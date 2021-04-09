@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "sw0b_0.0.1"

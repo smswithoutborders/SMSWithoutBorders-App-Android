@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">sw0b_0.0.1</string>
+    <string name="btn_sendMessage">Send Message</string>
+    <string name="btn_reset">Reset</string>
+    <string name="txt_newMessage">Type message here</string>
+    <string name="txt_viewMessage">View Message</string>
+</resources>
