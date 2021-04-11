@@ -6,49 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/txt_originalView"
-        android:layout_width="354dp"
-        android:layout_height="181dp"
-        android:text="@string/txt_viewMessage"
-        app:layout_constraintBottom_toTopOf="@+id/txt_original"
+    <EditText
+        android:id="@+id/editPhonenumber"
+        android:layout_width="381dp"
+        android:layout_height="54dp"
+        android:ems="10"
+        android:inputType="phone"
+        app:layout_constraintBottom_toTopOf="@+id/editMessage"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/txt_original"
-        android:layout_width="354dp"
-        android:layout_height="140dp"
+        android:id="@+id/editMessage"
+        android:layout_width="381dp"
+        android:layout_height="218dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="@string/txt_newMessage"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/sendBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_originalView" />
+        app:layout_constraintTop_toBottomOf="@+id/editPhonenumber" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/sendBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btn_reset"
-        app:layout_constraintBottom_toTopOf="@+id/btn_sendMessage"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_original" />
-
-    <Button
-        android:id="@+id/btn_sendMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="viewMessage"
-        android:text="@string/btn_sendMessage"
+        android:onClick="sendMessage"
+        android:text="Send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/editMessage" />
 </androidx.constraintlayout.widget.ConstraintLayout>
