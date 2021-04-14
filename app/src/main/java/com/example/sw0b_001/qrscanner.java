@@ -44,7 +44,10 @@ public class qrscanner extends AppCompatActivity {
 //        scanButton = findViewById(R.id.scan_btn);
         txtBarcodeValue = findViewById(R.id.qr_text);
         surfaceView = findViewById(R.id.surfaceView);
+        initialiseDetectorsAndSources();
+    }
 
+    private void initialiseDetectorsAndSources() {
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.QR_CODE)
                 .build();
@@ -53,11 +56,6 @@ public class qrscanner extends AppCompatActivity {
                 .setRequestedPreviewSize(1920, 1080)
                 .setAutoFocusEnabled(true) //you should add this feature
                 .build();
-
-        initialiseDetectorsAndSources();
-    }
-
-    private void initialiseDetectorsAndSources() {
 
         Toast.makeText(getApplicationContext(), "Barcode scanner started", Toast.LENGTH_SHORT).show();
 
@@ -132,5 +130,19 @@ public class qrscanner extends AppCompatActivity {
                 }
             }
         });
+
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        System.out.println(">> App paused!");
+        cameraSource.release();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        System.out.println(">> App Resumed!");
+        initialiseDetectorsAndSources();
     }
 }

@@ -12,7 +12,7 @@
         android:layout_height="294dp"
         android:text="@string/def_text_nobarcode"
         android:textColor="@color/white"
-        android:textSize="36sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
