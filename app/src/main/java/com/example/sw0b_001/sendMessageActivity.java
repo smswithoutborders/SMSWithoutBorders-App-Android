@@ -14,14 +14,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class sendMessageActivity extends AppCompatActivity {
 
     public static final String EXTRA_MESSAGE = "com.example.sw0b_001.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_sendmessage);
 
         Button sendBtn = findViewById(R.id.sendBtn);
         sendBtn.setEnabled(false);

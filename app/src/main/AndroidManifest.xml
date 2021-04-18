@@ -8,18 +8,20 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
+
     <meta-data
         android:name="com.google.android.gms.vision.DEPENDENCIES"
         android:value="barcode" />
 
     <application
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light">
-        <activity android:name=".MainActivity"></activity>
+        android:supportsRtl="true">
+        <activity android:name=".platforms"/>
+        <activity android:name=".sendMessageActivity" />
         <activity android:name=".qrscanner" />
         <activity android:name=".Login">
             <intent-filter>
