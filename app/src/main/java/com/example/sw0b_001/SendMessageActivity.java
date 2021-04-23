@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class sendMessageActivity extends AppCompatActivity {
+public class SendMessageActivity extends AppCompatActivity {
 
     public static final String EXTRA_MESSAGE = "com.example.sw0b_001.MESSAGE";
 
@@ -129,7 +129,7 @@ public class sendMessageActivity extends AppCompatActivity {
     }
 
     public void scanQR(View view) {
-        Intent intent = new Intent(this, qrscanner.class);
+        Intent intent = new Intent(this, QRScanner.class);
         startActivity(intent);
     }
 }

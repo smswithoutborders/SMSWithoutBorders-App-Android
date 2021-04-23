@@ -5,12 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:menu="@menu/navigation"
-    tools:context=".platforms">
+    tools:context=".Platforms">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
         app:itemIconTint="@color/white"
         app:itemTextColor="#FFFFFF"
         app:labelVisibilityMode="labeled"

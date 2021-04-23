@@ -24,7 +24,7 @@ public class Login extends AppCompatActivity {
         System.out.println("[+] Phonenumber:" + phonenumber.getText().toString());
         System.out.println("[+] Password: " + password.getText().toString());
 
-        Intent intent = new Intent(this, platforms.class);
+        Intent intent = new Intent(this, Platforms.class);
         startActivity(intent);
     }
 }
