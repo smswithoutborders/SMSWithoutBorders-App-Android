@@ -15,8 +15,13 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.util.Hex;
 
+import java.nio.charset.Charset;
+import java.security.InvalidKeyException;
 import java.security.PublicKey;
 import java.util.ArrayList;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 
 public class Platforms extends AppCompatActivity {
     // TODO: Check if user credentials are stored else log them out
@@ -29,9 +34,6 @@ public class Platforms extends AppCompatActivity {
 
 
     ListView listView;
-    Button addItemButton;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,15 +46,7 @@ public class Platforms extends AppCompatActivity {
 
         itemsAdapter.add("[+] GOOGLE: gmail");
 
-        PublicKey publicKey = securityLayer.generateKeys();
-
-//        String s = "42Gears Mobility Systems";
-        String strPublicKey = Base64.encodeToString(publicKey.getEncoded(), Base64.DEFAULT);
-        String strPrivateKey = Base64.encodeToString(securityLayer.getPrivateKey().getEncoded(), Base64.DEFAULT);
-
-        System.out.println("[-] PublicKey: " + strPublicKey);
-        System.out.println("[-] PrivateKey: " + strPrivateKey);
-
+        securityLayer.init();
         clickListener();
     }
 
@@ -70,14 +64,4 @@ public class Platforms extends AppCompatActivity {
             }
         });
     }
-
-//    public void addItem(View view) {
-//        EditText text = findViewById(R.id.edit_item);
-//        String input = text.getText().toString();
-//
-//        if(!input.equals("")) {
-//            itemsAdapter.add(input);
-//            text.setText("");
-//        }
-//    }
 }

@@ -1,34 +1,57 @@
 package com.example.sw0b_001;
 
-import java.io.IOException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.cert.CertificateException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 
 public class SecurityLayer {
+    private Cipher cipher;
+    private byte[] IV = null;
+    private SecretKey key;
 
-    KeyStore keyStore;
-    KeyPair generatedKeyPair;
+    int KEY_SIZE=256;
 
-    private static final String     AndroidKeyStore = "AndroidKeyStore";
-
-    public PublicKey generateKeys(){
+    public void init(){
         try {
-            KeyPairGenerator keyPairGenerated = KeyPairGenerator.getInstance("RSA");
-            keyPairGenerated.initialize(512);
-            generatedKeyPair = keyPairGenerated.generateKeyPair();
-        } catch (NoSuchAlgorithmException e) {
+            KeyGenerator keygen = KeyGenerator.getInstance("AES");
+            keygen.init(KEY_SIZE);
+            key = keygen.generateKey();
+
+            cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
             e.printStackTrace();
         }
-        return generatedKeyPair.getPublic();
     }
 
-    public PrivateKey getPrivateKey(){
-        return generatedKeyPair.getPrivate();
+    public byte[] encrypt(String input) throws BadPaddingException, IllegalBlockSizeException {
+        byte[] ciphertext = cipher.doFinal(input.getBytes());
+        this.IV = cipher.getIV();
+        return ciphertext;
+    }
+
+    public byte[] decrypt(byte[] input) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
+        IvParameterSpec iv = new IvParameterSpec(this.IV);
+        byte[] decBytes = null;
+        try {
+            cipher.init(Cipher.DECRYPT_MODE, key, iv);
+            decBytes = cipher.doFinal(input);
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        }
+        return decBytes;
+    }
+
+    public byte[] getIV() {
+        return this.IV;
     }
 }
