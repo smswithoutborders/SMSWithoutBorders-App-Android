@@ -14,10 +14,19 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.security.InvalidKeyException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 
 public class SendMessageActivity extends AppCompatActivity {
 
@@ -25,7 +34,8 @@ public class SendMessageActivity extends AppCompatActivity {
 
     String SMS_SENT = "SENT";
     String SMS_DELIVERED = "DELIVERED";
-    String SMS_FAILED = "FAILED";
+
+    SecurityLayer securityLayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +52,7 @@ public class SendMessageActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
             sendBtn.setEnabled(true);
         }
+        securityLayer = new SecurityLayer();
     }
 
     public void smsFailed() {
@@ -105,21 +116,43 @@ public class SendMessageActivity extends AppCompatActivity {
 
 
         String number = eNumber.getText().toString();
-        String text = eText.getText().toString();
-
-        // TODO: check if valid input
-
-        if(checkPermission(Manifest.permission.SEND_SMS)) {
-
-
-            SmsManager smsManager = SmsManager.getDefault();
-
-            smsManager.sendTextMessage(number, null, text, sentPendingIntent, deliveredPendingIntent);
-            Toast.makeText(this, "Sending SMS....", Toast.LENGTH_LONG).show();
+        String plainText = eText.getText().toString();
+        if(plainText.isEmpty()) {
+            Toast.makeText(this, "Text Cannot be empty!", Toast.LENGTH_LONG).show();
+            return;
         }
-        else {
-            Toast.makeText(this, "Permission Denied!", Toast.LENGTH_LONG).show();
+
+        try {
+            if(checkPermission(Manifest.permission.SEND_SMS)) {
+                String IV = new String(securityLayer.getIV(), "UTF-8");
+                String transmissionText = IV + ":" + plainText;
+                byte[] encryptedText = securityLayer.encrypt(transmissionText);
+
+                System.out.println("Transmission String: " + transmissionText);
+                System.out.println("[+] Decrypted: " + new String(securityLayer.decrypt(encryptedText), "UTF-8"));
+
+
+                String strEncryptedText = Base64.encodeToString(encryptedText, Base64.URL_SAFE);
+                System.out.println("Transmission message: " + strEncryptedText);
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(number, null, strEncryptedText, sentPendingIntent, deliveredPendingIntent);
+                Toast.makeText(this, "Sending SMS....", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Toast.makeText(this, "Permission Denied!", Toast.LENGTH_LONG).show();
+            }
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Internal Error while encrypting...", Toast.LENGTH_LONG).show();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Internal Error while encrypting...", Toast.LENGTH_LONG).show();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
         }
+
     }
 
     public boolean checkPermission(String permission) {

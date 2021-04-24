@@ -7,40 +7,41 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 public class SecurityLayer {
     private Cipher cipher;
-    private byte[] IV = null;
-    private SecretKey key;
+    private SecretKeySpec key;
+
+//    private byte[] iv;
+    private IvParameterSpec iv;
 
     int KEY_SIZE=256;
 
-    public void init(){
+    public SecurityLayer(){
         try {
-            KeyGenerator keygen = KeyGenerator.getInstance("AES");
-            keygen.init(KEY_SIZE);
-            key = keygen.generateKey();
+//            KeyGenerator keygen = KeyGenerator.getInstance("AES");
+//            keygen.init(KEY_SIZE);
+//            key = keygen.generateKey();
 
+            byte[] plainTextByte = "c4a15a90-57d4-4935-b5ae-ba89df8e".getBytes();
+            key = new SecretKeySpec(plainTextByte, "AES");
             cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
+            iv = new IvParameterSpec("1234567890123456".getBytes());
+            cipher.init(Cipher.ENCRYPT_MODE, key, iv);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         }
     }
 
     public byte[] encrypt(String input) throws BadPaddingException, IllegalBlockSizeException {
         byte[] ciphertext = cipher.doFinal(input.getBytes());
-        this.IV = cipher.getIV();
         return ciphertext;
     }
 
     public byte[] decrypt(byte[] input) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
-        IvParameterSpec iv = new IvParameterSpec(this.IV);
         byte[] decBytes = null;
         try {
             cipher.init(Cipher.DECRYPT_MODE, key, iv);
@@ -52,6 +53,6 @@ public class SecurityLayer {
     }
 
     public byte[] getIV() {
-        return this.IV;
+        return this.iv.getIV();
     }
 }

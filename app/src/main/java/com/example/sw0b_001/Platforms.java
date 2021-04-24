@@ -45,8 +45,6 @@ public class Platforms extends AppCompatActivity {
         listView.setAdapter((itemsAdapter));
 
         itemsAdapter.add("[+] GOOGLE: gmail");
-
-        securityLayer.init();
         clickListener();
     }
 
