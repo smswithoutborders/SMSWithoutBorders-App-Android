@@ -29,7 +29,6 @@ public class Platforms extends AppCompatActivity {
     // TODO: Include loader when message is sending...
 
     ArrayList<String> items = new ArrayList<>();
-    SecurityLayer securityLayer = new SecurityLayer();
     ArrayAdapter<String> itemsAdapter;
 
 
