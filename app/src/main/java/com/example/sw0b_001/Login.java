@@ -49,6 +49,8 @@ public class Login extends AppCompatActivity {
             if(!securityLayer.hasRSAKeys()) {
                 System.out.println("[+] Does not have RSA keys");
                 AccessPermissions();
+
+                // TODO: JUst for testing, remove this from here
                 securityLayer.init();
 
             }
@@ -65,23 +67,21 @@ public class Login extends AppCompatActivity {
             e.printStackTrace();
         } catch (KeyStoreException e) {
             e.printStackTrace();
-        } catch (UnrecoverableKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
+        } catch (BadPaddingException e) {
             e.printStackTrace();
         } catch (InvalidKeyException e) {
             e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
+        } catch (UnrecoverableKeyException e) {
             e.printStackTrace();
         } catch (InvalidAlgorithmParameterException e) {
             e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
         } catch (NoSuchProviderException e) {
             e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
         }
-
-
     }
 
     public void AccessPlatforms() {

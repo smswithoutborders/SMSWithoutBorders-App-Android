@@ -6,8 +6,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.HardwarePropertiesManager;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -21,6 +23,17 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class QRScanner extends AppCompatActivity {
 
@@ -33,9 +46,6 @@ public class QRScanner extends AppCompatActivity {
 
     private boolean requestingPermission = false;
 
-    private static final int REQUEST_CAMERA_PERMISSION = 200;
-    private static final int CAMERA_REQUEST = 101;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +55,7 @@ public class QRScanner extends AppCompatActivity {
 //        scanButton = findViewById(R.id.scan_btn);
         txtBarcodeValue = findViewById(R.id.qr_text);
         surfaceView = findViewById(R.id.surfaceView);
+
         initialiseDetectorsAndSources();
     }
 
@@ -54,7 +65,7 @@ public class QRScanner extends AppCompatActivity {
                 .build();
 
         cameraSource = new CameraSource.Builder(this, barcodeDetector)
-                .setRequestedPreviewSize(1920, 1080)
+                .setRequestedPreviewSize(1080, 1200)
                 .setAutoFocusEnabled(true) //you should add this feature
                 .build();
 
@@ -99,29 +110,41 @@ public class QRScanner extends AppCompatActivity {
                     txtBarcodeValue.post(new Runnable() {
                         @Override
                         public void run() {
-                        /*
-                            if (barcodes.valueAt(0).email != null) {
-                                txtBarcodeValue.removeCallbacks(null);
-                                intentData = barcodes.valueAt(0).email.address;
-                                txtBarcodeValue.setText(intentData);
-                                isEmail = true;
-                                btnAction.setText("ADD CONTENT TO THE MAIL");
-                            } else {
-                                isEmail = false;
-                                btnAction.setText("LAUNCH URL");
-                                intentData = barcodes.valueAt(0).displayValue;
-                                txtBarcodeValue.setText(intentData);
-
-                            }
-
-                     */
-
                             System.out.println("[+] QR code detected");
                             intentData = barcodes.valueAt(0).displayValue;
                             System.out.print("\t[+]: ");
                             System.out.println(intentData);
                             txtBarcodeValue.setText(intentData);
+                            try {
+                                cameraSource.stop();
+                                SecurityLayer securityLayer = new SecurityLayer();
+                                securityLayer.init();
 
+
+                                AccessPlatforms();
+                            } catch (KeyStoreException e) {
+                                e.printStackTrace();
+                            } catch (CertificateException e) {
+                                e.printStackTrace();
+                            } catch (NoSuchAlgorithmException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (BadPaddingException e) {
+                                e.printStackTrace();
+                            } catch (InvalidKeyException e) {
+                                e.printStackTrace();
+                            } catch (UnrecoverableKeyException e) {
+                                e.printStackTrace();
+                            } catch (InvalidAlgorithmParameterException e) {
+                                e.printStackTrace();
+                            } catch (NoSuchPaddingException e) {
+                                e.printStackTrace();
+                            } catch (NoSuchProviderException e) {
+                                e.printStackTrace();
+                            } catch (IllegalBlockSizeException e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
                 }
@@ -129,20 +152,20 @@ public class QRScanner extends AppCompatActivity {
         });
 
     }
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-////        System.out.println(">> App paused!");
-////        if (!requestingPermission )
-////            cameraSource.release();
-//        cameraSource.stop();
-//    }
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        System.out.println(">> App Resumed!");
-////        if (!requestingPermission )
-////            initialiseDetectorsAndSources();
-//    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cameraSource.release();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initialiseDetectorsAndSources();
+    }
+
+    public void AccessPlatforms() {
+        Intent intent = new Intent(this, Platforms.class);
+        startActivity(intent);
+    }
 }
