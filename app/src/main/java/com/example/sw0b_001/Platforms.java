@@ -5,23 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.util.Hex;
-
-import java.nio.charset.Charset;
-import java.security.InvalidKeyException;
-import java.security.PublicKey;
+import java.io.IOException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
 
 public class Platforms extends AppCompatActivity {
     // TODO: Check if user credentials are stored else log them out
@@ -30,6 +25,7 @@ public class Platforms extends AppCompatActivity {
 
     ArrayList<String> items = new ArrayList<>();
     ArrayAdapter<String> itemsAdapter;
+    KeyStore keyStore;
 
 
     ListView listView;
@@ -41,10 +37,28 @@ public class Platforms extends AppCompatActivity {
 
         listView = findViewById(R.id.item_list);
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
-        listView.setAdapter((itemsAdapter));
+        try {
+            listView.setAdapter(itemsAdapter);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
 
         itemsAdapter.add("[+] GOOGLE: gmail");
         clickListener();
+        try {
+            keyStore = KeyStore.getInstance(SecurityLayer.DEFAULT_KEYSTORE_PROVIDER);
+            keyStore.load(null);
+            keyStore.deleteEntry(SecurityLayer.DEFAULT_KEYSTORE_ALIAS);
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void clickListener() {
@@ -54,7 +68,6 @@ public class Platforms extends AppCompatActivity {
                 Context context = getApplicationContext();
                 String clickedString = "Item just got clicked: [" + id + ":<"+ items.get(position)  + ">]";
                 Toast.makeText(context, clickedString, Toast.LENGTH_SHORT).show();
-
 
                 Intent intent = new Intent(parent.getContext(), SendMessageActivity.class);
                 startActivity(intent);

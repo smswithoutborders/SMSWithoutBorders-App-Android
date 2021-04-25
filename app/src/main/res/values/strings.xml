@@ -1,13 +1,4 @@
 <resources>
     <string name="app_name">sw0b_0.0.1</string>
     <string name="def_text_nobarcode">No barcode detected</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="prompt_phonenumber">Phone Number</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_phonenumber">Not a valid phonenumber</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
 </resources>

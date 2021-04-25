@@ -44,7 +44,6 @@
         app:layout_constraintTop_toBottomOf="@+id/editMessage" />
 
     <Button
-        android:id="@+id/qr_btn"
         android:layout_width="102dp"
         android:layout_height="44dp"
         android:onClick="scanQR"
