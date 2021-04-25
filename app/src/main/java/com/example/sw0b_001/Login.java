@@ -58,6 +58,7 @@ public class Login extends AppCompatActivity {
                 System.out.println("[+] Has RSA Keys....");
 //                System.out.println("[+] Public key: " + Base64.encodeToString(getPublicKey().getEncoded(), Base64.URL_SAFE));
                 AccessPlatforms();
+                finish();
             }
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -83,7 +84,6 @@ public class Login extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        finish();
     }
 
     public void AccessPlatforms() {
