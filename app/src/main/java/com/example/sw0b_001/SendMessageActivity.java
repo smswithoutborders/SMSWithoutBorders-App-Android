@@ -65,31 +65,10 @@ public class SendMessageActivity extends AppCompatActivity {
         }
         try {
             securityLayer = new SecurityLayer();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (UnrecoverableKeyException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
+        } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public void smsFailed() {
@@ -204,8 +183,5 @@ public class SendMessageActivity extends AppCompatActivity {
         return (check == PackageManager.PERMISSION_GRANTED);
     }
 
-    public void scanQR(View view) {
-        Intent intent = new Intent(this, QRScanner.class);
-        startActivity(intent);
-    }
+
 }

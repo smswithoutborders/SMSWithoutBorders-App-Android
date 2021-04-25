@@ -46,6 +46,8 @@ public class Platforms extends AppCompatActivity {
 
         itemsAdapter.add("[+] GOOGLE: gmail");
         clickListener();
+
+        // Use this code for TESTING ONLY, will delete you RSA key and create a new one each time this activity starts
         try {
             keyStore = KeyStore.getInstance(SecurityLayer.DEFAULT_KEYSTORE_PROVIDER);
             keyStore.load(null);

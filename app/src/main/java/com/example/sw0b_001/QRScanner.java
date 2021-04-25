@@ -3,6 +3,7 @@ package com.example.sw0b_001;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -30,6 +31,8 @@ public class QRScanner extends AppCompatActivity {
     TextView txtBarcodeValue;
     String intentData = "";
 
+    private boolean requestingPermission = false;
+
     private static final int REQUEST_CAMERA_PERMISSION = 200;
     private static final int CAMERA_REQUEST = 101;
 
@@ -37,6 +40,7 @@ public class QRScanner extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscanner);
+        System.out.println("[+] Back to the beginning...");
 
 //        scanButton = findViewById(R.id.scan_btn);
         txtBarcodeValue = findViewById(R.id.qr_text);
@@ -62,11 +66,7 @@ public class QRScanner extends AppCompatActivity {
                 try {
                     if (ActivityCompat.checkSelfPermission(QRScanner.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                         cameraSource.start(surfaceView.getHolder());
-                    } else {
-                        ActivityCompat.requestPermissions(QRScanner.this, new
-                                String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
                     }
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -129,17 +129,20 @@ public class QRScanner extends AppCompatActivity {
         });
 
     }
-    @Override
-    protected void onPause() {
-        super.onPause();
-        System.out.println(">> App paused!");
-        cameraSource.release();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        System.out.println(">> App Resumed!");
-        initialiseDetectorsAndSources();
-    }
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+////        System.out.println(">> App paused!");
+////        if (!requestingPermission )
+////            cameraSource.release();
+//        cameraSource.stop();
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        System.out.println(">> App Resumed!");
+////        if (!requestingPermission )
+////            initialiseDetectorsAndSources();
+//    }
 }

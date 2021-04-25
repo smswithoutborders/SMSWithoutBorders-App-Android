@@ -48,36 +48,27 @@ public class SecurityLayer {
     public static String DEFAULT_KEYSTORE_PROVIDER = "AndroidKeyStore";
 
 
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public SecurityLayer() throws NoSuchAlgorithmException, IOException, InvalidAlgorithmParameterException, NoSuchProviderException, CertificateException, KeyStoreException, UnrecoverableKeyException, IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchPaddingException {
-        keyStore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
-        keyStore.load(null);
-
-
-       if(!hasRSAKeys()) {
-           System.out.println("[+] Does not have RSA keys");
-           this.init_RSA();
-       }
-       else {
-           System.out.println("[+] Has RSA Keys....");
-           System.out.println("[+] Public key: " + Base64.encodeToString(getPublicKey().getEncoded(), Base64.URL_SAFE));
-       }
-
-
-       byte[] encryptedText = encrypt_RSA("Hello world");
-       System.out.println("[+] Encrypted: " + Base64.encodeToString(encryptedText, Base64.URL_SAFE));
-       System.out.println("[+] Decrypted: " + new String(decrypt_RSA(encryptedText)));
-
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+    public SecurityLayer() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+        this.keyStore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
+        this.keyStore.load(null);
     }
 
     public boolean hasRSAKeys() throws KeyStoreException {
-        return keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS);
+        return this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS);
     }
 
     private PublicKey getPublicKey() throws KeyStoreException {
-        PublicKey publicKey = keyStore.getCertificate(DEFAULT_KEYSTORE_ALIAS).getPublicKey();
+        PublicKey publicKey = this.keyStore.getCertificate(DEFAULT_KEYSTORE_ALIAS).getPublicKey();
         return publicKey;
+    }
+
+    public void init() throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException, CertificateException, IOException, NoSuchPaddingException, UnrecoverableKeyException, KeyStoreException, BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
+        this.init_RSA();
+
+        byte[] encryptedText = this.encrypt_RSA("Hello world");
+        System.out.println("[+] Encrypted: " + Base64.encodeToString(encryptedText, Base64.URL_SAFE));
+        System.out.println("[+] Decrypted: " + new String(this.decrypt_RSA(encryptedText)));
     }
 
 
@@ -91,24 +82,24 @@ public class SecurityLayer {
                         .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
                         .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
                         .build());
-        keyPair = keygen.generateKeyPair();
-        System.out.println("[+] Public key: " + Base64.encodeToString(keyPair.getPublic().getEncoded(), Base64.URL_SAFE));
+        this.keyPair = keygen.generateKeyPair();
+        System.out.println("[+] Public key: " + Base64.encodeToString(this.keyPair.getPublic().getEncoded(), Base64.URL_SAFE));
     }
 
     public byte[] encrypt_RSA(String input) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-        cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-        cipher.init(Cipher.ENCRYPT_MODE, getPublicKey());
+        this.cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
+        this.cipher.init(Cipher.ENCRYPT_MODE, this.getPublicKey());
         return cipher.doFinal(input.getBytes());
     }
 
     public byte[] decrypt_RSA(byte[] input) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
         byte[] decBytes = null;
         try {
-            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(DEFAULT_KEYSTORE_ALIAS, null);
+            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)this.keyStore.getEntry(DEFAULT_KEYSTORE_ALIAS, null);
             PrivateKey privateKey = privateKeyEntry.getPrivateKey();
-            cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-            cipher.init(Cipher.DECRYPT_MODE, privateKey, cipher.getParameters());
-            decBytes = cipher.doFinal(input);
+            this.cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
+            this.cipher.init(Cipher.DECRYPT_MODE, privateKey, this.cipher.getParameters());
+            decBytes = this.cipher.doFinal(input);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (KeyStoreException e) {
@@ -135,19 +126,19 @@ public class SecurityLayer {
         String strIV = password.toString();
 
         byte[] plainTextByte = "c4a15a90-57d4-4935-b5ae-ba89df8e".getBytes();
-        key = new SecretKeySpec(plainTextByte, "AES");
-        iv = new IvParameterSpec(strIV.getBytes());
-        cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-        cipher.init(Cipher.ENCRYPT_MODE, key, iv);
-        byte[] ciphertext = cipher.doFinal(input.getBytes());
+        this.key = new SecretKeySpec(plainTextByte, "AES");
+        this.iv = new IvParameterSpec(strIV.getBytes());
+        this.cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+        this.cipher.init(Cipher.ENCRYPT_MODE, this.key, this.iv);
+        byte[] ciphertext = this.cipher.doFinal(input.getBytes());
         return ciphertext;
     }
 
     public byte[] decrypt(byte[] input) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
         byte[] decBytes = null;
         try {
-            cipher.init(Cipher.DECRYPT_MODE, key, iv);
-            decBytes = cipher.doFinal(input);
+            this.cipher.init(Cipher.DECRYPT_MODE, this.key, this.iv);
+            decBytes = this.cipher.doFinal(input);
         } catch (InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         }
