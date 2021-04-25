@@ -30,7 +30,9 @@ public class Permissions extends AppCompatActivity {
         }
         else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+
         }
+        finish();
     }
 
     @Override

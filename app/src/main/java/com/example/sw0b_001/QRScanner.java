@@ -98,7 +98,7 @@ public class QRScanner extends AppCompatActivity {
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
-                Toast.makeText(getApplicationContext(), "To prevent memory leaks barcode scanner has been stopped", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "To prevent memory leaks barcode scanner has been stopped", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -120,8 +120,8 @@ public class QRScanner extends AppCompatActivity {
                                 SecurityLayer securityLayer = new SecurityLayer();
                                 securityLayer.init();
 
-
                                 AccessPlatforms();
+                                finish();
                             } catch (KeyStoreException e) {
                                 e.printStackTrace();
                             } catch (CertificateException e) {

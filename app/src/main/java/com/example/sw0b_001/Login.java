@@ -82,6 +82,8 @@ public class Login extends AppCompatActivity {
         } catch (IllegalBlockSizeException e) {
             e.printStackTrace();
         }
+
+        finish();
     }
 
     public void AccessPlatforms() {
