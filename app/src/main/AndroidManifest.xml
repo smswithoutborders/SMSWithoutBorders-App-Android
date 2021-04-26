@@ -25,7 +25,9 @@
         </activity>
         <activity android:name=".Platforms" />
 
-        <activity android:name=".SendMessageActivity" />
+        <activity android:name=".SendMessageActivity" android:parentActivityName=".Permissions">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".Permissions" />
+        </activity>
 
         <activity android:name=".QRScanner" android:parentActivityName=".Login">
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".Login" />

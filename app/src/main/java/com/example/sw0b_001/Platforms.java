@@ -68,8 +68,8 @@ public class Platforms extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Context context = getApplicationContext();
-                String clickedString = "Item just got clicked: [" + id + ":<"+ items.get(position)  + ">]";
-                Toast.makeText(context, clickedString, Toast.LENGTH_SHORT).show();
+//                String clickedString = "Item just got clicked: [" + id + ":<"+ items.get(position)  + ">]";
+//                Toast.makeText(context, clickedString, Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(parent.getContext(), SendMessageActivity.class);
                 startActivity(intent);
