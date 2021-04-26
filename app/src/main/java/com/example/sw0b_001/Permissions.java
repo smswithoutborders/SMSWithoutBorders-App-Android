@@ -27,12 +27,12 @@ public class Permissions extends AppCompatActivity {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             Intent intent = new Intent(this, QRScanner.class);
             startActivity(intent);
+            finish();
         }
         else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
 
         }
-        finish();
     }
 
     @Override
@@ -53,5 +53,6 @@ public class Permissions extends AppCompatActivity {
                 startActivity(intent);
             }
         }
+        finish();
     }
 }
