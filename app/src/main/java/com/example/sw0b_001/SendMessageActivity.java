@@ -18,8 +18,11 @@ import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Base64;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -28,11 +31,13 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -46,6 +51,11 @@ public class SendMessageActivity extends AppCompatActivity {
     String SMS_DELIVERED = "DELIVERED";
 
     SecurityLayer securityLayer;
+    KeyStore keyStore;
+
+    ArrayList<String> items;
+    ArrayAdapter<String> itemsAdapter;
+    ListView listView;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -53,28 +63,33 @@ public class SendMessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sendmessage);
 
-        Button sendBtn = findViewById(R.id.sendBtn);
-        sendBtn.setEnabled(false);
-
-        if( checkPermission(Manifest.permission.SEND_SMS)) {
-            sendBtn.setEnabled(true);
-        }
-        else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
-            sendBtn.setEnabled(true);
-        }
+        listView = findViewById(R.id.message_list);
+        items = new ArrayList<>();
+        itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
         try {
-            securityLayer = new SecurityLayer();
-        } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
+            listView.setAdapter(itemsAdapter);
+        }
+        catch(Exception e) {
             e.printStackTrace();
         }
 
+//        itemsAdapter.add("[+] GOOGLE: gmail");
+    }
+
+    public void onClickSend(View view) {
+        TextView message = findViewById(R.id.edit_message);
+        String text = message.getText().toString();
+
+        itemsAdapter.add(text);
+        itemsAdapter.notifyDataSetChanged();
     }
 
     public void smsFailed() {
 
     }
 
+
+    /*
     public void sendMessage(View view) {
         EditText eNumber = findViewById(R.id.editPhonenumber);
         EditText eText = findViewById(R.id.editMessage);
@@ -182,6 +197,6 @@ public class SendMessageActivity extends AppCompatActivity {
 
         return (check == PackageManager.PERMISSION_GRANTED);
     }
-
+     */
 
 }
