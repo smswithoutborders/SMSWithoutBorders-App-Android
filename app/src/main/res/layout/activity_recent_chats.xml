@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
-        android:layout_width="413dp"
+        android:layout_width="match_parent"
         android:layout_height="279dp">
 
         <EditText
@@ -64,10 +64,10 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="412dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="2dp"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <ListView
             android:id="@+id/item_list"
