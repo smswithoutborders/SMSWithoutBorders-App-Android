@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.security.KeyStore;
@@ -18,10 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 
-public class Platforms extends AppCompatActivity {
-    // TODO: Check if user credentials are stored else log them out
-    // TODO: Fill in bottomBar actions (dashboard, settings, logs, exit)
-    // TODO: Include loader when message is sending...
+public class RecentChats extends AppCompatActivity {
 
     ArrayList<String> items = new ArrayList<>();
     ArrayAdapter<String> itemsAdapter;
@@ -29,11 +25,11 @@ public class Platforms extends AppCompatActivity {
 
 
     ListView listView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_platforms);
-
+        setContentView(R.layout.activity_recent_chats);
 
         listView = findViewById(R.id.item_list);
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
@@ -44,32 +40,20 @@ public class Platforms extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        itemsAdapter.add("[+] GOOGLE: gmail");
+        itemsAdapter.add("info@smswithoutwithoutborders.com");
         clickListener();
-        try {
-            keyStore = KeyStore.getInstance(SecurityLayer.DEFAULT_KEYSTORE_PROVIDER);
-            keyStore.load(null);
-            keyStore.deleteEntry(SecurityLayer.DEFAULT_KEYSTORE_ALIAS);
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
+
 
     public void clickListener() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Context context = getApplicationContext();
-                String clickedString = "Item just got clicked: [" + id + ":<"+ items.get(position)  + ">]";
-                Toast.makeText(context, clickedString, Toast.LENGTH_SHORT).show();
+//                String clickedString = "Item just got clicked: [" + id + ":<"+ items.get(position)  + ">]";
+//                Toast.makeText(context, clickedString, Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(parent.getContext(), RecentChats.class);
+                Intent intent = new Intent(parent.getContext(), SendMessageActivity.class);
                 startActivity(intent);
             }
         });

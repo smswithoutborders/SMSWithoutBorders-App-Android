@@ -19,20 +19,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
-
-        <activity android:name=".Permissions" android:parentActivityName=".Login">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".Login" />
+        <activity android:name=".RecentChats"></activity>
+        <activity
+            android:name=".Permissions"
+            android:parentActivityName=".Login">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Login" />
         </activity>
         <activity android:name=".Platforms" />
-
-        <activity android:name=".SendMessageActivity" android:parentActivityName=".Permissions">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".Permissions" />
+        <activity
+            android:name=".SendMessageActivity"
+            android:parentActivityName=".Permissions">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Permissions" />
         </activity>
-
-        <activity android:name=".QRScanner" android:parentActivityName=".Login">
-            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value=".Login" />
+        <activity
+            android:name=".QRScanner"
+            android:parentActivityName=".Login">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Login" />
         </activity>
-
         <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

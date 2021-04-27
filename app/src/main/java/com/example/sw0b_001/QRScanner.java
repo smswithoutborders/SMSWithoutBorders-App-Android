@@ -22,6 +22,9 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -42,8 +45,6 @@ public class QRScanner extends AppCompatActivity {
     private CameraSource cameraSource;
     SurfaceView surfaceView;
     TextView txtBarcodeValue;
-    String intentData = "";
-
     private boolean requestingPermission = false;
 
     @Override
@@ -97,7 +98,7 @@ public class QRScanner extends AppCompatActivity {
 
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
-            public void release() {
+            public void release() { 
 //                Toast.makeText(getApplicationContext(), "To prevent memory leaks barcode scanner has been stopped", Toast.LENGTH_SHORT).show();
             }
 
@@ -111,10 +112,16 @@ public class QRScanner extends AppCompatActivity {
                         @Override
                         public void run() {
                             System.out.println("[+] QR code detected");
-                            intentData = barcodes.valueAt(0).displayValue;
+                            String intentData = barcodes.valueAt(0).displayValue;
                             System.out.print("\t[+]: ");
                             System.out.println(intentData);
                             txtBarcodeValue.setText(intentData);
+
+//                            try {
+//                                JSONObject infoJson = new JSONObject(intentData);
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
                             try {
                                 cameraSource.stop();
                                 SecurityLayer securityLayer = new SecurityLayer();

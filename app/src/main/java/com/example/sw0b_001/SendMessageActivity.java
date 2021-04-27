@@ -82,6 +82,8 @@ public class SendMessageActivity extends AppCompatActivity {
 
         itemsAdapter.add(text);
         itemsAdapter.notifyDataSetChanged();
+
+        message.setText("");
     }
 
     public void smsFailed() {

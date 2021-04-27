@@ -23,19 +23,18 @@
         app:menu="@menu/navigation" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="143dp"
-        tools:layout_editor_absoluteY="447dp">
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ListView
             android:id="@+id/item_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/design_default_color_background"
-            android:theme="@style/CardView.Light"
-            android:visibility="visible" />
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
