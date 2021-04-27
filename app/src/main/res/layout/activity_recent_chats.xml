@@ -41,6 +41,7 @@
             android:layout_marginEnd="148dp"
             android:layout_marginBottom="45dp"
             android:background="#2196F3"
+            android:onClick="composeEmail"
             android:text="Compose"
             android:textColor="@color/white"
             app:layout_constraintBottom_toTopOf="@+id/manual_send_email"

@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -44,22 +46,7 @@ public class RecentChats extends AppCompatActivity {
         }
 
         clickListener();
-        TextView email_search = findViewById(R.id.manual_send_email);
-        String email = email_search.getText().toString();
-        String subject;
-//        email_search.setOnKeyListener(new View.OnKeyListener() {
-//            @Override
-//            public boolean onKey(View v, int keyCode, KeyEvent event) {
-//                if(keyCode == 66) {
-//                    String receipientEmailAddress = email_search.getText().toString();
-//                    accessMessages(receipientEmailAddress);
-////                    email_search.setText("");
-//
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
+
 
         itemsAdapter.add("info@smswithoutwithoutborders.com");
     }
@@ -72,15 +59,33 @@ public class RecentChats extends AppCompatActivity {
                 Context context = getApplicationContext();
 //                String clickedString = "Item just got clicked: [" + id + ":<"+ items.get(position)  + ">]";
 //                Toast.makeText(context, clickedString, Toast.LENGTH_SHORT).show();
-                String receipientEmailAddress = items.get(position);
-                accessMessages(receipientEmailAddress);
+//                String receipientEmailAddress = items.get(position);
+//                accessMessages(receipientEmailAddress);
             }
         });
     }
 
-    private void accessMessages(String receipientEmailAddress) {
+    private void accessMessages(String receipientEmailAddress, String emailSubject) {
         Intent intent = new Intent(this, SendMessageActivity.class);
         intent.putExtra("receipientEmailAddress", receipientEmailAddress);
+        intent.putExtra("emailSubject", emailSubject);
         startActivity(intent);
+    }
+
+    public void composeEmail(View view) {
+        EditText email = findViewById(R.id.manual_send_email);
+        EditText subject = findViewById(R.id.email_subject);
+
+        String receipientEmailAddress = email.getText().toString();
+        String emailSubject = subject.getText().toString();
+
+        if(receipientEmailAddress.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(receipientEmailAddress).matches()) {
+            email.setError("Invalid Email Address");
+            return;
+        }
+        if( emailSubject.isEmpty()) {
+            subject.setError("No subject provided!");
+        }
+        accessMessages(receipientEmailAddress, emailSubject);
     }
 }
