@@ -5,10 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.security.KeyStore;
@@ -40,8 +43,25 @@ public class RecentChats extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        itemsAdapter.add("info@smswithoutwithoutborders.com");
         clickListener();
+        TextView email_search = findViewById(R.id.manual_send_email);
+        String email = email_search.getText().toString();
+        String subject;
+//        email_search.setOnKeyListener(new View.OnKeyListener() {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                if(keyCode == 66) {
+//                    String receipientEmailAddress = email_search.getText().toString();
+//                    accessMessages(receipientEmailAddress);
+////                    email_search.setText("");
+//
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
+
+        itemsAdapter.add("info@smswithoutwithoutborders.com");
     }
 
 
@@ -52,10 +72,15 @@ public class RecentChats extends AppCompatActivity {
                 Context context = getApplicationContext();
 //                String clickedString = "Item just got clicked: [" + id + ":<"+ items.get(position)  + ">]";
 //                Toast.makeText(context, clickedString, Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(parent.getContext(), SendMessageActivity.class);
-                startActivity(intent);
+                String receipientEmailAddress = items.get(position);
+                accessMessages(receipientEmailAddress);
             }
         });
+    }
+
+    private void accessMessages(String receipientEmailAddress) {
+        Intent intent = new Intent(this, SendMessageActivity.class);
+        intent.putExtra("receipientEmailAddress", receipientEmailAddress);
+        startActivity(intent);
     }
 }
