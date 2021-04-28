@@ -7,10 +7,23 @@
     android:orientation="vertical"
     tools:context=".RecentChats">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/platform_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#373333"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/platform_action_bar">
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="279dp">
+        android:layout_height="267dp">
 
         <EditText
             android:id="@+id/manual_send_email"
@@ -51,8 +64,8 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="74dp"
+        android:layout_height="18dp"
         android:layout_marginEnd="334dp"
         android:layout_marginBottom="7dp"
         android:text="Recent Emails"

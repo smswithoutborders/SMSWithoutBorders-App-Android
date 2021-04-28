@@ -10,10 +10,6 @@
         android:title="Settings" />
 
     <item
-        android:icon="@drawable/logs"
-        android:title="Logs" />
-
-    <item
         android:icon="@drawable/logout"
         android:title="Exit" />
 </menu>

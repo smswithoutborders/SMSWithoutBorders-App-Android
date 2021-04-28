@@ -1,6 +1,7 @@
 package com.example.sw0b_001;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,12 +28,14 @@ public class Platforms extends AppCompatActivity {
     ArrayAdapter<String> itemsAdapter;
     KeyStore keyStore;
 
+    String activityLabel = "Activity Platforms";
 
     ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_platforms);
+
 
 
         listView = findViewById(R.id.item_list);
@@ -46,6 +49,11 @@ public class Platforms extends AppCompatActivity {
 
         itemsAdapter.add("[+] GOOGLE: gmail");
         clickListener();
+
+
+
+//        this.getActionBar().setTitle(activityLabel);
+//        this.getSupportActionBar().setTitle(activityLabel);  // provide compatibility to all the versions
         try {
             keyStore = KeyStore.getInstance(SecurityLayer.DEFAULT_KEYSTORE_PROVIDER);
             keyStore.load(null);

@@ -1,6 +1,7 @@
 package com.example.sw0b_001;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +37,9 @@ public class RecentChats extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recent_chats);
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.platform_toolbar);
+        setSupportActionBar(myToolbar);
+
         listView = findViewById(R.id.item_list);
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
         try {
@@ -47,6 +51,7 @@ public class RecentChats extends AppCompatActivity {
 
         clickListener();
 
+        myToolbar.setTitle("Platforms custom");
 
         itemsAdapter.add("info@smswithoutwithoutborders.com");
     }
