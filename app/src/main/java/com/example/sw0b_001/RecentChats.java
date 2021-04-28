@@ -1,5 +1,6 @@
 package com.example.sw0b_001;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -37,6 +38,9 @@ public class RecentChats extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recent_chats);
 
+
+
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.platform_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -50,8 +54,13 @@ public class RecentChats extends AppCompatActivity {
         }
 
         clickListener();
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
 
-        myToolbar.setTitle("Platforms custom");
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        ab.setTitle(getIntent().getStringExtra("platform_name"));
 
         itemsAdapter.add("info@smswithoutwithoutborders.com");
     }

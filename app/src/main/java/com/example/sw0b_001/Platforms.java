@@ -78,6 +78,7 @@ public class Platforms extends AppCompatActivity {
                 Toast.makeText(context, clickedString, Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(parent.getContext(), RecentChats.class);
+                intent.putExtra("platform_name", items.get(position));
                 startActivity(intent);
             }
         });

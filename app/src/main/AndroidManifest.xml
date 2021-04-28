@@ -19,7 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
-        <activity android:name=".RecentChats" android:parentActivityName=".Platforms">
+        <activity android:name=".RecentChats" android:parentActivityName=".Platforms" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Login" />
@@ -31,8 +31,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Login" />
         </activity>
-        <activity android:name=".Platforms" android:label="Platforms" android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            >
+        <activity android:name=".Platforms" android:label="Platforms" >
 
 
         </activity>
