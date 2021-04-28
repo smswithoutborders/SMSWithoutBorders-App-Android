@@ -7,9 +7,12 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.HardwarePropertiesManager;
+import android.preference.PreferenceManager;
+import android.util.JsonReader;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -17,6 +20,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.util.JsonUtils;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -24,6 +28,7 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -112,23 +117,31 @@ public class QRScanner extends AppCompatActivity {
                         @Override
                         public void run() {
                             System.out.println("[+] QR code detected");
-                            String intentData = barcodes.valueAt(0).displayValue;
-                            System.out.print("\t[+]: ");
-                            System.out.println(intentData);
-                            txtBarcodeValue.setText(intentData);
-
-//                            try {
-//                                JSONObject infoJson = new JSONObject(intentData);
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
                             try {
+                                //TODO: put a loader here, while loads of internet activities are happening
                                 cameraSource.stop();
-                                SecurityLayer securityLayer = new SecurityLayer();
-                                securityLayer.init();
 
-                                AccessPlatforms();
-                                finish();
+                                Barcode.UrlBookmark intentData = barcodes.valueAt(0).url;
+                                System.out.print("\t[+]: ");
+                                System.out.println(intentData);
+                                txtBarcodeValue.setText(intentData.url);
+
+//                                System.out.println("[+] GATEWAY PUBLICKEY: " + gatewayPublicKey);
+//                                System.out.println("[+] GATEWAY ORIGINATING URL: " + gatewayOriginatingURL);
+
+                                SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                SharedPreferences.Editor editor = app_preferences.edit();
+
+                                // TODO: revise method used to store publicKey, might not actually be best for storing URLs
+                                editor.putString(Gateway.VAR_PUBLICKEY, intentData.toString());
+                                editor.commit();
+
+                                SecurityLayer securityLayer = new SecurityLayer();
+                                if( securityLayer.initiate2WayHandshake()) {
+
+                                    AccessPlatforms();
+                                    finish();
+                                }
                             } catch (KeyStoreException e) {
                                 e.printStackTrace();
                             } catch (CertificateException e) {
@@ -136,20 +149,6 @@ public class QRScanner extends AppCompatActivity {
                             } catch (NoSuchAlgorithmException e) {
                                 e.printStackTrace();
                             } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (BadPaddingException e) {
-                                e.printStackTrace();
-                            } catch (InvalidKeyException e) {
-                                e.printStackTrace();
-                            } catch (UnrecoverableKeyException e) {
-                                e.printStackTrace();
-                            } catch (InvalidAlgorithmParameterException e) {
-                                e.printStackTrace();
-                            } catch (NoSuchPaddingException e) {
-                                e.printStackTrace();
-                            } catch (NoSuchProviderException e) {
-                                e.printStackTrace();
-                            } catch (IllegalBlockSizeException e) {
                                 e.printStackTrace();
                             }
                         }

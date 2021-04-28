@@ -148,4 +148,10 @@ public class SecurityLayer {
     public byte[] getIV() {
         return this.iv.getIV();
     }
+
+
+    public boolean initiate2WayHandshake() {
+
+        return false;
+    }
 }
