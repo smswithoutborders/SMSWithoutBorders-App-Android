@@ -19,7 +19,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light">
-        <activity android:name=".RecentChats"></activity>
+        <activity android:name=".RecentChats" android:parentActivityName=".Platforms">>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Login" />
+        </activity>
         <activity
             android:name=".Permissions"
             android:parentActivityName=".Login">
@@ -30,10 +34,10 @@
         <activity android:name=".Platforms" />
         <activity
             android:name=".SendMessageActivity"
-            android:parentActivityName=".Permissions">
+            android:parentActivityName=".RecentChats">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Permissions" />
+                android:value=".RecentChats" />
         </activity>
         <activity
             android:name=".QRScanner"

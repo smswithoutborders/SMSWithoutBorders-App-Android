@@ -126,6 +126,7 @@ public class QRScanner extends AppCompatActivity {
                                 System.out.println(intentData);
                                 txtBarcodeValue.setText(intentData.url);
 
+
 //                                System.out.println("[+] GATEWAY PUBLICKEY: " + gatewayPublicKey);
 //                                System.out.println("[+] GATEWAY ORIGINATING URL: " + gatewayOriginatingURL);
 
@@ -173,5 +174,6 @@ public class QRScanner extends AppCompatActivity {
     public void AccessPlatforms() {
         Intent intent = new Intent(this, Platforms.class);
         startActivity(intent);
+        finish();
     }
 }

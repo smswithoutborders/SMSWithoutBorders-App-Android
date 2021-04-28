@@ -167,6 +167,8 @@ public class SendMessageActivity extends AppCompatActivity {
 
                 String strEncryptedText = Base64.encodeToString(encryptedText, Base64.URL_SAFE);
                 System.out.println("Transmission message: " + strEncryptedText);
+
+                //TODO: Research what to do in case of a double sim phone
                 SmsManager smsManager = SmsManager.getDefault();
                 smsManager.sendTextMessage(number, null, strEncryptedText, sentPendingIntent, deliveredPendingIntent);
                 Toast.makeText(this, "Sending SMS....", Toast.LENGTH_LONG).show();

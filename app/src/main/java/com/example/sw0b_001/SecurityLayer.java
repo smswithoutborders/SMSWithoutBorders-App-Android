@@ -152,6 +152,6 @@ public class SecurityLayer {
 
     public boolean initiate2WayHandshake() {
 
-        return false;
+        return true;
     }
 }
