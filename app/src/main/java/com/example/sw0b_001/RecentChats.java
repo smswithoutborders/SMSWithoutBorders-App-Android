@@ -79,8 +79,9 @@ public class RecentChats extends AppCompatActivity {
                 Context context = getApplicationContext();
 //                String clickedString = "Item just got clicked: [" + id + ":<"+ items.get(position)  + ">]";
 //                Toast.makeText(context, clickedString, Toast.LENGTH_SHORT).show();
-//                String receipientEmailAddress = items.get(position);
-//                accessMessages(receipientEmailAddress);
+                String receipientEmailAddress = items.get(position);
+                String sampleSubject = "sample subject";
+                accessMessages(receipientEmailAddress, sampleSubject);
             }
         });
     }
