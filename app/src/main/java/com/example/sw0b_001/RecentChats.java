@@ -29,9 +29,8 @@ public class RecentChats extends AppCompatActivity {
     ArrayList<String> items = new ArrayList<>();
     ArrayAdapter<String> itemsAdapter;
     KeyStore keyStore;
-
-
     ListView listView;
+    private String PLATFORM_NAME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +59,16 @@ public class RecentChats extends AppCompatActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
-        ab.setTitle(getIntent().getStringExtra("platform_name"));
-
+        PLATFORM_NAME = getIntent().getStringExtra("platform_name");
+        ab.setTitle(PLATFORM_NAME);
         itemsAdapter.add("info@smswithoutwithoutborders.com");
+
+        //TODO: remove this
+        EditText email = findViewById(R.id.manual_send_email);
+        EditText subject = findViewById(R.id.email_subject);
+
+        email.setText("example@smswithoutborders.com");
+        subject.setText("Sample Email for Dev purposes");
     }
 
 
@@ -83,6 +89,7 @@ public class RecentChats extends AppCompatActivity {
         Intent intent = new Intent(this, SendMessageActivity.class);
         intent.putExtra("receipientEmailAddress", receipientEmailAddress);
         intent.putExtra("emailSubject", emailSubject);
+        intent.putExtra("platform_name", PLATFORM_NAME);
         startActivity(intent);
     }
 

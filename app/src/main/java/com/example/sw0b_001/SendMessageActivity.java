@@ -72,7 +72,6 @@ public class SendMessageActivity extends AppCompatActivity {
         catch(Exception e) {
             e.printStackTrace();
         }
-
 //        itemsAdapter.add("[+] GOOGLE: gmail");
     }
 

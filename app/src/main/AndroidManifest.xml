@@ -37,10 +37,10 @@
         </activity>
         <activity
             android:name=".SendMessageActivity"
-            android:parentActivityName=".RecentChats">
+            android:parentActivityName=".Platforms">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".RecentChats" />
+                android:value=".Platforms" />
         </activity>
         <activity
             android:name=".QRScanner"
