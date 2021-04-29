@@ -12,7 +12,6 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="411dp"
         android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
         app:itemBackground="@color/default_dark"
         app:itemIconTint="@color/white"
         app:itemTextColor="#FFFFFF"
@@ -41,8 +40,8 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
+        android:layout_width="409dp"
+        android:layout_height="21dp"
         android:text="Available Platforms"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
