@@ -10,7 +10,7 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
-        android:layout_width="411dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:itemBackground="@color/default_dark"
         app:itemIconTint="@color/white"
@@ -23,7 +23,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout3"
-        android:layout_width="411dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
@@ -40,9 +40,11 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="409dp"
+        android:layout_width="0dp"
         android:layout_height="21dp"
         android:text="Available Platforms"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
