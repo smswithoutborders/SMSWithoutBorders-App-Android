@@ -120,6 +120,7 @@ public class QRScanner extends AppCompatActivity {
 
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() != 0) {
+                    barcodeDetector.release();
                     txtBarcodeValue.post(new Runnable() {
                         @Override
                         public void run() {
