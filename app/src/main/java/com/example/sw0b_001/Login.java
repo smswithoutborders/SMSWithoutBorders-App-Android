@@ -51,7 +51,7 @@ public class Login extends AppCompatActivity {
                 AccessPermissions();
 
                 // TODO: JUst for testing, remove this from here
-                securityLayer.init();
+//                securityLayer.init();
 
             }
             else {
@@ -67,20 +67,6 @@ public class Login extends AppCompatActivity {
         } catch (CertificateException e) {
             e.printStackTrace();
         } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (UnrecoverableKeyException e) {
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
             e.printStackTrace();
         }
 

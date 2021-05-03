@@ -63,16 +63,18 @@ public class SecurityLayer {
         return publicKey;
     }
 
-    public void init() throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException, CertificateException, IOException, NoSuchPaddingException, UnrecoverableKeyException, KeyStoreException, BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
-        this.init_RSA();
+    public String init() throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException, CertificateException, IOException, NoSuchPaddingException, UnrecoverableKeyException, KeyStoreException, BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
+        PublicKey pk = this.init_RSA();
 
         byte[] encryptedText = this.encrypt_RSA("Hello world");
-        System.out.println("[+] Encrypted: " + Base64.encodeToString(encryptedText, Base64.URL_SAFE));
-        System.out.println("[+] Decrypted: " + new String(this.decrypt_RSA(encryptedText)));
+//        System.out.println("[+] Encrypted: " + Base64.encodeToString(encryptedText, Base64.URL_SAFE));
+//        System.out.println("[+] Decrypted: " + new String(this.decrypt_RSA(encryptedText)));
+
+        return Base64.encodeToString(pk.getEncoded(), Base64.DEFAULT);
     }
 
 
-    private void init_RSA() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException {
+    private PublicKey init_RSA() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException {
         KeyPairGenerator keygen = KeyPairGenerator.getInstance(
                 "RSA", DEFAULT_KEYSTORE_PROVIDER);
         keygen.initialize(
@@ -83,7 +85,8 @@ public class SecurityLayer {
                         .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
                         .build());
         this.keyPair = keygen.generateKeyPair();
-        System.out.println("[+] Public key: " + Base64.encodeToString(this.keyPair.getPublic().getEncoded(), Base64.URL_SAFE));
+        return this.keyPair.getPublic();
+//        System.out.println("[+] Public key: " + Base64.encodeToString(this.keyPair.getPublic().getEncoded(), Base64.DEFAULT));
     }
 
     public byte[] encrypt_RSA(String input) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {

@@ -20,6 +20,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.util.JsonUtils;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -117,32 +124,51 @@ public class QRScanner extends AppCompatActivity {
                         @Override
                         public void run() {
                             System.out.println("[+] QR code detected");
+                            cameraSource.stop();
                             try {
-                                //TODO: put a loader here, while loads of internet activities are happening
-                                cameraSource.stop();
+                                SecurityLayer sl = new SecurityLayer();
 
                                 Barcode.UrlBookmark intentData = barcodes.valueAt(0).url;
-                                System.out.print("\t[+]: ");
-                                System.out.println(intentData);
-                                txtBarcodeValue.setText(intentData.url);
+                                System.out.println("\t[+]: " + intentData.url);
 
+                                String appOutput = intentData.url;
+                                txtBarcodeValue.setText(appOutput);
+                                appOutput += "\n[+] Transmitting public key... ";
+                                txtBarcodeValue.setText(appOutput);
+                                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                                // Request a string response from the provided URL.
+                                sl.init();
+                                JSONObject jsonBody = new JSONObject("{\"public_key\": \"" + sl.init() + "\"}");
+                                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(intentData.url, jsonBody, new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+//                                            txtBarcodeValue.setText("DONE!");
+//                                            txtBarcodeValue.setText(response.toString());
+                                            System.out.println("DONE: " + response.toString());
+                                            // TODO: revise method used to store publicKey, might not actually be best for storing URLs
+                                            SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                            SharedPreferences.Editor editor = app_preferences.edit();
+//                                            editor.putString(Gateway.VAR_PUBLICKEY, intentData.toString());
+//                                            editor.commit();
+                                            if( sl.initiate2WayHandshake()) {
 
-//                                System.out.println("[+] GATEWAY PUBLICKEY: " + gatewayPublicKey);
-//                                System.out.println("[+] GATEWAY ORIGINATING URL: " + gatewayOriginatingURL);
-
-                                SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                SharedPreferences.Editor editor = app_preferences.edit();
-
-                                // TODO: revise method used to store publicKey, might not actually be best for storing URLs
-                                editor.putString(Gateway.VAR_PUBLICKEY, intentData.toString());
-                                editor.commit();
-
-                                SecurityLayer securityLayer = new SecurityLayer();
-                                if( securityLayer.initiate2WayHandshake()) {
-
-                                    AccessPlatforms();
-                                    finish();
-                                }
+                                                //AccessPlatforms();
+                                                //finish();
+                                            }
+                                        }
+                                    }, new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+//                                            txtBarcodeValue.setText(appOutput);
+                                            System.out.println("Failed: " + error);
+//                                            if( error.networkResponse.statusCode == 500) {
+//                                                finish();
+//
+//                                                return;
+//                                            }
+                                        }
+                                });
+                                queue.add(jsonObjectRequest);
                             } catch (KeyStoreException e) {
                                 e.printStackTrace();
                             } catch (CertificateException e) {
@@ -150,6 +176,22 @@ public class QRScanner extends AppCompatActivity {
                             } catch (NoSuchAlgorithmException e) {
                                 e.printStackTrace();
                             } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (BadPaddingException e) {
+                                e.printStackTrace();
+                            } catch (InvalidKeyException e) {
+                                e.printStackTrace();
+                            } catch (UnrecoverableKeyException e) {
+                                e.printStackTrace();
+                            } catch (InvalidAlgorithmParameterException e) {
+                                e.printStackTrace();
+                            } catch (NoSuchPaddingException e) {
+                                e.printStackTrace();
+                            } catch (NoSuchProviderException e) {
+                                e.printStackTrace();
+                            } catch (IllegalBlockSizeException e) {
                                 e.printStackTrace();
                             }
                         }
