@@ -155,26 +155,18 @@ public class QRScanner extends AppCompatActivity {
                                                 System.out.println("PublicKey: " + publicKey);
                                                 System.out.println("SharedKey: " + sharedKey);
 
-//                                                byte[] b_sharedKey = Base64.decode(sharedKey.getBytes(), Base64.DEFAULT);
-//                                                System.out.println("[+] Decrypted SharedKey: " + sl.decrypt_RSA(b_sharedKey));
                                                 byte[] decryptedSharedKey = sl.decrypt_RSA(sharedKey.getBytes("UTF-8"));
                                                 System.out.println("[+] Decrypted SharedKey: " + new String(decryptedSharedKey));
-//                                                System.out.println("SharedKey: " + sharedKey);
 
-
-
-                                                SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                                SharedPreferences.Editor editor = app_preferences.edit();
-                                                editor.putString(Gateway.VAR_PUBLICKEY, intentData.toString());
-                                                editor.putString(Gateway.VAR_PASSWDHASH, new String(sl.decrypt_RSA(passwdHash.getBytes("UTF-8"))));
-                                                editor.commit();
-
-//                                                String plainPassword = "asshole";
-//                                                char[] passwd = plainPassword.toCharArray();
                                                 if( sl.storeSecretKey(sl.decrypt_RSA(sharedKey.getBytes("UTF-8")))) {
-
-                                                    AccessPlatforms();
-                                                    finish();
+                                                    SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                                    SharedPreferences.Editor editor = app_preferences.edit();
+                                                    editor.putString(Gateway.VAR_PUBLICKEY, publicKey);
+                                                    editor.putString(Gateway.VAR_PASSWDHASH, passwdHash);
+                                                    editor.commit();
+                                                }
+                                                else {
+                                                    System.out.println("[-] Failed to store shared key");
                                                 }
                                             } catch (JSONException | KeyStoreException e) {
                                                 e.printStackTrace();

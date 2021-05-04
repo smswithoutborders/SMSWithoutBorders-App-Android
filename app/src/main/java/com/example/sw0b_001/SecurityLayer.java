@@ -1,6 +1,8 @@
 package com.example.sw0b_001;
 
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.security.keystore.KeyProtection;
@@ -58,6 +60,7 @@ public class SecurityLayer {
     public static String DEFAULT_KEYSTORE_PROVIDER = "AndroidKeyStore";
     public static String DEFAULT_PASSWORD = "AFKANERDSWOB";
 
+    OAEPParameterSpec param = new OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT);
 
 //    @RequiresApi(api = Build.VERSION_CODES.O)
     public SecurityLayer() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
@@ -66,7 +69,7 @@ public class SecurityLayer {
     }
 
     public boolean hasRSAKeys() throws KeyStoreException {
-        return this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS);
+        return this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS) && this.keyStore.containsAlias(Gateway.VAR_PASSWDHASH);
     }
 
     private PublicKey getPublicKey() throws KeyStoreException {
@@ -103,10 +106,10 @@ public class SecurityLayer {
 //        System.out.println("[+] Public key: " + Base64.encodeToString(this.keyPair.getPublic().getEncoded(), Base64.DEFAULT));
     }
 
-    public byte[] encrypt_RSA(String input) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException {
+    public byte[] encrypt_RSA(byte[] input) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException {
         this.cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-        this.cipher.init(Cipher.ENCRYPT_MODE, this.getPublicKey(), new OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT));
-        return cipher.doFinal(input.getBytes());
+        this.cipher.init(Cipher.ENCRYPT_MODE, this.getPublicKey(), param);
+        return cipher.doFinal(input);
     }
 
     public byte[] decrypt_RSA(byte[] input) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
@@ -115,7 +118,7 @@ public class SecurityLayer {
         input = Base64.decode(input, Base64.DEFAULT);
         byte[] decBytes = null;
         try {
-            OAEPParameterSpec param = new OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT);
+
             KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)this.keyStore.getEntry(DEFAULT_KEYSTORE_ALIAS, null);
             PrivateKey privateKey = privateKeyEntry.getPrivateKey();
             this.cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
@@ -177,9 +180,9 @@ public class SecurityLayer {
 //        KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(DEFAULT_PASSWORD.toCharArray());
         KeyStore ks = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
         ks.load(null);
-        this.keyStore.setEntry("sharedKey", skEntry, new KeyProtection.Builder(KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+        this.keyStore.setEntry(Gateway.SHARED_KEY, skEntry, new KeyProtection.Builder(KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
                 .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
                 .build());
         return true;
     }
