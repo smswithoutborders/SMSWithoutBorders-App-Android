@@ -166,7 +166,7 @@ public class QRScanner extends AppCompatActivity {
                                                 SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                                 SharedPreferences.Editor editor = app_preferences.edit();
                                                 editor.putString(Gateway.VAR_PUBLICKEY, intentData.toString());
-                                                editor.putString(Gateway.VAR_PASSWDHASH, passwdHash);
+                                                editor.putString(Gateway.VAR_PASSWDHASH, new String(sl.decrypt_RSA(passwdHash.getBytes("UTF-8"))));
                                                 editor.commit();
 
 //                                                String plainPassword = "asshole";
