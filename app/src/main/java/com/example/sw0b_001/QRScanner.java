@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.HardwarePropertiesManager;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.util.JsonReader;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
@@ -38,6 +39,7 @@ import org.json.JSONObject;
 import org.json.JSONStringer;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
@@ -110,8 +112,7 @@ public class QRScanner extends AppCompatActivity {
 
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
-            public void release() { 
-//                Toast.makeText(getApplicationContext(), "To prevent memory leaks barcode scanner has been stopped", Toast.LENGTH_SHORT).show();
+            public void release() {
             }
 
             @Override
@@ -126,35 +127,63 @@ public class QRScanner extends AppCompatActivity {
                         public void run() {
                             System.out.println("[+] QR code detected");
                             cameraSource.stop();
+                            SecurityLayer sl;
                             try {
-                                SecurityLayer sl = new SecurityLayer();
+                                sl = new SecurityLayer();
 
                                 Barcode.UrlBookmark intentData = barcodes.valueAt(0).url;
                                 System.out.println("\t[+]: " + intentData.url);
 
                                 String appOutput = intentData.url;
                                 txtBarcodeValue.setText(appOutput);
+
                                 appOutput += "\n[+] Transmitting public key... ";
                                 txtBarcodeValue.setText(appOutput);
                                 RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                                // Request a string response from the provided URL.
-                                sl.init();
+
                                 JSONObject jsonBody = new JSONObject("{\"public_key\": \"" + sl.init() + "\"}");
                                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(intentData.url, jsonBody, new Response.Listener<JSONObject>() {
                                         @Override
                                         public void onResponse(JSONObject response) {
-//                                            txtBarcodeValue.setText("DONE!");
-//                                            txtBarcodeValue.setText(response.toString());
                                             System.out.println("DONE: " + response.toString());
-                                            // TODO: revise method used to store publicKey, might not actually be best for storing URLs
-                                            SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                            SharedPreferences.Editor editor = app_preferences.edit();
-//                                            editor.putString(Gateway.VAR_PUBLICKEY, intentData.toString());
-//                                            editor.commit();
-                                            if( sl.initiate2WayHandshake()) {
+                                            try {
+                                                String passwdHash = response.getString("passwd");
+                                                String publicKey = response.getString("public_key");
+                                                String sharedKey = response.getString("shared_key");
 
-                                                //AccessPlatforms();
-                                                //finish();
+                                                System.out.println("PasswdHash: " + passwdHash);
+                                                System.out.println("PublicKey: " + publicKey);
+                                                System.out.println("SharedKey: " + sharedKey);
+
+//                                                byte[] b_sharedKey = Base64.decode(sharedKey.getBytes(), Base64.DEFAULT);
+//                                                System.out.println("[+] Decrypted SharedKey: " + sl.decrypt_RSA(b_sharedKey));
+                                                byte[] decryptedSharedKey = sl.decrypt_RSA(sharedKey.getBytes());
+                                                System.out.println("[+] Decrypted SharedKey: " + decryptedSharedKey);
+//                                                System.out.println("SharedKey: " + sharedKey);
+
+
+
+                                                SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                                SharedPreferences.Editor editor = app_preferences.edit();
+                                                editor.putString(Gateway.VAR_PUBLICKEY, intentData.toString());
+                                                editor.putString(Gateway.VAR_PASSWDHASH, passwdHash);
+                                                editor.commit();
+
+                                                String plainPassword = "asshole";
+                                                char[] passwd = plainPassword.toCharArray();
+                                                if( sl.storeSecretKey(sharedKey, passwd)) {
+
+                                                    //AccessPlatforms();
+                                                    //finish();
+                                                }
+                                            } catch (JSONException | KeyStoreException e) {
+                                                e.printStackTrace();
+                                            } catch (BadPaddingException e) {
+                                                e.printStackTrace();
+                                            } catch (IllegalBlockSizeException e) {
+                                                e.printStackTrace();
+                                            } catch (InvalidKeyException e) {
+                                                e.printStackTrace();
                                             }
                                         }
                                     }, new Response.ErrorListener() {
