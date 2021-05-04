@@ -3,6 +3,7 @@ package com.example.sw0b_001;
 import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
+import android.security.keystore.KeyProtection;
 import android.util.Base64;
 
 import androidx.annotation.RequiresApi;
@@ -31,6 +32,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.OAEPParameterSpec;
 import javax.crypto.spec.PSource;
@@ -46,13 +48,15 @@ public class SecurityLayer {
 
 
     public static final String DEFAULT_KEYPAIR_ALGORITHM = KeyProperties.KEY_ALGORITHM_RSA;
-//    public static final String DEFAULT_KEYPAIR_ALGORITHM_PADDING = "RSA/ECB/PKCS1Padding";
+    public static final String DEFAULT_KEYPAIR_ALGORITHM_PADDING_AES = "RSA/ECB/PKCS1Padding";
 //    public static final String DEFAULT_KEYPAIR_ALGORITHM_PADDING = KeyProperties.ENCRYPTION_PADDING_RSA_OAEP;
-    public static final String DEFAULT_KEYPAIR_ALGORITHM_PADDING = "RSA/ECB/OAEPPadding";
+    public static final String DEFAULT_KEYPAIR_ALGORITHM_PADDING = "RSA/ECB/" + KeyProperties.ENCRYPTION_PADDING_RSA_OAEP;
+//    public static final String DEFAULT_KEYPAIR_ALGORITHM_PADDING = "RSA/ECB/" + KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1;
 
 
     public static final String DEFAULT_KEYSTORE_ALIAS = "DEFAULT_SWOB_KEYSTORE";
     public static String DEFAULT_KEYSTORE_PROVIDER = "AndroidKeyStore";
+    public static String DEFAULT_PASSWORD = "AFKANERDSWOB";
 
 
 //    @RequiresApi(api = Build.VERSION_CODES.O)
@@ -90,8 +94,8 @@ public class SecurityLayer {
         keygen.initialize(
                 new KeyGenParameterSpec.Builder(
                         DEFAULT_KEYSTORE_ALIAS,
-                        KeyProperties.PURPOSE_DECRYPT | KeyProperties.PURPOSE_ENCRYPT)
-                        .setDigests(KeyProperties.DIGEST_SHA512)
+                        KeyProperties.PURPOSE_DECRYPT )
+                        .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
                         .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
                         .build());
 
@@ -107,11 +111,11 @@ public class SecurityLayer {
 
     public byte[] decrypt_RSA(byte[] input) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
         System.out.println("[+] Decoding len: " + input.length);
-        System.out.println("[+] Decoding: " + Base64.decode(input, Base64.DEFAULT));
+//        System.out.println("[+] Decoding: " + Base64.decode(input, Base64.DEFAULT));
         input = Base64.decode(input, Base64.DEFAULT);
         byte[] decBytes = null;
         try {
-            OAEPParameterSpec param = new OAEPParameterSpec("SHA-512", "MGF1", MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT);
+            OAEPParameterSpec param = new OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT);
             KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)this.keyStore.getEntry(DEFAULT_KEYSTORE_ALIAS, null);
             PrivateKey privateKey = privateKeyEntry.getPrivateKey();
             this.cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
@@ -145,7 +149,7 @@ public class SecurityLayer {
         byte[] plainTextByte = "c4a15a90-57d4-4935-b5ae-ba89df8e".getBytes();
         this.key = new SecretKeySpec(plainTextByte, "AES");
         this.iv = new IvParameterSpec(strIV.getBytes());
-        this.cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+        this.cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING_AES);
         this.cipher.init(Cipher.ENCRYPT_MODE, this.key, this.iv);
         byte[] ciphertext = this.cipher.doFinal(input.getBytes());
         return ciphertext;
@@ -167,12 +171,16 @@ public class SecurityLayer {
     }
 
 
-    public boolean storeSecretKey(String secretKey, char[] password) throws KeyStoreException {
-        KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(password);
-        javax.crypto.SecretKey key = new SecretKeySpec(secretKey.getBytes(), "AES");
+    public boolean storeSecretKey(byte[] secretKey) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+        SecretKey key = new SecretKeySpec(secretKey, "AES");
         KeyStore.SecretKeyEntry skEntry = new KeyStore.SecretKeyEntry(key);
-        KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-        ks.setEntry("sharedKey", skEntry, protParam);
+//        KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(DEFAULT_PASSWORD.toCharArray());
+        KeyStore ks = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
+        ks.load(null);
+        this.keyStore.setEntry("sharedKey", skEntry, new KeyProtection.Builder(KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+                .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
+                .build());
         return false;
     }
 }

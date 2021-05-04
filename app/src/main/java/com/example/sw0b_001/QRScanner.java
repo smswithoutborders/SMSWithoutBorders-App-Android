@@ -157,8 +157,8 @@ public class QRScanner extends AppCompatActivity {
 
 //                                                byte[] b_sharedKey = Base64.decode(sharedKey.getBytes(), Base64.DEFAULT);
 //                                                System.out.println("[+] Decrypted SharedKey: " + sl.decrypt_RSA(b_sharedKey));
-                                                byte[] decryptedSharedKey = sl.decrypt_RSA(sharedKey.getBytes());
-                                                System.out.println("[+] Decrypted SharedKey: " + decryptedSharedKey);
+                                                byte[] decryptedSharedKey = sl.decrypt_RSA(sharedKey.getBytes("UTF-8"));
+                                                System.out.println("[+] Decrypted SharedKey: " + new String(decryptedSharedKey));
 //                                                System.out.println("SharedKey: " + sharedKey);
 
 
@@ -169,9 +169,9 @@ public class QRScanner extends AppCompatActivity {
                                                 editor.putString(Gateway.VAR_PASSWDHASH, passwdHash);
                                                 editor.commit();
 
-                                                String plainPassword = "asshole";
-                                                char[] passwd = plainPassword.toCharArray();
-                                                if( sl.storeSecretKey(sharedKey, passwd)) {
+//                                                String plainPassword = "asshole";
+//                                                char[] passwd = plainPassword.toCharArray();
+                                                if( sl.storeSecretKey(sl.decrypt_RSA(sharedKey.getBytes("UTF-8")))) {
 
                                                     //AccessPlatforms();
                                                     //finish();
@@ -183,6 +183,14 @@ public class QRScanner extends AppCompatActivity {
                                             } catch (IllegalBlockSizeException e) {
                                                 e.printStackTrace();
                                             } catch (InvalidKeyException e) {
+                                                e.printStackTrace();
+                                            } catch (UnsupportedEncodingException e) {
+                                                e.printStackTrace();
+                                            } catch (CertificateException e) {
+                                                e.printStackTrace();
+                                            } catch (NoSuchAlgorithmException e) {
+                                                e.printStackTrace();
+                                            } catch (IOException e) {
                                                 e.printStackTrace();
                                             }
                                         }
