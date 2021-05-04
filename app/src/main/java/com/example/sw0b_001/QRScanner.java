@@ -173,8 +173,8 @@ public class QRScanner extends AppCompatActivity {
 //                                                char[] passwd = plainPassword.toCharArray();
                                                 if( sl.storeSecretKey(sl.decrypt_RSA(sharedKey.getBytes("UTF-8")))) {
 
-                                                    //AccessPlatforms();
-                                                    //finish();
+                                                    AccessPlatforms();
+                                                    finish();
                                                 }
                                             } catch (JSONException | KeyStoreException e) {
                                                 e.printStackTrace();

@@ -181,6 +181,6 @@ public class SecurityLayer {
                 .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
                 .build());
-        return false;
+        return true;
     }
 }
