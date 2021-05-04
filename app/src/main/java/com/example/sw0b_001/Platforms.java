@@ -54,19 +54,7 @@ public class Platforms extends AppCompatActivity {
 
 //        this.getActionBar().setTitle(activityLabel);
 //        this.getSupportActionBar().setTitle(activityLabel);  // provide compatibility to all the versions
-        try {
-            keyStore = KeyStore.getInstance(SecurityLayer.DEFAULT_KEYSTORE_PROVIDER);
-            keyStore.load(null);
-            keyStore.deleteEntry(SecurityLayer.DEFAULT_KEYSTORE_ALIAS);
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public void clickListener() {

@@ -18,6 +18,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
@@ -69,7 +70,8 @@ public class SecurityLayer {
     }
 
     public boolean hasRSAKeys() throws KeyStoreException {
-        return this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS) && this.keyStore.containsAlias(Gateway.VAR_PASSWDHASH);
+        return this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS);
+//        return true;
     }
 
     private PublicKey getPublicKey() throws KeyStoreException {
@@ -140,7 +142,7 @@ public class SecurityLayer {
         return decBytes;
     }
 
-    public byte[] encrypt(String input) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException {
+    public byte[] encrypt_AES(String input) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException {
         char[] charsArray = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '@', '#', '$', '%', '^', '*'};
         SecureRandom rand = new SecureRandom();
         StringBuilder password = new StringBuilder();
@@ -158,7 +160,7 @@ public class SecurityLayer {
         return ciphertext;
     }
 
-    public byte[] decrypt(byte[] input) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
+    public byte[] decrypt_AES(byte[] input) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
         byte[] decBytes = null;
         try {
             this.cipher.init(Cipher.DECRYPT_MODE, this.key, this.iv);
@@ -185,5 +187,29 @@ public class SecurityLayer {
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
                 .build());
         return true;
+    }
+
+    public byte[] hash_sha256(String input) throws NoSuchPaddingException, NoSuchAlgorithmException {
+        MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
+        byte[] digest = md.digest(input.getBytes());
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < digest.length; i++) {
+            sb.append(Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1));
+        }
+
+        return sb.toString().getBytes();
+    }
+
+    public boolean authenticate(Context context, String password) throws NoSuchAlgorithmException, NoSuchPaddingException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
+        byte[] hsPasswd = hash_sha256(password);
+        System.out.println("[+] Hashed Password: " + hsPasswd);
+        System.out.println("[+] Hashed Password (b64): " + new String(hsPasswd));
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String passwdHash = preferences.getString(Gateway.VAR_PASSWDHASH, null);
+        passwdHash = new String(decrypt_RSA(passwdHash.getBytes()));
+
+        System.out.println("[+] Stored Password: " + passwdHash);
+        return new String(hsPasswd).toUpperCase().equals(passwdHash.toUpperCase());
     }
 }
