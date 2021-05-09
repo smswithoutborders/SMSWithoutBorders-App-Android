@@ -3,6 +3,7 @@ package com.example.sw0b_001;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,6 +50,8 @@ public class Platforms extends AppCompatActivity {
         setContentView(R.layout.activity_platforms);
 
         recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL));
         platforms = getResources().getStringArray(R.array.platforms);
         descriptions = getResources().getStringArray(R.array.description);
 
