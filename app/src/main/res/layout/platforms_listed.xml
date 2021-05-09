@@ -2,19 +2,25 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/platforms_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp">
+    android:layout_margin="10dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/platform_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="false"
         android:theme="@style/Theme.MyApp"
         app:cardBackgroundColor="@color/default_dark"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,15 +40,15 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
 
-<!--            <ImageView-->
-<!--                android:id="@+id/platform_image"-->
-<!--                android:layout_width="63dp"-->
-<!--                android:layout_height="73dp"-->
-<!--                android:src="@android:drawable/sym_def_app_icon"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintVertical_bias="1.0" />-->
+            <!--            <ImageView-->
+            <!--                android:id="@+id/platform_image"-->
+            <!--                android:layout_width="63dp"-->
+            <!--                android:layout_height="73dp"-->
+            <!--                android:src="@android:drawable/sym_def_app_icon"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent"-->
+            <!--                app:layout_constraintVertical_bias="1.0" />-->
 
             <TextView
                 android:id="@+id/platform_description"
