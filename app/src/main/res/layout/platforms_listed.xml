@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_margin="2.5dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -14,26 +14,40 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/platform_image"
-                android:layout_width="85dp"
-                android:layout_height="71dp"
+                android:layout_width="73dp"
+                android:layout_height="73dp"
+                android:src="@android:drawable/sym_def_app_icon"
+                app:civ_border_color="#FFFFFF"
+                app:civ_border_width="2dp"
+                app:civ_circle_background_color="#FFFFFF"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0"
-                app:srcCompat="@android:drawable/sym_def_app_icon" />
+                app:layout_constraintVertical_bias="1.0" />
+
+<!--            <ImageView-->
+<!--                android:id="@+id/platform_image"-->
+<!--                android:layout_width="63dp"-->
+<!--                android:layout_height="73dp"-->
+<!--                android:src="@android:drawable/sym_def_app_icon"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintVertical_bias="1.0" />-->
 
             <TextView
                 android:id="@+id/platform_description"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="11dp"
                 android:text="description"

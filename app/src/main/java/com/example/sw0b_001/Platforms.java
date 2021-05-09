@@ -42,7 +42,7 @@ public class Platforms extends AppCompatActivity {
     RecyclerView recyclerView;
 
     String platforms[], descriptions[];
-    int images[] = {R.drawable.gmail, R.drawable.twitter};
+    int images[] = {R.drawable.roundgmail, R.drawable.roundtwitter};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
