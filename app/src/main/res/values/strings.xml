@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">sw0b_0.0.1</string>
     <string name="def_text_nobarcode">No barcode detected</string>
+
+    <string-array name="platforms">
+        <item>gmail</item>
+        <item>twitter</item>
+    </string-array>
+
+    <string-array name="description">
+        <item>Send emails using your gmail email address</item>
+        <item>Send tweet using your twitter address</item>
+    </string-array>
 </resources>

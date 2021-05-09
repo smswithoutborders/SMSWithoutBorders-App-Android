@@ -1,16 +1,25 @@
 package com.example.sw0b_001;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.security.KeyStore;
@@ -27,48 +36,24 @@ public class Platforms extends AppCompatActivity {
     ArrayList<String> items = new ArrayList<>();
     ArrayAdapter<String> itemsAdapter;
     KeyStore keyStore;
-
     String activityLabel = "Activity Platforms";
-
     ListView listView;
+    RecyclerView recyclerView;
+
+    String platforms[], descriptions[];
+    int images[] = {R.drawable.gmail, R.drawable.twitter};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_platforms);
 
+        recyclerView = findViewById(R.id.recycler_view);
+        platforms = getResources().getStringArray(R.array.platforms);
+        descriptions = getResources().getStringArray(R.array.description);
 
-
-        listView = findViewById(R.id.item_list);
-        itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
-        try {
-            listView.setAdapter(itemsAdapter);
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-
-        itemsAdapter.add("[+] GOOGLE: gmail");
-        clickListener();
-
-
-
-//        this.getActionBar().setTitle(activityLabel);
-//        this.getSupportActionBar().setTitle(activityLabel);  // provide compatibility to all the versions
-
-    }
-
-    public void clickListener() {
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Context context = getApplicationContext();
-                String clickedString = "Item just got clicked: [" + id + ":<"+ items.get(position)  + ">]";
-                Toast.makeText(context, clickedString, Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(parent.getContext(), RecentChats.class);
-                intent.putExtra("platform_name", items.get(position));
-                startActivity(intent);
-            }
-        });
+        PlatformsAdapter platformsAdapter = new PlatformsAdapter(this, platforms, descriptions, images);
+        recyclerView.setAdapter(platformsAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }
