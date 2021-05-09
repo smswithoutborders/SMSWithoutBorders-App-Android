@@ -44,7 +44,6 @@ public class Login extends AppCompatActivity {
         try {
             securityLayer = new SecurityLayer();
             EditText password = findViewById(R.id.user_password);
-
             if(!securityLayer.hasRSAKeys()) {
                 System.out.println("[+] Does not have RSA keys");
                 AccessPermissions();
@@ -85,8 +84,6 @@ public class Login extends AppCompatActivity {
         } catch (CertificateException e) {
             e.printStackTrace();
         } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
             e.printStackTrace();
         } catch (BadPaddingException e) {
             e.printStackTrace();

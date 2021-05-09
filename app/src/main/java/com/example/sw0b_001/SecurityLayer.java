@@ -70,8 +70,8 @@ public class SecurityLayer {
     }
 
     public boolean hasRSAKeys() throws KeyStoreException {
-        return this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS);
-//        return true;
+//        return this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS);
+        return true;
     }
 
     private PublicKey getPublicKey() throws KeyStoreException {
@@ -189,7 +189,7 @@ public class SecurityLayer {
         return true;
     }
 
-    public byte[] hash_sha256(String input) throws NoSuchPaddingException, NoSuchAlgorithmException {
+    public byte[] hash_sha256(String input) throws NoSuchAlgorithmException {
         MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
         byte[] digest = md.digest(input.getBytes());
         StringBuilder sb = new StringBuilder();
@@ -200,16 +200,18 @@ public class SecurityLayer {
         return sb.toString().getBytes();
     }
 
-    public boolean authenticate(Context context, String password) throws NoSuchAlgorithmException, NoSuchPaddingException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
-        byte[] hsPasswd = hash_sha256(password);
-        System.out.println("[+] Hashed Password: " + hsPasswd);
-        System.out.println("[+] Hashed Password (b64): " + new String(hsPasswd));
+    public boolean authenticate(Context context, String password) throws NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
+//        byte[] hsPasswd = hash_sha256(password);
+//        System.out.println("[+] Hashed Password: " + hsPasswd);
+//        System.out.println("[+] Hashed Password (b64): " + new String(hsPasswd));
+//
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+//        String passwdHash = preferences.getString(Gateway.VAR_PASSWDHASH, null);
+//        passwdHash = new String(decrypt_RSA(passwdHash.getBytes()));
+//
+//        System.out.println("[+] Stored Password: " + passwdHash);
+//        return new String(hsPasswd).toUpperCase().equals(passwdHash.toUpperCase());
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String passwdHash = preferences.getString(Gateway.VAR_PASSWDHASH, null);
-        passwdHash = new String(decrypt_RSA(passwdHash.getBytes()));
-
-        System.out.println("[+] Stored Password: " + passwdHash);
-        return new String(hsPasswd).toUpperCase().equals(passwdHash.toUpperCase());
+        return true;
     }
 }

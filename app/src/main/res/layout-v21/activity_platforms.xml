@@ -12,7 +12,7 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:itemBackground="@color/default_dark"
+        android:background="@android:color/background_dark"
         app:itemIconTint="@color/white"
         app:itemTextColor="#FFFFFF"
         app:labelVisibilityMode="labeled"
