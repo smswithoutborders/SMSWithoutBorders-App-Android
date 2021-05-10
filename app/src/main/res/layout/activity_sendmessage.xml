@@ -37,82 +37,103 @@
         android:layout_height="24dp"
         android:background="@color/default_dark"
         android:textColor="#ACA9A9"
-        app:layout_constraintBottom_toTopOf="@+id/message_list_layout"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/static_compose_subject" />
 
-    <EditText
-        android:id="@+id/edit_message"
-        android:layout_width="0dp"
-        android:layout_height="250dp"
-        android:backgroundTint="#FFFFFF"
-        android:ems="10"
-        android:gravity="start|top"
-        android:hint="Email Body..."
-        android:inputType="textMultiLine"
-        android:selectAllOnFocus="true"
-        android:textColorHint="#A8A8A8"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/message_list_layout" />
-
     <LinearLayout
-        android:id="@+id/message_list_layout"
+        android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/edit_message"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/static_compose_platform">
 
-        <ListView
-            android:id="@+id/message_list"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/default_dark"
-            android:theme="@style/CardView.Light"
-            android:visibility="visible">
+            android:layout_height="match_parent">
 
-        </ListView>
+            <EditText
+                android:id="@+id/edit_message"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:backgroundTint="#FFFFFF"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="Email Body..."
+                android:inputType="textMultiLine"
+                android:selectAllOnFocus="true"
+                android:textColor="@color/black"
+                android:textColorHint="#A8A8A8"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/message_list_layout" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edit_message">
+
+                <Button
+                    android:id="@+id/btn_sendMessage"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="310dp"
+                    android:layout_marginTop="35dp"
+                    android:layout_marginEnd="13dp"
+                    android:backgroundTint="@color/default_blue"
+                    android:onClick="onClickSend"
+                    android:paddingStart="25dp"
+                    android:paddingEnd="25dp"
+                    android:textColor="#FFFFFF"
+                    app:icon="@drawable/ic_baseline_send_24"
+                    app:iconTint="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/message_list_layout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:focusable="auto"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/edit_message"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ListView
+                    android:id="@+id/message_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/default_dark"
+                    android:theme="@style/CardView.Light"
+                    android:transcriptMode="alwaysScroll"
+                    android:visibility="visible">
+
+                </ListView>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </LinearLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_message">
-
-        <Button
-            android:id="@+id/btn_sendMessage"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="310dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginEnd="13dp"
-            android:backgroundTint="@color/default_blue"
-            android:onClick="onClickSend"
-            android:paddingStart="25dp"
-            android:paddingEnd="25dp"
-            android:textColor="#FFFFFF"
-            app:icon="@drawable/ic_baseline_send_24"
-            app:iconTint="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
