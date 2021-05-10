@@ -8,44 +8,75 @@
 
     <Button
         android:id="@+id/btn_sendMessage"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
+        android:layout_marginStart="307dp"
+        android:layout_marginEnd="16dp"
         android:onClick="onClickSend"
         android:text="SEND"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_message" />
 
     <EditText
         android:id="@+id/edit_message"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_width="409dp"
+        android:layout_height="244dp"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
         android:selectAllOnFocus="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_sendMessage"
+        app:layout_constraintBottom_toTopOf="@+id/btn_sendMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.428"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/message_list_layout" />
+
+    <TextView
+        android:id="@+id/static_compose_to"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:background="@color/white"
+        android:textColor="#FF939393"
+        app:layout_constraintBottom_toTopOf="@+id/message_list_layout"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/message_list_layout"
-        app:layout_constraintTop_toBottomOf="@+id/message_list_layout"
-        app:layout_constraintVertical_bias="0.974" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/static_compose_from"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:background="@color/white"
+        android:textColor="#939393"
+        app:layout_constraintBottom_toTopOf="@+id/message_list_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/static_compose_to" />
 
     <LinearLayout
         android:id="@+id/message_list_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/btn_sendMessage"
+        app:layout_constraintBottom_toTopOf="@+id/edit_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/static_compose_from"><![CDATA[
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="143dp"
         tools:layout_editor_absoluteY="447dp">
+
+
+
+        ]]>
 
         <ListView
             android:id="@+id/message_list"
@@ -53,7 +84,9 @@
             android:layout_height="match_parent"
             android:background="@color/design_default_color_background"
             android:theme="@style/CardView.Light"
-            android:visibility="visible" />
+            android:visibility="visible">
+
+        </ListView>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
