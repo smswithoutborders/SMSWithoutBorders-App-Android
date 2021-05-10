@@ -24,39 +24,39 @@
         android:supportsRtl="true">
 
 
-        <activity android:name=".ListPlatforms.Emails.EmailActivities_Recent" android:parentActivityName=".Platforms" android:label="Emailing...">
+        <activity android:name=".ListPlatforms.Emails.EmailActivities_Recent" android:parentActivityName=".Platforms" android:label="Recents...">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ListPlatforms.Emails.SendMessageActivity" />
         </activity>
 
 
-        <activity android:name=".Permissions" android:parentActivityName=".Login">
+        <activity android:name=".Permissions" android:parentActivityName=".Login" android:label="Permission">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Login" />
         </activity>
 
 
-        <activity android:name=".Platforms" android:label="Platforms">
+        <activity android:name=".Platforms" android:label="Usable Platforms">
 
 
         </activity>
-        <activity android:name=".ListPlatforms.Emails.SendMessageActivity" android:parentActivityName=".ListPlatforms.Emails.EmailActivities_Recent">
+        <activity android:name=".ListPlatforms.Emails.SendMessageActivity" android:parentActivityName=".ListPlatforms.Emails.EmailActivities_Recent" android:label="Compose">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ListPlatforms.Emails.EmailActivities_Recent" />
         </activity>
 
 
-        <activity android:name=".QRScanner" android:parentActivityName=".Login">
+        <activity android:name=".QRScanner" android:parentActivityName=".Login" android:label="QR Scanner">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Login" />
         </activity>
 
 
-        <activity android:name=".Login">
+        <activity android:name=".Login" android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
