@@ -102,8 +102,10 @@
             android:onClick="composeEmail"
             android:text="Compose"
             android:textColor="@color/white"
-            app:icon="@android:drawable/ic_menu_edit"
-            android:iconTint="@color/white"
+            app:icon="@drawable/ic_baseline_edit_24"
+            app:iconTint="@color/white"
+            android:paddingStart="25dp"
+            android:paddingEnd="25dp"
             app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
             app:layout_constraintStart_toEndOf="@+id/textInputLayout" />
 
@@ -126,7 +128,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="334dp"
             android:layout_marginBottom="7dp"
-            android:fontFamily="@font/roboto"
             android:text="Continue Recent Emails"
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
