@@ -22,37 +22,41 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/Theme.MaterialComponents"
         android:supportsRtl="true">
-        <activity android:name=".RecentChats" android:parentActivityName=".Platforms" android:theme="@style/Theme.MaterialComponents.NoActionBar">
+
+
+        <activity android:name=".ListPlatforms.EmailActivities_Recent" android:parentActivityName=".Platforms" android:label="Emailing...">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SendMessageActivity" />
+        </activity>
+
+
+        <activity android:name=".Permissions" android:parentActivityName=".Login">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Login" />
         </activity>
-        <activity
-            android:name=".Permissions"
-            android:parentActivityName=".Login">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
-        </activity>
-        <activity android:name=".Platforms" android:label="Platforms" android:theme="@style/Theme.MaterialComponents">
+
+
+        <activity android:name=".Platforms" android:label="Platforms">
 
 
         </activity>
-        <activity
-            android:name=".SendMessageActivity"
-            android:parentActivityName=".Platforms">
+        <activity android:name=".SendMessageActivity" android:parentActivityName=".ListPlatforms.EmailActivities_Recent">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Platforms" />
+                android:value=".ListPlatforms.EmailActivities_Recent" />
         </activity>
-        <activity
-            android:name=".QRScanner"
-            android:parentActivityName=".Login">
+
+
+        <activity android:name=".QRScanner" android:parentActivityName=".Login">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Login" />
         </activity>
-        <activity android:name=".Login" android:theme="@style/Theme.MaterialComponents">
+
+
+        <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

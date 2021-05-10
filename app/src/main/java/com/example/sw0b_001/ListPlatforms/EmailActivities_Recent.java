@@ -1,4 +1,4 @@
-package com.example.sw0b_001;
+package com.example.sw0b_001.ListPlatforms;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,25 +6,20 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import java.io.IOException;
+import com.example.sw0b_001.R;
+import com.example.sw0b_001.SendMessageActivity;
+
 import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
 import java.util.ArrayList;
 
-public class RecentChats extends AppCompatActivity {
+public class EmailActivities_Recent extends AppCompatActivity {
 
     ArrayList<String> items = new ArrayList<>();
     ArrayAdapter<String> itemsAdapter;
@@ -35,40 +30,37 @@ public class RecentChats extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recent_chats);
+        setContentView(R.layout.activity_emailactivities_recent);
 
+        //        Toolbar myToolbar = (Toolbar) findViewById(R.id.platform_toolbar);
+//        setSupportActionBar(myToolbar);
+//        // Get a support ActionBar corresponding to this toolbar
+//        ActionBar ab = getSupportActionBar();
+//
+//        // Enable the Up button
+//        ab.setDisplayHomeAsUpEnabled(true);
+//
+//        PLATFORM_NAME = getIntent().getStringExtra("platform_name");
+//        ab.setTitle(PLATFORM_NAME);
 
-
-
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.platform_toolbar);
-        setSupportActionBar(myToolbar);
 
         listView = findViewById(R.id.item_list);
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
         try {
             listView.setAdapter(itemsAdapter);
+            itemsAdapter.add("info@smswithoutwithoutborders.com");
         }
         catch(Exception e) {
             e.printStackTrace();
         }
 
-        clickListener();
-        // Get a support ActionBar corresponding to this toolbar
-        ActionBar ab = getSupportActionBar();
-
-        // Enable the Up button
-        ab.setDisplayHomeAsUpEnabled(true);
-
-        PLATFORM_NAME = getIntent().getStringExtra("platform_name");
-        ab.setTitle(PLATFORM_NAME);
-        itemsAdapter.add("info@smswithoutwithoutborders.com");
-
         //TODO: remove this
         EditText email = findViewById(R.id.manual_send_email);
         EditText subject = findViewById(R.id.email_subject);
-
         email.setText("example@smswithoutborders.com");
         subject.setText("Sample Email for Dev purposes");
+
+        clickListener();
     }
 
 
