@@ -79,9 +79,9 @@ public class SendMessageActivity extends AppCompatActivity {
         TextView tvSubject = findViewById(R.id.static_compose_subject);
         TextView tvPlatform = findViewById(R.id.static_compose_platform);
 
-        tvEmail.setText("Receipient's Email Address: " + email);
-        tvSubject.setText("Email's Subject: " + subject);
-        tvPlatform.setText("Sending via: " + platform);
+        tvEmail.setText("to - " + email);
+        tvSubject.setText("subject - " + subject);
+        tvPlatform.setText("platform - " + platform);
     }
 
     private void loadPreviousMessages() {
