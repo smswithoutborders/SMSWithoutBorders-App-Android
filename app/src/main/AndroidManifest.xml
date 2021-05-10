@@ -24,10 +24,10 @@
         android:supportsRtl="true">
 
 
-        <activity android:name=".ListPlatforms.EmailActivities_Recent" android:parentActivityName=".Platforms" android:label="Emailing...">
+        <activity android:name=".ListPlatforms.Emails.EmailActivities_Recent" android:parentActivityName=".Platforms" android:label="Emailing...">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SendMessageActivity" />
+                android:value=".ListPlatforms.Emails.SendMessageActivity" />
         </activity>
 
 
@@ -42,10 +42,10 @@
 
 
         </activity>
-        <activity android:name=".SendMessageActivity" android:parentActivityName=".ListPlatforms.EmailActivities_Recent">
+        <activity android:name=".ListPlatforms.Emails.SendMessageActivity" android:parentActivityName=".ListPlatforms.Emails.EmailActivities_Recent">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ListPlatforms.EmailActivities_Recent" />
+                android:value=".ListPlatforms.Emails.EmailActivities_Recent" />
         </activity>
 
 

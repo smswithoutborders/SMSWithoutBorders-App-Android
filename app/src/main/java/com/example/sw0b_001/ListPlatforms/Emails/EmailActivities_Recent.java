@@ -1,8 +1,6 @@
-package com.example.sw0b_001.ListPlatforms;
+package com.example.sw0b_001.ListPlatforms.Emails;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +12,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.sw0b_001.R;
-import com.example.sw0b_001.SendMessageActivity;
 
 import java.security.KeyStore;
 import java.util.ArrayList;
@@ -40,10 +37,9 @@ public class EmailActivities_Recent extends AppCompatActivity {
 //        // Enable the Up button
 //        ab.setDisplayHomeAsUpEnabled(true);
 //
-//        PLATFORM_NAME = getIntent().getStringExtra("platform_name");
 //        ab.setTitle(PLATFORM_NAME);
 
-
+        PLATFORM_NAME = getIntent().getStringExtra("platform_name");
         listView = findViewById(R.id.item_list);
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
         try {

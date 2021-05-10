@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SendMessageActivity">
+    tools:context=".ListPlatforms.Emails.SendMessageActivity">
 
     <Button
         android:id="@+id/btn_sendMessage"
@@ -19,16 +19,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
+        android:backgroundTint="@color/default_blue"
         app:layout_constraintTop_toBottomOf="@+id/edit_message" />
 
     <EditText
         android:id="@+id/edit_message"
-        android:layout_width="409dp"
-        android:layout_height="244dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:ems="10"
         android:gravity="start|top"
+        android:hint="Email Body..."
         android:inputType="textMultiLine"
         android:selectAllOnFocus="true"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/btn_sendMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.428"
@@ -39,9 +42,9 @@
         android:id="@+id/static_compose_to"
         android:layout_width="0dp"
         android:layout_height="24dp"
-        android:background="@color/white"
-        android:textColor="#FF939393"
-        app:layout_constraintBottom_toTopOf="@+id/message_list_layout"
+        android:background="@color/default_dark"
+        android:textColor="#C5C3C3"
+        app:layout_constraintBottom_toTopOf="@+id/static_compose_subject"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,15 +52,26 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/static_compose_from"
+        android:id="@+id/static_compose_subject"
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:background="@color/white"
-        android:textColor="#939393"
-        app:layout_constraintBottom_toTopOf="@+id/message_list_layout"
+        android:background="@color/default_dark"
+        android:textColor="#C5C3C3"
+        app:layout_constraintBottom_toTopOf="@+id/static_compose_platform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/static_compose_to" />
+
+    <TextView
+        android:id="@+id/static_compose_platform"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:background="@color/default_dark"
+        android:textColor="#C5C3C3"
+        app:layout_constraintBottom_toTopOf="@+id/message_list_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/static_compose_subject" />
 
     <LinearLayout
         android:id="@+id/message_list_layout"
@@ -67,7 +81,7 @@
         app:layout_constraintBottom_toTopOf="@+id/edit_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/static_compose_from"><![CDATA[
+        app:layout_constraintTop_toBottomOf="@+id/static_compose_subject"><![CDATA[
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"

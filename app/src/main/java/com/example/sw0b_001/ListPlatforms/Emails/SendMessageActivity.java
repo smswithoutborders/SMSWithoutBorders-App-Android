@@ -1,4 +1,4 @@
-package com.example.sw0b_001;
+package com.example.sw0b_001.ListPlatforms.Emails;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +24,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.sw0b_001.R;
+import com.example.sw0b_001.SecurityLayer;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -63,6 +66,25 @@ public class SendMessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sendmessage);
 
+        loadComposeInformation();
+        loadPreviousMessages();
+    }
+
+    private void loadComposeInformation() {
+        String email = getIntent().getStringExtra("receipientEmailAddress");
+        String subject = getIntent().getStringExtra("emailSubject");
+        String platform = getIntent().getStringExtra("platform_name");
+
+        TextView tvEmail = findViewById(R.id.static_compose_to);
+        TextView tvSubject = findViewById(R.id.static_compose_subject);
+        TextView tvPlatform = findViewById(R.id.static_compose_platform);
+
+        tvEmail.setText("Receipient's Email Address: " + email);
+        tvSubject.setText("Email's Subject: " + subject);
+        tvPlatform.setText("Sending via: " + platform);
+    }
+
+    private void loadPreviousMessages() {
         listView = findViewById(R.id.message_list);
         items = new ArrayList<>();
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
@@ -72,7 +94,6 @@ public class SendMessageActivity extends AppCompatActivity {
         catch(Exception e) {
             e.printStackTrace();
         }
-//        itemsAdapter.add("[+] GOOGLE: gmail");
     }
 
     public void onClickSend(View view) {

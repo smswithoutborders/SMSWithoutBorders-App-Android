@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sw0b_001.ListPlatforms.EmailActivities_Recent;
+import com.example.sw0b_001.ListPlatforms.Emails.EmailActivities_Recent;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +48,7 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EmailActivities_Recent.class);
-                intent.putExtra("platform", platforms[position]);
+                intent.putExtra("platform_name", platforms[position]);
                 intent.putExtra("description", descriptions[position]);
                 intent.putExtra("image", images[position]);
 
