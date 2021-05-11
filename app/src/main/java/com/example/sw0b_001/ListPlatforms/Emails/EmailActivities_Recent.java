@@ -64,7 +64,7 @@ public class EmailActivities_Recent extends AppCompatActivity {
         subjects = new String[]{"Subject1", "Subject2", "Subject3"};
         emails = new String[]{"info@smswithoutborders.com", "afkanerd@gmail.com", "wisdom@smswithoutborders.com"};
 
-        Intent intent = new Intent(this, EmailSendMessageActivity.class);
+        Intent intent = new Intent(this, EmailCompose.class);
         intent.putExtra("platform_name", getIntent().getStringExtra("text1"));
         PlatformsAdapter platformsAdapter = new PlatformsAdapter(this, subjects, emails, images, intent);
         recyclerView.setAdapter(platformsAdapter);
