@@ -20,6 +20,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sw0b_001.ListPlatforms.Emails.EmailActivities_Recent;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -55,7 +57,7 @@ public class Platforms extends AppCompatActivity {
         platforms = getResources().getStringArray(R.array.platforms);
         descriptions = getResources().getStringArray(R.array.description);
 
-        PlatformsAdapter platformsAdapter = new PlatformsAdapter(this, platforms, descriptions, images);
+        PlatformsAdapter platformsAdapter = new PlatformsAdapter(this, platforms, descriptions, images, new Intent(this, EmailActivities_Recent.class));
         recyclerView.setAdapter(platformsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/default_dark"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!--        <EditText-->
+        <!--            android:id="@+id/manual_send_email"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="67dp"-->
+        <!--            android:ems="10"-->
+        <!--            android:hint="Enter receipent Email"-->
+        <!--            android:inputType="textEmailAddress" />-->
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="139dp"
+            android:layout_marginBottom="7dp"
+            android:background="@color/black"
+            android:text="Compose New Email"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#939292"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="61dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="0dp"
+            android:hint="To"
+            app:layout_constraintBottom_toTopOf="@+id/textInputLayout1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/manual_send_email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/default_dark"
+                android:hint="receipient email"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:hint="Subject">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/email_subject"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/default_dark"
+                android:inputType="textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--        <EditText-->
+        <!--            android:id="@+id/email_subject"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="65dp"-->
+        <!--            android:layout_below="@+id/textInputLayout"-->
+        <!--            android:layout_alignParentEnd="true"-->
+        <!--            android:layout_marginTop="12dp"-->
+        <!--            android:layout_marginEnd="0dp"-->
+        <!--            android:ems="10"-->
+        <!--            android:hint="Email Subject"-->
+        <!--            android:inputType="textPersonName" />-->
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/default_dark"
+            android:gravity="start|top"
+            android:hint="Compose email"
+            android:selectAllOnFocus="true"
+            android:textColor="@color/white"
+            android:textColorHint="#A8A8A8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_message"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/default_dark"
+                android:inputType="textMultiLine"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,21 +12,21 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sw0b_001.ListPlatforms.Emails.EmailActivities_Recent;
-
 import org.jetbrains.annotations.NotNull;
 
 public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.ViewHolder> {
 
-    String platforms[], descriptions[];
+    String text1s[], text2s[];
     int images[];
     Context context;
+    Intent onclickIntent;
 
-    public PlatformsAdapter(Context context, String platforms[], String descriptions[], int images[]){
+    public PlatformsAdapter(Context context, String text1s[], String text2s[], int images[], Intent onclickIntent){
         this.context = context;
-        this.platforms = platforms;
-        this.descriptions = descriptions;
+        this.text1s = text1s;
+        this.text2s = text2s;
         this.images = images;
+        this.onclickIntent = onclickIntent;
     }
 
     @NonNull
@@ -40,19 +40,19 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        holder.platform.setText(this.platforms[position]);
-        holder.description.setText(this.descriptions[position]);
+        holder.text1.setText(this.text1s[position]);
+        holder.text2.setText(this.text2s[position]);
         holder.image.setImageResource(this.images[position]);
 
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, EmailActivities_Recent.class);
-                intent.putExtra("platform_name", platforms[position]);
-                intent.putExtra("description", descriptions[position]);
-                intent.putExtra("image", images[position]);
+//                Intent intent = new Intent(context, onclickIntent);
+                onclickIntent.putExtra("text1", text1s[position]);
+                onclickIntent.putExtra("text2", text2s[position]);
+                onclickIntent.putExtra("image", images[position]);
 
-                context.startActivity(intent);
+                context.startActivity(onclickIntent);
             }
         });
     }
@@ -64,14 +64,14 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView platform, description;
+        TextView text1, text2;
         ImageView image;
         ConstraintLayout mainLayout;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            platform = itemView.findViewById(R.id.platform_name);
-            description = itemView.findViewById(R.id.platform_description);
+            text1 = itemView.findViewById(R.id.text1);
+            text2 = itemView.findViewById(R.id.text2);
             image = itemView.findViewById(R.id.platform_image);
 
             mainLayout = itemView.findViewById(R.id.platforms_layout);

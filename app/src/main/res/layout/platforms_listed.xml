@@ -50,18 +50,18 @@
             <!--                app:layout_constraintVertical_bias="1.0" />-->
 
             <TextView
-                android:id="@+id/platform_description"
+                android:id="@+id/text2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="11dp"
                 android:text="description"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/platform_name"
-                app:layout_constraintTop_toBottomOf="@+id/platform_name" />
+                app:layout_constraintStart_toStartOf="@+id/text1"
+                app:layout_constraintTop_toBottomOf="@+id/text1" />
 
             <TextView
-                android:id="@+id/platform_name"
+                android:id="@+id/text1"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:layout_marginStart="8dp"
@@ -69,7 +69,7 @@
                 android:fontFamily="sans-serif-light"
                 android:text="platform name"
                 android:textColor="@color/white"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@+id/platform_image"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -68,11 +68,21 @@ public class SendMessageActivity extends AppCompatActivity {
 
         loadComposeInformation();
         loadPreviousMessages();
+
+        //        Toolbar myToolbar = (Toolbar) findViewById(R.id.platform_toolbar);
+//        setSupportActionBar(myToolbar);
+//        // Get a support ActionBar corresponding to this toolbar
+//        ActionBar ab = getSupportActionBar();
+//
+//        // Enable the Up button
+//        ab.setDisplayHomeAsUpEnabled(true);
+//
+//        ab.setTitle(PLATFORM_NAME);
     }
 
     private void loadComposeInformation() {
-        String email = getIntent().getStringExtra("receipientEmailAddress");
-        String subject = getIntent().getStringExtra("emailSubject");
+        String email = getIntent().getStringExtra("text1");
+        String subject = getIntent().getStringExtra("text2");
         String platform = getIntent().getStringExtra("platform_name");
 
         TextView tvEmail = findViewById(R.id.static_compose_to);

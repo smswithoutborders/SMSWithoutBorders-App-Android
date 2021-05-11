@@ -58,32 +58,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/edit_message"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:backgroundTint="#FFFFFF"
-                android:ems="10"
-                android:gravity="start|top"
-                android:hint="Email Body..."
-                android:inputType="textMultiLine"
-                android:selectAllOnFocus="true"
-                android:textColor="@color/black"
-                android:textColorHint="#A8A8A8"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/message_list_layout" />
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edit_message">
+                app:layout_constraintStart_toStartOf="parent">
 
                 <Button
                     android:id="@+id/btn_sendMessage"
@@ -115,7 +96,6 @@
                 android:layout_height="0dp"
                 android:focusable="auto"
                 android:orientation="vertical"
-                app:layout_constraintBottom_toTopOf="@+id/edit_message"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
