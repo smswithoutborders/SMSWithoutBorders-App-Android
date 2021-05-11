@@ -44,7 +44,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/manual_send_email"
+                android:id="@+id/email_to"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/default_dark"

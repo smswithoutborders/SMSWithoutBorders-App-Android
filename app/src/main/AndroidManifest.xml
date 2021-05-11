@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -15,48 +14,53 @@
         android:value="barcode" />
 
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents"
-        android:supportsRtl="true">
-
-
-        <activity android:name=".ListPlatforms.Emails.EmailActivities_Recent" android:parentActivityName=".Platforms" android:label="Recents...">
+        android:usesCleartextTraffic="true">
+        <activity android:name=".ListPlatforms.Emails.EmailBody"></activity>
+        <activity android:name=".ListPlatforms.Emails.EmailSnippet" />
+        <activity
+            android:name=".ListPlatforms.Emails.EmailActivities_Recent"
+            android:label="Recents..."
+            android:parentActivityName=".Platforms">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Platforms" />
         </activity>
-
-
-        <activity android:name=".Permissions" android:parentActivityName=".Login" android:label="Permission">
+        <activity
+            android:name=".Permissions"
+            android:label="Permission"
+            android:parentActivityName=".Login">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Login" />
         </activity>
-
-
-        <activity android:name=".Platforms" android:label="Usable Platforms">
-
-
-        </activity>
-        <activity android:name=".ListPlatforms.Emails.EmailCompose" android:parentActivityName=".ListPlatforms.Emails.EmailActivities_Recent" android:theme="@style/Theme.MaterialComponents.NoActionBar">
+        <activity
+            android:name=".Platforms"
+            android:label="Usable Platforms" />
+        <activity
+            android:name=".ListPlatforms.Emails.EmailCompose"
+            android:parentActivityName=".ListPlatforms.Emails.EmailActivities_Recent"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ListPlatforms.Emails.EmailActivities_Recent" />
         </activity>
-
-
-        <activity android:name=".QRScanner" android:parentActivityName=".Login" android:label="QR Scanner">
+        <activity
+            android:name=".QRScanner"
+            android:label="QR Scanner"
+            android:parentActivityName=".Login">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Login" />
         </activity>
-
-
-        <activity android:name=".Login" android:theme="@style/Theme.MaterialComponents.NoActionBar">
+        <activity
+            android:name=".Login"
+            android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

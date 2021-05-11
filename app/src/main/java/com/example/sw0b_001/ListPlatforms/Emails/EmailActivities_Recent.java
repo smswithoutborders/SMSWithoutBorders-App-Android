@@ -47,9 +47,6 @@ public class EmailActivities_Recent extends AppCompatActivity {
     RecyclerView recyclerView;
     SecurityLayer securityLayer;
 
-    String SMS_SENT = "SENT";
-    String SMS_DELIVERED = "DELIVERED";
-
     String subjects[], emails[];
     int images[] = {R.drawable.roundgmail, R.drawable.roundgmail, R.drawable.roundgmail};
 
@@ -73,116 +70,6 @@ public class EmailActivities_Recent extends AppCompatActivity {
 
     public void composeEmail(View view) {
        startActivity(new Intent(this, EmailCompose.class));
-    }
-
-
-    public void sendMessage(View view) {
-
-        PendingIntent sentPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("SENT"), 0);
-        PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("DELIVERED"), 0);
-
-        //---when the SMS has been sent---
-        registerReceiver(new BroadcastReceiver(){
-            @Override
-            public void onReceive(Context arg0, Intent arg1) {
-                switch (getResultCode())
-                {
-                    case Activity.RESULT_OK:
-                        Toast.makeText(getBaseContext(), "SMS sent",
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                        Toast.makeText(getBaseContext(), "Generic failure",
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_NO_SERVICE:
-                        Toast.makeText(getBaseContext(), "No service",
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_NULL_PDU:
-                        Toast.makeText(getBaseContext(), "Null PDU",
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case SmsManager.RESULT_ERROR_RADIO_OFF:
-                        Toast.makeText(getBaseContext(), "Radio off",
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-        }, new IntentFilter(SMS_SENT));
-
-        //---when the SMS has been delivered---
-        registerReceiver(new BroadcastReceiver(){
-            @Override
-            public void onReceive(Context arg0, Intent arg1) {
-                switch (getResultCode())
-                {
-                    case Activity.RESULT_OK:
-                        Toast.makeText(getBaseContext(), "SMS delivered",
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        Toast.makeText(getBaseContext(), "SMS not delivered",
-                                Toast.LENGTH_SHORT).show();
-                        break;
-                }
-            }
-        }, new IntentFilter(SMS_DELIVERED));
-
-
-//        String number = eNumber.getText().toString();
-//        String plainText = eText.getText().toString();
-        String number = "";
-        String plainText = "";
-        if(plainText.isEmpty()) {
-            Toast.makeText(this, "Text Cannot be empty!", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        try {
-            if(checkPermission(Manifest.permission.SEND_SMS)) {
-                String IV = new String(securityLayer.getIV(), "UTF-8");
-                String transmissionText = IV + ":" + plainText;
-                byte[] encryptedText = securityLayer.encrypt_AES(transmissionText);
-
-                System.out.println("Transmission String: " + transmissionText);
-                System.out.println("[+] Decrypted: " + new String(securityLayer.decrypt_AES(encryptedText), "UTF-8"));
-
-
-                String strEncryptedText = Base64.encodeToString(encryptedText, Base64.URL_SAFE);
-                System.out.println("Transmission message: " + strEncryptedText);
-
-                //TODO: Research what to do in case of a double sim phone
-                SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(number, null, strEncryptedText, sentPendingIntent, deliveredPendingIntent);
-                Toast.makeText(this, "Sending SMS....", Toast.LENGTH_LONG).show();
-            }
-            else {
-                Toast.makeText(this, "Permission Denied!", Toast.LENGTH_LONG).show();
-            }
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Internal Error while encrypting...", Toast.LENGTH_LONG).show();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Internal Error while encrypting...", Toast.LENGTH_LONG).show();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public boolean checkPermission(String permission) {
-        int check = ContextCompat.checkSelfPermission(this, permission);
-
-        return (check == PackageManager.PERMISSION_GRANTED);
+       finish();
     }
 }

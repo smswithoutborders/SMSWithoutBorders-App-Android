@@ -4,14 +4,14 @@
 
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
-        android:id="@+id/action_favorite"
+        android:id="@+id/action_send"
         android:icon="@drawable/ic_baseline_send_24"
         android:title="Compose"
         app:iconTint="@color/default_blue"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
     <!-- Settings, should always be in the overflow -->
-    <item android:id="@+id/action_settings"
+    <item android:id="@+id/discard"
         android:title="discard"
         app:showAsAction="never"/>
 
