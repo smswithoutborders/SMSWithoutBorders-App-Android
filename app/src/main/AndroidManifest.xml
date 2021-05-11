@@ -27,7 +27,7 @@
         <activity android:name=".ListPlatforms.Emails.EmailActivities_Recent" android:parentActivityName=".Platforms" android:label="Recents...">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ListPlatforms.Emails.SendMessageActivity" />
+                android:value=".ListPlatforms.Emails.EmailSendMessageActivity" />
         </activity>
 
 
@@ -42,7 +42,7 @@
 
 
         </activity>
-        <activity android:name=".ListPlatforms.Emails.SendMessageActivity" android:parentActivityName=".ListPlatforms.Emails.EmailActivities_Recent" android:label="Compose">
+        <activity android:name=".ListPlatforms.Emails.EmailCompose" android:parentActivityName=".ListPlatforms.Emails.EmailCompose" android:label="Compose">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ListPlatforms.Emails.EmailActivities_Recent" />

@@ -46,7 +46,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-public class SendMessageActivity extends AppCompatActivity {
+public class EmailSendMessageActivity extends AppCompatActivity {
 
     public static final String EXTRA_MESSAGE = "com.example.sw0b_001.MESSAGE";
 
@@ -60,7 +60,6 @@ public class SendMessageActivity extends AppCompatActivity {
     ArrayAdapter<String> itemsAdapter;
     ListView listView;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
