@@ -5,7 +5,7 @@
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
         android:id="@+id/action_send"
-        android:icon="@drawable/ic_baseline_send_24"
+        android:icon="@drawable/ic_round_send_24"
         android:title="Compose"
         app:iconTint="@color/default_blue"
         app:showAsAction="always" />

@@ -34,7 +34,7 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(this.context);
-        View view = inflater.inflate(R.layout.platforms_listed, parent, false);
+        View view = inflater.inflate(R.layout.activity_cardlist, parent, false);
         return new ViewHolder(view);
     }
 
