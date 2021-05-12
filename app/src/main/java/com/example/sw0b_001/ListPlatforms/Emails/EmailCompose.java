@@ -13,7 +13,6 @@ import android.telephony.SmsManager;
 import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -84,7 +83,7 @@ public class EmailCompose extends AppCompatActivity {
         EditText body = findViewById(R.id.email_body);
         switch (item.getItemId()) {
             case R.id.discard:
-                startActivity(new Intent(this, EmailActivities_Recent.class));
+                startActivity(new Intent(this, EmailMultipleThreads.class));
                 to.setText("");
                 subject.setText("");
                 body.setText("");

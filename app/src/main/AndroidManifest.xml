@@ -21,10 +21,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ListPlatforms.Emails.EmailBody"></activity>
-        <activity android:name=".ListPlatforms.Emails.EmailSnippet" />
+        <activity android:name=".ListPlatforms.Emails.EmailSingleThreads" android:parentActivityName=".ListPlatforms.Emails.EmailMultipleThreads" android:theme="@style/Theme.MaterialComponents.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ListPlatforms.Emails.EmailMultipleThreads" />
+        </activity>
+        <activity android:name=".ListPlatforms.Emails.EmailBody" />
         <activity
-            android:name=".ListPlatforms.Emails.EmailActivities_Recent"
+            android:name=".ListPlatforms.Emails.EmailMultipleThreads"
             android:label="Recents..."
             android:parentActivityName=".Platforms">
             <meta-data
@@ -44,11 +48,11 @@
             android:label="Usable Platforms" />
         <activity
             android:name=".ListPlatforms.Emails.EmailCompose"
-            android:parentActivityName=".ListPlatforms.Emails.EmailActivities_Recent"
+            android:parentActivityName=".ListPlatforms.Emails.EmailMultipleThreads"
             android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ListPlatforms.Emails.EmailActivities_Recent" />
+                android:value=".ListPlatforms.Emails.EmailMultipleThreads" />
         </activity>
         <activity
             android:name=".QRScanner"

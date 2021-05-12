@@ -11,7 +11,7 @@ import android.view.View;
 import com.example.sw0b_001.PlatformsAdapter;
 import com.example.sw0b_001.R;
 
-public class EmailActivities_Recent extends AppCompatActivity {
+public class EmailMultipleThreads extends AppCompatActivity {
     RecyclerView recyclerView;
 
     String subjects[], emails[];
@@ -31,7 +31,7 @@ public class EmailActivities_Recent extends AppCompatActivity {
         emails = new String[]{"info@smswithoutborders.com", "afkanerd@gmail.com", "wisdom@smswithoutborders.com"};
         images = new int[]{R.mipmap.letter_a, R.drawable.roundgmail, R.drawable.roundgmail};
 
-        Intent intent = new Intent(this, EmailCompose.class);
+        Intent intent = new Intent(this, EmailSingleThreads.class);
         intent.putExtra("platform_name", getIntent().getStringExtra("text1"));
         PlatformsAdapter platformsAdapter = new PlatformsAdapter(this, subjects, emails, images, intent);
         recyclerView.setAdapter(platformsAdapter);
