@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.sw0b_001.PlatformsAdapter;
 import com.example.sw0b_001.R;
@@ -35,6 +36,10 @@ public class EmailSingleThreads extends AppCompatActivity {
 
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
+
+        String subject = getIntent().getStringExtra("text1");
+        TextView tv = findViewById(R.id.single_subject_view);
+        tv.setText(subject);
 
         recyclerView = findViewById(R.id.email_single_thread);
         recyclerView.addItemDecoration(new DividerItemDecoration(this,
