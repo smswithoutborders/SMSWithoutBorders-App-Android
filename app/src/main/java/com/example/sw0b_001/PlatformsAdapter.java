@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.ViewHolder> {
 
-    String text1s[], text2s[], text3s[];
+    String text1s[], text2s[], text3s[], text4s[];
     int images[];
     Context context;
     Intent onclickIntent;
@@ -31,11 +31,12 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
         this.onclickIntent = onclickIntent;
     }
 
-    public PlatformsAdapter(Context context, String text1s[], String text2s[], String text3s[], int images[], Intent onclickIntent, int layout){
+    public PlatformsAdapter(Context context, String text1s[], String text2s[], String text3s[], String text4s[], int images[], Intent onclickIntent, int layout){
         this.context = context;
         this.text1s = text1s;
         this.text2s = text2s;
         this.text3s = text3s;
+        this.text4s = text4s;
         this.images = images;
         this.layout = layout;
         this.onclickIntent = onclickIntent;
@@ -56,6 +57,8 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
         holder.text2.setText(this.text2s[position]);
         if( this.text3s != null)
             holder.text3.setText(this.text3s[position]);
+        if( this.text4s != null)
+            holder.text4.setText(this.text4s[position]);
         holder.image.setImageResource(this.images[position]);
 
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
@@ -66,8 +69,9 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
                 onclickIntent.putExtra("text2", text2s[position]);
                 if( text3s != null)
                     onclickIntent.putExtra("text3", text3s[position]);
+                if( text4s != null)
+                    onclickIntent.putExtra("text4", text4s[position]);
                 onclickIntent.putExtra("image", images[position]);
-
                 context.startActivity(onclickIntent);
             }
         });
@@ -80,7 +84,7 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView text1, text2, text3;
+        TextView text1, text2, text3, text4;
         ImageView image;
         ConstraintLayout mainLayout;
 
@@ -90,6 +94,9 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
             text2 = itemView.findViewById(R.id.text2);
             if(itemView.findViewById(R.id.text3) != null ) {
                 text3 = itemView.findViewById(R.id.text3);
+            }
+            if(itemView.findViewById(R.id.text4) != null ) {
+                text4 = itemView.findViewById(R.id.text4);
             }
             image = itemView.findViewById(R.id.platform_image);
 

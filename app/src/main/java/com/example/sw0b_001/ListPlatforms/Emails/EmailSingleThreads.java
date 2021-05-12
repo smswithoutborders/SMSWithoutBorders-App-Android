@@ -20,7 +20,7 @@ import com.example.sw0b_001.R;
 public class EmailSingleThreads extends AppCompatActivity {
     RecyclerView recyclerView;
 
-    String status[], emails[], datetime[];
+    String status[], emails[], datetime[], snippet[];
     int images[];
 
     @Override
@@ -46,13 +46,14 @@ public class EmailSingleThreads extends AppCompatActivity {
                 DividerItemDecoration.VERTICAL));
 
         emails = new String[]{"info@smswithoutborders.com", "afkanerd@gmail.com", "wisdom@smswithoutborders.com"};
+        snippet = new String[]{"hello world1", "hello world2", "hello world3"};
         datetime = new String[]{"2021-01-01", "2021-01-02", "2021-01-02"};
         status = new String[]{"delivered", "delivered", "failed"};
         images = new int[]{R.mipmap.letter_a, R.drawable.roundgmail, R.drawable.roundgmail};
 
-        Intent intent = new Intent(this, EmailCompose.class);
+        Intent intent = new Intent(this, EmailBody.class);
         intent.putExtra("platform_name", getIntent().getStringExtra("text1"));
-        PlatformsAdapter platformsAdapter = new PlatformsAdapter(this, emails, datetime, status, images, intent, R.layout.activity_cardlist_single);
+        PlatformsAdapter platformsAdapter = new PlatformsAdapter(this, emails, snippet, status, datetime, images, intent, R.layout.activity_cardlist_single);
         recyclerView.setAdapter(platformsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

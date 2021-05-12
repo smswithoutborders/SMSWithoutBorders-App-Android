@@ -27,9 +27,10 @@ public class EmailMultipleThreads extends AppCompatActivity {
                 DividerItemDecoration.VERTICAL));
 
         // TODO: populate from database
-        subjects = new String[]{"Subject1", "Subject2", "Subject3"};
-        emails = new String[]{"info@smswithoutborders.com", "afkanerd@gmail.com", "wisdom@smswithoutborders.com"};
-        images = new int[]{R.mipmap.letter_a, R.drawable.roundgmail, R.drawable.roundgmail};
+//        subjects = new String[]{"Subject1", "Subject2", "Subject3"};
+//        emails = new String[]{"info@smswithoutborders.com", "afkanerd@gmail.com", "wisdom@smswithoutborders.com"};
+//        images = new int[]{R.mipmap.letter_a, R.drawable.roundgmail, R.drawable.roundgmail};
+
 
         Intent intent = new Intent(this, EmailSingleThreads.class);
         intent.putExtra("platform_name", getIntent().getStringExtra("text1"));
