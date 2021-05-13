@@ -53,7 +53,7 @@
             android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/platform_image"
+                android:id="@+id/image"
                 android:layout_width="53dp"
                 android:layout_height="53dp"
                 android:src="@android:drawable/sym_def_app_icon"
@@ -76,7 +76,7 @@
             <!--                app:layout_constraintVertical_bias="1.0" />-->
 
             <TextView
-                android:id="@+id/text2"
+                android:id="@+id/subjectSub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
@@ -84,11 +84,11 @@
                 android:textColor="#787777"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/text1"
-                app:layout_constraintTop_toBottomOf="@+id/text1" />
+                app:layout_constraintStart_toStartOf="@+id/subject"
+                app:layout_constraintTop_toBottomOf="@+id/subject" />
 
             <TextView
-                android:id="@+id/text1"
+                android:id="@+id/subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -99,11 +99,11 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/platform_image"
+                app:layout_constraintStart_toEndOf="@+id/image"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/text3"
+                android:id="@+id/bottomRightText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
@@ -113,21 +113,21 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.937"
-                app:layout_constraintStart_toEndOf="@+id/text2"
-                app:layout_constraintTop_toBottomOf="@+id/text1" />
+                app:layout_constraintStart_toEndOf="@+id/subjectSub"
+                app:layout_constraintTop_toBottomOf="@+id/subject" />
 
             <TextView
-                android:id="@+id/text4"
+                android:id="@+id/topRightText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="11dp"
                 android:textColor="#787777"
                 android:textSize="10sp"
-                app:layout_constraintBottom_toTopOf="@+id/text3"
+                app:layout_constraintBottom_toTopOf="@+id/bottomRightText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.92"
-                app:layout_constraintStart_toEndOf="@+id/text1"
+                app:layout_constraintStart_toEndOf="@+id/subject"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

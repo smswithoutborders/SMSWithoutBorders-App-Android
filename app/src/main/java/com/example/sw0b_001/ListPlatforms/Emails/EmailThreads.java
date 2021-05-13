@@ -1,53 +1,84 @@
 package com.example.sw0b_001.ListPlatforms.Emails;
 
+import com.example.sw0b_001.CustomHelpers;
+import com.example.sw0b_001.R;
+
 import java.util.ArrayList;
 
 public class EmailThreads {
+    private String subject;
+    private String subjectSub;
+    private String bottomRightText = "";
+    private String topRightText = "";
+    private int id;
+    private int image = R.drawable.googleg_standard_color_18;
+    private ArrayList<EmailCustomMessage> messages;
 
-    int id;
-    String subject;
-    ArrayList<Message> messages;
-
-    public EmailThreads() {
-        setSubject(id);
-        setMessages(id);
+    public EmailThreads add(EmailCustomMessage message) {
+        messages.add(message);
+        return this;
     }
 
-    public EmailThreads(int id) {
-        this.id = id;
-        setSubject(id);
-        setMessages(id);
+    public ArrayList<EmailCustomMessage> getMessages() {
+        return messages;
     }
 
+    public EmailThreads setTopRightText(String topRightText) {
+        this.topRightText = topRightText;
+        return this;
+    }
+
+    public EmailThreads setBottomRightText(String bottomRightText) {
+        this.bottomRightText = bottomRightText;
+        return this;
+    }
+
+    public EmailThreads setSubjectSub(String subjectSub) {
+        this.subjectSub = subjectSub;
+        return this;
+    }
 
     public String getSubject() {
-        return "";
+        return subject;
     }
 
-    public String getEmail() {
-        return "";
+    public EmailThreads setImage(int image) {
+        this.image = image;
+        return this;
     }
 
-    public ArrayList<EmailThreads> getAll() {
-        return new ArrayList<EmailThreads>(){};
+    public String getSubjectSub() {
+        return subjectSub;
     }
 
-    private void setSubject(int id) {
-
+    public int getImage() {
+        return this.image;
     }
 
-    private void setMessages(int id) {
-
+    public String getBottomRightText() {
+        return bottomRightText;
     }
 
-    public void setMessage(Message message) {
-        this.messages.add(message);
+    public String getTopRightText() {
+        return topRightText;
+    }
+
+    public EmailThreads setSubject(String subject) {
+        this.subject = subject;
+        return this;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public EmailThreads setId(int id) {
+        this.id = id;
+        return this;
     }
 
 
-    public class Message{
-        public void Message() {
-
-        }
+    static public ArrayList<String> getAll() {
+        return new ArrayList<String>(){};
     }
 }

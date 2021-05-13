@@ -90,15 +90,15 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            text1 = itemView.findViewById(R.id.text1);
-            text2 = itemView.findViewById(R.id.text2);
-            if(itemView.findViewById(R.id.text3) != null ) {
-                text3 = itemView.findViewById(R.id.text3);
+            text1 = itemView.findViewById(R.id.subject);
+            text2 = itemView.findViewById(R.id.subjectSub);
+            if(itemView.findViewById(R.id.bottomRightText) != null ) {
+                text3 = itemView.findViewById(R.id.bottomRightText);
             }
-            if(itemView.findViewById(R.id.text4) != null ) {
-                text4 = itemView.findViewById(R.id.text4);
+            if(itemView.findViewById(R.id.topRightText) != null ) {
+                text4 = itemView.findViewById(R.id.topRightText);
             }
-            image = itemView.findViewById(R.id.platform_image);
+            image = itemView.findViewById(R.id.image);
 
             mainLayout = itemView.findViewById(R.id.platforms_layout);
         }

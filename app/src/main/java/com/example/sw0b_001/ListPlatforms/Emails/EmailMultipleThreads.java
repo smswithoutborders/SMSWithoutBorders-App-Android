@@ -35,17 +35,44 @@ public class EmailMultipleThreads extends AppCompatActivity {
 //        emails = new String[]{"info@smswithoutborders.com", "afkanerd@gmail.com", "wisdom@smswithoutborders.com"};
 //        images = new int[]{R.mipmap.letter_a, R.drawable.roundgmail, R.drawable.roundgmail};
 
-        ArrayList<EmailThreads> threads = new EmailThreads().getAll();
-        for(EmailThreads thread : threads ) {
-            subjects[subjects.length + 1] = thread.getSubject();
-            emails[emails.length + 1] = thread.getEmail();
-            images[images.length + 1] = CustomHelpers.getLetterImage(thread.getEmail().charAt(0));
-        }
+        // TODO: change from mockup
+        EmailCustomMessage message1 = new EmailCustomMessage()
+                .setRecipient("info@smswithoutborders.com")
+                .setBody("Hello world, message sent to info@smswithoutborders.com")
+                .setId(1)
+                .setDatetime("2021-01-01")
+                .setStatus("delivered")
+                .setThreadId(1);
+        EmailCustomMessage message2 = new EmailCustomMessage()
+                .setRecipient("info@smswithoutborders.com")
+                .setBody("Hello world, message sent to wisdom@smswithoutborders.com")
+                .setId(2)
+                .setDatetime("2021-01-02")
+                .setStatus("delivered")
+                .setThreadId(1);
+        EmailCustomMessage message3 = new EmailCustomMessage()
+                .setRecipient("info@smswithoutborders.com")
+                .setBody("Hello world, message sent to devs@smswithoutborders.com")
+                .setId(2)
+                .setDatetime("2021-01-03")
+                .setStatus("failed")
+                .setThreadId(1);
+
+        EmailThreads thread = new EmailThreads()
+                .setSubject("Introduction Thread")
+                .setSubjectSub("info@smswithoutborders.com")
+                .setId(1)
+                .setTopRightText("2021-01-02")
+                .add(message1)
+                .add(message2)
+                .add(message3);
+        ArrayList<EmailThreads> threads = new ArrayList<EmailThreads>();
+        threads.add(thread);
 
         Intent intent = new Intent(this, EmailSingleThreads.class);
         intent.putExtra("platform_name", getIntent().getStringExtra("text1"));
-        PlatformsAdapter platformsAdapter = new PlatformsAdapter(this, subjects, emails, images, intent);
-        recyclerView.setAdapter(platformsAdapter);
+        EmailRecyclerViewAdapter adapter = new EmailRecyclerViewAdapter(this, threads, intent, R.layout.activity_cardlist);
+        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
