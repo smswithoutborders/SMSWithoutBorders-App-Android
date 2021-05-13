@@ -24,12 +24,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image"
-                android:layout_width="73dp"
-                android:layout_height="73dp"
+                android:layout_width="63dp"
+                android:layout_height="63dp"
                 android:src="@android:drawable/sym_def_app_icon"
                 app:civ_border_color="#FFFFFF"
                 app:civ_border_width="2dp"
@@ -54,7 +54,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:layout_marginBottom="11dp"
                 android:text="description"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/subject"
@@ -65,7 +64,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
                 android:fontFamily="sans-serif-light"
                 android:text="platform name"
                 android:textColor="@color/white"
@@ -78,9 +76,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="15dp"
                 android:text="TextView"
                 android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@+id/bottomRightText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.887"
                 app:layout_constraintStart_toEndOf="@+id/subject"
@@ -92,11 +91,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="167dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginBottom="16dp"
                 android:text="TextView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.653"
                 app:layout_constraintStart_toEndOf="@+id/subjectSub"
                 app:layout_constraintTop_toBottomOf="@+id/topRightText"
                 app:layout_constraintVertical_bias="1.0" />

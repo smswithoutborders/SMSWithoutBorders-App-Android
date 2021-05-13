@@ -6,41 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".ListPlatforms.Emails.EmailSingleThreads">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/single_thread_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/default_dark"
-        android:elevation="4dp"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/email_single_thread_toolbar"
-        app:title="snippets" />
-
     <TextView
         android:id="@+id/single_subject_view"
         android:layout_width="0dp"
         android:layout_height="32dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="sans-serif-medium"
         android:text="TextView"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/single_thread_toolbar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/platform_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:clickable="false"
         android:theme="@style/Theme.MyApp"
         app:cardBackgroundColor="@color/default_dark"
@@ -96,9 +80,9 @@
                 android:fontFamily="sans-serif-light"
                 android:text="email_address"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.04"
                 app:layout_constraintStart_toEndOf="@+id/image"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -133,7 +117,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/view_email_body"
+        android:id="@+id/body"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"

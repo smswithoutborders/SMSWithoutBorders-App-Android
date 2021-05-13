@@ -46,7 +46,7 @@ public class EmailSingleThreads extends AppCompatActivity {
 
         EmailCustomMessage message1 = new EmailCustomMessage()
                 .setRecipient("info@smswithoutborders.com")
-                .setBody("Hello world, message sent to info@smswithoutborders.com")
+                .setBody("Hello world, message sent to info@smswithoutborders.com".substring(0, 10))
                 .setId(1)
                 .setDatetime("2021-01-01")
                 .setStatus("delivered")
@@ -54,7 +54,7 @@ public class EmailSingleThreads extends AppCompatActivity {
                 .setThreadId(1);
         EmailCustomMessage message2 = new EmailCustomMessage()
                 .setRecipient("info@smswithoutborders.com")
-                .setBody("Hello world, message sent to wisdom@smswithoutborders.com")
+                .setBody("Hello world, message sent to info@smswithoutborders.com".substring(0, 10))
                 .setId(2)
                 .setDatetime("2021-01-02")
                 .setStatus("delivered")
@@ -62,7 +62,7 @@ public class EmailSingleThreads extends AppCompatActivity {
                 .setThreadId(1);
         EmailCustomMessage message3 = new EmailCustomMessage()
                 .setRecipient("info@smswithoutborders.com")
-                .setBody("Hello world, message sent to devs@smswithoutborders.com")
+                .setBody("Hello world, message sent to info@smswithoutborders.com".substring(0, 10))
                 .setId(2)
                 .setDatetime("2021-01-03")
                 .setStatus("failed")
@@ -84,7 +84,7 @@ public class EmailSingleThreads extends AppCompatActivity {
         System.out.println("[+] Subject: " + getIntent().getStringExtra("subject"));
 
         Intent intent = new Intent(this, EmailBody.class);
-//        intent.putExtra("thread_subject", getIntent().getStringExtra("subject"));
+        intent.putExtra("thread_subject", getIntent().getStringExtra("subject"));
         EmailRecyclerViewAdapter adapter = new EmailRecyclerViewAdapter(this, threads, intent, R.layout.activity_cardlist_single);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

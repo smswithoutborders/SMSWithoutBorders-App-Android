@@ -20,9 +20,10 @@ public class EmailThreads {
         for(EmailCustomMessage email : messages ) {
             EmailThreads thread = new EmailThreads()
                     .setSubject(email.getRecipient())
-                    .setSubjectSub(email.getBody().substring(0, (email.getBody().length()/2)))
+                    .setSubjectSub(email.getBody())
                     .setTopRightText(email.getDatetime())
-                    .setBottomRightText(email.getStatus());
+                    .setBottomRightText(email.getStatus())
+                    .setImage(email.getImage());
             threads.add(thread);
         }
         return threads;

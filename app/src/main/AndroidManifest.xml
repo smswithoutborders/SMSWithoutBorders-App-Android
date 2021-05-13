@@ -26,7 +26,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ListPlatforms.Emails.EmailMultipleThreads" />
         </activity>
-        <activity android:name=".ListPlatforms.Emails.EmailBody" />
+        <activity android:name=".ListPlatforms.Emails.EmailBody" android:parentActivityName=".ListPlatforms.Emails.EmailMultipleThreads" android:label="View message">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ListPlatforms.Emails.EmailMultipleThreads" />
+        </activity>
         <activity
             android:name=".ListPlatforms.Emails.EmailMultipleThreads"
             android:label="Recents..."
