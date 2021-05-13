@@ -12,7 +12,7 @@ public class EmailThreads {
     private String topRightText = "";
     private int id;
     private int image = R.drawable.googleg_standard_color_18;
-    private ArrayList<EmailCustomMessage> messages;
+    private ArrayList<EmailCustomMessage> messages = new ArrayList<>();
 
     public EmailThreads add(EmailCustomMessage message) {
         messages.add(message);

@@ -64,7 +64,7 @@ public class EmailRecyclerViewAdapter extends RecyclerView.Adapter<EmailRecycler
 
     @Override
     public int getItemCount() {
-        return this.text1s.length;
+        return this.threads.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

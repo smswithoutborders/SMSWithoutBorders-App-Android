@@ -75,9 +75,9 @@
 
             <TextView
                 android:id="@+id/topRightText"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="96dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="4dp"
                 android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
