@@ -19,16 +19,25 @@ public class EmailThreads {
         setMessages(id);
     }
 
+
+    public String getSubject() {
+        return "";
+    }
+
+    public String getEmail() {
+        return "";
+    }
+
+    public ArrayList<EmailThreads> getAll() {
+        return new ArrayList<EmailThreads>(){};
+    }
+
     private void setSubject(int id) {
 
     }
 
     private void setMessages(int id) {
 
-    }
-
-    public ArrayList<Message> getAll() {
-        return this.messages;
     }
 
     public void setMessage(Message message) {

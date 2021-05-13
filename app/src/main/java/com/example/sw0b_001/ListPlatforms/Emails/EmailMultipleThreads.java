@@ -8,14 +8,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.sw0b_001.CustomHelpers;
 import com.example.sw0b_001.PlatformsAdapter;
 import com.example.sw0b_001.R;
+
+import java.util.ArrayList;
 
 public class EmailMultipleThreads extends AppCompatActivity {
     RecyclerView recyclerView;
 
-    String subjects[], emails[];
-    int images[];
+    String subjects[] = {};
+    String emails[] = {};
+    int images[] = {};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,12 @@ public class EmailMultipleThreads extends AppCompatActivity {
 //        emails = new String[]{"info@smswithoutborders.com", "afkanerd@gmail.com", "wisdom@smswithoutborders.com"};
 //        images = new int[]{R.mipmap.letter_a, R.drawable.roundgmail, R.drawable.roundgmail};
 
+        ArrayList<EmailThreads> threads = new EmailThreads().getAll();
+        for(EmailThreads thread : threads ) {
+            subjects[subjects.length + 1] = thread.getSubject();
+            emails[emails.length + 1] = thread.getEmail();
+            images[images.length + 1] = CustomHelpers.getLetterImage(thread.getEmail().charAt(0));
+        }
 
         Intent intent = new Intent(this, EmailSingleThreads.class);
         intent.putExtra("platform_name", getIntent().getStringExtra("text1"));

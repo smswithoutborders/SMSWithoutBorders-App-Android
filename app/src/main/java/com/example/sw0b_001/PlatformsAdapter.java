@@ -79,7 +79,7 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
 
     @Override
     public int getItemCount() {
-        return this.images.length;
+        return this.text1s.length;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
