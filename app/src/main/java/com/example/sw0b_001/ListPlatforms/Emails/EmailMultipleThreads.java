@@ -35,8 +35,15 @@ public class EmailMultipleThreads extends AppCompatActivity {
                 .setSubjectSub("info@smswithoutborders.com")
                 .setId(1)
                 .setTopRightText("2021-01-02");
+
+        EmailThreads thread1 = new EmailThreads()
+                .setSubject("Introduction Thread 2")
+                .setSubjectSub("wisdom@smswithoutborders.com")
+                .setId(1)
+                .setTopRightText("2021-01-01");
         ArrayList<EmailThreads> threads = new ArrayList<EmailThreads>();
         threads.add(thread);
+        threads.add(thread1);
 
         Intent intent = new Intent(this, EmailSingleThreads.class);
 //        intent.putExtra("platform_name", getIntent().getStringExtra("text1"));
