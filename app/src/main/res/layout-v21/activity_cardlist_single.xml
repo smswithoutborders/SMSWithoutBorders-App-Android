@@ -26,19 +26,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/image"
-                android:layout_width="53dp"
-                android:layout_height="53dp"
-                android:src="@android:drawable/sym_def_app_icon"
-                app:civ_border_color="#FFFFFF"
-                app:civ_border_width="2dp"
-                app:civ_circle_background_color="#FFFFFF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0" />
-
             <!--            <ImageView-->
             <!--                android:id="@+id/platform_image"-->
             <!--                android:layout_width="63dp"-->
@@ -49,14 +36,25 @@
             <!--                app:layout_constraintTop_toTopOf="parent"-->
             <!--                app:layout_constraintVertical_bias="1.0" />-->
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@android:drawable/sym_def_app_icon"
+                app:civ_border_color="#FFFFFF"
+                app:civ_border_width="2dp"
+                app:civ_circle_background_color="#FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/subjectSub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
                 android:text="snippet"
                 android:textColor="#787777"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/subject"
                 app:layout_constraintTop_toBottomOf="@+id/subject" />
@@ -65,14 +63,14 @@
                 android:id="@+id/subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="21dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif-light"
                 android:text="email_address"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintBottom_toTopOf="@+id/subjectSub"
                 app:layout_constraintStart_toEndOf="@+id/image"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -80,30 +78,24 @@
                 android:id="@+id/bottomRightText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
                 android:text="status"
                 android:textColor="#FA0000"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.937"
-                app:layout_constraintStart_toEndOf="@+id/subjectSub"
-                app:layout_constraintTop_toBottomOf="@+id/subject" />
+                app:layout_constraintTop_toBottomOf="@+id/topRightText" />
 
             <TextView
                 android:id="@+id/topRightText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="11dp"
                 android:text="datetime"
                 android:textColor="#787777"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/bottomRightText"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.92"
-                app:layout_constraintStart_toEndOf="@+id/subject"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

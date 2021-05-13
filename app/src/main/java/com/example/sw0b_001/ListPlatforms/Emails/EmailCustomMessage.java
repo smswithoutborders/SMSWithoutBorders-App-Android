@@ -9,6 +9,16 @@ public class EmailCustomMessage {
     private String datetime;
     private String status;
     private int id;
+    private int image;
+
+    public EmailCustomMessage setImage(int image) {
+        this.image = image;
+        return this;
+    }
+
+    public int getImage() {
+        return this.image;
+    }
 
     public String getRecipient() {
         return recipient;

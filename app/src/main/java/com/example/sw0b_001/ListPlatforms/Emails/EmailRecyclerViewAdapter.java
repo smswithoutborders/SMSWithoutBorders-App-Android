@@ -57,6 +57,7 @@ public class EmailRecyclerViewAdapter extends RecyclerView.Adapter<EmailRecycler
             public void onClick(View v) {
 //                Intent intent = new Intent(context, onclickIntent);
                 onclickIntent.putExtra("threadId", threads.get(position).getId());
+                onclickIntent.putExtra("subject", threads.get(position).getSubject());
                 context.startActivity(onclickIntent);
             }
         });

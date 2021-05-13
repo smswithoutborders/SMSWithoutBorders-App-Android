@@ -14,6 +14,20 @@ public class EmailThreads {
     private int image = R.drawable.googleg_standard_color_18;
     private ArrayList<EmailCustomMessage> messages = new ArrayList<>();
 
+
+    public ArrayList<EmailThreads> getThreads() {
+        ArrayList<EmailThreads> threads = new ArrayList<>();
+        for(EmailCustomMessage email : messages ) {
+            EmailThreads thread = new EmailThreads()
+                    .setSubject(email.getRecipient())
+                    .setSubjectSub(email.getBody().substring(0, (email.getBody().length()/2)))
+                    .setTopRightText(email.getDatetime())
+                    .setBottomRightText(email.getStatus());
+            threads.add(thread);
+        }
+        return threads;
+    }
+
     public EmailThreads add(EmailCustomMessage message) {
         messages.add(message);
         return this;
