@@ -21,53 +21,53 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ListPlatforms.Emails.EmailSingleThreads" android:parentActivityName=".ListPlatforms.Emails.EmailMultipleThreads" android:theme="@style/Theme.MaterialComponents.NoActionBar">
+        <activity android:name=".EmailSingleThreads" android:parentActivityName=".EmailMultipleThreads" android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ListPlatforms.Emails.EmailMultipleThreads" />
+                android:value=".EmailMultipleThreads" />
         </activity>
-        <activity android:name=".ListPlatforms.Emails.EmailBody" android:parentActivityName=".ListPlatforms.Emails.EmailMultipleThreads" android:label="View message">
+        <activity android:name=".EmailBody" android:parentActivityName=".EmailMultipleThreads" android:label="View message">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ListPlatforms.Emails.EmailMultipleThreads" />
+                android:value=".EmailMultipleThreads" />
         </activity>
         <activity
-            android:name=".ListPlatforms.Emails.EmailMultipleThreads"
+            android:name=".EmailMultipleThreads"
             android:label="Recents..."
-            android:parentActivityName=".Platforms">
+            android:parentActivityName=".PlatformsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Platforms" />
+                android:value=".PlatformsActivity" />
         </activity>
         <activity
-            android:name=".Permissions"
+            android:name=".PermissionsActivity"
             android:label="Permission"
-            android:parentActivityName=".Login">
+            android:parentActivityName=".LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".LoginActivity" />
         </activity>
         <activity
-            android:name=".Platforms"
+            android:name=".PlatformsActivity"
             android:label="Usable Platforms" />
         <activity
-            android:name=".ListPlatforms.Emails.EmailCompose"
-            android:parentActivityName=".ListPlatforms.Emails.EmailMultipleThreads"
+            android:name=".EmailCompose"
+            android:parentActivityName=".EmailMultipleThreads"
             android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ListPlatforms.Emails.EmailMultipleThreads" />
+                android:value=".EmailMultipleThreads" />
         </activity>
         <activity
-            android:name=".QRScanner"
+            android:name=".QRScannerActivity"
             android:label="QR Scanner"
-            android:parentActivityName=".Login">
+            android:parentActivityName=".LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login" />
+                android:value=".LoginActivity" />
         </activity>
         <activity
-            android:name=".Login"
+            android:name=".LoginActivity"
             android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

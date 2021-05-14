@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-public class Permissions extends AppCompatActivity {
+public class PermissionsActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 200;
 
 
@@ -25,7 +25,7 @@ public class Permissions extends AppCompatActivity {
 
     public void scanQR(View view) {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent(this, QRScanner.class);
+            Intent intent = new Intent(this, QRScannerActivity.class);
             startActivity(intent);
             finish();
         }
@@ -44,12 +44,12 @@ public class Permissions extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Showing the toast message
                 Toast.makeText(getApplicationContext(), "Camera Permission Granted", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, QRScanner.class);
+                Intent intent = new Intent(this, QRScannerActivity.class);
                 startActivity(intent);
             }
             else {
                 Toast.makeText(this, "Camera Permission Denied", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, Login.class);
+                Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
             }
         }

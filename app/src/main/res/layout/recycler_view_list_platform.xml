@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/platforms_layout"
+    android:id="@+id/email_thread_card_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
@@ -50,22 +50,20 @@
             <!--                app:layout_constraintVertical_bias="1.0" />-->
 
             <TextView
-                android:id="@+id/subjectSub"
+                android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="description"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/subject"
-                app:layout_constraintTop_toBottomOf="@+id/subject" />
+                app:layout_constraintStart_toStartOf="@+id/name"
+                app:layout_constraintTop_toBottomOf="@+id/name" />
 
             <TextView
-                android:id="@+id/subject"
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="15dp"
                 android:fontFamily="sans-serif-light"
-                android:text="platform name"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintStart_toEndOf="@+id/image"
@@ -77,25 +75,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginBottom="15dp"
-                android:text="TextView"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/bottomRightText"
+                app:layout_constraintBottom_toTopOf="@+id/provider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.887"
-                app:layout_constraintStart_toEndOf="@+id/subject"
+                app:layout_constraintStart_toEndOf="@+id/name"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/bottomRightText"
+                android:id="@+id/provider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="167dp"
-                android:layout_marginTop="15dp"
-                android:text="TextView"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.653"
-                app:layout_constraintStart_toEndOf="@+id/subjectSub"
+                app:layout_constraintStart_toEndOf="@+id/description"
                 app:layout_constraintTop_toBottomOf="@+id/topRightText"
                 app:layout_constraintVertical_bias="1.0" />
 

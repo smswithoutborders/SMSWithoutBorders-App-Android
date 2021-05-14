@@ -1,15 +1,13 @@
-package com.example.sw0b_001;
+package com.example.sw0b_001.Helpers;
 
-import android.content.SharedPreferences;
-import android.os.Build;
-import android.preference.PreferenceManager;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.security.keystore.KeyProtection;
 import android.util.Base64;
 
-import androidx.annotation.RequiresApi;
 import android.content.Context;
+
+import com.example.sw0b_001.Helpers.Gateway;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -22,13 +20,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
-import java.security.Provider;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.MGF1ParameterSpec;
 
 import javax.crypto.BadPaddingException;

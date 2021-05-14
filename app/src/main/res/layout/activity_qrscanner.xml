@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".QRScanner">
+    tools:context=".QRScannerActivity">
 
     <TextView
         android:id="@+id/qr_text"

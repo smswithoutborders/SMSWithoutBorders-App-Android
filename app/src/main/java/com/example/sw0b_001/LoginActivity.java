@@ -1,35 +1,26 @@
 package com.example.sw0b_001;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.sw0b_001.Helpers.SecurityLayer;
+
 import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     SecurityLayer securityLayer;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
 
@@ -45,7 +36,8 @@ public class Login extends AppCompatActivity {
             securityLayer = new SecurityLayer();
             EditText password = findViewById(R.id.user_password);
             if(!securityLayer.hasRSAKeys()) {
-                System.out.println("[+] Does not have RSA keys");
+//                System.out.println("[+] Does not have RSA keys");
+//                Log.d(MainActivity.class.getSimpleName(), )
                 AccessPermissions();
             }
             else {
@@ -58,7 +50,7 @@ public class Login extends AppCompatActivity {
                     password.setError("Failed to authenticate!");
                 }
                 else {
-                    System.out.println("[+] Has RSA Keys....");
+//                    System.out.println("[+] Has RSA Keys....");
                     // TODO remove this when done
                     try {
                         KeyStore keyStore = KeyStore.getInstance(SecurityLayer.DEFAULT_KEYSTORE_PROVIDER);
@@ -96,13 +88,13 @@ public class Login extends AppCompatActivity {
     }
 
     public void AccessPlatforms() {
-        Intent intent = new Intent(this, Platforms.class);
+        Intent intent = new Intent(this, PlatformsActivity.class);
         startActivity(intent);
     }
 
 
     public void AccessPermissions() {
-        Intent intent = new Intent(this, Permissions.class);
+        Intent intent = new Intent(this, PermissionsActivity.class);
         startActivity(intent);
     }
 }

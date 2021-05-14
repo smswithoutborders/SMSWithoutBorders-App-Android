@@ -1,4 +1,4 @@
-package com.example.sw0b_001.ListPlatforms.Emails;
+package com.example.sw0b_001;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +14,11 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.sw0b_001.PlatformsAdapter;
+import com.example.sw0b_001.EmailBody;
+import com.example.sw0b_001.EmailMultipleThreads;
+import com.example.sw0b_001.EmailRecyclerViewAdapter;
+import com.example.sw0b_001.Providers.Emails.EmailCustomMessage;
+import com.example.sw0b_001.Providers.Emails.EmailCustomThreads;
 import com.example.sw0b_001.R;
 
 import java.util.ArrayList;
@@ -44,50 +48,50 @@ public class EmailSingleThreads extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL));
 
-        EmailCustomMessage message1 = new EmailCustomMessage()
-                .setRecipient("info@smswithoutborders.com")
-                .setBody("Hello world, message sent to info@smswithoutborders.com".substring(0, 10))
-                .setId(1)
-                .setDatetime("2021-01-01")
-                .setStatus("delivered")
-                .setImage(R.mipmap.letter_a)
-                .setThreadId(1);
-        EmailCustomMessage message2 = new EmailCustomMessage()
-                .setRecipient("info@smswithoutborders.com")
-                .setBody("Hello world, message sent to info@smswithoutborders.com".substring(0, 10))
-                .setId(2)
-                .setDatetime("2021-01-02")
-                .setStatus("delivered")
-                .setImage(R.mipmap.letter_a)
-                .setThreadId(1);
-        EmailCustomMessage message3 = new EmailCustomMessage()
-                .setRecipient("info@smswithoutborders.com")
-                .setBody("Hello world, message sent to info@smswithoutborders.com".substring(0, 10))
-                .setId(2)
-                .setDatetime("2021-01-03")
-                .setStatus("failed")
-                .setImage(R.mipmap.letter_a)
-                .setThreadId(1);
-
-        EmailThreads thread = new EmailThreads()
-                .setSubject(getIntent().getStringExtra("subject"))
-                .setSubjectSub("info@smswithoutborders.com")
-                .setId(1)
-                .setTopRightText("2021-01-02")
-                .add(message1)
-                .add(message2)
-                .add(message3);
-        ArrayList<EmailThreads> threads = thread.getThreads();
-
-        TextView tv = findViewById(R.id.single_subject_view);
-        tv.setText(getIntent().getStringExtra("subject"));
-        System.out.println("[+] Subject: " + getIntent().getStringExtra("subject"));
-
-        Intent intent = new Intent(this, EmailBody.class);
-        intent.putExtra("thread_subject", getIntent().getStringExtra("subject"));
-        EmailRecyclerViewAdapter adapter = new EmailRecyclerViewAdapter(this, threads, intent, R.layout.activity_cardlist_single);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        EmailCustomMessage message1 = new EmailCustomMessage()
+//                .setRecipient("info@smswithoutborders.com")
+//                .setBody("Hello world, message sent to info@smswithoutborders.com".substring(0, 10))
+//                .setId(1)
+//                .setDatetime("2021-01-01")
+//                .setStatus("delivered")
+//                .setImage(R.mipmap.letter_a)
+//                .setThreadId(1);
+//        EmailCustomMessage message2 = new EmailCustomMessage()
+//                .setRecipient("info@smswithoutborders.com")
+//                .setBody("Hello world, message sent to info@smswithoutborders.com".substring(0, 10))
+//                .setId(2)
+//                .setDatetime("2021-01-02")
+//                .setStatus("delivered")
+//                .setImage(R.mipmap.letter_a)
+//                .setThreadId(1);
+//        EmailCustomMessage message3 = new EmailCustomMessage()
+//                .setRecipient("info@smswithoutborders.com")
+//                .setBody("Hello world, message sent to info@smswithoutborders.com".substring(0, 10))
+//                .setId(2)
+//                .setDatetime("2021-01-03")
+//                .setStatus("failed")
+//                .setImage(R.mipmap.letter_a)
+//                .setThreadId(1);
+//
+//        EmailCustomThreads thread = new EmailCustomThreads()
+//                .setSubject(getIntent().getStringExtra("subject"))
+//                .setSubjectSub("info@smswithoutborders.com")
+//                .setId(1)
+//                .setTopRightText("2021-01-02")
+//                .add(message1)
+//                .add(message2)
+//                .add(message3);
+//        ArrayList<EmailCustomThreads> threads = thread.getThreads();
+//
+//        TextView tv = findViewById(R.id.single_subject_view);
+//        tv.setText(getIntent().getStringExtra("subject"));
+//        System.out.println("[+] Subject: " + getIntent().getStringExtra("subject"));
+//
+//        Intent intent = new Intent(this, EmailBody.class);
+//        intent.putExtra("thread_subject", getIntent().getStringExtra("subject"));
+//        EmailRecyclerViewAdapter adapter = new EmailRecyclerViewAdapter(this, threads, intent, R.layout.activity_cardlist_single);
+//        recyclerView.setAdapter(adapter);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override

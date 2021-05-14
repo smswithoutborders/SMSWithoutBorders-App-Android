@@ -1,4 +1,4 @@
-package com.example.sw0b_001;
+package com.example.sw0b_001.Helpers;
 
 public class Gateway {
     public static String VAR_PUBLICKEY = "GATEWAY_PUBLICKEY";

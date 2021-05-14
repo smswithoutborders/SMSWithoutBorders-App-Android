@@ -1,4 +1,4 @@
-package com.example.sw0b_001.ListPlatforms.Emails;
+package com.example.sw0b_001;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sw0b_001.R;
+import com.example.sw0b_001.Providers.Emails.EmailCustomThreads;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -26,9 +26,9 @@ public class EmailRecyclerViewAdapter extends RecyclerView.Adapter<EmailRecycler
     Context context;
     Intent onclickIntent;
     int layout;
-    ArrayList<EmailThreads> threads;
+    ArrayList<EmailCustomThreads> threads;
 
-    public EmailRecyclerViewAdapter(Context context, ArrayList<EmailThreads> threads, Intent intent, int intendedLayout) {
+    public EmailRecyclerViewAdapter(Context context, ArrayList<EmailCustomThreads> threads, Intent intent, int intendedLayout) {
         this.context = context;
         this.threads = threads;
         this.onclickIntent = intent;
@@ -46,21 +46,21 @@ public class EmailRecyclerViewAdapter extends RecyclerView.Adapter<EmailRecycler
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        holder.threadSubject.setText(this.threads.get(position).getSubject());
-        holder.threadSubjectSub.setText(this.threads.get(position).getSubjectSub());
-        holder.threadBottomRightText.setText(this.threads.get(position).getBottomRightText());
-        holder.threadTopRightText.setText(this.threads.get(position).getTopRightText());
-        holder.image.setImageResource(this.threads.get(position).getImage());
-
-        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent intent = new Intent(context, onclickIntent);
-                onclickIntent.putExtra("threadId", threads.get(position).getId());
-                onclickIntent.putExtra("subject", threads.get(position).getSubject());
-                context.startActivity(onclickIntent);
-            }
-        });
+//        holder.threadSubject.setText(this.threads.get(position).getSubject());
+//        holder.threadSubjectSub.setText(this.threads.get(position).getSubjectSub());
+//        holder.threadBottomRightText.setText(this.threads.get(position).getBottomRightText());
+//        holder.threadTopRightText.setText(this.threads.get(position).getTopRightText());
+//        holder.image.setImageResource(this.threads.get(position).getImage());
+//
+//        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Intent intent = new Intent(context, onclickIntent);
+//                onclickIntent.putExtra("threadId", threads.get(position).getId());
+//                onclickIntent.putExtra("subject", threads.get(position).getSubject());
+//                context.startActivity(onclickIntent);
+//            }
+//        });
     }
 
     @Override
@@ -76,12 +76,12 @@ public class EmailRecyclerViewAdapter extends RecyclerView.Adapter<EmailRecycler
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            threadSubject = itemView.findViewById(R.id.subject);
-            threadSubjectSub = itemView.findViewById(R.id.subjectSub);
+            threadSubject = itemView.findViewById(R.id.name);
+            threadSubjectSub = itemView.findViewById(R.id.description);
             threadTopRightText = itemView.findViewById(R.id.topRightText);
-            threadBottomRightText = itemView.findViewById(R.id.bottomRightText);
+            threadBottomRightText = itemView.findViewById(R.id.provider);
             image = itemView.findViewById(R.id.image);
-            mainLayout = itemView.findViewById(R.id.platforms_layout);
+            mainLayout = itemView.findViewById(R.id.email_thread_card_layout);
         }
     }
 }

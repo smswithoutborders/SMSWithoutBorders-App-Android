@@ -3,17 +3,13 @@ package com.example.sw0b_001;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.HardwarePropertiesManager;
 import android.preference.PreferenceManager;
-import android.util.Base64;
-import android.util.JsonReader;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -21,14 +17,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.util.JsonUtils;
+import com.example.sw0b_001.Helpers.Gateway;
+import com.example.sw0b_001.Helpers.SecurityLayer;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -36,13 +31,11 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONStringer;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -53,7 +46,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-public class QRScanner extends AppCompatActivity {
+public class QRScannerActivity extends AppCompatActivity {
 
     Button scanButton;
     private BarcodeDetector barcodeDetector;
@@ -91,7 +84,7 @@ public class QRScanner extends AppCompatActivity {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
                 try {
-                    if (ActivityCompat.checkSelfPermission(QRScanner.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(QRScannerActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                         cameraSource.start(surfaceView.getHolder());
                     }
                 } catch (IOException e) {
@@ -247,7 +240,7 @@ public class QRScanner extends AppCompatActivity {
     }
 
     public void AccessPlatforms() {
-        Intent intent = new Intent(this, Platforms.class);
+        Intent intent = new Intent(this, PlatformsActivity.class);
         startActivity(intent);
         finish();
     }

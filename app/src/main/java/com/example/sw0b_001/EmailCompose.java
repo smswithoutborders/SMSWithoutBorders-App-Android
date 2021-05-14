@@ -1,4 +1,4 @@
-package com.example.sw0b_001.ListPlatforms.Emails;
+package com.example.sw0b_001;
 
 import android.Manifest;
 import android.app.Activity;
@@ -21,8 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
-import com.example.sw0b_001.R;
-import com.example.sw0b_001.SecurityLayer;
+import com.example.sw0b_001.Helpers.SecurityLayer;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

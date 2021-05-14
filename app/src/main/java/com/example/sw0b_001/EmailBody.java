@@ -1,4 +1,4 @@
-package com.example.sw0b_001.ListPlatforms.Emails;
+package com.example.sw0b_001;
 
 import androidx.appcompat.app.AppCompatActivity;
 

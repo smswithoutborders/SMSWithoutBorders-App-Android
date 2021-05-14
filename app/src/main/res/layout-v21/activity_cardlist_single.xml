@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/platforms_layout"
+    android:id="@+id/email_thread_card_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
@@ -49,18 +49,18 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/subjectSub"
+                android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="snippet"
                 android:textColor="#787777"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/subject"
-                app:layout_constraintTop_toBottomOf="@+id/subject" />
+                app:layout_constraintStart_toStartOf="@+id/name"
+                app:layout_constraintTop_toBottomOf="@+id/name" />
 
             <TextView
-                android:id="@+id/subject"
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="21dp"
@@ -69,12 +69,12 @@
                 android:text="email_address"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/subjectSub"
+                app:layout_constraintBottom_toTopOf="@+id/description"
                 app:layout_constraintStart_toEndOf="@+id/image"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/bottomRightText"
+                android:id="@+id/provider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="status"
@@ -91,7 +91,7 @@
                 android:text="datetime"
                 android:textColor="#787777"
                 android:textSize="10sp"
-                app:layout_constraintBottom_toTopOf="@+id/bottomRightText"
+                app:layout_constraintBottom_toTopOf="@+id/provider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
