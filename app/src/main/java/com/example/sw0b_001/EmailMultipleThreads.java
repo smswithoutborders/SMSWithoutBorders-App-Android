@@ -16,6 +16,7 @@ import com.example.sw0b_001.Providers.Emails.EmailCustomThreads;
 import com.example.sw0b_001.Providers.Emails.EmailThreadDao;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.PlatformsAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class EmailMultipleThreads extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emailactivities_recent);
+
 
         emailThreads = new ArrayList<>();
         recyclerView = findViewById(R.id.email_subject_list);
@@ -54,6 +56,7 @@ public class EmailMultipleThreads extends AppCompatActivity {
         emailThreadsAdapter = new EmailRecyclerViewAdapter(this, emailThreads, R.layout.recycler_view_list_platform);
         recyclerView.setAdapter(emailThreadsAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
     public void composeEmail(View view) {
