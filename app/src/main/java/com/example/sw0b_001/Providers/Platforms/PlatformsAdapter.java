@@ -53,6 +53,7 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
         holder.name.setText(platform.getName());
         holder.description.setText(platform.getDescription());
         holder.provider.setText(platform.getProvider());
+        holder.type.setText(platform.getType());
         holder.image.setImageResource(platform.getImage());
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +72,7 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, description, provider;
+        TextView name, description, provider, type;
         ImageView image;
         ConstraintLayout layout;
 
@@ -81,6 +82,7 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
             this.description = itemView.findViewById(R.id.description);
             this.provider = itemView.findViewById(R.id.provider);
             this.image = itemView.findViewById(R.id.image);
+            this.type = itemView.findViewById(R.id.type);
             this.layout = itemView.findViewById(R.id.email_thread_card_layout);
         }
     }

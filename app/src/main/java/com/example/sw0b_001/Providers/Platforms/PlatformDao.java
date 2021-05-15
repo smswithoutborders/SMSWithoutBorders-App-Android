@@ -22,7 +22,7 @@ public interface PlatformDao {
 //    EmailCustomMessage findByName(String first, String last);
 
     @Insert
-    void insertAll(Platforms... emailCustomMessages);
+    void insertAll(Platforms... platforms);
 
     @Delete
     void delete(Platforms emailCustomMessages);

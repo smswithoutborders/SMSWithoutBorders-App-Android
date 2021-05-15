@@ -29,6 +29,18 @@ public class Platforms {
     @ColumnInfo(name="image")
     public int image;
 
+    public String getType() {
+        return type;
+    }
+
+    public Platforms setType(String type) {
+        this.type = type;
+        return this;
+    }
+
+    @ColumnInfo(name="type")
+    public String type;
+
     @PrimaryKey(autoGenerate = true)
     public int id;
 

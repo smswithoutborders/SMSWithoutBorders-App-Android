@@ -78,7 +78,7 @@ public class EmailRecyclerViewAdapter extends RecyclerView.Adapter<EmailRecycler
             super(itemView);
             threadSubject = itemView.findViewById(R.id.name);
             threadSubjectSub = itemView.findViewById(R.id.description);
-            threadTopRightText = itemView.findViewById(R.id.topRightText);
+            threadTopRightText = itemView.findViewById(R.id.type);
             threadBottomRightText = itemView.findViewById(R.id.provider);
             image = itemView.findViewById(R.id.image);
             mainLayout = itemView.findViewById(R.id.email_thread_card_layout);
