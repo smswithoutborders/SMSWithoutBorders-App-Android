@@ -12,8 +12,9 @@ public interface EmailThreadDao {
     @Query("SELECT * FROM EmailCustomThreads")
     List<EmailCustomThreads> getAll();
 
-//    @Query("SELECT * FROM emailcustommessage WHERE uid IN (:emailcustommessageIds)")
-//    List<EmailCustomMessage> loadAllByIds(int[] emailcustommessageIds);
+    @Query("SELECT * FROM emailcustommessage WHERE id IN (:emailcustommessageIds)")
+    List<EmailCustomMessage> loadAllByIds(int[] emailcustommessageIds);
+
 
 //    @Query("SELECT * FROM emailcustommessage WHERE first_name LIKE :first AND " +
 //            "last_name LIKE :last LIMIT 1")
@@ -21,6 +22,9 @@ public interface EmailThreadDao {
 
     @Insert
     void insertAll(EmailCustomThreads... emailCustomMessages);
+
+    @Insert
+    long insert(EmailCustomThreads emailCustomThreads);
 
     @Delete
     void delete(EmailCustomThreads emailCustomMessages);

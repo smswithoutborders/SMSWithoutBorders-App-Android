@@ -24,6 +24,9 @@ public interface PlatformDao {
     @Insert
     void insertAll(Platforms... platforms);
 
+    @Insert
+    long insert(Platforms platform);
+
     @Delete
     void delete(Platforms emailCustomMessages);
 

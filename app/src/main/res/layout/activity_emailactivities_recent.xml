@@ -23,11 +23,11 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/email_subject_list"
         android:layout_width="match_parent"
-        android:layout_height="563dp" />
+        android:layout_height="653dp" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButton2"

@@ -12,6 +12,51 @@ public class EmailCustomThreads {
     @ColumnInfo(name="recipient")
     public String recipient;
 
+    public String getSubject() {
+        return subject;
+    }
+
+    public EmailCustomThreads setSubject(String subject) {
+        this.subject = subject;
+        return this;
+    }
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public EmailCustomThreads setRecipient(String recipient) {
+        this.recipient = recipient;
+        return this;
+    }
+
+    public String getMdate() {
+        return mdate;
+    }
+
+    public EmailCustomThreads setMdate(String mdate) {
+        this.mdate = mdate;
+        return this;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public EmailCustomThreads setId(int id) {
+        this.id = id;
+        return this;
+    }
+
+    public int getImage() {
+        return image;
+    }
+
+    public EmailCustomThreads setImage(int image) {
+        this.image = image;
+        return this;
+    }
+
     @ColumnInfo(name="mdate")
     public String mdate;
 

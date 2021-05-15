@@ -1,6 +1,7 @@
 package com.example.sw0b_001;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +9,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.sw0b_001.Helpers.Datastore;
 import com.example.sw0b_001.Helpers.SecurityLayer;
+import com.example.sw0b_001.Providers.Emails.EmailCustomMessage;
+import com.example.sw0b_001.Providers.Emails.EmailCustomThreads;
+import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
+import com.example.sw0b_001.Providers.Emails.EmailThreadDao;
+import com.example.sw0b_001.Providers.Platforms.PlatformDao;
+import com.example.sw0b_001.Providers.Platforms.Platforms;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -38,9 +46,48 @@ public class LoginActivity extends AppCompatActivity {
             if(!securityLayer.hasRSAKeys()) {
 //                System.out.println("[+] Does not have RSA keys");
 //                Log.d(MainActivity.class.getSimpleName(), )
+
                 AccessPermissions();
             }
             else {
+                Platforms gmail = new Platforms()
+                        .setName("Gmail")
+                        .setProvider("google")
+                        .setDescription("Made By Google")
+                        .setImage(R.drawable.roundgmail)
+                        .setType("email");
+
+                EmailCustomThreads emailThreads = new EmailCustomThreads()
+                        .setImage(R.drawable.roundgmail)
+                        .setRecipient("info@smswithoutborders.com")
+                        .setSubject("Initial test")
+                        .setMdate("2021-01-01");
+
+                EmailCustomMessage emailMessage = new EmailCustomMessage()
+                        .setBody("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ")
+                        .setDatetime("2020-01-01")
+                        .setImage(R.mipmap.letter_a)
+                        .setStatus("delivered");
+
+                Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
+                        Datastore.class, Datastore.DBName).build();
+
+                PlatformDao platformsDao = platformDb.platformDao();
+                EmailThreadDao emailThreadDao = platformDb.emailThreadDao();
+                EmailMessageDao emailMessageDao = platformDb.emailDao();
+
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        long threadId = emailThreadDao.insert(emailThreads);
+                        emailMessage.setThreadId(threadId);
+                        emailMessageDao.insertAll(emailMessage);
+                        platformsDao.insertAll(gmail);
+                    }
+                };
+                Thread thread = new Thread(runnable);
+                thread.start();
+                thread.join();
                 if(password.getText().toString().isEmpty()) {
                     password.setError("Password cannot be empty!");
                     return;
@@ -82,6 +129,8 @@ public class LoginActivity extends AppCompatActivity {
         } catch (IllegalBlockSizeException e) {
             e.printStackTrace();
         } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 

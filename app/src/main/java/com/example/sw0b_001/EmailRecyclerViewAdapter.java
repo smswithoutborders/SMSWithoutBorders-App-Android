@@ -17,21 +17,17 @@ import com.example.sw0b_001.Providers.Emails.EmailCustomThreads;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class EmailRecyclerViewAdapter extends RecyclerView.Adapter<EmailRecyclerViewAdapter.ViewHolder> {
 
-    String text1s[], text2s[], text3s[], text4s[];
-    int images[];
-
     Context context;
-    Intent onclickIntent;
     int layout;
-    ArrayList<EmailCustomThreads> threads;
+    List<EmailCustomThreads> threads;
 
-    public EmailRecyclerViewAdapter(Context context, ArrayList<EmailCustomThreads> threads, Intent intent, int intendedLayout) {
+    public EmailRecyclerViewAdapter(Context context, List<EmailCustomThreads> threads, int intendedLayout) {
         this.context = context;
         this.threads = threads;
-        this.onclickIntent = intent;
         this.layout = intendedLayout;
     }
 
@@ -46,21 +42,19 @@ public class EmailRecyclerViewAdapter extends RecyclerView.Adapter<EmailRecycler
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-//        holder.threadSubject.setText(this.threads.get(position).getSubject());
-//        holder.threadSubjectSub.setText(this.threads.get(position).getSubjectSub());
-//        holder.threadBottomRightText.setText(this.threads.get(position).getBottomRightText());
-//        holder.threadTopRightText.setText(this.threads.get(position).getTopRightText());
-//        holder.image.setImageResource(this.threads.get(position).getImage());
-//
-//        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                Intent intent = new Intent(context, onclickIntent);
-//                onclickIntent.putExtra("threadId", threads.get(position).getId());
-//                onclickIntent.putExtra("subject", threads.get(position).getSubject());
-//                context.startActivity(onclickIntent);
-//            }
-//        });
+        holder.threadSubject.setText(this.threads.get(position).getSubject());
+        holder.threadSubjectSub.setText(this.threads.get(position).getRecipient());
+        holder.threadBottomRightText.setText("");
+        holder.threadTopRightText.setText(this.threads.get(position).getMdate());
+        holder.image.setImageResource(this.threads.get(position).getImage());
+
+        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, EmailSingleThreads.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

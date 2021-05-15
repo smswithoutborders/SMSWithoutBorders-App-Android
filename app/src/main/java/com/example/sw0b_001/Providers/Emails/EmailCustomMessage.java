@@ -15,6 +15,78 @@ public class EmailCustomMessage {
     @ColumnInfo(name="body")
     public String body;
 
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public EmailCustomMessage setRecipient(String recipient) {
+        this.recipient = recipient;
+        return this;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public EmailCustomMessage setSubject(String subject) {
+        this.subject = subject;
+        return this;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public EmailCustomMessage setBody(String body) {
+        this.body = body;
+        return this;
+    }
+
+    public String getDatetime() {
+        return datetime;
+    }
+
+    public EmailCustomMessage setDatetime(String datetime) {
+        this.datetime = datetime;
+        return this;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public EmailCustomMessage setStatus(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public int getImage() {
+        return image;
+    }
+
+    public EmailCustomMessage setImage(int image) {
+        this.image = image;
+        return this;
+    }
+
+    public long getThreadId() {
+        return threadId;
+    }
+
+    public EmailCustomMessage setThreadId(long threadId) {
+        this.threadId = threadId;
+        return this;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public EmailCustomMessage setId(int id) {
+        this.id = id;
+        return this;
+    }
+
     @ColumnInfo(name="datetime")
     public String datetime;
 
@@ -25,7 +97,7 @@ public class EmailCustomMessage {
     public int image;
 
     @ColumnInfo(name="thread_id")
-    public int threadId;
+    public long threadId;
 
     @PrimaryKey(autoGenerate = true)
     public int id;
