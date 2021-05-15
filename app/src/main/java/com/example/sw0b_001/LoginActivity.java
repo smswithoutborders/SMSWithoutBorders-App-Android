@@ -79,10 +79,15 @@ public class LoginActivity extends AppCompatActivity {
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
+                        platformsDao.deleteAll();
+                        emailThreadDao.deleteAll();
+                        emailMessageDao.deleteAll();
+
+                        long platformId = platformsDao.insert(gmail);
+                        emailThreads.setPlatformId(platformId);
                         long threadId = emailThreadDao.insert(emailThreads);
                         emailMessage.setThreadId(threadId);
                         emailMessageDao.insertAll(emailMessage);
-                        platformsDao.insertAll(gmail);
                     }
                 };
                 Thread thread = new Thread(runnable);

@@ -65,4 +65,15 @@ public class EmailCustomThreads {
 
     @ColumnInfo(name="image")
     public int image;
+
+    public long getPlatformId() {
+        return platformId;
+    }
+
+    public void setPlatformId(long platformId) {
+        this.platformId = platformId;
+    }
+
+    @ColumnInfo(name="platform_id")
+    public long platformId;
 }

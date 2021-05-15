@@ -16,7 +16,6 @@ import com.example.sw0b_001.Providers.Emails.EmailCustomThreads;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EmailRecyclerViewAdapter extends RecyclerView.Adapter<EmailRecyclerViewAdapter.ViewHolder> {

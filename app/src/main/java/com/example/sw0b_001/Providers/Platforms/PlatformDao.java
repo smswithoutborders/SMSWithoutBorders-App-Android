@@ -28,6 +28,9 @@ public interface PlatformDao {
     long insert(Platforms platform);
 
     @Delete
-    void delete(Platforms emailCustomMessages);
+    void delete(Platforms platform);
+
+    @Query("DELETE FROM Platforms")
+    void deleteAll();
 
 }

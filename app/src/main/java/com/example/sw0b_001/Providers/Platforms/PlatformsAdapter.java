@@ -60,6 +60,7 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
             @Override
             public void onClick(View v) {
                 Intent intent = Platforms.getIntent(context.getApplicationContext(), platform.getProvider(), platform.getName());
+                intent.putExtra("platformId", platform.id);
                 context.startActivity(intent);
             }
         });

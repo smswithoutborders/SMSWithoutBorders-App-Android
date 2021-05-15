@@ -12,8 +12,11 @@ public interface EmailThreadDao {
     @Query("SELECT * FROM EmailCustomThreads")
     List<EmailCustomThreads> getAll();
 
-    @Query("SELECT * FROM emailcustommessage WHERE id IN (:emailcustommessageIds)")
-    List<EmailCustomMessage> loadAllByIds(int[] emailcustommessageIds);
+    @Query("SELECT * FROM EmailCustomThreads WHERE id IN (:emailThreadId)")
+    List<EmailCustomThreads> loadAllByIds(int[] emailThreadId);
+
+    @Query("SELECT * FROM EmailCustomThreads WHERE platform_id IN (:platformIds)")
+    List<EmailCustomThreads> getAllForPlatform(long platformIds);
 
 
 //    @Query("SELECT * FROM emailcustommessage WHERE first_name LIKE :first AND " +
@@ -21,12 +24,16 @@ public interface EmailThreadDao {
 //    EmailCustomMessage findByName(String first, String last);
 
     @Insert
-    void insertAll(EmailCustomThreads... emailCustomMessages);
+    void insertAll(EmailCustomThreads... emailCustomThreads);
 
     @Insert
     long insert(EmailCustomThreads emailCustomThreads);
 
     @Delete
-    void delete(EmailCustomThreads emailCustomMessages);
+    void delete(EmailCustomThreads emailCustomThreads);
+
+
+    @Query("DELETE FROM EmailCustomThreads")
+    void deleteAll();
 
 }

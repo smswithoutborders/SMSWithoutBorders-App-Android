@@ -31,4 +31,7 @@ public interface EmailMessageDao {
     @Delete
     void delete(EmailCustomMessage emailCustomMessages);
 
+    @Query("DELETE FROM EmailCustomMessage")
+    void deleteAll();
+
 }
