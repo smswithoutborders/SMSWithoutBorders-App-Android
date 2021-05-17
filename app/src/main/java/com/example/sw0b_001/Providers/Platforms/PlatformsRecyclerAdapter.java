@@ -19,13 +19,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.ViewHolder> {
+public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecyclerAdapter.ViewHolder> {
 
     public Context context;
     public List<Platforms> platforms;
     public int customLayout;
 
-    public PlatformsAdapter(Context context, List<Platforms> platforms, int layout){
+    public PlatformsRecyclerAdapter(Context context, List<Platforms> platforms, int layout){
         this.context = context;
         this.platforms = platforms;
         this.customLayout = layout;
@@ -60,7 +60,8 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
             @Override
             public void onClick(View v) {
                 Intent intent = Platforms.getIntent(context.getApplicationContext(), platform.getProvider(), platform.getName());
-                intent.putExtra("platformId", platform.id);
+                intent.putExtra("platformId", platform.getId());
+                System.out.println(">> " + platform.getId());
                 context.startActivity(intent);
             }
         });
@@ -79,11 +80,11 @@ public class PlatformsAdapter extends RecyclerView.Adapter<PlatformsAdapter.View
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            this.name = itemView.findViewById(R.id.name);
-            this.description = itemView.findViewById(R.id.description);
-            this.provider = itemView.findViewById(R.id.provider);
+            this.name = itemView.findViewById(R.id.subject);
+            this.description = itemView.findViewById(R.id.subjectSub);
+            this.provider = itemView.findViewById(R.id.bottomRight);
             this.image = itemView.findViewById(R.id.image);
-            this.type = itemView.findViewById(R.id.type);
+            this.type = itemView.findViewById(R.id.topRight);
             this.layout = itemView.findViewById(R.id.email_thread_card_layout);
         }
     }

@@ -35,7 +35,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-public class EmailCompose extends AppCompatActivity {
+public class EmailComposeActivity extends AppCompatActivity {
 
     String SMS_SENT = "SENT";
     String SMS_DELIVERED = "DELIVERED";
@@ -82,7 +82,7 @@ public class EmailCompose extends AppCompatActivity {
         EditText body = findViewById(R.id.email_body);
         switch (item.getItemId()) {
             case R.id.discard:
-                startActivity(new Intent(this, EmailMultipleThreads.class));
+                startActivity(new Intent(this, EmailThreadsActivity.class));
                 to.setText("");
                 subject.setText("");
                 body.setText("");

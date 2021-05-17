@@ -11,7 +11,7 @@ import android.util.Log;
 import com.example.sw0b_001.Helpers.Datastore;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.Platforms;
-import com.example.sw0b_001.Providers.Platforms.PlatformsAdapter;
+import com.example.sw0b_001.Providers.Platforms.PlatformsRecyclerAdapter;
 
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class PlatformsActivity extends AppCompatActivity{
 
     RecyclerView recyclerView;
     List<Platforms> platforms;
-    PlatformsAdapter platformsAdapter;
+    PlatformsRecyclerAdapter platformsRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +52,8 @@ public class PlatformsActivity extends AppCompatActivity{
             e.printStackTrace();
         }
 
-        platformsAdapter = new PlatformsAdapter(this, platforms, R.layout.recycler_view_list_platform);
-        recyclerView.setAdapter(platformsAdapter);
+        platformsRecyclerAdapter = new PlatformsRecyclerAdapter(this, platforms, R.layout.layout_cardlist_threads);
+        recyclerView.setAdapter(platformsRecyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }

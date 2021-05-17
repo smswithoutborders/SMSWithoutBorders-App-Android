@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class EmailCustomMessage {
+public class EmailMessage {
     @ColumnInfo(name="recipient")
     public String recipient;
 
@@ -19,7 +19,7 @@ public class EmailCustomMessage {
         return recipient;
     }
 
-    public EmailCustomMessage setRecipient(String recipient) {
+    public EmailMessage setRecipient(String recipient) {
         this.recipient = recipient;
         return this;
     }
@@ -28,7 +28,7 @@ public class EmailCustomMessage {
         return subject;
     }
 
-    public EmailCustomMessage setSubject(String subject) {
+    public EmailMessage setSubject(String subject) {
         this.subject = subject;
         return this;
     }
@@ -37,7 +37,7 @@ public class EmailCustomMessage {
         return body;
     }
 
-    public EmailCustomMessage setBody(String body) {
+    public EmailMessage setBody(String body) {
         this.body = body;
         return this;
     }
@@ -46,7 +46,7 @@ public class EmailCustomMessage {
         return datetime;
     }
 
-    public EmailCustomMessage setDatetime(String datetime) {
+    public EmailMessage setDatetime(String datetime) {
         this.datetime = datetime;
         return this;
     }
@@ -55,7 +55,7 @@ public class EmailCustomMessage {
         return status;
     }
 
-    public EmailCustomMessage setStatus(String status) {
+    public EmailMessage setStatus(String status) {
         this.status = status;
         return this;
     }
@@ -64,7 +64,7 @@ public class EmailCustomMessage {
         return image;
     }
 
-    public EmailCustomMessage setImage(int image) {
+    public EmailMessage setImage(int image) {
         this.image = image;
         return this;
     }
@@ -73,7 +73,7 @@ public class EmailCustomMessage {
         return threadId;
     }
 
-    public EmailCustomMessage setThreadId(long threadId) {
+    public EmailMessage setThreadId(long threadId) {
         this.threadId = threadId;
         return this;
     }
@@ -82,7 +82,7 @@ public class EmailCustomMessage {
         return id;
     }
 
-    public EmailCustomMessage setId(int id) {
+    public EmailMessage setId(int id) {
         this.id = id;
         return this;
     }

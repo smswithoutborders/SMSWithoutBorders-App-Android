@@ -9,8 +9,8 @@ import java.util.List;
 
 @Dao
 public interface EmailMessageDao {
-    @Query("SELECT * FROM EmailCustomMessage")
-    List<EmailCustomMessage> getAll();
+    @Query("SELECT * FROM EmailMessage")
+    List<EmailMessage> getAll();
 
 //    @Query("SELECT * FROM emailcustommessage WHERE uid IN (:emailcustommessageIds)")
 //    List<EmailCustomMessage> loadAllByIds(int[] emailcustommessageIds);
@@ -19,19 +19,19 @@ public interface EmailMessageDao {
 //            "last_name LIKE :last LIMIT 1")
 //    EmailCustomMessage findByName(String first, String last);
 
-    @Query("SELECT * FROM emailcustommessage WHERE thread_id IN (:emailCustomThreadsId)")
-    List<EmailCustomMessage> loadAllByThreadId(int[] emailCustomThreadsId);
+    @Query("SELECT * FROM EmailMessage WHERE thread_id IN (:emailCustomThreadsId)")
+    List<EmailMessage> loadAllByThreadId(long[] emailCustomThreadsId);
 
     @Insert
-    void insertAll(EmailCustomMessage... emailCustomMessages);
+    void insertAll(EmailMessage... emailMessages);
 
     @Insert
-    long insertAll(EmailCustomMessage emailCustomMessages);
+    long insertAll(EmailMessage emailMessages);
 
     @Delete
-    void delete(EmailCustomMessage emailCustomMessages);
+    void delete(EmailMessage emailMessages);
 
-    @Query("DELETE FROM EmailCustomMessage")
+    @Query("DELETE FROM EmailMessage")
     void deleteAll();
 
 }

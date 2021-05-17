@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EmailSingleThreads">
+    tools:context=".EmailThreadActivity">
 
     <TextView
-        android:id="@+id/single_subject_view"
+        android:id="@+id/subject"
         android:layout_width="0dp"
         android:layout_height="32dp"
         android:layout_marginStart="15dp"
@@ -30,7 +30,7 @@
         app:cardBackgroundColor="@color/default_dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/single_subject_view">
+        app:layout_constraintTop_toBottomOf="@+id/subject">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -60,7 +60,7 @@
             <!--                app:layout_constraintVertical_bias="1.0" />-->
 
             <TextView
-                android:id="@+id/description"
+                android:id="@+id/subjectSub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
@@ -68,11 +68,11 @@
                 android:textColor="#787777"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/name"
-                app:layout_constraintTop_toBottomOf="@+id/name" />
+                app:layout_constraintStart_toStartOf="@+id/subject"
+                app:layout_constraintTop_toBottomOf="@+id/subject" />
 
             <TextView
-                android:id="@+id/name"
+                android:id="@+id/subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -87,7 +87,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/provider"
+                android:id="@+id/bottomRight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
@@ -97,21 +97,21 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.937"
-                app:layout_constraintStart_toEndOf="@+id/description"
-                app:layout_constraintTop_toBottomOf="@+id/name" />
+                app:layout_constraintStart_toEndOf="@+id/subjectSub"
+                app:layout_constraintTop_toBottomOf="@+id/subject" />
 
             <TextView
-                android:id="@+id/type"
+                android:id="@+id/topRight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="11dp"
                 android:textColor="#787777"
                 android:textSize="10sp"
-                app:layout_constraintBottom_toTopOf="@+id/provider"
+                app:layout_constraintBottom_toTopOf="@+id/bottomRight"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.92"
-                app:layout_constraintStart_toEndOf="@+id/name"
+                app:layout_constraintStart_toEndOf="@+id/subject"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -5,8 +5,6 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.example.sw0b_001.Providers.Emails.EmailCustomMessage;
-
 import java.util.List;
 
 @Dao

@@ -7,21 +7,21 @@ import androidx.room.InvalidationTracker;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
-import com.example.sw0b_001.Providers.Emails.EmailCustomMessage;
-import com.example.sw0b_001.Providers.Emails.EmailCustomThreads;
+import com.example.sw0b_001.Providers.Emails.EmailMessage;
+import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
-import com.example.sw0b_001.Providers.Emails.EmailThreadDao;
+import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.Platforms;
 
 import org.jetbrains.annotations.NotNull;
 
-@Database(entities = {EmailCustomMessage.class, EmailCustomThreads.class, Platforms.class}, version = 2)
+@Database(entities = {EmailMessage.class, EmailThreads.class, Platforms.class}, version = 2)
 public abstract class Datastore extends RoomDatabase {
     public static String DBName = "SWOBDb";
 
     public abstract EmailMessageDao emailDao();
-    public abstract EmailThreadDao emailThreadDao();
+    public abstract EmailThreadsDao emailThreadDao();
     public abstract PlatformDao platformDao();
 
     @NonNull

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EmailSingleThreads">
+    tools:context=".EmailThreadActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/single_thread_toolbar"
@@ -23,7 +23,7 @@
         app:title="snippets" />
 
     <TextView
-        android:id="@+id/single_subject_view"
+        android:id="@+id/subject"
         android:layout_width="0dp"
         android:layout_height="32dp"
         android:layout_marginStart="15dp"
@@ -46,5 +46,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/single_subject_view" />
+        app:layout_constraintTop_toBottomOf="@+id/subject" />
 </androidx.constraintlayout.widget.ConstraintLayout>

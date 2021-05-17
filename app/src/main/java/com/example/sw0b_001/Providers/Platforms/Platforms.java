@@ -1,18 +1,13 @@
 package com.example.sw0b_001.Providers.Platforms;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 
 import androidx.room.ColumnInfo;
-import androidx.room.DatabaseView;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.example.sw0b_001.EmailMultipleThreads;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import com.example.sw0b_001.EmailThreadsActivity;
 
 //@DatabaseView("SELECT platform.name, platform.description, platform.provider, platform.image, platform.id FROM platform")
 @Entity
@@ -42,11 +37,11 @@ public class Platforms {
     public String type;
 
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    public long id;
 
     public Platforms() {
     }
-    public Platforms(int id) {
+    public Platforms(long id) {
         this.id = id;
     }
 
@@ -56,7 +51,7 @@ public class Platforms {
             case "google":
                 switch(platform.toLowerCase()) {
                     case "gmail": {
-                        intent = new Intent(context, EmailMultipleThreads.class);
+                        intent = new Intent(context, EmailThreadsActivity.class);
                         intent.putExtra("platform", platform);
                         break;
                     }
@@ -103,11 +98,11 @@ public class Platforms {
         return this;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public Platforms setId(int id) {
+    public Platforms setId(long id) {
         this.id = id;
         return this;
     }

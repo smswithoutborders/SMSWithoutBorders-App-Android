@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class EmailCustomThreads {
+public class EmailThreads {
     @ColumnInfo(name="subject")
     public String subject;
 
@@ -16,7 +16,7 @@ public class EmailCustomThreads {
         return subject;
     }
 
-    public EmailCustomThreads setSubject(String subject) {
+    public EmailThreads setSubject(String subject) {
         this.subject = subject;
         return this;
     }
@@ -25,7 +25,7 @@ public class EmailCustomThreads {
         return recipient;
     }
 
-    public EmailCustomThreads setRecipient(String recipient) {
+    public EmailThreads setRecipient(String recipient) {
         this.recipient = recipient;
         return this;
     }
@@ -34,16 +34,16 @@ public class EmailCustomThreads {
         return mdate;
     }
 
-    public EmailCustomThreads setMdate(String mdate) {
+    public EmailThreads setMdate(String mdate) {
         this.mdate = mdate;
         return this;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public EmailCustomThreads setId(int id) {
+    public EmailThreads setId(long id) {
         this.id = id;
         return this;
     }
@@ -52,7 +52,7 @@ public class EmailCustomThreads {
         return image;
     }
 
-    public EmailCustomThreads setImage(int image) {
+    public EmailThreads setImage(int image) {
         this.image = image;
         return this;
     }
@@ -61,7 +61,7 @@ public class EmailCustomThreads {
     public String mdate;
 
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    public long id;
 
     @ColumnInfo(name="image")
     public int image;

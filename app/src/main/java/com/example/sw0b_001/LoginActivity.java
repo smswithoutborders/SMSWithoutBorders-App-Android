@@ -5,16 +5,15 @@ import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import com.example.sw0b_001.Helpers.Datastore;
 import com.example.sw0b_001.Helpers.SecurityLayer;
-import com.example.sw0b_001.Providers.Emails.EmailCustomMessage;
-import com.example.sw0b_001.Providers.Emails.EmailCustomThreads;
+import com.example.sw0b_001.Providers.Emails.EmailMessage;
+import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
-import com.example.sw0b_001.Providers.Emails.EmailThreadDao;
+import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.Platforms;
 
@@ -57,13 +56,13 @@ public class LoginActivity extends AppCompatActivity {
                         .setImage(R.drawable.roundgmail)
                         .setType("email");
 
-                EmailCustomThreads emailThreads = new EmailCustomThreads()
+                EmailThreads emailThreads = new EmailThreads()
                         .setImage(R.drawable.roundgmail)
                         .setRecipient("info@smswithoutborders.com")
                         .setSubject("Initial test")
                         .setMdate("2021-01-01");
 
-                EmailCustomMessage emailMessage = new EmailCustomMessage()
+                EmailMessage emailMessage = new EmailMessage()
                         .setBody("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ")
                         .setDatetime("2020-01-01")
                         .setImage(R.mipmap.letter_a)
@@ -73,19 +72,19 @@ public class LoginActivity extends AppCompatActivity {
                         Datastore.class, Datastore.DBName).build();
 
                 PlatformDao platformsDao = platformDb.platformDao();
-                EmailThreadDao emailThreadDao = platformDb.emailThreadDao();
+                EmailThreadsDao emailThreadsDao = platformDb.emailThreadDao();
                 EmailMessageDao emailMessageDao = platformDb.emailDao();
 
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
                         platformsDao.deleteAll();
-                        emailThreadDao.deleteAll();
+                        emailThreadsDao.deleteAll();
                         emailMessageDao.deleteAll();
 
                         long platformId = platformsDao.insert(gmail);
                         emailThreads.setPlatformId(platformId);
-                        long threadId = emailThreadDao.insert(emailThreads);
+                        long threadId = emailThreadsDao.insert(emailThreads);
                         emailMessage.setThreadId(threadId);
                         emailMessageDao.insertAll(emailMessage);
                     }

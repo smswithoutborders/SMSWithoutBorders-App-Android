@@ -49,18 +49,18 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/description"
+                android:id="@+id/subjectSub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="snippet"
                 android:textColor="#787777"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/name"
-                app:layout_constraintTop_toBottomOf="@+id/name" />
+                app:layout_constraintStart_toStartOf="@+id/subject"
+                app:layout_constraintTop_toBottomOf="@+id/subject" />
 
             <TextView
-                android:id="@+id/name"
+                android:id="@+id/subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="21dp"
@@ -69,12 +69,12 @@
                 android:text="email_address"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/description"
+                app:layout_constraintBottom_toTopOf="@+id/subjectSub"
                 app:layout_constraintStart_toEndOf="@+id/image"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/provider"
+                android:id="@+id/bottomRight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="status"
@@ -82,16 +82,16 @@
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/type" />
+                app:layout_constraintTop_toBottomOf="@+id/topRight" />
 
             <TextView
-                android:id="@+id/type"
+                android:id="@+id/topRight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="datetime"
                 android:textColor="#787777"
                 android:textSize="10sp"
-                app:layout_constraintBottom_toTopOf="@+id/provider"
+                app:layout_constraintBottom_toTopOf="@+id/bottomRight"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

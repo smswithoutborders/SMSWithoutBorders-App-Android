@@ -21,18 +21,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents"
         android:usesCleartextTraffic="true">
-        <activity android:name=".EmailSingleThreads" android:parentActivityName=".EmailMultipleThreads" android:theme="@style/Theme.MaterialComponents.NoActionBar">
+        <activity android:name=".EmailThreadActivity" android:parentActivityName=".EmailThreadsActivity" android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".EmailMultipleThreads" />
+                android:value=".EmailThreadsActivity" />
         </activity>
-        <activity android:name=".EmailBody" android:parentActivityName=".EmailMultipleThreads" android:label="View message">
+        <activity android:name=".EmailBody" android:parentActivityName=".EmailThreadsActivity" android:label="View message">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".EmailMultipleThreads" />
+                android:value=".EmailThreadsActivity" />
         </activity>
         <activity
-            android:name=".EmailMultipleThreads"
+            android:name=".EmailThreadsActivity"
             android:label="Recents..."
             android:parentActivityName=".PlatformsActivity">
             <meta-data
@@ -51,12 +51,12 @@
             android:name=".PlatformsActivity"
             android:label="Usable Platforms" />
         <activity
-            android:name=".EmailCompose"
-            android:parentActivityName=".EmailMultipleThreads"
+            android:name=".EmailComposeActivity"
+            android:parentActivityName=".EmailThreadsActivity"
             android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".EmailMultipleThreads" />
+                android:value=".EmailThreadsActivity" />
         </activity>
         <activity
             android:name=".QRScannerActivity"
