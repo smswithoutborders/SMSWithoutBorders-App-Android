@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreadRecyclerAdapter;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ public class EmailThreadActivity extends AppCompatActivity {
     List<EmailMessage> emailMessage;
     List<EmailThreads> emailThreads;
     EmailThreadRecyclerAdapter emailCustomMessageAdapter;
+    FloatingActionButton composeBtn;
 
 
     @Override
@@ -63,10 +66,29 @@ public class EmailThreadActivity extends AppCompatActivity {
         subjectView.setText(emailThreads.get(0).getSubject());
         for(EmailMessage email : emailMessage)
             email.setRecipient(emailThreads.get(0).getRecipient());
+        String recipient = emailThreads.get(0).getRecipient();
+        String subject = emailThreads.get(0).getSubject();
+
         emailCustomMessageAdapter = new EmailThreadRecyclerAdapter(this, emailMessage, R.layout.layout_cardlist_thread);
         recyclerView.setAdapter(emailCustomMessageAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        composeBtn = findViewById(R.id.floating_compose_body);
+        composeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                composeEmail(recipient, subject);
+            }
+        });
+
+    }
+
+    public void composeEmail(String recipient, String subject) {
+        Intent intent = new Intent(this, EmailComposeActivity.class);
+        intent.putExtra("recipient", recipient);
+        intent.putExtra("subject", subject);
+        startActivity(intent);
+        finish();
     }
 
     @Override

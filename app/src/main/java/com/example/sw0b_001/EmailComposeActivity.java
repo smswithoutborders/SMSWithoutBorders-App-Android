@@ -14,6 +14,7 @@ import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
@@ -65,6 +66,15 @@ public class EmailComposeActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        TextView emailTo = findViewById(R.id.email_to);
+        TextView emailSubject = findViewById(R.id.email_subject);
+        if(getIntent().hasExtra("recipient") ) {
+            emailTo.setText(getIntent().getStringExtra("recipient"));
+        }
+        if(getIntent().hasExtra("subject") ) {
+            emailSubject.setText(getIntent().getStringExtra("subject"));
         }
 
     }

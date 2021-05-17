@@ -52,11 +52,11 @@
             android:label="Usable Platforms" />
         <activity
             android:name=".EmailComposeActivity"
-            android:parentActivityName=".EmailThreadsActivity"
+            android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".EmailThreadsActivity" />
+                android:value=".PlatformsActivity" />
         </activity>
         <activity
             android:name=".QRScannerActivity"
