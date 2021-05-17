@@ -68,11 +68,11 @@
                 android:textColor="#787777"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/subject"
-                app:layout_constraintTop_toBottomOf="@+id/subject" />
+                app:layout_constraintStart_toStartOf="@+id/email_address"
+                app:layout_constraintTop_toBottomOf="@+id/email_address" />
 
             <TextView
-                android:id="@+id/subject"
+                android:id="@+id/email_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -98,7 +98,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.937"
                 app:layout_constraintStart_toEndOf="@+id/subjectSub"
-                app:layout_constraintTop_toBottomOf="@+id/subject" />
+                app:layout_constraintTop_toBottomOf="@+id/email_address" />
 
             <TextView
                 android:id="@+id/topRight"
@@ -111,7 +111,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/bottomRight"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.92"
-                app:layout_constraintStart_toEndOf="@+id/subject"
+                app:layout_constraintStart_toEndOf="@+id/email_address"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -19,6 +19,9 @@ public interface EmailMessageDao {
 //            "last_name LIKE :last LIMIT 1")
 //    EmailCustomMessage findByName(String first, String last);
 
+    @Query("SELECT * FROM EmailMessage WHERE id IN (:emailCustomThreadsId)")
+    List<EmailMessage> loadAllByEmailId(long emailCustomThreadsId);
+
     @Query("SELECT * FROM EmailMessage WHERE thread_id IN (:emailCustomThreadsId)")
     List<EmailMessage> loadAllByThreadId(long[] emailCustomThreadsId);
 

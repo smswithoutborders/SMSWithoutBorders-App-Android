@@ -78,11 +78,11 @@ public class EmailMessage {
         return this;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public EmailMessage setId(int id) {
+    public EmailMessage setId(long id) {
         this.id = id;
         return this;
     }
@@ -100,5 +100,5 @@ public class EmailMessage {
     public long threadId;
 
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    public long id;
 }
