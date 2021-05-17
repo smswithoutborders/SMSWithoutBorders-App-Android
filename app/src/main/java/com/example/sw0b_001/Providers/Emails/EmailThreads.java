@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.example.sw0b_001.Helpers.CustomHelpers;
+
 @Entity
 public class EmailThreads {
     @ColumnInfo(name="subject")
@@ -26,6 +28,7 @@ public class EmailThreads {
     }
 
     public EmailThreads setRecipient(String recipient) {
+        this.setImage(CustomHelpers.getLetterImage(recipient.charAt(0)));
         this.recipient = recipient;
         return this;
     }
