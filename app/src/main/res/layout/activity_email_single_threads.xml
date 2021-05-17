@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/email_single_thread_toolbar"
-        app:title="snippets" />
+        app:title="subjects" />
 
     <TextView
         android:id="@+id/subject"
@@ -29,10 +29,10 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="5dp"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="monospace"
         android:text="TextView"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/email_single_thread"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

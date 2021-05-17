@@ -26,7 +26,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".EmailThreadsActivity" />
         </activity>
-        <activity android:name=".EmailBody" android:parentActivityName=".PlatformsActivity" android:label="View message">
+        <activity android:name=".EmailBody" android:parentActivityName=".PlatformsActivity" android:label="...">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PlatformsActivity" />

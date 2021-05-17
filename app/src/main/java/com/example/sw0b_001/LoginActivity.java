@@ -85,7 +85,11 @@ public class LoginActivity extends AppCompatActivity {
                         long platformId = platformsDao.insert(gmail);
                         emailThreads.setPlatformId(platformId);
                         long threadId = emailThreadsDao.insert(emailThreads);
+                        emailThreads.setSubject("Second Initial Message");
+                        long threadId2 = emailThreadsDao.insert(emailThreads);
                         emailMessage.setThreadId(threadId);
+                        emailMessageDao.insertAll(emailMessage);
+                        emailMessage.setThreadId(threadId2);
                         emailMessageDao.insertAll(emailMessage);
                     }
                 };
