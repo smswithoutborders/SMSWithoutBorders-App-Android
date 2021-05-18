@@ -23,12 +23,14 @@ public class EmailThreadsRecyclerViewAdapter extends RecyclerView.Adapter<EmailT
 
     Context context;
     int layout;
+    long platformId;
     List<EmailThreads> threads;
 
-    public EmailThreadsRecyclerViewAdapter(Context context, List<EmailThreads> threads, int intendedLayout) {
+    public EmailThreadsRecyclerViewAdapter(Context context, List<EmailThreads> threads, int intendedLayout, long platformId) {
         this.context = context;
         this.threads = threads;
         this.layout = intendedLayout;
+        this.platformId = platformId;
     }
 
     @NonNull
@@ -54,6 +56,7 @@ public class EmailThreadsRecyclerViewAdapter extends RecyclerView.Adapter<EmailT
             public void onClick(View v) {
                 Intent intent = new Intent(context, EmailThreadActivity.class);
                 intent.putExtra("thread_id", thread.getId());
+                intent.putExtra("platform_id", platformId);
                 context.startActivity(intent);
             }
         });

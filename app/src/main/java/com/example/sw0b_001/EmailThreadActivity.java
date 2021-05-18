@@ -1,6 +1,8 @@
 package com.example.sw0b_001;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,16 +34,24 @@ public class EmailThreadActivity extends AppCompatActivity {
     EmailThreadRecyclerAdapter emailCustomMessageAdapter;
     FloatingActionButton composeBtn;
 
+    long threadId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_single_threads);
+        Toolbar composeToolbar = (Toolbar) findViewById(R.id.single_thread_toolbar);
+        setSupportActionBar(composeToolbar);
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
+
         emailMessage = new ArrayList<>();
         recyclerView = findViewById(R.id.email_single_thread);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        long threadId = getIntent().getLongExtra("thread_id", -1);
-        System.out.println(">> threadID: " + threadId);
+        threadId = getIntent().getLongExtra("thread_id", -1);
 
         Runnable runnable = new Runnable() {
             @Override
@@ -85,6 +95,8 @@ public class EmailThreadActivity extends AppCompatActivity {
 
     public void composeEmail(String recipient, String subject) {
         Intent intent = new Intent(this, EmailComposeActivity.class);
+        intent.putExtra("thread_id", threadId);
+        intent.putExtra("platform_id", getIntent().getLongExtra("platform_id", -1));
         intent.putExtra("recipient", recipient);
         intent.putExtra("subject", subject);
         startActivity(intent);

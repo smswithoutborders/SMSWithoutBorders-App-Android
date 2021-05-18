@@ -19,7 +19,7 @@ import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmailBody extends AppCompatActivity {
+public class EmailBodyActivity extends AppCompatActivity {
     List<EmailMessage> emailMessage;
     List<EmailThreads> emailThreads;
     EmailThreadRecyclerAdapter emailCustomMessageAdapter;

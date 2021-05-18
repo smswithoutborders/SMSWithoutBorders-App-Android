@@ -21,12 +21,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents"
         android:usesCleartextTraffic="true">
-        <activity android:name=".EmailThreadActivity" android:parentActivityName=".EmailThreadsActivity" android:theme="@style/Theme.MaterialComponents.NoActionBar">
+        <activity android:name=".EmailThreadActivity" android:parentActivityName=".PlatformsActivity" android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".EmailThreadsActivity" />
+                android:value=".PlatformsActivity" />
         </activity>
-        <activity android:name=".EmailBody" android:parentActivityName=".PlatformsActivity" android:label="...">
+        <activity android:name=".EmailBodyActivity" android:parentActivityName=".PlatformsActivity" android:label="...">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PlatformsActivity" />

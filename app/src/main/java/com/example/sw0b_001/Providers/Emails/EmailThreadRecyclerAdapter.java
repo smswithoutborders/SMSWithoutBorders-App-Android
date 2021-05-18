@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sw0b_001.EmailBody;
+import com.example.sw0b_001.EmailBodyActivity;
 import com.example.sw0b_001.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +44,7 @@ public class EmailThreadRecyclerAdapter extends RecyclerView.Adapter<EmailThread
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         EmailMessage message = this.threads.get(position);
         holder.threadSubject.setText(this.threads.get(position).getRecipient());
-        holder.threadSubjectSub.setText(this.threads.get(position).getBody().substring(0, 20));
+        holder.threadSubjectSub.setText(this.threads.get(position).getBody().length() > 20 ? this.threads.get(position).getBody().substring(0, 20) : this.threads.get(position).getBody());
         holder.threadBottomRightText.setText(this.threads.get(position).getStatus());
         holder.threadTopRightText.setText(this.threads.get(position).getDatetime());
         holder.image.setImageResource(this.threads.get(position).getImage());
@@ -52,7 +52,7 @@ public class EmailThreadRecyclerAdapter extends RecyclerView.Adapter<EmailThread
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, EmailBody.class);
+                Intent intent = new Intent(context, EmailBodyActivity.class);
                 intent.putExtra("message_id", message.getId());
                 context.startActivity(intent);
             }

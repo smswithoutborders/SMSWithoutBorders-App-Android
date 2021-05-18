@@ -73,8 +73,9 @@ public class EmailThreads {
         return platformId;
     }
 
-    public void setPlatformId(long platformId) {
+    public EmailThreads setPlatformId(long platformId) {
         this.platformId = platformId;
+        return this;
     }
 
     @ColumnInfo(name="platform_id")

@@ -23,6 +23,7 @@ public class EmailThreadsActivity extends AppCompatActivity {
     public static int recyclerView = R.id.email_threads_recycler_view;
     List<EmailThreads> emailThreads;
     EmailThreadsRecyclerViewAdapter emailThreadsAdapter;
+    long[] platformId;
 
     FloatingActionButton composeBtn;
 
@@ -34,7 +35,7 @@ public class EmailThreadsActivity extends AppCompatActivity {
         emailThreads = new ArrayList<>();
         RecyclerView cardlist = findViewById(recyclerView);
         cardlist.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        long[] platformId = {getIntent().getLongExtra("platformId", -1)};
+        platformId = new long[]{getIntent().getLongExtra("platformId", -1)};
         System.out.println(">> platformId: " + platformId);
 
         Runnable runnable = new Runnable() {
@@ -54,7 +55,7 @@ public class EmailThreadsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        emailThreadsAdapter = new EmailThreadsRecyclerViewAdapter(this, emailThreads, R.layout.layout_cardlist_threads);
+        emailThreadsAdapter = new EmailThreadsRecyclerViewAdapter(this, emailThreads, R.layout.layout_cardlist_threads, platformId[0]);
         cardlist.setAdapter(emailThreadsAdapter);
         cardlist.setLayoutManager(new LinearLayoutManager(this));
 
@@ -68,7 +69,9 @@ public class EmailThreadsActivity extends AppCompatActivity {
     }
 
     public void composeEmail() {
-       startActivity(new Intent(this, EmailComposeActivity.class));
+        Intent intent = new Intent(this, EmailComposeActivity.class);
+        intent.putExtra("platform_id", platformId[0]);
+       startActivity(intent);
        finish();
     }
 }
