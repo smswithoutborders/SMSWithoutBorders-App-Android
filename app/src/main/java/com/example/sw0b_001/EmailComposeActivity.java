@@ -199,6 +199,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                     case Activity.RESULT_OK:
                         Toast.makeText(getBaseContext(), "SMS sent",
                                 Toast.LENGTH_LONG).show();
+//                        Snackbar.make(findViewById(R.id.email_threads_recycler_view), "Sending SMS", Snackbar.LENGTH_LONG).show();
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                         Toast.makeText(getBaseContext(), "Generic failure",
@@ -284,10 +285,12 @@ public class EmailComposeActivity extends AppCompatActivity {
 //                //TODO: Research what to do in case of a double sim phone
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phonenumber, null, body, sentPendingIntent, deliveredPendingIntent);
+
             Toast.makeText(this, "Sending SMS....", Toast.LENGTH_LONG).show();
+//            Snackbar.make(getWindow().getDecorView().getRootView(), "Sending SMS", Snackbar.LENGTH_LONG).show();
         }
+
         else {
-            Toast.makeText(this, "Sending SMS....", Toast.LENGTH_LONG).show();
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
         }
 
