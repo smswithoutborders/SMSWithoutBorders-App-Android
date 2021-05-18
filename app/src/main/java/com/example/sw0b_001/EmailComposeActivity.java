@@ -40,6 +40,8 @@ import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -123,8 +125,6 @@ public class EmailComposeActivity extends AppCompatActivity {
                     return false;
                 }
 
-                finish();
-                String default_phonenumber = "12345";
                 final long[] threadId = {getIntent().getLongExtra("thread_id", -1)};
                 if(threadId[0] == -1) {
                     Thread storeEmailThread = new Thread(new Runnable() {
@@ -172,6 +172,8 @@ public class EmailComposeActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                sendMessage();
+                finish();
                 return true;
 
             default:
@@ -183,8 +185,8 @@ public class EmailComposeActivity extends AppCompatActivity {
     }
 
 
-    private void sendMessage(String phonenumber, String text) {
-        Toast.makeText(getBaseContext(), "SMS sending...", Toast.LENGTH_LONG).show();
+    private void sendMessage() {
+//        Toast.makeText(getBaseContext(), "SMS sending...", Toast.LENGTH_LONG).show();
         PendingIntent sentPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("SENT"), 0);
         PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("DELIVERED"), 0);
 
@@ -236,56 +238,59 @@ public class EmailComposeActivity extends AppCompatActivity {
             }
         }, new IntentFilter(SMS_DELIVERED));
 
+        final List<EmailMessage>[] pendingMessagesList = new List[]{new ArrayList<>()};
+        Thread storeEmailMessage = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
+                        Datastore.class, Datastore.DBName).build();
 
-        if(text.isEmpty()) {
+                EmailMessageDao platformsDao = emailStoreDb.emailDao();
+                pendingMessagesList[0] = platformsDao.getForStatus("pending");
+            }
+        });
+        storeEmailMessage.start();
+        try {
+            storeEmailMessage.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        List<EmailMessage> pendingMessages = pendingMessagesList[0];
+        // TODO: iterate and send every pending message
+        String phonenumber = "123456";
+        String recipient = pendingMessages.get(0).getRecipient();
+        String body = pendingMessages.get(0).getBody();
+        String subject = pendingMessages.get(0).getSubject();
+
+        if(body.isEmpty()) {
             Toast.makeText(this, "Text Cannot be empty!", Toast.LENGTH_LONG).show();
             return;
         }
 
-        try {
-            // TODO: work out how the IV gets encrypted before sending
-            if(checkPermission(Manifest.permission.SEND_SMS)) {
-                String IV = new String(securityLayer.getIV(), "UTF-8");
-                String transmissionText = IV + ":" + text;
-                byte[] encryptedText = securityLayer.encrypt_AES(transmissionText);
-
-                System.out.println("Transmission String: " + transmissionText);
-                System.out.println("[+] Decrypted: " + new String(securityLayer.decrypt_AES(encryptedText), "UTF-8"));
-
-
-                String strEncryptedText = Base64.encodeToString(encryptedText, Base64.URL_SAFE);
-                System.out.println("Transmission message: " + strEncryptedText);
-
-                //TODO: Research what to do in case of a double sim phone
-                SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(phonenumber, null, strEncryptedText, sentPendingIntent, deliveredPendingIntent);
-                Toast.makeText(this, "Sending SMS....", Toast.LENGTH_LONG).show();
-            }
-            else {
-                requestSMSpermission();
-            }
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Internal Error while encrypting...", Toast.LENGTH_LONG).show();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Internal Error while encrypting...", Toast.LENGTH_LONG).show();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
+        // TODO: work out how the IV gets encrypted before sending
+        if(checkPermission(Manifest.permission.SEND_SMS)) {
+//                String IV = new String(securityLayer.getIV(), "UTF-8");
+//                String transmissionText = IV + ":" + body;
+//                byte[] encryptedText = securityLayer.encrypt_AES(transmissionText);
+//
+//                System.out.println("Transmission String: " + transmissionText);
+//                System.out.println("[+] Decrypted: " + new String(securityLayer.decrypt_AES(encryptedText), "UTF-8"));
+//
+//
+//                String strEncryptedText = Base64.encodeToString(encryptedText, Base64.URL_SAFE);
+//                System.out.println("Transmission message: " + strEncryptedText);
+//
+//                //TODO: Research what to do in case of a double sim phone
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phonenumber, null, body, sentPendingIntent, deliveredPendingIntent);
+            Toast.makeText(this, "Sending SMS....", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(this, "Sending SMS....", Toast.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
         }
 
-    }
-
-    public void requestSMSpermission() {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
     }
 
     @Override
@@ -293,7 +298,10 @@ public class EmailComposeActivity extends AppCompatActivity {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_SEND_SMS: {
                 if (grantResults.length > 0) {
+                    sendMessage();
                 } else {
+                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_LONG).show();
+                    finish();
                 }
             }
         }
