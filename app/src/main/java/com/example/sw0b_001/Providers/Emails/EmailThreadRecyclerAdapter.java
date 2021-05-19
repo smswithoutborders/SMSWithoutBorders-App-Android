@@ -49,9 +49,9 @@ public class EmailThreadRecyclerAdapter extends RecyclerView.Adapter<EmailThread
         holder.threadTopRightText.setText(this.threads.get(position).getDatetime());
         holder.image.setImageResource(this.threads.get(position).getImage());
 
-        if(holder.threadBottomRightText.getText().toString().equals("sent"))
+        if(holder.threadBottomRightText.getText().toString().equals("sent") || holder.threadBottomRightText.getText().toString().equals("delivered"))
             holder.threadBottomRightText.setTextColor(context.getResources().getColor(R.color.success_green, context.getTheme()));
-        else if(holder.threadBottomRightText.getText().toString().equals("pending"))
+        else if(holder.threadBottomRightText.getText().toString().equals("pending") || holder.threadBottomRightText.getText().toString().equals("not delivered"))
             holder.threadBottomRightText.setTextColor(context.getResources().getColor(R.color.pending_gray, context.getTheme()));
 
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {

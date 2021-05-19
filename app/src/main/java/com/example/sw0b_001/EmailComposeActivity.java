@@ -274,16 +274,45 @@ public class EmailComposeActivity extends AppCompatActivity {
         registerReceiver(new BroadcastReceiver(){
             @Override
             public void onReceive(Context arg0, Intent arg1) {
+                Thread storeEmailMessage;
                 switch (getResultCode())
                 {
                     case Activity.RESULT_OK:
                         Toast.makeText(getBaseContext(), "SMS delivered",
                                 Toast.LENGTH_LONG).show();
+                        storeEmailMessage = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
+                                        Datastore.class, Datastore.DBName).build();
+
+                                EmailMessageDao platformsDao = emailStoreDb.emailDao();
+                                platformsDao.updateStatus("delivered", emailId);
+                            }
+                        });
                         break;
                     case Activity.RESULT_CANCELED:
                         Toast.makeText(getBaseContext(), "SMS not delivered",
                                 Toast.LENGTH_LONG).show();
+                        storeEmailMessage = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
+                                        Datastore.class, Datastore.DBName).build();
+
+                                EmailMessageDao platformsDao = emailStoreDb.emailDao();
+                                platformsDao.updateStatus("not delivered", emailId);
+                            }
+                        });
                         break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + getResultCode());
+                }
+                storeEmailMessage.start();
+                try {
+                    storeEmailMessage.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }, new IntentFilter(SMS_DELIVERED));
