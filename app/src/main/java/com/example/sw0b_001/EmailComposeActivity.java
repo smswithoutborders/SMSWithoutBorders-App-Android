@@ -10,7 +10,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -31,21 +30,13 @@ import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
-import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 public class EmailComposeActivity extends AppCompatActivity {
 
@@ -53,6 +44,7 @@ public class EmailComposeActivity extends AppCompatActivity {
     String SMS_DELIVERED = "DELIVERED";
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
     SecurityLayer securityLayer;
+    long emailId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +155,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                                 Datastore.class, Datastore.DBName).build();
 
                         EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                        platformsDao.insertAll(emailMessage);
+                        emailId = platformsDao.insertAll(emailMessage);
                     }
                 });
                 storeEmailMessage.start();
@@ -187,36 +179,93 @@ public class EmailComposeActivity extends AppCompatActivity {
 
     private void sendMessage() {
 //        Toast.makeText(getBaseContext(), "SMS sending...", Toast.LENGTH_LONG).show();
-        PendingIntent sentPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("SENT"), 0);
-        PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(this, 0, new Intent("DELIVERED"), 0);
 
         //---when the SMS has been sent---
         registerReceiver(new BroadcastReceiver(){
             @Override
-            public void onReceive(Context arg0, Intent arg1) {
+            public void onReceive(Context context, Intent intent) {
+                Thread storeEmailMessage;
                 switch (getResultCode())
                 {
                     case Activity.RESULT_OK:
                         Toast.makeText(getBaseContext(), "SMS sent",
                                 Toast.LENGTH_LONG).show();
-//                        Snackbar.make(findViewById(R.id.email_threads_recycler_view), "Sending SMS", Snackbar.LENGTH_LONG).show();
+
+                        storeEmailMessage = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
+                                        Datastore.class, Datastore.DBName).build();
+
+                                EmailMessageDao platformsDao = emailStoreDb.emailDao();
+                                platformsDao.updateStatus("sent", emailId);
+                            }
+                        });
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                         Toast.makeText(getBaseContext(), "Generic failure",
                                 Toast.LENGTH_SHORT).show();
+                        storeEmailMessage = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
+                                        Datastore.class, Datastore.DBName).build();
+
+                                EmailMessageDao platformsDao = emailStoreDb.emailDao();
+                                platformsDao.updateStatus("Generic failure", emailId);
+                            }
+                        });
                         break;
                     case SmsManager.RESULT_ERROR_NO_SERVICE:
                         Toast.makeText(getBaseContext(), "No service",
                                 Toast.LENGTH_SHORT).show();
+                        storeEmailMessage = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
+                                        Datastore.class, Datastore.DBName).build();
+
+                                EmailMessageDao platformsDao = emailStoreDb.emailDao();
+                                platformsDao.updateStatus("No service", emailId);
+                            }
+                        });
                         break;
                     case SmsManager.RESULT_ERROR_NULL_PDU:
                         Toast.makeText(getBaseContext(), "Null PDU",
                                 Toast.LENGTH_SHORT).show();
+                        storeEmailMessage = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
+                                        Datastore.class, Datastore.DBName).build();
+
+                                EmailMessageDao platformsDao = emailStoreDb.emailDao();
+                                platformsDao.updateStatus("Null PDU", emailId);
+                            }
+                        });
                         break;
                     case SmsManager.RESULT_ERROR_RADIO_OFF:
                         Toast.makeText(getBaseContext(), "Radio off",
                                 Toast.LENGTH_SHORT).show();
+                        storeEmailMessage = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
+                                        Datastore.class, Datastore.DBName).build();
+
+                                EmailMessageDao platformsDao = emailStoreDb.emailDao();
+                                platformsDao.updateStatus("Radio off", emailId);
+                            }
+                        });
                         break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + getResultCode());
+                }
+                storeEmailMessage.start();
+                try {
+                    storeEmailMessage.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         }, new IntentFilter(SMS_SENT));
@@ -257,13 +306,24 @@ public class EmailComposeActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
+
         List<EmailMessage> pendingMessages = pendingMessagesList[0];
         // TODO: iterate and send every pending message
-        String phonenumber = "123456";
+        long emailId = pendingMessages.get(0).getId();
+        String phonenumber = "652156811";
         String recipient = pendingMessages.get(0).getRecipient();
         String body = pendingMessages.get(0).getBody();
         String subject = pendingMessages.get(0).getSubject();
 
+        Intent for_sentPendingIntent = new Intent(SMS_SENT);
+        for_sentPendingIntent.putExtra("email_id", emailId);
+        PendingIntent sentPendingIntent = PendingIntent.getBroadcast(this, 0, for_sentPendingIntent, 0);
+        
+        Intent for_deliveredPendingIntent = new Intent(SMS_DELIVERED);
+        for_deliveredPendingIntent.putExtra("email_id", emailId);
+        PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(this, 0, for_deliveredPendingIntent, 0);
+        
         if(body.isEmpty()) {
             Toast.makeText(this, "Text Cannot be empty!", Toast.LENGTH_LONG).show();
             return;
@@ -286,7 +346,7 @@ public class EmailComposeActivity extends AppCompatActivity {
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(phonenumber, null, body, sentPendingIntent, deliveredPendingIntent);
 
-            Toast.makeText(this, "Sending SMS....", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Sending SMS....", Toast.LENGTH_LONG).show();
 //            Snackbar.make(getWindow().getDecorView().getRootView(), "Sending SMS", Snackbar.LENGTH_LONG).show();
         }
 

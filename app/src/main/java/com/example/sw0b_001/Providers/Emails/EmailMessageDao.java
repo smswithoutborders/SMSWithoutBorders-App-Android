@@ -18,15 +18,17 @@ public interface EmailMessageDao {
 //    @Query("SELECT * FROM emailcustommessage WHERE first_name LIKE :first AND " +
 //            "last_name LIKE :last LIMIT 1")
 //    EmailCustomMessage findByName(String first, String last);
+    @Query("UPDATE EmailMessage SET status = (:customStatus) WHERE id = (:emailId)")
+    void updateStatus(String customStatus, long emailId);
 
     @Query("SELECT * FROM EmailMessage WHERE status = (:customStatus)")
     List<EmailMessage> getForStatus(String customStatus);
 
-    @Query("SELECT * FROM EmailMessage WHERE id IN (:emailCustomThreadsId)")
-    List<EmailMessage> loadAllByEmailId(long emailCustomThreadsId);
+    @Query("SELECT * FROM EmailMessage WHERE id IN (:emailId)")
+    List<EmailMessage> loadAllByEmailId(long emailId);
 
-    @Query("SELECT * FROM EmailMessage WHERE thread_id IN (:emailCustomThreadsId)")
-    List<EmailMessage> loadAllByThreadId(long[] emailCustomThreadsId);
+    @Query("SELECT * FROM EmailMessage WHERE thread_id IN (:emailId)")
+    List<EmailMessage> loadAllByThreadId(long[] emailId);
 
     @Insert
     void insertAll(EmailMessage... emailMessages);
