@@ -80,6 +80,7 @@ private ActivitySplashBinding binding;
         SecurityLayer securityLayer = new SecurityLayer();
         if(securityLayer.hasRSAKeys()) {
             AccessPlatforms();
+            finish();
         }
         else {
             mContentView.postDelayed(new Runnable() {
@@ -88,10 +89,10 @@ private ActivitySplashBinding binding;
                     mControlsView.setVisibility(View.GONE);
                     mVisible = false;
                     AccessPermissions();
+                    finish();
                 }
             }, 3000);
         }
-
     }
 
     private final Runnable mHidePart2Runnable = new Runnable() {

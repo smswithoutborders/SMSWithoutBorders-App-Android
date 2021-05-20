@@ -58,11 +58,7 @@
         </activity>
         <activity
             android:name=".PermissionsActivity"
-            android:label="Permission"
-            android:parentActivityName=".LoginActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LoginActivity" />
+            android:label="Permission">
         </activity>
         <activity
             android:name=".PlatformsActivity"
