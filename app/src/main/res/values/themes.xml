@@ -2,7 +2,7 @@
 
     <style name="Theme.MaterialComponents.Fullscreen" parent="Theme.MaterialComponents">
         <item name="android:actionBarStyle">
-            @style/Widget.Theme.MaterialComponents.Fullscreen
+            @style/Widget.Theme.MaterialComponents.ActionBar.Fullscreen
         </item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowBackground">@null</item>

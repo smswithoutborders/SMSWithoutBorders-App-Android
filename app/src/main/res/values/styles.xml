@@ -5,7 +5,7 @@
 
     </style>
 
-    <style name="Widget.Theme.MaterialComponents.Fullscreen" parent="Widget.AppCompat.ActionBar">
+    <style name="Widget.Theme.MaterialComponents.ActionBar.Fullscreen" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/black_overlay</item>
     </style>
 
