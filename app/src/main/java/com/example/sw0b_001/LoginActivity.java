@@ -43,124 +43,79 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
-    public void validateInput(View view) {
-        try {
-            securityLayer = new SecurityLayer();
-            EditText password = findViewById(R.id.user_password);
-            if(!securityLayer.hasRSAKeys()) {
-//                System.out.println("[+] Does not have RSA keys");
-//                Log.d(MainActivity.class.getSimpleName(), )
+    public void populateDB() throws InterruptedException {
+        Platforms gmail = new Platforms()
+                .setName("Gmail")
+                .setProvider("google")
+                .setDescription("Made By Google")
+                .setImage(R.drawable.roundgmail)
+                .setType("email");
 
-                AccessPermissions();
-            }
-            else {
-//                System.out.println(securityLayer.init());
-                Platforms gmail = new Platforms()
-                        .setName("Gmail")
-                        .setProvider("google")
-                        .setDescription("Made By Google")
-                        .setImage(R.drawable.roundgmail)
-                        .setType("email");
-
-                EmailThreads emailThreads = new EmailThreads()
+        EmailThreads emailThreads = new EmailThreads()
 //                        .setImage(CustomHelpers.getLetterImage('i'))
-                        .setRecipient("info@smswithoutborders.com")
-                        .setSubject("Initial test")
-                        .setMdate("2021-01-01");
+                .setRecipient("info@smswithoutborders.com")
+                .setSubject("Initial test")
+                .setMdate("2021-01-01");
 
-                EmailMessage emailMessage = new EmailMessage()
-                        .setBody("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ")
-                        .setDatetime("2020-01-01")
+        EmailMessage emailMessage = new EmailMessage()
+                .setBody("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ")
+                .setDatetime("2020-01-01")
 //                        .setImage(CustomHelpers.getLetterImage('i'))
-                        .setStatus("delivered");
+                .setStatus("delivered");
 
-                Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DBName).build();
+        Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
+                Datastore.class, Datastore.DBName).build();
 
-                PlatformDao platformsDao = platformDb.platformDao();
-                EmailThreadsDao emailThreadsDao = platformDb.emailThreadDao();
-                EmailMessageDao emailMessageDao = platformDb.emailDao();
+        PlatformDao platformsDao = platformDb.platformDao();
+        EmailThreadsDao emailThreadsDao = platformDb.emailThreadDao();
+        EmailMessageDao emailMessageDao = platformDb.emailDao();
 
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        platformsDao.deleteAll();
-                        emailThreadsDao.deleteAll();
-                        emailMessageDao.deleteAll();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                platformsDao.deleteAll();
+                emailThreadsDao.deleteAll();
+                emailMessageDao.deleteAll();
 
-                        long platformId = platformsDao.insert(gmail);
-                        emailThreads.setPlatformId(platformId);
-                        long threadId = emailThreadsDao.insert(emailThreads);
+                long platformId = platformsDao.insert(gmail);
+                emailThreads.setPlatformId(platformId);
+                long threadId = emailThreadsDao.insert(emailThreads);
 
-                        emailThreads.setSubject("Second Initial Message");
-                        emailThreads.setRecipient("sherlock@gmail.com");
-                        long threadId2 = emailThreadsDao.insert(emailThreads);
+                emailThreads.setSubject("Second Initial Message");
+                emailThreads.setRecipient("sherlock@gmail.com");
+                long threadId2 = emailThreadsDao.insert(emailThreads);
 
-                        emailMessage.setThreadId(threadId);
-                        emailMessageDao.insertAll(emailMessage);
-                        emailMessage.setThreadId(threadId2);
-                        emailMessageDao.insertAll(emailMessage);
-                    }
-                };
-                Thread thread = new Thread(runnable);
-                thread.start();
-                thread.join();
-                if(password.getText().toString().isEmpty()) {
-                    password.setError("Password cannot be empty!");
-                    return;
-                }
-
-                if(!securityLayer.authenticate(getApplicationContext(), password.getText().toString())) {
-                    password.setError("Failed to authenticate!");
-                }
-                else {
-//                    System.out.println("[+] Has RSA Keys....");
-                    // TODO remove this when done
-                    try {
-                        KeyStore keyStore = KeyStore.getInstance(SecurityLayer.DEFAULT_KEYSTORE_PROVIDER);
-                        keyStore.load(null);
-                        keyStore.deleteEntry(SecurityLayer.DEFAULT_KEYSTORE_ALIAS);
-                    } catch (KeyStoreException e) {
-                        e.printStackTrace();
-                    } catch (CertificateException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    AccessPlatforms();
-                    finish();
-                }
+                emailMessage.setThreadId(threadId);
+                emailMessageDao.insertAll(emailMessage);
+                emailMessage.setThreadId(threadId2);
+                emailMessageDao.insertAll(emailMessage);
             }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        };
+        Thread thread = new Thread(runnable);
+        thread.start();
+        thread.join();
+    }
+
+    public void clear_rsa() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+        KeyStore keyStore = KeyStore.getInstance(SecurityLayer.DEFAULT_KEYSTORE_PROVIDER);
+        keyStore.load(null);
+        keyStore.deleteEntry(SecurityLayer.DEFAULT_KEYSTORE_ALIAS);
+    }
+
+
+    public void validateInput(View view) throws IllegalBlockSizeException, InvalidKeyException, NoSuchAlgorithmException, BadPaddingException {
+        EditText password = findViewById(R.id.user_password);
+        if(password.getText().toString().isEmpty()) {
+            password.setError("Password cannot be empty!");
+            return;
+        }
+        if(!securityLayer.authenticate(getApplicationContext(), password.getText().toString())) {
+            password.setError("Failed to authenticate!");
+        }
+        else {
+            startActivity(new Intent(this, Platforms.class));
+            finish();
         }
 
-    }
-
-    public void AccessPlatforms() {
-        Intent intent = new Intent(this, PlatformsActivity.class);
-        startActivity(intent);
-    }
-
-
-    public void AccessPermissions() {
-        Intent intent = new Intent(this, PermissionsActivity.class);
-        startActivity(intent);
     }
 }
