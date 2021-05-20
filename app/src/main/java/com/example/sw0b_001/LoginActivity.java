@@ -19,14 +19,18 @@ import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.Platforms;
 
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class LoginActivity extends AppCompatActivity {
     SecurityLayer securityLayer;
@@ -50,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                 AccessPermissions();
             }
             else {
+//                System.out.println(securityLayer.init());
                 Platforms gmail = new Platforms()
                         .setName("Gmail")
                         .setProvider("google")

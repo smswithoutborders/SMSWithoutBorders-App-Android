@@ -1,0 +1,15 @@
+<resources>
+
+    <style name="Theme.MaterialComponents.Fullscreen" parent="Theme.MaterialComponents">
+        <item name="android:actionBarStyle">
+            @style/Widget.Theme.MaterialComponents.ActionBar.Fullscreen
+        </item>
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+    </style>
+
+    <style name="ThemeOverlay.Sw0b_001.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/black</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    </style>
+</resources>

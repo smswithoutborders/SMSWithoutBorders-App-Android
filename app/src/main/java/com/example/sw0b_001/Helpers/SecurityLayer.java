@@ -1,5 +1,7 @@
 package com.example.sw0b_001.Helpers;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.security.keystore.KeyProtection;
@@ -66,8 +68,8 @@ public class SecurityLayer {
     }
 
     public boolean hasRSAKeys() throws KeyStoreException {
-//        return this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS);
-        return true;
+        return this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS);
+//        return true;
     }
 
     private PublicKey getPublicKey() throws KeyStoreException {
@@ -197,17 +199,16 @@ public class SecurityLayer {
     }
 
     public boolean authenticate(Context context, String password) throws NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
-//        byte[] hsPasswd = hash_sha256(password);
-//        System.out.println("[+] Hashed Password: " + hsPasswd);
-//        System.out.println("[+] Hashed Password (b64): " + new String(hsPasswd));
-//
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-//        String passwdHash = preferences.getString(Gateway.VAR_PASSWDHASH, null);
-//        passwdHash = new String(decrypt_RSA(passwdHash.getBytes()));
-//
-//        System.out.println("[+] Stored Password: " + passwdHash);
-//        return new String(hsPasswd).toUpperCase().equals(passwdHash.toUpperCase());
+        byte[] hsPasswd = hash_sha256(password);
+        System.out.println("[+] Hashed Password: " + hsPasswd);
+        System.out.println("[+] Hashed Password (b64): " + new String(hsPasswd));
 
-        return true;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String passwdHash = preferences.getString(Gateway.VAR_PASSWDHASH, null);
+        passwdHash = new String(decrypt_RSA(passwdHash.getBytes()));
+
+        System.out.println("[+] Stored Password: " + passwdHash);
+        return new String(hsPasswd).toUpperCase().equals(passwdHash.toUpperCase());
+
     }
 }

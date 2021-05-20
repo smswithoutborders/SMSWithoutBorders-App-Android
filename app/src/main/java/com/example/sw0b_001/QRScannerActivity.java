@@ -158,7 +158,7 @@ public class QRScannerActivity extends AppCompatActivity {
                                                     editor.putString(Gateway.VAR_PUBLICKEY, publicKey);
                                                     editor.putString(Gateway.VAR_PASSWDHASH, passwdHash);
                                                     editor.commit();
-                                                    AccessPlatforms();
+                                                    logout();
                                                     finish();
                                                 }
                                                 else {
@@ -237,6 +237,12 @@ public class QRScannerActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         initialiseDetectorsAndSources();
+    }
+
+    private void logout() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void AccessPlatforms() {
