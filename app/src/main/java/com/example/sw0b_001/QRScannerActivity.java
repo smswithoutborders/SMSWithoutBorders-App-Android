@@ -152,19 +152,17 @@ public class QRScannerActivity extends AppCompatActivity {
                                                 byte[] decryptedSharedKey = sl.decrypt_RSA(sharedKey.getBytes("UTF-8"));
                                                 System.out.println("[+] Decrypted SharedKey: " + new String(decryptedSharedKey));
 
-                                                if( sl.storeSecretKey(sl.decrypt_RSA(sharedKey.getBytes("UTF-8")))) {
-                                                    SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                                    SharedPreferences.Editor editor = app_preferences.edit();
-                                                    editor.putString(Gateway.VAR_PUBLICKEY, publicKey);
-                                                    editor.putString(Gateway.VAR_PASSWDHASH, passwdHash);
-                                                    editor.commit();
-                                                    logout();
-                                                    finish();
-                                                }
-                                                else {
-                                                    System.out.println("[-] Failed to store shared key");
-                                                }
-                                            } catch (JSONException | KeyStoreException e) {
+                                                SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                                SharedPreferences.Editor editor = app_preferences.edit();
+                                                editor.putString(Gateway.VAR_PUBLICKEY, publicKey);
+                                                editor.putString(Gateway.VAR_PASSWDHASH, passwdHash);
+                                                editor.commit();
+                                                Intent logoutIntent = new Intent(getApplicationContext(), LoginActivity.class);
+                                                logoutIntent.putExtra("shared_key", sharedKey);
+                                                logoutIntent.putExtra("public_key", sharedKey);
+                                                logout(logoutIntent);
+                                                finish();
+                                            } catch (JSONException e) {
                                                 e.printStackTrace();
                                             } catch (BadPaddingException e) {
                                                 e.printStackTrace();
@@ -173,10 +171,6 @@ public class QRScannerActivity extends AppCompatActivity {
                                             } catch (InvalidKeyException e) {
                                                 e.printStackTrace();
                                             } catch (UnsupportedEncodingException e) {
-                                                e.printStackTrace();
-                                            } catch (CertificateException e) {
-                                                e.printStackTrace();
-                                            } catch (NoSuchAlgorithmException e) {
                                                 e.printStackTrace();
                                             } catch (IOException e) {
                                                 e.printStackTrace();
@@ -239,8 +233,7 @@ public class QRScannerActivity extends AppCompatActivity {
         initialiseDetectorsAndSources();
     }
 
-    private void logout() {
-        Intent intent = new Intent(this, LoginActivity.class);
+    private void logout(Intent intent) {
         startActivity(intent);
         finish();
     }

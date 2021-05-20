@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">sw0b_0.0.1</string>
+    <string name="app_name">SWOB</string>
     <string name="def_text_nobarcode">No barcode detected</string>
 
     <string-array name="platforms">

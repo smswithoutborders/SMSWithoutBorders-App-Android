@@ -67,8 +67,9 @@ public class SecurityLayer {
         this.keyStore.load(null);
     }
 
-    public boolean hasRSAKeys() throws KeyStoreException {
-        return this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS);
+    public boolean hasKeyPairs(Context context) throws KeyStoreException {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return this.keyStore.containsAlias(Gateway.SHARED_KEY) && this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS) && preferences.contains(Gateway.VAR_PASSWDHASH);
 //        return true;
     }
 

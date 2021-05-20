@@ -41,8 +41,18 @@ private ActivitySplashBinding binding;
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        try {
+            SecurityLayer securityLayer = new SecurityLayer();
+            if(securityLayer.hasKeyPairs(getApplicationContext())) {
+                AccessPlatforms();
+                finish();
+            }
+        } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
+            e.printStackTrace();
+        }
+
         mVisible = true;
-        mControlsView = binding.fullscreenContentControls;
+//        mControlsView = binding.fullscreenContentControls;
         mContentView = binding.fullscreenContent;
     }
 
@@ -78,21 +88,15 @@ private ActivitySplashBinding binding;
         mHideHandler.removeCallbacks(mShowPart2Runnable);
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
         SecurityLayer securityLayer = new SecurityLayer();
-        if(securityLayer.hasRSAKeys()) {
-            AccessPlatforms();
-            finish();
-        }
-        else {
-            mContentView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mControlsView.setVisibility(View.GONE);
-                    mVisible = false;
-                    AccessPermissions();
-                    finish();
-                }
-            }, 3000);
-        }
+        mContentView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+//                    mControlsView.setVisibility(View.GONE);
+                mVisible = false;
+                AccessPermissions();
+                finish();
+            }
+        }, 3000);
     }
 
     private final Runnable mHidePart2Runnable = new Runnable() {

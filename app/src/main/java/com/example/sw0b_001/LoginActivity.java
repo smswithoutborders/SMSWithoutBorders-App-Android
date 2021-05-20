@@ -19,6 +19,7 @@ import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.Platforms;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
@@ -41,6 +42,17 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        try {
+            securityLayer = new SecurityLayer();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void populateDB() throws InterruptedException {
@@ -103,8 +115,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void validateInput(View view) throws IllegalBlockSizeException, InvalidKeyException, NoSuchAlgorithmException, BadPaddingException {
+    public void validateInput(View view) throws IllegalBlockSizeException, InvalidKeyException, NoSuchAlgorithmException, BadPaddingException, IOException, CertificateException, KeyStoreException {
         EditText password = findViewById(R.id.user_password);
+        String sharedKey = getIntent().getStringExtra("shared_key");
+        String publicKey = getIntent().getStringExtra("public_key");
         if(password.getText().toString().isEmpty()) {
             password.setError("Password cannot be empty!");
             return;
@@ -113,7 +127,11 @@ public class LoginActivity extends AppCompatActivity {
             password.setError("Failed to authenticate!");
         }
         else {
-            startActivity(new Intent(this, Platforms.class));
+            if(sharedKey != null && !sharedKey.isEmpty() && publicKey != null && !publicKey.isEmpty()) {
+                if (securityLayer.storeSecretKey(securityLayer.decrypt_RSA(sharedKey.getBytes("UTF-8")))) {
+                }
+            }
+            startActivity(new Intent(this, PlatformsActivity.class));
             finish();
         }
 
