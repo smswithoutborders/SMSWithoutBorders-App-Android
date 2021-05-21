@@ -118,7 +118,6 @@ public class LoginActivity extends AppCompatActivity {
     public void validateInput(View view) throws IllegalBlockSizeException, InvalidKeyException, NoSuchAlgorithmException, BadPaddingException, IOException, CertificateException, KeyStoreException {
         EditText password = findViewById(R.id.user_password);
         String sharedKey = getIntent().getStringExtra("shared_key");
-        String publicKey = getIntent().getStringExtra("public_key");
         if(password.getText().toString().isEmpty()) {
             password.setError("Password cannot be empty!");
             return;
@@ -127,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
             password.setError("Failed to authenticate!");
         }
         else {
-            if(sharedKey != null && !sharedKey.isEmpty() && publicKey != null && !publicKey.isEmpty()) {
+            if(sharedKey != null && !sharedKey.isEmpty()) {
                 if (securityLayer.storeSecretKey(securityLayer.decrypt_RSA(sharedKey.getBytes("UTF-8")))) {
                 }
             }

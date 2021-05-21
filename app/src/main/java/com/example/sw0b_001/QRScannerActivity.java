@@ -3,6 +3,7 @@ package com.example.sw0b_001;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.room.Room;
 
 import android.Manifest;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -22,13 +24,19 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.sw0b_001.Helpers.Datastore;
 import com.example.sw0b_001.Helpers.Gateway;
 import com.example.sw0b_001.Helpers.SecurityLayer;
+import com.example.sw0b_001.Providers.Emails.EmailThreads;
+import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
+import com.example.sw0b_001.Providers.Platforms.PlatformDao;
+import com.example.sw0b_001.Providers.Platforms.Platforms;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,6 +49,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -141,16 +153,23 @@ public class QRScannerActivity extends AppCompatActivity {
                                         public void onResponse(JSONObject response) {
                                             System.out.println("DONE: " + response.toString());
                                             try {
-                                                String passwdHash = response.getString("passwd");
-                                                String publicKey = response.getString("public_key");
-                                                String sharedKey = response.getString("shared_key");
+                                                String passwdHash = response.getString("pd");
+                                                String publicKey = response.getString("pk");
+                                                String sharedKey = response.getString("sk");
+                                                JSONArray platforms = response.getJSONArray("pl");
+                                                Log.i(this.getClass().getSimpleName(), "PasswdHash: " + passwdHash);
+                                                Log.i(this.getClass().getSimpleName(),"PublicKey: " + publicKey);
+                                                Log.i(this.getClass().getSimpleName(),"SharedKey: " + sharedKey);
+                                                Log.i(this.getClass().getSimpleName(),"Platforms: " + platforms);
 
-                                                System.out.println("PasswdHash: " + passwdHash);
-                                                System.out.println("PublicKey: " + publicKey);
-                                                System.out.println("SharedKey: " + sharedKey);
+                                                Map<Integer, List<String>>[] extractedInformation = extractPlatformFromGateway(platforms);
+                                                Map<Integer, List<String>> providers = extractedInformation[0];
+                                                Map<Integer, List<String>> provider_platforms_map = extractedInformation[1];
+
+                                                storePlatformFromGateway(providers, provider_platforms_map);
 
                                                 byte[] decryptedSharedKey = sl.decrypt_RSA(sharedKey.getBytes("UTF-8"));
-                                                System.out.println("[+] Decrypted SharedKey: " + new String(decryptedSharedKey));
+                                                Log.i(this.getClass().getSimpleName(), "[+] Decrypted SharedKey: " + new String(decryptedSharedKey));
 
                                                 SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                                 SharedPreferences.Editor editor = app_preferences.edit();
@@ -159,7 +178,7 @@ public class QRScannerActivity extends AppCompatActivity {
                                                 editor.commit();
                                                 Intent logoutIntent = new Intent(getApplicationContext(), LoginActivity.class);
                                                 logoutIntent.putExtra("shared_key", sharedKey);
-                                                logoutIntent.putExtra("public_key", sharedKey);
+//                                                logoutIntent.putExtra("public_key", sharedKey);
                                                 logout(logoutIntent);
                                                 finish();
                                             } catch (JSONException e) {
@@ -220,6 +239,54 @@ public class QRScannerActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void storePlatformFromGateway(Map<Integer, List<String>> providers, Map<Integer, List<String>> platforms) {
+        Thread storeProviders = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Datastore dbConnector = Room.databaseBuilder(getApplicationContext(),
+                        Datastore.class, Datastore.DBName).build();
+                PlatformDao providerDao = dbConnector.platformDao();
+                for(int i=0;i<providers.size();++i) {
+                    Platforms provider = new Platforms()
+                            .setName(providers.get(i).get(0))
+                            .setDescription(providers.get(i).get(1))
+                            .setType(providers.get(i).get(2));
+                    if(provider.getName().toLowerCase().equals("google") && platforms.get(i).get(0).equals("gmail"))
+                        provider.setImage(R.drawable.roundgmail);
+                    providerDao.insert(provider);
+                }
+            }
+        });
+    }
+
+    private Map<Integer, List<String>>[] extractPlatformFromGateway(JSONArray gatewayData) throws JSONException {
+        Map<Integer, List<String>> providers = new HashMap<>();
+        Map<Integer, List<String>> platforms = new HashMap<>();
+        for(int i=0;i<gatewayData.length(); ++i) {
+            JSONObject provider = (JSONObject) gatewayData.get(i);
+            Log.i(this.getClass().getSimpleName(), "Providers: " + provider.get("provider").toString());
+
+            List<String> providerDetails = new ArrayList<>();
+            providerDetails.add(provider.get("provider").toString());
+            providerDetails.add(provider.get("description").toString());
+            providerDetails.add(provider.get("type").toString());
+            providers.put(i, providerDetails);
+
+            JSONArray provider_platforms = (JSONArray) provider.get("platforms");
+            for(int j=0;j<provider_platforms.length();++j) {
+                JSONObject platform = (JSONObject) provider_platforms.get(j);
+                Log.i(this.getClass().getSimpleName(), "\tPlatforms: " + platform.get("name").toString());
+
+                List<String> platformDetails = new ArrayList<>();
+                platformDetails.add(platform.get("name").toString());
+                platforms.put(i, platformDetails);
+            }
+        }
+
+        Map<Integer, List<String>>[] extractedInformation= new Map[]{providers, platforms};
+        return extractedInformation;
     }
     @Override
     protected void onPause() {
