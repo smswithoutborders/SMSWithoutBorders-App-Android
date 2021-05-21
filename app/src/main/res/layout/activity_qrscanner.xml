@@ -6,27 +6,44 @@
     android:layout_height="match_parent"
     tools:context=".QRScannerActivity">
 
-    <TextView
-        android:id="@+id/qr_text"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="@string/def_text_nobarcode"
-        android:textColor="@color/white"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/surfaceView"
-        app:layout_constraintVertical_bias="0.277" />
-
     <SurfaceView
-        android:id="@+id/surfaceView"
-        android:layout_width="307dp"
-        android:layout_height="388dp"
+        android:id="@+id/cameraView"
+        android:layout_width="369dp"
+        android:layout_height="315dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="190dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="192dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.253" />
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ProgressBar
+        android:id="@+id/sync_loader"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.396" />
+
+    <TextView
+        android:id="@+id/sync_status"
+        android:layout_width="149dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="30dp"
+        android:text="Syncing..."
+        android:textAlignment="center"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toBottomOf="@+id/cameraView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sync_loader"
+        app:layout_constraintVertical_bias="0.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
