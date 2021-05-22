@@ -8,8 +8,8 @@
 
     <SurfaceView
         android:id="@+id/cameraView"
-        android:layout_width="369dp"
-        android:layout_height="315dp"
+        android:layout_width="281dp"
+        android:layout_height="343dp"
         android:layout_marginStart="50dp"
         android:layout_marginTop="190dp"
         android:layout_marginEnd="50dp"
@@ -17,8 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/sync_loader"

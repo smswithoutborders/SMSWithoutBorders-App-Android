@@ -92,7 +92,7 @@ public class QRScannerActivity extends AppCompatActivity {
                 .build();
 
         cameraSource = new CameraSource.Builder(this, barcodeDetector)
-                .setRequestedPreviewSize(800, 800 )
+                .setRequestedPreviewSize(800, 1000 )
                 .setAutoFocusEnabled(true) //you should add this feature
                 .build();
 
