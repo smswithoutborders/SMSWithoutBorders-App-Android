@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.sw0b_001" >
+    package="com.example.sw0b_001">
 
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -20,11 +20,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents"
-        android:usesCleartextTraffic="true" >
+        android:usesCleartextTraffic="true">
+        <activity android:name=".SyncProcessingActivity" android:theme="@style/Theme.MaterialComponents.NoActionBar"></activity>
         <activity
             android:name=".SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/Theme.MaterialComponents.Fullscreen" >
+            android:theme="@style/Theme.MaterialComponents.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +35,7 @@
         <activity
             android:name=".EmailThreadActivity"
             android:parentActivityName=".PlatformsActivity"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar" >
+            android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PlatformsActivity" />
@@ -42,7 +43,7 @@
         <activity
             android:name=".EmailBodyActivity"
             android:label="..."
-            android:parentActivityName=".PlatformsActivity" >
+            android:parentActivityName=".PlatformsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PlatformsActivity" />
@@ -50,22 +51,21 @@
         <activity
             android:name=".EmailThreadsActivity"
             android:label="Recents..."
-            android:parentActivityName=".PlatformsActivity" >
+            android:parentActivityName=".PlatformsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PlatformsActivity" />
         </activity>
         <activity
             android:name=".PermissionsActivity"
-            android:label="Permission">
-        </activity>
+            android:label="Permission"></activity>
         <activity
             android:name=".PlatformsActivity"
             android:label="Usable Platforms" />
         <activity
             android:name=".EmailComposeActivity"
             android:parentActivityName=".PlatformsActivity"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar" >
+            android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PlatformsActivity" />
@@ -73,7 +73,7 @@
         <activity
             android:name=".QRScannerActivity"
             android:label="QR Scanner"
-            android:parentActivityName=".LoginActivity" >
+            android:parentActivityName=".LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LoginActivity" />

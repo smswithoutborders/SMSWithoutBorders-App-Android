@@ -69,26 +69,13 @@ public class QRScannerActivity extends AppCompatActivity {
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
     SurfaceView surfaceView;
+    private boolean requestingPermission = false;
+    private CodeScanner mCodeScanner;
     private View loaderView;
     private TextView syncText;
-    private CodeScanner mCodeScanner;
-    private boolean requestingPermission = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_qrscanner);
-//        System.out.println("[+] Back to the beginning...");
-//
-////        scanButton = findViewById(R.id.scan_btn);
-//        surfaceView = findViewById(R.id.cameraView);
-//        loaderView = findViewById(R.id.sync_loader);
-//        syncText = findViewById(R.id.sync_status);
-//
-//        loaderView.setVisibility(View.GONE);
-//        syncText.setVisibility(View.GONE);
-//
-//        initialiseDetectorsAndSources();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscanner);
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
@@ -100,6 +87,12 @@ public class QRScannerActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Toast.makeText(QRScannerActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), SyncProcessingActivity.class);
+                        // TODO: authenticate text before sending for processing
+
+                        intent.putExtra("syncUrl", result.getText());
+                        startActivity(intent);
+                        finish();
                     }
                 });
             }
@@ -112,209 +105,6 @@ public class QRScannerActivity extends AppCompatActivity {
         });
     }
 
-    private void initialiseDetectorsAndSources() {
-        barcodeDetector = new BarcodeDetector.Builder(this)
-                .setBarcodeFormats(Barcode.QR_CODE)
-                .build();
-
-        cameraSource = new CameraSource.Builder(this, barcodeDetector)
-                .setRequestedPreviewSize(800, 1000 )
-                .setAutoFocusEnabled(true) //you should add this feature
-                .build();
-
-//        Toast.makeText(getApplicationContext(), "Barcode scanner started", Toast.LENGTH_SHORT).show();
-
-        surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                try {
-                    if (ActivityCompat.checkSelfPermission(QRScannerActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                        cameraSource.start(surfaceView.getHolder());
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
-
-            }
-
-            @Override
-            public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
-                cameraSource.stop();
-            }
-        });
-
-        barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
-            @Override
-            public void release() {
-            }
-
-            @Override
-            public void receiveDetections(Detector.Detections<Barcode> detections) {
-//                surfaceView.setVisibility(View.GONE);
-                final SparseArray<Barcode> barcodes = detections.getDetectedItems();
-                if (barcodes.size() != 0) {
-                    barcodeDetector.release();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-//                            surfaceView.setVisibility(View.GONE);
-//                            surfaceView.getBackground().setColorFilter(Color.rgb(123, 123, 123), PorterDuff.Mode.DARKEN);
-                            syncText.setVisibility(View.VISIBLE);
-                            loaderView.setVisibility(View.VISIBLE);
-                        }
-                    });
-                    SecurityLayer sl;
-                    try {
-                        sl = new SecurityLayer();
-
-                        Barcode.UrlBookmark intentData = barcodes.valueAt(0).url;
-                        System.out.println("\t[+]: " + intentData.url);
-
-                        String appOutput = intentData.url;
-                        syncText.setText(appOutput);
-
-                        appOutput += "\n[+] Transmitting public key... ";
-                        syncText.setText(appOutput);
-                        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-
-                        JSONObject jsonBody = new JSONObject("{\"public_key\": \"" + sl.init() + "\"}");
-                        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(intentData.url, jsonBody, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            System.out.println("DONE: " + response.toString());
-                            try {
-                                String passwdHash = response.getString("pd");
-                                String publicKey = response.getString("pk");
-                                String sharedKey = response.getString("sk");
-                                JSONArray platforms = response.getJSONArray("pl");
-                                Log.i(this.getClass().getSimpleName(), "PasswdHash: " + passwdHash);
-                                Log.i(this.getClass().getSimpleName(),"PublicKey: " + publicKey);
-                                Log.i(this.getClass().getSimpleName(),"SharedKey: " + sharedKey);
-                                Log.i(this.getClass().getSimpleName(),"Platforms: " + platforms);
-
-                                Map<Integer, List<String>>[] extractedInformation = extractPlatformFromGateway(platforms);
-                                Map<Integer, List<String>> providers = extractedInformation[0];
-                                Map<Integer, List<String>> provider_platforms_map = extractedInformation[1];
-
-                                storePlatformFromGateway(providers, provider_platforms_map);
-
-                                byte[] decryptedSharedKey = sl.decrypt_RSA(sharedKey.getBytes("UTF-8"));
-                                Log.i(this.getClass().getSimpleName(), "[+] Decrypted SharedKey: " + new String(decryptedSharedKey));
-
-                                SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                SharedPreferences.Editor editor = app_preferences.edit();
-                                editor.putString(Gateway.VAR_PUBLICKEY, publicKey);
-                                editor.putString(Gateway.VAR_PASSWDHASH, passwdHash);
-                                editor.commit();
-                                Intent logoutIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                                logoutIntent.putExtra("shared_key", sharedKey);
-                                logout(logoutIntent);
-                                finish();
-                            } catch (JSONException e) {
-                                    e.printStackTrace();
-                                } catch (BadPaddingException e) {
-                                    e.printStackTrace();
-                                } catch (IllegalBlockSizeException e) {
-                                    e.printStackTrace();
-                                } catch (InvalidKeyException e) {
-                                    e.printStackTrace();
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                System.out.println("Failed: " + error);
-                            }
-                        });
-                        queue.add(jsonObjectRequest);
-                    } catch (KeyStoreException e) {
-                        e.printStackTrace();
-                    } catch (CertificateException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (BadPaddingException e) {
-                        e.printStackTrace();
-                    } catch (InvalidKeyException e) {
-                        e.printStackTrace();
-                    } catch (UnrecoverableKeyException e) {
-                        e.printStackTrace();
-                    } catch (InvalidAlgorithmParameterException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchPaddingException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchProviderException e) {
-                        e.printStackTrace();
-                    } catch (IllegalBlockSizeException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-
-    }
-
-    private void storePlatformFromGateway(Map<Integer, List<String>> providers, Map<Integer, List<String>> platforms) {
-        Thread storeProviders = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Datastore dbConnector = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DBName).build();
-                PlatformDao providerDao = dbConnector.platformDao();
-                for(int i=0;i<providers.size();++i) {
-                    Platforms provider = new Platforms()
-                            .setName(providers.get(i).get(0))
-                            .setDescription(providers.get(i).get(1))
-                            .setType(providers.get(i).get(2));
-                    if(provider.getName().toLowerCase().equals("google") && platforms.get(i).get(0).equals("gmail"))
-                        provider.setImage(R.drawable.roundgmail);
-                    providerDao.insert(provider);
-                }
-            }
-        });
-    }
-
-    private Map<Integer, List<String>>[] extractPlatformFromGateway(JSONArray gatewayData) throws JSONException {
-        Map<Integer, List<String>> providers = new HashMap<>();
-        Map<Integer, List<String>> platforms = new HashMap<>();
-        for(int i=0;i<gatewayData.length(); ++i) {
-            JSONObject provider = (JSONObject) gatewayData.get(i);
-            Log.i(this.getClass().getSimpleName(), "Providers: " + provider.get("provider").toString());
-
-            List<String> providerDetails = new ArrayList<>();
-            providerDetails.add(provider.get("provider").toString());
-            providerDetails.add(provider.get("description").toString());
-            providerDetails.add(provider.get("type").toString());
-            providers.put(i, providerDetails);
-
-            JSONArray provider_platforms = (JSONArray) provider.get("platforms");
-            for(int j=0;j<provider_platforms.length();++j) {
-                JSONObject platform = (JSONObject) provider_platforms.get(j);
-                Log.i(this.getClass().getSimpleName(), "\tPlatforms: " + platform.get("name").toString());
-
-                List<String> platformDetails = new ArrayList<>();
-                platformDetails.add(platform.get("name").toString());
-                platforms.put(i, platformDetails);
-            }
-        }
-
-        Map<Integer, List<String>>[] extractedInformation= new Map[]{providers, platforms};
-        return extractedInformation;
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -325,15 +115,5 @@ public class QRScannerActivity extends AppCompatActivity {
     protected void onPause() {
         mCodeScanner.releaseResources();
         super.onPause();
-    }
-    private void logout(Intent intent) {
-        startActivity(intent);
-        finish();
-    }
-
-    public void AccessPlatforms() {
-        Intent intent = new Intent(this, PlatformsActivity.class);
-        startActivity(intent);
-        finish();
     }
 }
