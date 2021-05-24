@@ -27,6 +27,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.budiyev.android.codescanner.CodeScanner;
+import com.budiyev.android.codescanner.CodeScannerView;
+import com.budiyev.android.codescanner.DecodeCallback;
 import com.example.sw0b_001.Helpers.Datastore;
 import com.example.sw0b_001.Helpers.Gateway;
 import com.example.sw0b_001.Helpers.SecurityLayer;
@@ -36,6 +39,7 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.zxing.Result;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,23 +71,45 @@ public class QRScannerActivity extends AppCompatActivity {
     SurfaceView surfaceView;
     private View loaderView;
     private TextView syncText;
+    private CodeScanner mCodeScanner;
     private boolean requestingPermission = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_qrscanner);
+//        System.out.println("[+] Back to the beginning...");
+//
+////        scanButton = findViewById(R.id.scan_btn);
+//        surfaceView = findViewById(R.id.cameraView);
+//        loaderView = findViewById(R.id.sync_loader);
+//        syncText = findViewById(R.id.sync_status);
+//
+//        loaderView.setVisibility(View.GONE);
+//        syncText.setVisibility(View.GONE);
+//
+//        initialiseDetectorsAndSources();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscanner);
-        System.out.println("[+] Back to the beginning...");
-
-//        scanButton = findViewById(R.id.scan_btn);
-        surfaceView = findViewById(R.id.cameraView);
-        loaderView = findViewById(R.id.sync_loader);
-        syncText = findViewById(R.id.sync_status);
-
-        loaderView.setVisibility(View.GONE);
-        syncText.setVisibility(View.GONE);
-
-        initialiseDetectorsAndSources();
+        CodeScannerView scannerView = findViewById(R.id.scanner_view);
+        mCodeScanner = new CodeScanner(this, scannerView);
+        mCodeScanner.setDecodeCallback(new DecodeCallback() {
+            @Override
+            public void onDecoded(@NonNull final Result result) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(QRScannerActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        scannerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCodeScanner.startPreview();
+            }
+        });
     }
 
     private void initialiseDetectorsAndSources() {
@@ -290,17 +316,16 @@ public class QRScannerActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        cameraSource.release();
+    protected void onResume() {
+        super.onResume();
+        mCodeScanner.startPreview();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        initialiseDetectorsAndSources();
+    protected void onPause() {
+        mCodeScanner.releaseResources();
+        super.onPause();
     }
-
     private void logout(Intent intent) {
         startActivity(intent);
         finish();
