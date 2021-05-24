@@ -52,11 +52,18 @@ public class SyncProcessingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sync_processing);
 
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
         String syncUrl = getIntent().getStringExtra("syncUrl");
         processQR(syncUrl);
     }
 
     public void processQR(String QRText) {
+        Log.i(this.getClass().getSimpleName(), "[+] QR text: " + QRText);
         SecurityLayer sl;
         try {
             sl = new SecurityLayer();
@@ -92,6 +99,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
                         editor.putString(Gateway.VAR_PUBLICKEY, publicKey);
                         editor.putString(Gateway.VAR_PASSWDHASH, passwdHash);
                         editor.commit();
+
                         Intent logoutIntent = new Intent(getApplicationContext(), LoginActivity.class);
                         logoutIntent.putExtra("shared_key", sharedKey);
                         logout(logoutIntent);
@@ -107,6 +115,8 @@ public class SyncProcessingActivity extends AppCompatActivity {
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
@@ -144,7 +154,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
         }
     }
 
-    private void storePlatformFromGateway(Map<Integer, List<String>> providers, Map<Integer, List<String>> platforms) {
+    private void storePlatformFromGateway(Map<Integer, List<String>> providers, Map<Integer, List<String>> platforms) throws InterruptedException {
         Thread storeProviders = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -162,6 +172,8 @@ public class SyncProcessingActivity extends AppCompatActivity {
                 }
             }
         });
+        storeProviders.start();
+        storeProviders.join();
     }
 
     private Map<Integer, List<String>>[] extractPlatformFromGateway(JSONArray gatewayData) throws JSONException {

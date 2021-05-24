@@ -199,8 +199,20 @@ public class SecurityLayer {
         return sb.toString().getBytes();
     }
 
+    public byte[] hash_sha512(String input) throws NoSuchAlgorithmException {
+        MessageDigest md = java.security.MessageDigest.getInstance("SHA-512");
+        byte[] digest = md.digest(input.getBytes());
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < digest.length; i++) {
+            sb.append(Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1));
+        }
+
+        return sb.toString().getBytes();
+    }
+
     public boolean authenticate(Context context, String password) throws NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
-        byte[] hsPasswd = hash_sha256(password);
+//        byte[] hsPasswd = hash_sha256(password);
+        byte[] hsPasswd = hash_sha512(password);
         System.out.println("[+] Hashed Password: " + hsPasswd);
         System.out.println("[+] Hashed Password (b64): " + new String(hsPasswd));
 
