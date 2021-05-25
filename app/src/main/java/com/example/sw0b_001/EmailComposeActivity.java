@@ -59,6 +59,21 @@ public class EmailComposeActivity extends AppCompatActivity {
 
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
+        if(!checkPermission(Manifest.permission.SEND_SMS)) {
+//                String IV = new String(securityLayer.getIV(), "UTF-8");
+//                String transmissionText = IV + ":" + body;
+//                byte[] encryptedText = securityLayer.encrypt_AES(transmissionText);
+//
+//                System.out.println("Transmission String: " + transmissionText);
+//                System.out.println("[+] Decrypted: " + new String(securityLayer.decrypt_AES(encryptedText), "UTF-8"));
+//
+//
+//                String strEncryptedText = Base64.encodeToString(encryptedText, Base64.URL_SAFE);
+//                System.out.println("Transmission message: " + strEncryptedText);
+//
+//            Snackbar.make(getWindow().getDecorView().getRootView(), "Sending SMS", Snackbar.LENGTH_LONG).show();
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
+        }
 
         try {
             securityLayer = new SecurityLayer();
@@ -165,7 +180,6 @@ public class EmailComposeActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 sendMessage();
-                finish();
                 return true;
 
             default:
@@ -180,142 +194,6 @@ public class EmailComposeActivity extends AppCompatActivity {
     private void sendMessage() {
 //        Toast.makeText(getBaseContext(), "SMS sending...", Toast.LENGTH_LONG).show();
 
-        //---when the SMS has been sent---
-        registerReceiver(new BroadcastReceiver(){
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Thread storeEmailMessage;
-                switch (getResultCode())
-                {
-                    case Activity.RESULT_OK:
-                        Toast.makeText(getBaseContext(), "SMS sent",
-                                Toast.LENGTH_LONG).show();
-
-                        storeEmailMessage = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
-                                        Datastore.class, Datastore.DBName).build();
-
-                                EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                                platformsDao.updateStatus("sent", emailId);
-                            }
-                        });
-                        break;
-                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                        Toast.makeText(getBaseContext(), "Generic failure",
-                                Toast.LENGTH_SHORT).show();
-                        storeEmailMessage = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
-                                        Datastore.class, Datastore.DBName).build();
-
-                                EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                                platformsDao.updateStatus("Generic failure", emailId);
-                            }
-                        });
-                        break;
-                    case SmsManager.RESULT_ERROR_NO_SERVICE:
-                        Toast.makeText(getBaseContext(), "No service",
-                                Toast.LENGTH_SHORT).show();
-                        storeEmailMessage = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
-                                        Datastore.class, Datastore.DBName).build();
-
-                                EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                                platformsDao.updateStatus("No service", emailId);
-                            }
-                        });
-                        break;
-                    case SmsManager.RESULT_ERROR_NULL_PDU:
-                        Toast.makeText(getBaseContext(), "Null PDU",
-                                Toast.LENGTH_SHORT).show();
-                        storeEmailMessage = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
-                                        Datastore.class, Datastore.DBName).build();
-
-                                EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                                platformsDao.updateStatus("Null PDU", emailId);
-                            }
-                        });
-                        break;
-                    case SmsManager.RESULT_ERROR_RADIO_OFF:
-                        Toast.makeText(getBaseContext(), "Radio off",
-                                Toast.LENGTH_SHORT).show();
-                        storeEmailMessage = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
-                                        Datastore.class, Datastore.DBName).build();
-
-                                EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                                platformsDao.updateStatus("Radio off", emailId);
-                            }
-                        });
-                        break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + getResultCode());
-                }
-                storeEmailMessage.start();
-                try {
-                    storeEmailMessage.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new IntentFilter(SMS_SENT));
-
-        //---when the SMS has been delivered---
-        registerReceiver(new BroadcastReceiver(){
-            @Override
-            public void onReceive(Context arg0, Intent arg1) {
-                Thread storeEmailMessage;
-                switch (getResultCode())
-                {
-                    case Activity.RESULT_OK:
-                        Toast.makeText(getBaseContext(), "SMS delivered",
-                                Toast.LENGTH_LONG).show();
-                        storeEmailMessage = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
-                                        Datastore.class, Datastore.DBName).build();
-
-                                EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                                platformsDao.updateStatus("delivered", emailId);
-                            }
-                        });
-                        break;
-                    case Activity.RESULT_CANCELED:
-                        Toast.makeText(getBaseContext(), "SMS not delivered",
-                                Toast.LENGTH_LONG).show();
-                        storeEmailMessage = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
-                                        Datastore.class, Datastore.DBName).build();
-
-                                EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                                platformsDao.updateStatus("not delivered", emailId);
-                            }
-                        });
-                        break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + getResultCode());
-                }
-                storeEmailMessage.start();
-                try {
-                    storeEmailMessage.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new IntentFilter(SMS_DELIVERED));
 
         final List<EmailMessage>[] pendingMessagesList = new List[]{new ArrayList<>()};
         Thread storeEmailMessage = new Thread(new Runnable() {
@@ -345,43 +223,14 @@ public class EmailComposeActivity extends AppCompatActivity {
         String body = pendingMessages.get(0).getBody();
         String subject = pendingMessages.get(0).getSubject();
 
-        Intent for_sentPendingIntent = new Intent(SMS_SENT);
-        for_sentPendingIntent.putExtra("email_id", emailId);
-        PendingIntent sentPendingIntent = PendingIntent.getBroadcast(this, 0, for_sentPendingIntent, 0);
-        
-        Intent for_deliveredPendingIntent = new Intent(SMS_DELIVERED);
-        for_deliveredPendingIntent.putExtra("email_id", emailId);
-        PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(this, 0, for_deliveredPendingIntent, 0);
-        
+
         if(body.isEmpty()) {
             Toast.makeText(this, "Text Cannot be empty!", Toast.LENGTH_LONG).show();
             return;
         }
 
+        CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
         // TODO: work out how the IV gets encrypted before sending
-        if(checkPermission(Manifest.permission.SEND_SMS)) {
-//                String IV = new String(securityLayer.getIV(), "UTF-8");
-//                String transmissionText = IV + ":" + body;
-//                byte[] encryptedText = securityLayer.encrypt_AES(transmissionText);
-//
-//                System.out.println("Transmission String: " + transmissionText);
-//                System.out.println("[+] Decrypted: " + new String(securityLayer.decrypt_AES(encryptedText), "UTF-8"));
-//
-//
-//                String strEncryptedText = Base64.encodeToString(encryptedText, Base64.URL_SAFE);
-//                System.out.println("Transmission message: " + strEncryptedText);
-//
-//                //TODO: Research what to do in case of a double sim phone
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phonenumber, null, body, sentPendingIntent, deliveredPendingIntent);
-
-            Toast.makeText(getBaseContext(), "Sending SMS....", Toast.LENGTH_LONG).show();
-//            Snackbar.make(getWindow().getDecorView().getRootView(), "Sending SMS", Snackbar.LENGTH_LONG).show();
-        }
-
-        else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
-        }
 
     }
 
@@ -390,10 +239,9 @@ public class EmailComposeActivity extends AppCompatActivity {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_SEND_SMS: {
                 if (grantResults.length > 0) {
-                    sendMessage();
+                    Toast.makeText(this, "Permission Granted!", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(this, "Permission denied!", Toast.LENGTH_LONG).show();
-                    finish();
                 }
             }
         }
