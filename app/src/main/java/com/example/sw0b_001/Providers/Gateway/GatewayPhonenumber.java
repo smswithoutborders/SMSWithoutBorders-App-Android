@@ -56,10 +56,11 @@ public class GatewayPhonenumber {
 
     @ColumnInfo(name="isp")
     String isp;
-    public GatewayPhonenumber(String type, String number, String isp) {
+    public GatewayPhonenumber(String type, String number, String isp, boolean isDefault) {
         this.type = type;
         this.number = number;
         this.isp = isp;
+        this.isDefault = isDefault;
     }
 
     public GatewayPhonenumber() {}

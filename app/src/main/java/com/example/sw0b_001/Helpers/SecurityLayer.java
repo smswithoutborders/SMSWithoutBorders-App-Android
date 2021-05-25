@@ -8,10 +8,14 @@ import android.security.keystore.KeyProtection;
 import android.util.Base64;
 
 import android.content.Context;
+import android.util.Log;
+
+import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
@@ -26,6 +30,8 @@ import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.MGF1ParameterSpec;
+import java.util.Enumeration;
+import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -45,6 +51,8 @@ public class SecurityLayer {
     private KeyPair keyPair;
     private KeyStore keyStore;
 
+    private SharedPreferences preferences;
+
 
     public static final String DEFAULT_KEYPAIR_ALGORITHM = KeyProperties.KEY_ALGORITHM_RSA;
     public static final String DEFAULT_KEYPAIR_ALGORITHM_PADDING_AES = "RSA/ECB/PKCS1Padding";
@@ -63,6 +71,13 @@ public class SecurityLayer {
     public SecurityLayer() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
         this.keyStore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
         this.keyStore.load(null);
+    }
+
+    public SecurityLayer(Context context) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+        this.keyStore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
+        this.keyStore.load(null);
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public boolean hasKeyPairs(Context context) throws KeyStoreException {
@@ -139,7 +154,7 @@ public class SecurityLayer {
         return decBytes;
     }
 
-    public byte[] encrypt_AES(String input) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException {
+    public byte[] encrypt_AES(String input) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException {
         char[] charsArray = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '@', '#', '$', '%', '^', '*'};
         SecureRandom rand = new SecureRandom();
         StringBuilder password = new StringBuilder();
@@ -148,10 +163,15 @@ public class SecurityLayer {
         }
         String strIV = password.toString();
 
-        byte[] plainTextByte = "c4a15a90-57d4-4935-b5ae-ba89df8e".getBytes();
-        this.key = new SecretKeySpec(plainTextByte, "AES");
+//         byte[] plainTextByte = "c4a15a90-57d4-4935-b5ae-ba89df8e".getBytes();
+//         this.key = new SecretKeySpec(plainTextByte, "AES");
+        byte[] plainTextByte = preferences.getString(GatewayValues.SHARED_KEY, "").getBytes("UTF-8");
+        this.key = new SecretKeySpec(decrypt_RSA(plainTextByte), "AES");
+        KeyStore keystore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
+        keystore.load(null);
+
         this.iv = new IvParameterSpec(strIV.getBytes());
-        this.cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING_AES);
+        this.cipher = Cipher.getInstance("AES");
         this.cipher.init(Cipher.ENCRYPT_MODE, this.key, this.iv);
         byte[] ciphertext = this.cipher.doFinal(input.getBytes());
         return ciphertext;
@@ -208,13 +228,13 @@ public class SecurityLayer {
         return sb.toString().getBytes();
     }
 
-    public boolean authenticate(Context context, String password) throws NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
+    public boolean authenticate(String password) throws NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
 //        byte[] hsPasswd = hash_sha256(password);
         byte[] hsPasswd = hash_sha512(password);
         System.out.println("[+] Hashed Password: " + hsPasswd);
         System.out.println("[+] Hashed Password (b64): " + new String(hsPasswd));
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String passwdHash = preferences.getString(GatewayValues.VAR_PASSWDHASH, null);
         passwdHash = new String(decrypt_RSA(passwdHash.getBytes()));
 

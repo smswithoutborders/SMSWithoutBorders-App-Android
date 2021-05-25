@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.EditText;
 
 import com.example.sw0b_001.Helpers.CustomHelpers;
 import com.example.sw0b_001.Helpers.Datastore;
+import com.example.sw0b_001.Helpers.GatewayValues;
 import com.example.sw0b_001.Helpers.SecurityLayer;
 import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
@@ -118,18 +121,27 @@ public class LoginActivity extends AppCompatActivity {
     public void validateInput(View view) throws IllegalBlockSizeException, InvalidKeyException, NoSuchAlgorithmException, BadPaddingException, IOException, CertificateException, KeyStoreException {
         EditText password = findViewById(R.id.user_password);
         String sharedKey = getIntent().getStringExtra("shared_key");
+        String publicKey = getIntent().getStringExtra("public_key");
+        String passwdHash = getIntent().getStringExtra("passwd_hash");
+
+        SecurityLayer securityLayer = new SecurityLayer(getApplicationContext());
         if(password.getText().toString().isEmpty()) {
             password.setError("Password cannot be empty!");
             return;
         }
-        if(!securityLayer.authenticate(getApplicationContext(), password.getText().toString())) {
+        if(!securityLayer.authenticate(password.getText().toString())) {
             password.setError("Failed to authenticate!");
         }
         else {
-            if(sharedKey != null && !sharedKey.isEmpty()) {
-                if (securityLayer.storeSecretKey(securityLayer.decrypt_RSA(sharedKey.getBytes("UTF-8")))) {
-                }
+            if(sharedKey != null && !sharedKey.isEmpty() && publicKey != null && !publicKey.isEmpty()) {
+                SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = app_preferences.edit();
+                editor.putString(GatewayValues.VAR_PUBLICKEY, publicKey);
+                editor.putString(GatewayValues.SHARED_KEY, sharedKey);
+//                editor.putString(GatewayValues.VAR_PASSWDHASH, passwdHash);
+                editor.commit();
             }
+
             startActivity(new Intent(this, PlatformsActivity.class));
             finish();
         }

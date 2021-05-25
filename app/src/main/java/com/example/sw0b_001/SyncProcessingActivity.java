@@ -91,13 +91,11 @@ public class SyncProcessingActivity extends AppCompatActivity {
                         Map<Integer, List<String>> provider_platforms_map = extractedInformation[1];
 
                         storePlatformFromGateway(providers, provider_platforms_map);
-
-                        byte[] decryptedSharedKey = sl.decrypt_RSA(sharedKey.getBytes("UTF-8"));
-                        Log.i(this.getClass().getSimpleName(), "[+] Decrypted SharedKey: " + new String(decryptedSharedKey));
+//                        byte[] decryptedSharedKey = sl.decrypt_RSA(sharedKey.getBytes("UTF-8"));
+//                        Log.i(this.getClass().getSimpleName(), "[+] Decrypted SharedKey: " + new String(decryptedSharedKey));
 
                         SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         SharedPreferences.Editor editor = app_preferences.edit();
-                        editor.putString(GatewayValues.VAR_PUBLICKEY, publicKey);
                         editor.putString(GatewayValues.VAR_PASSWDHASH, passwdHash);
                         editor.commit();
 
@@ -106,19 +104,10 @@ public class SyncProcessingActivity extends AppCompatActivity {
 
                         Intent logoutIntent = new Intent(getApplicationContext(), LoginActivity.class);
                         logoutIntent.putExtra("shared_key", sharedKey);
+                        logoutIntent.putExtra("public_key", publicKey);
                         logout(logoutIntent);
                         finish();
                     } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (BadPaddingException e) {
-                        e.printStackTrace();
-                    } catch (IllegalBlockSizeException e) {
-                        e.printStackTrace();
-                    } catch (InvalidKeyException e) {
-                        e.printStackTrace();
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -167,6 +156,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
                     .setNumber(phone.getString("number"))
                     .setDefault(phone.getBoolean("default"))
                     .setIsp(phone.getString("isp"));
+
             phonenumbers.add(phonenumber);
         }
         return phonenumbers;

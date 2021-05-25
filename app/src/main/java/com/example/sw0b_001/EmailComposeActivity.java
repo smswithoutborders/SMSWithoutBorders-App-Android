@@ -35,16 +35,22 @@ import com.example.sw0b_001.Providers.Gateway.GatewayDao;
 import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
 
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableEntryException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
 public class EmailComposeActivity extends AppCompatActivity {
 
-    String SMS_SENT = "SENT";
-    String SMS_DELIVERED = "DELIVERED";
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
     SecurityLayer securityLayer;
     long emailId;
@@ -78,6 +84,10 @@ public class EmailComposeActivity extends AppCompatActivity {
 //            Snackbar.make(getWindow().getDecorView().getRootView(), "Sending SMS", Snackbar.LENGTH_LONG).show();
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
 
+        }
+        Log.i(this.getLocalClassName(), "[+] #Numbers: " + phonenumbers.size());
+
+        try {
             Thread getPhonenumber = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -93,10 +103,7 @@ public class EmailComposeActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-
-        try {
-            securityLayer = new SecurityLayer();
+            securityLayer = new SecurityLayer(getApplicationContext());
         } catch (KeyStoreException e) {
             e.printStackTrace();
         } catch (CertificateException e) {
@@ -199,7 +206,31 @@ public class EmailComposeActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                sendMessage();
+                try {
+                    sendMessage();
+                } catch (BadPaddingException e) {
+                    e.printStackTrace();
+                } catch (InvalidAlgorithmParameterException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (IllegalBlockSizeException e) {
+                    e.printStackTrace();
+                } catch (UnrecoverableKeyException e) {
+                    e.printStackTrace();
+                } catch (KeyStoreException e) {
+                    e.printStackTrace();
+                } catch (NoSuchPaddingException e) {
+                    e.printStackTrace();
+                } catch (InvalidKeyException e) {
+                    e.printStackTrace();
+                } catch (CertificateException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (UnrecoverableEntryException e) {
+                    e.printStackTrace();
+                }
                 return true;
 
             default:
@@ -211,13 +242,15 @@ public class EmailComposeActivity extends AppCompatActivity {
     }
 
 
-    private void sendMessage() {
+    private void sendMessage() throws BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, IllegalBlockSizeException, UnrecoverableEntryException, KeyStoreException, NoSuchPaddingException, InvalidKeyException, CertificateException, IOException {
 //        Toast.makeText(getBaseContext(), "SMS sending...", Toast.LENGTH_LONG).show();
         String phonenumber = "";
         for(GatewayPhonenumber number : phonenumbers) {
+            Log.i(this.getLocalClassName(), "[+] Number: " + number.getNumber());
             if(number.isDefault())
                 phonenumber = number.getNumber();
         }
+
         if(phonenumber.length() < 1 ) {
             Toast.makeText(this, "Default number could not be determined", Toast.LENGTH_LONG).show();
             return;
@@ -256,10 +289,20 @@ public class EmailComposeActivity extends AppCompatActivity {
             return;
         }
 
+
+        body = getEncryptedSMS(body);
+        Log.i(this.getLocalClassName(), "[+] Encrypted data: " + body);
         CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
         finish();
         // TODO: work out how the IV gets encrypted before sending
 
+    }
+
+    private String getEncryptedSMS(String data) throws BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, UnrecoverableEntryException, KeyStoreException, CertificateException, IOException {
+        String encryptedData = securityLayer.encrypt_AES(data).toString();
+        Log.i(this.getLocalClassName(), ">> Encrypted SMS: " + encryptedData);
+        String iv = securityLayer.getIV().toString();
+        return encryptedData;
     }
 
     @Override

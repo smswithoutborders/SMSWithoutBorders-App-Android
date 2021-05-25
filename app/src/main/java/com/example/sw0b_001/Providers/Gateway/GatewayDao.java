@@ -9,10 +9,10 @@ import java.util.List;
 
 @Dao
 public interface GatewayDao {
-    @Query("SELECT * FROM gatewayPhonenumber")
+    @Query("SELECT * FROM GatewayPhonenumber")
     List<GatewayPhonenumber> getAll();
 
-    @Query("SELECT * FROM gatewayPhonenumber")
+    @Query("SELECT * FROM GatewayPhonenumber")
     List<GatewayPhonenumber> getAllPhonenumbers();
 
 //    @Query("SELECT * FROM emailcustommessage WHERE uid IN (:emailcustommessageIds)")
@@ -23,15 +23,15 @@ public interface GatewayDao {
 //    EmailCustomMessage findByName(String first, String last);
 
     @Insert
-    void insertAll(GatewayPhonenumber... gatewayPhonenumbers);
+    void insertAll(GatewayPhonenumber... GatewayPhonenumbers);
 
     @Insert
-    long insert(GatewayPhonenumber gatewayPhonenumber);
+    long insert(GatewayPhonenumber GatewayPhonenumber);
 
     @Delete
-    void delete(GatewayPhonenumber gatewayPhonenumber);
+    void delete(GatewayPhonenumber GatewayPhonenumber);
 
-    @Query("DELETE FROM gatewayPhonenumber")
+    @Query("DELETE FROM GatewayPhonenumber")
     void deleteAll();
 
 }
