@@ -340,7 +340,7 @@ public class EmailComposeActivity extends AppCompatActivity {
         List<EmailMessage> pendingMessages = pendingMessagesList[0];
         // TODO: iterate and send every pending message
         long emailId = pendingMessages.get(0).getId();
-        String phonenumber = "652156811";
+        String phonenumber = "670471866";
         String recipient = pendingMessages.get(0).getRecipient();
         String body = pendingMessages.get(0).getBody();
         String subject = pendingMessages.get(0).getSubject();

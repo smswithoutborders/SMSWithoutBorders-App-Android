@@ -9,8 +9,6 @@ import android.util.Base64;
 
 import android.content.Context;
 
-import com.example.sw0b_001.Helpers.Gateway;
-
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -69,7 +67,7 @@ public class SecurityLayer {
 
     public boolean hasKeyPairs(Context context) throws KeyStoreException {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return this.keyStore.containsAlias(Gateway.SHARED_KEY) && this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS) && preferences.contains(Gateway.VAR_PASSWDHASH);
+        return this.keyStore.containsAlias(GatewayValues.SHARED_KEY) && this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS) && preferences.contains(GatewayValues.VAR_PASSWDHASH);
 //        return true;
     }
 
@@ -181,7 +179,7 @@ public class SecurityLayer {
 //        KeyStore.ProtectionParameter protParam = new KeyStore.PasswordProtection(DEFAULT_PASSWORD.toCharArray());
         KeyStore ks = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
         ks.load(null);
-        this.keyStore.setEntry(Gateway.SHARED_KEY, skEntry, new KeyProtection.Builder(KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+        this.keyStore.setEntry(GatewayValues.SHARED_KEY, skEntry, new KeyProtection.Builder(KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
                 .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
                 .build());
@@ -217,7 +215,7 @@ public class SecurityLayer {
         System.out.println("[+] Hashed Password (b64): " + new String(hsPasswd));
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String passwdHash = preferences.getString(Gateway.VAR_PASSWDHASH, null);
+        String passwdHash = preferences.getString(GatewayValues.VAR_PASSWDHASH, null);
         passwdHash = new String(decrypt_RSA(passwdHash.getBytes()));
 
         System.out.println("[+] Stored Password: " + passwdHash);

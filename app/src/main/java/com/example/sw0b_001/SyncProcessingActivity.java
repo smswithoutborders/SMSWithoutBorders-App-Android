@@ -8,18 +8,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.budiyev.android.codescanner.CodeScanner;
 import com.example.sw0b_001.Helpers.Datastore;
-import com.example.sw0b_001.Helpers.Gateway;
+import com.example.sw0b_001.Helpers.GatewayValues;
 import com.example.sw0b_001.Helpers.SecurityLayer;
+import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
+import com.example.sw0b_001.Providers.Gateway.GatewayDao;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.Platforms;
 
@@ -80,10 +79,12 @@ public class SyncProcessingActivity extends AppCompatActivity {
                         String publicKey = response.getString("pk");
                         String sharedKey = response.getString("sk");
                         JSONArray platforms = response.getJSONArray("pl");
+                        JSONArray phonenumbers = response.getJSONArray("ph");
                         Log.i(this.getClass().getSimpleName(), "PasswdHash: " + passwdHash);
                         Log.i(this.getClass().getSimpleName(),"PublicKey: " + publicKey);
                         Log.i(this.getClass().getSimpleName(),"SharedKey: " + sharedKey);
                         Log.i(this.getClass().getSimpleName(),"Platforms: " + platforms);
+                        Log.i(this.getClass().getSimpleName(),"Phonenumbers: " + platforms);
 
                         Map<Integer, List<String>>[] extractedInformation = extractPlatformFromGateway(platforms);
                         Map<Integer, List<String>> providers = extractedInformation[0];
@@ -96,9 +97,12 @@ public class SyncProcessingActivity extends AppCompatActivity {
 
                         SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                         SharedPreferences.Editor editor = app_preferences.edit();
-                        editor.putString(Gateway.VAR_PUBLICKEY, publicKey);
-                        editor.putString(Gateway.VAR_PASSWDHASH, passwdHash);
+                        editor.putString(GatewayValues.VAR_PUBLICKEY, publicKey);
+                        editor.putString(GatewayValues.VAR_PASSWDHASH, passwdHash);
                         editor.commit();
+
+                        List<GatewayPhonenumber> list_phonenumbers = extractPhonenumbersFromGateway(phonenumbers);
+                        storePhonenumbersFromGateway(list_phonenumbers);
 
                         Intent logoutIntent = new Intent(getApplicationContext(), LoginActivity.class);
                         logoutIntent.putExtra("shared_key", sharedKey);
@@ -152,6 +156,35 @@ public class SyncProcessingActivity extends AppCompatActivity {
         } catch (IllegalBlockSizeException e) {
             e.printStackTrace();
         }
+    }
+
+    private List<GatewayPhonenumber> extractPhonenumbersFromGateway(JSONArray gatewayData) throws JSONException {
+        List<GatewayPhonenumber> phonenumbers = new ArrayList<>();
+        for(int i=0;i<gatewayData.length(); ++i ) {
+            JSONObject phone = gatewayData.getJSONObject(i);
+            GatewayPhonenumber phonenumber = new GatewayPhonenumber()
+                    .setType(phone.getString("type"))
+                    .setNumber(phone.getString("number"))
+                    .setIsp(phone.getString("isp"));
+            phonenumbers.add(phonenumber);
+        }
+        return phonenumbers;
+    }
+
+    private void storePhonenumbersFromGateway(List<GatewayPhonenumber> phonenumbers) throws InterruptedException {
+        Thread storeProviders = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Datastore dbConnector = Room.databaseBuilder(getApplicationContext(),
+                        Datastore.class, Datastore.DBName).build();
+                GatewayDao gatewayDao = dbConnector.gatewayDao();
+                for(int i=0;i<phonenumbers.size();++i) {
+                    gatewayDao.insert(phonenumbers.get(i));
+                }
+            }
+        });
+        storeProviders.start();
+        storeProviders.join();
     }
 
     private void storePlatformFromGateway(Map<Integer, List<String>> providers, Map<Integer, List<String>> platforms) throws InterruptedException {

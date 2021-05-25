@@ -59,6 +59,8 @@ public class EmailBodyActivity extends AppCompatActivity {
         TextView dateTime = findViewById(R.id.subjectSub);
         dateTime.setText(emailMessage.get(0).getDatetime());
         TextView status = findViewById(R.id.bottomRight);
+        if(emailMessage.get(0).getStatus().equals("delivered") || emailMessage.get(0).getStatus().equals("sent"))
+            status.setTextColor(getApplication().getResources().getColor(R.color.success_blue, getApplication().getTheme()));
         status.setText(emailMessage.get(0).getStatus());
         TextView body = findViewById(R.id.body);
         body.setText(emailMessage.get(0).getBody());
