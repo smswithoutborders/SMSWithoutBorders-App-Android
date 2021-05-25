@@ -163,10 +163,11 @@ public class SyncProcessingActivity extends AppCompatActivity {
                 PlatformDao providerDao = dbConnector.platformDao();
                 for(int i=0;i<providers.size();++i) {
                     Platforms provider = new Platforms()
-                            .setName(providers.get(i).get(0))
+                            .setName(platforms.get(i).get(0))
                             .setDescription(providers.get(i).get(1))
-                            .setType(providers.get(i).get(2));
-                    if(provider.getName().toLowerCase().equals("google") && platforms.get(i).get(0).equals("gmail"))
+                            .setProvider(providers.get(i).get(0))
+                            .setType(platforms.get(i).get(1));
+                    if(provider.getName().toLowerCase().equals("gmail") && provider.getProvider().toLowerCase().equals("google"))
                         provider.setImage(R.drawable.roundgmail);
                     providerDao.insert(provider);
                 }
@@ -186,7 +187,6 @@ public class SyncProcessingActivity extends AppCompatActivity {
             List<String> providerDetails = new ArrayList<>();
             providerDetails.add(provider.get("provider").toString());
             providerDetails.add(provider.get("description").toString());
-            providerDetails.add(provider.get("type").toString());
             providers.put(i, providerDetails);
 
             JSONArray provider_platforms = (JSONArray) provider.get("platforms");
@@ -196,6 +196,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
 
                 List<String> platformDetails = new ArrayList<>();
                 platformDetails.add(platform.get("name").toString());
+                platformDetails.add(platform.get("type").toString());
                 platforms.put(i, platformDetails);
             }
         }
