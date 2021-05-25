@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -86,6 +87,12 @@ public class EmailComposeActivity extends AppCompatActivity {
                     phonenumbers = gatewayDao.getAll();
                 }
             });
+            getPhonenumber.start();
+            try {
+                getPhonenumber.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         try {
@@ -206,7 +213,16 @@ public class EmailComposeActivity extends AppCompatActivity {
 
     private void sendMessage() {
 //        Toast.makeText(getBaseContext(), "SMS sending...", Toast.LENGTH_LONG).show();
-
+        String phonenumber = "";
+        for(GatewayPhonenumber number : phonenumbers) {
+            if(number.isDefault())
+                phonenumber = number.getNumber();
+        }
+        if(phonenumber.length() < 1 ) {
+            Toast.makeText(this, "Default number could not be determined", Toast.LENGTH_LONG).show();
+            return;
+        }
+        Log.i(this.getLocalClassName(), "[+] Phonenumber: " + phonenumber);
 
         final List<EmailMessage>[] pendingMessagesList = new List[]{new ArrayList<>()};
         Thread storeEmailMessage = new Thread(new Runnable() {
@@ -234,15 +250,6 @@ public class EmailComposeActivity extends AppCompatActivity {
         String recipient = pendingMessages.get(0).getRecipient();
         String body = pendingMessages.get(0).getBody();
         String subject = pendingMessages.get(0).getSubject();
-        String phonenumber = "";
-        for(GatewayPhonenumber number : phonenumbers) {
-            if(number.isDefault())
-                phonenumber = number.getNumber();
-        }
-        if(phonenumber.length() < 1 ) {
-            Toast.makeText(this, "Default number could not be determined", Toast.LENGTH_LONG).show();
-            return;
-        }
 
         if(body.isEmpty()) {
             Toast.makeText(this, "Text Cannot be empty!", Toast.LENGTH_LONG).show();

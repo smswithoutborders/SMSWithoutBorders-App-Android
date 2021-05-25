@@ -84,7 +84,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
                         Log.i(this.getClass().getSimpleName(),"PublicKey: " + publicKey);
                         Log.i(this.getClass().getSimpleName(),"SharedKey: " + sharedKey);
                         Log.i(this.getClass().getSimpleName(),"Platforms: " + platforms);
-                        Log.i(this.getClass().getSimpleName(),"Phonenumbers: " + platforms);
+                        Log.i(this.getClass().getSimpleName(),"Phonenumbers: " + phonenumbers);
 
                         Map<Integer, List<String>>[] extractedInformation = extractPlatformFromGateway(platforms);
                         Map<Integer, List<String>> providers = extractedInformation[0];
@@ -165,6 +165,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
             GatewayPhonenumber phonenumber = new GatewayPhonenumber()
                     .setType(phone.getString("type"))
                     .setNumber(phone.getString("number"))
+                    .setDefault(phone.getBoolean("default"))
                     .setIsp(phone.getString("isp"));
             phonenumbers.add(phonenumber);
         }
