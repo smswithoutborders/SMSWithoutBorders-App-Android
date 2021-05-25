@@ -30,6 +30,8 @@ import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
+import com.example.sw0b_001.Providers.Gateway.GatewayDao;
+import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
 
 import java.io.IOException;
 import java.security.KeyStoreException;
@@ -45,6 +47,7 @@ public class EmailComposeActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
     SecurityLayer securityLayer;
     long emailId;
+    private List<GatewayPhonenumber> phonenumbers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,16 @@ public class EmailComposeActivity extends AppCompatActivity {
 //
 //            Snackbar.make(getWindow().getDecorView().getRootView(), "Sending SMS", Snackbar.LENGTH_LONG).show();
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
+
+            Thread getPhonenumber = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
+                            Datastore.class, Datastore.DBName).build();
+                    GatewayDao gatewayDao = platformDb.gatewayDao();
+                    phonenumbers = gatewayDao.getAll();
+                }
+            });
         }
 
         try {
@@ -218,11 +231,18 @@ public class EmailComposeActivity extends AppCompatActivity {
         List<EmailMessage> pendingMessages = pendingMessagesList[0];
         // TODO: iterate and send every pending message
         long emailId = pendingMessages.get(0).getId();
-        String phonenumber = "670471866";
         String recipient = pendingMessages.get(0).getRecipient();
         String body = pendingMessages.get(0).getBody();
         String subject = pendingMessages.get(0).getSubject();
-
+        String phonenumber = "";
+        for(GatewayPhonenumber number : phonenumbers) {
+            if(number.isDefault())
+                phonenumber = number.getNumber();
+        }
+        if(phonenumber.length() < 1 ) {
+            Toast.makeText(this, "Default number could not be determined", Toast.LENGTH_LONG).show();
+            return;
+        }
 
         if(body.isEmpty()) {
             Toast.makeText(this, "Text Cannot be empty!", Toast.LENGTH_LONG).show();
@@ -230,6 +250,7 @@ public class EmailComposeActivity extends AppCompatActivity {
         }
 
         CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
+        finish();
         // TODO: work out how the IV gets encrypted before sending
 
     }

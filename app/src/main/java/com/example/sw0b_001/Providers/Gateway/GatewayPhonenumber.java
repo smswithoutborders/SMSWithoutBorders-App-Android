@@ -42,6 +42,18 @@ public class GatewayPhonenumber {
     @ColumnInfo(name="number")
     String number;
 
+    @ColumnInfo(name="default")
+    boolean isDefault = false;
+
+    public boolean isDefault() {
+        return this.isDefault;
+    }
+
+    public GatewayPhonenumber setDefault(boolean isDefault) {
+        this.isDefault = isDefault;
+        return this;
+    }
+
     @ColumnInfo(name="isp")
     String isp;
     public GatewayPhonenumber(String type, String number, String isp) {
