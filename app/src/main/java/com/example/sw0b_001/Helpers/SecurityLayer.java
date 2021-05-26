@@ -131,25 +131,15 @@ public class SecurityLayer {
         return decBytes;
     }
 
-    public byte[] encrypt_AES(String input) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException {
-        char[] charsArray = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '@', '#', '$', '%', '^', '*'};
+    public String generateRandom(int length) {
+//        char[] charsArray = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '@', '#', '$', '%', '^', '*'};
+        char[] charsArray = "abcdefghijklmnopqrstuvwxyz^!@#$%&*_+=-".toCharArray();
         SecureRandom rand = new SecureRandom();
         StringBuilder password = new StringBuilder();
-        for (int i = 0; i < 16; i++) {
+        for (int i = 0; i < length; i++) {
             password.append(charsArray[rand.nextInt(charsArray.length)]);
         }
-        String strIV = password.toString();
-
-        byte[] plainTextByte = preferences.getString(GatewayValues.SHARED_KEY, "").getBytes("UTF-8");
-        this.key = new SecretKeySpec(decrypt_RSA(plainTextByte), "AES");
-        KeyStore keystore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
-        keystore.load(null);
-
-        this.iv = new IvParameterSpec(strIV.getBytes());
-        this.cipher = Cipher.getInstance("AES");
-        this.cipher.init(Cipher.ENCRYPT_MODE, this.key, this.iv);
-        byte[] ciphertext = this.cipher.doFinal(input.getBytes());
-        return ciphertext;
+        return password.toString();
     }
 
     public byte[] encrypt_AES(String input, byte[] iv) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException {

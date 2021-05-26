@@ -286,7 +286,7 @@ public class EmailComposeActivity extends AppCompatActivity {
             String subject = emailMessage.getSubject();
 
             body = getEncryptedSMS(body);
-            body = Base64.encodeToString(body.getBytes(), Base64.DEFAULT);
+            Log.i(this.getLocalClassName(), ">> iv: " + Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT));
             String encryptedIv = Base64.encodeToString(securityLayer.encrypt_AES(Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT), passwdHash.getBytes()), Base64.DEFAULT);
             body = encryptedIv + "_" + body;
             Log.i(this.getLocalClassName(), "[+] Transmission data: " + body);
@@ -303,7 +303,8 @@ public class EmailComposeActivity extends AppCompatActivity {
     }
 
     private String getEncryptedSMS(String data) throws BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, UnrecoverableEntryException, KeyStoreException, CertificateException, IOException {
-        byte[] encryptedData = securityLayer.encrypt_AES(data);
+        String randString = securityLayer.generateRandom(16);
+        byte[] encryptedData = securityLayer.encrypt_AES(data, randString.getBytes());
         return Base64.encodeToString(encryptedData, Base64.DEFAULT);
     }
 
