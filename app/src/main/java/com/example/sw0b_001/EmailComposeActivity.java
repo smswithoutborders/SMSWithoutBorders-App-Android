@@ -16,6 +16,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -74,22 +75,8 @@ public class EmailComposeActivity extends AppCompatActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
         if(!checkPermission(Manifest.permission.SEND_SMS)) {
-//                String IV = new String(securityLayer.getIV(), "UTF-8");
-//                String transmissionText = IV + ":" + body;
-//                byte[] encryptedText = securityLayer.encrypt_AES(transmissionText);
-//
-//                System.out.println("Transmission String: " + transmissionText);
-//                System.out.println("[+] Decrypted: " + new String(securityLayer.decrypt_AES(encryptedText), "UTF-8"));
-//
-//
-//                String strEncryptedText = Base64.enyycodeToString(encryptedText, Base64.URL_SAFE);
-//                System.out.println("Transmission message: " + strEncryptedText);
-//
-//            Snackbar.make(getWindow().getDecorView().getRootView(), "Sending SMS", Snackbar.LENGTH_LONG).show();
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
-
         }
-        Log.i(this.getLocalClassName(), "[+] #Numbers: " + phonenumbers.size());
 
         try {
             Thread getPhonenumber = new Thread(new Runnable() {
@@ -150,6 +137,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_send:
+                item.setEnabled(false);
                 if(to.getText().toString().isEmpty()) {
                     to.setError("Recipient cannot be empty!");
                     return false;
@@ -279,36 +267,23 @@ public class EmailComposeActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
-
-        List<EmailMessage> pendingMessages = pendingMessagesList[0];
-        // TODO: iterate and send every pending message
-        long emailId = pendingMessages.get(0).getId();
-        String recipient = pendingMessages.get(0).getRecipient();
-        String body = pendingMessages.get(0).getBody();
-        String subject = pendingMessages.get(0).getSubject();
-
-        if(body.isEmpty()) {
-            Toast.makeText(this, "Text Cannot be empty!", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-
-        body = getEncryptedSMS(body);
-        body = Base64.encodeToString(body.getBytes(), Base64.DEFAULT);
-        Log.i(this.getLocalClassName(), "[+] Encrypted Body: " + body);
-        Log.i(this.getLocalClassName(), "[+] Encrypted Body - IV: " + Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT));
-
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String passwdHash = preferences.getString(GatewayValues.VAR_PASSWDHASH, null);
         passwdHash = new String(securityLayer.decrypt_RSA(passwdHash.getBytes())).substring(0, 16);
-        Log.i(this.getLocalClassName(), "[+] Encrypted IV's Iv: " + passwdHash);
+        List<EmailMessage> pendingMessages = pendingMessagesList[0];
+        for(EmailMessage emailMessage : pendingMessages) {
+            long emailId = emailMessage.getId();
+            String recipient = emailMessage.getRecipient();
+            String body = emailMessage.getBody();
+            String subject = emailMessage.getSubject();
 
-        String encryptedIv = Base64.encodeToString(securityLayer.encrypt_AES(Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT), passwdHash.getBytes()), Base64.DEFAULT);
-        Log.i(this.getLocalClassName(), "[+] Encrypted IV: " + encryptedIv);
-        body = encryptedIv + "_" + body;
-        Log.i(this.getLocalClassName(), "[+] Transmission data: " + body);
-        CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
+            body = getEncryptedSMS(body);
+            body = Base64.encodeToString(body.getBytes(), Base64.DEFAULT);
+            String encryptedIv = Base64.encodeToString(securityLayer.encrypt_AES(Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT), passwdHash.getBytes()), Base64.DEFAULT);
+            body = encryptedIv + "_" + body;
+            Log.i(this.getLocalClassName(), "[+] Transmission data: " + body);
+            CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
+        }
         finish();
         // TODO: work out how the IV gets encrypted before sending
 
@@ -316,9 +291,6 @@ public class EmailComposeActivity extends AppCompatActivity {
 
     private String getEncryptedSMS(String data) throws BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, UnrecoverableEntryException, KeyStoreException, CertificateException, IOException {
         byte[] encryptedData = securityLayer.encrypt_AES(data);
-        Log.i(this.getLocalClassName(), ">> Encrypted SMS: " + encryptedData);
-        String iv = Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT);
-        Log.i(this.getLocalClassName(), ">> ini IV: " + iv);
         return Base64.encodeToString(encryptedData, Base64.DEFAULT);
     }
 

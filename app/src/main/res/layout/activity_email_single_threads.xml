@@ -29,7 +29,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="5dp"
-        android:fontFamily="monospace"
+        android:fontFamily="sans-serif-light"
         android:text="TextView"
         android:textColor="@color/white"
         android:textSize="24sp"
