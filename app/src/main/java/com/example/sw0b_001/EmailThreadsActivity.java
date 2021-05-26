@@ -34,7 +34,7 @@ public class EmailThreadsActivity extends AppCompatActivity {
 
         emailThreads = new ArrayList<>();
         RecyclerView cardlist = findViewById(recyclerView);
-        cardlist.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+//        cardlist.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         platformId = new long[]{getIntent().getLongExtra("platform_id", -1)};
         System.out.println(">> platformId: " + platformId[0]);
 

@@ -50,7 +50,7 @@ public class EmailThreadActivity extends AppCompatActivity {
 
         emailMessage = new ArrayList<>();
         recyclerView = findViewById(R.id.email_single_thread);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+//        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         threadId = getIntent().getLongExtra("thread_id", -1);
 
         Runnable runnable = new Runnable() {
