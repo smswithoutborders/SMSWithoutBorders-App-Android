@@ -58,6 +58,7 @@ public class EmailThreadRecyclerAdapter extends RecyclerView.Adapter<EmailThread
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, EmailBodyActivity.class);
+                intent.putExtra("thread_id", message.getThreadId());
                 intent.putExtra("message_id", message.getId());
                 context.startActivity(intent);
             }

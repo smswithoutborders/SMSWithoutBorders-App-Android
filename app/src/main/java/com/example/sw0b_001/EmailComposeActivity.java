@@ -60,6 +60,7 @@ public class EmailComposeActivity extends AppCompatActivity {
     SecurityLayer securityLayer;
     long emailId;
     private List<GatewayPhonenumber> phonenumbers = new ArrayList<>();
+    Intent returnIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +114,14 @@ public class EmailComposeActivity extends AppCompatActivity {
         if(getIntent().hasExtra("subject") ) {
             emailSubject.setText(getIntent().getStringExtra("subject"));
         }
-
+        if(getIntent().hasExtra("thread_id")) {
+            returnIntent = new Intent(this, EmailThreadActivity.class);
+            returnIntent.putExtra("thread_id", getIntent().getLongExtra("thread_id", -1));
+        }
+        else {
+            returnIntent = new Intent(this, EmailThreadsActivity.class);
+            returnIntent.putExtra("platform_id", getIntent().getLongExtra("platform_id", -1));
+        }
     }
 
     @Override
@@ -133,7 +141,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                 to.setText("");
                 subject.setText("");
                 body.setText("");
-                finish();
+                finished_thread();
                 return true;
 
             case R.id.action_send:
@@ -284,9 +292,14 @@ public class EmailComposeActivity extends AppCompatActivity {
             Log.i(this.getLocalClassName(), "[+] Transmission data: " + body);
             CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
         }
-        finish();
+        finished_thread();
         // TODO: work out how the IV gets encrypted before sending
 
+    }
+
+    private void finished_thread() {
+       startActivity(returnIntent);
+       finish();
     }
 
     private String getEncryptedSMS(String data) throws BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, UnrecoverableEntryException, KeyStoreException, CertificateException, IOException {

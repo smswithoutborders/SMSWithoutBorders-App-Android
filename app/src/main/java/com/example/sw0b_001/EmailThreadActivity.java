@@ -81,7 +81,10 @@ public class EmailThreadActivity extends AppCompatActivity {
 
         emailCustomMessageAdapter = new EmailThreadRecyclerAdapter(this, emailMessage, R.layout.layout_cardlist_thread);
         recyclerView.setAdapter(emailCustomMessageAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager ln = new LinearLayoutManager(this);
+        ln.setStackFromEnd(true);
+        ln.setReverseLayout(true);
+        recyclerView.setLayoutManager(ln);
 
         composeBtn = findViewById(R.id.floating_compose_body);
         composeBtn.setOnClickListener(new View.OnClickListener() {
@@ -100,7 +103,6 @@ public class EmailThreadActivity extends AppCompatActivity {
         intent.putExtra("recipient", recipient);
         intent.putExtra("subject", subject);
         startActivity(intent);
-        finish();
     }
 
     @Override

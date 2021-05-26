@@ -35,8 +35,8 @@ public class EmailThreadsActivity extends AppCompatActivity {
         emailThreads = new ArrayList<>();
         RecyclerView cardlist = findViewById(recyclerView);
         cardlist.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        platformId = new long[]{getIntent().getLongExtra("platformId", -1)};
-        System.out.println(">> platformId: " + platformId);
+        platformId = new long[]{getIntent().getLongExtra("platform_id", -1)};
+        System.out.println(">> platformId: " + platformId[0]);
 
         Runnable runnable = new Runnable() {
             @Override
@@ -57,7 +57,11 @@ public class EmailThreadsActivity extends AppCompatActivity {
 
         emailThreadsAdapter = new EmailThreadsRecyclerViewAdapter(this, emailThreads, R.layout.layout_cardlist_threads, platformId[0]);
         cardlist.setAdapter(emailThreadsAdapter);
-        cardlist.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager ln = new LinearLayoutManager(this);
+        ln.setStackFromEnd(true);
+        ln.setReverseLayout(true);
+        cardlist.setLayoutManager(ln);
+        emailThreadsAdapter.notifyDataSetChanged();
 
         composeBtn = findViewById(R.id.floating_compose_body);
         composeBtn.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +75,6 @@ public class EmailThreadsActivity extends AppCompatActivity {
     public void composeEmail() {
         Intent intent = new Intent(this, EmailComposeActivity.class);
         intent.putExtra("platform_id", platformId[0]);
-       startActivity(intent);
-       finish();
+        startActivity(intent);
     }
 }

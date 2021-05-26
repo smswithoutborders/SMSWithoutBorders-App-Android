@@ -48,7 +48,6 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        Log.d(this.getClass().getSimpleName(), ": bindingHappening>> " + platforms.size());
         Platforms platform = this.platforms.get(position);
         holder.name.setText(platform.getName());
         holder.description.setText(platform.getDescription());
@@ -60,7 +59,7 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
             @Override
             public void onClick(View v) {
                 Intent intent = Platforms.getIntent(context.getApplicationContext(), platform.getProvider(), platform.getName());
-                intent.putExtra("platformId", platform.getId());
+                intent.putExtra("platform_id", platform.getId());
                 System.out.println(">> " + platform.getId());
                 context.startActivity(intent);
             }
