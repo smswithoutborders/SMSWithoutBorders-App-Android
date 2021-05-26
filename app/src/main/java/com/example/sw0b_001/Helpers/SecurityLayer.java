@@ -82,8 +82,9 @@ public class SecurityLayer {
 
     public boolean hasKeyPairs(Context context) throws KeyStoreException {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return this.keyStore.containsAlias(GatewayValues.SHARED_KEY) && this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS) && preferences.contains(GatewayValues.VAR_PASSWDHASH);
-//        return true;
+//        return this.keyStore.containsAlias(GatewayValues.SHARED_KEY) && this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS) && preferences.contains(GatewayValues.VAR_PASSWDHASH);
+        return preferences.contains(GatewayValues.SHARED_KEY) && this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS) && preferences.contains(GatewayValues.VAR_PASSWDHASH);
+//        return true;`
     }
 
     private PublicKey getPublicKey() throws KeyStoreException {
@@ -112,7 +113,8 @@ public class SecurityLayer {
                 new KeyGenParameterSpec.Builder(
                         DEFAULT_KEYSTORE_ALIAS,
                         KeyProperties.PURPOSE_DECRYPT )
-                        .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
+//                        .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
+                        .setDigests(KeyProperties.DIGEST_SHA256)
                         .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
                         .build());
 
@@ -127,9 +129,34 @@ public class SecurityLayer {
     }
 
     public byte[] decrypt_RSA(byte[] input) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
-        System.out.println("[+] Decoding len: " + input.length);
+//        System.out.println("[+] Decoding len: " + input.length);
 //        System.out.println("[+] Decoding: " + Base64.decode(input, Base64.DEFAULT));
         input = Base64.decode(input, Base64.DEFAULT);
+        byte[] decBytes = null;
+        try {
+
+            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)this.keyStore.getEntry(DEFAULT_KEYSTORE_ALIAS, null);
+            PrivateKey privateKey = privateKeyEntry.getPrivateKey();
+            this.cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
+            this.cipher.init(Cipher.DECRYPT_MODE, privateKey, param);
+            decBytes = this.cipher.doFinal(input);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableEntryException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        }
+        return decBytes;
+    }
+
+    private byte[] decrypt_RSA_sharedKey(byte[] input) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
         byte[] decBytes = null;
         try {
 
@@ -172,6 +199,22 @@ public class SecurityLayer {
 
         this.iv = new IvParameterSpec(strIV.getBytes());
         this.cipher = Cipher.getInstance("AES");
+        this.cipher.init(Cipher.ENCRYPT_MODE, this.key, this.iv);
+        byte[] ciphertext = this.cipher.doFinal(input.getBytes());
+        return ciphertext;
+    }
+
+    public byte[] encrypt_AES(String input, byte[] iv) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException {
+        String plainTextByte = preferences.getString(GatewayValues.SHARED_KEY, null);
+        Log.i(this.getClass().getSimpleName(), ">> shared key: " + plainTextByte);
+        byte[] decryptedKey = decrypt_RSA(plainTextByte.getBytes());
+        Log.i(this.getClass().getSimpleName(), ">> shared key decrypted: " + new String(decryptedKey));
+        this.key = new SecretKeySpec(decryptedKey, "AES");
+        KeyStore keystore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
+        keystore.load(null);
+
+        this.iv = new IvParameterSpec(iv);
+        this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         this.cipher.init(Cipher.ENCRYPT_MODE, this.key, this.iv);
         byte[] ciphertext = this.cipher.doFinal(input.getBytes());
         return ciphertext;
@@ -228,13 +271,14 @@ public class SecurityLayer {
         return sb.toString().getBytes();
     }
 
+
     public boolean authenticate(String password) throws NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
 //        byte[] hsPasswd = hash_sha256(password);
         byte[] hsPasswd = hash_sha512(password);
         System.out.println("[+] Hashed Password: " + hsPasswd);
         System.out.println("[+] Hashed Password (b64): " + new String(hsPasswd));
 
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+//        SharedPreferences preyyferences = PreferenceManager.getDefaultSharedPreferences(context);
         String passwdHash = preferences.getString(GatewayValues.VAR_PASSWDHASH, null);
         passwdHash = new String(decrypt_RSA(passwdHash.getBytes()));
 

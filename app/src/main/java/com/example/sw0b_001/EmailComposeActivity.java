@@ -7,9 +7,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +29,7 @@ import androidx.room.Room;
 
 import com.example.sw0b_001.Helpers.CustomHelpers;
 import com.example.sw0b_001.Helpers.Datastore;
+import com.example.sw0b_001.Helpers.GatewayValues;
 import com.example.sw0b_001.Helpers.SecurityLayer;
 import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
@@ -78,7 +82,7 @@ public class EmailComposeActivity extends AppCompatActivity {
 //                System.out.println("[+] Decrypted: " + new String(securityLayer.decrypt_AES(encryptedText), "UTF-8"));
 //
 //
-//                String strEncryptedText = Base64.encodeToString(encryptedText, Base64.URL_SAFE);
+//                String strEncryptedText = Base64.enyycodeToString(encryptedText, Base64.URL_SAFE);
 //                System.out.println("Transmission message: " + strEncryptedText);
 //
 //            Snackbar.make(getWindow().getDecorView().getRootView(), "Sending SMS", Snackbar.LENGTH_LONG).show();
@@ -291,7 +295,19 @@ public class EmailComposeActivity extends AppCompatActivity {
 
 
         body = getEncryptedSMS(body);
-        Log.i(this.getLocalClassName(), "[+] Encrypted data: " + body);
+        body = Base64.encodeToString(body.getBytes(), Base64.DEFAULT);
+        Log.i(this.getLocalClassName(), "[+] Encrypted Body: " + body);
+        Log.i(this.getLocalClassName(), "[+] Encrypted Body - IV: " + Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT));
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String passwdHash = preferences.getString(GatewayValues.VAR_PASSWDHASH, null);
+        passwdHash = new String(securityLayer.decrypt_RSA(passwdHash.getBytes())).substring(0, 16);
+        Log.i(this.getLocalClassName(), "[+] Encrypted IV's Iv: " + passwdHash);
+
+        String encryptedIv = Base64.encodeToString(securityLayer.encrypt_AES(Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT), passwdHash.getBytes()), Base64.DEFAULT);
+        Log.i(this.getLocalClassName(), "[+] Encrypted IV: " + encryptedIv);
+        body = encryptedIv + "_" + body;
+        Log.i(this.getLocalClassName(), "[+] Transmission data: " + body);
         CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
         finish();
         // TODO: work out how the IV gets encrypted before sending
@@ -299,10 +315,11 @@ public class EmailComposeActivity extends AppCompatActivity {
     }
 
     private String getEncryptedSMS(String data) throws BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, UnrecoverableEntryException, KeyStoreException, CertificateException, IOException {
-        String encryptedData = securityLayer.encrypt_AES(data).toString();
+        byte[] encryptedData = securityLayer.encrypt_AES(data);
         Log.i(this.getLocalClassName(), ">> Encrypted SMS: " + encryptedData);
-        String iv = securityLayer.getIV().toString();
-        return encryptedData;
+        String iv = Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT);
+        Log.i(this.getLocalClassName(), ">> ini IV: " + iv);
+        return Base64.encodeToString(encryptedData, Base64.DEFAULT);
     }
 
     @Override
