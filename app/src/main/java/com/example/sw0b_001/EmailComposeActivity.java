@@ -285,6 +285,7 @@ public class EmailComposeActivity extends AppCompatActivity {
             String body = emailMessage.getBody();
             String subject = emailMessage.getSubject();
 
+            body = formatForEmail(recipient, subject, body);
             body = getEncryptedSMS(body);
             Log.i(this.getLocalClassName(), ">> iv: " + Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT));
             String encryptedIv = Base64.encodeToString(securityLayer.encrypt_AES(Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT), passwdHash.getBytes()), Base64.DEFAULT);
@@ -295,6 +296,11 @@ public class EmailComposeActivity extends AppCompatActivity {
         finished_thread();
         // TODO: work out how the IV gets encrypted before sending
 
+    }
+
+    private String formatForEmail(String to, String subject, String body) {
+       // Gmail = to:subject:body
+        return to + ":" + subject + ":" + body;
     }
 
     private void finished_thread() {
