@@ -78,7 +78,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
                         String passwdHash = response.getString("pd");
                         String publicKey = response.getString("pk");
                         String sharedKey = response.getString("sk");
-                        JSONArray platforms = response.getJSONArray("pl");
+                        JSONObject platforms = response.getJSONObject("pl");
                         JSONArray phonenumbers = response.getJSONArray("ph");
                         Log.i(this.getClass().getSimpleName(), "PasswdHash: " + passwdHash);
                         Log.i(this.getClass().getSimpleName(),"PublicKey: " + publicKey);
@@ -86,7 +86,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
                         Log.i(this.getClass().getSimpleName(),"Platforms: " + platforms);
                         Log.i(this.getClass().getSimpleName(),"Phonenumbers: " + phonenumbers);
 
-                        Map<Integer, List<String>>[] extractedInformation = extractPlatformFromGateway(platforms);
+                        Map<Integer, List<String>>[] extractedInformation = extractPlatformFromGateway(platforms.getJSONArray("default_provider"));
                         Map<Integer, List<String>> providers = extractedInformation[0];
                         Map<Integer, List<String>> provider_platforms_map = extractedInformation[1];
 
