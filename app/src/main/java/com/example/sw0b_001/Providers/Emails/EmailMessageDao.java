@@ -18,7 +18,7 @@ public interface EmailMessageDao {
 //    @Query("SELECT * FROM emailcustommessage WHERE first_name LIKE :first AND " +
 //            "last_name LIKE :last LIMIT 1")
 //    EmailCustomMessage findByName(String first, String last);
-    @Query("UPDATE EmailMessage SET status = (:customStatus) WHERE id = (:emailId)")
+    @Query("UPDATE EmailMessage SET status = (:customStatus) WHERE id=:emailId")
     void updateStatus(String customStatus, long emailId);
 
     @Query("SELECT * FROM EmailMessage WHERE status = (:customStatus)")

@@ -288,7 +288,7 @@ public class EmailComposeActivity extends AppCompatActivity {
             body = formatForEmail(recipient, subject, body);
             body = getEncryptedSMS(body);
             Log.i(this.getLocalClassName(), ">> iv: " + Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT));
-            String encryptedIv = Base64.encodeToString(securityLayer.encrypt_AES(Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT), passwdHash.getBytes()), Base64.DEFAULT);
+            String encryptedIv = Base64.encodeToString(securityLayer.encrypt_AES(Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT), passwdHash.getBytes()), Base64.DEFAULT).trim();
             body = encryptedIv + "_" + body;
             Log.i(this.getLocalClassName(), "[+] Transmission data: " + body);
             CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
