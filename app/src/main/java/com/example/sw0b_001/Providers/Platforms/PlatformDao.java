@@ -12,12 +12,8 @@ public interface PlatformDao {
     @Query("SELECT * FROM Platforms")
     List<Platforms> getAll();
 
-//    @Query("SELECT * FROM emailcustommessage WHERE uid IN (:emailcustommessageIds)")
-//    List<EmailCustomMessage> loadAllByIds(int[] emailcustommessageIds);
-
-//    @Query("SELECT * FROM emailcustommessage WHERE first_name LIKE :first AND " +
-//            "last_name LIKE :last LIMIT 1")
-//    EmailCustomMessage findByName(String first, String last);
+    @Query("SELECT * FROM Platforms WHERE id=:platform_id")
+    Platforms get(long platform_id);
 
     @Insert
     void insertAll(Platforms... platforms);

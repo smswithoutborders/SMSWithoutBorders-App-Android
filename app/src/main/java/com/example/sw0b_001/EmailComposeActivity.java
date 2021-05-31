@@ -38,8 +38,12 @@ import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
 import com.example.sw0b_001.Providers.Gateway.GatewayDao;
 import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
+import com.example.sw0b_001.Providers.Platforms.PlatformDao;
+import com.example.sw0b_001.Providers.Platforms.Platforms;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
@@ -62,6 +66,8 @@ public class EmailComposeActivity extends AppCompatActivity {
     private List<GatewayPhonenumber> phonenumbers = new ArrayList<>();
     Intent returnIntent;
 
+    private Platforms platforms;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +84,7 @@ public class EmailComposeActivity extends AppCompatActivity {
         if(!checkPermission(Manifest.permission.SEND_SMS)) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
         }
+        long platformId = getIntent().getLongExtra("platform_id", -1);
 
         try {
             Thread getPhonenumber = new Thread(new Runnable() {
@@ -87,6 +94,9 @@ public class EmailComposeActivity extends AppCompatActivity {
                             Datastore.class, Datastore.DBName).build();
                     GatewayDao gatewayDao = platformDb.gatewayDao();
                     phonenumbers = gatewayDao.getAll();
+
+                    PlatformDao platformDao = platformDb.platformDao();
+                    platforms = platformDao.get(platformId);
                 }
             });
             getPhonenumber.start();
@@ -286,14 +296,13 @@ public class EmailComposeActivity extends AppCompatActivity {
             String body = emailMessage.getBody();
             String subject = emailMessage.getSubject();
 
-            body = formatForEmail(recipient, subject, body);
+            body = formatForEmail(platforms.getName().toLowerCase(), recipient, subject, body);
             Log.i(this.getLocalClassName(), ">> Body: " + body);
             body = getEncryptedSMS(body);
-//            Log.i(this.getLocalClassName(), ">> decrypted: " + new String(securityLayer.decrypt_AES(Base64.decode(body, Base64.DEFAULT))));
-//            Log.i(this.getLocalClassName(), ">> iv: " + Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT));
+//            Log.i(this.getLocalClassName(), ">> decrypted: " + new String(securityLayer.decrypt_AES(Base64.decode(body.getBytes(), Base64.DEFAULT))));
+            Log.i(this.getLocalClassName(), ">> iv: " + new String(securityLayer.getIV()));
             byte[] byte_encryptedIv = securityLayer.encrypt_AES(securityLayer.getIV(), passwdHash.getBytes());
-            String encryptedIv = Base64.encodeToString(byte_encryptedIv, Base64.DEFAULT).trim();
-            body = encryptedIv + "_" + body;
+            body = Base64.encodeToString(byte_encryptedIv, Base64.DEFAULT) + "_" + body;
             Log.i(this.getLocalClassName(), "[+] Transmission data: " + body);
             CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
         }
@@ -302,10 +311,10 @@ public class EmailComposeActivity extends AppCompatActivity {
 
     }
 
-    private String formatForEmail(String to, String subject, String body) {
+    private String formatForEmail(String platform, String to, String subject, String body) throws UnsupportedEncodingException {
        // Gmail = to:subject:body
         // TODO: put platform and protocol
-        return to + ":" + subject + ":" + body;
+        return platform + ":send:" + to + ":" + subject + ":" + body;
     }
 
     private void finished_thread() {
@@ -316,7 +325,7 @@ public class EmailComposeActivity extends AppCompatActivity {
     private String getEncryptedSMS(String data) throws BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, UnrecoverableEntryException, KeyStoreException, CertificateException, IOException {
         String randString = securityLayer.generateRandom(16);
 //        Log.i(this.getLocalClassName(), ">> Rand string: " + randString);
-        byte[] encryptedData = securityLayer.encrypt_AES(data, randString.getBytes());
+        byte[] encryptedData = securityLayer.encrypt_AES(data, randString.toUpperCase().getBytes());
         return Base64.encodeToString(encryptedData, Base64.DEFAULT);
     }
 
