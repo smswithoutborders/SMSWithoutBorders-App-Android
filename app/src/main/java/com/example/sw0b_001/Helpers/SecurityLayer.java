@@ -173,8 +173,6 @@ public class SecurityLayer {
         String plainTextByte = preferences.getString(GatewayValues.SHARED_KEY, null);
         byte[] decryptedKey = decrypt_RSA(plainTextByte.getBytes());
         this.key = new SecretKeySpec(decryptedKey, "AES");
-        KeyStore keystore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
-        keystore.load(null);
 
         this.iv = new IvParameterSpec(iv);
         this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -184,11 +182,19 @@ public class SecurityLayer {
     }
 
     public byte[] decrypt_AES(byte[] input) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
+        String plainTextByte = preferences.getString(GatewayValues.SHARED_KEY, null);
+        byte[] decryptedKey = decrypt_RSA(plainTextByte.getBytes());
+        this.key = new SecretKeySpec(decryptedKey, "AES");
         byte[] decBytes = null;
         try {
+            this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             this.cipher.init(Cipher.DECRYPT_MODE, this.key, this.iv);
             decBytes = this.cipher.doFinal(input);
         } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return decBytes;

@@ -289,11 +289,11 @@ public class EmailComposeActivity extends AppCompatActivity {
             body = formatForEmail(recipient, subject, body);
             Log.i(this.getLocalClassName(), ">> Body: " + body);
             body = getEncryptedSMS(body);
-            Log.i(this.getLocalClassName(), ">> iv: " + Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT));
+//            Log.i(this.getLocalClassName(), ">> decrypted: " + new String(securityLayer.decrypt_AES(Base64.decode(body, Base64.DEFAULT))));
+//            Log.i(this.getLocalClassName(), ">> iv: " + Base64.encodeToString(securityLayer.getIV(), Base64.DEFAULT));
             byte[] byte_encryptedIv = securityLayer.encrypt_AES(securityLayer.getIV(), passwdHash.getBytes());
             String encryptedIv = Base64.encodeToString(byte_encryptedIv, Base64.DEFAULT).trim();
             body = encryptedIv + "_" + body;
-            body = body.trim();
             Log.i(this.getLocalClassName(), "[+] Transmission data: " + body);
             CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
         }
@@ -304,6 +304,7 @@ public class EmailComposeActivity extends AppCompatActivity {
 
     private String formatForEmail(String to, String subject, String body) {
        // Gmail = to:subject:body
+        // TODO: put platform and protocol
         return to + ":" + subject + ":" + body;
     }
 
