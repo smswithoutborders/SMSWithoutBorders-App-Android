@@ -133,13 +133,40 @@ public class SecurityLayer {
 
     public String generateRandom(int length) {
 //        char[] charsArray = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '@', '#', '$', '%', '^', '*'};
-        char[] charsArray = "abcdefghijklmnopqrstuvwxyz^!@#$%&*_+=-".toCharArray();
+        char[] charsArray = "abcdefghijklmnopqrstuvwxyz".toCharArray();
         SecureRandom rand = new SecureRandom();
         StringBuilder password = new StringBuilder();
         for (int i = 0; i < length; i++) {
             password.append(charsArray[rand.nextInt(charsArray.length)]);
         }
         return password.toString();
+    }
+
+    public byte[] encrypt_AES(byte[] input) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException {
+        String plainTextByte = preferences.getString(GatewayValues.SHARED_KEY, null);
+        byte[] decryptedKey = decrypt_RSA(plainTextByte.getBytes());
+        this.key = new SecretKeySpec(decryptedKey, "AES");
+        KeyStore keystore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
+        keystore.load(null);
+
+        this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        this.cipher.init(Cipher.ENCRYPT_MODE, this.key);
+        byte[] ciphertext = this.cipher.doFinal(input);
+        return ciphertext;
+    }
+
+    public byte[] encrypt_AES(byte[] input, byte[] iv) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException {
+        String plainTextByte = preferences.getString(GatewayValues.SHARED_KEY, null);
+        byte[] decryptedKey = decrypt_RSA(plainTextByte.getBytes());
+        this.key = new SecretKeySpec(decryptedKey, "AES");
+        KeyStore keystore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
+        keystore.load(null);
+
+        this.iv = new IvParameterSpec(iv);
+        this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        this.cipher.init(Cipher.ENCRYPT_MODE, this.key, this.iv);
+        byte[] ciphertext = this.cipher.doFinal(input);
+        return ciphertext;
     }
 
     public byte[] encrypt_AES(String input, byte[] iv) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException {
@@ -168,7 +195,8 @@ public class SecurityLayer {
     }
 
     public byte[] getIV() {
-        return this.iv.getIV();
+        // return this.iv.getIV();
+        return this.cipher.getIV();
     }
 
 
