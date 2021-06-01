@@ -64,8 +64,6 @@ public class EmailComposeActivity extends AppCompatActivity {
     SecurityLayer securityLayer;
     long emailId;
     private List<GatewayPhonenumber> phonenumbers = new ArrayList<>();
-    Intent returnIntent;
-
     private Platforms platforms;
 
     @Override
@@ -123,14 +121,6 @@ public class EmailComposeActivity extends AppCompatActivity {
         }
         if(getIntent().hasExtra("subject") ) {
             emailSubject.setText(getIntent().getStringExtra("subject"));
-        }
-        if(getIntent().hasExtra("thread_id")) {
-            returnIntent = new Intent(this, EmailThreadActivity.class);
-            returnIntent.putExtra("thread_id", getIntent().getLongExtra("thread_id", -1));
-        }
-        else {
-            returnIntent = new Intent(this, EmailThreadsActivity.class);
-            returnIntent.putExtra("platform_id", getIntent().getLongExtra("platform_id", -1));
         }
     }
 
@@ -320,7 +310,7 @@ public class EmailComposeActivity extends AppCompatActivity {
     }
 
     private void finished_thread() {
-       startActivity(returnIntent);
+       setResult(Activity.RESULT_OK, new Intent());
        finish();
     }
 

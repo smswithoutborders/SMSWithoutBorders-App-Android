@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 import static android.content.ContentValues.TAG;
 
@@ -217,21 +218,27 @@ public class CustomHelpers {
             }
         }, new IntentFilter(SMS_DELIVERED));
 
-        Intent for_sentPendingIntent = new Intent(SMS_SENT);
-        for_sentPendingIntent.putExtra("email_id", emailId);
-        PendingIntent sentPendingIntent = PendingIntent.getBroadcast(context, 0, for_sentPendingIntent, 0);
-
-        Intent for_deliveredPendingIntent = new Intent(SMS_DELIVERED);
-        for_deliveredPendingIntent.putExtra("email_id", emailId);
-        PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(context, 0, for_deliveredPendingIntent, 0);
+        SmsManager smsManager = SmsManager.getDefault();
+        ArrayList<String> texts = smsManager.divideMessage(text);
 
         ArrayList<PendingIntent> listSentPendingIntent = new ArrayList<>();
         ArrayList<PendingIntent> listDeliveredPendingIntent = new ArrayList<>();
-        listSentPendingIntent.add(sentPendingIntent);
-        listDeliveredPendingIntent.add(deliveredPendingIntent);
 
-        SmsManager smsManager = SmsManager.getDefault();
-        ArrayList<String> texts = smsManager.divideMessage(text);
+
+        for(int i=0;i<texts.size();++i) {
+            int number = (int) (new Random().nextDouble()*100L);
+            Intent for_sentPendingIntent = new Intent(SMS_SENT);
+            for_sentPendingIntent.putExtra("email_id", emailId);
+            PendingIntent sentPendingIntent = PendingIntent.getBroadcast(context, number, for_sentPendingIntent, 0);
+
+            Intent for_deliveredPendingIntent = new Intent(SMS_DELIVERED);
+            for_deliveredPendingIntent.putExtra("email_id", emailId);
+            PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(context, number, for_deliveredPendingIntent, 0);
+
+            listSentPendingIntent.add(sentPendingIntent);
+            listDeliveredPendingIntent.add(deliveredPendingIntent);
+        }
+
         smsManager.sendMultipartTextMessage(phonenumber, null, texts, listSentPendingIntent, listDeliveredPendingIntent);
 
         Toast.makeText(context, "Sending SMS....", Toast.LENGTH_LONG).show();

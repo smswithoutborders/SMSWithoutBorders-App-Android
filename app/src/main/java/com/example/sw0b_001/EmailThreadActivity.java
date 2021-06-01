@@ -53,6 +53,10 @@ public class EmailThreadActivity extends AppCompatActivity {
 //        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         threadId = getIntent().getLongExtra("thread_id", -1);
 
+        refresh();
+    }
+
+    private void refresh() {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -93,7 +97,6 @@ public class EmailThreadActivity extends AppCompatActivity {
                 composeEmail(recipient, subject);
             }
         });
-
     }
 
     public void composeEmail(String recipient, String subject) {
@@ -102,7 +105,7 @@ public class EmailThreadActivity extends AppCompatActivity {
         intent.putExtra("platform_id", getIntent().getLongExtra("platform_id", -1));
         intent.putExtra("recipient", recipient);
         intent.putExtra("subject", subject);
-        startActivity(intent);
+        startActivityForResult(intent, 1);
     }
 
     @Override
@@ -142,6 +145,16 @@ public class EmailThreadActivity extends AppCompatActivity {
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
 
+        }
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            // Write your code here...
+            refresh();
         }
     }
 }

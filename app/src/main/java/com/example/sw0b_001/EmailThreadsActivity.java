@@ -33,11 +33,23 @@ public class EmailThreadsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_email_threads);
 
         emailThreads = new ArrayList<>();
-        RecyclerView cardlist = findViewById(recyclerView);
 //        cardlist.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         platformId = new long[]{getIntent().getLongExtra("platform_id", -1)};
         System.out.println(">> platformId: " + platformId[0]);
 
+        composeBtn = findViewById(R.id.floating_compose_body);
+        composeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                composeEmail();
+            }
+        });
+
+        refresh();
+    }
+
+    private void refresh() {
+        RecyclerView cardlist = findViewById(recyclerView);
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -62,19 +74,21 @@ public class EmailThreadsActivity extends AppCompatActivity {
         ln.setReverseLayout(true);
         cardlist.setLayoutManager(ln);
         emailThreadsAdapter.notifyDataSetChanged();
-
-        composeBtn = findViewById(R.id.floating_compose_body);
-        composeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                composeEmail();
-            }
-        });
     }
 
     public void composeEmail() {
         Intent intent = new Intent(this, EmailComposeActivity.class);
         intent.putExtra("platform_id", platformId[0]);
-        startActivity(intent);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            // Write your code here...
+            refresh();
+        }
     }
 }
