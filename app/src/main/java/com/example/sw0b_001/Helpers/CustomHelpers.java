@@ -6,7 +6,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.room.Room;
@@ -15,8 +17,11 @@ import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.R;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import static android.content.ContentValues.TAG;
 
 public class CustomHelpers {
     public static String getDateTime() {
@@ -44,13 +49,6 @@ public class CustomHelpers {
         String SMS_SENT = "SENT";
         String SMS_DELIVERED = "DELIVERED";
 
-        Intent for_sentPendingIntent = new Intent(SMS_SENT);
-        for_sentPendingIntent.putExtra("email_id", emailId);
-        PendingIntent sentPendingIntent = PendingIntent.getBroadcast(context, 0, for_sentPendingIntent, 0);
-
-        Intent for_deliveredPendingIntent = new Intent(SMS_DELIVERED);
-        for_deliveredPendingIntent.putExtra("email_id", emailId);
-        PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(context, 0, for_deliveredPendingIntent, 0);
 
         context.registerReceiver(new BroadcastReceiver(){
             @Override
@@ -72,6 +70,12 @@ public class CustomHelpers {
                                 platformsDao.updateStatus("sent", intent.getLongExtra("email_id", 0));
                             }
                         });
+                        storeEmailMessage.start();
+                        try {
+                            storeEmailMessage.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                         Toast.makeText(context, "Generic failure",
@@ -83,9 +87,16 @@ public class CustomHelpers {
                                         Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
+                                Log.i(this.getClass().getSimpleName(), "Event for Email: " + intent.getLongExtra("email_id", 0));
                                 platformsDao.updateStatus("Generic failure", intent.getLongExtra("email_id", 0));
                             }
                         });
+                        storeEmailMessage.start();
+                        try {
+                            storeEmailMessage.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case SmsManager.RESULT_ERROR_NO_SERVICE:
                         Toast.makeText(context, "No service",
@@ -100,6 +111,12 @@ public class CustomHelpers {
                                 platformsDao.updateStatus("No service", intent.getLongExtra("email_id", 0));
                             }
                         });
+                        storeEmailMessage.start();
+                        try {
+                            storeEmailMessage.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case SmsManager.RESULT_ERROR_NULL_PDU:
                         Toast.makeText(context, "Null PDU",
@@ -114,6 +131,12 @@ public class CustomHelpers {
                                 platformsDao.updateStatus("Null PDU", intent.getLongExtra("email_id", 0));
                             }
                         });
+                        storeEmailMessage.start();
+                        try {
+                            storeEmailMessage.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case SmsManager.RESULT_ERROR_RADIO_OFF:
                         Toast.makeText(context, "Radio off",
@@ -128,15 +151,15 @@ public class CustomHelpers {
                                 platformsDao.updateStatus("Radio off", intent.getLongExtra("email_id", 0));
                             }
                         });
+                        storeEmailMessage.start();
+                        try {
+                            storeEmailMessage.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + getResultCode());
-                }
-                storeEmailMessage.start();
-                try {
-                    storeEmailMessage.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
         }, new IntentFilter(SMS_SENT));
@@ -161,6 +184,12 @@ public class CustomHelpers {
                                 platformsDao.updateStatus("delivered", arg1.getLongExtra("email_id", 0));
                             }
                         });
+                        storeEmailMessage.start();
+                        try {
+                            storeEmailMessage.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case Activity.RESULT_CANCELED:
                         Toast.makeText(context, "SMS not delivered",
@@ -175,20 +204,35 @@ public class CustomHelpers {
                                 platformsDao.updateStatus("not delivered", arg1.getLongExtra("email_id", 0));
                             }
                         });
+                        storeEmailMessage.start();
+                        try {
+                            storeEmailMessage.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + getResultCode());
                 }
-                storeEmailMessage.start();
-                try {
-                    storeEmailMessage.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
         }, new IntentFilter(SMS_DELIVERED));
+
+        Intent for_sentPendingIntent = new Intent(SMS_SENT);
+        for_sentPendingIntent.putExtra("email_id", emailId);
+        PendingIntent sentPendingIntent = PendingIntent.getBroadcast(context, 0, for_sentPendingIntent, 0);
+
+        Intent for_deliveredPendingIntent = new Intent(SMS_DELIVERED);
+        for_deliveredPendingIntent.putExtra("email_id", emailId);
+        PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(context, 0, for_deliveredPendingIntent, 0);
+
+        ArrayList<PendingIntent> listSentPendingIntent = new ArrayList<>();
+        ArrayList<PendingIntent> listDeliveredPendingIntent = new ArrayList<>();
+        listSentPendingIntent.add(sentPendingIntent);
+        listDeliveredPendingIntent.add(deliveredPendingIntent);
+
         SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(phonenumber, null, text, sentPendingIntent, deliveredPendingIntent);
+        ArrayList<String> texts = smsManager.divideMessage(text);
+        smsManager.sendMultipartTextMessage(phonenumber, null, texts, listSentPendingIntent, listDeliveredPendingIntent);
 
         Toast.makeText(context, "Sending SMS....", Toast.LENGTH_LONG).show();
     }
