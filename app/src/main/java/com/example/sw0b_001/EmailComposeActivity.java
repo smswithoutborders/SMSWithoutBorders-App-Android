@@ -296,13 +296,15 @@ public class EmailComposeActivity extends AppCompatActivity {
             String body = emailMessage.getBody();
             String subject = emailMessage.getSubject();
 
-            body = formatForEmail(platforms.getName().toLowerCase(), recipient, subject, body);
+            body = formatForEmail(platforms.getProvider().toLowerCase(), platforms.getName().toLowerCase(), "send", recipient, subject, body);
             Log.i(this.getLocalClassName(), ">> Body: " + body);
             body = getEncryptedSMS(body);
 //            Log.i(this.getLocalClassName(), ">> decrypted: " + new String(securityLayer.decrypt_AES(Base64.decode(body.getBytes(), Base64.DEFAULT))));
             Log.i(this.getLocalClassName(), ">> iv: " + new String(securityLayer.getIV()));
-            byte[] byte_encryptedIv = securityLayer.encrypt_AES(securityLayer.getIV(), passwdHash.getBytes());
-            body = Base64.encodeToString(byte_encryptedIv, Base64.DEFAULT) + "_" + body;
+//            byte[] byte_encryptedIv = securityLayer.encrypt_AES(securityLayer.getIV(), passwdHash.getBytes());
+//            byte[] fullmessage = securityLayer.encrypt_AES((new String(securityLayer.getIV()) + "_" + body), passwdHash.getBytes("UTF-8"));
+            body = new String(securityLayer.getIV()) + body;
+//            body = Base64.encodeToString(fullmessage, Base64.DEFAULT);
             Log.i(this.getLocalClassName(), "[+] Transmission data: " + body);
             CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
         }
@@ -311,10 +313,10 @@ public class EmailComposeActivity extends AppCompatActivity {
 
     }
 
-    private String formatForEmail(String platform, String to, String subject, String body) throws UnsupportedEncodingException {
+    private String formatForEmail(String provider, String platform, String protocol, String to, String subject, String body) throws UnsupportedEncodingException {
        // Gmail = to:subject:body
         // TODO: put platform and protocol
-        return platform + ":send:" + to + ":" + subject + ":" + body;
+        return provider + ":" + platform + ":" + protocol + ":" + to + ":" + subject + ":" + body;
     }
 
     private void finished_thread() {
@@ -325,8 +327,8 @@ public class EmailComposeActivity extends AppCompatActivity {
     private String getEncryptedSMS(String data) throws BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, UnrecoverableEntryException, KeyStoreException, CertificateException, IOException {
         String randString = securityLayer.generateRandom(16);
 //        Log.i(this.getLocalClassName(), ">> Rand string: " + randString);
-        byte[] encryptedData = securityLayer.encrypt_AES(data, randString.toUpperCase().getBytes());
-        return Base64.encodeToString(encryptedData, Base64.DEFAULT);
+        byte[] encryptedData = securityLayer.encrypt_AES(data, randString.getBytes());
+        return Base64.encodeToString(encryptedData, Base64.NO_WRAP);
     }
 
     @Override
