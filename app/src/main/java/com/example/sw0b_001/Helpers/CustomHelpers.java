@@ -43,12 +43,15 @@ public class CustomHelpers {
         //---when the SMS has been sent---
         String SMS_SENT = "SENT";
         String SMS_DELIVERED = "DELIVERED";
+
         Intent for_sentPendingIntent = new Intent(SMS_SENT);
         for_sentPendingIntent.putExtra("email_id", emailId);
         PendingIntent sentPendingIntent = PendingIntent.getBroadcast(context, 0, for_sentPendingIntent, 0);
+
         Intent for_deliveredPendingIntent = new Intent(SMS_DELIVERED);
         for_deliveredPendingIntent.putExtra("email_id", emailId);
         PendingIntent deliveredPendingIntent = PendingIntent.getBroadcast(context, 0, for_deliveredPendingIntent, 0);
+
         context.registerReceiver(new BroadcastReceiver(){
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -66,7 +69,7 @@ public class CustomHelpers {
                                         Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                                platformsDao.updateStatus("sent", emailId);
+                                platformsDao.updateStatus("sent", intent.getLongExtra("email_id", 0));
                             }
                         });
                         break;
@@ -80,7 +83,7 @@ public class CustomHelpers {
                                         Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                                platformsDao.updateStatus("Generic failure", emailId);
+                                platformsDao.updateStatus("Generic failure", intent.getLongExtra("email_id", 0));
                             }
                         });
                         break;
@@ -94,7 +97,7 @@ public class CustomHelpers {
                                         Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                                platformsDao.updateStatus("No service", emailId);
+                                platformsDao.updateStatus("No service", intent.getLongExtra("email_id", 0));
                             }
                         });
                         break;
@@ -108,7 +111,7 @@ public class CustomHelpers {
                                         Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                                platformsDao.updateStatus("Null PDU", emailId);
+                                platformsDao.updateStatus("Null PDU", intent.getLongExtra("email_id", 0));
                             }
                         });
                         break;
@@ -122,7 +125,7 @@ public class CustomHelpers {
                                         Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                                platformsDao.updateStatus("Radio off", emailId);
+                                platformsDao.updateStatus("Radio off", intent.getLongExtra("email_id", 0));
                             }
                         });
                         break;
@@ -155,7 +158,7 @@ public class CustomHelpers {
                                         Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                                platformsDao.updateStatus("delivered", emailId);
+                                platformsDao.updateStatus("delivered", arg1.getLongExtra("email_id", 0));
                             }
                         });
                         break;
@@ -169,7 +172,7 @@ public class CustomHelpers {
                                         Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                                platformsDao.updateStatus("not delivered", emailId);
+                                platformsDao.updateStatus("not delivered", arg1.getLongExtra("email_id", 0));
                             }
                         });
                         break;
