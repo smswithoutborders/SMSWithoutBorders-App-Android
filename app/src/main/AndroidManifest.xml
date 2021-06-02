@@ -19,7 +19,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/main_icon"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MaterialComponents"
+        android:theme="@style/Theme.MyApp"
         android:usesCleartextTraffic="true">
         <activity android:name=".SyncProcessingActivity" android:theme="@style/Theme.MaterialComponents.NoActionBar"></activity>
         <activity

@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.MyApp" parent="Theme.MaterialComponents">
-
+        <item name="android:statusBarColor">@color/default_dark</item>
     </style>
 
     <style name="Widget.Theme.MaterialComponents.ActionBar.Fullscreen" parent="Widget.AppCompat.ActionBar">

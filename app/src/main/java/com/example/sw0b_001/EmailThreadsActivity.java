@@ -33,8 +33,6 @@ public class EmailThreadsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_threads);
 
-
-
         emailThreads = new ArrayList<>();
         platformId = new long[]{getIntent().getLongExtra("platform_id", -1)};
 //        System.out.println(">> platformId: " + platformId[0]);

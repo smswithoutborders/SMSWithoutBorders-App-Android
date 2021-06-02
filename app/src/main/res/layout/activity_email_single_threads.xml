@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/email_single_thread_toolbar"
-        app:title="subjects" />
+        app:title="Threads" />
 
     <TextView
         android:id="@+id/subject"
