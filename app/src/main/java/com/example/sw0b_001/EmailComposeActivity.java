@@ -145,7 +145,6 @@ public class EmailComposeActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_send:
-                item.setEnabled(false);
                 if(to.getText().toString().isEmpty()) {
                     to.setError("Recipient cannot be empty!");
                     return false;
@@ -158,6 +157,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                     body.setError("Body should not be empty!");
                     return false;
                 }
+                item.setEnabled(false);
 
                 final long[] threadId = {getIntent().getLongExtra("thread_id", -1)};
                 if(threadId[0] == -1) {
