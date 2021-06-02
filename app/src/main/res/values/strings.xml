@@ -14,4 +14,9 @@
     <string name="title_activity_splash">FullscreenActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="login_text">
+        The password required here is the same password you will use to log into your online account.
+        You will be required to enter this password only in the event of you logging out of the app
+        or at this moment when you are synchronizing
+    </string>
 </resources>
