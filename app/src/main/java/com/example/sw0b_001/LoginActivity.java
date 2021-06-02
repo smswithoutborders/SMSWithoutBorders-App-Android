@@ -18,6 +18,7 @@ import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
+import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.Platforms;
 
@@ -31,6 +32,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.List;
+import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -118,33 +121,66 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void validateInput(View view) throws IllegalBlockSizeException, InvalidKeyException, NoSuchAlgorithmException, BadPaddingException, IOException, CertificateException, KeyStoreException {
+    public void validateInput(View view) throws IllegalBlockSizeException, InvalidKeyException, NoSuchAlgorithmException, BadPaddingException, IOException, CertificateException, KeyStoreException, InterruptedException {
         EditText password = findViewById(R.id.user_password);
         String sharedKey = getIntent().getStringExtra("shared_key");
         String publicKey = getIntent().getStringExtra("public_key");
-        String passwdHash = getIntent().getStringExtra("passwd_hash");
+        String passwdHash = getIntent().getStringExtra("password_hash");
+        Map<Integer, List<String>>[] extractedInformation = (Map<Integer, List<String>>[]) getIntent().getSerializableExtra("platforms");
 
         SecurityLayer securityLayer = new SecurityLayer(getApplicationContext());
         if(password.getText().toString().isEmpty()) {
             password.setError("Password cannot be empty!");
             return;
         }
-        if(!securityLayer.authenticate(password.getText().toString())) {
+        if(!securityLayer.authenticate(password.getText().toString(), securityLayer.decrypt_RSA(passwdHash.getBytes()))) {
             password.setError("Failed to authenticate!");
         }
         else {
             if(sharedKey != null && !sharedKey.isEmpty() && publicKey != null && !publicKey.isEmpty()) {
-                SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = app_preferences.edit();
-                editor.putString(GatewayValues.VAR_PUBLICKEY, publicKey);
-                editor.putString(GatewayValues.SHARED_KEY, sharedKey);
-//                editor.putString(GatewayValues.VAR_PASSWDHASH, passwdHash);
-                editor.commit();
+                storeGatewayInformation(extractedInformation, passwdHash, publicKey, sharedKey);
             }
 
             startActivity(new Intent(this, PlatformsActivity.class));
             finish();
         }
 
+    }
+
+    private void storeGatewayInformation(Map<Integer, List<String>>[] extractedInformation, String passwdHash, String publicKey, String sharedKey) throws InterruptedException {
+        Map<Integer, List<String>> providers = extractedInformation[0];
+        Map<Integer, List<String>> provider_platforms_map = extractedInformation[1];
+
+        SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = app_preferences.edit();
+        editor.putString(GatewayValues.VAR_PUBLICKEY, publicKey);
+        editor.putString(GatewayValues.SHARED_KEY, sharedKey);
+//                editor.putString(GatewayValues.VAR_PASSWDHASH, passwdHash);
+        storePlatformFromGateway(providers, provider_platforms_map);
+        editor.putString(GatewayValues.VAR_PASSWDHASH, passwdHash);
+        editor.commit();
+    }
+
+    public void storePlatformFromGateway(Map<Integer, List<String>> providers, Map<Integer, List<String>> platforms) throws InterruptedException {
+        Thread storeProviders = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Datastore dbConnector = Room.databaseBuilder(getApplicationContext(),
+                        Datastore.class, Datastore.DBName).build();
+                PlatformDao providerDao = dbConnector.platformDao();
+                for(int i=0;i<providers.size();++i) {
+                    Platforms provider = new Platforms()
+                            .setName(platforms.get(i).get(0))
+                            .setDescription(providers.get(i).get(1))
+                            .setProvider(providers.get(i).get(0))
+                            .setType(platforms.get(i).get(1));
+                    if(provider.getName().toLowerCase().equals("gmail") && provider.getProvider().toLowerCase().equals("google"))
+                        provider.setImage(R.drawable.roundgmail);
+                    providerDao.insert(provider);
+                }
+            }
+        });
+        storeProviders.start();
+        storeProviders.join();
     }
 }

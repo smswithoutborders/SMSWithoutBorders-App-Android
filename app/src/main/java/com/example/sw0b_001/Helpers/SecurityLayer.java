@@ -250,4 +250,8 @@ public class SecurityLayer {
         return new String(hsPasswd).toUpperCase().equals(passwdHash.toUpperCase());
 
     }
+
+    public boolean authenticate(String password, byte[] passwd1) throws NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
+        return new String(hash_sha512(password)).toUpperCase().equals(new String(passwd1).toUpperCase());
+    }
 }

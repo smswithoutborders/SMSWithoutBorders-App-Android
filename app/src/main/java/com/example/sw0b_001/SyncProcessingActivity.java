@@ -87,36 +87,24 @@ public class SyncProcessingActivity extends AppCompatActivity {
                         Log.i(this.getClass().getSimpleName(),"Phonenumbers: " + phonenumbers);
 
                         Map<Integer, List<String>>[] extractedInformation = extractPlatformFromGateway(platforms.getJSONArray("user_provider"));
-                        Map<Integer, List<String>> providers = extractedInformation[0];
-                        Map<Integer, List<String>> provider_platforms_map = extractedInformation[1];
-
-                        storePlatformFromGateway(providers, provider_platforms_map);
-//                        byte[] decryptedSharedKey = sl.decrypt_RSA(sharedKey.getBytes("UTF-8"));
-//                        Log.i(this.getClass().getSimpleName(), "[+] Decrypted SharedKey: " + new String(decryptedSharedKey));
-
-                        SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                        SharedPreferences.Editor editor = app_preferences.edit();
-                        editor.putString(GatewayValues.VAR_PASSWDHASH, passwdHash);
-                        editor.commit();
-
-                        List<GatewayPhonenumber> list_phonenumbers = extractPhonenumbersFromGateway(phonenumbers);
-                        storePhonenumbersFromGateway(list_phonenumbers);
-
                         Intent logoutIntent = new Intent(getApplicationContext(), LoginActivity.class);
                         logoutIntent.putExtra("shared_key", sharedKey);
                         logoutIntent.putExtra("public_key", publicKey);
+                        logoutIntent.putExtra("platforms", extractedInformation);
+                        logoutIntent.putExtra("password_hash", passwdHash);
+                        List<GatewayPhonenumber> list_phonenumbers = SyncProcessingActivity.extractPhonenumbersFromGateway(phonenumbers);
+                        storePhonenumbersFromGateway(list_phonenumbers);
                         logout(logoutIntent);
-                        finish();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
+
+                    } catch (JSONException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    System.out.println("Failed: " + error);
+//                    System.out.println("Failed: " + error);
+                    Log.i(this.getClass().getSimpleName(), error.toString());
                 }
             });
             queue.add(jsonObjectRequest);
@@ -147,7 +135,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
         }
     }
 
-    private List<GatewayPhonenumber> extractPhonenumbersFromGateway(JSONArray gatewayData) throws JSONException {
+    public static List<GatewayPhonenumber> extractPhonenumbersFromGateway(JSONArray gatewayData) throws JSONException {
         List<GatewayPhonenumber> phonenumbers = new ArrayList<>();
         for(int i=0;i<gatewayData.length(); ++i ) {
             JSONObject phone = gatewayData.getJSONObject(i);
@@ -178,30 +166,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
         storeProviders.join();
     }
 
-    private void storePlatformFromGateway(Map<Integer, List<String>> providers, Map<Integer, List<String>> platforms) throws InterruptedException {
-        Thread storeProviders = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Datastore dbConnector = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DBName).build();
-                PlatformDao providerDao = dbConnector.platformDao();
-                for(int i=0;i<providers.size();++i) {
-                    Platforms provider = new Platforms()
-                            .setName(platforms.get(i).get(0))
-                            .setDescription(providers.get(i).get(1))
-                            .setProvider(providers.get(i).get(0))
-                            .setType(platforms.get(i).get(1));
-                    if(provider.getName().toLowerCase().equals("gmail") && provider.getProvider().toLowerCase().equals("google"))
-                        provider.setImage(R.drawable.roundgmail);
-                    providerDao.insert(provider);
-                }
-            }
-        });
-        storeProviders.start();
-        storeProviders.join();
-    }
-
-    private Map<Integer, List<String>>[] extractPlatformFromGateway(JSONArray gatewayData) throws JSONException {
+    public Map<Integer, List<String>>[] extractPlatformFromGateway(JSONArray gatewayData) throws JSONException {
         Map<Integer, List<String>> providers = new HashMap<>();
         Map<Integer, List<String>> platforms = new HashMap<>();
         for(int i=0;i<gatewayData.length(); ++i) {
@@ -228,6 +193,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
         Map<Integer, List<String>>[] extractedInformation= new Map[]{providers, platforms};
         return extractedInformation;
     }
+
 
     private void logout(Intent intent) {
         startActivity(intent);
