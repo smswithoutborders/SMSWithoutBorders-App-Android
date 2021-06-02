@@ -27,15 +27,17 @@ public class EmailThreadsActivity extends AppCompatActivity {
 
     FloatingActionButton composeBtn;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_threads);
 
+
+
         emailThreads = new ArrayList<>();
-//        cardlist.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         platformId = new long[]{getIntent().getLongExtra("platform_id", -1)};
-        System.out.println(">> platformId: " + platformId[0]);
+//        System.out.println(">> platformId: " + platformId[0]);
 
         composeBtn = findViewById(R.id.floating_compose_body);
         composeBtn.setOnClickListener(new View.OnClickListener() {

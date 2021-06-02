@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,7 +34,6 @@ public class EmailBodyActivity extends AppCompatActivity {
         emailMessage = new ArrayList<>();
         emailThreads = new ArrayList<>();
         long messageId = getIntent().getLongExtra("message_id", -1);
-        System.out.println(">> messageID: " + messageId);
 
         Runnable runnable = new Runnable() {
             @Override
@@ -53,8 +54,7 @@ public class EmailBodyActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        TextView subjectView = findViewById(R.id.subject);
-        subjectView.setText(emailThreads.get(0).getSubject());
+        setTitle(emailThreads.get(0).getSubject());
 
         TextView emailAddress = findViewById(R.id.email_address);
         emailAddress.setText(emailThreads.get(0).getRecipient());
@@ -74,5 +74,12 @@ public class EmailBodyActivity extends AppCompatActivity {
 
         TextView body = findViewById(R.id.body);
         body.setText(emailMessage.get(0).getBody());
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        setResult(Activity.RESULT_OK, new Intent());
+        finish();
+        return true;
     }
 }

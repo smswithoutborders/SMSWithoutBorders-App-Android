@@ -28,25 +28,23 @@
             android:theme="@style/Theme.MaterialComponents.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".EmailThreadActivity"
-            android:parentActivityName=".PlatformsActivity"
+            android:parentActivityName=".EmailThreadsActivity"
             android:theme="@style/Theme.MaterialComponents.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".PlatformsActivity" />
+                android:value=".EmailThreadsActivity" />
         </activity>
         <activity
             android:name=".EmailBodyActivity"
-            android:label="..."
-            android:parentActivityName=".PlatformsActivity">
+            android:parentActivityName=".EmailThreadActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".PlatformsActivity" />
+                android:value=".EmailThreadActivity" />
         </activity>
         <activity
             android:name=".EmailThreadsActivity"
@@ -66,9 +64,6 @@
             android:name=".EmailComposeActivity"
             android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MaterialComponents.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".PlatformsActivity" />
         </activity>
         <activity
             android:name=".QRScannerActivity"

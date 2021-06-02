@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -147,7 +148,7 @@ public class EmailThreadActivity extends AppCompatActivity {
 
         }
     }
-    
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -156,5 +157,12 @@ public class EmailThreadActivity extends AppCompatActivity {
             // Write your code here...
             refresh();
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        setResult(Activity.RESULT_OK, new Intent());
+        finish();
+        return true;
     }
 }
