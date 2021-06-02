@@ -7,10 +7,10 @@
     android:tint="#000000">
   <group android:scaleX="0.23020096"
       android:scaleY="0.23020096"
-      android:translateX="49.51108"
+      android:translateX="44.44666"
       android:translateY="32.1408">
     <group android:translateY="150.89062">
-      <path android:pathData="M23.703125,-0L15.265625,-0L15.265625,-103L23.703125,-103L23.703125,-0Z"
+      <path android:pathData="M71.578125,-48L21.796875,-48L21.796875,0.5L13.4375,0.5L13.4375,-103L78.75,-103L78.75,-95.78125L21.796875,-95.78125L21.796875,-55.296875L71.578125,-55.296875L71.578125,-48Z"
           android:fillColor="#000000"/>
     </group>
   </group>
