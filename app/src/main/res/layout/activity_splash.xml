@@ -14,11 +14,11 @@
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/fullscreenContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/swob_icon" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srcCompat="@drawable/swob_icon_smaller" />
 
     <FrameLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
