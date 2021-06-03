@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
+import com.google.android.gms.security.ProviderInstaller;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.zxing.Result;
@@ -59,6 +60,7 @@ public class QRScannerActivity extends AppCompatActivity {
             }
         });
     }
+
 
     @Override
     protected void onResume() {
