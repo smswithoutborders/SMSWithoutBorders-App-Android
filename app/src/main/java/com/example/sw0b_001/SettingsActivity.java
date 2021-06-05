@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -82,7 +83,46 @@ public class SettingsActivity extends AppCompatActivity {
             if(phonenumber.isDefault())
                 button.setChecked(true);
             button.setPadding(30, 50, 0, 50);
+
+
+//            button.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Thread makeDefault = new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
+//                                    Datastore.class, Datastore.DBName).build();
+//                            GatewayDao gatewayDao = platformDb.gatewayDao();
+//                            gatewayDao.updateDefault(true, phonenumber.getId());
+//                            gatewayDao.updateDefault(true, phonenumber.getId());
+//                        }
+//                    });
+//                }
+//            });
             radioGroup.addView(button);
         }
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                Thread makeDefault = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
+                                Datastore.class, Datastore.DBName).build();
+                        GatewayDao gatewayDao = platformDb.gatewayDao();
+                        gatewayDao.resetAllDefaults();
+                        gatewayDao.updateDefault(true, checkedId);
+                    }
+                });
+                makeDefault.start();
+                try {
+                    makeDefault.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

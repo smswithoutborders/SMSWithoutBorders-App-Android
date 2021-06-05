@@ -34,4 +34,9 @@ public interface GatewayDao {
     @Query("DELETE FROM GatewayPhonenumber")
     void deleteAll();
 
+    @Query("UPDATE GatewayPhonenumber SET `default` =:isdefault WHERE id=:phonenumberId")
+    void updateDefault(boolean isdefault, long phonenumberId);
+
+    @Query("UPDATE GatewayPhonenumber SET `default`=0")
+    void resetAllDefaults();
 }
