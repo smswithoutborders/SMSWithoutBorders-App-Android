@@ -9,6 +9,10 @@ public class GatewayPhonenumber {
     @PrimaryKey(autoGenerate = true)
     public long id;
 
+    public long getId() {
+        return id;
+    }
+
     @ColumnInfo(name="type")
     String type;
 
