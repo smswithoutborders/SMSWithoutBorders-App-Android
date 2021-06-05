@@ -91,7 +91,7 @@ public class CustomHelpers {
                 image = R.mipmap.letter_s;
                 break;
             case 't':
-                image = R.mipmap.letter_s;
+                image = R.mipmap.letter_t;
                 break;
             case 'u':
                 image = R.mipmap.letter_u;

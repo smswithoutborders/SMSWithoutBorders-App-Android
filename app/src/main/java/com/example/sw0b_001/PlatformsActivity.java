@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -63,27 +65,21 @@ public class PlatformsActivity extends AppCompatActivity{
         recyclerView.setAdapter(platformsRecyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView2);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+        bottomNavigationView.setSelectedItemId(R.id.platform);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
                 Log.i(this.getClass().getSimpleName(), item.getTitle().toString());
-                if( item.getTitle().equals("Platforms" )) {
-                    item.setChecked(true);
-                    return true;
+                switch(item.getItemId()) {
+                    case R.id.settings:
+                        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                        overridePendingTransition(0, 0);
+                        finish();
                 }
-                else if( item.getTitle().equals("Settings" )) {
-                    item.setChecked(true);
-                    return true;
-                }
-                else if( item.getTitle().equals("Exit") ) {
-                    item.setChecked(true);
-                    return true;
-                }
-
                 return false;
             }
         });
     }
-
 }

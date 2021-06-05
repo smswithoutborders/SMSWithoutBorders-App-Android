@@ -2,14 +2,17 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/platform"
         android:icon="@drawable/dashboard"
         android:title="Platforms" />
 
     <item
+        android:id="@+id/settings"
         android:icon="@drawable/settings"
         android:title="Settings" />
 
     <item
+        android:id="@+id/logout"
         android:icon="@drawable/logout"
         android:title="Exit" />
 </menu>
