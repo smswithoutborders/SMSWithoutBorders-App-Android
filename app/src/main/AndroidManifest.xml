@@ -24,8 +24,7 @@
         <activity
             android:name=".SettingsActivity"
             android:parentActivityName=".PlatformsActivity"
-            android:label="Settings"
-            android:theme="@style/Theme.MaterialComponents">
+            android:label="Settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PlatformsActivity" />

@@ -3,14 +3,22 @@ package com.example.sw0b_001;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,8 +43,8 @@ public class EmailThreadActivity extends AppCompatActivity {
     EmailThreadRecyclerAdapter emailCustomMessageAdapter;
     FloatingActionButton composeBtn;
 
+    private SMSSateViewModel model;
     long threadId;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +63,16 @@ public class EmailThreadActivity extends AppCompatActivity {
         threadId = getIntent().getLongExtra("thread_id", -1);
 
         refresh();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter("sms_state_changed"));
     }
+    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+//            Log.i(getLocalClassName(), ">> BROADCAST RECEIVED - REFRESHING");
+            refresh();
+        }
+    };
 
     private void refresh() {
         Runnable runnable = new Runnable() {

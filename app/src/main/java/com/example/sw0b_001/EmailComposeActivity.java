@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
 import com.example.sw0b_001.Helpers.CustomHelpers;
@@ -65,6 +66,7 @@ public class EmailComposeActivity extends AppCompatActivity {
     long emailId;
     private List<GatewayPhonenumber> phonenumbers = new ArrayList<>();
     private Platforms platforms;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +124,7 @@ public class EmailComposeActivity extends AppCompatActivity {
         if(getIntent().hasExtra("subject") ) {
             emailSubject.setText(getIntent().getStringExtra("subject"));
         }
+
     }
 
     @Override

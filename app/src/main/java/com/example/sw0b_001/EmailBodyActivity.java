@@ -1,13 +1,17 @@
 package com.example.sw0b_001;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,8 +37,20 @@ public class EmailBodyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_email_body);
         emailMessage = new ArrayList<>();
         emailThreads = new ArrayList<>();
-        long messageId = getIntent().getLongExtra("message_id", -1);
 
+        refresh();
+        LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter("sms_state_changed"));
+    }
+    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+//            Log.i(getLocalClassName(), ">> BROADCAST RECEIVED - REFRESHING");
+            refresh();
+        }
+    };
+
+    private void refresh() {
+        long messageId = getIntent().getLongExtra("message_id", -1);
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -53,7 +69,6 @@ public class EmailBodyActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         setTitle(emailThreads.get(0).getSubject());
 
         TextView emailAddress = findViewById(R.id.email_address);

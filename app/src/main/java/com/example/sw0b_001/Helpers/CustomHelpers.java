@@ -11,8 +11,11 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.room.Room;
 
+import com.example.sw0b_001.EmailThreadActivity;
+import com.example.sw0b_001.EmailThreadsActivity;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.R;
 
@@ -233,6 +236,8 @@ public class CustomHelpers {
                     default:
                         throw new IllegalStateException("Unexpected value: " + getResultCode());
                 }
+                Intent bIntent = new Intent("sms_state_changed");
+                LocalBroadcastManager.getInstance(context).sendBroadcast(bIntent);
             }
         }, new IntentFilter(SMS_SENT));
 
@@ -286,6 +291,8 @@ public class CustomHelpers {
                     default:
                         throw new IllegalStateException("Unexpected value: " + getResultCode());
                 }
+                Intent bIntent = new Intent("sms_state_changed");
+                LocalBroadcastManager.getInstance(context).sendBroadcast(bIntent);
             }
         }, new IntentFilter(SMS_DELIVERED));
 
