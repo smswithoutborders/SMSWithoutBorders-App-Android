@@ -1,5 +1,6 @@
 package com.example.sw0b_001;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,12 +8,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.example.sw0b_001.Helpers.Datastore;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.Platforms;
 import com.example.sw0b_001.Providers.Platforms.PlatformsRecyclerAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +31,14 @@ public class PlatformsActivity extends AppCompatActivity{
     List<Platforms> platforms;
     PlatformsRecyclerAdapter platformsRecyclerAdapter;
 
+    BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_platforms);
         platforms = new ArrayList<>();
-        recyclerView = findViewById(R.id.platforms_recycler_view);
+        recyclerView = findViewById(R.id.settings_list_view);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         Runnable runnable = new Runnable() {
@@ -56,5 +63,27 @@ public class PlatformsActivity extends AppCompatActivity{
         recyclerView.setAdapter(platformsRecyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        bottomNavigationView = findViewById(R.id.bottomNavigationView2);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+                Log.i(this.getClass().getSimpleName(), item.getTitle().toString());
+                if( item.getTitle().equals("Platforms" )) {
+                    item.setChecked(true);
+                    return true;
+                }
+                else if( item.getTitle().equals("Settings" )) {
+                    item.setChecked(true);
+                    return true;
+                }
+                else if( item.getTitle().equals("Exit") ) {
+                    item.setChecked(true);
+                    return true;
+                }
+
+                return false;
+            }
+        });
     }
+
 }

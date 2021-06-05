@@ -129,8 +129,6 @@ public class CustomHelpers {
                 switch (getResultCode())
                 {
                     case Activity.RESULT_OK:
-                        Toast.makeText(context, "SMS sent",
-                                Toast.LENGTH_LONG).show();
 
                         storeEmailMessage = new Thread(new Runnable() {
                             @Override
@@ -148,10 +146,10 @@ public class CustomHelpers {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                        Toast.makeText(context, "SMS sent",
+                                Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                        Toast.makeText(context, "Generic failure",
-                                Toast.LENGTH_SHORT).show();
                         storeEmailMessage = new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -169,6 +167,8 @@ public class CustomHelpers {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                        Toast.makeText(context, "Generic failure",
+                                Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_NO_SERVICE:
                         Toast.makeText(context, "No service",
@@ -244,8 +244,6 @@ public class CustomHelpers {
                 switch (getResultCode())
                 {
                     case Activity.RESULT_OK:
-                        Toast.makeText(context, "SMS delivered",
-                                Toast.LENGTH_LONG).show();
                         storeEmailMessage = new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -262,10 +260,10 @@ public class CustomHelpers {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                        Toast.makeText(context, "SMS delivered",
+                                Toast.LENGTH_SHORT).show();
                         break;
                     case Activity.RESULT_CANCELED:
-                        Toast.makeText(context, "SMS not delivered",
-                                Toast.LENGTH_LONG).show();
                         storeEmailMessage = new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -282,6 +280,8 @@ public class CustomHelpers {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+                        Toast.makeText(context, "SMS not delivered",
+                                Toast.LENGTH_LONG).show();
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + getResultCode());
