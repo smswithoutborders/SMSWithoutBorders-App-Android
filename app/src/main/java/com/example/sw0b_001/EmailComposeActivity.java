@@ -66,6 +66,7 @@ public class EmailComposeActivity extends AppCompatActivity {
     long emailId;
     private List<GatewayPhonenumber> phonenumbers = new ArrayList<>();
     private Platforms platforms;
+    private long threadId;
 
 
     @Override
@@ -162,8 +163,8 @@ public class EmailComposeActivity extends AppCompatActivity {
                 }
                 item.setEnabled(false);
 
-                final long[] threadId = {getIntent().getLongExtra("thread_id", -1)};
-                if(threadId[0] == -1) {
+                threadId = getIntent().getLongExtra("thread_id", -1);
+                if(threadId == -1) {
                     Thread storeEmailThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -175,7 +176,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                                     Datastore.class, Datastore.DBName).build();
 
                             EmailThreadsDao platformsDao = emailStoreDb.emailThreadDao();
-                            threadId[0] = platformsDao.insert(emailThread);
+                            threadId = platformsDao.insert(emailThread);
                         }
                     });
 
@@ -192,7 +193,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                         EmailMessage emailMessage = new EmailMessage()
                                 .setBody(body.getText().toString())
                                 .setDatetime(CustomHelpers.getDateTime())
-                                .setThreadId(threadId[0])
+                                .setThreadId(threadId)
                                 .setRecipient(to.getText().toString())
                                 .setSubject(subject.getText().toString())
                                 .setStatus("pending");
@@ -313,8 +314,15 @@ public class EmailComposeActivity extends AppCompatActivity {
     }
 
     private void finished_thread() {
-       setResult(Activity.RESULT_OK, new Intent());
-       finish();
+        if(threadId != -1) {
+            Intent intent = new Intent(this, EmailThreadActivity.class);
+            intent.putExtra("thread_id", threadId);
+            startActivity(intent);
+        }
+        else
+           setResult(Activity.RESULT_OK, new Intent());
+
+        finish();
     }
 
     private String getEncryptedSMS(String data) throws BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, UnrecoverableEntryException, KeyStoreException, CertificateException, IOException {

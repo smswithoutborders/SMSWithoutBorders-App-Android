@@ -29,7 +29,7 @@ import static android.content.ContentValues.TAG;
 
 public class CustomHelpers {
     public static String getDateTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-d HH:mm", Locale.getDefault());
         String currentDateandTime = sdf.format(new Date());
         return currentDateandTime;
     }
@@ -149,8 +149,6 @@ public class CustomHelpers {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(context, "SMS sent",
-                                Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                         storeEmailMessage = new Thread(new Runnable() {
@@ -170,12 +168,8 @@ public class CustomHelpers {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(context, "Generic failure",
-                                Toast.LENGTH_SHORT).show();
                         break;
                     case SmsManager.RESULT_ERROR_NO_SERVICE:
-                        Toast.makeText(context, "No service",
-                                Toast.LENGTH_SHORT).show();
                         storeEmailMessage = new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -194,8 +188,6 @@ public class CustomHelpers {
                         }
                         break;
                     case SmsManager.RESULT_ERROR_NULL_PDU:
-                        Toast.makeText(context, "Null PDU",
-                                Toast.LENGTH_SHORT).show();
                         storeEmailMessage = new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -214,8 +206,6 @@ public class CustomHelpers {
                         }
                         break;
                     case SmsManager.RESULT_ERROR_RADIO_OFF:
-                        Toast.makeText(context, "Radio off",
-                                Toast.LENGTH_SHORT).show();
                         storeEmailMessage = new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -265,8 +255,6 @@ public class CustomHelpers {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(context, "SMS delivered",
-                                Toast.LENGTH_SHORT).show();
                         break;
                     case Activity.RESULT_CANCELED:
                         storeEmailMessage = new Thread(new Runnable() {
@@ -285,8 +273,6 @@ public class CustomHelpers {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(context, "SMS not delivered",
-                                Toast.LENGTH_LONG).show();
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + getResultCode());
