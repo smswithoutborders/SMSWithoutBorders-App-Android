@@ -50,7 +50,7 @@ public class PlatformsActivity extends AppCompatActivity{
                         Datastore.class, Datastore.DBName).build();
                 PlatformDao platformsDao = platformDb.platformDao();
                 platforms = platformsDao.getAll();
-                Log.d(this.getClass().getSimpleName(), ": size>> " + platforms.size());
+//                Log.d(this.getClass().getSimpleName(), ": size>> " + platforms.size());
             }
         };
         Thread dbFetchThread = new Thread(runnable);
@@ -71,7 +71,7 @@ public class PlatformsActivity extends AppCompatActivity{
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-                Log.i(this.getClass().getSimpleName(), item.getTitle().toString());
+//                Log.i(this.getClass().getSimpleName(), item.getTitle().toString());
                 switch(item.getItemId()) {
                     case R.id.settings:
                         startActivity(new Intent(getApplicationContext(), SettingsActivity.class));

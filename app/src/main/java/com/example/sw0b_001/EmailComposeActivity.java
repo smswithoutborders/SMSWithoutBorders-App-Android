@@ -250,7 +250,7 @@ public class EmailComposeActivity extends AppCompatActivity {
 //        Toast.makeText(getBaseContext(), "SMS sending...", Toast.LENGTH_LONG).show();
         String phonenumber = "";
         for(GatewayPhonenumber number : phonenumbers) {
-            Log.i(this.getLocalClassName(), "[+] Number: " + number.getNumber());
+//            Log.i(this.getLocalClassName(), "[+] Number: " + number.getNumber());
             if(number.isDefault())
                 phonenumber = number.getNumber();
         }
@@ -259,7 +259,7 @@ public class EmailComposeActivity extends AppCompatActivity {
             Toast.makeText(this, "Default number could not be determined", Toast.LENGTH_LONG).show();
             return;
         }
-        Log.i(this.getLocalClassName(), "[+] Phonenumber: " + phonenumber);
+//        Log.i(this.getLocalClassName(), "[+] Phonenumber: " + phonenumber);
 
         final List<EmailMessage>[] pendingMessagesList = new List[]{new ArrayList<>()};
         Thread storeEmailMessage = new Thread(new Runnable() {
@@ -283,7 +283,7 @@ public class EmailComposeActivity extends AppCompatActivity {
         String passwdHash = preferences.getString(GatewayValues.VAR_PASSWDHASH, null);
         passwdHash = new String(securityLayer.decrypt_RSA(passwdHash.getBytes())).substring(0, 16);
         List<EmailMessage> pendingMessages = pendingMessagesList[0];
-        Log.i(this.getLocalClassName(), "# PENDING: " + pendingMessages.size());
+//        Log.i(this.getLocalClassName(), "# PENDING: " + pendingMessages.size());
         for(EmailMessage emailMessage : pendingMessages) {
             long emailId = emailMessage.getId();
             String recipient = emailMessage.getRecipient();
@@ -291,15 +291,15 @@ public class EmailComposeActivity extends AppCompatActivity {
             String subject = emailMessage.getSubject();
 
             body = formatForEmail(platforms.getProvider().toLowerCase(), platforms.getName().toLowerCase(), "send", recipient, subject, body);
-            Log.i(this.getLocalClassName(), ">> Body: " + body);
+//            Log.i(this.getLocalClassName(), ">> Body: " + body);
             body = getEncryptedSMS(body);
 //            Log.i(this.getLocalClassName(), ">> decrypted: " + new String(securityLayer.decrypt_AES(Base64.decode(body.getBytes(), Base64.DEFAULT))));
-            Log.i(this.getLocalClassName(), ">> iv: " + new String(securityLayer.getIV()));
+//            Log.i(this.getLocalClassName(), ">> iv: " + new String(securityLayer.getIV()));
 //            byte[] byte_encryptedIv = securityLayer.encrypt_AES(securityLayer.getIV(), passwdHash.getBytes());
 //            byte[] fullmessage = securityLayer.encrypt_AES((new String(securityLayer.getIV()) + "_" + body), passwdHash.getBytes("UTF-8"));
             body = new String(securityLayer.getIV()) + body;
 //            body = Base64.encodeToString(fullmessage, Base64.DEFAULT);
-            Log.i(this.getLocalClassName(), "[+] Transmission data: " + body);
+//            Log.i(this.getLocalClassName(), "[+] Transmission data: " + body);
             CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
         }
         finished_thread();

@@ -103,7 +103,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
     }
 
     public void processQR(String QRText) {
-        Log.i(this.getClass().getSimpleName(), "[+] QR text: " + QRText);
+//        Log.i(this.getClass().getSimpleName(), "[+] QR text: " + QRText);
         SecurityLayer sl;
         try {
             sl = new SecurityLayer();
@@ -115,18 +115,17 @@ public class SyncProcessingActivity extends AppCompatActivity {
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(QRText, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    System.out.println("DONE: " + response.toString());
                     try {
                         String passwdHash = response.getString("pd");
                         String publicKey = response.getString("pk");
                         String sharedKey = response.getString("sk");
                         JSONObject platforms = response.getJSONObject("pl");
                         JSONArray phonenumbers = response.getJSONArray("ph");
-                        Log.i(this.getClass().getSimpleName(), "PasswdHash: " + passwdHash);
-                        Log.i(this.getClass().getSimpleName(),"PublicKey: " + publicKey);
-                        Log.i(this.getClass().getSimpleName(),"SharedKey: " + sharedKey);
-                        Log.i(this.getClass().getSimpleName(),"Platforms: " + platforms);
-                        Log.i(this.getClass().getSimpleName(),"Phonenumbers: " + phonenumbers);
+//                        Log.i(this.getClass().getSimpleName(), "PasswdHash: " + passwdHash);
+//                        Log.i(this.getClass().getSimpleName(),"PublicKey: " + publicKey);
+//                        Log.i(this.getClass().getSimpleName(),"SharedKey: " + sharedKey);
+//                        Log.i(this.getClass().getSimpleName(),"Platforms: " + platforms);
+//                        Log.i(this.getClass().getSimpleName(),"Phonenumbers: " + phonenumbers);
 
                         Map<Integer, List<String>>[] extractedInformation = extractPlatformFromGateway(platforms.getJSONArray("user_provider"));
                         Intent logoutIntent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -146,7 +145,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
 //                    System.out.println("Failed: " + error);
-                    Log.i(this.getClass().getSimpleName(), error.toString());
+//                    Log.i(this.getClass().getSimpleName(), error.toString());
                 }
             });
             queue.add(jsonObjectRequest);
@@ -213,7 +212,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
         Map<Integer, List<String>> platforms = new HashMap<>();
         for(int i=0;i<gatewayData.length(); ++i) {
             JSONObject provider = (JSONObject) gatewayData.get(i);
-            Log.i(this.getClass().getSimpleName(), "Providers: " + provider.get("provider").toString());
+//            Log.i(this.getClass().getSimpleName(), "Providers: " + provider.get("provider").toString());
 
             List<String> providerDetails = new ArrayList<>();
             providerDetails.add(provider.get("provider").toString());
@@ -223,7 +222,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
             JSONArray provider_platforms = (JSONArray) provider.get("platforms");
             for(int j=0;j<provider_platforms.length();++j) {
                 JSONObject platform = (JSONObject) provider_platforms.get(j);
-                Log.i(this.getClass().getSimpleName(), "\tPlatforms: " + platform.get("name").toString());
+//                Log.i(this.getClass().getSimpleName(), "\tPlatforms: " + platform.get("name").toString());
 
                 List<String> platformDetails = new ArrayList<>();
                 platformDetails.add(platform.get("name").toString());

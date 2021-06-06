@@ -158,7 +158,7 @@ public class CustomHelpers {
                                         Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                                Log.i(this.getClass().getSimpleName(), "Event for Email: " + intent.getLongExtra("email_id", 0));
+//                                Log.i(this.getClass().getSimpleName(), "Event for Email: " + intent.getLongExtra("email_id", 0));
                                 platformsDao.updateStatus("Generic failure", intent.getLongExtra("email_id", 0));
                             }
                         });

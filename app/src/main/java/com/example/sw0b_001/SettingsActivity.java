@@ -41,7 +41,7 @@ public class SettingsActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-                Log.i(this.getClass().getSimpleName(), item.getTitle().toString());
+//                Log.i(this.getClass().getSimpleName(), item.getTitle().toString());
                 switch(item.getItemId()) {
                     case R.id.platform:
                         startActivity(new Intent(getApplicationContext(), PlatformsActivity.class));
