@@ -8,27 +8,12 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="273dp"
-        android:layout_height="62dp"
+        android:layout_width="0dp"
+        android:layout_height="131dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/swob_icon_smaller" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="0dp"
-        android:layout_height="463dp"
-        android:background="@color/black"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/login_text"
-        android:textAlignment="center"
-        android:textColor="@color/pending_gray"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.042"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
@@ -36,16 +21,21 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="220dp"
         android:layout_marginEnd="15dp"
-        android:background="@color/black"
+        android:fontFamily="sans-serif-thin"
         android:hint="Enter your current login password"
+        app:boxBackgroundColor="@color/black"
         app:boxStrokeColor="@color/default_blue"
+        app:helperText="Enter the password from your cloud account"
+        app:helperTextEnabled="true"
+        app:hintTextColor="@color/light_blue_A400"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:startIconTint="@color/default_blue">
+        app:startIconDrawable="@drawable/ic_round_lock_24"
+        app:startIconTint="@color/white">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/user_password"
@@ -59,15 +49,17 @@
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="272dp"
         android:backgroundTint="@color/default_blue"
+        android:fontFamily="sans-serif-thin"
         android:onClick="validateInput"
         android:text="Enter"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
