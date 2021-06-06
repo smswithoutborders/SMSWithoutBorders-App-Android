@@ -59,9 +59,6 @@ public class EmailThreadActivity extends AppCompatActivity {
 
         emailMessage = new ArrayList<>();
         recyclerView = findViewById(R.id.email_single_thread);
-//        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        threadId = getIntent().getLongExtra("thread_id", -1);
-
         refresh();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(bReceiver, new IntentFilter("sms_state_changed"));
@@ -75,6 +72,7 @@ public class EmailThreadActivity extends AppCompatActivity {
     };
 
     private void refresh() {
+        threadId = getIntent().getLongExtra("thread_id", -1);
         Runnable runnable = new Runnable() {
             @Override
             public void run() {

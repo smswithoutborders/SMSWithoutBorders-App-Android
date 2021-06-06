@@ -317,6 +317,7 @@ public class EmailComposeActivity extends AppCompatActivity {
         if(threadId != -1) {
             Intent intent = new Intent(this, EmailThreadActivity.class);
             intent.putExtra("thread_id", threadId);
+            intent.putExtra("platform_id", threadId);
             startActivity(intent);
         }
         else
