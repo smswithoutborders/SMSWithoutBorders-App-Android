@@ -19,6 +19,15 @@
         You will be required to enter this password only in the event of you logging out of the app
         or at this moment when you are synchronizing
     </string>
+    <string name="qr_permission_text">
+        When you store a token with SMSwithoutborders, we securely store that token and guarantee it will only be accessed you.
+        In order to accomplish this we synchronize your App with your account details.
+        We will ask for your permission (depending on your settings) to access your Camera and scan the code.
+        Click "Scan QR" below to begin the synchronization process.
+    </string>
+    <string name="privacy_policy">
+        https://smswithoutborders.com/privacy-policy
+    </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

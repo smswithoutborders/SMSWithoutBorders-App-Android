@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -54,5 +55,11 @@ public class PermissionsActivity extends AppCompatActivity {
             }
         }
         finish();
+    }
+
+    public void linkPrivacyPolicy(View view) {
+        Uri intentUri = Uri.parse(getResources().getString(R.string.privacy_policy));
+        Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
+        startActivity(intent);
     }
 }
