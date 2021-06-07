@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
@@ -82,9 +83,9 @@ public class EmailComposeActivity extends AppCompatActivity {
 
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
-        if(!checkPermission(Manifest.permission.SEND_SMS)) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
-        }
+//        if(!checkPermission(Manifest.permission.SEND_SMS)) {
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
+//        }
         long platformId = getIntent().getLongExtra("platform_id", -1);
 
         try {
@@ -145,7 +146,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                 to.setText("");
                 subject.setText("");
                 body.setText("");
-                finished_thread();
+                finished_thread(null);
                 return true;
 
             case R.id.action_send:
@@ -211,7 +212,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 try {
-                    sendMessage();
+                    sendMessage(to.getText().toString(), subject.getText().toString(), body.getText().toString());
                 } catch (BadPaddingException e) {
                     e.printStackTrace();
                 } catch (InvalidAlgorithmParameterException e) {
@@ -246,7 +247,7 @@ public class EmailComposeActivity extends AppCompatActivity {
     }
 
 
-    private void sendMessage() throws BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, IllegalBlockSizeException, UnrecoverableEntryException, KeyStoreException, NoSuchPaddingException, InvalidKeyException, CertificateException, IOException {
+    private void sendMessage(String recipient, String subject, String body) throws BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, IllegalBlockSizeException, UnrecoverableEntryException, KeyStoreException, NoSuchPaddingException, InvalidKeyException, CertificateException, IOException {
 //        Toast.makeText(getBaseContext(), "SMS sending...", Toast.LENGTH_LONG).show();
         String phonenumber = "";
         for(GatewayPhonenumber number : phonenumbers) {
@@ -259,52 +260,30 @@ public class EmailComposeActivity extends AppCompatActivity {
             Toast.makeText(this, "Default number could not be determined", Toast.LENGTH_LONG).show();
             return;
         }
-//        Log.i(this.getLocalClassName(), "[+] Phonenumber: " + phonenumber);
 
-        final List<EmailMessage>[] pendingMessagesList = new List[]{new ArrayList<>()};
-        Thread storeEmailMessage = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DBName).build();
-
-                EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                pendingMessagesList[0] = platformsDao.getForStatus("pending");
-            }
-        });
-        storeEmailMessage.start();
-        try {
-            storeEmailMessage.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String passwdHash = preferences.getString(GatewayValues.VAR_PASSWDHASH, null);
-        passwdHash = new String(securityLayer.decrypt_RSA(passwdHash.getBytes())).substring(0, 16);
-        List<EmailMessage> pendingMessages = pendingMessagesList[0];
-//        Log.i(this.getLocalClassName(), "# PENDING: " + pendingMessages.size());
-        for(EmailMessage emailMessage : pendingMessages) {
-            long emailId = emailMessage.getId();
-            String recipient = emailMessage.getRecipient();
-            String body = emailMessage.getBody();
-            String subject = emailMessage.getSubject();
-
-            body = formatForEmail(platforms.getProvider().toLowerCase(), platforms.getName().toLowerCase(), "send", recipient, subject, body);
+        body = formatForEmail(platforms.getProvider().toLowerCase(), platforms.getName().toLowerCase(), "send", recipient, subject, body);
 //            Log.i(this.getLocalClassName(), ">> Body: " + body);
-            body = getEncryptedSMS(body);
+        body = getEncryptedSMS(body);
 //            Log.i(this.getLocalClassName(), ">> decrypted: " + new String(securityLayer.decrypt_AES(Base64.decode(body.getBytes(), Base64.DEFAULT))));
 //            Log.i(this.getLocalClassName(), ">> iv: " + new String(securityLayer.getIV()));
 //            byte[] byte_encryptedIv = securityLayer.encrypt_AES(securityLayer.getIV(), passwdHash.getBytes());
 //            byte[] fullmessage = securityLayer.encrypt_AES((new String(securityLayer.getIV()) + "_" + body), passwdHash.getBytes("UTF-8"));
-            body = new String(securityLayer.getIV()) + body;
+        body = new String(securityLayer.getIV()) + body;
 //            body = Base64.encodeToString(fullmessage, Base64.DEFAULT);
 //            Log.i(this.getLocalClassName(), "[+] Transmission data: " + body);
-            CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
-        }
-        finished_thread();
+//            CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
+        Intent intent = sendSMSMessageIntent(body, phonenumber);
+        finished_thread(intent);
         // TODO: work out how the IV gets encrypted before sending
 
+    }
+
+    public Intent sendSMSMessageIntent(String text, String phonenumber) {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("smsto:"+phonenumber));
+        intent.putExtra("sms_body", text);
+
+        return intent;
     }
 
     private String formatForEmail(String provider, String platform, String protocol, String to, String subject, String body) throws UnsupportedEncodingException {
@@ -313,12 +292,20 @@ public class EmailComposeActivity extends AppCompatActivity {
         return provider + ":" + platform + ":" + protocol + ":" + to + ":" + subject + ":" + body;
     }
 
-    private void finished_thread() {
+    private void finished_thread(Intent intent) {
         if(threadId != -1) {
-            Intent intent = new Intent(this, EmailThreadActivity.class);
+            boolean intentCameNull = false;
+            if( intent == null ) {
+                intentCameNull = true;
+                intent = new Intent(this, EmailThreadActivity.class);
+            }
             intent.putExtra("thread_id", threadId);
             intent.putExtra("platform_id", threadId);
-            startActivity(intent);
+            if (!intentCameNull && intent.resolveActivity(getPackageManager()) != null ) {
+                startActivity(intent);
+            }
+            else
+                startActivity(intent);
         }
         else
            setResult(Activity.RESULT_OK, new Intent());

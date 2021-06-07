@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -117,6 +118,7 @@ public class CustomHelpers {
         }
         return image;
     }
+
 
     public static void sendEmailSMS(Context context, String text, String phonenumber, long emailId) {
         //TODO: Research what to do in case of a double sim phone

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sw0b_001">
 
-    <uses-permission android:name="android.permission.SEND_SMS" />
+<!--    <uses-permission android:name="android.permission.SEND_SMS" />-->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -74,7 +74,13 @@
         <activity
             android:name=".EmailComposeActivity"
             android:parentActivityName=".PlatformsActivity"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar"></activity>
+            android:theme="@style/Theme.MaterialComponents.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".QRScannerActivity"
             android:label="QR Scanner"
