@@ -70,38 +70,6 @@ public class SyncProcessingActivity extends AppCompatActivity {
         processQR(syncUrl);
     }
 
-    private void installSSLCertificationRequirements() {
-        TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                return null;
-            }
-            public void checkClientTrusted(X509Certificate[] certs, String authType) {
-            }
-            public void checkServerTrusted(X509Certificate[] certs, String authType) {
-            }
-        } };
-        SSLContext sc = null;
-        try {
-            sc = SSLContext.getInstance("SSL");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        try {
-            sc.init(null, trustAllCerts, new java.security.SecureRandom());
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        }
-        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        // Create all-trusting host name verifier
-        HostnameVerifier allHostsValid = new HostnameVerifier() {
-            public boolean verify(String hostname, SSLSession session) {
-                return true;
-            }
-        };
-        // Install the all-trusting host verifier
-        HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-    }
-
     public void processQR(String QRText) {
 //        Log.i(this.getClass().getSimpleName(), "[+] QR text: " + QRText);
         SecurityLayer sl;
@@ -111,7 +79,6 @@ public class SyncProcessingActivity extends AppCompatActivity {
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
             JSONObject jsonBody = new JSONObject("{\"public_key\": \"" + sl.init() + "\"}");
-            installSSLCertificationRequirements();
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(QRText, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -145,7 +112,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
 //                    System.out.println("Failed: " + error);
-//                    Log.i(this.getClass().getSimpleName(), error.toString());
+                    Log.i(this.getClass().getSimpleName(), error.toString());
                 }
             });
             queue.add(jsonObjectRequest);
