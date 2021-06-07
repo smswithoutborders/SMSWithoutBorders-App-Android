@@ -307,9 +307,7 @@ public class EmailComposeActivity extends AppCompatActivity {
             else
                 startActivity(intent);
         }
-        else
-           setResult(Activity.RESULT_OK, new Intent());
-
+        setResult(Activity.RESULT_OK, new Intent());
         finish();
     }
 
