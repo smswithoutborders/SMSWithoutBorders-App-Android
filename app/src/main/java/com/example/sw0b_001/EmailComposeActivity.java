@@ -197,7 +197,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                                 .setThreadId(threadId)
                                 .setRecipient(to.getText().toString())
                                 .setSubject(subject.getText().toString())
-                                .setStatus("pending");
+                                .setStatus("requested");
                         Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
                                 Datastore.class, Datastore.DBName).build();
 
@@ -303,12 +303,14 @@ public class EmailComposeActivity extends AppCompatActivity {
             intent.putExtra("platform_id", threadId);
             if (!intentCameNull && intent.resolveActivity(getPackageManager()) != null ) {
                 startActivity(intent);
+                setResult(Activity.RESULT_OK, new Intent());
+                finish();
             }
-            else
-                startActivity(intent);
         }
-        setResult(Activity.RESULT_OK, new Intent());
-        finish();
+        else {
+            setResult(Activity.RESULT_OK, new Intent());
+            finish();
+        }
     }
 
     private String getEncryptedSMS(String data) throws BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, UnrecoverableEntryException, KeyStoreException, CertificateException, IOException {

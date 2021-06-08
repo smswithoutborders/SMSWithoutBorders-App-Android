@@ -81,7 +81,7 @@ public class EmailBodyActivity extends AppCompatActivity {
         dateTime.setText(emailMessage.get(0).getDatetime());
 
         TextView status = findViewById(R.id.bottomRight);
-        if(emailMessage.get(0).getStatus().equals("delivered") || emailMessage.get(0).getStatus().equals("sent"))
+        if(emailMessage.get(0).getStatus().equals("requested") || emailMessage.get(0).getStatus().equals("sent"))
             status.setTextColor(getApplication().getResources().getColor(R.color.success_blue, getApplication().getTheme()));
         else if(emailMessage.get(0).getStatus().equals("pending"))
             status.setTextColor(getApplication().getResources().getColor(R.color.pending_gray, getApplication().getTheme()));

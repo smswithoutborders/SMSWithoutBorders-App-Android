@@ -79,7 +79,7 @@ public class EmailThreadsActivity extends AppCompatActivity {
     public void composeEmail() {
         Intent intent = new Intent(this, EmailComposeActivity.class);
         intent.putExtra("platform_id", platformId[0]);
-        startActivity(intent);
+        startActivityForResult(intent, 1);
     }
 
     @Override
