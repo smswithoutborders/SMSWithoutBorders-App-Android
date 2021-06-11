@@ -74,6 +74,12 @@ public class SettingsActivity extends AppCompatActivity {
         loadSettings();
     }
 
+    public void resyncApp(View view) {
+        Intent intent = new Intent(this, PermissionsActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     private void loadSettings() {
         for(GatewayPhonenumber phonenumber : phonenumbers) {
             RadioButton button = new RadioButton(this);

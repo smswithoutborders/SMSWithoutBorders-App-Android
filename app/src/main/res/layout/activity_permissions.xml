@@ -11,6 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/frameLayout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,9 +26,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
-            android:fontFamily="serif-monospace"
+            android:fontFamily="sans-serif-light"
             android:text="@string/qr_permission_text"
-            android:textAlignment="viewStart"
+            android:textAlignment="center"
             android:textColor="#B6B4B4"
             android:textSize="20sp" />
 
@@ -89,10 +90,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="67dp"
             android:layout_marginBottom="20dp"
-            android:fontFamily="serif-monospace"
+            android:fontFamily="sans-serif-medium"
             android:text="Synchronization Permission Request"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="@color/default_blue"
             android:textSize="20sp"
             android:textStyle="bold" />
 

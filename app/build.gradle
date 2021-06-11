@@ -7,10 +7,10 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.afkanerd.swob"
+        applicationId "com.afkanerd.sw0b"
         minSdkVersion 23
         targetSdkVersion 30
-        versionCode 5
+        versionCode 8
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
