@@ -151,6 +151,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
                     .setType(phone.getString("type"))
                     .setNumber(phone.getString("number"))
                     .setDefault(phone.getBoolean("default"))
+                    .setCountryCode(phone.getString("country_code"))
                     .setIsp(phone.getString("isp"));
 
             phonenumbers.add(phonenumber);
@@ -163,7 +164,9 @@ public class SyncProcessingActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Datastore dbConnector = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DBName).build();
+                        Datastore.class, Datastore.DBName)
+                        .fallbackToDestructiveMigration()
+                        .build();
                 GatewayDao gatewayDao = dbConnector.gatewayDao();
                 for(int i=0;i<phonenumbers.size();++i) {
                     gatewayDao.insert(phonenumbers.get(i));

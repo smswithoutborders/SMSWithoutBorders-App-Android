@@ -1,6 +1,8 @@
 package com.example.sw0b_001.Helpers;
 
+
 import androidx.annotation.NonNull;
+import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.DatabaseConfiguration;
 import androidx.room.InvalidationTracker;
@@ -18,7 +20,7 @@ import com.example.sw0b_001.Providers.Platforms.Platforms;
 
 import org.jetbrains.annotations.NotNull;
 
-@Database(entities = {EmailMessage.class, EmailThreads.class, Platforms.class, GatewayPhonenumber.class}, version = 1)
+@Database(entities = {EmailMessage.class, EmailThreads.class, Platforms.class, GatewayPhonenumber.class}, version = 2)
 public abstract class Datastore extends RoomDatabase {
     public static String DBName = "SWOBDb";
 

@@ -47,7 +47,9 @@ public class PlatformsActivity extends AppCompatActivity{
             @Override
             public void run() {
                 Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DBName).build();
+                        Datastore.class, Datastore.DBName)
+                        .fallbackToDestructiveMigration()
+                        .build();
                 PlatformDao platformsDao = platformDb.platformDao();
                 platforms = platformsDao.getAll();
 //                Log.d(this.getClass().getSimpleName(), ": size>> " + platforms.size());

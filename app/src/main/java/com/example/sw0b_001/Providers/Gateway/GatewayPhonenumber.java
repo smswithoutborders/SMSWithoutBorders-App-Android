@@ -2,12 +2,25 @@ package com.example.sw0b_001.Providers.Gateway;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(indices = {@Index(value={"number"}, unique = true)})
 public class GatewayPhonenumber {
     @PrimaryKey(autoGenerate = true)
     public long id;
+
+    @ColumnInfo(name="country_code")
+    public String countryCode;
+
+    public String getCountryCode() {
+        return this.countryCode;
+    }
+
+    public GatewayPhonenumber setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+        return this;
+    }
 
     public long getId() {
         return id;

@@ -5,12 +5,14 @@ import android.content.Intent;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.example.sw0b_001.EmailThreadsActivity;
+import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
 
 //@DatabaseView("SELECT platform.name, platform.description, platform.provider, platform.image, platform.id FROM platform")
-@Entity
+@Entity(indices = {@Index(value={"name", "short_name"}, unique = true)})
 public class Platforms {
     @ColumnInfo(name="name")
     public String name;
@@ -23,6 +25,18 @@ public class Platforms {
 
     @ColumnInfo(name="image")
     public int image;
+
+    @ColumnInfo(name="short_name")
+    public String short_name;
+
+    public String getShort_name() {
+        return this.short_name;
+    }
+
+    public Platforms setShort_name(String short_name) {
+        this.short_name = short_name;
+        return this;
+    }
 
     public String getType() {
         return type;
