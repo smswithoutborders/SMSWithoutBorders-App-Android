@@ -162,7 +162,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                     body.setError("Body should not be empty!");
                     return false;
                 }
-                item.setEnabled(false);
+//                item.setEnabled(false);
 
                 threadId = getIntent().getLongExtra("thread_id", -1);
                 if(threadId == -1) {
@@ -248,12 +248,12 @@ public class EmailComposeActivity extends AppCompatActivity {
 
 
     private void sendMessage(String recipient, String subject, String body) throws BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, IllegalBlockSizeException, UnrecoverableEntryException, KeyStoreException, NoSuchPaddingException, InvalidKeyException, CertificateException, IOException {
-//        Toast.makeText(getBaseContext(), "SMS sending...", Toast.LENGTH_LONG).show();
+//        Toast.makeText(getBaseContext(), "SMS sending...",yy Toast.LENGTH_LONG).show();
         String phonenumber = "";
         for(GatewayPhonenumber number : phonenumbers) {
 //            Log.i(this.getLocalClassName(), "[+] Number: " + number.getNumber());
             if(number.isDefault())
-                phonenumber = number.getNumber();
+                phonenumber = number.getCountryCode() + number.getNumber();
         }
 
         if(phonenumber.length() < 1 ) {
@@ -305,6 +305,11 @@ public class EmailComposeActivity extends AppCompatActivity {
                 startActivity(intent);
                 setResult(Activity.RESULT_OK, new Intent());
                 finish();
+            }
+            else {
+                Toast.makeText(this, "Could not transfer to default app", Toast.LENGTH_SHORT).show();
+                Log.i(this.getLocalClassName(), "IntentCameNull= " + intentCameNull);
+                Log.i(this.getLocalClassName(), "isPackageManager= " + intent.resolveActivity(getPackageManager()));
             }
         }
         else {

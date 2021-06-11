@@ -83,7 +83,7 @@ public class SettingsActivity extends AppCompatActivity {
     private void loadSettings() {
         for(GatewayPhonenumber phonenumber : phonenumbers) {
             RadioButton button = new RadioButton(this);
-            button.setText(phonenumber.getNumber() + "  |  " + phonenumber.getIsp());
+            button.setText("(" + phonenumber.getCountryCode() + ") " + phonenumber.getNumber() + "  |  " + phonenumber.getIsp());
             button.setId((int) phonenumber.getId());
             button.setTextSize(20);
             if(phonenumber.isDefault())
