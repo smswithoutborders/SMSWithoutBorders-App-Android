@@ -78,7 +78,7 @@ public class PlatformsActivity extends AppCompatActivity{
                     case R.id.settings:
                         startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                         overridePendingTransition(0, 0);
-//                        finish();
+                        finish();
                 }
                 return false;
             }
