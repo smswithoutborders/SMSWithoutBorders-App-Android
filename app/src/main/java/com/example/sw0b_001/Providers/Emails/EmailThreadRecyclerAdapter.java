@@ -1,5 +1,6 @@
 package com.example.sw0b_001.Providers.Emails;
 
+import androidx.appcompat.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -22,15 +23,18 @@ import java.util.List;
 public class EmailThreadRecyclerAdapter extends RecyclerView.Adapter<EmailThreadRecyclerAdapter.ViewHolder> {
 
     Context context;
-    int layout;
-    List<EmailMessage> threads;
+    int layout, highlightCount;
+    public List<EmailMessage> threads;
     boolean isHighlighting;
+    ActionBar ab;
 
-    public EmailThreadRecyclerAdapter(Context context, List<EmailMessage> threads, int intendedLayout) {
+    public EmailThreadRecyclerAdapter(Context context, List<EmailMessage> threads, int intendedLayout, ActionBar ab) {
         this.context = context;
         this.threads = threads;
         this.layout = intendedLayout;
         this.isHighlighting = false;
+        this.ab = ab;
+        this.highlightCount = 0;
     }
 
     @NonNull
@@ -87,11 +91,17 @@ public class EmailThreadRecyclerAdapter extends RecyclerView.Adapter<EmailThread
         v.setBackgroundColor(context.getResources().getColor(R.color.highlight_blue, context.getTheme()));
         v.setSelected(true);
         isHighlighting = true;
+        v.getRootView().findViewById(R.id.action_delete).setEnabled(true);
+        ++highlightCount;
     }
 
     private void deselected(View v) {
         v.setBackgroundColor(context.getResources().getColor(R.color.default_dark, context.getTheme()));
         v.setSelected(false);
+        --highlightCount;
+        if(highlightCount < 1 ) {
+            v.getRootView().findViewById(R.id.action_delete).setEnabled(false);
+        }
     }
 
 

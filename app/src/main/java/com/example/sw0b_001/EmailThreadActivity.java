@@ -57,7 +57,6 @@ public class EmailThreadActivity extends AppCompatActivity {
         ab = getSupportActionBar();
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
-
         emailMessage = new ArrayList<>();
         recyclerView = findViewById(R.id.email_single_thread);
         refresh();
@@ -100,7 +99,7 @@ public class EmailThreadActivity extends AppCompatActivity {
         String recipient = emailThreads.get(0).getRecipient();
         String subject = emailThreads.get(0).getSubject();
 
-        emailCustomMessageAdapter = new EmailThreadRecyclerAdapter(this, emailMessage, R.layout.layout_cardlist_thread);
+        emailCustomMessageAdapter = new EmailThreadRecyclerAdapter(this, emailMessage, R.layout.layout_cardlist_thread, ab);
         recyclerView.setAdapter(emailCustomMessageAdapter);
         LinearLayoutManager ln = new LinearLayoutManager(this);
         ln.setStackFromEnd(true);
@@ -133,16 +132,17 @@ public class EmailThreadActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        EditText to = findViewById(R.id.email_to);
-        EditText subject = findViewById(R.id.email_subject);
-        EditText body = findViewById(R.id.email_body);
         switch (item.getItemId()) {
             case R.id.action_delete:
-                startActivity(new Intent(this, EmailThreadsActivity.class));
-                to.setText("");
-                subject.setText("");
-                body.setText("");
-                finish();
+                int views = emailCustomMessageAdapter.getItemCount();
+                for(int i=0;i<views;++i) {
+                    View view = recyclerView.getLayoutManager().findViewByPosition(i);
+                    if(view.isSelected()) {
+                        emailCustomMessageAdapter.threads.remove(i);
+                        emailCustomMessageAdapter.notifyItemRemoved(i);
+                        emailCustomMessageAdapter.notifyItemRangeChanged(i, emailCustomMessageAdapter.getItemCount());
+                    }
+                }
                 return true;
 
             default:
