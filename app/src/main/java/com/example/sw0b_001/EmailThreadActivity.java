@@ -43,6 +43,7 @@ public class EmailThreadActivity extends AppCompatActivity {
     EmailThreadRecyclerAdapter emailCustomMessageAdapter;
     FloatingActionButton composeBtn;
 
+    ActionBar ab;
     private SMSSateViewModel model;
     long threadId;
 
@@ -53,7 +54,7 @@ public class EmailThreadActivity extends AppCompatActivity {
         Toolbar composeToolbar = (Toolbar) findViewById(R.id.single_thread_toolbar);
         setSupportActionBar(composeToolbar);
         // Get a support ActionBar corresponding to this toolbar
-        ActionBar ab = getSupportActionBar();
+        ab = getSupportActionBar();
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
@@ -136,24 +137,12 @@ public class EmailThreadActivity extends AppCompatActivity {
         EditText subject = findViewById(R.id.email_subject);
         EditText body = findViewById(R.id.email_body);
         switch (item.getItemId()) {
-            case R.id.discard:
+            case R.id.action_delete:
                 startActivity(new Intent(this, EmailThreadsActivity.class));
                 to.setText("");
                 subject.setText("");
                 body.setText("");
                 finish();
-                return true;
-
-            case R.id.action_send:
-                if(to.getText().toString().isEmpty()) {
-                    to.setError("Recipient cannot be empty!");
-                }
-                if(subject.getText().toString().isEmpty()) {
-                    subject.setError("Subject should not be empty!");
-                }
-                if(body.getText().toString().isEmpty()) {
-                    body.setError("Body should not be empty!");
-                }
                 return true;
 
             default:
@@ -176,8 +165,21 @@ public class EmailThreadActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp(){
-        setResult(Activity.RESULT_OK, new Intent());
-        finish();
+        // remove all highlighted
+        boolean removeSelection = false;
+        int views = emailCustomMessageAdapter.getItemCount();
+        for(int i=0;i<views;++i) {
+            View view = recyclerView.getLayoutManager().findViewByPosition(i);
+            if(view.isSelected()) {
+                removeSelection = true;
+                view.setSelected(false);
+                view.setBackgroundColor(getResources().getColor(R.color.default_dark, getApplicationContext().getTheme()));
+            }
+        }
+        if(!removeSelection) {
+            setResult(Activity.RESULT_OK, new Intent());
+            finish();
+        }
         return true;
     }
 }
