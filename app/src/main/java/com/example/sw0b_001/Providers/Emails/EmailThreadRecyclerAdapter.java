@@ -57,7 +57,9 @@ public class EmailThreadRecyclerAdapter extends RecyclerView.Adapter<EmailThread
         holder.mainLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                holder.mainLayout.setBackgroundColor(context.getResources().getColor(R.color.pending_gray, context.getTheme()));
+//                holder.mainLayout.setBackgroundColor(context.getResources().getColor(R.color.pending_gray, context.getTheme()));
+                v.setBackgroundColor(context.getResources().getColor(R.color.highlight_blue, context.getTheme()));
+                v.setSelected(true);
 //                holder.mainLayout.findViewById(R.id.platform_card).setBackgroundColor(context.getResources().getColor(R.color.pending_gray, context.getTheme()));
                 return true;
             }
