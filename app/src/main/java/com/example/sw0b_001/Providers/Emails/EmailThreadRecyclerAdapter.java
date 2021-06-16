@@ -54,6 +54,15 @@ public class EmailThreadRecyclerAdapter extends RecyclerView.Adapter<EmailThread
         else if(holder.threadBottomRightText.getText().toString().equals("pending") || holder.threadBottomRightText.getText().toString().equals("not delivered"))
             holder.threadBottomRightText.setTextColor(context.getResources().getColor(R.color.pending_gray, context.getTheme()));
 
+        holder.mainLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                holder.mainLayout.setBackgroundColor(context.getResources().getColor(R.color.pending_gray, context.getTheme()));
+//                holder.mainLayout.findViewById(R.id.platform_card).setBackgroundColor(context.getResources().getColor(R.color.pending_gray, context.getTheme()));
+                return true;
+            }
+        });
+
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
