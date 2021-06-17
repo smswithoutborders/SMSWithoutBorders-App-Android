@@ -50,7 +50,6 @@ public class EmailThreadsActivity extends AppCompatActivity {
     }
 
     private void refresh() {
-        Log.i("Refresh: ", "Refreshing...");
         RecyclerView cardlist = findViewById(recyclerView);
         Runnable runnable = new Runnable() {
             @Override
