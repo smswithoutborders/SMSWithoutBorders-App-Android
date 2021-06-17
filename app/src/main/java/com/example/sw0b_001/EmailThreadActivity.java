@@ -138,7 +138,25 @@ public class EmailThreadActivity extends AppCompatActivity {
                 for(int i=0;i<views;++i) {
                     View view = recyclerView.getLayoutManager().findViewByPosition(i);
                     if(view.isSelected()) {
+                        EmailMessage message = emailCustomMessageAdapter.threads.get(i);
                         emailCustomMessageAdapter.threads.remove(i);
+
+                        Runnable runnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
+                                        Datastore.class, Datastore.DBName).build();
+                                EmailMessageDao emailMessageDao = platformDb.emailDao();
+                                emailMessageDao.delete(message);
+                            }
+                        };
+                        Thread dbFetchThread = new Thread(runnable);
+                        dbFetchThread.start();
+                        try {
+                            dbFetchThread.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         emailCustomMessageAdapter.notifyItemRemoved(i);
                         emailCustomMessageAdapter.notifyItemRangeChanged(i, emailCustomMessageAdapter.getItemCount());
                     }
