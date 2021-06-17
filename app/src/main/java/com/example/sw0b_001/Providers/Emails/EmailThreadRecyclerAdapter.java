@@ -87,7 +87,7 @@ public class EmailThreadRecyclerAdapter extends RecyclerView.Adapter<EmailThread
         });
     }
 
-    private void selected(View v) {
+    public void selected(View v) {
         v.setBackgroundColor(context.getResources().getColor(R.color.highlight_blue, context.getTheme()));
         v.setSelected(true);
         isHighlighting = true;
@@ -95,11 +95,12 @@ public class EmailThreadRecyclerAdapter extends RecyclerView.Adapter<EmailThread
         ++highlightCount;
     }
 
-    private void deselected(View v) {
+    public void deselected(View v) {
         v.setBackgroundColor(context.getResources().getColor(R.color.default_dark, context.getTheme()));
         v.setSelected(false);
         --highlightCount;
         if(highlightCount < 1 ) {
+            isHighlighting = false;
             v.getRootView().findViewById(R.id.action_delete).setEnabled(false);
         }
     }

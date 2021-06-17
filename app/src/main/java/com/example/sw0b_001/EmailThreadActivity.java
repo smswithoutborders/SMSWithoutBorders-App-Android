@@ -190,8 +190,9 @@ public class EmailThreadActivity extends AppCompatActivity {
             View view = recyclerView.getLayoutManager().findViewByPosition(i);
             if(view.isSelected()) {
                 removeSelection = true;
-                view.setSelected(false);
-                view.setBackgroundColor(getResources().getColor(R.color.default_dark, getApplicationContext().getTheme()));
+//                view.setSelected(false);
+//                view.setBackgroundColor(getResources().getColor(R.color.default_dark, getApplicationContext().getTheme()));
+                emailCustomMessageAdapter.deselected(view);
             }
         }
         if(!removeSelection) {
