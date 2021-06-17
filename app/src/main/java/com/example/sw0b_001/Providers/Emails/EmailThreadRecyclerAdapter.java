@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw0b_001.EmailBodyActivity;
+import com.example.sw0b_001.EmailThreadActivity;
 import com.example.sw0b_001.R;
 
 import org.jetbrains.annotations.NotNull;

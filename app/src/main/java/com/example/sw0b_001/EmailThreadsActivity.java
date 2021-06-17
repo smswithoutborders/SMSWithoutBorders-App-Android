@@ -8,6 +8,7 @@ import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.example.sw0b_001.Helpers.Datastore;
@@ -49,6 +50,7 @@ public class EmailThreadsActivity extends AppCompatActivity {
     }
 
     private void refresh() {
+        Log.i("Refresh: ", "Refreshing...");
         RecyclerView cardlist = findViewById(recyclerView);
         Runnable runnable = new Runnable() {
             @Override
@@ -67,7 +69,7 @@ public class EmailThreadsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        emailThreadsAdapter = new EmailThreadsRecyclerViewAdapter(this, emailThreads, R.layout.layout_cardlist_threads, platformId[0]);
+        emailThreadsAdapter = new EmailThreadsRecyclerViewAdapter(this, emailThreads, R.layout.layout_cardlist_threads, platformId[0], this);
         cardlist.setAdapter(emailThreadsAdapter);
         LinearLayoutManager ln = new LinearLayoutManager(this);
         ln.setStackFromEnd(true);

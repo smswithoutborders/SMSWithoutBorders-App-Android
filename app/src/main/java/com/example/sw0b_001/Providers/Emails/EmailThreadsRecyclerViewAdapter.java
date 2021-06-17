@@ -13,6 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw0b_001.EmailThreadActivity;
+import com.example.sw0b_001.EmailThreadsActivity;
 import com.example.sw0b_001.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,12 +26,14 @@ public class EmailThreadsRecyclerViewAdapter extends RecyclerView.Adapter<EmailT
     int layout;
     long platformId;
     List<EmailThreads> threads;
+    EmailThreadsActivity emailThreadsActivity;
 
-    public EmailThreadsRecyclerViewAdapter(Context context, List<EmailThreads> threads, int intendedLayout, long platformId) {
+    public EmailThreadsRecyclerViewAdapter(Context context, List<EmailThreads> threads, int intendedLayout, long platformId, EmailThreadsActivity emailThreadsActivity) {
         this.context = context;
         this.threads = threads;
         this.layout = intendedLayout;
         this.platformId = platformId;
+        this.emailThreadsActivity = emailThreadsActivity;
     }
 
     @NonNull
@@ -58,6 +61,7 @@ public class EmailThreadsRecyclerViewAdapter extends RecyclerView.Adapter<EmailT
                 intent.putExtra("thread_id", thread.getId());
                 intent.putExtra("platform_id", platformId);
                 context.startActivity(intent);
+                emailThreadsActivity.finish();
             }
         });
     }

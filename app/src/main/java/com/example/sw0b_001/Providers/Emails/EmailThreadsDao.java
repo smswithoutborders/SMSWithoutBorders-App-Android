@@ -15,6 +15,9 @@ public interface EmailThreadsDao {
     @Query("SELECT * FROM EmailThreads WHERE id IN (:emailThreadId)")
     List<EmailThreads> loadAllByIds(long[] emailThreadId);
 
+    @Query("SELECT * FROM EmailThreads WHERE id = :emailThreadId")
+    EmailThreads loadByIds(long emailThreadId);
+
     @Query("SELECT * FROM EmailThreads WHERE platform_id IN (:platformIds)")
     List<EmailThreads> loadAllByPlatformId(long[] platformIds);
 

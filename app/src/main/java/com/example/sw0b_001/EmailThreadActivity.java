@@ -152,14 +152,35 @@ public class EmailThreadActivity extends AppCompatActivity {
                         };
                         Thread dbFetchThread = new Thread(runnable);
                         dbFetchThread.start();
+                        emailCustomMessageAdapter.notifyItemRemoved(i);
+                        emailCustomMessageAdapter.notifyItemRangeChanged(i, emailCustomMessageAdapter.getItemCount());
                         try {
                             dbFetchThread.join();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        emailCustomMessageAdapter.notifyItemRemoved(i);
-                        emailCustomMessageAdapter.notifyItemRangeChanged(i, emailCustomMessageAdapter.getItemCount());
                     }
+                }
+                if(emailCustomMessageAdapter.getItemCount() < 1 ) {
+                    Runnable runnable2 = new Runnable() {
+                        @Override
+                        public void run() {
+                            Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
+                                    Datastore.class, Datastore.DBName).build();
+                            EmailThreadsDao emailThreadsDao = platformDb.emailThreadDao();
+                            EmailThreads emailThreads = emailThreadsDao.loadByIds(threadId);
+                            emailThreadsDao.delete(emailThreads);
+                        }
+                    };
+                    Thread dbFetchThread2 = new Thread(runnable2);
+                    dbFetchThread2.start();
+                    try {
+                        dbFetchThread2.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    startActivity(getParentActivityIntent());
+                    finish();
                 }
                 return true;
 
