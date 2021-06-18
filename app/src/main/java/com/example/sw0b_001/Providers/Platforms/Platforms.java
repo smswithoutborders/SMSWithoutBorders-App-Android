@@ -12,7 +12,7 @@ import com.example.sw0b_001.EmailThreadsActivity;
 import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
 
 //@DatabaseView("SELECT platform.name, platform.description, platform.provider, platform.image, platform.id FROM platform")
-@Entity(indices = {@Index(value={"name", "short_name"}, unique = true)})
+@Entity(indices = {@Index(value={"name"}, unique = true)})
 public class Platforms {
     @ColumnInfo(name="name")
     public String name;

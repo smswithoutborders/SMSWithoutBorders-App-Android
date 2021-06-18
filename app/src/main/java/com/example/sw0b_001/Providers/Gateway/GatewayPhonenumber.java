@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(indices = {@Index(value={"number"}, unique = true)})
+@Entity(indices = {@Index(value={"number", "country_code"}, unique = true)})
 public class GatewayPhonenumber {
     @PrimaryKey(autoGenerate = true)
     public long id;

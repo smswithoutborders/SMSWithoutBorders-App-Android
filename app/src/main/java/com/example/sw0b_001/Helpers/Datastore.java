@@ -20,7 +20,7 @@ import com.example.sw0b_001.Providers.Platforms.Platforms;
 
 import org.jetbrains.annotations.NotNull;
 
-@Database(entities = {EmailMessage.class, EmailThreads.class, Platforms.class, GatewayPhonenumber.class}, version = 2)
+@Database(entities = {EmailMessage.class, EmailThreads.class, Platforms.class, GatewayPhonenumber.class}, version = 3)
 public abstract class Datastore extends RoomDatabase {
     public static String DBName = "SWOBDb";
 
