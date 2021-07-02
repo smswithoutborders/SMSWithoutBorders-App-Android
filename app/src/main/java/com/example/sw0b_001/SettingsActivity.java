@@ -131,4 +131,10 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, PlatformsActivity.class));
+        finish();
+    }
 }
