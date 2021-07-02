@@ -38,7 +38,7 @@
         </activity>
         <activity
             android:name=".SyncProcessingActivity"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+            android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:name=".SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -52,7 +52,7 @@
         <activity
             android:name=".EmailThreadActivity"
             android:parentActivityName=".EmailThreadsActivity"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar">
+            android:theme="@style/Theme.MyAppNoBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".EmailThreadsActivity" />
@@ -77,11 +77,11 @@
             android:label="Permission" />
         <activity
             android:name=".PlatformsActivity"
-            android:label="Usable Platforms" />
+            android:label="Synchronized Platforms" />
         <activity
             android:name=".EmailComposeActivity"
             android:parentActivityName=".PlatformsActivity"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar">
+            android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -98,7 +98,7 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar" />
+            android:theme="@style/Theme.MyAppNoBar" />
     </application>
 
 </manifest>

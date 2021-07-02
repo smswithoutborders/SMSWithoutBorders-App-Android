@@ -42,7 +42,8 @@ public class QRScannerActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(QRScannerActivity.this, result.getText(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(QRScannerActivity.this, "Synchronization begins...", Toast.LENGTH_SHORT).show();
+
                         Intent intent = new Intent(getApplicationContext(), SyncProcessingActivity.class);
                         // TODO: authenticate text before sending for processing
 
