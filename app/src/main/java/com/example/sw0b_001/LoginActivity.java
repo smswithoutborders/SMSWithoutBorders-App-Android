@@ -168,6 +168,9 @@ public class LoginActivity extends AppCompatActivity {
                 Datastore dbConnector = Room.databaseBuilder(getApplicationContext(),
                         Datastore.class, Datastore.DBName).build();
                 PlatformDao providerDao = dbConnector.platformDao();
+                EmailMessageDao emailMessageDao = dbConnector.emailDao();
+                providerDao.deleteAll();
+                emailMessageDao.deleteAll();
                 for(int i=0;i<providers.size();++i) {
                     Platforms provider = new Platforms()
                             .setName(platforms.get(i).get(0))

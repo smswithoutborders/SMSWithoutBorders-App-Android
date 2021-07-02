@@ -168,6 +168,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
                         .fallbackToDestructiveMigration()
                         .build();
                 GatewayDao gatewayDao = dbConnector.gatewayDao();
+                gatewayDao.deleteAll();
                 for(int i=0;i<phonenumbers.size();++i) {
                     gatewayDao.insert(phonenumbers.get(i));
                 }
