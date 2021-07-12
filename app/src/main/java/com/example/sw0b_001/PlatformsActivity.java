@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.sw0b_001.Helpers.Datastore;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
@@ -42,6 +44,8 @@ public class PlatformsActivity extends AppCompatActivity{
         platforms = new ArrayList<>();
         recyclerView = findViewById(R.id.settings_list_view);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        findViewById(R.id.no_platform_txt).setVisibility(View.INVISIBLE);
+        findViewById(R.id.btn_store_tokens).setVisibility(View.INVISIBLE);
 
         Runnable runnable = new Runnable() {
             @Override
@@ -61,6 +65,12 @@ public class PlatformsActivity extends AppCompatActivity{
             dbFetchThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+
+        if(platforms.size() < 1 ) {
+//            findViewById(R.id.textView3).setVisibility(View.INVISIBLE);
+            findViewById(R.id.no_platform_txt).setVisibility(View.VISIBLE);
+            findViewById(R.id.btn_store_tokens).setVisibility(View.VISIBLE);
         }
 
         platformsRecyclerAdapter = new PlatformsRecyclerAdapter(this, platforms, R.layout.layout_cardlist_threads);
@@ -83,5 +93,11 @@ public class PlatformsActivity extends AppCompatActivity{
                 return false;
             }
         });
+    }
+
+    public void linkPrivacyPolicy(View view) {
+        Uri intentUri = Uri.parse(getResources().getString(R.string.store_tokens));
+        Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
+        startActivity(intent);
     }
 }

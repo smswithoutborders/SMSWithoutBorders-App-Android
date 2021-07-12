@@ -28,6 +28,9 @@
     <string name="privacy_policy">
         https://smswithoutborders.com/privacy-policy
     </string>
+    <string name="store_tokens">
+        https://smswithoutborders.com/dashboard/wallet
+    </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
