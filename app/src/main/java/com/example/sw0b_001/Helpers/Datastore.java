@@ -22,6 +22,7 @@ import com.example.sw0b_001.Providers.Text.TextMessageDao;
 
 import org.jetbrains.annotations.NotNull;
 
+// @Database(entities = {EmailMessage.class, EmailThreads.class, Platforms.class, GatewayPhonenumber.class, TextMessage.class}, autoMigrations = {@AutoMigration(from=3,to=4)}, version = 4)
 @Database(entities = {EmailMessage.class, EmailThreads.class, Platforms.class, GatewayPhonenumber.class, TextMessage.class}, version = 4)
 public abstract class Datastore extends RoomDatabase {
     public static String DBName = "SWOBDb";
