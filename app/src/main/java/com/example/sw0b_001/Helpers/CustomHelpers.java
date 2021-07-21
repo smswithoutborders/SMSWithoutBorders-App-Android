@@ -36,7 +36,7 @@ public class CustomHelpers {
     }
     public static int getLetterImage(char letter) {
         int image = R.drawable.ic_round_message_24;
-        switch (letter) {
+        switch (Character.toLowerCase(letter)) {
             case 'a':
                 image = R.mipmap.letter_a;
                 break;
@@ -115,6 +115,10 @@ public class CustomHelpers {
             case 'z':
                 image = R.mipmap.letter_z;
             break;
+
+            default:
+                // image = R.mipmap.no_letter;
+                image = R.drawable.no_letter_foreground;
         }
         return image;
     }

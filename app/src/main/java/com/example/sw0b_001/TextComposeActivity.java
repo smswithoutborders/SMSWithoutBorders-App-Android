@@ -135,6 +135,7 @@ public class TextComposeActivity extends AppCompatActivity {
                                 .setDatetime(CustomHelpers.getDateTime())
                                 .setStatus("requested")
                                 .setPlatformId(platformId)
+                                .setImage(CustomHelpers.getLetterImage(body.getText().toString().charAt(0)))
                                 .setBody(body.getText().toString());
                         Datastore textStoreDB = Room.databaseBuilder(getApplicationContext(),
                                 Datastore.class, Datastore.DBName).build();

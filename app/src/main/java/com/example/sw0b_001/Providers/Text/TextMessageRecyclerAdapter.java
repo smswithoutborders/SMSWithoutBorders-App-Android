@@ -51,7 +51,9 @@ public class TextMessageRecyclerAdapter extends RecyclerView.Adapter<TextMessage
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         TextMessage textMessage = this.textMessages.get(position);
 //        holder.threadSubject.setText(this.textMessages.get(position).getBody());
-        holder.threadSubject.setText(this.textMessages.get(position).getBody().length() > 20 ? this.textMessages.get(position).getBody().substring(0, 20) : this.textMessages.get(position).getBody());
+        holder.threadSubject.setText(this.textMessages.get(position).getBody().length() > 20 ?
+                this.textMessages.get(position).getBody().substring(0, 20) + "..." :
+                this.textMessages.get(position).getBody());
         holder.threadSubSubject.setText("");
         holder.threadBottomRightText.setText(this.textMessages.get(position).getStatus());
         holder.threadTopRightText.setText(this.textMessages.get(position).getDatetime());
