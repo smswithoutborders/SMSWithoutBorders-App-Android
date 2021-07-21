@@ -20,33 +20,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/email_single_thread_toolbar"
-        app:title="Threads" />
+        app:title="Text" />
 
-    <TextView
-        android:id="@+id/subject"
-        android:layout_width="0dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="5dp"
-        android:fontFamily="sans-serif-light"
-        android:text="TextView"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/single_list_emails"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/single_thread_toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/single_list_emails"
+        android:id="@+id/single_list_text"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subject" />
+        app:layout_constraintTop_toBottomOf="@+id/single_thread_toolbar" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="wrap_content"

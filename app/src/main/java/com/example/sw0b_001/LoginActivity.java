@@ -179,6 +179,8 @@ public class LoginActivity extends AppCompatActivity {
                             .setType(platforms.get(i).get(1));
                     if(provider.getName().toLowerCase().equals("gmail") && provider.getProvider().toLowerCase().equals("google"))
                         provider.setImage(R.drawable.roundgmail);
+                    else if(provider.getName().toLowerCase().equals("twitter") && provider.getProvider().toLowerCase().equals("twitter"))
+                        provider.setImage(R.drawable.roundtwitter);
                     providerDao.insert(provider);
                 }
             }

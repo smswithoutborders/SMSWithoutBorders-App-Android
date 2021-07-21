@@ -10,6 +10,7 @@ import androidx.room.PrimaryKey;
 
 import com.example.sw0b_001.EmailThreadsActivity;
 import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
+import com.example.sw0b_001.TextThreadActivity;
 
 //@DatabaseView("SELECT platform.name, platform.description, platform.provider, platform.image, platform.id FROM platform")
 @Entity(indices = {@Index(value={"name"}, unique = true)})
@@ -59,18 +60,32 @@ public class Platforms {
         this.id = id;
     }
 
-    static public Intent getIntent(Context context, String provider, String platform) {
+    static public Intent getIntent(Context context, String platform, String type) {
         Intent intent = new Intent();
-        switch(provider.toLowerCase()) {
-            case "google":
-                switch(platform.toLowerCase()) {
-                    case "gmail": {
-                        intent = new Intent(context, EmailThreadsActivity.class);
-                        intent.putExtra("platform", platform);
-                        break;
-                    }
-                }
-            break;
+//        switch(provider.toLowerCase()) {
+//            case "google":
+//                switch(platform.toLowerCase()) {
+//                    case "gmail": {
+//                        intent = new Intent(context, EmailThreadsActivity.class);
+//                        intent.putExtra("platform", platform);
+//                        break;
+//                    }
+//                }
+//            break;
+//        }
+        switch(type) {
+            case "email": {
+                intent = new Intent(context, EmailThreadsActivity.class);
+                intent.putExtra("platform", platform);
+                break;
+            }
+
+            case "text": {
+                intent = new Intent(context, TextThreadActivity.class);
+                intent.putExtra("platform", platform);
+                break;
+            }
+            // TODO: put a default here
         }
         return intent;
     }

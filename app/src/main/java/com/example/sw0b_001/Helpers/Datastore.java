@@ -17,14 +17,17 @@ import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
 import com.example.sw0b_001.Providers.Gateway.GatewayDao;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.Platforms;
+import com.example.sw0b_001.Providers.Text.TextMessage;
+import com.example.sw0b_001.Providers.Text.TextMessageDao;
 
 import org.jetbrains.annotations.NotNull;
 
-@Database(entities = {EmailMessage.class, EmailThreads.class, Platforms.class, GatewayPhonenumber.class}, version = 3)
+@Database(entities = {EmailMessage.class, EmailThreads.class, Platforms.class, GatewayPhonenumber.class, TextMessage.class}, version = 4)
 public abstract class Datastore extends RoomDatabase {
     public static String DBName = "SWOBDb";
 
     public abstract EmailMessageDao emailDao();
+    public abstract TextMessageDao textMessageDao();
     public abstract EmailThreadsDao emailThreadDao();
     public abstract PlatformDao platformDao();
     public abstract GatewayDao gatewayDao();

@@ -58,11 +58,26 @@
                 android:value=".EmailThreadsActivity" />
         </activity>
         <activity
+            android:name=".TextThreadActivity"
+            android:parentActivityName=".PlatformsActivity"
+            android:theme="@style/Theme.MyAppNoBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PlatformsActivity" />
+        </activity>
+        <activity
             android:name=".EmailBodyActivity"
             android:parentActivityName=".EmailThreadActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".EmailThreadActivity" />
+        </activity>
+        <activity
+            android:name=".TextBodyActivity"
+            android:parentActivityName=".PlatformsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PlatformsActivity" />
         </activity>
         <activity
             android:name=".EmailThreadsActivity"
@@ -80,6 +95,16 @@
             android:label="Synchronized Platforms" />
         <activity
             android:name=".EmailComposeActivity"
+            android:parentActivityName=".PlatformsActivity"
+            android:theme="@style/Theme.MyAppNoBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".TextComposeActivity"
             android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
