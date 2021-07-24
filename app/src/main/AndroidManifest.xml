@@ -124,6 +124,10 @@
         <activity
             android:name=".LoginActivity"
             android:theme="@style/Theme.MyAppNoBar" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

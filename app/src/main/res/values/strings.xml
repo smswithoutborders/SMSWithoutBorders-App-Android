@@ -20,10 +20,9 @@
         or at this moment when you are synchronizing
     </string>
     <string name="qr_permission_text">
-        When you store a token with SMSwithoutborders, we securely store that token and guarantee it will only be accessed you.
-        In order to accomplish this we synchronize your App with your account details.
-        We will ask for your permission (depending on your settings) to access your Camera and scan the code.
-        Click "Scan QR" below to begin the synchronization process.
+        • Go to https://smswithoutborders.com <br/> &nbsp;&nbsp;and signup for an account.<br/><br/>
+        • Log into your account and use the <br/> &nbsp;&nbsp;wallet to save access to your <br/>&nbsp;platforms<br/><br/>
+        • Click "Scan QR" below to begin the <br/> &nbsp;&nbsp;synchronization process.<br></br>
     </string>
     <string name="privacy_policy">
         https://smswithoutborders.com/privacy-policy

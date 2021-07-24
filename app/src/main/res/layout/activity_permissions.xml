@@ -8,33 +8,6 @@
     tools:context=".PermissionsActivity">
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frameLayout2"
-        app:layout_constraintVertical_bias="0.068">
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/qr_permission_text"
-            android:textAlignment="center"
-            android:textColor="#B6B4B4"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/frameLayout"
         android:layout_width="366dp"
         android:layout_height="wrap_content"
@@ -75,28 +48,35 @@
             android:textSize="10sp" />
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/frameLayout2"
+    <TextView
+        android:id="@+id/textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="73dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="120dp"
+        android:fontFamily="@font/quicksand_medium"
+        android:text="@string/qr_permission_text"
+        android:textAlignment="textStart"
+        android:textColor="#B6B4B4"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="123dp"
+        android:fontFamily="@font/quicksand_medium"
+        android:text="Synchronization"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="67dp"
-            android:layout_marginBottom="20dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="Synchronization Permission Request"
-            android:textAlignment="center"
-            android:textColor="@color/default_blue"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-    </FrameLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
