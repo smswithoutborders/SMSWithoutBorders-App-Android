@@ -38,6 +38,7 @@ public class EmailThreadsActivity extends AppCompatActivity {
         platformId = new long[]{getIntent().getLongExtra("platform_id", -1)};
 //        System.out.println(">> platformId: " + platformId[0]);
 
+        findViewById(R.id.no_emails_sent).setVisibility(View.INVISIBLE);
         composeBtn = findViewById(R.id.floating_compose_body);
         composeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +69,8 @@ public class EmailThreadsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        if(emailThreads.size() < 1 )
+            findViewById(R.id.no_emails_sent).setVisibility(View.VISIBLE);
         emailThreadsAdapter = new EmailThreadsRecyclerViewAdapter(this, emailThreads, R.layout.layout_cardlist_threads, platformId[0], this);
         cardlist.setAdapter(emailThreadsAdapter);
         LinearLayoutManager ln = new LinearLayoutManager(this);

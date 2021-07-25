@@ -52,6 +52,7 @@ public class TextThreadActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
         textMessages = new ArrayList<>();
         recyclerView = findViewById(R.id.single_list_text);
+        findViewById(R.id.no_messages_sent).setVisibility(View.INVISIBLE);
         refresh();
     }
 
@@ -81,6 +82,8 @@ public class TextThreadActivity extends AppCompatActivity {
 //        String recipient = emailThreads.get(0).getRecipient();
 //        String subject = emailThreads.get(0).getSubject();
 
+        if(textMessages.size() < 1 )
+            findViewById(R.id.no_messages_sent).setVisibility(View.VISIBLE);
         textMessageRecyclerAdapter = new TextMessageRecyclerAdapter(this, textMessages, R.layout.layout_cardlist_thread, ab);
         recyclerView.setAdapter(textMessageRecyclerAdapter);
         LinearLayoutManager ln = new LinearLayoutManager(this);
