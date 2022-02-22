@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
-import com.example.sw0b_001.Helpers.Datastore;
+import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Providers.Emails.EmailThreadRecyclerAdapter;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.Platforms;
@@ -34,7 +34,7 @@ public class TextBodyActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DBName).build();
+                        Datastore.class, Datastore.DatabaseName).build();
                 long messageId = getIntent().getLongExtra("text_message_id", -1);
                 TextMessageDao textMessageDao = platformDb.textMessageDao();
                 textMessage = textMessageDao.get(messageId);

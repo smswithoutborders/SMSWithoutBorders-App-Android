@@ -12,8 +12,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.sw0b_001.Helpers.Datastore;
+import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Helpers.SecurityLayer;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServers;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
 import com.example.sw0b_001.Providers.Gateway.GatewayDao;
 
@@ -22,6 +24,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
@@ -57,13 +61,14 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
     public void processQR(String QRText) {
 //        Log.i(this.getClass().getSimpleName(), "[+] QR text: " + QRText);
-        SecurityLayer sl;
         try {
-            sl = new SecurityLayer();
-
+            SecurityLayer securityLayer = new SecurityLayer();
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
-            JSONObject jsonBody = new JSONObject("{\"public_key\": \"" + sl.init() + "\"}");
+
+            String publicKey = securityLayer.init();
+
+            JSONObject jsonBody = new JSONObject("{\"public_key\": \"" + publicKey + "\"}");
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(QRText, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -74,6 +79,29 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         - Would need to send password to the server after that
                         - Would receive the shared key if authentication is available
                          */
+
+                        // TODO: change from "pd" to "public_key"
+                        String gatewayServerPublicKey = response.getString("pd");
+
+                        // Log.d(getLocalClassName(), "Server public key: " + serverPublicKey);
+                        GatewayServers gatewayServer = new GatewayServers();
+                        gatewayServer.setPublicKey(gatewayServerPublicKey);
+
+                        String gatewayServerUrlHost = new URL(QRText).getHost();
+                        gatewayServer.setUrl(gatewayServerUrlHost);
+
+                        String gatewayServerUrlProtocol = new URL(QRText).getProtocol();
+                        gatewayServer.setProtocol(gatewayServerUrlProtocol);
+
+                        GatewayServersHandler gatewayServersHandler = new GatewayServersHandler(getApplicationContext());
+                        gatewayServersHandler.add(gatewayServer);
+
+                    } catch (JSONException | InterruptedException | MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+
+                    /*
+                    try{
                         String passwdHash = response.getString("pd");
                         String publicKey = response.getString("pk");
                         String sharedKey = response.getString("sk");
@@ -95,9 +123,11 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         storePhonenumbersFromGateway(list_phonenumbers);
                         logout(logoutIntent);
 
+
                     } catch (JSONException | InterruptedException e) {
                         e.printStackTrace();
                     }
+                     */
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -155,7 +185,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Datastore dbConnector = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DBName)
+                        Datastore.class, Datastore.DatabaseName)
                         .fallbackToDestructiveMigration()
                         .build();
                 GatewayDao gatewayDao = dbConnector.gatewayDao();

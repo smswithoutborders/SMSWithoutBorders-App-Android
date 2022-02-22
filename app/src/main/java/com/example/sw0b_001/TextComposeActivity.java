@@ -2,7 +2,6 @@ package com.example.sw0b_001;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
@@ -10,22 +9,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
 import com.example.sw0b_001.Helpers.CustomHelpers;
-import com.example.sw0b_001.Helpers.Datastore;
+import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Helpers.SecurityLayer;
-import com.example.sw0b_001.Providers.Emails.EmailMessage;
-import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
-import com.example.sw0b_001.Providers.Emails.EmailThreads;
-import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
 import com.example.sw0b_001.Providers.Gateway.GatewayDao;
 import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
@@ -82,7 +75,7 @@ public class TextComposeActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                            Datastore.class, Datastore.DBName).build();
+                            Datastore.class, Datastore.DatabaseName).build();
                     GatewayDao gatewayDao = platformDb.gatewayDao();
                     phonenumbers = gatewayDao.getAll();
 
@@ -138,7 +131,7 @@ public class TextComposeActivity extends AppCompatActivity {
                                 .setImage(CustomHelpers.getLetterImage(body.getText().toString().charAt(0)))
                                 .setBody(body.getText().toString());
                         Datastore textStoreDB = Room.databaseBuilder(getApplicationContext(),
-                                Datastore.class, Datastore.DBName).build();
+                                Datastore.class, Datastore.DatabaseName).build();
 
                         TextMessageDao platformsDao = textStoreDB.textMessageDao();
                         textMessageId = platformsDao.insertAll(textMessage);

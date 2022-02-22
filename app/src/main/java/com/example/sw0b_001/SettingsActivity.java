@@ -4,20 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.example.sw0b_001.Helpers.Datastore;
+import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Providers.Gateway.GatewayDao;
 import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
-import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DBName).build();
+                        Datastore.class, Datastore.DatabaseName).build();
                 GatewayDao gatewayDao = platformDb.gatewayDao();
                 phonenumbers = gatewayDao.getAll();
             }
@@ -98,7 +94,7 @@ public class SettingsActivity extends AppCompatActivity {
 //                        @Override
 //                        public void run() {
 //                            Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-//                                    Datastore.class, Datastore.DBName).build();
+//                                    Datastore.class, Datastore.DatabaseName).build();
 //                            GatewayDao gatewayDao = platformDb.gatewayDao();
 //                            gatewayDao.updateDefault(true, phonenumber.getId());
 //                            gatewayDao.updateDefault(true, phonenumber.getId());
@@ -116,7 +112,7 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                                Datastore.class, Datastore.DBName).build();
+                                Datastore.class, Datastore.DatabaseName).build();
                         GatewayDao gatewayDao = platformDb.gatewayDao();
                         gatewayDao.resetAllDefaults();
                         gatewayDao.updateDefault(true, checkedId);

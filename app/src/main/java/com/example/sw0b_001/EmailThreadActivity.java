@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.sw0b_001.Helpers.Datastore;
+import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreadRecyclerAdapter;
@@ -67,7 +67,7 @@ public class EmailThreadActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DBName).build();
+                        Datastore.class, Datastore.DatabaseName).build();
                 EmailMessageDao emailMessageDao = platformDb.emailDao();
                 EmailThreadsDao emailThreadsDao = platformDb.emailThreadDao();
                 emailMessage = emailMessageDao.loadAllByThreadId(new long[]{threadId});
@@ -135,7 +135,7 @@ public class EmailThreadActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                                        Datastore.class, Datastore.DBName).build();
+                                        Datastore.class, Datastore.DatabaseName).build();
                                 EmailMessageDao emailMessageDao = platformDb.emailDao();
                                 emailMessageDao.delete(message);
                             }
@@ -156,7 +156,7 @@ public class EmailThreadActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                                    Datastore.class, Datastore.DBName).build();
+                                    Datastore.class, Datastore.DatabaseName).build();
                             EmailThreadsDao emailThreadsDao = platformDb.emailThreadDao();
                             EmailThreads emailThreads = emailThreadsDao.loadByIds(threadId);
                             emailThreadsDao.delete(emailThreads);

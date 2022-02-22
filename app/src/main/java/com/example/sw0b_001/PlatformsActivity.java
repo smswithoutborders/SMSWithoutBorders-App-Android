@@ -10,11 +10,10 @@ import androidx.room.Room;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.sw0b_001.Helpers.Datastore;
+import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.Platforms;
 import com.example.sw0b_001.Providers.Platforms.PlatformsRecyclerAdapter;
@@ -51,7 +50,7 @@ public class PlatformsActivity extends AppCompatActivity{
             @Override
             public void run() {
                 Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DBName)
+                        Datastore.class, Datastore.DatabaseName)
                         .fallbackToDestructiveMigration()
                         .build();
                 PlatformDao platformsDao = platformDb.platformDao();

@@ -10,34 +10,27 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.EditText;
 
-import com.example.sw0b_001.Helpers.CustomHelpers;
-import com.example.sw0b_001.Helpers.Datastore;
+import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Helpers.GatewayValues;
 import com.example.sw0b_001.Helpers.SecurityLayer;
 import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
-import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.Platforms;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 public class LoginActivity extends AppCompatActivity {
     SecurityLayer securityLayer;
@@ -82,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                 .setStatus("delivered");
 
         Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                Datastore.class, Datastore.DBName).build();
+                Datastore.class, Datastore.DatabaseName).build();
 
         PlatformDao platformsDao = platformDb.platformDao();
         EmailThreadsDao emailThreadsDao = platformDb.emailThreadDao();
@@ -166,7 +159,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Datastore dbConnector = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DBName).build();
+                        Datastore.class, Datastore.DatabaseName).build();
                 PlatformDao providerDao = dbConnector.platformDao();
                 EmailMessageDao emailMessageDao = dbConnector.emailDao();
                 providerDao.deleteAll();
