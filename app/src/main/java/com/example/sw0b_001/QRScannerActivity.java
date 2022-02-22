@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
-import com.google.android.gms.security.ProviderInstaller;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.zxing.Result;
@@ -44,7 +43,7 @@ public class QRScannerActivity extends AppCompatActivity {
                     public void run() {
                         Toast.makeText(QRScannerActivity.this, "Synchronization begins...", Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(getApplicationContext(), SyncProcessingActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
                         // TODO: authenticate text before sending for processing
 
                         intent.putExtra("syncUrl", result.getText());

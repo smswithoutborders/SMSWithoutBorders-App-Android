@@ -4,9 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -15,29 +13,22 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Helpers.Datastore;
-import com.example.sw0b_001.Helpers.GatewayValues;
 import com.example.sw0b_001.Helpers.SecurityLayer;
 import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
 import com.example.sw0b_001.Providers.Gateway.GatewayDao;
-import com.example.sw0b_001.Providers.Platforms.PlatformDao;
-import com.example.sw0b_001.Providers.Platforms.Platforms;
-import com.google.android.gms.security.ProviderInstaller;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,14 +37,8 @@ import java.util.Map;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
-public class SyncProcessingActivity extends AppCompatActivity {
+public class SyncHandshakeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +68,12 @@ public class SyncProcessingActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
+                        /*
+                        - Should receive server's public key
+                            - should store the key after receiving it
+                        - Would need to send password to the server after that
+                        - Would receive the shared key if authentication is available
+                         */
                         String passwdHash = response.getString("pd");
                         String publicKey = response.getString("pk");
                         String sharedKey = response.getString("sk");
@@ -100,7 +91,7 @@ public class SyncProcessingActivity extends AppCompatActivity {
                         logoutIntent.putExtra("public_key", publicKey);
                         logoutIntent.putExtra("platforms", extractedInformation);
                         logoutIntent.putExtra("password_hash", passwdHash);
-                        List<GatewayPhonenumber> list_phonenumbers = SyncProcessingActivity.extractPhonenumbersFromGateway(phonenumbers);
+                        List<GatewayPhonenumber> list_phonenumbers = SyncHandshakeActivity.extractPhonenumbersFromGateway(phonenumbers);
                         storePhonenumbersFromGateway(list_phonenumbers);
                         logout(logoutIntent);
 

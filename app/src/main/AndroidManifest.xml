@@ -37,7 +37,7 @@
                 android:value=".PlatformsActivity" />
         </activity>
         <activity
-            android:name=".SyncProcessingActivity"
+            android:name=".SyncHandshakeActivity"
             android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:name=".SplashActivity"
