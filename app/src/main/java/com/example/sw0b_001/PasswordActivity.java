@@ -32,7 +32,7 @@ import java.util.Map;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 
-public class LoginActivity extends AppCompatActivity {
+public class PasswordActivity extends AppCompatActivity {
     SecurityLayer securityLayer;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
 

@@ -96,6 +96,11 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         GatewayServersHandler gatewayServersHandler = new GatewayServersHandler(getApplicationContext());
                         gatewayServersHandler.add(gatewayServer);
 
+                        // Navigating user to password intent
+                        Intent passwordActivityIntent = new Intent(getApplicationContext(), PasswordActivity.class);
+                        startActivity(passwordActivityIntent);
+
+                        // TODO not finished so that can return here
                     } catch (JSONException | InterruptedException | MalformedURLException e) {
                         e.printStackTrace();
                     }

@@ -50,7 +50,7 @@ public class PermissionsActivity extends AppCompatActivity {
             }
             else {
                 Toast.makeText(this, "Camera Permission Denied", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, LoginActivity.class);
+                Intent intent = new Intent(this, PasswordActivity.class);
                 startActivity(intent);
             }
         }

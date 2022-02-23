@@ -116,13 +116,13 @@
         <activity
             android:name=".QRScannerActivity"
             android:label="QR Scanner"
-            android:parentActivityName=".LoginActivity">
+            android:parentActivityName=".PasswordActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LoginActivity" />
+                android:value=".PasswordActivity" />
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".PasswordActivity"
             android:theme="@style/Theme.MyAppNoBar" />
 
         <meta-data
