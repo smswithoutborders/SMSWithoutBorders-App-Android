@@ -58,6 +58,8 @@ public class QRScannerActivity extends AppCompatActivity {
                         catch(Exception e) {
                             e.printStackTrace();
                             Toast.makeText(QRScannerActivity.this, "Failed to synchronize [" + result.getText() + "]", Toast.LENGTH_SHORT).show();
+
+                            // TODO return use to QR scan screen
                         }
                     }
                 });
