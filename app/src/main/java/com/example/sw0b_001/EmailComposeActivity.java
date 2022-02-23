@@ -21,7 +21,7 @@ import androidx.room.Room;
 
 import com.example.sw0b_001.Helpers.CustomHelpers;
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Helpers.SecurityLayer;
+import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
@@ -50,7 +50,7 @@ import javax.crypto.NoSuchPaddingException;
 public class EmailComposeActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
-    SecurityLayer securityLayer;
+    SecurityHandler securityLayer;
     long emailId;
     private List<GatewayPhonenumber> phonenumbers = new ArrayList<>();
     private Platforms platforms;
@@ -94,7 +94,7 @@ public class EmailComposeActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            securityLayer = new SecurityLayer(getApplicationContext());
+            securityLayer = new SecurityHandler(getApplicationContext());
         } catch (KeyStoreException e) {
             e.printStackTrace();
         } catch (CertificateException e) {

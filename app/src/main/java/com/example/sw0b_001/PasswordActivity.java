@@ -12,7 +12,7 @@ import android.widget.EditText;
 
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Helpers.GatewayValues;
-import com.example.sw0b_001.Helpers.SecurityLayer;
+import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
@@ -21,19 +21,22 @@ import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.Platforms;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.List;
 import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class PasswordActivity extends AppCompatActivity {
-    SecurityLayer securityLayer;
+    SecurityHandler securityLayer;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
 
 
@@ -42,7 +45,7 @@ public class PasswordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         try {
-            securityLayer = new SecurityLayer();
+            securityLayer = new SecurityHandler();
         } catch (KeyStoreException e) {
             e.printStackTrace();
         } catch (CertificateException e) {
@@ -54,90 +57,27 @@ public class PasswordActivity extends AppCompatActivity {
         }
     }
 
-    public void populateDB() throws InterruptedException {
-        Platforms gmail = new Platforms()
-                .setName("Gmail")
-                .setProvider("google")
-                .setDescription("Made By Google")
-                .setImage(R.drawable.roundgmail)
-                .setType("email");
-
-        EmailThreads emailThreads = new EmailThreads()
-//                        .setImage(CustomHelpers.getLetterImage('i'))
-                .setRecipient("info@smswithoutborders.com")
-                .setSubject("Initial test")
-                .setMdate("2021-01-01");
-
-        EmailMessage emailMessage = new EmailMessage()
-                .setBody("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ")
-                .setDatetime("2020-01-01")
-//                        .setImage(CustomHelpers.getLetterImage('i'))
-                .setStatus("delivered");
-
-        Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                Datastore.class, Datastore.DatabaseName).build();
-
-        PlatformDao platformsDao = platformDb.platformDao();
-        EmailThreadsDao emailThreadsDao = platformDb.emailThreadDao();
-        EmailMessageDao emailMessageDao = platformDb.emailDao();
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                platformsDao.deleteAll();
-                emailThreadsDao.deleteAll();
-                emailMessageDao.deleteAll();
-
-                long platformId = platformsDao.insert(gmail);
-                emailThreads.setPlatformId(platformId);
-                long threadId = emailThreadsDao.insert(emailThreads);
-
-                emailThreads.setSubject("Second Initial Message");
-                emailThreads.setRecipient("sherlock@gmail.com");
-                long threadId2 = emailThreadsDao.insert(emailThreads);
-
-                emailMessage.setThreadId(threadId);
-                emailMessageDao.insertAll(emailMessage);
-                emailMessage.setThreadId(threadId2);
-                emailMessageDao.insertAll(emailMessage);
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-        thread.join();
+    public boolean cloudValidatePassword(byte[] encryptedPassword) {
+       return false;
     }
 
-    public void clear_rsa() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
-        KeyStore keyStore = KeyStore.getInstance(SecurityLayer.DEFAULT_KEYSTORE_PROVIDER);
-        keyStore.load(null);
-        keyStore.deleteEntry(SecurityLayer.DEFAULT_KEYSTORE_ALIAS);
-    }
+    public void validateUsersCloudPassword(View view) throws IllegalBlockSizeException, InvalidKeyException, NoSuchAlgorithmException, BadPaddingException, IOException, CertificateException, KeyStoreException, InterruptedException, InvalidAlgorithmParameterException, UnrecoverableKeyException, NoSuchPaddingException {
+        EditText passwordField = findViewById(R.id.user_password);
+        SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
 
-
-    public void validateInput(View view) throws IllegalBlockSizeException, InvalidKeyException, NoSuchAlgorithmException, BadPaddingException, IOException, CertificateException, KeyStoreException, InterruptedException {
-        EditText password = findViewById(R.id.user_password);
-        String sharedKey = getIntent().getStringExtra("shared_key");
-        String publicKey = getIntent().getStringExtra("public_key");
-        String passwdHash = getIntent().getStringExtra("password_hash");
-        Map<Integer, List<String>>[] extractedInformation = (Map<Integer, List<String>>[]) getIntent().getSerializableExtra("platforms");
-
-        SecurityLayer securityLayer = new SecurityLayer(getApplicationContext());
-        if(password.getText().toString().isEmpty()) {
-            password.setError("Password cannot be empty!");
+        if(passwordField.getText().toString().isEmpty()) {
+            passwordField.setError("Password cannot be empty!");
             return;
         }
-        if(!securityLayer.authenticate(password.getText().toString(), securityLayer.decrypt_RSA(passwdHash.getBytes()))) {
-            password.setError("Failed to authenticate!");
+
+        byte[] passwordEncoded = passwordField.getText().toString().getBytes(StandardCharsets.UTF_8);
+        byte[] RSAEncryptedPassword = securityHandler.encrypt_RSA(passwordEncoded);
+        if(cloudValidatePassword(RSAEncryptedPassword)) {
+            // TODO return to SyncHandshakeActivity with an intent
         }
         else {
-            if(sharedKey != null && !sharedKey.isEmpty() && publicKey != null && !publicKey.isEmpty()) {
-                storeGatewayInformation(extractedInformation, passwdHash, publicKey, sharedKey);
-            }
-
-            startActivity(new Intent(this, PlatformsActivity.class));
-            finish();
+            passwordField.setError("Authentication Failed!");
         }
-
     }
 
     private void storeGatewayInformation(Map<Integer, List<String>>[] extractedInformation, String passwdHash, String publicKey, String sharedKey) throws InterruptedException {

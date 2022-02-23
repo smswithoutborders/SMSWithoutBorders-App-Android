@@ -5,6 +5,7 @@ import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -13,7 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Helpers.SecurityLayer;
+import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServers;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
@@ -31,6 +32,7 @@ import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.PublicKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
@@ -55,20 +57,25 @@ public class SyncHandshakeActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        String syncUrl = getIntent().getStringExtra("syncUrl");
-        processQR(syncUrl);
+        String syncUrl = getIntent().getStringExtra("gateway_server_session_sync_url");
+        publicKeyExchange(syncUrl);
     }
 
-    public void processQR(String QRText) {
+    public void publicKeyExchange(String QRText) {
 //        Log.i(this.getClass().getSimpleName(), "[+] QR text: " + QRText);
         try {
-            SecurityLayer securityLayer = new SecurityLayer();
+            SecurityHandler securityLayer = new SecurityHandler();
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
+            String gatewayServerUrlHost = new URL(QRText).getHost();
+            String keystoreAlias = gatewayServerUrlHost + "-keystore-alias";
+            Log.d(getLocalClassName(), "keystoreAlias: " + keystoreAlias);
+            PublicKey publicKeyEncoded = securityLayer.generateKeyPair(keystoreAlias)
+                    .generateKeyPair()
+                    .getPublic();
 
-            String publicKey = securityLayer.init();
-
-            JSONObject jsonBody = new JSONObject("{\"public_key\": \"" + publicKey + "\"}");
+            String publicKeyBase64 = Base64.encodeToString(publicKeyEncoded.getEncoded(), Base64.DEFAULT);
+            JSONObject jsonBody = new JSONObject("{\"public_key\": \"" + publicKeyBase64 + "\"}");
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(QRText, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -142,29 +149,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                 }
             });
             queue.add(jsonObjectRequest);
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (UnrecoverableKeyException e) {
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
+        } catch (KeyStoreException | NoSuchProviderException | CertificateException | NoSuchAlgorithmException | IOException | JSONException | InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         }
     }

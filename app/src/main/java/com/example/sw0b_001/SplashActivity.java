@@ -7,11 +7,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 
-import com.example.sw0b_001.Helpers.SecurityLayer;
+import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.databinding.ActivitySplashBinding;
 
 import java.io.IOException;
@@ -42,7 +40,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         try {
-            SecurityLayer securityLayer = new SecurityLayer();
+            SecurityHandler securityLayer = new SecurityHandler();
             if(securityLayer.hasKeyPairs(getApplicationContext())) {
                 AccessPlatforms();
                 finish();
@@ -87,7 +85,7 @@ public class SplashActivity extends AppCompatActivity {
         }
         mHideHandler.removeCallbacks(mShowPart2Runnable);
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
-        SecurityLayer securityLayer = new SecurityLayer();
+        SecurityHandler securityLayer = new SecurityHandler();
         mContentView.postDelayed(new Runnable() {
             @Override
             public void run() {
