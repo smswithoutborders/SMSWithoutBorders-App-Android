@@ -18,6 +18,9 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.zxing.Result;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 public class QRScannerActivity extends AppCompatActivity {
 
     Button scanButton;
@@ -25,7 +28,7 @@ public class QRScannerActivity extends AppCompatActivity {
     private CameraSource cameraSource;
     SurfaceView surfaceView;
     private boolean requestingPermission = false;
-    private CodeScanner mCodeScanner;
+    private CodeScanner codeScanner;
     private View loaderView;
     private TextView syncText;
 
@@ -34,21 +37,28 @@ public class QRScannerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscanner);
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
-        mCodeScanner = new CodeScanner(this, scannerView);
-        mCodeScanner.setDecodeCallback(new DecodeCallback() {
+        codeScanner = new CodeScanner(this, scannerView);
+        codeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull final Result result) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Toast.makeText(QRScannerActivity.this, "Synchronization begins...", Toast.LENGTH_SHORT).show();
-
-                        Intent intent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
                         // TODO: authenticate text before sending for processing
+                        try {
+                            String resultValue = result.getText();
+                            URL resultURL = new URL(resultValue);
 
-                        intent.putExtra("syncUrl", result.getText());
-                        startActivity(intent);
-                        finish();
+                            Intent intent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
+                            intent.putExtra("gateway_server_session_sync_url", resultURL);
+                            startActivity(intent);
+                            finish();
+                        }
+                        catch(Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(QRScannerActivity.this, "Failed to synchronize [" + result.getText() + "]", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }
@@ -56,7 +66,7 @@ public class QRScannerActivity extends AppCompatActivity {
         scannerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCodeScanner.startPreview();
+                codeScanner.startPreview();
             }
         });
     }
@@ -65,12 +75,12 @@ public class QRScannerActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mCodeScanner.startPreview();
+        codeScanner.startPreview();
     }
 
     @Override
     protected void onPause() {
-        mCodeScanner.releaseResources();
+        codeScanner.releaseResources();
         super.onPause();
     }
 }
