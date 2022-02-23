@@ -3,6 +3,7 @@ package com.example.sw0b_001.Models.GatewayServers;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.sw0b_001.Providers.Emails.EmailMessage;
@@ -14,7 +15,7 @@ public interface GatewayServersDAO {
     @Query("SELECT * FROM GatewayServers")
     List<GatewayServers> getAll();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(GatewayServers gatewayServers);
 
 //    @Query("SELECT * FROM emailcustommessage WHERE uid IN (:emailcustommessageIds)")
