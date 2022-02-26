@@ -67,13 +67,13 @@ public class SyncHandshakeActivity extends AppCompatActivity {
         }
     }
 
-    public void publicKeyExchange(String QRText) {
-//        Log.i(this.getClass().getSimpleName(), "[+] QR text: " + QRText);
+    public void publicKeyExchange(String gatewayServerHandshakeUrl) {
+        Log.d(getLocalClassName(), gatewayServerHandshakeUrl);
         try {
             SecurityHandler securityLayer = new SecurityHandler();
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
-            String gatewayServerUrlHost = new URL(QRText).getHost();
+            String gatewayServerUrlHost = new URL(gatewayServerHandshakeUrl).getHost();
             String keystoreAlias = gatewayServerUrlHost + "-keystore-alias";
             Log.d(getLocalClassName(), "keystoreAlias: " + keystoreAlias);
             PublicKey publicKeyEncoded = securityLayer.generateKeyPair(keystoreAlias)
@@ -82,7 +82,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
             String publicKeyBase64 = Base64.encodeToString(publicKeyEncoded.getEncoded(), Base64.DEFAULT);
             JSONObject jsonBody = new JSONObject("{\"public_key\": \"" + publicKeyBase64 + "\"}");
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(QRText, jsonBody, new Response.Listener<JSONObject>() {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(gatewayServerHandshakeUrl, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
@@ -94,16 +94,16 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                          */
 
                         // TODO: change from "pd" to "public_key"
-                        String gatewayServerPublicKey = response.getString("pd");
+                        String gatewayServerPublicKey = response.getString("public_key");
 
                         // Log.d(getLocalClassName(), "Server public key: " + serverPublicKey);
                         GatewayServers gatewayServer = new GatewayServers();
                         gatewayServer.setPublicKey(gatewayServerPublicKey);
 
-                        String gatewayServerUrlHost = new URL(QRText).getHost();
+                        String gatewayServerUrlHost = new URL(gatewayServerHandshakeUrl).getHost();
                         gatewayServer.setUrl(gatewayServerUrlHost);
 
-                        String gatewayServerUrlProtocol = new URL(QRText).getProtocol();
+                        String gatewayServerUrlProtocol = new URL(gatewayServerHandshakeUrl).getProtocol();
                         gatewayServer.setProtocol(gatewayServerUrlProtocol);
 
                         GatewayServersHandler gatewayServersHandler = new GatewayServersHandler(getApplicationContext());
@@ -115,7 +115,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         Intent syncHandshakeIntent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
                         syncHandshakeIntent.putExtra("state", "complete_handshake");
 
-                        passwordActivityIntent.putExtra("callbackIntent", passwordActivityIntent);
+                        passwordActivityIntent.putExtra("callbackIntent", syncHandshakeIntent);
                         startActivity(passwordActivityIntent);
 
                         finish();
@@ -123,40 +123,13 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    /*
-                    try{
-                        String passwdHash = response.getString("pd");
-                        String publicKey = response.getString("pk");
-                        String sharedKey = response.getString("sk");
-                        JSONObject platforms = response.getJSONObject("pl");
-                        JSONArray phonenumbers = response.getJSONArray("ph");
-//                        Log.i(this.getClass().getSimpleName(), "PasswdHash: " + passwdHash);
-//                        Log.i(this.getClass().getSimpleName(),"PublicKey: " + publicKey);
-//                        Log.i(this.getClass().getSimpleName(),"SharedKey: " + sharedKey);
-//                        Log.i(this.getClass().getSimpleName(),"Platforms: " + platforms);
-//                        Log.i(this.getClass().getSimpleName(),"Phonenumbers: " + phonenumbers);
-
-                        Map<Integer, List<String>>[] extractedInformation = extractPlatformFromGateway(platforms.getJSONArray("user_provider"));
-                        Intent logoutIntent = new Intent(getApplicationContext(), LoginActivity.class);
-                        logoutIntent.putExtra("shared_key", sharedKey);
-                        logoutIntent.putExtra("public_key", publicKey);
-                        logoutIntent.putExtra("platforms", extractedInformation);
-                        logoutIntent.putExtra("password_hash", passwdHash);
-                        List<GatewayPhonenumber> list_phonenumbers = SyncHandshakeActivity.extractPhonenumbersFromGateway(phonenumbers);
-                        storePhonenumbersFromGateway(list_phonenumbers);
-                        logout(logoutIntent);
-
-
-                    } catch (JSONException | InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                     */
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
 //                    System.out.println("Failed: " + error);
-                    Log.i(this.getClass().getSimpleName(), error.toString());
+                    // Log.e(this.getClass().getSimpleName(), error.toString());
+                    error.printStackTrace();
                 }
             });
             queue.add(jsonObjectRequest);
