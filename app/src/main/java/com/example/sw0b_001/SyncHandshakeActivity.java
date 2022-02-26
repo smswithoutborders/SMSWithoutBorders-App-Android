@@ -57,8 +57,14 @@ public class SyncHandshakeActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        String syncUrl = getIntent().getStringExtra("gateway_server_session_sync_url");
-        publicKeyExchange(syncUrl);
+        String state = getIntent().getStringExtra("state");
+        if(state == "complete_handshake") {
+            Log.d(this.getLocalClassName(), "Completing handshake");
+        }
+        else {
+            Log.d(this.getLocalClassName(), "Going to public key exchange");
+            publicKeyExchange(state);
+        }
     }
 
     public void publicKeyExchange(String QRText) {
@@ -105,9 +111,14 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
                         // Navigating user to password intent
                         Intent passwordActivityIntent = new Intent(getApplicationContext(), PasswordActivity.class);
+
+                        Intent syncHandshakeIntent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
+                        syncHandshakeIntent.putExtra("state", "complete_handshake");
+
+                        passwordActivityIntent.putExtra("callbackIntent", passwordActivityIntent);
                         startActivity(passwordActivityIntent);
 
-                        // TODO not finished so that can return here
+                        finish();
                     } catch (JSONException | InterruptedException | MalformedURLException e) {
                         e.printStackTrace();
                     }

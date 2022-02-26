@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
@@ -48,10 +49,13 @@ public class QRScannerActivity extends AppCompatActivity {
                         // TODO: authenticate text before sending for processing
                         try {
                             String resultValue = result.getText();
+                            Log.d(getLocalClassName(), "QR code: " + resultValue);
+
+                            // Raises an exception in case result is not a URL
                             URL resultURL = new URL(resultValue);
 
                             Intent intent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
-                            intent.putExtra("gateway_server_session_sync_url", resultURL);
+                            intent.putExtra("state", resultValue);
                             startActivity(intent);
                             finish();
                         }

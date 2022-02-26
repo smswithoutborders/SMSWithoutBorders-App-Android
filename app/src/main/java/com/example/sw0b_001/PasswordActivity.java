@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -73,7 +74,14 @@ public class PasswordActivity extends AppCompatActivity {
         byte[] passwordEncoded = passwordField.getText().toString().getBytes(StandardCharsets.UTF_8);
         byte[] RSAEncryptedPassword = securityHandler.encrypt_RSA(passwordEncoded);
         if(cloudValidatePassword(RSAEncryptedPassword)) {
-            // TODO return to SyncHandshakeActivity with an intent
+            // TODO: return to sender
+            if(getIntent().hasExtra("callbackIntent")) {
+                Object callbackIntent = getIntent().getExtras().get("callbackIntent");
+                if (callbackIntent.getClass() == Intent.class) {
+                    startActivity((Intent) callbackIntent);
+                }
+            }
+            finish();
         }
         else {
             passwordField.setError("Authentication Failed!");
