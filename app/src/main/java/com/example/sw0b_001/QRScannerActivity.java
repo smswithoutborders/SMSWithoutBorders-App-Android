@@ -49,6 +49,7 @@ public class QRScannerActivity extends AppCompatActivity {
                         // TODO: authenticate text before sending for processing
                         try {
                             String resultValue = result.getText();
+
                             Log.d(getLocalClassName(), "QR code: " + resultValue);
 
                             // Raises an exception in case result is not a URL
@@ -57,12 +58,12 @@ public class QRScannerActivity extends AppCompatActivity {
                             Intent intent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
                             intent.putExtra("state", resultValue);
                             startActivity(intent);
+
                             finish();
                         }
                         catch(Exception e) {
                             e.printStackTrace();
                             Toast.makeText(QRScannerActivity.this, "Failed to synchronize [" + result.getText() + "]", Toast.LENGTH_SHORT).show();
-
                             // TODO return use to QR scan screen
                         }
                     }
