@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.InvalidAlgorithmParameterException;
@@ -62,13 +63,11 @@ public class SyncHandshakeActivity extends AppCompatActivity {
         if(state.equals("complete_handshake")) {
             Log.d(this.getLocalClassName(), "Completing handshake");
 
-            /*
-            TODO
-            - Expecting (payload):
-                - shared_key
-                - gateways
-                - platforms
-             */
+            Serializable serializable = getIntent().getSerializableExtra("payload");
+            JSONObject jsonObjectPayload = (JSONObject) serializable;
+
+            // TODO: extract the contents of the object
+            Log.d(getLocalClassName(), "Completed handshake and information is stored");
         }
         else {
             Log.d(this.getLocalClassName(), "Going to public key exchange");
@@ -80,7 +79,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
         Log.d(getLocalClassName(), gatewayServerHandshakeUrl);
         try {
             SecurityHandler securityLayer = new SecurityHandler();
-            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
             URL gatewayServerUrl = new URL(gatewayServerHandshakeUrl);
             String gatewayServerUrlHost = gatewayServerUrl.getHost();
@@ -99,6 +97,8 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                     .getPublic();
 
             String publicKeyBase64 = Base64.encodeToString(publicKeyEncoded.getEncoded(), Base64.DEFAULT);
+
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
             JSONObject jsonBody = new JSONObject("{\"public_key\": \"" + publicKeyBase64 + "\"}");
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(gatewayServerHandshakeUrl, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
@@ -114,6 +114,9 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         // TODO: change from "pd" to "public_key"
                         String gatewayServerPublicKey = response.getString("public_key");
                         Log.d(getLocalClassName(), "Gateway server public key: " + gatewayServerPublicKey);
+
+                        String gatewayServerVerifyUrl = response.getString("verify_url");
+                        Log.d(getLocalClassName(), "Verify URL: " + gatewayServerVerifyUrl);
 
                         // Formatting public key to work well from here
                         // TODO: check to make sure this is working
@@ -141,6 +144,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
                         passwordActivityIntent.putExtra("callbackIntent", syncHandshakeIntent);
                         passwordActivityIntent.putExtra("gatewayServerID", gatewayServerId);
+                        passwordActivityIntent.putExtra("verificationURL", gatewayServerVerifyUrl);
                         startActivity(passwordActivityIntent);
 
                         finish();

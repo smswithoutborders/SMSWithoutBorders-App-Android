@@ -8,10 +8,16 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Helpers.GatewayValues;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServers;
@@ -23,7 +29,11 @@ import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.Platforms;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -60,8 +70,40 @@ public class PasswordActivity extends AppCompatActivity {
         }
     }
 
-    public boolean cloudValidatePassword(byte[] encryptedPassword, String userId) {
-        return true;
+    private class CustomVerificationPayload {
+        public Object payload = new Object();
+        public boolean state = false;
+    }
+
+
+    public CustomVerificationPayload cloudVerifyPassword(byte[] encryptedPassword, byte[] userId, String verificationUrl) throws CertificateException, KeyStoreException, NoSuchAlgorithmException, IOException, JSONException {
+        SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+
+        CustomVerificationPayload customVerificationPayload = new CustomVerificationPayload();
+
+        String passwordBase64 = Base64.encodeToString(encryptedPassword, Base64.DEFAULT);
+        String userIdBase64 = Base64.encodeToString(userId, Base64.DEFAULT);
+
+        JSONObject jsonBody = new JSONObject(
+                "{\"password\": \"" + passwordBase64 + "\"}," +
+                        "{\"user_id\": \"" + userIdBase64 + "\"");
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(verificationUrl, jsonBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                customVerificationPayload.payload = response;
+                customVerificationPayload.state = true;
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        queue.add(jsonObjectRequest);
+
+        return customVerificationPayload;
     }
 
     public void validateUsersCloudPassword(View view) throws IllegalBlockSizeException, InvalidKeyException, NoSuchAlgorithmException, BadPaddingException, IOException, CertificateException, KeyStoreException, InterruptedException, InvalidAlgorithmParameterException, UnrecoverableKeyException, NoSuchPaddingException {
@@ -76,6 +118,8 @@ public class PasswordActivity extends AppCompatActivity {
 
         if(getIntent().hasExtra("gatewayServerID")) {
             long gatewayServerId = getIntent().getLongExtra("gatewayServerID", -1);
+            String verificationUrl = getIntent().getStringExtra("verificationUrl");
+
             if(gatewayServerId == -1) {
                 Log.e(getLocalClassName(), "GatewayServer ID is incorrect currently = -1");
             }
@@ -86,7 +130,6 @@ public class PasswordActivity extends AppCompatActivity {
                         Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(),
                                 Datastore.class, Datastore.DatabaseName).build();
                         GatewayServersDAO gatewayServersDAO = databaseConnector.gatewayServersDAO();
-                        // GatewayServers gatewayServer = gatewayServersDAO.getById(gatewayServerId);
                         gatewayServers[0] = gatewayServersDAO.getById(gatewayServerId);
 
                     }
@@ -97,18 +140,28 @@ public class PasswordActivity extends AppCompatActivity {
                 byte[] passwordEncoded = passwordField.getText().toString().getBytes(StandardCharsets.UTF_8);
                 try {
                     GatewayServers gatewayServer = gatewayServers[0];
-                    byte[] RSAEncryptedPassword = securityHandler.encryptRSA(passwordEncoded, gatewayServer.getPublicKey());
-                    Log.d(getLocalClassName(), "RSAEncryptedPassword: " + RSAEncryptedPassword);
 
                     // TODO start a loader here, in case of a slow internet connection
                     UserHandler userHandler = new UserHandler(getApplicationContext());
                     User user = userHandler.getUser();
-                    if (cloudValidatePassword(RSAEncryptedPassword, user.getUserId())) {
-                        // TODO: return to sender
+
+                    byte[] RSAEncryptedPassword = securityHandler.encryptRSA(passwordEncoded, gatewayServer.getPublicKey());
+                    Log.d(getLocalClassName(), "RSAEncryptedPassword: " + RSAEncryptedPassword);
+
+                    byte[] RSAEncryptedUserId = securityHandler.encryptRSA(user.getUserId().getBytes(StandardCharsets.UTF_8), gatewayServer.getPublicKey());
+                    Log.d(getLocalClassName(), "RSAEncryptedPassword: " + RSAEncryptedPassword);
+
+                    /*
+                    Validate user, then callback the intended Intent
+                     */
+                    CustomVerificationPayload customVerificationPayload = cloudVerifyPassword(RSAEncryptedPassword, RSAEncryptedUserId, verificationUrl);
+                    if (customVerificationPayload.state) {
                         if (getIntent().hasExtra("callbackIntent")) {
-                            Object callbackIntent = getIntent().getExtras().get("callbackIntent");
-                            if (callbackIntent.getClass() == Intent.class) {
-                                startActivity((Intent) callbackIntent);
+                            Object callbackObject = getIntent().getExtras().get("callbackIntent");
+                            if (callbackObject.getClass() == Intent.class) {
+                                Intent callbackIntent = (Intent) callbackObject;
+                                callbackIntent.putExtra("payload", (Serializable) customVerificationPayload.payload);
+                                startActivity(callbackIntent);
                                 finish();
                             }
                         }
