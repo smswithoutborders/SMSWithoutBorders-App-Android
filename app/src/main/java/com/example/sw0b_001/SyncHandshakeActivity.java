@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Models.User.UserHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServers;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
@@ -58,8 +59,16 @@ public class SyncHandshakeActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
 
         String state = getIntent().getStringExtra("state");
-        if(state == "complete_handshake") {
+        if(state.equals("complete_handshake")) {
             Log.d(this.getLocalClassName(), "Completing handshake");
+
+            /*
+            TODO
+            - Expecting (payload):
+                - shared_key
+                - gateways
+                - platforms
+             */
         }
         else {
             Log.d(this.getLocalClassName(), "Going to public key exchange");
@@ -73,7 +82,16 @@ public class SyncHandshakeActivity extends AppCompatActivity {
             SecurityHandler securityLayer = new SecurityHandler();
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
-            String gatewayServerUrlHost = new URL(gatewayServerHandshakeUrl).getHost();
+            URL gatewayServerUrl = new URL(gatewayServerHandshakeUrl);
+            String gatewayServerUrlHost = gatewayServerUrl.getHost();
+
+            // Extracting userId from gatewayServerHandshake
+            int userIdIndex =4;
+            String userId = gatewayServerUrl.getPath().split("/")[userIdIndex];
+            Log.d(getLocalClassName(), "userId: " + userId);
+            UserHandler userHandler = new UserHandler(getApplicationContext(), userId);
+            userHandler.commitUser();
+
             String keystoreAlias = gatewayServerUrlHost + "-keystore-alias";
             Log.d(getLocalClassName(), "keystoreAlias: " + keystoreAlias);
             PublicKey publicKeyEncoded = securityLayer.generateKeyPair(keystoreAlias)

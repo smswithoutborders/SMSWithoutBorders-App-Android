@@ -16,6 +16,8 @@ import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Helpers.GatewayValues;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServers;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
+import com.example.sw0b_001.Models.User.User;
+import com.example.sw0b_001.Models.User.UserHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
@@ -58,13 +60,14 @@ public class PasswordActivity extends AppCompatActivity {
         }
     }
 
-    public boolean cloudValidatePassword(byte[] encryptedPassword) {
-       return false;
+    public boolean cloudValidatePassword(byte[] encryptedPassword, String userId) {
+        return true;
     }
 
     public void validateUsersCloudPassword(View view) throws IllegalBlockSizeException, InvalidKeyException, NoSuchAlgorithmException, BadPaddingException, IOException, CertificateException, KeyStoreException, InterruptedException, InvalidAlgorithmParameterException, UnrecoverableKeyException, NoSuchPaddingException {
         EditText passwordField = findViewById(R.id.user_password);
         SecurityHandler securityHandler = new SecurityHandler();
+        GatewayServers gatewayServers[] = {new GatewayServers()};
 
         if(passwordField.getText().toString().isEmpty()) {
             passwordField.setError("Password cannot be empty!");
@@ -83,31 +86,40 @@ public class PasswordActivity extends AppCompatActivity {
                         Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(),
                                 Datastore.class, Datastore.DatabaseName).build();
                         GatewayServersDAO gatewayServersDAO = databaseConnector.gatewayServersDAO();
-                        GatewayServers gatewayServer = gatewayServersDAO.getById(gatewayServerId);
+                        // GatewayServers gatewayServer = gatewayServersDAO.getById(gatewayServerId);
+                        gatewayServers[0] = gatewayServersDAO.getById(gatewayServerId);
 
-                        byte[] passwordEncoded = passwordField.getText().toString().getBytes(StandardCharsets.UTF_8);
-                        try {
-                            byte[] RSAEncryptedPassword = securityHandler.encryptRSA(passwordEncoded, gatewayServer.getPublicKey());
-                            Log.d(getLocalClassName(), "RSAEncryptedPassword: " + RSAEncryptedPassword);
-                            if (cloudValidatePassword(RSAEncryptedPassword)) {
-                                // TODO: return to sender
-                                if (getIntent().hasExtra("callbackIntent")) {
-                                    Object callbackIntent = getIntent().getExtras().get("callbackIntent");
-                                    if (callbackIntent.getClass() == Intent.class) {
-                                        startActivity((Intent) callbackIntent);
-                                        finish();
-                                    }
-                                }
-                            }
-                        }
-                        catch(Exception e) {
-                            e.printStackTrace();
-                        }
                     }
                 });
                 extractGatewayInformationThread.start();
                 extractGatewayInformationThread.join();
-                passwordField.setError("Authentication Failed!");
+
+                byte[] passwordEncoded = passwordField.getText().toString().getBytes(StandardCharsets.UTF_8);
+                try {
+                    GatewayServers gatewayServer = gatewayServers[0];
+                    byte[] RSAEncryptedPassword = securityHandler.encryptRSA(passwordEncoded, gatewayServer.getPublicKey());
+                    Log.d(getLocalClassName(), "RSAEncryptedPassword: " + RSAEncryptedPassword);
+
+                    // TODO start a loader here, in case of a slow internet connection
+                    UserHandler userHandler = new UserHandler(getApplicationContext());
+                    User user = userHandler.getUser();
+                    if (cloudValidatePassword(RSAEncryptedPassword, user.getUserId())) {
+                        // TODO: return to sender
+                        if (getIntent().hasExtra("callbackIntent")) {
+                            Object callbackIntent = getIntent().getExtras().get("callbackIntent");
+                            if (callbackIntent.getClass() == Intent.class) {
+                                startActivity((Intent) callbackIntent);
+                                finish();
+                            }
+                        }
+                    }
+                    else {
+                        passwordField.setError("Authentication Failed! Please try again...");
+                    }
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
