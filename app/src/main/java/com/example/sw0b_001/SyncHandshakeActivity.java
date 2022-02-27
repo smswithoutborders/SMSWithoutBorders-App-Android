@@ -97,6 +97,11 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         String gatewayServerPublicKey = response.getString("public_key");
                         Log.d(getLocalClassName(), "Gateway server public key: " + gatewayServerPublicKey);
 
+                        // Formatting public key to work well from here
+                        // TODO: check to make sure this is working
+                        gatewayServerPublicKey = gatewayServerPublicKey.replace("-----BEGIN PUBLIC KEY-----\n", "");
+                        gatewayServerPublicKey = gatewayServerPublicKey.replace("-----END PUBLIC KEY-----", "");
+
                         // Log.d(getLocalClassName(), "Server public key: " + serverPublicKey);
                         GatewayServers gatewayServer = new GatewayServers();
                         gatewayServer.setPublicKey(gatewayServerPublicKey);
