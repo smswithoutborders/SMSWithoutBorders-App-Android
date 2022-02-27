@@ -5,15 +5,17 @@ import android.preference.PreferenceManager;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.security.keystore.KeyProtection;
-import android.util.Base64;
 
 import android.content.Context;
+import android.util.Base64;
 
 import com.example.sw0b_001.Helpers.GatewayValues;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.KeyFactory;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -26,7 +28,9 @@ import java.security.SecureRandom;
 import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.MGF1ParameterSpec;
+import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -85,9 +89,18 @@ public class SecurityHandler {
         return publicKey;
     }
 
-    public byte[] encrypt_RSA(byte[] input, String keystoreAlias) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException {
+    public static PublicKey getPublicKeyFromBase64String(String publicKeyBase64) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        byte[] publicBytes = Base64.decode(publicKeyBase64, Base64.DEFAULT);
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicBytes);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PublicKey pubKey = keyFactory.generatePublic(keySpec);
+        return pubKey;
+    }
+
+    public byte[] encryptRSA(byte[] input, String publicKeyBase64) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
+        PublicKey publicKey = getPublicKeyFromBase64String(publicKeyBase64);
         this.cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-        this.cipher.init(Cipher.ENCRYPT_MODE, this.getPublicKey(keystoreAlias), param);
+        this.cipher.init(Cipher.ENCRYPT_MODE, publicKey, param);
         return cipher.doFinal(input);
     }
 

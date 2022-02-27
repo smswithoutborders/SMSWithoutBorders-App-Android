@@ -95,6 +95,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
                         // TODO: change from "pd" to "public_key"
                         String gatewayServerPublicKey = response.getString("public_key");
+                        Log.d(getLocalClassName(), "Gateway server public key: " + gatewayServerPublicKey);
 
                         // Log.d(getLocalClassName(), "Server public key: " + serverPublicKey);
                         GatewayServers gatewayServer = new GatewayServers();

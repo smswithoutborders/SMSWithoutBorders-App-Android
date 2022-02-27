@@ -17,10 +17,7 @@ import com.example.sw0b_001.Helpers.GatewayValues;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServers;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
 import com.example.sw0b_001.Security.SecurityHandler;
-import com.example.sw0b_001.Providers.Emails.EmailMessage;
-import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
-import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
 import com.example.sw0b_001.Providers.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Platforms.Platforms;
 
@@ -67,7 +64,7 @@ public class PasswordActivity extends AppCompatActivity {
 
     public void validateUsersCloudPassword(View view) throws IllegalBlockSizeException, InvalidKeyException, NoSuchAlgorithmException, BadPaddingException, IOException, CertificateException, KeyStoreException, InterruptedException, InvalidAlgorithmParameterException, UnrecoverableKeyException, NoSuchPaddingException {
         EditText passwordField = findViewById(R.id.user_password);
-        SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
+        SecurityHandler securityHandler = new SecurityHandler();
 
         if(passwordField.getText().toString().isEmpty()) {
             passwordField.setError("Password cannot be empty!");
@@ -90,7 +87,7 @@ public class PasswordActivity extends AppCompatActivity {
 
                         byte[] passwordEncoded = passwordField.getText().toString().getBytes(StandardCharsets.UTF_8);
                         try {
-                            byte[] RSAEncryptedPassword = securityHandler.encrypt_RSA(passwordEncoded, gatewayServer.getPublicKey());
+                            byte[] RSAEncryptedPassword = securityHandler.encryptRSA(passwordEncoded, gatewayServer.getPublicKey());
                             Log.d(getLocalClassName(), "RSAEncryptedPassword: " + RSAEncryptedPassword);
                             if (cloudValidatePassword(RSAEncryptedPassword)) {
                                 // TODO: return to sender
