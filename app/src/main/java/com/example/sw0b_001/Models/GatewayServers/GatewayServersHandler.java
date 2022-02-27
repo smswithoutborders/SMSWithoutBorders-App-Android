@@ -17,20 +17,22 @@ public class GatewayServersHandler {
         this.context = context;
     }
 
-    public void add(GatewayServers gatewayServer) throws InterruptedException {
+    public long add(GatewayServers gatewayServer) throws InterruptedException {
         // Log.d(getClass().getSimpleName(), "Public key for gateway: " + gatewayServer.getPublicKey());
         Datastore databaseConnector = Room.databaseBuilder(this.context, Datastore.class,
                 Datastore.DatabaseName).build();
+        final long[] gatewayServerInsertId = {-1};
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 GatewayServersDAO gatewayServersDAO = databaseConnector.gatewayServersDAO();
-                gatewayServersDAO.insert(gatewayServer);
+                gatewayServerInsertId[0] = gatewayServersDAO.insert(gatewayServer);
                 Log.d(getClass().getSimpleName(), "Added new gateway...");
             }
         });
         thread.start();
         thread.join();
+        return gatewayServerInsertId[0];
     }
 
     public boolean hasPublicKey(GatewayServers gatewayServers) {

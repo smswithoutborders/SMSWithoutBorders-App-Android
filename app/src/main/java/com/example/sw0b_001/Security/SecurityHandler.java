@@ -79,14 +79,15 @@ public class SecurityHandler {
         return preferences.contains(GatewayValues.SHARED_KEY) && this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS) && preferences.contains(GatewayValues.VAR_PASSWDHASH);
     }
 
-    private PublicKey getPublicKey() throws KeyStoreException {
-        PublicKey publicKey = this.keyStore.getCertificate(DEFAULT_KEYSTORE_ALIAS).getPublicKey();
+    private PublicKey getPublicKey(String keystoreAlias) throws KeyStoreException {
+        // PublicKey publicKey = this.keyStore.getCertificate(DEFAULT_KEYSTORE_ALIAS).getPublicKey();
+        PublicKey publicKey = this.keyStore.getCertificate(keystoreAlias).getPublicKey();
         return publicKey;
     }
 
-    public byte[] encrypt_RSA(byte[] input) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException {
+    public byte[] encrypt_RSA(byte[] input, String keystoreAlias) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException {
         this.cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-        this.cipher.init(Cipher.ENCRYPT_MODE, this.getPublicKey(), param);
+        this.cipher.init(Cipher.ENCRYPT_MODE, this.getPublicKey(keystoreAlias), param);
         return cipher.doFinal(input);
     }
 

@@ -13,6 +13,8 @@ import android.widget.EditText;
 
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Helpers.GatewayValues;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServers;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
@@ -71,20 +73,46 @@ public class PasswordActivity extends AppCompatActivity {
             return;
         }
 
-        byte[] passwordEncoded = passwordField.getText().toString().getBytes(StandardCharsets.UTF_8);
-        byte[] RSAEncryptedPassword = securityHandler.encrypt_RSA(passwordEncoded);
-        if(cloudValidatePassword(RSAEncryptedPassword)) {
-            // TODO: return to sender
-            if(getIntent().hasExtra("callbackIntent")) {
-                Object callbackIntent = getIntent().getExtras().get("callbackIntent");
-                if (callbackIntent.getClass() == Intent.class) {
-                    startActivity((Intent) callbackIntent);
-                }
+        if(getIntent().hasExtra("gatewayServerID")) {
+            long gatewayServerId = getIntent().getLongExtra("gatewayServerID", -1);
+            if(gatewayServerId == -1) {
+                Log.e(getLocalClassName(), "GatewayServer ID is incorrect currently = -1");
             }
-            finish();
-        }
-        else {
-            passwordField.setError("Authentication Failed!");
+            else {
+                Thread extractGatewayInformationThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(),
+                                Datastore.class, Datastore.DatabaseName).build();
+                        GatewayServersDAO gatewayServersDAO = databaseConnector.gatewayServersDAO();
+                        GatewayServers gatewayServer = gatewayServersDAO.getById(gatewayServerId);
+
+                        byte[] passwordEncoded = passwordField.getText().toString().getBytes(StandardCharsets.UTF_8);
+                        try {
+                            byte[] RSAEncryptedPassword = securityHandler.encrypt_RSA(passwordEncoded, gatewayServer.getPublicKey());
+                            Log.d(getLocalClassName(), "RSAEncryptedPassword: " + RSAEncryptedPassword);
+                            if (cloudValidatePassword(RSAEncryptedPassword)) {
+                                // TODO: return to sender
+                                if (getIntent().hasExtra("callbackIntent")) {
+                                    Object callbackIntent = getIntent().getExtras().get("callbackIntent");
+                                    if (callbackIntent.getClass() == Intent.class) {
+                                        startActivity((Intent) callbackIntent);
+                                    }
+                                }
+                            } else {
+                                passwordField.setError("Authentication Failed!");
+                            }
+                            return;
+                        }
+                        catch(Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                extractGatewayInformationThread.start();
+                extractGatewayInformationThread.join();
+                finish();
+            }
         }
     }
 

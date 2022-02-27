@@ -18,6 +18,9 @@ public interface GatewayServersDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(GatewayServers gatewayServers);
 
+    @Query("SELECT * FROM GatewayServers WHERE id IN (:gatewayServerId)")
+    GatewayServers getById(long gatewayServerId);
+
 //    @Query("SELECT * FROM emailcustommessage WHERE uid IN (:emailcustommessageIds)")
 //    List<EmailCustomMessage> loadAllByIds(int[] emailcustommessageIds);
 

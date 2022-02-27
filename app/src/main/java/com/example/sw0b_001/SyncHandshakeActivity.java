@@ -107,7 +107,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         gatewayServer.setProtocol(gatewayServerUrlProtocol);
 
                         GatewayServersHandler gatewayServersHandler = new GatewayServersHandler(getApplicationContext());
-                        gatewayServersHandler.add(gatewayServer);
+                        long gatewayServerId = gatewayServersHandler.add(gatewayServer);
 
                         // Navigating user to password intent
                         Intent passwordActivityIntent = new Intent(getApplicationContext(), PasswordActivity.class);
@@ -116,6 +116,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         syncHandshakeIntent.putExtra("state", "complete_handshake");
 
                         passwordActivityIntent.putExtra("callbackIntent", syncHandshakeIntent);
+                        passwordActivityIntent.putExtra("gatewayServerID", gatewayServerId);
                         startActivity(passwordActivityIntent);
 
                         finish();
