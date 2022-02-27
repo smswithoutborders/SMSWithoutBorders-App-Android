@@ -95,12 +95,10 @@ public class PasswordActivity extends AppCompatActivity {
                                     Object callbackIntent = getIntent().getExtras().get("callbackIntent");
                                     if (callbackIntent.getClass() == Intent.class) {
                                         startActivity((Intent) callbackIntent);
+                                        finish();
                                     }
                                 }
-                            } else {
-                                passwordField.setError("Authentication Failed!");
                             }
-                            return;
                         }
                         catch(Exception e) {
                             e.printStackTrace();
@@ -109,7 +107,7 @@ public class PasswordActivity extends AppCompatActivity {
                 });
                 extractGatewayInformationThread.start();
                 extractGatewayInformationThread.join();
-                finish();
+                passwordField.setError("Authentication Failed!");
             }
         }
     }
