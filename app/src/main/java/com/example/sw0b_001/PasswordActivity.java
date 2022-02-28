@@ -76,18 +76,15 @@ public class PasswordActivity extends AppCompatActivity {
     }
 
 
-    public CustomVerificationPayload cloudVerifyPassword(byte[] encryptedPassword, byte[] userId, String verificationUrl) throws CertificateException, KeyStoreException, NoSuchAlgorithmException, IOException, JSONException {
+    public CustomVerificationPayload cloudVerifyPassword(byte[] encryptedPassword, String verificationUrl) throws CertificateException, KeyStoreException, NoSuchAlgorithmException, IOException, JSONException {
         SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
         CustomVerificationPayload customVerificationPayload = new CustomVerificationPayload();
 
         String passwordBase64 = Base64.encodeToString(encryptedPassword, Base64.DEFAULT);
-        String userIdBase64 = Base64.encodeToString(userId, Base64.DEFAULT);
-
-        JSONObject jsonBody = new JSONObject(
-                "{\"password\": \"" + passwordBase64 + "\"}," +
-                        "{\"user_id\": \"" + userIdBase64 + "\"");
+        Log.d(getLocalClassName(), "passwordBase64: " + passwordBase64);
+        JSONObject jsonBody = new JSONObject( "{\"password\": \"" + passwordBase64 + "\"}");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(verificationUrl, jsonBody, new Response.Listener<JSONObject>() {
             @Override
@@ -106,7 +103,7 @@ public class PasswordActivity extends AppCompatActivity {
         return customVerificationPayload;
     }
 
-    public void validateUsersCloudPassword(View view) throws IllegalBlockSizeException, InvalidKeyException, NoSuchAlgorithmException, BadPaddingException, IOException, CertificateException, KeyStoreException, InterruptedException, InvalidAlgorithmParameterException, UnrecoverableKeyException, NoSuchPaddingException {
+    public void validateUsersCloudPassword(View view) throws NoSuchAlgorithmException, IOException, CertificateException, KeyStoreException, InterruptedException {
         EditText passwordField = findViewById(R.id.user_password);
         SecurityHandler securityHandler = new SecurityHandler();
         GatewayServers gatewayServers[] = {new GatewayServers()};
@@ -154,7 +151,7 @@ public class PasswordActivity extends AppCompatActivity {
                     /*
                     Validate user, then callback the intended Intent
                      */
-                    CustomVerificationPayload customVerificationPayload = cloudVerifyPassword(RSAEncryptedPassword, RSAEncryptedUserId, verificationUrl);
+                    CustomVerificationPayload customVerificationPayload = cloudVerifyPassword(RSAEncryptedPassword, verificationUrl);
                     if (customVerificationPayload.state) {
                         if (getIntent().hasExtra("callbackIntent")) {
                             Object callbackObject = getIntent().getExtras().get("callbackIntent");

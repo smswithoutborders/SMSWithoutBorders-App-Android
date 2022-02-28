@@ -83,7 +83,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
             URL gatewayServerUrl = new URL(gatewayServerHandshakeUrl);
             String gatewayServerUrlHost = gatewayServerUrl.getHost();
 
-            // Extracting userId from gatewayServerHandshake
+            // Extracting and storing userId from gatewayServerHandshake
             int userIdIndex =4;
             String userId = gatewayServerUrl.getPath().split("/")[userIdIndex];
             Log.d(getLocalClassName(), "userId: " + userId);
@@ -115,7 +115,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         String gatewayServerPublicKey = response.getString("public_key");
                         Log.d(getLocalClassName(), "Gateway server public key: " + gatewayServerPublicKey);
 
-                        String gatewayServerVerifyUrl = response.getString("verify_url");
+                        String gatewayServerVerifyUrl = response.getString("verification_url");
                         Log.d(getLocalClassName(), "Verify URL: " + gatewayServerVerifyUrl);
 
                         // Formatting public key to work well from here
