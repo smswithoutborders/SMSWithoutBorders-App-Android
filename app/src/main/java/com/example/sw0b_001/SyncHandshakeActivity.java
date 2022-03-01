@@ -130,6 +130,12 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         String gatewayServerUrlHost = new URL(gatewayServerHandshakeUrl).getHost();
                         gatewayServer.setUrl(gatewayServerUrlHost);
 
+                        Integer gatewayServerUrlPort = new URL(gatewayServerHandshakeUrl).getPort();
+                        gatewayServer.setPort(gatewayServerUrlPort);
+
+                        gatewayServerVerifyUrl = gatewayServerUrlHost + ":" + gatewayServerUrlPort + gatewayServerVerifyUrl;
+                        Log.d(getLocalClassName(), "Gatway server verification url: " + gatewayServerVerifyUrl);
+
                         String gatewayServerUrlProtocol = new URL(gatewayServerHandshakeUrl).getProtocol();
                         gatewayServer.setProtocol(gatewayServerUrlProtocol);
 
@@ -143,8 +149,8 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         syncHandshakeIntent.putExtra("state", "complete_handshake");
 
                         passwordActivityIntent.putExtra("callbackIntent", syncHandshakeIntent);
-                        passwordActivityIntent.putExtra("gatewayServerID", gatewayServerId);
-                        passwordActivityIntent.putExtra("verificationURL", gatewayServerVerifyUrl);
+                        passwordActivityIntent.putExtra("gatewayserver_id", gatewayServerId);
+                        passwordActivityIntent.putExtra("verification_url", gatewayServerVerifyUrl);
                         startActivity(passwordActivityIntent);
 
                         finish();

@@ -21,6 +21,13 @@ public class GatewayServers {
     @NonNull
     private String protocol;
 
+    @NonNull
+    private Integer port = 80;
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
     public void setPublicKey(String publicKey) {
         this.publicKey = publicKey;
     }
@@ -41,6 +48,9 @@ public class GatewayServers {
         return this.publicKey;
     }
 
+    public Integer getPort() {
+        return this.port;
+    }
     public String getUrl() {
         return this.url;
     }

@@ -113,9 +113,11 @@ public class PasswordActivity extends AppCompatActivity {
             return;
         }
 
-        if(getIntent().hasExtra("gatewayServerID")) {
-            long gatewayServerId = getIntent().getLongExtra("gatewayServerID", -1);
-            String verificationUrl = getIntent().getStringExtra("verificationUrl");
+        if(getIntent().hasExtra("gatewayserver_id")) {
+            long gatewayServerId = getIntent().getLongExtra("gatewayserver_id", -1);
+
+            // TODO check if has verification url
+            String verificationUrl = getIntent().getStringExtra("verification_url");
 
             if(gatewayServerId == -1) {
                 Log.e(getLocalClassName(), "GatewayServer ID is incorrect currently = -1");
@@ -143,9 +145,6 @@ public class PasswordActivity extends AppCompatActivity {
                     User user = userHandler.getUser();
 
                     byte[] RSAEncryptedPassword = securityHandler.encryptRSA(passwordEncoded, gatewayServer.getPublicKey());
-                    Log.d(getLocalClassName(), "RSAEncryptedPassword: " + RSAEncryptedPassword);
-
-                    byte[] RSAEncryptedUserId = securityHandler.encryptRSA(user.getUserId().getBytes(StandardCharsets.UTF_8), gatewayServer.getPublicKey());
                     Log.d(getLocalClassName(), "RSAEncryptedPassword: " + RSAEncryptedPassword);
 
                     /*
