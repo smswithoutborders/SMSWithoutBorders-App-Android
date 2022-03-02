@@ -130,14 +130,14 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         String gatewayServerUrlHost = new URL(gatewayServerHandshakeUrl).getHost();
                         gatewayServer.setUrl(gatewayServerUrlHost);
 
+                        String gatewayServerUrlProtocol = new URL(gatewayServerHandshakeUrl).getProtocol();
+                        gatewayServer.setProtocol(gatewayServerUrlProtocol);
+
                         Integer gatewayServerUrlPort = new URL(gatewayServerHandshakeUrl).getPort();
                         gatewayServer.setPort(gatewayServerUrlPort);
 
-                        gatewayServerVerifyUrl = gatewayServerUrlHost + ":" + gatewayServerUrlPort + gatewayServerVerifyUrl;
-                        Log.d(getLocalClassName(), "Gatway server verification url: " + gatewayServerVerifyUrl);
-
-                        String gatewayServerUrlProtocol = new URL(gatewayServerHandshakeUrl).getProtocol();
-                        gatewayServer.setProtocol(gatewayServerUrlProtocol);
+                        gatewayServerVerifyUrl = gatewayServerUrlProtocol + "://" + gatewayServerUrlHost + ":" + gatewayServerUrlPort + gatewayServerVerifyUrl;
+                        Log.d(getLocalClassName(), "Gateway server verification url: " + gatewayServerVerifyUrl);
 
                         GatewayServersHandler gatewayServersHandler = new GatewayServersHandler(getApplicationContext());
                         long gatewayServerId = gatewayServersHandler.add(gatewayServer);
