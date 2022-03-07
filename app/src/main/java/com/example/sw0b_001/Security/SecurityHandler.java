@@ -30,6 +30,7 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.MGF1ParameterSpec;
+import java.security.spec.RSAKeyGenParameterSpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.BadPaddingException;
@@ -247,8 +248,8 @@ public class SecurityHandler {
         keygen.initialize(
                 new KeyGenParameterSpec.Builder(
                         keystoreAlias,
-                        KeyProperties.PURPOSE_DECRYPT )
-                        .setDigests(KeyProperties.DIGEST_SHA256)
+                        KeyProperties.PURPOSE_DECRYPT | KeyProperties.PURPOSE_ENCRYPT)
+                        .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
                         .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
                         .build());
 
@@ -257,5 +258,14 @@ public class SecurityHandler {
         // return publicKey.getEncoded();
 
         return keygen;
+    }
+
+
+    public static String convert_to_pem_format(byte[] key) {
+        String keyString = Base64.encodeToString(key, Base64.DEFAULT);
+        keyString = "-----BEGIN PUBLIC KEY-----\n" + keyString;
+        keyString += "-----END PUBLIC KEY-----";
+
+        return keyString;
     }
 }

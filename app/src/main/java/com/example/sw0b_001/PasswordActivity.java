@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
@@ -70,42 +71,9 @@ public class PasswordActivity extends AppCompatActivity {
         }
     }
 
-    private class CustomVerificationPayload {
-        public Object payload = new Object();
-        public boolean state = false;
-    }
-
-
-    public CustomVerificationPayload cloudVerifyPassword(byte[] encryptedPassword, String verificationUrl) throws CertificateException, KeyStoreException, NoSuchAlgorithmException, IOException, JSONException {
-        SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-
-        CustomVerificationPayload customVerificationPayload = new CustomVerificationPayload();
-
-        String passwordBase64 = Base64.encodeToString(encryptedPassword, Base64.DEFAULT);
-        Log.d(getLocalClassName(), "passwordBase64: " + passwordBase64);
-        JSONObject jsonBody = new JSONObject( "{\"password\": \"" + passwordBase64 + "\"}");
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(verificationUrl, jsonBody, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                customVerificationPayload.payload = response;
-                customVerificationPayload.state = true;
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-        queue.add(jsonObjectRequest);
-
-        return customVerificationPayload;
-    }
-
     public void validateUsersCloudPassword(View view) throws NoSuchAlgorithmException, IOException, CertificateException, KeyStoreException, InterruptedException {
         EditText passwordField = findViewById(R.id.user_password);
-        SecurityHandler securityHandler = new SecurityHandler();
+        SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
         GatewayServers gatewayServers[] = {new GatewayServers()};
 
         if(passwordField.getText().toString().isEmpty()) {
@@ -147,72 +115,38 @@ public class PasswordActivity extends AppCompatActivity {
                     byte[] RSAEncryptedPassword = securityHandler.encryptRSA(passwordEncoded, gatewayServer.getPublicKey());
                     Log.d(getLocalClassName(), "RSAEncryptedPassword: " + RSAEncryptedPassword);
 
-                    /*
-                    Validate user, then callback the intended Intent
-                     */
-                    CustomVerificationPayload customVerificationPayload = cloudVerifyPassword(RSAEncryptedPassword, verificationUrl);
-                    if (customVerificationPayload.state) {
-                        if (getIntent().hasExtra("callbackIntent")) {
-                            Object callbackObject = getIntent().getExtras().get("callbackIntent");
-                            if (callbackObject.getClass() == Intent.class) {
-                                Intent callbackIntent = (Intent) callbackObject;
-                                callbackIntent.putExtra("payload", (Serializable) customVerificationPayload.payload);
-                                startActivity(callbackIntent);
-                                finish();
+                    String passwordBase64 = Base64.encodeToString(RSAEncryptedPassword, Base64.DEFAULT);
+                    Log.d(getLocalClassName(), "passwordBase64: " + passwordBase64);
+
+                    JSONObject jsonBody = new JSONObject( "{\"password\": \"" + passwordBase64 + "\"}");
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(verificationUrl, jsonBody, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            if (getIntent().hasExtra("callbackIntent")) {
+                                Object callbackObject = getIntent().getExtras().get("callbackIntent");
+                                if (callbackObject.getClass() == Intent.class) {
+                                    Intent callbackIntent = (Intent) callbackObject;
+                                    callbackIntent.putExtra("payload", response.toString());
+                                    startActivity(callbackIntent);
+                                    finish();
+                                }
                             }
                         }
-                    }
-                    else {
-                        passwordField.setError("Authentication Failed! Please try again...");
-                    }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            passwordField.setError("Authentication Failed! Please try again...");
+                            error.printStackTrace();
+                        }
+                    });
+                    RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                    queue.add(jsonObjectRequest);
                 }
                 catch(Exception e) {
                     e.printStackTrace();
                 }
             }
         }
-    }
-
-    private void storeGatewayInformation(Map<Integer, List<String>>[] extractedInformation, String passwdHash, String publicKey, String sharedKey) throws InterruptedException {
-        Map<Integer, List<String>> providers = extractedInformation[0];
-        Map<Integer, List<String>> provider_platforms_map = extractedInformation[1];
-
-        SharedPreferences app_preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor editor = app_preferences.edit();
-        editor.putString(GatewayValues.VAR_PUBLICKEY, publicKey);
-        editor.putString(GatewayValues.SHARED_KEY, sharedKey);
-//                editor.putString(GatewayValues.VAR_PASSWDHASH, passwdHash);
-        storePlatformFromGateway(providers, provider_platforms_map);
-        editor.putString(GatewayValues.VAR_PASSWDHASH, passwdHash);
-        editor.commit();
-    }
-
-    public void storePlatformFromGateway(Map<Integer, List<String>> providers, Map<Integer, List<String>> platforms) throws InterruptedException {
-        Thread storeProviders = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Datastore dbConnector = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DatabaseName).build();
-                PlatformDao providerDao = dbConnector.platformDao();
-                EmailMessageDao emailMessageDao = dbConnector.emailDao();
-                providerDao.deleteAll();
-                emailMessageDao.deleteAll();
-                for(int i=0;i<providers.size();++i) {
-                    Platforms provider = new Platforms()
-                            .setName(platforms.get(i).get(0))
-                            .setDescription(providers.get(i).get(1))
-                            .setProvider(providers.get(i).get(0))
-                            .setType(platforms.get(i).get(1));
-                    if(provider.getName().toLowerCase().equals("gmail") && provider.getProvider().toLowerCase().equals("google"))
-                        provider.setImage(R.drawable.roundgmail);
-                    else if(provider.getName().toLowerCase().equals("twitter") && provider.getProvider().toLowerCase().equals("twitter"))
-                        provider.setImage(R.drawable.roundtwitter);
-                    providerDao.insert(provider);
-                }
-            }
-        });
-        storeProviders.start();
-        storeProviders.join();
     }
 
     public void linkPrivacyPolicy(View view) {

@@ -63,9 +63,12 @@ public class SyncHandshakeActivity extends AppCompatActivity {
         if(state.equals("complete_handshake")) {
             Log.d(this.getLocalClassName(), "Completing handshake");
 
-            Serializable serializable = getIntent().getSerializableExtra("payload");
-            JSONObject jsonObjectPayload = (JSONObject) serializable;
-
+            try {
+                JSONObject jsonObject = new JSONObject(getIntent().getStringExtra("payload"));
+                Log.d(getLocalClassName(), "Auth response (payload expected): " + jsonObject.getString("shared_key"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             // TODO: extract the contents of the object
             Log.d(getLocalClassName(), "Completed handshake and information is stored");
         }
@@ -78,7 +81,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
     public void publicKeyExchange(String gatewayServerHandshakeUrl) {
         Log.d(getLocalClassName(), gatewayServerHandshakeUrl);
         try {
-            SecurityHandler securityLayer = new SecurityHandler();
+            SecurityHandler securityHandler = new SecurityHandler();
 
             URL gatewayServerUrl = new URL(gatewayServerHandshakeUrl);
             String gatewayServerUrlHost = gatewayServerUrl.getHost();
@@ -92,14 +95,15 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
             String keystoreAlias = gatewayServerUrlHost + "-keystore-alias";
             Log.d(getLocalClassName(), "keystoreAlias: " + keystoreAlias);
-            PublicKey publicKeyEncoded = securityLayer.generateKeyPair(keystoreAlias)
+            PublicKey publicKeyEncoded = securityHandler.generateKeyPair(keystoreAlias)
                     .generateKeyPair()
                     .getPublic();
 
-            String publicKeyBase64 = Base64.encodeToString(publicKeyEncoded.getEncoded(), Base64.DEFAULT);
+            String PEMPublicKey = SecurityHandler.convert_to_pem_format(publicKeyEncoded.getEncoded());
+            Log.d(getLocalClassName(), "PEM Public Key: " + PEMPublicKey);
 
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            JSONObject jsonBody = new JSONObject("{\"public_key\": \"" + publicKeyBase64 + "\"}");
+            JSONObject jsonBody = new JSONObject("{\"public_key\": \"" + PEMPublicKey + "\"}");
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(gatewayServerHandshakeUrl, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
