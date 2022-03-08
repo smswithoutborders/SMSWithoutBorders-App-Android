@@ -72,7 +72,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void AccessPlatforms() {
-        Intent intent = new Intent(this, PlatformsActivity.class);
+        Intent intent = new Intent(this, DashboardActivity.class);
         startActivity(intent);
     }
 

@@ -5,7 +5,6 @@ import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -26,25 +25,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 public class SyncHandshakeActivity extends AppCompatActivity {
 
@@ -65,16 +57,46 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
             try {
                 JSONObject jsonObject = new JSONObject(getIntent().getStringExtra("payload"));
-                Log.d(getLocalClassName(), "Auth response (payload expected): " + jsonObject.getString("shared_key"));
+
+
+                // TODO: process when no platform is available
+                // TODO: process when platforms are available
+                processHandshakePayload(jsonObject);
+                Log.d(getLocalClassName(), "Completed handshake and information is stored");
+
+                Intent dashboardIntent = new Intent(getApplicationContext(), DashboardActivity.class);
+                startActivity(dashboardIntent);
+                finish();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            // TODO: extract the contents of the object
-            Log.d(getLocalClassName(), "Completed handshake and information is stored");
         }
         else {
             Log.d(this.getLocalClassName(), "Going to public key exchange");
             publicKeyExchange(state);
+        }
+    }
+
+    public void processHandshakePayload(JSONObject jsonObject) {
+        try {
+            String sharedKey = jsonObject.getString("shared_key");
+            Log.d(getLocalClassName(), "Shared Key: " + sharedKey);
+
+            JSONArray gatewayClients = jsonObject.getJSONArray("gateway_clients");
+            Log.d(getLocalClassName(), "");
+
+            JSONArray platforms = jsonObject.getJSONArray("user_platforms");
+            processAndStorePlatforms(platforms);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void processAndStorePlatforms(JSONArray platforms) throws JSONException {
+        for(int i=0; i< platforms.length(); ++i ) {
+            JSONObject platform = platforms.getJSONObject(i);
+            Log.d(getLocalClassName(), "+ Platform name: " + platform.getString("name"));
+            Log.d(getLocalClassName(), "\t+ Logo: " + platform.getString("logo"));
         }
     }
 

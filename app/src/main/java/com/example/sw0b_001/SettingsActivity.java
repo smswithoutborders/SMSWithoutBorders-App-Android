@@ -40,7 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
 //                Log.i(this.getClass().getSimpleName(), item.getTitle().toString());
                 switch(item.getItemId()) {
                     case R.id.platform:
-                        startActivity(new Intent(getApplicationContext(), PlatformsActivity.class));
+                        startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
                         overridePendingTransition(0, 0);
                         finish();
                 }
@@ -130,7 +130,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, PlatformsActivity.class));
+        startActivity(new Intent(this, DashboardActivity.class));
         finish();
     }
 }

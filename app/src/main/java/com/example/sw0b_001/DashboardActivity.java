@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlatformsActivity extends AppCompatActivity{
+public class DashboardActivity extends AppCompatActivity{
     // TODO: Check if user credentials are stored else log them out
     // TODO: Fill in bottomBar actions (dashboard, settings, logs, exit)
     // TODO: Include loader when message is sending...
