@@ -3,8 +3,12 @@ package com.example.sw0b_001;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.app.DownloadManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.telephony.mbms.DownloadRequest;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
@@ -13,7 +17,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Models.User.UserHandler;
+import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServers;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
@@ -24,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -57,8 +64,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
             try {
                 JSONObject jsonObject = new JSONObject(getIntent().getStringExtra("payload"));
-
-
                 // TODO: process when no platform is available
                 // TODO: process when platforms are available
                 processHandshakePayload(jsonObject);
@@ -79,6 +84,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
     public void processHandshakePayload(JSONObject jsonObject) {
         try {
+            // TODO securely store the shared key
             String sharedKey = jsonObject.getString("shared_key");
             Log.d(getLocalClassName(), "Shared Key: " + sharedKey);
 
@@ -87,17 +93,75 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
             JSONArray platforms = jsonObject.getJSONArray("user_platforms");
             processAndStorePlatforms(platforms);
-        } catch (JSONException e) {
+        } catch (JSONException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    private void processAndStorePlatforms(JSONArray platforms) throws JSONException {
-        for(int i=0; i< platforms.length(); ++i ) {
-            JSONObject platform = platforms.getJSONObject(i);
-            Log.d(getLocalClassName(), "+ Platform name: " + platform.getString("name"));
-            Log.d(getLocalClassName(), "\t+ Logo: " + platform.getString("logo"));
+    private void processAndStorePlatforms(JSONArray platforms) throws JSONException, InterruptedException {
+        Thread insertPlatformThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(),
+                        Datastore.class, Datastore.DatabaseName)
+                        .fallbackToDestructiveMigration()
+                        .build();
+                PlatformDao platformDao = databaseConnector.platformDao();
+
+                for(int i=0; i< platforms.length(); ++i ) {
+                    try {
+                        JSONObject JSONPlatform = platforms.getJSONObject(i);
+                        Log.d(getLocalClassName(), "+ Platform name: " + JSONPlatform.getString("name"));
+                        Log.d(getLocalClassName(), "\t+ Logo: " + JSONPlatform.getString("logo"));
+
+                        Platforms platform = new Platforms();
+                        platform.setName(JSONPlatform.getString("name"));
+                        platform.setDescription(JSONPlatform.getString("description"));
+                        platform.setLogo(downloadLogoOnline(JSONPlatform.getString("logo"), JSONPlatform.getString("name")));
+                        platform.setType(JSONPlatform.getString("type"));
+                        platform.setLetter(JSONPlatform.getString("letter"));
+
+                        platformDao.insert(platform);
+                        Log.d(getLocalClassName(), "Platform inserted successfully");
+                    }
+                    catch(JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+
+        insertPlatformThread.start();
+        insertPlatformThread.join();
+    }
+
+    public long downloadLogoOnline(String logoCompleteURL, String logoStorageName) {
+        // TODO: construct the logo back into a full URL
+        // TODO: download and store the image from the server
+        // TODO: pass back stored location of image (int) on device to be linked to stored platform
+        /*
+        File direct = new File(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), logoStorageName);
+
+        if (!direct.exists()) {
+            direct.mkdirs();
+            Log.d(getLocalClassName(), "Created dir for storing image");
         }
+         */
+
+        Uri logoCompleteURLURI = Uri.parse(logoCompleteURL);
+        DownloadManager.Request downloadManagerRequest = new DownloadManager.Request(logoCompleteURLURI);
+
+        String requestDescription = "Downloading " + logoCompleteURL;
+        String requestTitle = "Downloading platform logos";
+        downloadManagerRequest.setDescription(requestDescription);
+        downloadManagerRequest.setTitle(requestTitle);
+        downloadManagerRequest.setDestinationInExternalFilesDir(getApplicationContext(), Environment.DIRECTORY_PICTURES, logoStorageName);
+
+        DownloadManager downloadManager = (DownloadManager) getSystemService(getApplicationContext().DOWNLOAD_SERVICE);
+        long downloadId = downloadManager.enqueue(downloadManagerRequest);
+
+        return downloadId;
     }
 
     public void publicKeyExchange(String gatewayServerHandshakeUrl) {
