@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="Theme.MaterialComponents.Fullscreen" parent="Theme.MaterialComponents">
+    <style name="Theme.AppCompat.Light.NoActionBar">
         <item name="android:actionBarStyle">
             @style/Widget.Theme.MaterialComponents.ActionBar.Fullscreen
         </item>

@@ -248,7 +248,7 @@ public class EmailComposeActivity extends AppCompatActivity {
             return;
         }
 
-        body = formatForEmail(platforms.getProvider().toLowerCase(), platforms.getName().toLowerCase(), "send", recipient, subject, body);
+//        body = formatForEmail(platforms.getProvider().toLowerCase(), platforms.getName().toLowerCase(), "send", recipient, subject, body);
 //            Log.i(this.getLocalClassName(), ">> Body: " + body);
         body = getEncryptedSMS(body);
 //            Log.i(this.getLocalClassName(), ">> decrypted: " + new String(securityLayer.decrypt_AES(Base64.decode(body.getBytes(), Base64.DEFAULT))));
