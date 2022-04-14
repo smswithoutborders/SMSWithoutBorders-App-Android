@@ -10,7 +10,6 @@
         android:layout_width="217dp"
         android:layout_height="216dp"
         android:background="@drawable/swob_logo"
-        android:text="TextView"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +21,7 @@
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome!!!"
+        android:text="Welcome"
         android:textColor="#FFFFFF"
         android:textSize="44sp"
         android:textStyle="bold"
@@ -95,4 +94,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.90999997" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
