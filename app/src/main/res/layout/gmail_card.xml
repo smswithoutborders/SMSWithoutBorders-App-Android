@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -52,37 +53,35 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.19" />
 
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="0dp"
+            <EditText
+                android:id="@+id/editTextTime3"
+                android:layout_width="96dp"
                 android:layout_height="42dp"
-                android:layout_marginStart="90dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="30dp"
-                android:text="Email body.....  Email body.....  Email body..... Email body..... Email body..... "
+                android:layout_marginStart="87dp"
+                android:layout_marginEnd="25dp"
+                android:ems="10"
+                android:inputType="time"
+                android:text="10:30"
+                android:textColor="#A6A6A6"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView8"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintStart_toEndOf="@+id/textView8"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textView11"
+            <EditText
+                android:id="@+id/editTextTextMultiLine6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="330dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginBottom="40dp"
-                android:text="dateTime"
-                android:textColor="#BCBCBC"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="12dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:text="email body"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.45" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/textView7"
+                tools:layout_editor_absoluteY="40dp" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
