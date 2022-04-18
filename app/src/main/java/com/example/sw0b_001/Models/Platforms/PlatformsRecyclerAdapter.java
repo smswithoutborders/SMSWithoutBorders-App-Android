@@ -51,7 +51,7 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
         Platforms platform = this.platforms.get(position);
         holder.name.setText(platform.getName());
         holder.description.setText(platform.getDescription());
-        holder.provider.setText(platform.getProvider());
+        // holder.provider.setText(platform.getProvider());
         holder.type.setText(platform.getType());
 //        holder.image.setImageResource(platform.getImage());
 
