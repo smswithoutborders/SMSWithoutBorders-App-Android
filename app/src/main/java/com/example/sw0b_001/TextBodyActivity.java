@@ -50,7 +50,7 @@ public class TextBodyActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        setTitle(platform.getProvider());
+//        setTitle(platform.getProvider());
 
         TextView subject = findViewById(R.id.text_provider);
         subject.setText(platform.getName());
