@@ -3,8 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout-v21/activity_platforms.xml" value="0.37135416666666665" />
+        <entry key="app/src/main/res/layout-v21/layout_cardlist_thread.xml" value="0.37135416666666665" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/activity_permissions.xml" value="0.35104166666666664" />
+        <entry key="app/src/main/res/layout/activity_platforms.xml" value="0.37135416666666665" />
+        <entry key="app/src/main/res/layout/layout_cardlist_threads.xml" value="0.37135416666666665" />
       </map>
     </option>
   </component>

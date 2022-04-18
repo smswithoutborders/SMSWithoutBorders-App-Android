@@ -40,7 +40,6 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-//        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         LayoutInflater inflater = LayoutInflater.from(this.context);
         View view = inflater.inflate(this.customLayout, parent, false);
         return new ViewHolder(view);
@@ -51,7 +50,6 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
         Platforms platform = this.platforms.get(position);
         holder.name.setText(platform.getName());
         holder.description.setText(platform.getDescription());
-        holder.provider.setText(platform.getProvider());
         holder.type.setText(platform.getType());
 //        holder.image.setImageResource(platform.getImage());
 
