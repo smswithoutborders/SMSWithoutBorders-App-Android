@@ -2,11 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-<<<<<<< HEAD
     "identityHash": "8112e54dfdffeb10fe504e9cc3cd30fe",
-=======
-    "identityHash": "817664f0c697910f5324be54f7f1b8fe",
->>>>>>> alpha1
     "entities": [
       {
         "tableName": "GatewayServers",
@@ -175,11 +171,7 @@
       },
       {
         "tableName": "Platforms",
-<<<<<<< HEAD
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `description` TEXT, `logo` INTEGER NOT NULL, `letter` TEXT, `type` TEXT)",
-=======
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `description` TEXT, `provider` TEXT, `logo` INTEGER NOT NULL, `letter` TEXT, `type` TEXT)",
->>>>>>> alpha1
         "fields": [
           {
             "fieldPath": "id",
@@ -200,15 +192,6 @@
             "notNull": false
           },
           {
-<<<<<<< HEAD
-=======
-            "fieldPath": "provider",
-            "columnName": "provider",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
->>>>>>> alpha1
             "fieldPath": "logo",
             "columnName": "logo",
             "affinity": "INTEGER",
@@ -359,11 +342,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-<<<<<<< HEAD
       "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8112e54dfdffeb10fe504e9cc3cd30fe')"
-=======
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '817664f0c697910f5324be54f7f1b8fe')"
->>>>>>> alpha1
     ]
   }
 }
