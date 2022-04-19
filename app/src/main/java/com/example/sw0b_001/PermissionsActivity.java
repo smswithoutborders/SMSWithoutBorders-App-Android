@@ -21,7 +21,7 @@ public class PermissionsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_permissions);
+        setContentView(R.layout.activity_synchronise_type);
     }
 
     public void scanQR(View view) {

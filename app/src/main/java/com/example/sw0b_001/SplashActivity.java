@@ -65,8 +65,8 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
-    private void AccessPermissions() {
-        Intent intent = new Intent(this, PermissionsActivity.class);
+    private void AccessWelcomeActivity() {
+        Intent intent = new Intent(this, WelcomeActivity.class);
         startActivity(intent);
         return;
     }
@@ -91,7 +91,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
 //                    mControlsView.setVisibility(View.GONE);
                 mVisible = false;
-                AccessPermissions();
+                AccessWelcomeActivity();
                 finish();
             }
         }, 3000);

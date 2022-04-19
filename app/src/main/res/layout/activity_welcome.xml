@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.067" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView9"
@@ -39,10 +39,10 @@
         android:layout_marginTop="29dp"
         android:backgroundTint="#FFFFFF"
         android:text="SignUp"
+
         android:textAlignment="center"
         android:textColor="#3F51B5"
         android:textSize="20sp"
-
         app:cornerRadius="10dp"
         app:iconTintMode="add"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -58,6 +58,7 @@
         android:layout_width="282dp"
         android:layout_height="52dp"
         android:backgroundTint="#FFFFFF"
+        android:onClick="onClickSynchroniseBtn"
         android:text="synchronise"
         android:textAlignment="center"
         android:textColor="#3F51B5"
