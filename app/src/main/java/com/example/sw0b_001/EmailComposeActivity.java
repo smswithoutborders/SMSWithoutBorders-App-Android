@@ -1,23 +1,14 @@
 package com.example.sw0b_001;
 
-import android.Manifest;
 import android.app.Activity;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.telephony.SmsManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,27 +16,23 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
 import com.example.sw0b_001.Helpers.CustomHelpers;
-import com.example.sw0b_001.Helpers.Datastore;
-import com.example.sw0b_001.Helpers.GatewayValues;
-import com.example.sw0b_001.Helpers.SecurityLayer;
+import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
 import com.example.sw0b_001.Providers.Gateway.GatewayDao;
 import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
-import com.example.sw0b_001.Providers.Platforms.PlatformDao;
-import com.example.sw0b_001.Providers.Platforms.Platforms;
+import com.example.sw0b_001.Models.Platforms.PlatformDao;
+import com.example.sw0b_001.Models.Platforms.Platforms;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
@@ -63,7 +50,7 @@ import javax.crypto.NoSuchPaddingException;
 public class EmailComposeActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
-    SecurityLayer securityLayer;
+    SecurityHandler securityLayer;
     long emailId;
     private List<GatewayPhonenumber> phonenumbers = new ArrayList<>();
     private Platforms platforms;
@@ -93,7 +80,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                            Datastore.class, Datastore.DBName).build();
+                            Datastore.class, Datastore.DatabaseName).build();
                     GatewayDao gatewayDao = platformDb.gatewayDao();
                     phonenumbers = gatewayDao.getAll();
 
@@ -107,7 +94,7 @@ public class EmailComposeActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            securityLayer = new SecurityLayer(getApplicationContext());
+            securityLayer = new SecurityHandler(getApplicationContext());
         } catch (KeyStoreException e) {
             e.printStackTrace();
         } catch (CertificateException e) {
@@ -174,7 +161,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                                     .setSubject(subject.getText().toString())
                                     .setPlatformId(getIntent().getLongExtra("platform_id", -1));
                             Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
-                                    Datastore.class, Datastore.DBName).build();
+                                    Datastore.class, Datastore.DatabaseName).build();
 
                             EmailThreadsDao platformsDao = emailStoreDb.emailThreadDao();
                             threadId = platformsDao.insert(emailThread);
@@ -199,7 +186,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                                 .setSubject(subject.getText().toString())
                                 .setStatus("requested");
                         Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
-                                Datastore.class, Datastore.DBName).build();
+                                Datastore.class, Datastore.DatabaseName).build();
 
                         EmailMessageDao platformsDao = emailStoreDb.emailDao();
                         emailId = platformsDao.insertAll(emailMessage);
@@ -261,7 +248,7 @@ public class EmailComposeActivity extends AppCompatActivity {
             return;
         }
 
-        body = formatForEmail(platforms.getProvider().toLowerCase(), platforms.getName().toLowerCase(), "send", recipient, subject, body);
+//        body = formatForEmail(platforms.getProvider().toLowerCase(), platforms.getName().toLowerCase(), "send", recipient, subject, body);
 //            Log.i(this.getLocalClassName(), ">> Body: " + body);
         body = getEncryptedSMS(body);
 //            Log.i(this.getLocalClassName(), ">> decrypted: " + new String(securityLayer.decrypt_AES(Base64.decode(body.getBytes(), Base64.DEFAULT))));
