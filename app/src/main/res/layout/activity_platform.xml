@@ -7,7 +7,7 @@
     android:backgroundTint="#00FFFFFF">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/cardView1"
         android:layout_width="405dp"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="#393838"
@@ -57,7 +57,7 @@
         android:layout_width="426dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView">
+        app:layout_constraintTop_toBottomOf="@+id/cardView1">
 
     </androidx.cardview.widget.CardView>
 
@@ -77,7 +77,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/cardView1"
         app:layout_constraintVertical_bias="0.023" />
 
     <Button
@@ -116,7 +116,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/cardView1"
         app:layout_constraintVertical_bias="0.249" />
 
     <androidx.cardview.widget.CardView
