@@ -23,7 +23,7 @@
         app:menu="@menu/new_navigation" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/cardView1"
         android:layout_width="405dp"
         android:layout_height="wrap_content"
         android:background="#000000"
@@ -87,7 +87,7 @@
         android:background="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView">
+        app:layout_constraintTop_toBottomOf="@+id/cardView1">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="410dp"
