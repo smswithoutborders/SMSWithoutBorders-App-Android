@@ -25,7 +25,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/main_icon"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyApp"
+        android:theme="@style/Theme.MyAppNoBar"
+
         android:usesCleartextTraffic="true">
         <activity
             android:name=".SettingsActivity"
