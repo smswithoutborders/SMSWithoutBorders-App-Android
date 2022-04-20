@@ -6,13 +6,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
+import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.room.Room;
 
-import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.EmailThreadActivity;
+import com.example.sw0b_001.EmailThreadsActivity;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.R;
 
@@ -21,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
+
+import static android.content.ContentValues.TAG;
 
 public class CustomHelpers {
     public static String getDateTime() {
@@ -137,7 +143,7 @@ public class CustomHelpers {
                             @Override
                             public void run() {
                                 Datastore emailStoreDb = Room.databaseBuilder(context,
-                                        Datastore.class, Datastore.DatabaseName).build();
+                                        Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
                                 platformsDao.updateStatus("sent", intent.getLongExtra("email_id", 0));
@@ -155,7 +161,7 @@ public class CustomHelpers {
                             @Override
                             public void run() {
                                 Datastore emailStoreDb = Room.databaseBuilder(context,
-                                        Datastore.class, Datastore.DatabaseName).build();
+                                        Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
 //                                Log.i(this.getClass().getSimpleName(), "Event for Email: " + intent.getLongExtra("email_id", 0));
@@ -174,7 +180,7 @@ public class CustomHelpers {
                             @Override
                             public void run() {
                                 Datastore emailStoreDb = Room.databaseBuilder(context,
-                                        Datastore.class, Datastore.DatabaseName).build();
+                                        Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
                                 platformsDao.updateStatus("No service", intent.getLongExtra("email_id", 0));
@@ -192,7 +198,7 @@ public class CustomHelpers {
                             @Override
                             public void run() {
                                 Datastore emailStoreDb = Room.databaseBuilder(context,
-                                        Datastore.class, Datastore.DatabaseName).build();
+                                        Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
                                 platformsDao.updateStatus("Null PDU", intent.getLongExtra("email_id", 0));
@@ -210,7 +216,7 @@ public class CustomHelpers {
                             @Override
                             public void run() {
                                 Datastore emailStoreDb = Room.databaseBuilder(context,
-                                        Datastore.class, Datastore.DatabaseName).build();
+                                        Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
                                 platformsDao.updateStatus("Radio off", intent.getLongExtra("email_id", 0));
@@ -243,7 +249,7 @@ public class CustomHelpers {
                             @Override
                             public void run() {
                                 Datastore emailStoreDb = Room.databaseBuilder(context,
-                                        Datastore.class, Datastore.DatabaseName).build();
+                                        Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
                                 platformsDao.updateStatus("delivered", arg1.getLongExtra("email_id", 0));
@@ -261,7 +267,7 @@ public class CustomHelpers {
                             @Override
                             public void run() {
                                 Datastore emailStoreDb = Room.databaseBuilder(context,
-                                        Datastore.class, Datastore.DatabaseName).build();
+                                        Datastore.class, Datastore.DBName).build();
 
                                 EmailMessageDao platformsDao = emailStoreDb.emailDao();
                                 platformsDao.updateStatus("not delivered", arg1.getLongExtra("email_id", 0));

@@ -19,7 +19,7 @@
         android:id="@+id/fullscreenContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srcCompat="@drawable/swob_logo" />
+        app:srcCompat="@drawable/swob_icon_larger" />
 
     <FrameLayout android:layout_width="match_parent"
         android:layout_height="match_parent"

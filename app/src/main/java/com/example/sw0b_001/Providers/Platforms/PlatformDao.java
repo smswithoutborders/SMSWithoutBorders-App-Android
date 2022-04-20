@@ -1,4 +1,4 @@
-package com.example.sw0b_001.Models.Platforms;
+package com.example.sw0b_001.Providers.Platforms;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -19,7 +19,7 @@ public interface PlatformDao {
     @Insert
     void insertAll(Platforms... platforms);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insert(Platforms platform);
 
     @Delete

@@ -1,21 +1,18 @@
-package com.example.sw0b_001.Security;
+package com.example.sw0b_001.Helpers;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.security.keystore.KeyProtection;
-
-import android.content.Context;
 import android.util.Base64;
 
-import com.example.sw0b_001.Helpers.GatewayValues;
+import android.content.Context;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.KeyFactory;
+import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -28,10 +25,7 @@ import java.security.SecureRandom;
 import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.MGF1ParameterSpec;
-import java.security.spec.RSAKeyGenParameterSpec;
-import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -43,13 +37,13 @@ import javax.crypto.spec.OAEPParameterSpec;
 import javax.crypto.spec.PSource;
 import javax.crypto.spec.SecretKeySpec;
 
-public class SecurityHandler {
+public class SecurityLayer {
     private Cipher cipher;
     private SecretKeySpec key;
     private IvParameterSpec iv;
     private KeyStore keyStore;
 
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences preferences;
 
 
     public static final String DEFAULT_KEYPAIR_ALGORITHM_PADDING = "RSA/ECB/" + KeyProperties.ENCRYPTION_PADDING_RSA_OAEP;
@@ -60,48 +54,53 @@ public class SecurityHandler {
     OAEPParameterSpec param = new OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT);
 
 //    @RequiresApi(api = Build.VERSION_CODES.O)
-    public SecurityHandler() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+    public SecurityLayer() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
         this.keyStore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
         this.keyStore.load(null);
     }
 
-    public SecurityHandler(Context context) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+    public SecurityLayer(Context context) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
         this.keyStore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
         this.keyStore.load(null);
 
-        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
-
-    public void clear_rsa() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
-        KeyStore keyStore = KeyStore.getInstance(SecurityHandler.DEFAULT_KEYSTORE_PROVIDER);
-        keyStore.load(null);
-        keyStore.deleteEntry(SecurityHandler.DEFAULT_KEYSTORE_ALIAS);
-    }
-
 
     public boolean hasKeyPairs(Context context) throws KeyStoreException {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.contains(GatewayValues.SHARED_KEY) && this.keyStore.containsAlias(DEFAULT_KEYSTORE_ALIAS) && preferences.contains(GatewayValues.VAR_PASSWDHASH);
     }
 
-    private PublicKey getPublicKey(String keystoreAlias) throws KeyStoreException {
-        // PublicKey publicKey = this.keyStore.getCertificate(DEFAULT_KEYSTORE_ALIAS).getPublicKey();
-        PublicKey publicKey = this.keyStore.getCertificate(keystoreAlias).getPublicKey();
+    private PublicKey getPublicKey() throws KeyStoreException {
+        PublicKey publicKey = this.keyStore.getCertificate(DEFAULT_KEYSTORE_ALIAS).getPublicKey();
         return publicKey;
     }
 
-    public static PublicKey getPublicKeyFromBase64String(String publicKeyBase64) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        byte[] publicBytes = Base64.decode(publicKeyBase64, Base64.DEFAULT);
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicBytes);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        PublicKey pubKey = keyFactory.generatePublic(keySpec);
-        return pubKey;
+    public String init() throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException, CertificateException, IOException, NoSuchPaddingException, UnrecoverableKeyException, KeyStoreException, BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
+        this.init_RSA();
+        PublicKey pk = this.keyStore.getCertificate(DEFAULT_KEYSTORE_ALIAS).getPublicKey();
+        return Base64.encodeToString(pk.getEncoded(), Base64.DEFAULT);
     }
 
-    public byte[] encryptRSA(byte[] input, String publicKeyBase64) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
-        PublicKey publicKey = getPublicKeyFromBase64String(publicKeyBase64);
+
+    private void init_RSA() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException, NoSuchProviderException {
+        KeyPairGenerator keygen = KeyPairGenerator.getInstance(
+                KeyProperties.KEY_ALGORITHM_RSA, DEFAULT_KEYSTORE_PROVIDER);
+        keygen.initialize(
+                new KeyGenParameterSpec.Builder(
+                        DEFAULT_KEYSTORE_ALIAS,
+                        KeyProperties.PURPOSE_DECRYPT )
+//                        .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
+                        .setDigests(KeyProperties.DIGEST_SHA256)
+                        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
+                        .build());
+
+        keygen.generateKeyPair();
+    }
+
+    public byte[] encrypt_RSA(byte[] input) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException {
         this.cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-        this.cipher.init(Cipher.ENCRYPT_MODE, publicKey, param);
+        this.cipher.init(Cipher.ENCRYPT_MODE, this.getPublicKey(), param);
         return cipher.doFinal(input);
     }
 
@@ -144,7 +143,7 @@ public class SecurityHandler {
     }
 
     public byte[] encrypt_AES(byte[] input) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException {
-        String plainTextByte = this.sharedPreferences.getString(GatewayValues.SHARED_KEY, null);
+        String plainTextByte = preferences.getString(GatewayValues.SHARED_KEY, null);
         byte[] decryptedKey = decrypt_RSA(plainTextByte.getBytes());
         this.key = new SecretKeySpec(decryptedKey, "AES");
         KeyStore keystore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
@@ -157,7 +156,7 @@ public class SecurityHandler {
     }
 
     public byte[] encrypt_AES(byte[] input, byte[] iv) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException {
-        String plainTextByte = this.sharedPreferences.getString(GatewayValues.SHARED_KEY, null);
+        String plainTextByte = preferences.getString(GatewayValues.SHARED_KEY, null);
         byte[] decryptedKey = decrypt_RSA(plainTextByte.getBytes());
         this.key = new SecretKeySpec(decryptedKey, "AES");
         KeyStore keystore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
@@ -171,7 +170,7 @@ public class SecurityHandler {
     }
 
     public byte[] encrypt_AES(String input, byte[] iv) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException {
-        String plainTextByte = this.sharedPreferences.getString(GatewayValues.SHARED_KEY, null);
+        String plainTextByte = preferences.getString(GatewayValues.SHARED_KEY, null);
         byte[] decryptedKey = decrypt_RSA(plainTextByte.getBytes("UTF-8"));
         this.key = new SecretKeySpec(decryptedKey, "AES");
 
@@ -183,7 +182,7 @@ public class SecurityHandler {
     }
 
     public byte[] decrypt_AES(byte[] input) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
-        String plainTextByte = this.sharedPreferences.getString(GatewayValues.SHARED_KEY, null);
+        String plainTextByte = preferences.getString(GatewayValues.SHARED_KEY, null);
         byte[] decryptedKey = decrypt_RSA(plainTextByte.getBytes());
         this.key = new SecretKeySpec(decryptedKey, "AES");
         byte[] decBytes = null;
@@ -241,31 +240,18 @@ public class SecurityHandler {
         return sb.toString().getBytes();
     }
 
-    public KeyPairGenerator generateKeyPair(String keystoreAlias) throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException, KeyStoreException {
-        KeyPairGenerator keygen = KeyPairGenerator.getInstance(
-                KeyProperties.KEY_ALGORITHM_RSA, DEFAULT_KEYSTORE_PROVIDER);
 
-        keygen.initialize(
-                new KeyGenParameterSpec.Builder(
-                        keystoreAlias,
-                        KeyProperties.PURPOSE_DECRYPT | KeyProperties.PURPOSE_ENCRYPT)
-                        .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
-                        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
-                        .build());
+    public boolean authenticate(String password) throws NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
+        byte[] hsPasswd = hash_sha512(password);
 
-        // PublicKey publicKey = this.keyStore.getCertificate(DEFAULT_KEYSTORE_ALIAS).getPublicKey();
-        // return Base64.encodeToString(publicKey.getEncoded(), Base64.DEFAULT);
-        // return publicKey.getEncoded();
+        String passwdHash = preferences.getString(GatewayValues.VAR_PASSWDHASH, null);
+        passwdHash = new String(decrypt_RSA(passwdHash.getBytes()));
 
-        return keygen;
+        return new String(hsPasswd).toUpperCase().equals(passwdHash.toUpperCase());
+
     }
 
-
-    public static String convert_to_pem_format(byte[] key) {
-        String keyString = Base64.encodeToString(key, Base64.DEFAULT);
-        keyString = "-----BEGIN PUBLIC KEY-----\n" + keyString;
-        keyString += "-----END PUBLIC KEY-----";
-
-        return keyString;
+    public boolean authenticate(String password, byte[] passwd1) throws NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
+        return new String(hash_sha512(password)).toUpperCase().equals(new String(passwd1).toUpperCase());
     }
 }

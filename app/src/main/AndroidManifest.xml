@@ -12,6 +12,7 @@
         </intent>
     </queries>
 
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -29,14 +30,14 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".SettingsActivity"
-            android:parentActivityName=".DashboardActivity"
+            android:parentActivityName=".PlatformsActivity"
             android:label="Settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DashboardActivity" />
+                android:value=".PlatformsActivity" />
         </activity>
         <activity
-            android:name=".SyncHandshakeActivity"
+            android:name=".SyncProcessingActivity"
             android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:name=".SplashActivity"
@@ -48,9 +49,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WelcomeActivity">
-
-        </activity>
         <activity
             android:name=".EmailThreadActivity"
             android:parentActivityName=".EmailThreadsActivity"
@@ -61,11 +59,11 @@
         </activity>
         <activity
             android:name=".TextThreadActivity"
-            android:parentActivityName=".DashboardActivity"
+            android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DashboardActivity" />
+                android:value=".PlatformsActivity" />
         </activity>
         <activity
             android:name=".EmailBodyActivity"
@@ -76,28 +74,28 @@
         </activity>
         <activity
             android:name=".TextBodyActivity"
-            android:parentActivityName=".DashboardActivity">
+            android:parentActivityName=".PlatformsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DashboardActivity" />
+                android:value=".PlatformsActivity" />
         </activity>
         <activity
             android:name=".EmailThreadsActivity"
             android:label="Recents..."
-            android:parentActivityName=".DashboardActivity">
+            android:parentActivityName=".PlatformsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DashboardActivity" />
+                android:value=".PlatformsActivity" />
         </activity>
         <activity
             android:name=".PermissionsActivity"
             android:label="Permission" />
         <activity
-            android:name=".DashboardActivity"
+            android:name=".PlatformsActivity"
             android:label="Synchronized Platforms" />
         <activity
             android:name=".EmailComposeActivity"
-            android:parentActivityName=".DashboardActivity"
+            android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -107,7 +105,7 @@
         </activity>
         <activity
             android:name=".TextComposeActivity"
-            android:parentActivityName=".DashboardActivity"
+            android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -118,13 +116,13 @@
         <activity
             android:name=".QRScannerActivity"
             android:label="QR Scanner"
-            android:parentActivityName=".PasswordActivity">
+            android:parentActivityName=".LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".PasswordActivity" />
+                android:value=".LoginActivity" />
         </activity>
         <activity
-            android:name=".PasswordActivity"
+            android:name=".LoginActivity"
             android:theme="@style/Theme.MyAppNoBar" />
 
         <meta-data

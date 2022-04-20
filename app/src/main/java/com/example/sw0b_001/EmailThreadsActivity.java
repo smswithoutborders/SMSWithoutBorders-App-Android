@@ -1,15 +1,17 @@
 package com.example.sw0b_001;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
-import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Helpers.Datastore;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreadsRecyclerViewAdapter;
@@ -54,7 +56,7 @@ public class EmailThreadsActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DatabaseName).build();
+                        Datastore.class, Datastore.DBName).build();
                 EmailThreadsDao emailThreadsDao = platformDb.emailThreadDao();
                 emailThreads = emailThreadsDao.loadAllByPlatformId(platformId);
             }

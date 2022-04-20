@@ -10,13 +10,14 @@ import androidx.room.Room;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Models.Platforms.PlatformDao;
-import com.example.sw0b_001.Models.Platforms.Platforms;
-import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter;
+import com.example.sw0b_001.Helpers.Datastore;
+import com.example.sw0b_001.Providers.Platforms.PlatformDao;
+import com.example.sw0b_001.Providers.Platforms.Platforms;
+import com.example.sw0b_001.Providers.Platforms.PlatformsRecyclerAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
@@ -25,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardActivity extends AppCompatActivity{
+public class PlatformsActivity extends AppCompatActivity{
     // TODO: Check if user credentials are stored else log them out
     // TODO: Fill in bottomBar actions (dashboard, settings, logs, exit)
     // TODO: Include loader when message is sending...
@@ -50,7 +51,7 @@ public class DashboardActivity extends AppCompatActivity{
             @Override
             public void run() {
                 Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DatabaseName)
+                        Datastore.class, Datastore.DBName)
                         .fallbackToDestructiveMigration()
                         .build();
                 PlatformDao platformsDao = platformDb.platformDao();

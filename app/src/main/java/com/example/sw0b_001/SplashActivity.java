@@ -7,9 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 
-import com.example.sw0b_001.Security.SecurityHandler;
+import com.example.sw0b_001.Helpers.SecurityLayer;
 import com.example.sw0b_001.databinding.ActivitySplashBinding;
 
 import java.io.IOException;
@@ -40,7 +42,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         try {
-            SecurityHandler securityLayer = new SecurityHandler();
+            SecurityLayer securityLayer = new SecurityLayer();
             if(securityLayer.hasKeyPairs(getApplicationContext())) {
                 AccessPlatforms();
                 finish();
@@ -65,14 +67,14 @@ public class SplashActivity extends AppCompatActivity {
 
     }
 
-    private void AccessWelcomeActivity() {
-        Intent intent = new Intent(this, WelcomeActivity.class);
+    private void AccessPermissions() {
+        Intent intent = new Intent(this, PermissionsActivity.class);
         startActivity(intent);
         return;
     }
 
     private void AccessPlatforms() {
-        Intent intent = new Intent(this, DashboardActivity.class);
+        Intent intent = new Intent(this, PlatformsActivity.class);
         startActivity(intent);
     }
 
@@ -85,13 +87,13 @@ public class SplashActivity extends AppCompatActivity {
         }
         mHideHandler.removeCallbacks(mShowPart2Runnable);
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
-        SecurityHandler securityLayer = new SecurityHandler();
+        SecurityLayer securityLayer = new SecurityLayer();
         mContentView.postDelayed(new Runnable() {
             @Override
             public void run() {
 //                    mControlsView.setVisibility(View.GONE);
                 mVisible = false;
-                AccessWelcomeActivity();
+                AccessPermissions();
                 finish();
             }
         }, 3000);

@@ -1,11 +1,14 @@
 package com.example.sw0b_001;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,7 +17,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
-import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Helpers.Datastore;
+import com.example.sw0b_001.Providers.Emails.EmailMessage;
+import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
+import com.example.sw0b_001.Providers.Emails.EmailThreadRecyclerAdapter;
+import com.example.sw0b_001.Providers.Emails.EmailThreads;
+import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
 import com.example.sw0b_001.Providers.Text.TextMessage;
 import com.example.sw0b_001.Providers.Text.TextMessageDao;
 import com.example.sw0b_001.Providers.Text.TextMessageRecyclerAdapter;
@@ -54,7 +62,7 @@ public class TextThreadActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DatabaseName).build();
+                        Datastore.class, Datastore.DBName).build();
                 TextMessageDao textMessageDao = platformDb.textMessageDao();
                 textMessages = textMessageDao.loadAllByPlatformId(platform_id);
             }
@@ -119,7 +127,7 @@ public class TextThreadActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                                        Datastore.class, Datastore.DatabaseName).build();
+                                        Datastore.class, Datastore.DBName).build();
                                 TextMessageDao textMessageDao = platformDb.textMessageDao();
                                 textMessageDao.delete(message);
 

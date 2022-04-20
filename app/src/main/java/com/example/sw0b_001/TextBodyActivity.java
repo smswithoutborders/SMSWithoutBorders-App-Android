@@ -9,10 +9,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
-import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Helpers.Datastore;
 import com.example.sw0b_001.Providers.Emails.EmailThreadRecyclerAdapter;
-import com.example.sw0b_001.Models.Platforms.PlatformDao;
-import com.example.sw0b_001.Models.Platforms.Platforms;
+import com.example.sw0b_001.Providers.Platforms.PlatformDao;
+import com.example.sw0b_001.Providers.Platforms.Platforms;
 import com.example.sw0b_001.Providers.Text.TextMessage;
 import com.example.sw0b_001.Providers.Text.TextMessageDao;
 
@@ -34,7 +34,7 @@ public class TextBodyActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DatabaseName).build();
+                        Datastore.class, Datastore.DBName).build();
                 long messageId = getIntent().getLongExtra("text_message_id", -1);
                 TextMessageDao textMessageDao = platformDb.textMessageDao();
                 textMessage = textMessageDao.get(messageId);
@@ -50,7 +50,7 @@ public class TextBodyActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        setTitle(platform.getProvider());
+        setTitle(platform.getProvider());
 
         TextView subject = findViewById(R.id.text_provider);
         subject.setText(platform.getName());
