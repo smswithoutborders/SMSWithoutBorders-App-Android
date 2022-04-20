@@ -21,7 +21,7 @@ public class PermissionsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_permissions);
+        setContentView(R.layout.activity_synchronise_type);
     }
 
     public void scanQR(View view) {
@@ -50,7 +50,7 @@ public class PermissionsActivity extends AppCompatActivity {
             }
             else {
                 Toast.makeText(this, "Camera Permission Denied", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, PasswordActivity.class);
+                Intent intent = new Intent(this, PermissionsActivity.class);
                 startActivity(intent);
             }
         }
@@ -62,4 +62,6 @@ public class PermissionsActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
         startActivity(intent);
     }
+
+
 }
