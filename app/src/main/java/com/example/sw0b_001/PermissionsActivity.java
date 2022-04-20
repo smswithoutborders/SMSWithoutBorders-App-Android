@@ -62,4 +62,6 @@ public class PermissionsActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
         startActivity(intent);
     }
+
+
 }
