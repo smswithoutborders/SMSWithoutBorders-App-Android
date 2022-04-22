@@ -11,9 +11,9 @@
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="156dp"
-        android:fontFamily="sans-serif-light"
+        android:layout_marginBottom="72dp"
 
+        android:fontFamily="sans-serif-light"
         android:onClick="linkPrivacyPolicy"
         android:text="Read about our privacy policy"
         android:textAlignment="center"
@@ -22,74 +22,39 @@
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/containedButton4"
-        app:layout_constraintVertical_bias="0.133" />
+        app:layout_constraintTop_toBottomOf="@+id/textButton"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/containedButton4"
-        android:layout_width="282dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginEnd="65dp"
-
-        android:backgroundTint="#FFFFFF"
-        android:onClick="scanQR"
-        android:text="scan qr"
-        android:textAlignment="center"
-        android:textColor="#3F51B5"
-        android:textSize="20sp"
+        android:id="@+id/textButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="42dp"
+        android:text="SCAN QR"
+        android:textColor="#FDFCFC"
+        android:textSize="18sp"
         app:cornerRadius="10dp"
-        app:iconTintMode="add"
+        app:iconTint="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine3" />
-
-    <TextView
-        android:id="@+id/editTextTextMultiLine3"
-        android:layout_width="327dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="43dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="42dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:text="Or scan the QR code to synchronise manually "
-        android:textAlignment="center"
-        android:textColor="#8A8888"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/containedButton" />
-
-    <TextView
-        android:id="@+id/editTextTextMultiLine"
-        android:layout_width="302dp"
-        android:layout_height="58dp"
-        android:layout_marginStart="54dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="55dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:text="Click on the button below synchronise your accounts offline "
-        android:textAlignment="center"
-        android:textColor="#8A8888"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+        app:layout_constraintTop_toBottomOf="@+id/textView15"
+        app:strokeColor="#FFFFFF"
+        app:strokeWidth="1dp" />
 
     <TextView
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="114dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="114dp"
+        android:layout_marginTop="72dp"
         android:text="Synchronize"
         android:textColor="#03A9F4"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -97,10 +62,8 @@
         android:id="@+id/containedButton"
         android:layout_width="282dp"
         android:layout_height="52dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="3dp"
 
-        android:layout_marginEnd="65dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="#FFFFFF"
         android:text="continue "
         android:textAlignment="center"
@@ -110,6 +73,27 @@
         app:iconTintMode="add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="286dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="61dp"
+        android:text="Click on the button below to synchronize your accounts offline "
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:text="Or scan the QR code to synchronize manually"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/containedButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

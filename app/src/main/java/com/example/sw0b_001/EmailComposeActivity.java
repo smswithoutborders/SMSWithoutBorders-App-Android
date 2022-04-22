@@ -60,7 +60,7 @@ public class EmailComposeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_email_compose);
+        setContentView(R.layout.activity_newemail_compose);
 
         Toolbar composeToolbar = (Toolbar) findViewById(R.id.compose_toolbar);
         setSupportActionBar(composeToolbar);
@@ -105,7 +105,7 @@ public class EmailComposeActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        TextView emailTo = findViewById(R.id.email_to);
+        TextView emailTo = findViewById(R.id.email_cc);
         TextView emailSubject = findViewById(R.id.email_subject);
         if(getIntent().hasExtra("recipient") ) {
             emailTo.setText(getIntent().getStringExtra("recipient"));
@@ -124,7 +124,7 @@ public class EmailComposeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        EditText to = findViewById(R.id.email_to);
+        EditText to = findViewById(R.id.email_cc);
         EditText subject = findViewById(R.id.email_subject);
         EditText body = findViewById(R.id.email_body);
         switch (item.getItemId()) {
