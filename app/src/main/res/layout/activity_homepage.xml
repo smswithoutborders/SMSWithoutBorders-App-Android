@@ -24,7 +24,7 @@
         app:title="Recents" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/settings_bottomnav"
+        android:id="@+id/homepage_bottom_navbar"
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:background="@color/default_dark"
@@ -45,7 +45,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/settings_bottomnav"
+        app:layout_constraintBottom_toTopOf="@+id/homepage_bottom_navbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,27 +64,29 @@
             app:layout_constraintVertical_bias="0.22000003" />
 
         <TextView
-            android:id="@+id/editTextTextPersonName3"
+            android:id="@+id/no_recent_messages_text"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:ems="10"
+            android:gravity="center_vertical|center"
             android:inputType="textPersonName"
             android:text="No recent messages"
-            android:gravity="center_vertical|center"
             android:textColor="#B6B6B6"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.45" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
+            android:id="@+id/platform_select_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="#00BCD4"
-            android:clickable="false"
+            android:clickable="true"
+            android:onClick="onClickPlatformSelect"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.954"

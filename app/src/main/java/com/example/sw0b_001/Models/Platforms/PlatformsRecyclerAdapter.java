@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sw0b_001.EmailComposeActivity;
 import com.example.sw0b_001.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,12 +24,12 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
 
     public Context context;
     public List<Platforms> platforms;
-    public int customLayout;
+    public int platformRenderLayout;
 
     public PlatformsRecyclerAdapter(Context context, List<Platforms> platforms, int layout){
         this.context = context;
         this.platforms = platforms;
-        this.customLayout = layout;
+        this.platformRenderLayout = layout;
     }
 
     public void update(List<Platforms> platforms) {
@@ -42,20 +43,17 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
 //        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         LayoutInflater inflater = LayoutInflater.from(this.context);
-        View view = inflater.inflate(this.customLayout, parent, false);
+        View view = inflater.inflate(this.platformRenderLayout, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull @NotNull ViewHolder viewHolder, int position) {
         Platforms platform = this.platforms.get(position);
-        holder.name.setText(platform.getName());
-        holder.description.setText(platform.getDescription());
-        // holder.provider.setText(platform.getProvider());
-        holder.type.setText(platform.getType());
-//        holder.image.setImageResource(platform.getImage());
+        viewHolder.name.setText(platform.getName());
+        // viewHolder.image.setImageResource(platform.getLogo());
 
-        holder.layout.setOnClickListener(new View.OnClickListener() {
+        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 /*
@@ -67,6 +65,10 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
 
                  */
                 Log.d(getClass().getName(), "Got clicked");
+
+                // FIX change to dynamic intent navigation
+                Intent emailComposeIntent = new Intent(context.getApplicationContext(), EmailComposeActivity.class);
+                context.startActivity(emailComposeIntent);
             }
         });
     }
@@ -78,18 +80,15 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, description, provider, type;
+        TextView name;
         ImageView image;
         ConstraintLayout layout;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            this.name = itemView.findViewById(R.id.subject);
-            this.description = itemView.findViewById(R.id.subjectSub);
-            this.provider = itemView.findViewById(R.id.bottomRight);
-            this.image = itemView.findViewById(R.id.image);
-            this.type = itemView.findViewById(R.id.topRight);
-            this.layout = itemView.findViewById(R.id.email_thread_card_layout);
+            this.layout = itemView.findViewById(R.id.platform_card_layout);
+            this.name = itemView.findViewById(R.id.platform_name);
+            this.image = itemView.findViewById(R.id.platform_logo);
         }
     }
 }

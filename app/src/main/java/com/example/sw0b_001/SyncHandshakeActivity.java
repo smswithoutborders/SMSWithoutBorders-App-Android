@@ -1,15 +1,14 @@
 package com.example.sw0b_001;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
-
 import android.app.DownloadManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.telephony.mbms.DownloadRequest;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -17,20 +16,19 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Models.Platforms.Platforms;
-import com.example.sw0b_001.Models.User.UserHandler;
-import com.example.sw0b_001.Models.Platforms.PlatformDao;
-import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServers;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
-import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
+import com.example.sw0b_001.Models.Platforms.PlatformDao;
+import com.example.sw0b_001.Models.Platforms.Platforms;
+import com.example.sw0b_001.Models.User.UserHandler;
 import com.example.sw0b_001.Providers.Gateway.GatewayDao;
+import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
+import com.example.sw0b_001.Security.SecurityHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -69,7 +67,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                 processHandshakePayload(jsonObject);
                 Log.d(getLocalClassName(), "Completed handshake and information is stored");
 
-                Intent dashboardIntent = new Intent(getApplicationContext(), DashboardActivity.class);
+                Intent dashboardIntent = new Intent(getApplicationContext(), HomepageActivity.class);
                 startActivity(dashboardIntent);
                 finish();
             } catch (JSONException e) {
@@ -117,9 +115,11 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         Platforms platform = new Platforms();
                         platform.setName(JSONPlatform.getString("name"));
                         platform.setDescription(JSONPlatform.getString("description"));
-                        platform.setLogo(downloadLogoOnline(JSONPlatform.getString("logo"), JSONPlatform.getString("name")));
                         platform.setType(JSONPlatform.getString("type"));
                         platform.setLetter(JSONPlatform.getString("letter"));
+
+                        long logoDownloadId = downloadLogoOnline(JSONPlatform.getString("logo"), JSONPlatform.getString("name"));
+                        platform.setLogo(logoDownloadId);
 
                         platformDao.insert(platform);
                         Log.d(getLocalClassName(), "Platform inserted successfully");

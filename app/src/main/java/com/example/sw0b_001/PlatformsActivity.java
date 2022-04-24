@@ -1,17 +1,15 @@
 package com.example.sw0b_001;
 
-import androidx.annotation.NonNull;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
-
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
 
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
@@ -19,13 +17,10 @@ import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class DashboardActivity extends AppCompatActivity{
+public class PlatformsActivity extends AppCompatActivity{
     // TODO: Check if user credentials are stored else log them out
     // TODO: Fill in bottomBar actions (dashboard, settings, logs, exit)
     // TODO: Include loader when message is sending...
@@ -41,10 +36,17 @@ public class DashboardActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_platforms);
         platforms = new ArrayList<>();
-        recyclerView = findViewById(R.id.settings_list_view);
+
+        // Enable back button
+        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        recyclerView = findViewById(R.id.list_synced_platforms);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        /*
         findViewById(R.id.no_platform_txt).setVisibility(View.INVISIBLE);
         findViewById(R.id.btn_store_tokens).setVisibility(View.INVISIBLE);
+
+         */
 
         Runnable runnable = new Runnable() {
             @Override
@@ -66,32 +68,18 @@ public class DashboardActivity extends AppCompatActivity{
             e.printStackTrace();
         }
 
+        /*
         if(platforms.size() < 1 ) {
 //            findViewById(R.id.textView3).setVisibility(View.INVISIBLE);
             findViewById(R.id.no_platform_txt).setVisibility(View.VISIBLE);
             findViewById(R.id.btn_store_tokens).setVisibility(View.VISIBLE);
         }
 
-        platformsRecyclerAdapter = new PlatformsRecyclerAdapter(this, platforms, R.layout.layout_cardlist_threads);
+         */
+
+        platformsRecyclerAdapter = new PlatformsRecyclerAdapter(this, platforms, R.layout.layout_cardlist_platforms);
         recyclerView.setAdapter(platformsRecyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
-        bottomNavigationView.setSelectedItemId(R.id.platform);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-//                Log.i(this.getClass().getSimpleName(), item.getTitle().toString());
-                switch(item.getItemId()) {
-                    case R.id.settings:
-                        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                        overridePendingTransition(0, 0);
-                        finish();
-                }
-                return false;
-            }
-        });
     }
 
     public void linkPrivacyPolicy(View view) {
