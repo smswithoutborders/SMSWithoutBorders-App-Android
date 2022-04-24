@@ -1,8 +1,5 @@
 package com.example.sw0b_001;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +9,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
@@ -19,7 +19,6 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.zxing.Result;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class QRScannerActivity extends AppCompatActivity {
@@ -45,8 +44,7 @@ public class QRScannerActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(QRScannerActivity.this, "Synchronization begins...", Toast.LENGTH_SHORT).show();
-                        // TODO: authenticate text before sending for processing
+                        Toast.makeText(QRScannerActivity.this, "QR Code identified!", Toast.LENGTH_LONG).show();
                         try {
                             String resultValue = result.getText();
 

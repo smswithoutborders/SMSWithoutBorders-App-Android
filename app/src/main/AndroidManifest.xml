@@ -36,16 +36,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PlatformsActivity" />
         </activity>
+
+
         <activity
             android:name=".SyncHandshakeActivity"
             android:theme="@style/Theme.MyAppNoBar" />
+
+
         <activity
             android:name=".SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.MaterialComponents.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -104,7 +107,8 @@
 
         <activity
             android:name=".HomepageActivity"
-            android:label="Synchronized Platforms" />
+            android:label="Synchronized Platforms" >
+        </activity>
 
         <activity
             android:name=".EmailComposeActivity"

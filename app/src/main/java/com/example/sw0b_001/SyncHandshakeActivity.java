@@ -32,6 +32,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -70,8 +71,9 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                 Intent dashboardIntent = new Intent(getApplicationContext(), HomepageActivity.class);
                 startActivity(dashboardIntent);
                 finish();
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
         else {
@@ -80,19 +82,26 @@ public class SyncHandshakeActivity extends AppCompatActivity {
         }
     }
 
-    public void processHandshakePayload(JSONObject jsonObject) {
+    private void processAndStoreSharedKey(String sharedKey) throws GeneralSecurityException, IOException {
+        SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
+        securityHandler.storeSharedKey(sharedKey);
+    }
+
+    public void processHandshakePayload(JSONObject jsonObject) throws Exception {
         try {
             // TODO securely store the shared key
             String sharedKey = jsonObject.getString("shared_key");
             Log.d(getLocalClassName(), "Shared Key: " + sharedKey);
+
+            processAndStoreSharedKey(sharedKey);
 
             JSONArray gatewayClients = jsonObject.getJSONArray("gateway_clients");
             Log.d(getLocalClassName(), "");
 
             JSONArray platforms = jsonObject.getJSONArray("user_platforms");
             processAndStorePlatforms(platforms);
-        } catch (JSONException | InterruptedException e) {
-            e.printStackTrace();
+        } catch (JSONException | InterruptedException | CertificateException | KeyStoreException | NoSuchAlgorithmException | IOException e) {
+            throw new Exception(e);
         }
     }
 
