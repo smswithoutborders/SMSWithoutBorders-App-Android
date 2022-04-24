@@ -128,6 +128,7 @@ public class EmailComposeActivity extends AppCompatActivity {
         EditText subject = findViewById(R.id.email_subject);
         EditText body = findViewById(R.id.email_body);
         switch (item.getItemId()) {
+            /*
             case R.id.discard:
                 startActivity(new Intent(this, EmailThreadsActivity.class));
                 to.setText("");
@@ -135,6 +136,8 @@ public class EmailComposeActivity extends AppCompatActivity {
                 body.setText("");
                 finished_thread(null);
                 return true;
+
+             */
 
             case R.id.action_send:
                 if(to.getText().toString().isEmpty()) {

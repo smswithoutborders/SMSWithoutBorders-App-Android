@@ -112,6 +112,7 @@ public class TextComposeActivity extends AppCompatActivity {
         EditText body = findViewById(R.id.email_body);
 
         switch (item.getItemId()) {
+            /*
             case R.id.discard:
                 startActivity(new Intent(this, EmailThreadsActivity.class));
 //                to.setText("");
@@ -119,6 +120,8 @@ public class TextComposeActivity extends AppCompatActivity {
                 body.setText("");
                 finished_thread(null);
                 return true;
+
+             */
 
             case R.id.action_send:
                 Thread storeEmailMessage = new Thread(new Runnable() {

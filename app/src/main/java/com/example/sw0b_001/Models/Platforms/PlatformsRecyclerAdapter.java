@@ -2,7 +2,6 @@ package com.example.sw0b_001.Models.Platforms;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sw0b_001.EmailComposeActivity;
 import com.example.sw0b_001.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -56,19 +54,9 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
         viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                // Intent intent = Platforms.getIntent(context.getApplicationContext(), platform.getProvider(), platform.getName());
-                Intent intent = Platforms.getIntent(context.getApplicationContext(), platform.getName(), platform.getType());
-//                Log.i("onclick" + platform.getName(), platform.getType());
+                Intent intent = PlatformsHandler.getIntent(context.getApplicationContext(), platform.getName(), platform.getType());
                 intent.putExtra("platform_id", platform.getId());
                 context.startActivity(intent);
-
-                 */
-                Log.d(getClass().getName(), "Got clicked");
-
-                // FIX change to dynamic intent navigation
-                Intent emailComposeIntent = new Intent(context.getApplicationContext(), EmailComposeActivity.class);
-                context.startActivity(emailComposeIntent);
             }
         });
     }
