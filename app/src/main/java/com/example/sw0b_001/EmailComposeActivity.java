@@ -60,7 +60,7 @@ public class EmailComposeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_newemail_compose);
+        setContentView(R.layout.activity_email_compose);
 
         Toolbar composeToolbar = (Toolbar) findViewById(R.id.compose_toolbar);
         setSupportActionBar(composeToolbar);
