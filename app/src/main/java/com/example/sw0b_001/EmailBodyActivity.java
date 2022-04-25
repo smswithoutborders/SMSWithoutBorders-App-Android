@@ -1,9 +1,5 @@
 package com.example.sw0b_001;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.room.Room;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,6 +8,10 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Providers.Emails.EmailMessage;
@@ -78,11 +78,14 @@ public class EmailBodyActivity extends AppCompatActivity {
         dateTime.setText(emailMessage.get(0).getDatetime());
 
         TextView status = findViewById(R.id.bottomRight);
+        /*
         if(emailMessage.get(0).getStatus().equals("requested") || emailMessage.get(0).getStatus().equals("sent"))
             status.setTextColor(getApplication().getResources().getColor(R.color.success_blue, getApplication().getTheme()));
         else if(emailMessage.get(0).getStatus().equals("pending"))
             status.setTextColor(getApplication().getResources().getColor(R.color.pending_gray, getApplication().getTheme()));
+
         status.setText(emailMessage.get(0).getStatus());
+         */
 
         TextView body = findViewById(R.id.body);
         body.setText(emailMessage.get(0).getBody());

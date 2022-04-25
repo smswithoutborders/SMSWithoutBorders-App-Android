@@ -38,4 +38,8 @@ public class GatewayServersHandler {
     public boolean hasPublicKey(GatewayServers gatewayServers) {
         return false;
     }
+
+    public static String buildKeyStoreAlias(String gatewayServerUrl) {
+        return gatewayServerUrl + "-keystore-alias";
+    }
 }

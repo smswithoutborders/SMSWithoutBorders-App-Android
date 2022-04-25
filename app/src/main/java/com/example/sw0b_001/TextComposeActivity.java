@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,18 +15,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.room.Room;
 
-import com.example.sw0b_001.Helpers.CustomHelpers;
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Providers.Gateway.GatewayClient;
-import com.example.sw0b_001.Security.SecurityHandler;
-import com.example.sw0b_001.Providers.Gateway.GatewayDao;
+import com.example.sw0b_001.Helpers.CustomHelpers;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Models.Platforms.Platforms;
+import com.example.sw0b_001.Providers.Gateway.GatewayClient;
+import com.example.sw0b_001.Providers.Gateway.GatewayDao;
 import com.example.sw0b_001.Providers.Text.TextMessage;
 import com.example.sw0b_001.Providers.Text.TextMessageDao;
+import com.example.sw0b_001.Security.SecurityHandler;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
@@ -97,6 +97,8 @@ public class TextComposeActivity extends AppCompatActivity {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (GeneralSecurityException e) {
             e.printStackTrace();
         }
     }
@@ -203,7 +205,7 @@ public class TextComposeActivity extends AppCompatActivity {
 //            Log.i(this.getLocalClassName(), ">> iv: " + new String(securityLayer.getIV()));
 //            byte[] byte_encryptedIv = securityLayer.encrypt_AES(securityLayer.getIV(), passwdHash.getBytes());
 //            byte[] fullmessage = securityLayer.encrypt_AES((new String(securityLayer.getIV()) + "_" + body), passwdHash.getBytes("UTF-8"));
-        body = new String(securityLayer.getIV()) + body;
+        // body = new String(securityLayer.getIV()) + body;
 //            body = Base64.encodeToString(fullmessage, Base64.DEFAULT);
 //            Log.i(this.getLocalClassName(), "[+] Transmission data: " + body);
 //            CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
@@ -244,8 +246,9 @@ public class TextComposeActivity extends AppCompatActivity {
     private String getEncryptedSMS(String data) throws BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, UnrecoverableEntryException, KeyStoreException, CertificateException, IOException {
         String randString = securityLayer.generateRandom(16);
 //        Log.i(this.getLocalClassName(), ">> Rand string: " + randString);
-        byte[] encryptedData = securityLayer.encrypt_AES(data, randString.getBytes());
-        return Base64.encodeToString(encryptedData, Base64.NO_WRAP);
+        // byte[] encryptedData = securityLayer.encrypt_AES(data, randString.getBytes());
+        return "";
+        // return Base64.encodeToString(encryptedData, Base64.NO_WRAP);
     }
 
 }

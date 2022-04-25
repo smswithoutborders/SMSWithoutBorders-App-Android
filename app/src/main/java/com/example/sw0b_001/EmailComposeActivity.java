@@ -1,9 +1,11 @@
 package com.example.sw0b_001;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -17,6 +19,9 @@ import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Helpers.CustomHelpers;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServers;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Providers.Emails.EmailMessage;
@@ -29,7 +34,6 @@ import com.example.sw0b_001.Security.SecurityHandler;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
@@ -191,10 +195,11 @@ public class EmailComposeActivity extends AppCompatActivity {
         }
     }
 
-    private GatewayClient getGatewayClientPhonenumber() throws Throwable {
-        List<GatewayClient> gatewayClients = this.fetchGatewayClients();
+    private GatewayClient getGatewayClientMSISDN() throws Throwable {
 
         GatewayClient defaultGatewayClient = new GatewayClient();
+
+        List<GatewayClient> gatewayClients = this.fetchGatewayClients();
         for(GatewayClient gatewayClient : gatewayClients) {
             if(gatewayClient.isDefault()) {
                 defaultGatewayClient = gatewayClient;
@@ -254,18 +259,36 @@ public class EmailComposeActivity extends AppCompatActivity {
                     Platforms platform = getPlatform();
 
                     String encryptedContent = processEmailForEncryption(platform.getLetter(), to, cc, bcc, subject, body);
+                    Log.d(getLocalClassName(), "[*] size utf8: " + encryptedContent.length());
+                    Log.d(getLocalClassName(), "[*] data utf8: " + encryptedContent);
 
-                    GatewayClient gatewayClient = getGatewayClientPhonenumber();
+                    String encryptedContentBase64 = Base64.encodeToString(encryptedContent.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+                    Log.d(getLocalClassName(), "[*] size base64: " + encryptedContentBase64.length());
+                    Log.d(getLocalClassName(), "[*] data base64: " + encryptedContentBase64);
 
-                    Intent defaultSMSAppIntent = transferToDefaultSMSApp(gatewayClient, encryptedContent);
+                    GatewayClient gatewayClient = getGatewayClientMSISDN();
+
+                    if(gatewayClient.getMSISDN() == null || gatewayClient.getMSISDN().isEmpty()) {
+                        // TODO should have fallback GatewayClients that can be used in the code
+
+                        String defaultSeedFallbackGatewayClientMSISDN = "+237672451860";
+                        gatewayClient.setMSISDN(defaultSeedFallbackGatewayClientMSISDN);
+                    }
+
+                    Intent defaultSMSAppIntent = transferToDefaultSMSApp(gatewayClient, encryptedContentBase64);
 
                     if(defaultSMSAppIntent.resolveActivity(getPackageManager()) != null) {
                         startActivity(defaultSMSAppIntent);
-
-                        Intent homepageIntent = new Intent(getApplicationContext(), HomepageActivity.class);
-                        startActivity(homepageIntent);
+                        setResult(Activity.RESULT_OK, new Intent());
                         finish();
+
+//                        Intent homepageIntent = new Intent(getApplicationContext(), HomepageActivity.class);
+//                        startActivity(homepageIntent);
+//                        finish();
                     }
+
+                    return true;
+
                 } catch (BadPaddingException e) {
                     e.printStackTrace();
                 } catch (InvalidAlgorithmParameterException e) {
@@ -291,7 +314,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                 } catch (Throwable throwable) {
                     throwable.printStackTrace();
                 }
-                return true;
+                return false;
 
             default:
                 // If we got here, the user's action was not recognized.
@@ -301,26 +324,59 @@ public class EmailComposeActivity extends AppCompatActivity {
         }
     }
 
-    private String[] getEncryptEmailContent(String emailContent) throws GeneralSecurityException, IOException {
+    private List<GatewayServers> getGatewayServers() throws Throwable {
+        final List<GatewayServers>[] gatewayServers = new List[]{new ArrayList<>()};
+        Thread fetchGatewayClientThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                GatewayServersDAO gatewayServerDao = databaseConnection.gatewayServersDAO();
+                gatewayServers[0] = gatewayServerDao.getAll();
+            }
+        });
+
+        try {
+            fetchGatewayClientThread.start();
+            fetchGatewayClientThread.join();
+        } catch (InterruptedException e) {
+            throw e.fillInStackTrace();
+        }
+
+        return gatewayServers[0];
+    }
+
+    private String[] getEncryptEmailContent(String emailContent) throws Throwable {
         SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
         String randomStringForIv = securityHandler.generateRandom(16);
 
-        byte[] encryptedEmailContent = securityHandler.encryptWithSharedKeyAES(randomStringForIv.getBytes(), emailContent.getBytes(StandardCharsets.UTF_8));
+        GatewayServers gatewayServer = getGatewayServers().get(0);
+        String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServer.getUrl() );
 
-        return new String[]{randomStringForIv, Base64.encodeToString(encryptedEmailContent, Base64.NO_WRAP)};
+        try {
+            byte[] encryptedEmailContent = securityHandler.encryptWithSharedKeyAES(randomStringForIv.getBytes(), emailContent.getBytes(StandardCharsets.UTF_8), keystoreAlias);
+
+            return new String[]{randomStringForIv, Base64.encodeToString(encryptedEmailContent, Base64.NO_WRAP)};
+        }
+        catch(Exception e ) {
+            throw new Throwable(e);
+        }
     }
 
 
-    private String processEmailForEncryption(String platformLetter, String to, String cc, String bcc, String subject, String body) throws GeneralSecurityException, IOException {
+    private String processEmailForEncryption(String platformLetter, String to, String cc, String bcc, String subject, String body) throws Throwable {
         String emailContent = platformLetter + ":" + to + ":" + cc + ":" + bcc + ":" + subject + ":" + body;
-        String[] encryptedIVEmailContent = this.getEncryptEmailContent(emailContent);
+        try {
+            String[] encryptedIVEmailContent = this.getEncryptEmailContent(emailContent);
 
-        String IV = encryptedIVEmailContent[0];
-        String encryptedEmailContent = encryptedIVEmailContent[1];
+            String IV = encryptedIVEmailContent[0];
+            String encryptedEmailContent = encryptedIVEmailContent[1];
 
-        final String encryptedContent = IV + encryptedEmailContent;
+            final String encryptedContent = IV + encryptedEmailContent;
 
-        return encryptedContent;
+            return encryptedContent;
+        }
+        catch(Exception e ) {
+            throw new Throwable(e);
+        }
     }
 
     public Intent transferToDefaultSMSApp(GatewayClient gatewayClient, String encryptedContent) {

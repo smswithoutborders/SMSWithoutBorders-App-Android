@@ -1,26 +1,10 @@
 package com.example.sw0b_001.Helpers;
 
-import android.app.Activity;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.telephony.SmsManager;
-import android.widget.Toast;
-
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.room.Room;
-
-import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.R;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Random;
 
 public class CustomHelpers {
     public static String getDateTime() {
@@ -118,6 +102,7 @@ public class CustomHelpers {
     }
 
 
+    /*
     public static void sendEmailSMS(Context context, String text, String phonenumber, long emailId) {
         //TODO: Research what to do in case of a double sim phone
         //---when the SMS has been sent---
@@ -307,4 +292,6 @@ public class CustomHelpers {
 
         Toast.makeText(context, "Sending SMS....", Toast.LENGTH_LONG).show();
     }
+
+     */
 }

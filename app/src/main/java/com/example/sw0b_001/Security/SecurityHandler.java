@@ -10,10 +10,7 @@ import android.util.Log;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
-import com.example.sw0b_001.Helpers.GatewayValues;
-
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -37,7 +34,6 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.OAEPParameterSpec;
 import javax.crypto.spec.PSource;
@@ -101,24 +97,25 @@ public class SecurityHandler {
         return pubKey;
     }
 
-    public byte[] encryptRSA(byte[] input, String publicKeyBase64) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
+    public byte[] encryptWithExternalPublicKey(byte[] input, String publicKeyBase64) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
         PublicKey publicKey = getPublicKeyFromBase64String(publicKeyBase64);
-        this.cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-        this.cipher.init(Cipher.ENCRYPT_MODE, publicKey, param);
+        Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey, param);
         return cipher.doFinal(input);
     }
 
     // Requirements to use this: input has to be Base64 encoded
-    public byte[] decrypt_RSA(byte[] input) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
-        input = Base64.decode(input, Base64.DEFAULT);
-        byte[] decBytes = null;
+    public byte[] decryptWithInternalPrivateKey(byte[] encryptedInput, String keyStoreAlias) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
+        byte[] decryptedBytes = null;
         try {
+            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)this.keyStore.getEntry(keyStoreAlias, null);
 
-            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)this.keyStore.getEntry(DEFAULT_KEYSTORE_ALIAS, null);
             PrivateKey privateKey = privateKeyEntry.getPrivateKey();
-            this.cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-            this.cipher.init(Cipher.DECRYPT_MODE, privateKey, param);
-            decBytes = this.cipher.doFinal(input);
+
+            Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
+            cipher.init(Cipher.DECRYPT_MODE, privateKey, param);
+
+            decryptedBytes = cipher.doFinal(encryptedInput);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (KeyStoreException e) {
@@ -132,7 +129,7 @@ public class SecurityHandler {
         } catch (InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         }
-        return decBytes;
+        return decryptedBytes;
     }
 
     public String generateRandom(int length) {
@@ -146,13 +143,18 @@ public class SecurityHandler {
         return password.toString();
     }
 
-    public byte[] encryptWithSharedKeyAES(byte[] iv, byte[] input) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException {
+    public byte[] encryptWithSharedKeyAES(byte[] iv, byte[] input, String keystoreAlias) throws Throwable {
         byte[] ciphertext = null;
-        String sharedKey = this.sharedPreferences.getString(SHARED_SECRET_KEY, "");
+        String encryptedSharedKey = this.sharedPreferences.getString(SHARED_SECRET_KEY, "");
 
-        // TODO decrypt sharedKey with private key
+        byte[] encryptedSharedKeyDecoded = Base64.decode(encryptedSharedKey, Base64.DEFAULT);
+        byte[] sharedKey = this.decryptWithInternalPrivateKey(encryptedSharedKeyDecoded, keystoreAlias);
+
+        // Log.d(getClass().getName(), "[*] Decrypted shared key: " + Base64.encodeToString(sharedKey, Base64.DEFAULT));
+        Log.d(getClass().getName(), "[*] Decrypted shared key: " + new String(sharedKey, "UTF-8"));
+
         try {
-            SecretKeySpec secretKeySpec = new SecretKeySpec(sharedKey.getBytes(StandardCharsets.UTF_8), "AES");
+            SecretKeySpec secretKeySpec = new SecretKeySpec(sharedKey, "AES");
             IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
 
             Cipher cipher = Cipher.getInstance(DEFAULT_AES_ALGORITHM);
@@ -161,6 +163,7 @@ public class SecurityHandler {
         }
         catch (Exception e) {
             e.printStackTrace();
+            throw new Throwable(e);
         }
         return ciphertext;
     }
@@ -188,11 +191,6 @@ public class SecurityHandler {
 
     public void storeSharedKey(String sharedKey) throws GeneralSecurityException, IOException {
         // TODO: encrypt sharedKey before storing
-
-        MasterKey masterKeyAlias = new MasterKey.Builder(this.context)
-                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-                .build();
-
         SharedPreferences encryptedSharedPreferences = EncryptedSharedPreferences.create(
                 context,
                 this.SHARED_SECRET_KEY,

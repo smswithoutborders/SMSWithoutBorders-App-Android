@@ -188,7 +188,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
             UserHandler userHandler = new UserHandler(getApplicationContext(), userId);
             userHandler.commitUser();
 
-            String keystoreAlias = gatewayServerUrlHost + "-keystore-alias";
+            String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerUrlHost );
             Log.d(getLocalClassName(), "keystoreAlias: " + keystoreAlias);
             PublicKey publicKeyEncoded = securityHandler.generateKeyPair(keystoreAlias)
                     .generateKeyPair()
