@@ -11,14 +11,15 @@
         android:id="@+id/sync_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
         android:text="Store Accounts"
         android:textColor="#03A9F4"
         android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textView11"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.199" />
+        app:layout_constraintVertical_bias="0.698" />
 
     <TextView
         android:id="@+id/textView14"
@@ -37,34 +38,34 @@
         android:id="@+id/sync_continue_btn"
         android:layout_width="282dp"
         android:layout_height="52dp"
+        android:layout_marginTop="372dp"
+        android:layout_marginBottom="224dp"
         android:backgroundTint="#FFFFFF"
         android:text="store platforms "
         android:textAlignment="center"
+
         android:textColor="#3F51B5"
         android:textSize="20sp"
-
         app:cornerRadius="10dp"
         app:iconTintMode="add"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textView14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.567" />
+        app:layout_constraintVertical_bias="1.0" />
 
-    <EditText
-        android:id="@+id/editTextTextMultiLine2"
-        android:layout_width="325dp"
-        android:layout_height="110dp"
-        android:layout_marginTop="56dp"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="285dp"
+        android:layout_height="77dp"
+        android:layout_marginBottom="20dp"
         android:text="Click on the button below to store access for your accounts to use when offline "
         android:textAlignment="center"
-        android:textColor="#8A8888"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/sync_continue_btn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sync_text" />
+        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
