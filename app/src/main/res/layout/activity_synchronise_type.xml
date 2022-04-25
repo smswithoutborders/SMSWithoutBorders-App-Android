@@ -11,8 +11,8 @@
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginBottom="16dp"
 
+        android:layout_marginBottom="16dp"
         android:fontFamily="sans-serif-light"
         android:onClick="linkPrivacyPolicy"
         android:text="Read about our privacy policy"
@@ -22,7 +22,6 @@
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -30,41 +29,38 @@
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="145dp"
         android:onClick="scanQR"
         android:text="SCAN QR"
-        android:textColor="#FDFCFC"
+        android:textColor="#03A9F4"
         android:textSize="18sp"
         app:cornerRadius="10dp"
         app:iconTint="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/button5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:strokeColor="#FFFFFF"
-        app:strokeWidth="1dp" />
+        app:strokeColor="#00BCD4"
+        app:strokeWidth="1dp"
+        tools:layout_editor_absoluteX="154dp" />
 
     <TextView
         android:id="@+id/sync_text"
-        android:layout_width="413dp"
-        android:layout_height="112dp"
+        android:layout_width="267dp"
+        android:layout_height="97dp"
         android:gravity="center_vertical|center"
         android:text="Synchronize"
         android:textColor="#03A9F4"
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.103" />
+        app:layout_constraintVertical_bias="0.904" />
 
     <Button
         android:id="@+id/sync_continue_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="188dp"
+        android:layout_marginBottom="56dp"
         android:backgroundTint="#FFFFFF"
         android:text="continue "
         android:textAlignment="center"
@@ -72,35 +68,32 @@
         android:textSize="20sp"
         app:cornerRadius="10dp"
         app:iconTintMode="add"
+        app:layout_constraintBottom_toTopOf="@+id/textView15"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sync_text" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="0dp"
+        android:layout_width="312dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="44dp"
         android:text="Automatically link your app with your online account"
         android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/textButton"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/sync_continue_btn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sync_continue_btn"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
+        android:layout_marginBottom="14dp"
         android:text="Manually link your app with your online account"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textButton" />
+        android:textSize="16"
+        app:layout_constraintBottom_toTopOf="@+id/textButton"
+        tools:layout_editor_absoluteX="49dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
