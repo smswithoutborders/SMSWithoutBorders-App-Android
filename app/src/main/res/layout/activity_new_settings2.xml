@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/settings_bottomnav"
+        android:id="@+id/homepage_bottom_navbar"
         android:layout_width="0dp"
         android:layout_height="61dp"
         android:background="@color/default_dark"

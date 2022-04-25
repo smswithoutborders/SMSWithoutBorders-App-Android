@@ -30,7 +30,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_settings2);
 
-        bottomNavigationView = findViewById(R.id.settings_bottomnav);
+        bottomNavigationView = findViewById(R.id.homepage_bottom_navbar);
 
         bottomNavigationView.setSelectedItemId(R.id.settings);
         findViewById(R.id.settings).setEnabled(false);
@@ -40,7 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
 //                Log.i(this.getClass().getSimpleName(), item.getTitle().toString());
                 switch(item.getItemId()) {
                     case R.id.platform:
-                        startActivity(new Intent(getApplicationContext(), DashboardActivity.class));
+                        startActivity(new Intent(getApplicationContext(), PlatformsActivity.class));
                         overridePendingTransition(0, 0);
                         finish();
                 }
@@ -130,7 +130,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, DashboardActivity.class));
+        startActivity(new Intent(this, PlatformsActivity.class));
         finish();
     }
 }

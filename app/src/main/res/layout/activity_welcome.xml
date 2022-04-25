@@ -50,7 +50,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView11" />
 
     <Button
-        android:id="@+id/containedButton"
+        android:id="@+id/sync_continue_btn"
         android:layout_width="282dp"
         android:layout_height="52dp"
         android:layout_marginTop="29dp"
@@ -93,6 +93,6 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/containedButton" />
+        app:layout_constraintTop_toBottomOf="@+id/sync_continue_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

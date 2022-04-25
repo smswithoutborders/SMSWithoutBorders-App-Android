@@ -11,7 +11,7 @@
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="16dp"
 
         android:fontFamily="sans-serif-light"
         android:onClick="linkPrivacyPolicy"
@@ -23,47 +23,48 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textButton"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/textButton"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
+        android:layout_marginBottom="64dp"
+        android:onClick="scanQR"
         android:text="SCAN QR"
         android:textColor="#FDFCFC"
         android:textSize="18sp"
         app:cornerRadius="10dp"
         app:iconTint="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/button5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView15"
         app:strokeColor="#FFFFFF"
         app:strokeWidth="1dp" />
 
     <TextView
-        android:id="@+id/textView12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
+        android:id="@+id/sync_text"
+        android:layout_width="413dp"
+        android:layout_height="112dp"
+        android:gravity="center_vertical|center"
         android:text="Synchronize"
         android:textColor="#03A9F4"
         android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.103" />
 
     <Button
-        android:id="@+id/containedButton"
-        android:layout_width="282dp"
-        android:layout_height="52dp"
+        android:id="@+id/sync_continue_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="188dp"
         android:backgroundTint="#FFFFFF"
         android:text="continue "
         android:textAlignment="center"
@@ -72,28 +73,34 @@
         app:cornerRadius="10dp"
         app:iconTintMode="add"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/sync_text" />
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="286dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="61dp"
-        android:text="Click on the button below to synchronize your accounts offline "
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="50dp"
+        android:text="Automatically link your app with your online account"
         android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/textButton"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+        app:layout_constraintTop_toBottomOf="@+id/sync_continue_btn"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
-        android:text="Or scan the QR code to synchronize manually"
+        android:layout_marginTop="21dp"
+        android:text="Manually link your app with your online account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/containedButton" />
+        app:layout_constraintTop_toBottomOf="@+id/textButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

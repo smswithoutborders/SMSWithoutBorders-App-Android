@@ -30,22 +30,25 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".SettingsActivity"
-            android:parentActivityName=".DashboardActivity"
+            android:parentActivityName=".PlatformsActivity"
             android:label="Settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DashboardActivity" />
+                android:value=".PlatformsActivity" />
         </activity>
+
+
         <activity
             android:name=".SyncHandshakeActivity"
             android:theme="@style/Theme.MyAppNoBar" />
+
+
         <activity
             android:name=".SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.MaterialComponents.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -62,11 +65,10 @@
         </activity>
         <activity
             android:name=".TextThreadActivity"
-            android:parentActivityName=".DashboardActivity"
-            android:theme="@style/Theme.MyAppNoBar">
+            android:parentActivityName=".HomepageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DashboardActivity" />
+                android:value=".HomepageActivity" />
         </activity>
         <activity
             android:name=".EmailBodyActivity"
@@ -77,28 +79,40 @@
         </activity>
         <activity
             android:name=".TextBodyActivity"
-            android:parentActivityName=".DashboardActivity">
+            android:parentActivityName=".PlatformsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DashboardActivity" />
+                android:value=".PlatformsActivity" />
         </activity>
         <activity
             android:name=".EmailThreadsActivity"
             android:label="Recents..."
-            android:parentActivityName=".DashboardActivity">
+            android:parentActivityName=".PlatformsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".DashboardActivity" />
+                android:value=".PlatformsActivity" />
         </activity>
         <activity
             android:name=".PermissionsActivity"
             android:label="Permission" />
+
+
         <activity
-            android:name=".DashboardActivity"
-            android:label="Synchronized Platforms" />
+            android:name=".PlatformsActivity"
+            android:label="Synchronized Platforms" >
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".HomepageActivity" />
+        </activity>
+
+        <activity
+            android:name=".HomepageActivity"
+            android:label="Synchronized Platforms" >
+        </activity>
+
         <activity
             android:name=".EmailComposeActivity"
-            android:parentActivityName=".DashboardActivity"
+            android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -108,7 +122,7 @@
         </activity>
         <activity
             android:name=".TextComposeActivity"
-            android:parentActivityName=".DashboardActivity"
+            android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
