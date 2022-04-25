@@ -21,8 +21,8 @@ import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Models.User.UserHandler;
+import com.example.sw0b_001.Providers.Gateway.GatewayClient;
 import com.example.sw0b_001.Providers.Gateway.GatewayDao;
-import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
 import com.example.sw0b_001.Security.SecurityHandler;
 
 import org.json.JSONArray;
@@ -272,23 +272,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
         }
     }
 
-    public static List<GatewayPhonenumber> extractPhonenumbersFromGateway(JSONArray gatewayData) throws JSONException {
-        List<GatewayPhonenumber> phonenumbers = new ArrayList<>();
-        for(int i=0;i<gatewayData.length(); ++i ) {
-            JSONObject phone = gatewayData.getJSONObject(i);
-            GatewayPhonenumber phonenumber = new GatewayPhonenumber()
-                    .setType(phone.getString("type"))
-                    .setNumber(phone.getString("number"))
-                    .setDefault(phone.getBoolean("default"))
-                    .setCountryCode(phone.getString("country_code"))
-                    .setIsp(phone.getString("isp"));
-
-            phonenumbers.add(phonenumber);
-        }
-        return phonenumbers;
-    }
-
-    private void storePhonenumbersFromGateway(List<GatewayPhonenumber> phonenumbers) throws InterruptedException {
+    private void storePhonenumbersFromGateway(List<GatewayClient> phonenumbers) throws InterruptedException {
         Thread storeProviders = new Thread(new Runnable() {
             @Override
             public void run() {

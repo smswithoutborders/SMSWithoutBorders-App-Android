@@ -18,9 +18,9 @@ import androidx.room.Room;
 
 import com.example.sw0b_001.Helpers.CustomHelpers;
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Providers.Gateway.GatewayClient;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Providers.Gateway.GatewayDao;
-import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Providers.Text.TextMessage;
@@ -47,7 +47,7 @@ public class TextComposeActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
     SecurityHandler securityLayer;
     long textMessageId;
-    private List<GatewayPhonenumber> phonenumbers = new ArrayList<>();
+    private List<GatewayClient> phonenumbers = new ArrayList<>();
     private Platforms platforms;
     private long platformId;
 
@@ -185,10 +185,10 @@ public class TextComposeActivity extends AppCompatActivity {
     private void sendMessage(String body) throws BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, IllegalBlockSizeException, UnrecoverableEntryException, KeyStoreException, NoSuchPaddingException, InvalidKeyException, CertificateException, IOException {
 //        Toast.makeText(getBaseContext(), "SMS sending...",yy Toast.LENGTH_LONG).show();
         String phonenumber = "";
-        for(GatewayPhonenumber number : phonenumbers) {
+        for(GatewayClient number : phonenumbers) {
 //            Log.i(this.getLocalClassName(), "[+] Number: " + number.getNumber());
             if(number.isDefault())
-                phonenumber = number.getCountryCode() + number.getNumber();
+                phonenumber = number.getMSISDN();
         }
 
         if(phonenumber.length() < 1 ) {

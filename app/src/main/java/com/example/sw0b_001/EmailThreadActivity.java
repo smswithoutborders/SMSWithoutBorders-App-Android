@@ -85,7 +85,7 @@ public class EmailThreadActivity extends AppCompatActivity {
         TextView subjectView = findViewById(R.id.subject);
         subjectView.setText(emailThreads.get(0).getSubject());
         for(EmailMessage email : emailMessage)
-            email.setRecipient(emailThreads.get(0).getRecipient());
+            email.setTo(emailThreads.get(0).getRecipient());
         String recipient = emailThreads.get(0).getRecipient();
         String subject = emailThreads.get(0).getSubject();
 

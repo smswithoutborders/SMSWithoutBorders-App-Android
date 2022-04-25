@@ -10,11 +10,11 @@ import java.util.List;
 
 @Dao
 public interface GatewayDao {
-    @Query("SELECT * FROM GatewayPhonenumber")
-    List<GatewayPhonenumber> getAll();
+    @Query("SELECT * FROM GatewayClient")
+    List<GatewayClient> getAll();
 
-    @Query("SELECT * FROM GatewayPhonenumber")
-    List<GatewayPhonenumber> getAllPhonenumbers();
+    @Query("SELECT * FROM GatewayClient")
+    List<GatewayClient> getAllPhonenumbers();
 
 //    @Query("SELECT * FROM emailcustommessage WHERE uid IN (:emailcustommessageIds)")
 //    List<EmailCustomMessage> loadAllByIds(int[] emailcustommessageIds);
@@ -24,20 +24,20 @@ public interface GatewayDao {
 //    EmailCustomMessage findByName(String first, String last);
 
     @Insert
-    void insertAll(GatewayPhonenumber... GatewayPhonenumbers);
+    void insertAll(GatewayClient... gatewayClients);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    long insert(GatewayPhonenumber GatewayPhonenumber);
+    long insert(GatewayClient GatewayClient);
 
     @Delete
-    void delete(GatewayPhonenumber GatewayPhonenumber);
+    void delete(GatewayClient GatewayClient);
 
-    @Query("DELETE FROM GatewayPhonenumber")
+    @Query("DELETE FROM GatewayClient")
     void deleteAll();
 
-    @Query("UPDATE GatewayPhonenumber SET `default` =:isdefault WHERE id=:phonenumberId")
+    @Query("UPDATE GatewayClient SET `default` =:isdefault WHERE id=:phonenumberId")
     void updateDefault(boolean isdefault, long phonenumberId);
 
-    @Query("UPDATE GatewayPhonenumber SET `default`=0")
+    @Query("UPDATE GatewayClient SET `default`=0")
     void resetAllDefaults();
 }

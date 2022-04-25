@@ -2,7 +2,6 @@ package com.example.sw0b_001.Security;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
@@ -14,6 +13,7 @@ import androidx.security.crypto.MasterKey;
 import com.example.sw0b_001.Helpers.GatewayValues;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -32,59 +32,57 @@ import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.MGF1ParameterSpec;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Map;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.OAEPParameterSpec;
 import javax.crypto.spec.PSource;
 import javax.crypto.spec.SecretKeySpec;
 
 public class SecurityHandler {
-    Cipher cipher;
     SecretKeySpec key;
     IvParameterSpec iv;
     KeyStore keyStore;
     Context context;
     SharedPreferences sharedPreferences;
-    static final String SHARED_SECRET_KEY = "SHARED_SECRET_KEY";
     OAEPParameterSpec param = new OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT);
+    MasterKey masterKeyAlias;
 
     public static final String DEFAULT_KEYPAIR_ALGORITHM_PADDING = "RSA/ECB/" + KeyProperties.ENCRYPTION_PADDING_RSA_OAEP;
+    public static final String DEFAULT_AES_ALGORITHM = "AES/CBC/PKCS5Padding";
     public static final String DEFAULT_KEYSTORE_ALIAS = "DEFAULT_SWOB_KEYSTORE";
-    public static final String DEFAULT_SHARED_KEY_ALIAS = "DEFAULT_SHARED_KEY";
     public static final String DEFAULT_KEYSTORE_PROVIDER = "AndroidKeyStore";
+    final String SHARED_SECRET_KEY = "SHARED_SECRET_KEY";
 
     public SecurityHandler() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
         this.keyStore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
         this.keyStore.load(null);
     }
 
-    public SecurityHandler(Context context) throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
+    public SecurityHandler(Context context) throws GeneralSecurityException, IOException {
         this.keyStore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
         this.keyStore.load(null);
         this.context = context;
 
-        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.masterKeyAlias = new MasterKey.Builder(this.context)
+                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                .build();
+
+        this.sharedPreferences = EncryptedSharedPreferences.create(
+                context,
+                this.SHARED_SECRET_KEY,
+                this.masterKeyAlias,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM );
     }
 
     public boolean hasSharedKey() throws KeyStoreException {
         try {
-            MasterKey masterKeyAlias = new MasterKey.Builder(this.context)
-                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-                    .build();
-            SharedPreferences sharedPreferences = EncryptedSharedPreferences.create(
-                    context,
-                    SecurityHandler.SHARED_SECRET_KEY,
-                    masterKeyAlias,
-                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM );
-
-            Boolean keystoreHasSharedKey = sharedPreferences.contains(SecurityHandler.SHARED_SECRET_KEY);
-
+            Boolean keystoreHasSharedKey = sharedPreferences.contains(this.SHARED_SECRET_KEY);
             if (keystoreHasSharedKey) {
                 return true;
             }
@@ -148,45 +146,26 @@ public class SecurityHandler {
         return password.toString();
     }
 
-    public byte[] encrypt_AES(byte[] input) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException {
-        String plainTextByte = this.sharedPreferences.getString(GatewayValues.SHARED_KEY, null);
-        byte[] decryptedKey = decrypt_RSA(plainTextByte.getBytes());
-        this.key = new SecretKeySpec(decryptedKey, "AES");
-        KeyStore keystore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
-        keystore.load(null);
+    public byte[] encryptWithSharedKeyAES(byte[] iv, byte[] input) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException {
+        byte[] ciphertext = null;
+        String sharedKey = this.sharedPreferences.getString(SHARED_SECRET_KEY, "");
 
-        this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        this.cipher.init(Cipher.ENCRYPT_MODE, this.key);
-        byte[] ciphertext = this.cipher.doFinal(input);
+        // TODO decrypt sharedKey with private key
+        try {
+            SecretKeySpec secretKeySpec = new SecretKeySpec(sharedKey.getBytes(StandardCharsets.UTF_8), "AES");
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+
+            Cipher cipher = Cipher.getInstance(DEFAULT_AES_ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
+            ciphertext = cipher.doFinal(input);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         return ciphertext;
     }
 
-    public byte[] encrypt_AES(byte[] input, byte[] iv) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException {
-        String plainTextByte = this.sharedPreferences.getString(GatewayValues.SHARED_KEY, null);
-        byte[] decryptedKey = decrypt_RSA(plainTextByte.getBytes());
-        this.key = new SecretKeySpec(decryptedKey, "AES");
-        KeyStore keystore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
-        keystore.load(null);
-
-        this.iv = new IvParameterSpec(iv);
-        this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        this.cipher.init(Cipher.ENCRYPT_MODE, this.key, this.iv);
-        byte[] ciphertext = this.cipher.doFinal(input);
-        return ciphertext;
-    }
-
-    public byte[] encrypt_AES(String input, byte[] iv) throws BadPaddingException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, KeyStoreException, UnrecoverableEntryException, CertificateException, IOException {
-        String plainTextByte = this.sharedPreferences.getString(GatewayValues.SHARED_KEY, null);
-        byte[] decryptedKey = decrypt_RSA(plainTextByte.getBytes("UTF-8"));
-        this.key = new SecretKeySpec(decryptedKey, "AES");
-
-        this.iv = new IvParameterSpec(iv);
-        this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        this.cipher.init(Cipher.ENCRYPT_MODE, this.key, this.iv);
-        byte[] ciphertext = this.cipher.doFinal(input.getBytes("UTF-8"));
-        return ciphertext;
-    }
-
+    /*
     public byte[] decrypt_AES(byte[] input) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
         String plainTextByte = this.sharedPreferences.getString(GatewayValues.SHARED_KEY, null);
         byte[] decryptedKey = decrypt_RSA(plainTextByte.getBytes());
@@ -205,22 +184,19 @@ public class SecurityHandler {
         }
         return decBytes;
     }
+     */
 
-    public byte[] getIV() {
-        // return this.iv.getIV();
-        return this.cipher.getIV();
-    }
+    public void storeSharedKey(String sharedKey) throws GeneralSecurityException, IOException {
+        // TODO: encrypt sharedKey before storing
 
-
-    public void storeSharedKey(String sharedKeyBytes) throws GeneralSecurityException, IOException {
         MasterKey masterKeyAlias = new MasterKey.Builder(this.context)
                 .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
                 .build();
 
         SharedPreferences encryptedSharedPreferences = EncryptedSharedPreferences.create(
                 context,
-                SecurityHandler.SHARED_SECRET_KEY,
-                masterKeyAlias,
+                this.SHARED_SECRET_KEY,
+                this.masterKeyAlias,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM );
 
@@ -228,7 +204,7 @@ public class SecurityHandler {
 
         // (shared_secret_key)
         // If stolen IV still required and currently encrypted with public key
-        sharedPreferencesEditor.putString(SecurityHandler.SHARED_SECRET_KEY, sharedKeyBytes);
+        sharedPreferencesEditor.putString(this.SHARED_SECRET_KEY, sharedKey);
         if(!sharedPreferencesEditor.commit()) {
             Log.e(getClass().getName(), "- Failed to store shared key!");
             throw new RuntimeException("Failed to store shared key!");

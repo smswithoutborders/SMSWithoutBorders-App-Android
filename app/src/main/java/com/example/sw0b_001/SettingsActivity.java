@@ -1,9 +1,5 @@
 package com.example.sw0b_001;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -11,9 +7,13 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
+
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Providers.Gateway.GatewayClient;
 import com.example.sw0b_001.Providers.Gateway.GatewayDao;
-import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     RadioGroup radioGroup;
     BottomNavigationView bottomNavigationView;
-    List<GatewayPhonenumber> phonenumbers;
+    List<GatewayClient> phonenumbers;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,9 +77,9 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void loadSettings() {
-        for(GatewayPhonenumber phonenumber : phonenumbers) {
+        for(GatewayClient phonenumber : phonenumbers) {
             RadioButton button = new RadioButton(this);
-            button.setText("(" + phonenumber.getCountryCode() + ") " + phonenumber.getNumber() + "  |  " + phonenumber.getIsp());
+            button.setText("() " + phonenumber.getMSISDN() + "  |  " + phonenumber.getOperatorName());
             button.setId((int) phonenumber.getId());
             button.setTextSize(20);
             if(phonenumber.isDefault())

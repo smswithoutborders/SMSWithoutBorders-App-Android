@@ -14,7 +14,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw0b_001.EmailBodyActivity;
-import com.example.sw0b_001.EmailThreadActivity;
 import com.example.sw0b_001.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +49,7 @@ public class EmailThreadRecyclerAdapter extends RecyclerView.Adapter<EmailThread
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         EmailMessage message = this.threads.get(position);
-        holder.threadSubject.setText(this.threads.get(position).getRecipient());
+        holder.threadSubject.setText(this.threads.get(position).getTo());
         holder.threadSubjectSub.setText(this.threads.get(position).getBody().length() > 20 ? this.threads.get(position).getBody().substring(0, 20) : this.threads.get(position).getBody());
         holder.threadBottomRightText.setText(this.threads.get(position).getStatus());
         holder.threadTopRightText.setText(this.threads.get(position).getDatetime());
