@@ -42,6 +42,7 @@ public class HomepageActivity extends AppCompatActivity {
     }
 
 
+
     public void onClickPlatformSelect(View view) {
         Intent platformIntent = new Intent(getApplicationContext(), PlatformsActivity.class);
         startActivity(platformIntent);
