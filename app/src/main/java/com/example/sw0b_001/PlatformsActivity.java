@@ -34,6 +34,7 @@ public class PlatformsActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_platforms);
         platforms = new ArrayList<>();
 
@@ -77,7 +78,7 @@ public class PlatformsActivity extends AppCompatActivity{
 
          */
 
-        platformsRecyclerAdapter = new PlatformsRecyclerAdapter(this, platforms, R.layout.layout_cardlist_platforms);
+        platformsRecyclerAdapter = new PlatformsRecyclerAdapter(this, platforms, R.layout.layout_cardlist_platforms, this);
         recyclerView.setAdapter(platformsRecyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -86,5 +87,16 @@ public class PlatformsActivity extends AppCompatActivity{
         Uri intentUri = Uri.parse(getResources().getString(R.string.store_tokens));
         Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
         startActivity(intent);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            Intent homepageIntent = new Intent(getApplicationContext(), HomepageActivity.class);
+            startActivity(homepageIntent);
+            finish();
+        }
     }
 }

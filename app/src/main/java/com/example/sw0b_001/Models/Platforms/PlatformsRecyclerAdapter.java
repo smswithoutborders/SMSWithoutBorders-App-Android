@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sw0b_001.PlatformsActivity;
 import com.example.sw0b_001.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,11 +24,13 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
     public Context context;
     public List<Platforms> platforms;
     public int platformRenderLayout;
+    public PlatformsActivity platformsActivity;
 
-    public PlatformsRecyclerAdapter(Context context, List<Platforms> platforms, int layout){
+    public PlatformsRecyclerAdapter(Context context, List<Platforms> platforms, int layout, PlatformsActivity platformsActivity){
         this.context = context;
         this.platforms = platforms;
         this.platformRenderLayout = layout;
+        this.platformsActivity = platformsActivity;
     }
 
     public void update(List<Platforms> platforms) {
@@ -56,7 +59,7 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
             public void onClick(View v) {
                 Intent intent = PlatformsHandler.getIntent(context.getApplicationContext(), platform.getName(), platform.getType());
                 intent.putExtra("platform_id", platform.getId());
-                context.startActivity(intent);
+                platformsActivity.startActivityForResult(intent, 1);
             }
         });
     }

@@ -281,10 +281,6 @@ public class EmailComposeActivity extends AppCompatActivity {
                         startActivity(defaultSMSAppIntent);
                         setResult(Activity.RESULT_OK, new Intent());
                         finish();
-
-//                        Intent homepageIntent = new Intent(getApplicationContext(), HomepageActivity.class);
-//                        startActivity(homepageIntent);
-//                        finish();
                     }
 
                     return true;
