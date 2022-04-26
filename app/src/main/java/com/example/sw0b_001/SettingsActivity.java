@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
     RadioGroup radioGroup;
     BottomNavigationView bottomNavigationView;
     List<GatewayPhonenumber> phonenumbers;
+//    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,11 +72,23 @@ public class SettingsActivity extends AppCompatActivity {
         loadSettings();
     }
 
+//    revert to this if you fuckup
+
+//    public void resyncApp(View view) {
+//        Intent intent = new Intent(this, PermissionsActivity.class);
+//        startActivity(intent);
+//        finish();
+//    }
+
+
     public void resyncApp(View view) {
         Intent intent = new Intent(this, PermissionsActivity.class);
         startActivity(intent);
         finish();
     }
+
+
+
 
     private void loadSettings() {
         for(GatewayPhonenumber phonenumber : phonenumbers) {
