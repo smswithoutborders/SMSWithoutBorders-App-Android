@@ -7,8 +7,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView1"
-        android:layout_width="405dp"
-        android:layout_height="wrap_content"
+        android:layout_width="418dp"
+        android:layout_height="83dp"
         app:cardBackgroundColor="#393838"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +42,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Gmail"
+                android:text="number"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -54,46 +54,41 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView4"
-        android:layout_width="410dp"
-        android:layout_height="567dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="7dp"
+    <ScrollView
+        android:layout_width="417dp"
+        android:layout_height="547dp"
         android:background="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/homepage_bottom_navbar"
+        app:layout_constraintBottom_toTopOf="@+id/editTextTextMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView1" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView1">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/homepage_bottom_navbar"
-        android:layout_width="0dp"
-        android:layout_height="70dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
-        android:layout_marginBottom="6dp"
-        android:background="@color/default_dark"
-        android:visibility="visible"
-        app:itemIconTint="@color/white"
-        app:itemRippleColor="@color/pending_gray"
-        app:itemTextColor="@color/white"
-        app:labelVisibilityMode="labeled"
+    <EditText
+        android:id="@+id/editTextTextMultiLine"
+        android:layout_width="401dp"
+        android:layout_height="96dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Type message "
+        android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/new_navigation" />
+        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/textView23"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No emails sent "
-        android:textColor="#595959"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerView4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView1" />
-
+        android:clickable="true"
+        app:backgroundTint="#03A9F4"
+        app:srcCompat="@drawable/ic_baseline_send_24"
+        tools:layout_editor_absoluteX="339dp"
+        tools:layout_editor_absoluteY="659dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

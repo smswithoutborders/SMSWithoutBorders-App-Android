@@ -42,7 +42,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Gmail"
+                android:text="Telegram"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -55,12 +55,9 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView4"
-        android:layout_width="410dp"
-        android:layout_height="567dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="7dp"
+        android:id="@+id/recyclerView3"
+        android:layout_width="406dp"
+        android:layout_height="569dp"
         android:background="#000000"
         app:layout_constraintBottom_toTopOf="@+id/homepage_bottom_navbar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,7 +69,6 @@
         android:layout_width="0dp"
         android:layout_height="70dp"
 
-        android:layout_marginBottom="6dp"
         android:background="@color/default_dark"
         android:visibility="visible"
         app:itemIconTint="@color/white"
@@ -81,19 +77,19 @@
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/new_navigation" />
 
     <TextView
-        android:id="@+id/textView23"
+        android:id="@+id/textView20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No emails sent "
-        android:textColor="#595959"
+        android:text="No messages sent"
+        android:textColor="#5C5C5C"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerView4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView3"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerView3"
+        app:layout_constraintStart_toStartOf="@+id/recyclerView3"
         app:layout_constraintTop_toBottomOf="@+id/cardView1" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
