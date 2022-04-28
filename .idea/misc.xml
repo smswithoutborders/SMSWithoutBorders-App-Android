@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/drawable/edit_text.xml" value="0.246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout-v21/activity_email_body.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout-v21/activity_platforms.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout-v21/activity_text.xml" value="0.2504528985507246" />
@@ -28,6 +29,9 @@
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_store_platforms.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_sync_processing.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_synchronise_type.xml" value="0.25" />
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_telegram_history.xml" value="0.25226449275362317" />
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_telegram_history_card.xml" value="0.25226449275362317" />
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_telegram_single_thread.xml" value="0.2" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_telegram_thread.xml" value="0.25226449275362317" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_telegramchat.xml" value="0.264" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_text_compose.xml" value="0.2504528985507246" />

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#000000">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView1"
@@ -55,6 +56,7 @@
     </androidx.cardview.widget.CardView>
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="417dp"
         android:layout_height="547dp"
         android:background="#000000"
@@ -71,16 +73,22 @@
 
     <EditText
         android:id="@+id/editTextTextMultiLine"
-        android:layout_width="401dp"
-        android:layout_height="96dp"
+        android:layout_width="408dp"
+        android:layout_height="78dp"
+        android:background="@drawable/edit_text"
         android:ems="10"
         android:gravity="start|top"
         android:hint="Type message "
         android:inputType="textMultiLine"
+        android:paddingStart="16sp"
+        android:paddingLeft="16sp"
+        android:paddingTop="16sp"
+        android:paddingBottom="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.515"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -88,7 +96,11 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         app:backgroundTint="#03A9F4"
-        app:srcCompat="@drawable/ic_baseline_send_24"
-        tools:layout_editor_absoluteX="339dp"
-        tools:layout_editor_absoluteY="659dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/editTextTextMultiLine"
+        app:layout_constraintEnd_toEndOf="@+id/editTextTextMultiLine"
+        app:layout_constraintHorizontal_bias="0.972"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextTextMultiLine"
+        app:layout_constraintVertical_bias="0.53"
+        app:srcCompat="@drawable/ic_baseline_send_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>
