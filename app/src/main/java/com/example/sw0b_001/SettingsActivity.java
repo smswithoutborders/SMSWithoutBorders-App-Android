@@ -31,7 +31,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_settings2);
+        setContentView(R.layout.activity_settings);
 
 
         bottomNavigationView = findViewById(R.id.homepage_bottom_navbar);
@@ -74,13 +74,7 @@ public class SettingsActivity extends AppCompatActivity {
         loadSettings();
     }
 
-//    revert to this if you fuckup
 
-//    public void resyncApp(View view) {
-//        Intent intent = new Intent(this, PermissionsActivity.class);
-//        startActivity(intent);
-//        finish();
-//    }
 
 
     public void resyncApp(View view) {
