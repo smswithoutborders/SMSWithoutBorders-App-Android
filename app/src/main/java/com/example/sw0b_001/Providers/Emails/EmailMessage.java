@@ -4,12 +4,19 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.example.sw0b_001.Helpers.CustomHelpers;
-
 @Entity
 public class EmailMessage {
-    @ColumnInfo(name="recipient")
-    public String recipient;
+    @PrimaryKey(autoGenerate = true)
+    public long id;
+
+    @ColumnInfo(name="to")
+    public String to;
+
+    @ColumnInfo(name="cc")
+    public String cc;
+
+    @ColumnInfo(name="bcc")
+    public String bcc;
 
     @ColumnInfo(name="subject")
     public String subject;
@@ -17,91 +24,63 @@ public class EmailMessage {
     @ColumnInfo(name="body")
     public String body;
 
-    public String getRecipient() {
-        return recipient;
+    @ColumnInfo(name="datetime")
+    public String datetime;
+
+    @ColumnInfo(name="thread_id")
+    public long threadId;
+
+
+    public void setTo(String to) {
+        // this.setImage(CustomHelpers.getLetterImage(to.charAt(0)));
+        this.to = to;
     }
 
-    public EmailMessage setRecipient(String recipient) {
-        this.setImage(CustomHelpers.getLetterImage(recipient.charAt(0)));
-        this.recipient = recipient;
-        return this;
-    }
+    public void setCC(String cc) { this.cc = cc; }
 
-    public String getSubject() {
-        return subject;
-    }
+    public void setBCC(String bcc) { this.bcc = bcc; }
 
-    public EmailMessage setSubject(String subject) {
+    public void setSubject(String subject) {
         this.subject = subject;
-        return this;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public void setThreadId(long threadId) {
+        this.threadId = threadId;
+    }
+
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getBody() {
         return body;
     }
 
-    public EmailMessage setBody(String body) {
-        this.body = body;
-        return this;
+    public String getTo() {
+        return to;
+    }
+
+    public String getSubject() {
+        return subject;
     }
 
     public String getDatetime() {
         return datetime;
     }
 
-    public EmailMessage setDatetime(String datetime) {
-        this.datetime = datetime;
-        return this;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public EmailMessage setStatus(String status) {
-        this.status = status;
-        return this;
-    }
-
-    public int getImage() {
-        return image;
-    }
-
-    public EmailMessage setImage(int image) {
-        this.image = image;
-        return this;
-    }
-
     public long getThreadId() {
         return threadId;
-    }
-
-    public EmailMessage setThreadId(long threadId) {
-        this.threadId = threadId;
-        return this;
     }
 
     public long getId() {
         return id;
     }
-
-    public EmailMessage setId(long id) {
-        this.id = id;
-        return this;
-    }
-
-    @ColumnInfo(name="datetime")
-    public String datetime;
-
-    @ColumnInfo(name="status")
-    public String status;
-
-    @ColumnInfo(name="image")
-    public int image;
-
-    @ColumnInfo(name="thread_id")
-    public long threadId;
-
-    @PrimaryKey(autoGenerate = true)
-    public long id;
 }

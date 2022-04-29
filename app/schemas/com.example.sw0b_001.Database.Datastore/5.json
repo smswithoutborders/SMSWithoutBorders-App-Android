@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "8112e54dfdffeb10fe504e9cc3cd30fe",
+    "identityHash": "640c0381d81037f019541de9d8dc1d01",
     "entities": [
       {
         "tableName": "GatewayServers",
@@ -59,11 +59,29 @@
       },
       {
         "tableName": "EmailMessage",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`recipient` TEXT, `subject` TEXT, `body` TEXT, `datetime` TEXT, `status` TEXT, `image` INTEGER NOT NULL, `thread_id` INTEGER NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `to` TEXT, `cc` TEXT, `bcc` TEXT, `subject` TEXT, `body` TEXT, `datetime` TEXT, `thread_id` INTEGER NOT NULL)",
         "fields": [
           {
-            "fieldPath": "recipient",
-            "columnName": "recipient",
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "to",
+            "columnName": "to",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "cc",
+            "columnName": "cc",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "bcc",
+            "columnName": "bcc",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -86,26 +104,8 @@
             "notNull": false
           },
           {
-            "fieldPath": "status",
-            "columnName": "status",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "image",
-            "columnName": "image",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
             "fieldPath": "threadId",
             "columnName": "thread_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "id",
-            "columnName": "id",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -229,8 +229,8 @@
         "foreignKeys": []
       },
       {
-        "tableName": "GatewayPhonenumber",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `country_code` TEXT, `type` TEXT, `number` TEXT, `default` INTEGER NOT NULL, `isp` TEXT)",
+        "tableName": "GatewayClient",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT, `MSISDN` TEXT, `default` INTEGER NOT NULL, `operator_name` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -239,20 +239,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "countryCode",
-            "columnName": "country_code",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
             "fieldPath": "type",
             "columnName": "type",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "number",
-            "columnName": "number",
+            "fieldPath": "MSISDN",
+            "columnName": "MSISDN",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -263,8 +257,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "isp",
-            "columnName": "isp",
+            "fieldPath": "operatorName",
+            "columnName": "operator_name",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -277,13 +271,12 @@
         },
         "indices": [
           {
-            "name": "index_GatewayPhonenumber_number_country_code",
+            "name": "index_GatewayClient_MSISDN",
             "unique": true,
             "columnNames": [
-              "number",
-              "country_code"
+              "MSISDN"
             ],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_GatewayPhonenumber_number_country_code` ON `${TABLE_NAME}` (`number`, `country_code`)"
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_GatewayClient_MSISDN` ON `${TABLE_NAME}` (`MSISDN`)"
           }
         ],
         "foreignKeys": []
@@ -342,7 +335,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8112e54dfdffeb10fe504e9cc3cd30fe')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '640c0381d81037f019541de9d8dc1d01')"
     ]
   }
 }

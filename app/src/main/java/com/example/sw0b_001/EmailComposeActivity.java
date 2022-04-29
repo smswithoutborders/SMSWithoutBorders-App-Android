@@ -2,7 +2,6 @@ package com.example.sw0b_001;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
@@ -16,23 +15,25 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
-import com.example.sw0b_001.Helpers.CustomHelpers;
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Security.SecurityHandler;
+import com.example.sw0b_001.Helpers.CustomHelpers;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServers;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
+import com.example.sw0b_001.Models.Platforms.PlatformDao;
+import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
+import com.example.sw0b_001.Providers.Gateway.GatewayClient;
 import com.example.sw0b_001.Providers.Gateway.GatewayDao;
-import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
-import com.example.sw0b_001.Models.Platforms.PlatformDao;
-import com.example.sw0b_001.Models.Platforms.Platforms;
+import com.example.sw0b_001.Security.SecurityHandler;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
@@ -50,12 +51,11 @@ import javax.crypto.NoSuchPaddingException;
 public class EmailComposeActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
-    SecurityHandler securityLayer;
     long emailId;
-    private List<GatewayPhonenumber> phonenumbers = new ArrayList<>();
+    private List<GatewayClient> phonenumbers = new ArrayList<>();
     private Platforms platforms;
-    private long threadId;
 
+    Datastore databaseConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,47 +64,19 @@ public class EmailComposeActivity extends AppCompatActivity {
 
         Toolbar composeToolbar = (Toolbar) findViewById(R.id.compose_toolbar);
         setSupportActionBar(composeToolbar);
-
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
-
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
-//        if(!checkPermission(Manifest.permission.SEND_SMS)) {
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
-//        }
-        long platformId = getIntent().getLongExtra("platform_id", -1);
 
-        try {
-            Thread getPhonenumber = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                            Datastore.class, Datastore.DatabaseName).build();
-                    GatewayDao gatewayDao = platformDb.gatewayDao();
-                    phonenumbers = gatewayDao.getAll();
+        this.databaseConnection = Room.databaseBuilder(getApplicationContext(),
+                Datastore.class, Datastore.DatabaseName).build();
 
-                    PlatformDao platformDao = platformDb.platformDao();
-                    platforms = platformDao.get(platformId);
-                }
-            });
-            getPhonenumber.start();
-            try {
-                getPhonenumber.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            securityLayer = new SecurityHandler(getApplicationContext());
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
+        configureForThreading();
+    }
+
+    private void configureForThreading() {
         TextView emailTo = findViewById(R.id.email_cc);
         TextView emailSubject = findViewById(R.id.email_subject);
         if(getIntent().hasExtra("recipient") ) {
@@ -113,7 +85,56 @@ public class EmailComposeActivity extends AppCompatActivity {
         if(getIntent().hasExtra("subject") ) {
             emailSubject.setText(getIntent().getStringExtra("subject"));
         }
+    }
 
+    private Platforms fetchPlatform(long platformID) throws Throwable {
+        final Platforms[] platforms = new Platforms[1];
+        Thread fetchPlatformThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                PlatformDao platformDao = databaseConnection.platformDao();
+                platforms[0] = platformDao.get(platformID);
+            }
+        });
+
+        try {
+            fetchPlatformThread.start();
+            fetchPlatformThread.join();
+        } catch (InterruptedException e) {
+            throw e.fillInStackTrace();
+        }
+
+        return platforms[0];
+    }
+
+    private List<GatewayClient> fetchGatewayClients() throws Throwable {
+        final List<GatewayClient>[] gatewayClients = new List[]{new ArrayList<>()};
+
+        Thread fetchGatewayClientThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                GatewayDao gatewayDao = databaseConnection.gatewayDao();
+                gatewayClients[0] = gatewayDao.getAll();
+            }
+        });
+
+        try {
+            fetchGatewayClientThread.start();
+            fetchGatewayClientThread.join();
+        } catch (InterruptedException e) {
+            throw e.fillInStackTrace();
+        }
+
+        return gatewayClients[0];
+    }
+
+    private boolean isFromEmailThread(String subject) {
+        long threadId = getIntent().getLongExtra("thread_id", -1);
+        // TODO compare the subjects
+        if(threadId != -1 )
+            return true;
+
+        return false;
     }
 
     @Override
@@ -122,87 +143,152 @@ public class EmailComposeActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    private long createEmailThread(String to, String subject) {
+        long threadId[] = {-1};
+        Thread storeEmailThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                long platformId = getIntent().getLongExtra("platform_id", -1);
+                EmailThreads emailThread = new EmailThreads();
+                emailThread .setRecipient(to);
+                emailThread.setSubject(subject);
+                emailThread.setPlatformId(platformId);
+
+                EmailThreadsDao platformsDao = databaseConnection.emailThreadDao();
+                threadId[0] = platformsDao.insert(emailThread);
+            }
+        });
+
+        storeEmailThread.start();
+        try {
+            storeEmailThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return threadId[0];
+    }
+
+    public void storeEmailMessage(String to, String cc, String bcc, String subject, String body, long threadId) {
+        Thread storeEmailMessage = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                EmailMessage emailMessage = new EmailMessage();
+                emailMessage.setTo(to);
+                emailMessage.setCC(cc);
+                emailMessage.setBCC(bcc);
+                emailMessage.setSubject(subject);
+                emailMessage.setBody(body);
+                emailMessage.setThreadId(threadId);
+                emailMessage.setDatetime(CustomHelpers.getDateTime());
+
+                EmailMessageDao platformsDao = databaseConnection.emailDao();
+                emailId = platformsDao.insertAll(emailMessage);
+            }
+        });
+
+        try {
+            storeEmailMessage.start();
+            storeEmailMessage.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private GatewayClient getGatewayClientMSISDN() throws Throwable {
+
+        GatewayClient defaultGatewayClient = new GatewayClient();
+
+        List<GatewayClient> gatewayClients = this.fetchGatewayClients();
+        for(GatewayClient gatewayClient : gatewayClients) {
+            if(gatewayClient.isDefault()) {
+                defaultGatewayClient = gatewayClient;
+                break;
+            }
+        }
+
+        return defaultGatewayClient;
+    }
+
+    private Platforms getPlatform() {
+        Platforms platform = new Platforms();
+        try {
+            long platformId = getIntent().getLongExtra("platform_id", -1);
+            platform = fetchPlatform(platformId);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+
+        return platform;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        EditText to = findViewById(R.id.email_cc);
-        EditText subject = findViewById(R.id.email_subject);
-        EditText body = findViewById(R.id.email_body);
+        EditText toEditText = findViewById(R.id.email_to);
+        EditText ccEditText = findViewById(R.id.email_cc);
+        EditText bccEditText = findViewById(R.id.email_bcc);
+        EditText subjectEditText = findViewById(R.id.email_subject);
+        EditText bodyEditText = findViewById(R.id.email_body);
+
         switch (item.getItemId()) {
-            /*
-            case R.id.discard:
-                startActivity(new Intent(this, EmailThreadsActivity.class));
-                to.setText("");
-                subject.setText("");
-                body.setText("");
-                finished_thread(null);
-                return true;
-
-             */
-
             case R.id.action_send:
-                if(to.getText().toString().isEmpty()) {
-                    to.setError("Recipient cannot be empty!");
+                String to = toEditText.getText().toString();
+                String cc = ccEditText.getText().toString();
+                String bcc = bccEditText.getText().toString();
+                String body = bodyEditText.getText().toString();
+                String subject = subjectEditText.getText().toString();
+
+                if(to.isEmpty()) {
+                    toEditText.setError("Recipient cannot be empty!");
                     return false;
                 }
-                if(subject.getText().toString().isEmpty()) {
-                    subject.setError("Subject should not be empty!");
+                if(body.isEmpty()) {
+                    bodyEditText.setError("Body should not be empty!");
                     return false;
                 }
-                if(body.getText().toString().isEmpty()) {
-                    body.setError("Body should not be empty!");
-                    return false;
+
+                long threadId = getIntent().getLongExtra("platform_id", -1);
+
+                if(!this.isFromEmailThread(subject)) {
+                    threadId = this.createEmailThread(to, subject);
                 }
-//                item.setEnabled(false);
+                this.storeEmailMessage(to, cc, bcc, subject, body, threadId);
 
-                threadId = getIntent().getLongExtra("thread_id", -1);
-                if(threadId == -1) {
-                    Thread storeEmailThread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            EmailThreads emailThread = new EmailThreads()
-                                    .setRecipient(to.getText().toString())
-                                    .setSubject(subject.getText().toString())
-                                    .setPlatformId(getIntent().getLongExtra("platform_id", -1));
-                            Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
-                                    Datastore.class, Datastore.DatabaseName).build();
-
-                            EmailThreadsDao platformsDao = emailStoreDb.emailThreadDao();
-                            threadId = platformsDao.insert(emailThread);
-                        }
-                    });
-
-                    storeEmailThread.start();
-                    try {
-                        storeEmailThread.join();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                Thread storeEmailMessage = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        EmailMessage emailMessage = new EmailMessage()
-                                .setBody(body.getText().toString())
-                                .setDatetime(CustomHelpers.getDateTime())
-                                .setThreadId(threadId)
-                                .setRecipient(to.getText().toString())
-                                .setSubject(subject.getText().toString())
-                                .setStatus("requested");
-                        Datastore emailStoreDb = Room.databaseBuilder(getApplicationContext(),
-                                Datastore.class, Datastore.DatabaseName).build();
-
-                        EmailMessageDao platformsDao = emailStoreDb.emailDao();
-                        emailId = platformsDao.insertAll(emailMessage);
-                    }
-                });
-                storeEmailMessage.start();
                 try {
-                    storeEmailMessage.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    sendMessage(to.getText().toString(), subject.getText().toString(), body.getText().toString());
+
+                    Platforms platform = getPlatform();
+
+                    String encryptedContent = processEmailForEncryption(platform.getLetter(), to, cc, bcc, subject, body);
+                    Log.d(getLocalClassName(), "[*] size utf8: " + encryptedContent.length());
+                    Log.d(getLocalClassName(), "[*] data utf8: " + encryptedContent);
+
+                    String encryptedContentBase64 = Base64.encodeToString(encryptedContent.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+                    Log.d(getLocalClassName(), "[*] size base64: " + encryptedContentBase64.length());
+                    Log.d(getLocalClassName(), "[*] data base64: " + encryptedContentBase64);
+
+                    GatewayClient gatewayClient = getGatewayClientMSISDN();
+
+                    if(gatewayClient.getMSISDN() == null || gatewayClient.getMSISDN().isEmpty()) {
+                        // TODO should have fallback GatewayClients that can be used in the code
+
+                        String defaultSeedFallbackGatewayClientMSISDN = "+237672451860";
+                        gatewayClient.setMSISDN(defaultSeedFallbackGatewayClientMSISDN);
+                    }
+
+                    Intent defaultSMSAppIntent = transferToDefaultSMSApp(gatewayClient, encryptedContentBase64);
+
+                    if(defaultSMSAppIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(defaultSMSAppIntent);
+                        setResult(Activity.RESULT_OK, new Intent());
+                        finish();
+
+//                        Intent homepageIntent = new Intent(getApplicationContext(), HomepageActivity.class);
+//                        startActivity(homepageIntent);
+//                        finish();
+                    }
+
+                    return true;
+
                 } catch (BadPaddingException e) {
                     e.printStackTrace();
                 } catch (InvalidAlgorithmParameterException e) {
@@ -225,8 +311,10 @@ public class EmailComposeActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } catch (UnrecoverableEntryException e) {
                     e.printStackTrace();
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
                 }
-                return true;
+                return false;
 
             default:
                 // If we got here, the user's action was not recognized.
@@ -236,83 +324,68 @@ public class EmailComposeActivity extends AppCompatActivity {
         }
     }
 
+    private List<GatewayServers> getGatewayServers() throws Throwable {
+        final List<GatewayServers>[] gatewayServers = new List[]{new ArrayList<>()};
+        Thread fetchGatewayClientThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                GatewayServersDAO gatewayServerDao = databaseConnection.gatewayServersDAO();
+                gatewayServers[0] = gatewayServerDao.getAll();
+            }
+        });
 
-    private void sendMessage(String recipient, String subject, String body) throws BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, IllegalBlockSizeException, UnrecoverableEntryException, KeyStoreException, NoSuchPaddingException, InvalidKeyException, CertificateException, IOException {
-//        Toast.makeText(getBaseContext(), "SMS sending...",yy Toast.LENGTH_LONG).show();
-        String phonenumber = "";
-        for(GatewayPhonenumber number : phonenumbers) {
-//            Log.i(this.getLocalClassName(), "[+] Number: " + number.getNumber());
-            if(number.isDefault())
-                phonenumber = number.getCountryCode() + number.getNumber();
+        try {
+            fetchGatewayClientThread.start();
+            fetchGatewayClientThread.join();
+        } catch (InterruptedException e) {
+            throw e.fillInStackTrace();
         }
 
-        if(phonenumber.length() < 1 ) {
-            Toast.makeText(this, "Default number could not be determined", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-//        body = formatForEmail(platforms.getProvider().toLowerCase(), platforms.getName().toLowerCase(), "send", recipient, subject, body);
-//            Log.i(this.getLocalClassName(), ">> Body: " + body);
-        body = getEncryptedSMS(body);
-//            Log.i(this.getLocalClassName(), ">> decrypted: " + new String(securityLayer.decrypt_AES(Base64.decode(body.getBytes(), Base64.DEFAULT))));
-//            Log.i(this.getLocalClassName(), ">> iv: " + new String(securityLayer.getIV()));
-//            byte[] byte_encryptedIv = securityLayer.encrypt_AES(securityLayer.getIV(), passwdHash.getBytes());
-//            byte[] fullmessage = securityLayer.encrypt_AES((new String(securityLayer.getIV()) + "_" + body), passwdHash.getBytes("UTF-8"));
-        body = new String(securityLayer.getIV()) + body;
-//            body = Base64.encodeToString(fullmessage, Base64.DEFAULT);
-//            Log.i(this.getLocalClassName(), "[+] Transmission data: " + body);
-//            CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
-        Intent intent = sendSMSMessageIntent(body, phonenumber);
-        finished_thread(intent);
-        // TODO: work out how the IV gets encrypted before sending
-
+        return gatewayServers[0];
     }
 
-    public Intent sendSMSMessageIntent(String text, String phonenumber) {
+    private String[] getEncryptEmailContent(String emailContent) throws Throwable {
+        SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
+        String randomStringForIv = securityHandler.generateRandom(16);
+
+        GatewayServers gatewayServer = getGatewayServers().get(0);
+        String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServer.getUrl() );
+
+        try {
+            byte[] encryptedEmailContent = securityHandler.encryptWithSharedKeyAES(randomStringForIv.getBytes(), emailContent.getBytes(StandardCharsets.UTF_8), keystoreAlias);
+
+            return new String[]{randomStringForIv, Base64.encodeToString(encryptedEmailContent, Base64.NO_WRAP)};
+        }
+        catch(Exception e ) {
+            throw new Throwable(e);
+        }
+    }
+
+
+    private String processEmailForEncryption(String platformLetter, String to, String cc, String bcc, String subject, String body) throws Throwable {
+        String emailContent = platformLetter + ":" + to + ":" + cc + ":" + bcc + ":" + subject + ":" + body;
+        try {
+            String[] encryptedIVEmailContent = this.getEncryptEmailContent(emailContent);
+
+            String IV = encryptedIVEmailContent[0];
+            String encryptedEmailContent = encryptedIVEmailContent[1];
+
+            final String encryptedContent = IV + encryptedEmailContent;
+
+            return encryptedContent;
+        }
+        catch(Exception e ) {
+            throw new Throwable(e);
+        }
+    }
+
+    public Intent transferToDefaultSMSApp(GatewayClient gatewayClient, String encryptedContent) {
+        String MSISDN = gatewayClient.getMSISDN();
         Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("smsto:"+phonenumber));
-        intent.putExtra("sms_body", text);
+        intent.setData(Uri.parse("smsto:" + MSISDN));
+        intent.putExtra("sms_body", encryptedContent);
 
         return intent;
-    }
-
-    private String formatForEmail(String provider, String platform, String protocol, String to, String subject, String body) throws UnsupportedEncodingException {
-       // Gmail = to:subject:body
-        // TODO: put platform and protocol
-        return provider + ":" + platform + ":" + protocol + ":" + to + ":" + subject + ":" + body;
-    }
-
-    private void finished_thread(Intent intent) {
-        if(threadId != -1) {
-            boolean intentCameNull = false;
-            if( intent == null ) {
-                intentCameNull = true;
-                intent = new Intent(this, EmailThreadActivity.class);
-            }
-            intent.putExtra("thread_id", threadId);
-            intent.putExtra("platform_id", threadId);
-            if (!intentCameNull && intent.resolveActivity(getPackageManager()) != null ) {
-                startActivity(intent);
-                setResult(Activity.RESULT_OK, new Intent());
-                finish();
-            }
-            else {
-                Toast.makeText(this, "Could not transfer to default app", Toast.LENGTH_SHORT).show();
-                Log.i(this.getLocalClassName(), "IntentCameNull= " + intentCameNull);
-                Log.i(this.getLocalClassName(), "isPackageManager= " + intent.resolveActivity(getPackageManager()));
-            }
-        }
-        else {
-            setResult(Activity.RESULT_OK, new Intent());
-            finish();
-        }
-    }
-
-    private String getEncryptedSMS(String data) throws BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, UnrecoverableEntryException, KeyStoreException, CertificateException, IOException {
-        String randString = securityLayer.generateRandom(16);
-//        Log.i(this.getLocalClassName(), ">> Rand string: " + randString);
-        byte[] encryptedData = securityLayer.encrypt_AES(data, randString.getBytes());
-        return Base64.encodeToString(encryptedData, Base64.NO_WRAP);
     }
 
     @Override
@@ -328,11 +401,4 @@ public class EmailComposeActivity extends AppCompatActivity {
         }
 
     }
-
-    public boolean checkPermission(String permission) {
-        int check = ContextCompat.checkSelfPermission(this, permission);
-
-        return (check == PackageManager.PERMISSION_GRANTED);
-    }
-
 }

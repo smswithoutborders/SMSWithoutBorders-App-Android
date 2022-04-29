@@ -1,8 +1,5 @@
 package com.example.sw0b_001;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +7,9 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -53,7 +54,7 @@ public class PasswordActivity extends AppCompatActivity {
         }
     }
 
-    public void validateUsersCloudPassword(View view) throws NoSuchAlgorithmException, IOException, CertificateException, KeyStoreException, InterruptedException {
+    public void validateUsersCloudPassword(View view) throws GeneralSecurityException, IOException, InterruptedException {
         EditText passwordField = findViewById(R.id.user_password);
         SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
         GatewayServers gatewayServers[] = {new GatewayServers()};
@@ -94,7 +95,7 @@ public class PasswordActivity extends AppCompatActivity {
                     UserHandler userHandler = new UserHandler(getApplicationContext());
                     User user = userHandler.getUser();
 
-                    byte[] RSAEncryptedPassword = securityHandler.encryptRSA(passwordEncoded, gatewayServer.getPublicKey());
+                    byte[] RSAEncryptedPassword = securityHandler.encryptWithExternalPublicKey(passwordEncoded, gatewayServer.getPublicKey());
                     Log.d(getLocalClassName(), "RSAEncryptedPassword: " + RSAEncryptedPassword);
 
                     String passwordBase64 = Base64.encodeToString(RSAEncryptedPassword, Base64.DEFAULT);

@@ -14,6 +14,7 @@ import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.databinding.ActivitySplashBinding;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -135,6 +136,8 @@ public class SplashActivity extends AppCompatActivity {
                 return true;
             }
         } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
+            e.printStackTrace();
+        } catch (GeneralSecurityException e) {
             e.printStackTrace();
         }
 
