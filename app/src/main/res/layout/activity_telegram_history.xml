@@ -11,16 +11,17 @@
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:background="@color/default_dark"
-        android:visibility="visible"
 
+        android:visibility="visible"
         app:itemIconTint="@color/white"
         app:itemRippleColor="@color/pending_gray"
         app:itemTextColor="@color/white"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView5"
         app:menu="@menu/new_navigation" />
 
     <androidx.appcompat.widget.Toolbar
@@ -40,7 +41,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/telegram_history_toolbar"
-        app:title="Contacts" />
+        app:title="Contacts" />>= 70k depending on t>= 70k depending on the colorhe color
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView5"
