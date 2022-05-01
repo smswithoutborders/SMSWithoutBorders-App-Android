@@ -92,9 +92,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PlatformsActivity" />
         </activity>
+
+
+
         <activity
             android:name=".PermissionsActivity"
-            android:label="Permission" />
+            android:parentActivityName=".WelcomeActivity"
+            android:label="Permission"
+            android:theme="@style/Theme.MyAppNoBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
+
+
 
 
         <activity

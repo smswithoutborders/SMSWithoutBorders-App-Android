@@ -7,15 +7,17 @@
 
     <RadioButton
         android:id="@+id/radioButton"
-        android:layout_width="30dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/cardView"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="292dp"
         android:layout_height="72dp"
         app:cardBackgroundColor="#F6EEEE"
@@ -49,19 +51,24 @@
                 android:layout_marginStart="16dp"
                 android:text="Cameroon"
                 android:textColor="#3F51B5"
-                app:layout_constraintEnd_toStartOf="@+id/editTextTextPersonName"
-                app:layout_constraintHorizontal_bias="0.103"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="46dp" />
+                app:layout_constraintTop_toBottomOf="@+id/textView17"
+                app:layout_constraintVertical_bias="0.846" />
 
             <TextView
                 android:id="@+id/textView12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
                 android:text="LPS: 2 secs"
                 android:textColor="#878686"
-                tools:layout_editor_absoluteX="204dp"
-                tools:layout_editor_absoluteY="46dp" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.791"
+                app:layout_constraintStart_toEndOf="@+id/textView18"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

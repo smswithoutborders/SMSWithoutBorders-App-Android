@@ -37,9 +37,10 @@
         app:cornerRadius="10dp"
         app:iconTint="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/button5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="#00BCD4"
-        app:strokeWidth="1dp"
-        tools:layout_editor_absoluteX="154dp" />
+        app:strokeWidth="1dp" />
 
     <TextView
         android:id="@+id/sync_text"
@@ -92,8 +93,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="14dp"
         android:text="Manually link your app with your online account"
-        android:textSize="16"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/textButton"
-        tools:layout_editor_absoluteX="49dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

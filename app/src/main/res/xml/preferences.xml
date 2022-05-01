@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android2="http://schemas.android.com/apk/res/android"
+    xmlns:android="https://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android2:layout_width="match_parent"
+        android2:layout_height="wrap_content"
+        android2:defaultValue="Default value"
+        android2:icon="@drawable/ic_baseline_confirmation_number_24"
+        android2:key="edit_text_preference_1"
+        android2:selectAllOnFocus="true"
+        android2:singleLine="true"
+        android2:title="Gateway Settings "
+        app:summary="select a new gateway client " />
+    <EditTextPreference
+        android2:defaultValue="Default value"
+        android2:icon="@drawable/ic_baseline_group_work_24"
+        android2:key="edit_text_preference_2"
+        android2:selectAllOnFocus="true"
+        android2:singleLine="true"
+        android2:summary="Check the accounts stored "
+        android2:title="Stored Accounts " />
+
+    <EditTextPreference
+        android2:defaultValue="Default value"
+        android2:icon="@drawable/ic_baseline_language_24"
+        android2:key="edit_text_preference_3"
+        android2:selectAllOnFocus="true"
+        android2:singleLine="true"
+        android2:title="Language"
+        app:summary="Change the language of the application" />
+    <EditTextPreference
+        android2:defaultValue="Default value"
+        android2:key="edit_text_preference_4"
+        android2:selectAllOnFocus="true"
+        android2:selectable="false"
+        android2:singleLine="true"
+        android2:title="Help and support"
+        app:icon="@drawable/ic_baseline_help_center_24"
+        app:iconSpaceReserved="false"
+        app:selectable="false" />
+    <EditTextPreference
+        android2:defaultValue="Default value"
+        android2:icon="@drawable/ic_baseline_supervised_user_circle_24"
+        android2:key="edit_text_preference_5"
+        android2:selectAllOnFocus="true"
+        android2:singleLine="true"
+        android2:title="About" />
+    <EditTextPreference
+        android2:defaultValue="Default value"
+        android2:icon="@drawable/ic_baseline_update_24"
+        android2:key="edit_text_preference_6"
+        android2:selectAllOnFocus="true"
+        android2:singleLine="true"
+        android2:title="Updates" />
+</PreferenceScreen>
+
+
