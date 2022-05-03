@@ -13,8 +13,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sw0b_001.EmailBodyActivity;
-import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.TextBodyActivity;
 
@@ -127,7 +125,7 @@ public class TextMessageRecyclerAdapter extends RecyclerView.Adapter<TextMessage
             threadTopRightText = itemView.findViewById(R.id.topRight);
             threadBottomRightText = itemView.findViewById(R.id.bottomRight);
             image = itemView.findViewById(R.id.image);
-            mainLayout = itemView.findViewById(R.id.email_thread_card_layout);
+//            mainLayout = itemView.findViewById(R.id.email_thread_card_layout);
         }
     }
 }

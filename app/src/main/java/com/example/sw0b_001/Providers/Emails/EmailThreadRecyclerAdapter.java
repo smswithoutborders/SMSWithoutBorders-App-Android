@@ -122,7 +122,7 @@ public class EmailThreadRecyclerAdapter extends RecyclerView.Adapter<EmailThread
             threadTopRightText = itemView.findViewById(R.id.topRight);
             threadBottomRightText = itemView.findViewById(R.id.bottomRight);
             image = itemView.findViewById(R.id.image);
-            mainLayout = itemView.findViewById(R.id.email_thread_card_layout);
+            // mainLayout = itemView.findViewById(R.id.email_thread_card_layout);
         }
     }
 }

@@ -1,13 +1,12 @@
 package com.example.sw0b_001;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
@@ -69,6 +68,7 @@ public class EmailThreadsActivity extends AppCompatActivity {
 
         if(emailThreads.size() < 1 )
             findViewById(R.id.no_emails_sent).setVisibility(View.VISIBLE);
+        /*
         emailThreadsAdapter = new EmailThreadsRecyclerViewAdapter(this, emailThreads, R.layout.layout_cardlist_threads, platformId[0], this);
         cardlist.setAdapter(emailThreadsAdapter);
         LinearLayoutManager ln = new LinearLayoutManager(this);
@@ -76,6 +76,8 @@ public class EmailThreadsActivity extends AppCompatActivity {
         ln.setReverseLayout(true);
         cardlist.setLayoutManager(ln);
         emailThreadsAdapter.notifyDataSetChanged();
+
+         */
     }
 
     public void composeEmail() {

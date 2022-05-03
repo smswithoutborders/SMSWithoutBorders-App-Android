@@ -1,12 +1,5 @@
 package com.example.sw0b_001;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,12 +8,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
+
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Providers.Emails.EmailMessage;
-import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
-import com.example.sw0b_001.Providers.Emails.EmailThreadRecyclerAdapter;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
+import com.example.sw0b_001.Providers.Emails.EmailThreadRecyclerAdapter;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
+import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -89,12 +88,15 @@ public class EmailThreadActivity extends AppCompatActivity {
         String recipient = emailThreads.get(0).getRecipient();
         String subject = emailThreads.get(0).getSubject();
 
+        /*
         emailCustomMessageAdapter = new EmailThreadRecyclerAdapter(this, emailMessage, R.layout.layout_cardlist_thread, ab);
         recyclerView.setAdapter(emailCustomMessageAdapter);
         LinearLayoutManager ln = new LinearLayoutManager(this);
         ln.setStackFromEnd(true);
         ln.setReverseLayout(true);
         recyclerView.setLayoutManager(ln);
+
+         */
 
         composeBtn = findViewById(R.id.floating_compose_body);
         composeBtn.setOnClickListener(new View.OnClickListener() {

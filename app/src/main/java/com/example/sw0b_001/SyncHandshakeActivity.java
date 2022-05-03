@@ -4,7 +4,6 @@ import android.app.DownloadManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -162,14 +161,15 @@ public class SyncHandshakeActivity extends AppCompatActivity {
         DownloadManager.Request downloadManagerRequest = new DownloadManager.Request(logoCompleteURLURI);
 
         String requestDescription = "Downloading " + logoCompleteURL;
+        Log.d(getLocalClassName(), "Downloading file: " + requestDescription);
         String requestTitle = "Downloading platform logos";
         downloadManagerRequest.setDescription(requestDescription);
         downloadManagerRequest.setTitle(requestTitle);
-        downloadManagerRequest.setDestinationInExternalFilesDir(getApplicationContext(), Environment.DIRECTORY_PICTURES, logoStorageName);
+        downloadManagerRequest.setMimeType("image/svg+xml");
+        downloadManagerRequest.setDestinationInExternalFilesDir(getApplicationContext(), "logos", logoStorageName + ".svg");
 
         DownloadManager downloadManager = (DownloadManager) getSystemService(getApplicationContext().DOWNLOAD_SERVICE);
         long downloadId = downloadManager.enqueue(downloadManagerRequest);
-
         return downloadId;
     }
 

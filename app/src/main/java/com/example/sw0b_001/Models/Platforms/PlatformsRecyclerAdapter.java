@@ -1,7 +1,9 @@
 package com.example.sw0b_001.Models.Platforms;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +44,6 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-//        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         LayoutInflater inflater = LayoutInflater.from(this.context);
         View view = inflater.inflate(this.platformRenderLayout, parent, false);
         return new ViewHolder(view);
@@ -53,6 +54,10 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
         Platforms platform = this.platforms.get(position);
         viewHolder.name.setText(platform.getName());
         // viewHolder.image.setImageResource(platform.getLogo());
+
+        DownloadManager downloadManager = (DownloadManager) this.context.getSystemService(Context.DOWNLOAD_SERVICE);
+        Uri platformLogoURI = downloadManager.getUriForDownloadedFile(platform.getLogo());
+        viewHolder.image.setImageResource(R.drawable.gmail);
 
         viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
