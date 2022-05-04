@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/drawable/button.xml" value="0.1565" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/drawable/edit_text.xml" value="0.246" />
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/drawable/searchbar.xml" value="0.138" />
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/font/quicksand_medium.xml" value="0.234375" />
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/font/roboto.xml" value="0.234375" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout-v21/activity_email_body.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout-v21/activity_platforms.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout-v21/activity_text.xml" value="0.2504528985507246" />
@@ -44,7 +48,10 @@
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_welcome.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/gateway_card.xml" value="0.264" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/gmail_card.xml" value="0.2504528985507246" />
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/layout_cardlist_gateway_clients.xml" value="0.1526268115942029" />
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/layout_cardlist_gmail.xml" value="0.1526268115942029" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/layout_cardlist_platforms.xml" value="0.264" />
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/layout_cardlist_telegram_recent_contacts.xml" value="0.1526268115942029" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/layout_cardlist_threads.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/telegram_card.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/twitter_card.xml" value="0.2504528985507246" />

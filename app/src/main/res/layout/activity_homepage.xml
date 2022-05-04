@@ -36,20 +36,20 @@
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2"
         app:menu="@menu/new_navigation" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cardView2"
-        android:layout_width="0dp"
+        android:layout_width="415dp"
         android:layout_height="0dp"
         android:background="#000000"
         app:layout_constraintBottom_toTopOf="@+id/homepage_bottom_navbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homepage_toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/searchView2">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView2"
@@ -75,16 +75,16 @@
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="1.0" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/platform_select_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#00BCD4"
+            android:backgroundTint="#81bffc"
             android:clickable="true"
             android:onClick="onClickPlatformSelect"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -93,10 +93,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.98"
-            app:rippleColor="#2196F3"
             app:srcCompat="@drawable/ic_baseline_edit_24"
             tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <SearchView
+        android:id="@+id/searchView2"
+        android:layout_width="397dp"
+
+        android:layout_height="45dp"
+        android:background="@drawable/searchbar"
+        app:layout_constraintBottom_toTopOf="@+id/cardView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/homepage_toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

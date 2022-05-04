@@ -57,11 +57,11 @@
                 android:layout_width="156dp"
 
                 android:layout_height="48dp"
-                android:backgroundTint="#03A9F4"
+                android:backgroundTint="#81bffc"
                 android:onClick="validateUsersCloudPassword"
                 android:text="tweet"
                 android:textAlignment="center"
-                android:textColor="#FAFAFA"
+                android:textColor="#061993"
                 android:textSize="20sp"
                 app:cornerRadius="10dp"
                 app:iconTintMode="add"

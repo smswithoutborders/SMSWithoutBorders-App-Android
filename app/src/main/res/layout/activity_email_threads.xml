@@ -76,9 +76,8 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:contentDescription="compose button"
-            app:backgroundTint="@color/default_blue"
-            app:srcCompat="@drawable/ic_baseline_edit_24"
-            app:tint="@color/white" />
+            app:backgroundTint="#81bffc"
+            app:srcCompat="@drawable/ic_baseline_edit_24" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

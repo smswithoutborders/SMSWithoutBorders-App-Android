@@ -66,7 +66,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
-        app:backgroundTint="#03A9F4"
+        app:backgroundTint="#81bffc"
         app:layout_constraintBottom_toBottomOf="@+id/editTextTextMultiLine"
         app:layout_constraintEnd_toEndOf="@+id/editTextTextMultiLine"
         app:layout_constraintHorizontal_bias="0.972"
