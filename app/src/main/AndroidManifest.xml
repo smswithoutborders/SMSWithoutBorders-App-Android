@@ -95,6 +95,7 @@
 
 
 
+
         <activity
             android:name=".PermissionsActivity"
             android:parentActivityName=".WelcomeActivity"
@@ -106,8 +107,6 @@
             </intent-filter>
 
         </activity>
-
-
 
 
         <activity
