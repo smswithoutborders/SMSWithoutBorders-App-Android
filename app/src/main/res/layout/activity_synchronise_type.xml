@@ -7,18 +7,22 @@
 
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/compose_toolbar2"
-        android:layout_width="0dp"
+        android:id="@+id/toolbar6"
+        android:layout_width="411dp"
         android:layout_height="wrap_content"
         android:background="@color/default_dark"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/sync_text"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/email_compose_toolbar">
+        app:layout_constraintVertical_bias="0.64"
+        app:menu="@menu/email_compose_toolbar"
+        app:title="sync">
 
         <ImageView
             android:id="@+id/tv_header_title"
@@ -32,25 +36,26 @@
         android:id="@+id/sync_text"
         android:layout_width="260dp"
         android:layout_height="68dp"
-        android:layout_marginBottom="47dp"
+        android:layout_marginTop="16dp"
         android:gravity="center_vertical|center"
         android:text="Synchronize"
         android:textColor="#81bffc"
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/compose_toolbar2" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar6" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="312dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="29dp"
+        android:layout_marginBottom="54dp"
         android:text="Automatically link your app with your online account"
         android:textAlignment="center"
         android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/sync_continue_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +66,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="28dp"
         android:backgroundTint="#FFFFFF"
         android:text="continue "
         android:textAlignment="center"
@@ -73,16 +77,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <TextView
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
+        android:layout_marginTop="59dp"
+        android:layout_marginBottom="31dp"
         android:text="Manually link your app with your online account"
         android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/textButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sync_continue_btn" />
@@ -92,8 +97,6 @@
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="198dp"
         android:onClick="scanQR"
         android:text="SCAN QR"
         android:textColor="#81bffc"
@@ -102,6 +105,7 @@
         app:iconTint="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/button5"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView15"
         app:strokeColor="#81bffc"
@@ -113,6 +117,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
 
+        android:layout_marginTop="28dp"
         android:fontFamily="sans-serif-light"
         android:onClick="linkPrivacyPolicy"
         android:text="Read about our privacy policy"
@@ -120,6 +125,9 @@
         android:textAllCaps="false"
         android:textColor="@color/success_blue"
         android:textSize="10sp"
-        tools:layout_editor_absoluteY="667dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
