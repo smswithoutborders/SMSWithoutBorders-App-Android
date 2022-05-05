@@ -99,7 +99,7 @@
         <activity
             android:name=".PermissionsActivity"
             android:parentActivityName=".WelcomeActivity"
-            android:label="Permission"
+            android:label=""
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

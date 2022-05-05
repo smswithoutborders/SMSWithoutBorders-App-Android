@@ -7,7 +7,7 @@
 
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar6"
+        android:id="@+id/compose_toolbar"
         android:layout_width="411dp"
         android:layout_height="wrap_content"
         android:background="@color/default_dark"
@@ -21,8 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.64"
-        app:menu="@menu/email_compose_toolbar"
-        app:title="sync">
+        app:menu="@menu/email_compose_toolbar">
 
         <ImageView
             android:id="@+id/tv_header_title"
@@ -44,7 +43,7 @@
         app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar6" />
+        app:layout_constraintTop_toBottomOf="@+id/compose_toolbar" />
 
     <TextView
         android:id="@+id/textView6"
