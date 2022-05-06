@@ -15,14 +15,16 @@
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_appbar.xml" value="0.25226449275362317" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_compose_tweet.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_email_body.xml" value="0.2504528985507246" />
-        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_email_compose.xml" value="0.2504528985507246" />
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_email_compose.xml" value="0.1" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_email_single_threads.xml" value="0.25226449275362317" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_email_threads.xml" value="0.25226449275362317" />
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_gateway.xml" value="0.13496376811594202" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_gateway_settings.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_gmail.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_homepage.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_login.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_new_homepage.xml" value="0.2504528985507246" />
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_new_list.xml" value="0.21331521739130435" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_new_settings2.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_newemail_compose.xml" value="0.176" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_password.xml" value="0.2504528985507246" />
@@ -33,6 +35,7 @@
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_settings.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_splash.xml" value="0.25226449275362317" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_store_platforms.xml" value="0.2504528985507246" />
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_storedaccess_settings.xml" value="0.10400000000000001" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_sync_processing.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_synchronise_type.xml" value="0.25" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_telegram_history.xml" value="0.25226449275362317" />
@@ -44,6 +47,7 @@
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_text_compose.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_toolbar.xml" value="0.25226449275362317" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_tweet_compose.xml" value="0.25226449275362317" />
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_update_settings.xml" value="0.264" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_updates_page.xml" value="0.25226449275362317" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/activity_welcome.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/gateway_card.xml" value="0.264" />
@@ -57,6 +61,7 @@
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/layout/twitter_card.xml" value="0.2504528985507246" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/menu/email_compose_toolbar.xml" value="0.264" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/menu/email_single_thread_toolbar.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/menu/gateway_settings_toolbar.xml" value="0.13333333333333333" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/menu/homepage_toolbar.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/menu/navigation.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/menu/new_navigation.xml" value="0.25416666666666665" />
@@ -64,6 +69,7 @@
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/menu/synchronise_toolbar.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/menu/twitter_history_toolbar.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Beginning/AndroidStudioProjects/SMSwithoutBorders-App-Android/app/src/main/res/xml/preferences.xml" value="0.176" />
+        <entry key="..\:/Users/Beginning/AppData/Local/Android/Sdk/platforms/android-30/data/res/layout/simple_list_item_1.xml" value="0.1" />
         <entry key="app/src/main/res/layout-v21/activity_platforms.xml" value="0.37135416666666665" />
         <entry key="app/src/main/res/layout-v21/layout_cardlist_thread.xml" value="0.37135416666666665" />
         <entry key="app/src/main/res/layout/activity_compose_tweet.xml" value="0.37135416666666665" />

@@ -47,4 +47,7 @@ public class HomepageActivity extends AppCompatActivity {
         Intent platformIntent = new Intent(getApplicationContext(), PlatformsActivity.class);
         startActivity(platformIntent);
     }
+
+
+
 }
