@@ -15,20 +15,20 @@
         android:textColor="#FFFFFF"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/searchView2"
+        app:layout_constraintBottom_toTopOf="@+id/search_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.053"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <SearchView
-        android:id="@+id/searchView2"
+        android:id="@+id/search_bar"
         android:layout_width="351dp"
-
         android:layout_height="47dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="14dp"
         android:background="@drawable/searchbar"
+
         app:layout_constraintBottom_toTopOf="@+id/cardView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +61,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView2">
+        app:layout_constraintTop_toBottomOf="@+id/search_bar">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView2"

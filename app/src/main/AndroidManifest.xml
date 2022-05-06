@@ -121,6 +121,7 @@
 
         <activity
             android:name=".PlatformsActivity"
+            android:parentActivityName=".HomepageActivity"
             android:label="Synchronized Platforms" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
