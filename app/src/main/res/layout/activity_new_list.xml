@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/RelativeView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:padding="10dp"
-    tools:context=".Settings2Activity"
-    >
+    tools:context=".Settings2Activity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/compose_toolbar"
@@ -46,5 +44,25 @@
 
     </ListView>
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/homepage_bottom_navbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="2dp"
+        android:background="@color/default_dark"
+        android:visibility="visible"
+        app:itemIconTint="@color/white"
+        app:itemRippleColor="@color/pending_gray"
+        app:itemTextColor="@color/white"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/new_navigation">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 </RelativeLayout>
