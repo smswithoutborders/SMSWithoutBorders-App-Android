@@ -28,8 +28,8 @@ import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
-import com.example.sw0b_001.Providers.Gateway.GatewayClient;
-import com.example.sw0b_001.Providers.Gateway.GatewayDao;
+import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
+import com.example.sw0b_001.Models.GatewayClients.GatewayDao;
 import com.example.sw0b_001.Security.SecurityHandler;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.example.sw0b_001.Providers.Gateway;
+package com.example.sw0b_001.Models.GatewayClients;
 
 import androidx.room.Dao;
 import androidx.room.Delete;

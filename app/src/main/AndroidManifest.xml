@@ -124,6 +124,11 @@
         </activity>
 
         <activity
+            android:name=".GatewayClientsSettingsActivity"
+            android:label="Available Gateway Client" >
+        </activity>
+
+        <activity
             android:name=".EmailComposeActivity"
             android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar">

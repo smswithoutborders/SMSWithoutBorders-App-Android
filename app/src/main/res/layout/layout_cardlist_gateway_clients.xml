@@ -2,35 +2,30 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/gateway_client_card_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RadioButton
-        android:id="@+id/radioButton"
-        android:layout_width="34dp"
-        android:layout_height="50dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/cardView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="292dp"
-        android:layout_height="72dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         app:cardBackgroundColor="#F6EEEE"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/radioButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/gateway_client_radio_btn"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="69dp">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/textView17"
+                android:id="@+id/gateway_client_MSISDN"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="(237) 654 321 987"
@@ -45,7 +40,7 @@
                 app:layout_constraintVertical_bias="0.29" />
 
             <TextView
-                android:id="@+id/textView18"
+                android:id="@+id/gateway_client_country"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -55,11 +50,11 @@
 
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView17"
+                app:layout_constraintTop_toBottomOf="@+id/gateway_client_MSISDN"
                 app:layout_constraintVertical_bias="0.846" />
 
             <TextView
-                android:id="@+id/textView12"
+                android:id="@+id/gateway_client_last_ping_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
@@ -67,11 +62,24 @@
                 android:textColor="#878686"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.791"
-                app:layout_constraintStart_toEndOf="@+id/textView18"
+                app:layout_constraintStart_toEndOf="@+id/gateway_client_country"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <RadioButton
+        android:id="@+id/gateway_client_radio_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginBottom="10dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cardView"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

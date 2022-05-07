@@ -20,8 +20,8 @@ import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Models.User.UserHandler;
-import com.example.sw0b_001.Providers.Gateway.GatewayClient;
-import com.example.sw0b_001.Providers.Gateway.GatewayDao;
+import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
+import com.example.sw0b_001.Models.GatewayClients.GatewayDao;
 import com.example.sw0b_001.Security.SecurityHandler;
 
 import org.json.JSONArray;

@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    public static final String GATEWAY_CLIENT_SETTINGS = "Gateway Clients";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,12 +36,12 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void populateSettings() {
         List<String> listOfSettings = new ArrayList<>();
-        listOfSettings.add("Gateway Clients");
+        listOfSettings.add(GATEWAY_CLIENT_SETTINGS);
 
         RecyclerView settingsRecyclerView = findViewById(R.id.settings_recycler_view);
         // settingsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        SettingsRecyclerAdapter settingsRecyclerAdapter = new SettingsRecyclerAdapter(this, listOfSettings, R.layout.layout_cardlist_settings, this);
+        SettingsRecyclerAdapter settingsRecyclerAdapter = new SettingsRecyclerAdapter(this, listOfSettings, R.layout.layout_cardlist_settings);
         settingsRecyclerView.setAdapter(settingsRecyclerAdapter);
         settingsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
