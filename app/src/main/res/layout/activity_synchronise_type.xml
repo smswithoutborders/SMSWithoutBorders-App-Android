@@ -7,49 +7,38 @@
 
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/compose_toolbar"
-        android:layout_width="411dp"
+        android:id="@+id/synchronise_type_toolbar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/default_dark"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/sync_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.64"
-        app:menu="@menu/email_compose_toolbar">
-
-        <ImageView
-            android:id="@+id/tv_header_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left" />
-
-    </androidx.appcompat.widget.Toolbar>
+        app:menu="@menu/email_compose_toolbar" />
 
     <TextView
         android:id="@+id/sync_text"
-        android:layout_width="260dp"
-        android:layout_height="68dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:gravity="center_vertical|center"
         android:text="Synchronize"
         android:textColor="#81bffc"
         android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/compose_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/synchronise_type_toolbar" />
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="312dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="32dp"
         android:layout_marginBottom="54dp"
         android:text="Automatically link your app with your online account"
         android:textAlignment="center"
@@ -104,7 +93,6 @@
         app:iconTint="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/button5"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView15"
         app:strokeColor="#81bffc"
@@ -114,7 +102,7 @@
         android:id="@+id/button5"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
 
         android:layout_marginTop="28dp"
         android:fontFamily="sans-serif-light"

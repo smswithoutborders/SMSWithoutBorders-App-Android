@@ -24,8 +24,10 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_synced_platforms"
-        android:layout_width="403dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:background="#000000"
         app:layout_constraintBottom_toTopOf="@+id/homepage_bottom_navbar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,8 +36,8 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/homepage_bottom_navbar"
-        android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
 
         android:background="@color/default_dark"
         android:visibility="visible"

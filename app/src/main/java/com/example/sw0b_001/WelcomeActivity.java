@@ -15,7 +15,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     public void onClickSynchroniseBtn(View view) {
-        Intent synchroniseTypeActivityIntent = new Intent(getApplicationContext(), PermissionsActivity.class);
+        Intent synchroniseTypeActivityIntent = new Intent(getApplicationContext(), SynchroniseTypeActivity.class);
         startActivity(synchroniseTypeActivityIntent);
 
     }

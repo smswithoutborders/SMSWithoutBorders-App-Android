@@ -16,7 +16,7 @@ import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
-import com.example.sw0b_001.Models.GatewayClients.GatewayDao;
+import com.example.sw0b_001.Models.GatewayClients.GatewayClientsDao;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Providers.Text.TextMessage;
 import com.example.sw0b_001.Providers.Text.TextMessageDao;
@@ -32,7 +32,7 @@ public abstract class Datastore extends RoomDatabase {
     public abstract TextMessageDao textMessageDao();
     public abstract EmailThreadsDao emailThreadDao();
     public abstract PlatformDao platformDao();
-    public abstract GatewayDao gatewayDao();
+    public abstract GatewayClientsDao gatewayClientsDao();
     public abstract GatewayServersDAO gatewayServersDAO();
 
     @NonNull

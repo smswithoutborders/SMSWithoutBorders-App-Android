@@ -11,15 +11,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
-import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.Platforms.Platform;
-import com.example.sw0b_001.Models.Platforms.PlatformDao;
+import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlatformsActivity extends AppCompatActivity{
@@ -28,7 +25,6 @@ public class PlatformsActivity extends AppCompatActivity{
     // TODO: Include loader when message is sending...
 
     RecyclerView recyclerView;
-    List<Platform> platforms;
     PlatformsRecyclerAdapter platformsRecyclerAdapter;
 
     BottomNavigationView bottomNavigationView;
@@ -38,10 +34,9 @@ public class PlatformsActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_platforms);
-        platforms = new ArrayList<>();
+        List<Platform> platforms = PlatformsHandler.getAllPlatforms(getApplicationContext());
 
         // Enable back button
-
         Toolbar composeToolbar = (Toolbar) findViewById(R.id.compose_toolbar);
         setSupportActionBar(composeToolbar);
         // Get a support ActionBar corresponding to this toolbar
@@ -54,31 +49,10 @@ public class PlatformsActivity extends AppCompatActivity{
 
         recyclerView = findViewById(R.id.list_synced_platforms);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        /*
-        findViewById(R.id.no_platform_txt).setVisibility(View.INVISIBLE);
-        findViewById(R.id.btn_store_tokens).setVisibility(View.INVISIBLE);
 
-         */
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DatabaseName)
-                        .fallbackToDestructiveMigration()
-                        .build();
-                PlatformDao platformsDao = platformDb.platformDao();
-                platforms = platformsDao.getAll();
-//                Log.d(this.getClass().getSimpleName(), ": size>> " + platforms.size());
-            }
-        };
-        Thread dbFetchThread = new Thread(runnable);
-        dbFetchThread.start();
-        try {
-            dbFetchThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        platformsRecyclerAdapter = new PlatformsRecyclerAdapter(this, platforms, R.layout.layout_cardlist_platforms, this);
+        recyclerView.setAdapter(platformsRecyclerAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         /*
         if(platforms.size() < 1 ) {
@@ -87,11 +61,10 @@ public class PlatformsActivity extends AppCompatActivity{
             findViewById(R.id.btn_store_tokens).setVisibility(View.VISIBLE);
         }
 
-         */
+        findViewById(R.id.no_platform_txt).setVisibility(View.INVISIBLE);
+        findViewById(R.id.btn_store_tokens).setVisibility(View.INVISIBLE);
 
-        platformsRecyclerAdapter = new PlatformsRecyclerAdapter(this, platforms, R.layout.layout_cardlist_platforms, this);
-        recyclerView.setAdapter(platformsRecyclerAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+         */
     }
 
     public void linkPrivacyPolicy(View view) {

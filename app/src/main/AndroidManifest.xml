@@ -90,15 +90,8 @@
 
 
         <activity
-            android:name=".PermissionsActivity"
-            android:parentActivityName=".WelcomeActivity"
-            android:label=""
-            android:theme="@style/Theme.MyAppNoBar">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-
+            android:name=".SynchroniseTypeActivity"
+            android:parentActivityName=".WelcomeActivity">
         </activity>
 
 
@@ -125,6 +118,7 @@
 
         <activity
             android:name=".GatewayClientsSettingsActivity"
+            android:parentActivityName=".SettingsActivity"
             android:label="Available Gateway Client" >
         </activity>
 

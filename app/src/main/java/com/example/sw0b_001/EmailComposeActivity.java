@@ -19,6 +19,7 @@ import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Helpers.CustomHelpers;
+import com.example.sw0b_001.Models.GatewayClients.GatewayClientsDao;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
@@ -29,7 +30,6 @@ import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
-import com.example.sw0b_001.Models.GatewayClients.GatewayDao;
 import com.example.sw0b_001.Security.SecurityHandler;
 
 import java.io.IOException;
@@ -113,8 +113,8 @@ public class EmailComposeActivity extends AppCompatActivity {
         Thread fetchGatewayClientThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                GatewayDao gatewayDao = databaseConnection.gatewayDao();
-                gatewayClients[0] = gatewayDao.getAll();
+                GatewayClientsDao gatewayClientsDao = databaseConnection.gatewayClientsDao();
+                gatewayClients[0] = gatewayClientsDao.getAll();
             }
         });
 

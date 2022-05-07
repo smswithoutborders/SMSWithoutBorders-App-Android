@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.Models.Platforms.Platform;
@@ -76,7 +77,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
     }
 
     private void remoteFetchAndStoreGatewayClients(String gatewayServerSeedsUrl) {
-        // TODO:
+        GatewayClientsHandler.remoteFetchAndStoreGatewayClients(getApplicationContext(), gatewayServerSeedsUrl);
     }
 
     private void processAndStoreSharedKey(String sharedKey) throws GeneralSecurityException, IOException {

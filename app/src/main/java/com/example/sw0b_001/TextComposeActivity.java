@@ -17,10 +17,10 @@ import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Helpers.CustomHelpers;
+import com.example.sw0b_001.Models.GatewayClients.GatewayClientsDao;
 import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
-import com.example.sw0b_001.Models.GatewayClients.GatewayDao;
 import com.example.sw0b_001.Providers.Text.TextMessage;
 import com.example.sw0b_001.Providers.Text.TextMessageDao;
 import com.example.sw0b_001.Security.SecurityHandler;
@@ -76,8 +76,8 @@ public class TextComposeActivity extends AppCompatActivity {
                 public void run() {
                     Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
                             Datastore.class, Datastore.DatabaseName).build();
-                    GatewayDao gatewayDao = platformDb.gatewayDao();
-                    phonenumbers = gatewayDao.getAll();
+                    GatewayClientsDao gatewayClientsDao = platformDb.gatewayClientsDao();
+                    phonenumbers = gatewayClientsDao.getAll();
 
                     PlatformDao platformDao = platformDb.platformDao();
                     platform = platformDao.get(platformId);

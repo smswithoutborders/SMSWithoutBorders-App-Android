@@ -22,14 +22,18 @@ public class GatewayClient {
     @ColumnInfo(name="operator_name")
     String operatorName;
 
+    @ColumnInfo(name="country")
+    String country;
+
     @ColumnInfo(name="last_ping_session")
     double lastPingSession = 0.0;
 
-    public GatewayClient(String type, String MSISDN, String operatorName, boolean isDefault) {
+    public GatewayClient(String type, String MSISDN, String operatorName, String country, boolean isDefault) {
         this.type = type;
         this.MSISDN = MSISDN;
         this.operatorName = operatorName;
         this.isDefault = isDefault;
+        this.country = country;
     }
 
     public GatewayClient() {}
@@ -44,6 +48,14 @@ public class GatewayClient {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCountry() {
+        return this.country;
     }
 
     public String getMSISDN() {

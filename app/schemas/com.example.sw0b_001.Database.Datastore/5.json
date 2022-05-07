@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "15df9e48933778082a72aba16d54df07",
+    "identityHash": "8747ab519b2ebf4e96139d7904231bf0",
     "entities": [
       {
         "tableName": "GatewayServer",
@@ -236,7 +236,7 @@
       },
       {
         "tableName": "GatewayClient",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT, `MSISDN` TEXT, `default` INTEGER NOT NULL, `operator_name` TEXT, `last_ping_session` REAL NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT, `MSISDN` TEXT, `default` INTEGER NOT NULL, `operator_name` TEXT, `country` TEXT, `last_ping_session` REAL NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -265,6 +265,12 @@
           {
             "fieldPath": "operatorName",
             "columnName": "operator_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -347,7 +353,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '15df9e48933778082a72aba16d54df07')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8747ab519b2ebf4e96139d7904231bf0')"
     ]
   }
 }

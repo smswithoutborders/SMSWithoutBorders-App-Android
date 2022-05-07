@@ -9,7 +9,7 @@ import androidx.room.Query;
 import java.util.List;
 
 @Dao
-public interface GatewayDao {
+public interface GatewayClientsDao {
     @Query("SELECT * FROM GatewayClient")
     List<GatewayClient> getAll();
 
@@ -26,7 +26,7 @@ public interface GatewayDao {
     @Insert
     void insertAll(GatewayClient... gatewayClients);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(GatewayClient GatewayClient);
 
     @Delete
