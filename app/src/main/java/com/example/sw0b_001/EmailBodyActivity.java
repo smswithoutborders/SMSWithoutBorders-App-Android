@@ -31,7 +31,7 @@ public class EmailBodyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_email_body);
+//        setContentView(R.layout.activity_email_body);
         emailMessage = new ArrayList<>();
         emailThreads = new ArrayList<>();
 

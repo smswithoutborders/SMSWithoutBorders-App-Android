@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_constrain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000">
@@ -36,8 +37,8 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/homepage_bottom_navbar"
-        android:layout_width="411dp"
-        android:layout_height="70dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:background="@color/default_dark"
         android:visibility="visible"
 
@@ -48,12 +49,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2"
-        app:menu="@menu/new_navigation" />
+        app:menu="@menu/main_navigation" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cardView2"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="14dp"
         android:background="#000000"
@@ -64,18 +64,19 @@
         app:layout_constraintTop_toBottomOf="@+id/search_bar">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView2"
-            android:layout_width="397dp"
-            android:layout_height="515dp"
+            android:id="@+id/settings_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/no_recent_messages_text"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:id="@+id/settings_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:ems="10"
             android:gravity="center_vertical|center"
             android:inputType="textPersonName"
@@ -84,25 +85,26 @@
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/platform_select_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#81bffc"
-            android:clickable="true"
-            android:onClick="onClickPlatformSelect"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.887"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.965"
-            app:srcCompat="@drawable/ic_baseline_edit_24"
-            tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/platform_select_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#81bffc"
+        android:clickable="true"
+        android:onClick="onClickPlatformSelect"
+        app:layout_constraintBottom_toTopOf="@id/homepage_bottom_navbar"
+        app:layout_constraintEnd_toEndOf="@id/main_constrain"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="@id/main_constrain"
+        app:srcCompat="@drawable/ic_baseline_edit_24"
+        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

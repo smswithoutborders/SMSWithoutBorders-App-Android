@@ -28,14 +28,6 @@
         android:theme="@style/Theme.MyAppNoBar"
 
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".SettingsActivity"
-            android:parentActivityName=".PlatformsActivity"
-            android:label="Settings">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".PlatformsActivity" />
-        </activity>
 
 
         <activity
@@ -52,13 +44,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity android:name=".Settings2Activity"
-            android:label="Settings"
-            android:theme="@style/Theme.MyAppNoBar"
-            android:parentActivityName=".HomepageActivity">
-
         </activity>
 
         <activity android:name=".WelcomeActivity">
@@ -130,7 +115,12 @@
 
         <activity
             android:name=".HomepageActivity"
-            android:label="Synchronized Platforms" >
+            android:label="Recents">
+        </activity>
+
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings" >
         </activity>
 
         <activity

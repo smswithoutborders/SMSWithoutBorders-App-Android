@@ -1,7 +1,5 @@
 package com.example.sw0b_001;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -25,33 +23,28 @@ public class HomepageActivity extends AppCompatActivity {
         SearchView searchView = (SearchView) findViewById(R.id.search_bar);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.homepage_bottom_navbar);
-        bottomNavBar(getApplicationContext(), this.getParent(), bottomNavigationView);
+        bottomNavBar(bottomNavigationView);
     }
 
-    public static void bottomNavBar(Context context, Activity activity, BottomNavigationView bottomNavigationView) {
-        bottomNavigationView.setSelectedItemId(R.id.platform);
+    public void bottomNavBar(BottomNavigationView bottomNavigationView) {
+        bottomNavigationView.setSelectedItemId(R.id.recents);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-//                Log.i(this.getClass().getSimpleName(), item.getTitle().toString());
                 switch(item.getItemId()) {
-                    case R.id.settings:
-                        context.startActivity(new Intent(context, SettingsActivity.class));
-                        activity.finish();
+                    case R.id.settings: {
+                        Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+                        startActivity(settingsIntent);
+                        finish();
+                    }
                 }
                 return false;
             }
         });
     }
 
-
-
-
     public void onClickPlatformSelect(View view) {
         Intent platformIntent = new Intent(getApplicationContext(), PlatformsActivity.class);
         startActivity(platformIntent);
     }
-
-
-
 }
