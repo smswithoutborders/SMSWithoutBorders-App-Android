@@ -18,6 +18,13 @@ public interface GatewayServersDAO {
     @Query("SELECT * FROM GatewayServer WHERE id IN (:gatewayServerId)")
     GatewayServer getById(long gatewayServerId);
 
+    @Query("UPDATE GatewayServer SET seedsUrl = (:seedsUrl) WHERE id =:gatewayServerId")
+    void updateSeedsUrl(String seedsUrl, long gatewayServerId);
+
+
+
+
+
 //    @Query("SELECT * FROM emailcustommessage WHERE uid IN (:emailcustommessageIds)")
 //    List<EmailCustomMessage> loadAllByIds(int[] emailcustommessageIds);
 

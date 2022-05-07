@@ -35,6 +35,23 @@ public class GatewayServersHandler {
         return gatewayServerInsertId[0];
     }
 
+    public void updateSeedsUrl(String seedsUrl, long gatewayServerId) throws InterruptedException {
+        // Log.d(getClass().getSimpleName(), "Public key for gateway: " + gatewayServer.getPublicKey());
+        Datastore databaseConnector = Room.databaseBuilder(this.context, Datastore.class,
+                Datastore.DatabaseName).build();
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                GatewayServersDAO gatewayServersDAO = databaseConnector.gatewayServersDAO();
+                gatewayServersDAO.updateSeedsUrl(seedsUrl, gatewayServerId);
+                Log.d(getClass().getSimpleName(), "Updated seedsUrl for gateway server");
+            }
+        });
+        thread.start();
+        thread.join();
+    }
+
     public boolean hasPublicKey(GatewayServer gatewayServer) {
         return false;
     }

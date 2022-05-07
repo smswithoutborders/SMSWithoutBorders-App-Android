@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "7b90a670800de408e1b92b723175cc48",
+    "identityHash": "15df9e48933778082a72aba16d54df07",
     "entities": [
       {
         "tableName": "GatewayServer",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `publicKey` TEXT NOT NULL, `url` TEXT NOT NULL, `protocol` TEXT NOT NULL, `port` INTEGER NOT NULL, `seedsUrl` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `publicKey` TEXT NOT NULL, `url` TEXT NOT NULL, `protocol` TEXT NOT NULL, `port` INTEGER NOT NULL, `seedsUrl` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -42,7 +42,7 @@
             "fieldPath": "seedsUrl",
             "columnName": "seedsUrl",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -347,7 +347,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7b90a670800de408e1b92b723175cc48')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '15df9e48933778082a72aba16d54df07')"
     ]
   }
 }

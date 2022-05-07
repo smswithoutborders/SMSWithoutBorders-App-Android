@@ -24,7 +24,6 @@ public class GatewayServer {
     @NonNull
     private Integer port = 80;
 
-    @NonNull
     private String seedsUrl;
 
     public void setPort(Integer port) {

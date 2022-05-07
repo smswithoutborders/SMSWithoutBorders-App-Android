@@ -20,8 +20,6 @@ import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Models.User.UserHandler;
-import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
-import com.example.sw0b_001.Models.GatewayClients.GatewayDao;
 import com.example.sw0b_001.Security.SecurityHandler;
 
 import org.json.JSONArray;
@@ -38,10 +36,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class SyncHandshakeActivity extends AppCompatActivity {
 
@@ -62,10 +56,9 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
             try {
                 JSONObject jsonObject = new JSONObject(getIntent().getStringExtra("payload"));
-                String gatewayServerSeedsUrl = getIntent().getStringExtra("gateway_server_seeds_url");
+                long gatewayServerId = getIntent().getLongExtra("gatewayserver_id", -1);
 
-                processHandshakePayload(jsonObject);
-                remoteFetchAndStoreGatewayClients(gatewayServerSeedsUrl);
+                processHandshakePayload(jsonObject, gatewayServerId);
                 Log.d(getLocalClassName(), "Completed handshake and information is stored");
 
                 Intent dashboardIntent = new Intent(getApplicationContext(), HomepageActivity.class);
@@ -83,7 +76,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
     }
 
     private void remoteFetchAndStoreGatewayClients(String gatewayServerSeedsUrl) {
-
+        // TODO:
     }
 
     private void processAndStoreSharedKey(String sharedKey) throws GeneralSecurityException, IOException {
@@ -91,15 +84,25 @@ public class SyncHandshakeActivity extends AppCompatActivity {
         securityHandler.storeSharedKey(sharedKey);
     }
 
-    public void processHandshakePayload(JSONObject jsonObject) throws Exception {
+    private void processAndUpdateGatewayServerSeedUrl(String gatewayServerSeedsUrl, long gatewayServerId) throws InterruptedException {
+        GatewayServersHandler gatewayServersHandler = new GatewayServersHandler(getApplicationContext());
+        gatewayServersHandler.updateSeedsUrl(gatewayServerSeedsUrl, gatewayServerId);
+    }
+
+    public void processHandshakePayload(JSONObject jsonObject, long gatewayServerId) throws Exception {
         try {
             // TODO securely store the shared key
             String sharedKey = jsonObject.getString("shared_key");
             JSONArray platforms = jsonObject.getJSONArray("user_platforms");
             Log.d(getLocalClassName(), "Shared Key: " + sharedKey);
 
+            String gatewayServerSeedsUrl = jsonObject.getString("seeds_url");
+            Log.d(getLocalClassName(), "Seeds URL: " + gatewayServerSeedsUrl);
+
+            processAndUpdateGatewayServerSeedUrl(gatewayServerSeedsUrl, gatewayServerId);
             processAndStoreSharedKey(sharedKey);
             processAndStorePlatforms(platforms);
+            remoteFetchAndStoreGatewayClients(gatewayServerSeedsUrl);
 
         } catch (JSONException | InterruptedException | CertificateException | KeyStoreException | NoSuchAlgorithmException | IOException e) {
             throw new Exception(e);
@@ -220,8 +223,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         String gatewayServerVerifyUrl = response.getString("verification_url");
                         Log.d(getLocalClassName(), "Verify URL: " + gatewayServerVerifyUrl);
 
-                        String gatewayServerSeedsUrl = response.getString("seeds_urls");
-                        Log.d(getLocalClassName(), "Seeds URL: " + gatewayServerSeedsUrl);
 
                         // Formatting public key to work well from here
                         // TODO: check to make sure this is working
@@ -252,7 +253,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
                         Intent syncHandshakeIntent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
                         syncHandshakeIntent.putExtra("state", "complete_handshake");
-                        syncHandshakeIntent.putExtra("gateway_server_seeds_url", gatewayServerSeedsUrl);
+                        syncHandshakeIntent.putExtra("gatewayserver_id", gatewayServerId);
 
                         passwordActivityIntent.putExtra("callbackIntent", syncHandshakeIntent);
                         passwordActivityIntent.putExtra("gatewayserver_id", gatewayServerId);
@@ -277,58 +278,5 @@ public class SyncHandshakeActivity extends AppCompatActivity {
         } catch (KeyStoreException | NoSuchProviderException | CertificateException | NoSuchAlgorithmException | IOException | JSONException | InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         }
-    }
-
-    private void storePhonenumbersFromGateway(List<GatewayClient> phonenumbers) throws InterruptedException {
-        Thread storeProviders = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Datastore dbConnector = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DatabaseName)
-                        .fallbackToDestructiveMigration()
-                        .build();
-                GatewayDao gatewayDao = dbConnector.gatewayDao();
-                gatewayDao.deleteAll();
-                for(int i=0;i<phonenumbers.size();++i) {
-                    gatewayDao.insert(phonenumbers.get(i));
-                }
-            }
-        });
-        storeProviders.start();
-        storeProviders.join();
-    }
-
-    public Map<Integer, List<String>>[] extractPlatformFromGateway(JSONArray gatewayData) throws JSONException {
-        Map<Integer, List<String>> providers = new HashMap<>();
-        Map<Integer, List<String>> platforms = new HashMap<>();
-        for(int i=0;i<gatewayData.length(); ++i) {
-            JSONObject provider = (JSONObject) gatewayData.get(i);
-//            Log.i(this.getClass().getSimpleName(), "Providers: " + provider.get("provider").toString());
-
-            List<String> providerDetails = new ArrayList<>();
-            providerDetails.add(provider.get("provider").toString());
-            providerDetails.add(provider.get("description").toString());
-            providers.put(i, providerDetails);
-
-            JSONArray provider_platforms = (JSONArray) provider.get("platforms");
-            for(int j=0;j<provider_platforms.length();++j) {
-                JSONObject platform = (JSONObject) provider_platforms.get(j);
-//                Log.i(this.getClass().getSimpleName(), "\tPlatforms: " + platform.get("name").toString());
-
-                List<String> platformDetails = new ArrayList<>();
-                platformDetails.add(platform.get("name").toString());
-                platformDetails.add(platform.get("type").toString());
-                platforms.put(i, platformDetails);
-            }
-        }
-
-        Map<Integer, List<String>>[] extractedInformation= new Map[]{providers, platforms};
-        return extractedInformation;
-    }
-
-
-    private void logout(Intent intent) {
-        startActivity(intent);
-        finish();
     }
 }
