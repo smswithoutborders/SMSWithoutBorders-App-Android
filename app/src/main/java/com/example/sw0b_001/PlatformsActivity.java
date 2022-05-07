@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
-import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -28,7 +28,7 @@ public class PlatformsActivity extends AppCompatActivity{
     // TODO: Include loader when message is sending...
 
     RecyclerView recyclerView;
-    List<Platforms> platforms;
+    List<Platform> platforms;
     PlatformsRecyclerAdapter platformsRecyclerAdapter;
 
     BottomNavigationView bottomNavigationView;

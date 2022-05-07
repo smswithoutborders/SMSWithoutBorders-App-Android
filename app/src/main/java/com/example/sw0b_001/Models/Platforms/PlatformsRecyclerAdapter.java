@@ -24,18 +24,18 @@ import java.util.List;
 public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecyclerAdapter.ViewHolder> {
 
     public Context context;
-    public List<Platforms> platforms;
+    public List<Platform> platforms;
     public int platformRenderLayout;
     public PlatformsActivity platformsActivity;
 
-    public PlatformsRecyclerAdapter(Context context, List<Platforms> platforms, int layout, PlatformsActivity platformsActivity){
+    public PlatformsRecyclerAdapter(Context context, List<Platform> platforms, int layout, PlatformsActivity platformsActivity){
         this.context = context;
         this.platforms = platforms;
         this.platformRenderLayout = layout;
         this.platformsActivity = platformsActivity;
     }
 
-    public void update(List<Platforms> platforms) {
+    public void update(List<Platform> platforms) {
         this.platforms = platforms;
         this.notifyDataSetChanged();
     }
@@ -51,7 +51,7 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder viewHolder, int position) {
-        Platforms platform = this.platforms.get(position);
+        Platform platform = this.platforms.get(position);
         viewHolder.name.setText(platform.getName());
         // viewHolder.image.setImageResource(platform.getLogo());
 

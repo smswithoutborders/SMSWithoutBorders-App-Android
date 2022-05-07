@@ -10,22 +10,22 @@ import java.util.List;
 
 @Dao
 public interface PlatformDao {
-    @Query("SELECT * FROM Platforms")
-    List<Platforms> getAll();
+    @Query("SELECT * FROM Platform")
+    List<Platform> getAll();
 
-    @Query("SELECT * FROM Platforms WHERE id=:platform_id")
-    Platforms get(long platform_id);
+    @Query("SELECT * FROM Platform WHERE id=:platform_id")
+    Platform get(long platform_id);
 
     @Insert
-    void insertAll(Platforms... platforms);
+    void insertAll(Platform... platforms);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insert(Platforms platform);
+    long insert(Platform platform);
 
     @Delete
-    void delete(Platforms platform);
+    void delete(Platform platform);
 
-    @Query("DELETE FROM Platforms")
+    @Query("DELETE FROM Platform")
     void deleteAll();
 
 }

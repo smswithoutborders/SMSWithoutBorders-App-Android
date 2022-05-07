@@ -22,6 +22,9 @@ public class GatewayClient {
     @ColumnInfo(name="operator_name")
     String operatorName;
 
+    @ColumnInfo(name="last_ping_session")
+    double lastPingSession = 0.0;
+
     public GatewayClient(String type, String MSISDN, String operatorName, boolean isDefault) {
         this.type = type;
         this.MSISDN = MSISDN;
@@ -65,5 +68,13 @@ public class GatewayClient {
 
     public void setDefault(boolean isDefault) {
         this.isDefault = isDefault;
+    }
+
+    public void setLastPingSession(double lastPingSession) {
+        this.lastPingSession = lastPingSession;
+    }
+
+    public double getLastPingSession() {
+        return this.lastPingSession;
     }
 }

@@ -17,8 +17,8 @@ import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Helpers.CustomHelpers;
+import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
-import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayDao;
 import com.example.sw0b_001.Providers.Text.TextMessage;
@@ -48,7 +48,7 @@ public class TextComposeActivity extends AppCompatActivity {
     SecurityHandler securityLayer;
     long textMessageId;
     private List<GatewayClient> phonenumbers = new ArrayList<>();
-    private Platforms platforms;
+    private Platform platform;
     private long platformId;
 
 
@@ -80,7 +80,7 @@ public class TextComposeActivity extends AppCompatActivity {
                     phonenumbers = gatewayDao.getAll();
 
                     PlatformDao platformDao = platformDb.platformDao();
-                    platforms = platformDao.get(platformId);
+                    platform = platformDao.get(platformId);
                 }
             });
             getPhonenumber.start();

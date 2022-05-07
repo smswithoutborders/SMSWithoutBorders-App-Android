@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "640c0381d81037f019541de9d8dc1d01",
+    "identityHash": "7b90a670800de408e1b92b723175cc48",
     "entities": [
       {
-        "tableName": "GatewayServers",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `publicKey` TEXT NOT NULL, `url` TEXT NOT NULL, `protocol` TEXT NOT NULL, `port` INTEGER NOT NULL)",
+        "tableName": "GatewayServer",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `publicKey` TEXT NOT NULL, `url` TEXT NOT NULL, `protocol` TEXT NOT NULL, `port` INTEGER NOT NULL, `seedsUrl` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -37,6 +37,12 @@
             "columnName": "port",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "seedsUrl",
+            "columnName": "seedsUrl",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -47,12 +53,12 @@
         },
         "indices": [
           {
-            "name": "index_GatewayServers_url",
+            "name": "index_GatewayServer_url",
             "unique": true,
             "columnNames": [
               "url"
             ],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_GatewayServers_url` ON `${TABLE_NAME}` (`url`)"
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_GatewayServer_url` ON `${TABLE_NAME}` (`url`)"
           }
         ],
         "foreignKeys": []
@@ -170,7 +176,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "Platforms",
+        "tableName": "Platform",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `description` TEXT, `logo` INTEGER NOT NULL, `letter` TEXT, `type` TEXT)",
         "fields": [
           {
@@ -218,19 +224,19 @@
         },
         "indices": [
           {
-            "name": "index_Platforms_name",
+            "name": "index_Platform_name",
             "unique": true,
             "columnNames": [
               "name"
             ],
-            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Platforms_name` ON `${TABLE_NAME}` (`name`)"
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_Platform_name` ON `${TABLE_NAME}` (`name`)"
           }
         ],
         "foreignKeys": []
       },
       {
         "tableName": "GatewayClient",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT, `MSISDN` TEXT, `default` INTEGER NOT NULL, `operator_name` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT, `MSISDN` TEXT, `default` INTEGER NOT NULL, `operator_name` TEXT, `last_ping_session` REAL NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -261,6 +267,12 @@
             "columnName": "operator_name",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "lastPingSession",
+            "columnName": "last_ping_session",
+            "affinity": "REAL",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -335,7 +347,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '640c0381d81037f019541de9d8dc1d01')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7b90a670800de408e1b92b723175cc48')"
     ]
   }
 }

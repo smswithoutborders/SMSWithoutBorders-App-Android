@@ -12,13 +12,13 @@ import androidx.room.Room;
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Providers.Emails.EmailThreadRecyclerAdapter;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
-import com.example.sw0b_001.Models.Platforms.Platforms;
+import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Providers.Text.TextMessage;
 import com.example.sw0b_001.Providers.Text.TextMessageDao;
 
 public class TextBodyActivity extends AppCompatActivity {
     TextMessage textMessage;
-    Platforms platform;
+    Platform platform;
     EmailThreadRecyclerAdapter emailCustomMessageAdapter;
 
     @Override

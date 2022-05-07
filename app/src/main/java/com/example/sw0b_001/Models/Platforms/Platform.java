@@ -13,7 +13,7 @@ import com.example.sw0b_001.TextThreadActivity;
 
 //@DatabaseView("SELECT platform.name, platform.description, platform.provider, platform.image, platform.id FROM platform")
 @Entity(indices = {@Index(value={"name"}, unique = true)})
-public class Platforms {
+public class Platform {
     @PrimaryKey(autoGenerate = true)
     private long id;
 
@@ -27,8 +27,8 @@ public class Platforms {
 
     private String type;
 
-    public Platforms() { }
-    public Platforms(long id) {
+    public Platform() { }
+    public Platform(long id) {
         this.id = id;
     }
 

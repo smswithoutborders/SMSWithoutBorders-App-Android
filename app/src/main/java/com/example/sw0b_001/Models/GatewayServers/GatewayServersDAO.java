@@ -1,25 +1,22 @@
 package com.example.sw0b_001.Models.GatewayServers;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-
-import com.example.sw0b_001.Providers.Emails.EmailMessage;
 
 import java.util.List;
 
 @Dao
 public interface GatewayServersDAO {
-    @Query("SELECT * FROM GatewayServers")
-    List<GatewayServers> getAll();
+    @Query("SELECT * FROM GatewayServer")
+    List<GatewayServer> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insert(GatewayServers gatewayServers);
+    long insert(GatewayServer gatewayServer);
 
-    @Query("SELECT * FROM GatewayServers WHERE id IN (:gatewayServerId)")
-    GatewayServers getById(long gatewayServerId);
+    @Query("SELECT * FROM GatewayServer WHERE id IN (:gatewayServerId)")
+    GatewayServer getById(long gatewayServerId);
 
 //    @Query("SELECT * FROM emailcustommessage WHERE uid IN (:emailcustommessageIds)")
 //    List<EmailCustomMessage> loadAllByIds(int[] emailcustommessageIds);

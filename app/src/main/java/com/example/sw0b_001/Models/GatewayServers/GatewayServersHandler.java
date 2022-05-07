@@ -17,7 +17,7 @@ public class GatewayServersHandler {
         this.context = context;
     }
 
-    public long add(GatewayServers gatewayServer) throws InterruptedException {
+    public long add(GatewayServer gatewayServer) throws InterruptedException {
         // Log.d(getClass().getSimpleName(), "Public key for gateway: " + gatewayServer.getPublicKey());
         Datastore databaseConnector = Room.databaseBuilder(this.context, Datastore.class,
                 Datastore.DatabaseName).build();
@@ -35,7 +35,7 @@ public class GatewayServersHandler {
         return gatewayServerInsertId[0];
     }
 
-    public boolean hasPublicKey(GatewayServers gatewayServers) {
+    public boolean hasPublicKey(GatewayServer gatewayServer) {
         return false;
     }
 

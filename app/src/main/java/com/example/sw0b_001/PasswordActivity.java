@@ -17,7 +17,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServers;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
 import com.example.sw0b_001.Models.User.User;
 import com.example.sw0b_001.Models.User.UserHandler;
@@ -57,7 +57,7 @@ public class PasswordActivity extends AppCompatActivity {
     public void validateUsersCloudPassword(View view) throws GeneralSecurityException, IOException, InterruptedException {
         EditText passwordField = findViewById(R.id.user_password);
         SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
-        GatewayServers gatewayServers[] = {new GatewayServers()};
+        GatewayServer gatewayServers[] = {new GatewayServer()};
 
         if(passwordField.getText().toString().isEmpty()) {
             passwordField.setError("Password cannot be empty!");
@@ -89,7 +89,7 @@ public class PasswordActivity extends AppCompatActivity {
 
                 byte[] passwordEncoded = passwordField.getText().toString().getBytes(StandardCharsets.UTF_8);
                 try {
-                    GatewayServers gatewayServer = gatewayServers[0];
+                    GatewayServer gatewayServer = gatewayServers[0];
 
                     // TODO start a loader here, in case of a slow internet connection
                     UserHandler userHandler = new UserHandler(getApplicationContext());

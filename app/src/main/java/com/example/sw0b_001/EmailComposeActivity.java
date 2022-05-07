@@ -19,11 +19,11 @@ import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Helpers.CustomHelpers;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServers;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
+import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
-import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
@@ -53,7 +53,7 @@ public class EmailComposeActivity extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
     long emailId;
     private List<GatewayClient> phonenumbers = new ArrayList<>();
-    private Platforms platforms;
+    private Platform platform;
 
     Datastore databaseConnection;
 
@@ -87,8 +87,8 @@ public class EmailComposeActivity extends AppCompatActivity {
         }
     }
 
-    private Platforms fetchPlatform(long platformID) throws Throwable {
-        final Platforms[] platforms = new Platforms[1];
+    private Platform fetchPlatform(long platformID) throws Throwable {
+        final Platform[] platforms = new Platform[1];
         Thread fetchPlatformThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -210,8 +210,8 @@ public class EmailComposeActivity extends AppCompatActivity {
         return defaultGatewayClient;
     }
 
-    private Platforms getPlatform() {
-        Platforms platform = new Platforms();
+    private Platform getPlatform() {
+        Platform platform = new Platform();
         try {
             long platformId = getIntent().getLongExtra("platform_id", -1);
             platform = fetchPlatform(platformId);
@@ -256,7 +256,7 @@ public class EmailComposeActivity extends AppCompatActivity {
 
                 try {
 
-                    Platforms platform = getPlatform();
+                    Platform platform = getPlatform();
 
                     String encryptedContent = processEmailForEncryption(platform.getLetter(), to, cc, bcc, subject, body);
                     Log.d(getLocalClassName(), "[*] size utf8: " + encryptedContent.length());
@@ -320,8 +320,8 @@ public class EmailComposeActivity extends AppCompatActivity {
         }
     }
 
-    private List<GatewayServers> getGatewayServers() throws Throwable {
-        final List<GatewayServers>[] gatewayServers = new List[]{new ArrayList<>()};
+    private List<GatewayServer> getGatewayServers() throws Throwable {
+        final List<GatewayServer>[] gatewayServers = new List[]{new ArrayList<>()};
         Thread fetchGatewayClientThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -344,7 +344,7 @@ public class EmailComposeActivity extends AppCompatActivity {
         SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
         String randomStringForIv = securityHandler.generateRandom(16);
 
-        GatewayServers gatewayServer = getGatewayServers().get(0);
+        GatewayServer gatewayServer = getGatewayServers().get(0);
         String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServer.getUrl() );
 
         try {

@@ -6,7 +6,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(indices = {@Index(value={"url"}, unique = true)})
-public class GatewayServers {
+public class GatewayServer {
 
 
     @PrimaryKey(autoGenerate = true)
@@ -24,6 +24,9 @@ public class GatewayServers {
     @NonNull
     private Integer port = 80;
 
+    @NonNull
+    private String seedsUrl;
+
     public void setPort(Integer port) {
         this.port = port;
     }
@@ -34,6 +37,10 @@ public class GatewayServers {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public void setSeedsUrl(String seedsUrl) {
+        this.seedsUrl = seedsUrl;
     }
 
     public void setId(long id) {
@@ -55,6 +62,10 @@ public class GatewayServers {
         return this.url;
     }
 
+    public String getSeedsUrl() {
+        return this.seedsUrl;
+    }
+
     public String getProtocol() {
         return this.protocol;
     }
@@ -62,5 +73,5 @@ public class GatewayServers {
         return this.id;
     }
 
-    public GatewayServers(){}
+    public GatewayServer(){}
 }
