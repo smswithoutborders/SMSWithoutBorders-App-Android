@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +21,8 @@ public class HomepageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+
+        SearchView searchView = (SearchView) findViewById(R.id.search_bar);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.homepage_bottom_navbar);
         bottomNavBar(getApplicationContext(), this.getParent(), bottomNavigationView);
@@ -43,8 +46,12 @@ public class HomepageActivity extends AppCompatActivity {
 
 
 
+
     public void onClickPlatformSelect(View view) {
         Intent platformIntent = new Intent(getApplicationContext(), PlatformsActivity.class);
         startActivity(platformIntent);
     }
+
+
+
 }

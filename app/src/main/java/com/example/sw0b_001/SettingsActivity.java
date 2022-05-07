@@ -2,30 +2,31 @@ package com.example.sw0b_001;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RadioButton;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 
-import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Providers.Gateway.GatewayDao;
 //import com.example.sw0b_001.Providers.Gateway.GatewayPhonenumber;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.ArrayList;
+
 
 public class SettingsActivity extends AppCompatActivity {
 
     RadioGroup radioGroup;
     BottomNavigationView bottomNavigationView;
 //    List<GatewayPhonenumber> phonenumbers;
+
+
+
 
 
     @Override
@@ -38,6 +39,11 @@ public class SettingsActivity extends AppCompatActivity {
 
         bottomNavigationView.setSelectedItemId(R.id.settings);
         findViewById(R.id.settings).setEnabled(false);
+
+
+
+
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {

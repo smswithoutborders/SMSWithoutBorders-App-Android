@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#000000">
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    tools:context=".Settings2Activity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/compose_toolbar2"
+        android:id="@+id/compose_toolbar"
         android:layout_width="411dp"
         android:layout_height="wrap_content"
         android:background="@color/default_dark"
@@ -32,39 +35,21 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <ListView
+        android:id="@+id/ListViewID"
+        android:layout_width="wrap_content"
+        android:layout_height="501dp"
+        android:layout_below="@+id/compose_toolbar"
+        android:layout_marginTop="7dp">
 
-
-    <RelativeLayout
-        android:id="@+id/RelativeView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:padding="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/homepage_bottom_navbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/compose_toolbar2"
-        tools:context=".SettingsActivity">
-
-        <Button
-            android:id="@+id/AddItemBtn"
-            android:layout_width="374dp"
-            android:layout_height="wrap_content"
-            android:text="Add Items In ListView" />
-
-        <ListView
-            android:id="@+id/listview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </RelativeLayout>
+    </ListView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/homepage_bottom_navbar"
-        android:layout_width="0dp"
-        android:layout_height="61dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="2dp"
         android:background="@color/default_dark"
         android:visibility="visible"
         app:itemIconTint="@color/white"
@@ -74,11 +59,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
 
+        app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/new_navigation">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

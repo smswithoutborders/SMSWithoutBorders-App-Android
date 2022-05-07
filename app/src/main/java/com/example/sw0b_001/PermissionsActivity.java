@@ -1,7 +1,9 @@
 package com.example.sw0b_001;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -22,6 +24,17 @@ public class PermissionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_synchronise_type);
+        Toolbar composeToolbar = (Toolbar) findViewById(R.id.compose_toolbar);
+        setSupportActionBar(composeToolbar);
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
+
+
+
+
+
     }
 
     public void scanQR(View view) {
@@ -62,6 +75,13 @@ public class PermissionsActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
         startActivity(intent);
     }
+
+
+
+
+
+
+
     public void backToWelcome(View view) {
         Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
         startActivity(intent);
