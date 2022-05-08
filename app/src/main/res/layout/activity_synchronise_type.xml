@@ -6,33 +6,17 @@
     android:layout_height="match_parent">
 
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/synchronise_type_toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/default_dark"
-        android:elevation="4dp"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/email_compose_toolbar" />
-
     <TextView
         android:id="@+id/sync_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:gravity="center_vertical|center"
         android:text="Synchronize"
         android:textColor="#81bffc"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/synchronise_type_toolbar" />
+        tools:layout_editor_absoluteY="80dp" />
 
     <TextView
         android:id="@+id/textView6"

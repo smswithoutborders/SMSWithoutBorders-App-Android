@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
 import com.example.sw0b_001.Models.User.User;
 import com.example.sw0b_001.Models.User.UserHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import org.json.JSONObject;
 
@@ -55,6 +57,7 @@ public class PasswordActivity extends AppCompatActivity {
     }
 
     public void validateUsersCloudPassword(View view) throws GeneralSecurityException, IOException, InterruptedException {
+
         EditText passwordField = findViewById(R.id.user_password);
         SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
         GatewayServer gatewayServers[] = {new GatewayServer()};
@@ -63,6 +66,12 @@ public class PasswordActivity extends AppCompatActivity {
             passwordField.setError("Password cannot be empty!");
             return;
         }
+
+        Button validationButton = findViewById(R.id.password_confirm_btn);
+        validationButton.setVisibility(View.INVISIBLE);
+
+        CircularProgressIndicator passwordValidationProgressBar = findViewById(R.id.password_validation_progress_bar);
+        passwordValidationProgressBar.setVisibility(View.VISIBLE);
 
         if(getIntent().hasExtra("gatewayserver_id")) {
             long gatewayServerId = getIntent().getLongExtra("gatewayserver_id", -1);
@@ -120,6 +129,9 @@ public class PasswordActivity extends AppCompatActivity {
                         public void onErrorResponse(VolleyError error) {
                             passwordField.setError("Authentication Failed! Please try again...");
                             error.printStackTrace();
+
+                            passwordValidationProgressBar.setVisibility(View.INVISIBLE);
+                            validationButton.setVisibility(View.VISIBLE);
                         }
                     });
                     RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
@@ -137,4 +149,5 @@ public class PasswordActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
         startActivity(intent);
     }
+
 }
