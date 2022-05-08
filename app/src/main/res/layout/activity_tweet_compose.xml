@@ -53,7 +53,7 @@
 
 
             <Button
-                android:id="@+id/homepage_search_bar"
+                android:id="@+id/user_password"
                 android:layout_width="156dp"
 
                 android:layout_height="48dp"
