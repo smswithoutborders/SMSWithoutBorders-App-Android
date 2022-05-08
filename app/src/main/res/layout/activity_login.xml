@@ -38,7 +38,7 @@
         app:startIconTint="@color/white">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/confirm_btn"
+            android:id="@+id/homepage_search_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="textPassword" />

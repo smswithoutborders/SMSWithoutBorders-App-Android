@@ -6,71 +6,32 @@
     android:layout_height="match_parent"
     android:background="#000000">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/header_constraint"
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/email_compose_toolbar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
+        android:background="@color/default_dark"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/compose_toolbar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/default_dark"
-            android:elevation="4dp"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/email_compose_toolbar"
-            app:title="Email" >
-            <ImageView
-                android:id="@+id/tv_header_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"/>
-
-        </androidx.appcompat.widget.Toolbar>
-
-        <!--    <com.google.android.material.textfield.TextInputLayout-->
-        <!--        android:layout_width="0dp"-->
-        <!--        android:layout_height="0dp"-->
-        <!--        android:backgroundTint="@color/default_dark"-->
-        <!--        android:hint="Compose email"-->
-        <!--        android:textColor="@color/white"-->
-        <!--        android:textColorHint="#A8A8A8"-->
-        <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--        app:layout_constraintEnd_toEndOf="parent"-->
-        <!--        app:layout_constraintStart_toStartOf="parent"-->
-        <!--        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">-->
-
-        <!--        <com.google.android.material.textfield.TextInputEditText-->
-        <!--            android:id="@+id/edit_message"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:background="@color/default_dark"-->
-        <!--            android:inputType="textPersonName"-->
-        <!--            android:textSize="16sp" />-->
-        <!--    </com.google.android.material.textfield.TextInputLayout>-->
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/email_compose_toolbar"
+        app:title="Email" />
 
     <LinearLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:background="@color/default_dark"
         android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@+id/header_constraint"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header_constraint">
+        app:layout_constraintTop_toBottomOf="@+id/email_compose_toolbar">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layer_email_to"
@@ -82,8 +43,8 @@
                 android:id="@+id/email_to"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:hint="To" />
+                android:hint="To"
+                android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -136,51 +97,20 @@
 
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+    <EditText
+        android:id="@+id/email_body"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:autoLink="all"
+        android:gravity="start|top"
+        android:hint="Compose email"
+        android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layer_email_body"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:hint="Compose email"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/email_body"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/default_dark"
-                android:gravity="start"
-                android:inputType="textMultiLine" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/action_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true"
-            app:backgroundTint="#81bffc"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.92"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.90999997"
-            app:srcCompat="@drawable/ic_baseline_send_24" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
+        tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

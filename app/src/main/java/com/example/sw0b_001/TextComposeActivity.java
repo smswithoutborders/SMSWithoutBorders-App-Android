@@ -57,7 +57,7 @@ public class TextComposeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_text_compose);
 
-        Toolbar composeToolbar = (Toolbar) findViewById(R.id.compose_toolbar);
+        Toolbar composeToolbar = (Toolbar) findViewById(R.id.email_compose_toolbar);
         setSupportActionBar(composeToolbar);
 
         // Get a support ActionBar corresponding to this toolbar

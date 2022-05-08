@@ -53,7 +53,7 @@
 
 
             <Button
-                android:id="@+id/confirm_btn"
+                android:id="@+id/homepage_search_bar"
                 android:layout_width="156dp"
 
                 android:layout_height="48dp"

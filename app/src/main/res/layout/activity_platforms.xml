@@ -6,33 +6,18 @@
     android:layout_height="match_parent"
     android:backgroundTint="#00FFFFFF">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/compose_toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/default_dark"
-        android:elevation="4dp"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/email_compose_toolbar"
-        app:title="Synchronised Platforms" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_synced_platforms"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:background="#000000"
+        android:background="@color/default_dark"
         app:layout_constraintBottom_toTopOf="@+id/homepage_bottom_navbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/compose_toolbar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/homepage_bottom_navbar"

@@ -25,7 +25,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/main_icon_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyAppNoBar"
+        android:theme="@style/Theme.MyApp"
 
         android:usesCleartextTraffic="true">
 
@@ -108,17 +108,20 @@
 
         <activity
             android:name=".HomepageActivity"
-            android:label="Recents">
+            android:theme="@style/Theme.MyAppNoBar"
+            android:label="">
         </activity>
 
         <activity
             android:name=".SettingsActivity"
+            android:theme="@style/Theme.MyAppNoBar"
             android:label="Settings" >
         </activity>
 
         <activity
             android:name=".GatewayClientsSettingsActivity"
             android:parentActivityName=".SettingsActivity"
+            android:theme="@style/Theme.MyAppNoBar"
             android:label="Available Gateway Client" >
         </activity>
 
