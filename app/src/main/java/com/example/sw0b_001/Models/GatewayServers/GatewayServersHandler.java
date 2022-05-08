@@ -7,6 +7,9 @@ import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GatewayServersHandler {
 
     private Context context;
@@ -36,7 +39,6 @@ public class GatewayServersHandler {
     }
 
     public void updateSeedsUrl(String seedsUrl, long gatewayServerId) throws InterruptedException {
-        // Log.d(getClass().getSimpleName(), "Public key for gateway: " + gatewayServer.getPublicKey());
         Datastore databaseConnector = Room.databaseBuilder(this.context, Datastore.class,
                 Datastore.DatabaseName).build();
 
@@ -58,5 +60,23 @@ public class GatewayServersHandler {
 
     public static String buildKeyStoreAlias(String gatewayServerUrl) {
         return gatewayServerUrl + "-keystore-alias";
+    }
+
+    public static List<GatewayServer> getAllGatewayServers(Context context) throws InterruptedException {
+        Datastore databaseConnector = Room.databaseBuilder(context, Datastore.class,
+                Datastore.DatabaseName).build();
+
+        final List<GatewayServer>[] gatewayServerList = new List[]{new ArrayList<>()};
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                GatewayServersDAO gatewayServersDAO = databaseConnector.gatewayServersDAO();
+                gatewayServerList[0] = gatewayServersDAO.getAll();
+            }
+        });
+        thread.start();
+        thread.join();
+
+        return gatewayServerList[0];
     }
 }

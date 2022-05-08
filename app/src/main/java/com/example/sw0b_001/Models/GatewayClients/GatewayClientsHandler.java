@@ -40,6 +40,22 @@ public class GatewayClientsHandler {
         return gatewayClientsInsertId[0];
     }
 
+    public static void toggleDefault(Context context, GatewayClient gatewayClient) throws InterruptedException {
+        Datastore databaseConnector = Room.databaseBuilder(context, Datastore.class,
+                Datastore.DatabaseName).build();
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                GatewayClientsDao gatewayClientsDao = databaseConnector.gatewayClientsDao();
+                gatewayClientsDao.resetAllDefaults();
+                gatewayClientsDao.updateDefault(gatewayClient.isDefault(), gatewayClient.getId());
+            }
+        });
+        thread.start();
+        thread.join();
+    }
+
     public static void remoteFetchAndStoreGatewayClients(Context context, String gatewayServerSeedsUrl) {
 
         RequestQueue queue = Volley.newRequestQueue(context);

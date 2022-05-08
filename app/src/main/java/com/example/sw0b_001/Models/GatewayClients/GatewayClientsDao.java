@@ -13,16 +13,6 @@ public interface GatewayClientsDao {
     @Query("SELECT * FROM GatewayClient")
     List<GatewayClient> getAll();
 
-    @Query("SELECT * FROM GatewayClient")
-    List<GatewayClient> getAllPhonenumbers();
-
-//    @Query("SELECT * FROM emailcustommessage WHERE uid IN (:emailcustommessageIds)")
-//    List<EmailCustomMessage> loadAllByIds(int[] emailcustommessageIds);
-
-//    @Query("SELECT * FROM emailcustommessage WHERE first_name LIKE :first AND " +
-//            "last_name LIKE :last LIMIT 1")
-//    EmailCustomMessage findByName(String first, String last);
-
     @Insert
     void insertAll(GatewayClient... gatewayClients);
 
@@ -35,8 +25,8 @@ public interface GatewayClientsDao {
     @Query("DELETE FROM GatewayClient")
     void deleteAll();
 
-    @Query("UPDATE GatewayClient SET `default` =:isdefault WHERE id=:phonenumberId")
-    void updateDefault(boolean isdefault, long phonenumberId);
+    @Query("UPDATE GatewayClient SET `default` = :setDefault WHERE id=:id")
+    void updateDefault(boolean setDefault, long id);
 
     @Query("UPDATE GatewayClient SET `default`=0")
     void resetAllDefaults();

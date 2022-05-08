@@ -1,6 +1,7 @@
 package com.example.sw0b_001;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,10 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsRecyclerAdapter;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GatewayClientsSettingsActivity extends AppCompatActivity {
+    public RecyclerView gatewayClientRecyclerView;
+    public GatewayClientsRecyclerAdapter gatewayClientsRecyclerAdapter;
+    public List<GatewayClient> listOfGateways = new ArrayList<>();
+    public int gatewayClientsLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,17 +38,33 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
+        gatewayClientsLayout = R.layout.layout_cardlist_gateway_clients;
+        gatewayClientRecyclerView = findViewById(R.id.gateway_clients_recycler_view);
+        gatewayClientRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        // gatewayRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
         populateSettings();
+        gatewayClientRecyclerView.setAdapter(this.gatewayClientsRecyclerAdapter);
     }
 
     public void populateSettings() {
-        List<GatewayClient> listOfGateways = GatewayClientsHandler.getAllGatewayClients(getApplicationContext());
+        listOfGateways = GatewayClientsHandler.getAllGatewayClients(getApplicationContext());
+        this.gatewayClientsRecyclerAdapter = new GatewayClientsRecyclerAdapter( getApplicationContext(), this);
+    }
 
-        RecyclerView gatewayRecyclerView = findViewById(R.id.gateway_clients_recycler_view);
-        // settingsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+    public void refreshGatewayClientsSettings() throws InterruptedException {
+        List<GatewayServer> gatewayServerList = GatewayServersHandler.getAllGatewayServers(getApplicationContext());
+        for(GatewayServer gatewayServer : gatewayServerList) {
+            String gatewayServerSeedsUrl = gatewayServer.getSeedsUrl();
+            GatewayClientsHandler.remoteFetchAndStoreGatewayClients(getApplicationContext(), gatewayServerSeedsUrl);
+        }
+    }
 
-        GatewayClientsRecyclerAdapter gatewayClientRecyclerAdapter = new GatewayClientsRecyclerAdapter(this, listOfGateways, R.layout.layout_cardlist_gateway_clients);
-        gatewayRecyclerView.setAdapter(gatewayClientRecyclerAdapter);
-        gatewayRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    public void onRefreshButton(View view) throws InterruptedException {
+        refreshGatewayClientsSettings();
+
+        populateSettings();
+
+        this.gatewayClientsRecyclerAdapter.notifyDataSetChanged();
     }
 }
