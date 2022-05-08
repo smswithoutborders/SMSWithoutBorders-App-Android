@@ -61,6 +61,7 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
     }
 
     public void onRefreshButton(View view) throws InterruptedException {
+        // TODO put a loader here
         refreshGatewayClientsSettings();
 
         populateSettings();
