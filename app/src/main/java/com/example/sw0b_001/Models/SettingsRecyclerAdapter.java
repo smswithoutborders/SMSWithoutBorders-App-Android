@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -44,6 +45,7 @@ public class SettingsRecyclerAdapter extends RecyclerView.Adapter<SettingsRecycl
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         String settings = this.listOfSettings.get(position);
         holder.name.setText(settings);
+        holder.settingsItemImage.setImageResource(SettingsActivity.SETTINGS_ICON_MAPPER.get(settings));
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,12 +65,14 @@ public class SettingsRecyclerAdapter extends RecyclerView.Adapter<SettingsRecycl
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView name;
+        ImageView settingsItemImage;
         ConstraintLayout layout;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             this.layout = itemView.findViewById(R.id.settings_card_layout);
             this.name = itemView.findViewById(R.id.settings_item_text);
+            this.settingsItemImage = itemView.findViewById(R.id.settings_item_img);
         }
     }
 }

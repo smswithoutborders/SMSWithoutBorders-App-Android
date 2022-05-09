@@ -15,11 +15,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SettingsActivity extends AppCompatActivity {
 
     public static final String GATEWAY_CLIENT_SETTINGS = "Gateway Clients";
+
+    public static final Map<String, Integer> SETTINGS_ICON_MAPPER = new HashMap<String, Integer>() {
+        {
+            put(GATEWAY_CLIENT_SETTINGS, R.drawable.ic_round_router_24);
+        }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
