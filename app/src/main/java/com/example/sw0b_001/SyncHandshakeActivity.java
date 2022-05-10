@@ -76,7 +76,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
         }
     }
 
-    private void remoteFetchAndStoreGatewayClients(String gatewayServerSeedsUrl) {
+    private void remoteFetchAndStoreGatewayClients(String gatewayServerSeedsUrl) throws InterruptedException {
         GatewayClientsHandler.remoteFetchAndStoreGatewayClients(getApplicationContext(), gatewayServerSeedsUrl);
     }
 

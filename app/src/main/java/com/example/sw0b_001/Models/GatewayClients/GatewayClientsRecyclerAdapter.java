@@ -1,6 +1,7 @@
 package com.example.sw0b_001.Models.GatewayClients;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,7 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        GatewayClient gatewayClient = gatewayClientsSettingsActivity.listOfGateways.get(position);
+        GatewayClient gatewayClient = this.gatewayClientsSettingsActivity.listOfGateways.get(position);
         holder.MSISDN.setText(gatewayClient.getMSISDN());
 
         holder.radioButton.setChecked(gatewayClient.isDefault());
@@ -64,7 +65,8 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
 
     @Override
     public int getItemCount() {
-        return gatewayClientsSettingsActivity.listOfGateways.size();
+        Log.d(getClass().getName(), "# of gateway clients: " + this.gatewayClientsSettingsActivity.listOfGateways.size());
+        return this.gatewayClientsSettingsActivity.listOfGateways.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

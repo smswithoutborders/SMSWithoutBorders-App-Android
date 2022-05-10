@@ -1,6 +1,7 @@
 package com.example.sw0b_001;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
@@ -38,22 +39,24 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
 
-        gatewayClientsLayout = R.layout.layout_cardlist_gateway_clients;
-        gatewayClientRecyclerView = findViewById(R.id.gateway_clients_recycler_view);
-        gatewayClientRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        this.gatewayClientsLayout = R.layout.layout_cardlist_gateway_clients;
+        this.gatewayClientRecyclerView = findViewById(R.id.gateway_clients_recycler_view);
+        this.gatewayClientRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         // gatewayRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
+        this.gatewayClientsRecyclerAdapter = new GatewayClientsRecyclerAdapter( getApplicationContext(), this);
         populateSettings();
-        gatewayClientRecyclerView.setAdapter(this.gatewayClientsRecyclerAdapter);
     }
 
     public void populateSettings() {
-        listOfGateways = GatewayClientsHandler.getAllGatewayClients(getApplicationContext());
-        this.gatewayClientsRecyclerAdapter = new GatewayClientsRecyclerAdapter( getApplicationContext(), this);
+        this.listOfGateways = GatewayClientsHandler.getAllGatewayClients(getApplicationContext());
+        Log.d(getLocalClassName(), "# of listed gateway clients: " + this.listOfGateways.size());
+        this.gatewayClientRecyclerView.setAdapter(this.gatewayClientsRecyclerAdapter);
     }
 
     public void refreshGatewayClientsSettings() throws InterruptedException {
         List<GatewayServer> gatewayServerList = GatewayServersHandler.getAllGatewayServers(getApplicationContext());
+        GatewayClientsHandler.clearStoredGatewayClients(getApplicationContext());
         for(GatewayServer gatewayServer : gatewayServerList) {
             String gatewayServerSeedsUrl = gatewayServer.getSeedsUrl();
             GatewayClientsHandler.remoteFetchAndStoreGatewayClients(getApplicationContext(), gatewayServerSeedsUrl);
@@ -62,9 +65,9 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
 
     public void onRefreshButton(View view) throws InterruptedException {
         // TODO put a loader here
-        refreshGatewayClientsSettings();
+        this.refreshGatewayClientsSettings();
 
-        populateSettings();
+        this.populateSettings();
 
         this.gatewayClientsRecyclerAdapter.notifyDataSetChanged();
     }
