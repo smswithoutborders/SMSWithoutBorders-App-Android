@@ -5,7 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RadioButton;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -44,7 +45,28 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
         GatewayClient gatewayClient = this.gatewayClientsSettingsActivity.listOfGateways.get(position);
         holder.MSISDN.setText(gatewayClient.getMSISDN());
 
-        holder.radioButton.setChecked(gatewayClient.isDefault());
+        holder.switchBtn.setChecked(gatewayClient.isDefault());
+
+        holder.switchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    gatewayClient.setDefault(true);
+                    try {
+                        GatewayClientsHandler.toggleDefault(context, gatewayClient);
+
+                        gatewayClientsSettingsActivity.populateSettings();
+
+                        notifyDataSetChanged();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                   buttonView.setChecked(true);
+                }
+            }
+        });
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +95,7 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
         TextView MSISDN;
         TextView country;
         TextView lastPing;
-        RadioButton radioButton;
+        Switch switchBtn;
         ConstraintLayout layout;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
@@ -82,7 +104,7 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
             this.MSISDN = itemView.findViewById(R.id.gateway_client_MSISDN);
             this.country = itemView.findViewById(R.id.gateway_client_country);
             this.lastPing = itemView.findViewById(R.id.gateway_client_last_ping_time);
-            this.radioButton = itemView.findViewById(R.id.gateway_client_radio_btn);
+            this.switchBtn = itemView.findViewById(R.id.gateway_client_radio_btn);
         }
     }
 }
