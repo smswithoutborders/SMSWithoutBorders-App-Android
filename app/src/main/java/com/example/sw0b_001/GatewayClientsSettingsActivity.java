@@ -57,18 +57,23 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
     public void refreshGatewayClientsSettings() throws InterruptedException {
         List<GatewayServer> gatewayServerList = GatewayServersHandler.getAllGatewayServers(getApplicationContext());
         GatewayClientsHandler.clearStoredGatewayClients(getApplicationContext());
+
+        Runnable callbackFunction = new Runnable() {
+            @Override
+            public void run() {
+                populateSettings();
+            }
+        };
+
         for(GatewayServer gatewayServer : gatewayServerList) {
             String gatewayServerSeedsUrl = gatewayServer.getSeedsUrl();
-            GatewayClientsHandler.remoteFetchAndStoreGatewayClients(getApplicationContext(), gatewayServerSeedsUrl);
+            GatewayClientsHandler.remoteFetchAndStoreGatewayClients(getApplicationContext(), gatewayServerSeedsUrl, callbackFunction);
         }
     }
 
     public void onRefreshButton(View view) throws InterruptedException {
         // TODO put a loader here
         this.refreshGatewayClientsSettings();
-
-        this.populateSettings();
-
         this.gatewayClientsRecyclerAdapter.notifyDataSetChanged();
     }
 }

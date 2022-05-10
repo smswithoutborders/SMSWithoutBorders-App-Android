@@ -56,8 +56,7 @@ public class GatewayClientsHandler {
         thread.join();
     }
 
-    public static void remoteFetchAndStoreGatewayClients(Context context, String gatewayServerSeedsUrl) throws InterruptedException {
-
+    public static void remoteFetchAndStoreGatewayClients(Context context, String gatewayServerSeedsUrl, Runnable callbackFunction) throws InterruptedException {
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonArrayRequest remoteSeedsRequest = new JsonArrayRequest(Request.Method.GET, gatewayServerSeedsUrl, null, new Response.Listener<JSONArray>() {
             @Override
@@ -65,6 +64,7 @@ public class GatewayClientsHandler {
                 Log.d(getClass().getName(), "___> got nre response from thread");
                 for(int i=0;i<responses.length();++i) {
                     try {
+                        // TODO: Add algorithm for default Gateway Client
                         JSONObject response = responses.getJSONObject(i);
                         String IMSI = response.getString("IMSI");
                         String MSISDN = response.getString("MSISDN");
@@ -85,6 +85,8 @@ public class GatewayClientsHandler {
                         e.printStackTrace();
                     }
                 }
+                if(callbackFunction != null)
+                    callbackFunction.run();
             }
         }, new Response.ErrorListener() {
             @Override
