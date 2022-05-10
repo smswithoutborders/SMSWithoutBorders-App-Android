@@ -35,6 +35,7 @@ public class HomepageActivity extends AppCompatActivity {
                     case R.id.settings: {
                         Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
                         startActivity(settingsIntent);
+                        overridePendingTransition(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit);
                         finish();
                     }
                 }

@@ -62,6 +62,7 @@ public class SettingsActivity extends AppCompatActivity {
                     case R.id.recents: {
                         Intent recentsIntent = new Intent(getApplicationContext(), HomepageActivity.class);
                         startActivity(recentsIntent);
+                        overridePendingTransition(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit);
                         finish();
                     }
                 }
