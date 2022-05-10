@@ -46,7 +46,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".WelcomeActivity">
+        <activity android:name=".WelcomeActivity"
+            android:theme="@style/Theme.MyAppNoBar">
 
         </activity>
         <activity
@@ -91,7 +92,7 @@
 
         <activity
             android:name=".SynchroniseTypeActivity"
-            android:label="Synchronize Types"
+            android:label=""
             android:parentActivityName=".WelcomeActivity">
         </activity>
 
