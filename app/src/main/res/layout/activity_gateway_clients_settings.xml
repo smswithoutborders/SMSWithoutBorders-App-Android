@@ -20,7 +20,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/gateway_client_settings_toolbar"
-        app:title="Available Gateway Clients" />
+        app:title="Available Gateway Clients"
+        tools:visibility="visible" />
 
 
     <androidx.recyclerview.widget.RecyclerView
