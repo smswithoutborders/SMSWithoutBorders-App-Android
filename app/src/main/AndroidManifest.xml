@@ -124,7 +124,7 @@
             android:name=".GatewayClientsSettingsActivity"
             android:parentActivityName=".SettingsActivity"
             android:theme="@style/Theme.MyAppNoBar"
-            android:label="Available Gateway Client" >
+             >
         </activity>
 
         <activity
