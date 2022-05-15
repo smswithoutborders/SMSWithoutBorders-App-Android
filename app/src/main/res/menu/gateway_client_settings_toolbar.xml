@@ -2,10 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:enabled="true"
+        android:id="@+id/add_gateway"
         android:icon="@drawable/ic_baseline_add_24"
+        android:iconTint="@color/white"
         android:title="add"
+        app:showAsAction="always" />
+    <item
+        android:icon="@drawable/dashboard"
+        android:title="great"
         android:visible="true"
-        app:showAsAction="always"
-        android:iconTint="@color/white"/>
+        app:showAsAction="always" />
 </menu>

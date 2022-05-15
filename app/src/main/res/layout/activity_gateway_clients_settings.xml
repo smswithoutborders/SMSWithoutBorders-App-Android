@@ -9,6 +9,7 @@
         android:id="@+id/gateway_client_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:background="@color/default_dark"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
@@ -16,12 +17,10 @@
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/gateway_clients_recycler_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/gateway_client_settings_toolbar"
-        app:title="Available Gateway Clients"
-        tools:visibility="visible" />
+        app:title="Available Gateway Clients" />
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -29,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/gateway_client_refresh_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
