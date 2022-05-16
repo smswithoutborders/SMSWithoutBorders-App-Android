@@ -115,16 +115,24 @@
         </activity>
 
         <activity
-            android:name=".SettingsActivity"
+            android:name=".SettingsActivities.SettingsActivity"
             android:theme="@style/Theme.MyAppNoBar"
             android:label="Settings" >
         </activity>
 
         <activity
             android:name=".GatewayClientsSettingsActivity"
-            android:parentActivityName=".SettingsActivity"
-            android:theme="@style/Theme.MyAppNoBar"
+            android:parentActivityName=".SettingsActivities.SettingsActivity"
+            android:theme="@style/Theme.MyAppNoBar">
              >
+
+        </activity>
+
+        <activity
+            android:name=".SettingsActivities.StoreAccessSettingsActivity"
+            android:parentActivityName=".SettingsActivities.SettingsActivity"
+            android:label="Store Access"
+            >
 
         </activity>
 

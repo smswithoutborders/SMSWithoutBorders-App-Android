@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    android:background="@color/default_dark">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/email_compose_toolbar"
@@ -38,7 +38,7 @@
             android:id="@+id/layer_email_to"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:boxBackgroundColor="#000000">
+            app:boxBackgroundColor="@color/default_dark">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email_to"
@@ -57,7 +57,7 @@
                 android:id="@+id/email_cc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#000000"
+                android:background="@color/default_dark"
                 android:hint="Cc"
                 android:inputType="textEmailAddress" />
 
@@ -67,7 +67,7 @@
             android:id="@+id/layer_email_bcc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:boxBackgroundColor="#000000">
+            app:boxBackgroundColor="@color/default_dark">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email_bcc"
@@ -89,7 +89,7 @@
                 android:id="@+id/email_subject"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/black"
+                android:background="@color/default_dark"
                 android:inputType="textEmailSubject"
                 app:endIconMode="clear_text" />
 

@@ -14,7 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw0b_001.GatewayClientsSettingsActivity;
 import com.example.sw0b_001.R;
-import com.example.sw0b_001.SettingsActivity;
+import com.example.sw0b_001.SettingsActivities.SettingsActivity;
+import com.example.sw0b_001.SettingsActivities.StoreAccessSettingsActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -53,6 +54,10 @@ public class SettingsRecyclerAdapter extends RecyclerView.Adapter<SettingsRecycl
                 if(settings.equals(SettingsActivity.GATEWAY_CLIENT_SETTINGS)) {
                     Intent gatewayClientsIntent = new Intent(context, GatewayClientsSettingsActivity.class);
                     context.startActivity(gatewayClientsIntent);
+                }
+                else if(settings.equals(SettingsActivity.STORED_ACCESS_SETTINGS)) {
+                    Intent storeAccessIntent = new Intent(context, StoreAccessSettingsActivity.class);
+                    context.startActivity(storeAccessIntent);
                 }
             }
         });

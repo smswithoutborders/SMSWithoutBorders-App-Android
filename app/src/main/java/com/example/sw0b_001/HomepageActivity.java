@@ -18,6 +18,7 @@ import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.RecentsRecyclerAdapter;
+import com.example.sw0b_001.SettingsActivities.SettingsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.NotNull;

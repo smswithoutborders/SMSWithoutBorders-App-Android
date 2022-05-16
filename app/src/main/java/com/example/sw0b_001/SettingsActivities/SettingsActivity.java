@@ -1,4 +1,4 @@
-package com.example.sw0b_001;
+package com.example.sw0b_001.SettingsActivities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sw0b_001.HomepageActivity;
 import com.example.sw0b_001.Models.SettingsRecyclerAdapter;
+import com.example.sw0b_001.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.NotNull;
@@ -22,10 +24,12 @@ import java.util.Map;
 public class SettingsActivity extends AppCompatActivity {
 
     public static final String GATEWAY_CLIENT_SETTINGS = "Gateway Clients";
+    public static final String STORED_ACCESS_SETTINGS = "Stored Access";
 
     public static final Map<String, Integer> SETTINGS_ICON_MAPPER = new HashMap<String, Integer>() {
         {
             put(GATEWAY_CLIENT_SETTINGS, R.drawable.ic_round_router_24);
+            put(STORED_ACCESS_SETTINGS, R.drawable.ic_round_sync_24);
         }};
 
     @Override
@@ -44,6 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
     public void populateSettings() {
         List<String> listOfSettings = new ArrayList<>();
         listOfSettings.add(GATEWAY_CLIENT_SETTINGS);
+        listOfSettings.add(STORED_ACCESS_SETTINGS);
 
         RecyclerView settingsRecyclerView = findViewById(R.id.settings_recycler_view);
         // settingsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
