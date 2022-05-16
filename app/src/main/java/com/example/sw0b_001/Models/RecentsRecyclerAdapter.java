@@ -46,11 +46,12 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         EncryptedContent encryptedContent = listOfRecents.get(position);
-        holder.encryptedTextSnippet.setText(encryptedContent.getEncryptedContent());
+
+        String displayString = encryptedContent.getEncryptedContent().length() > 141 ?
+                encryptedContent.getEncryptedContent().substring(0, 141) : encryptedContent.getEncryptedContent();
+        holder.encryptedTextSnippet.setText(displayString);
 
         Date date = new Date(encryptedContent.getDate());
-
-        String formattedDate = "";
         if(DateUtils.isToday(encryptedContent.getDate())) {
             DateFormat format = new SimpleDateFormat("HH:mm a");
             holder.date.setText(format.format(date));
