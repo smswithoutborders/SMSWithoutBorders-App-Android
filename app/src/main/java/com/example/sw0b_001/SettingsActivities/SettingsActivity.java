@@ -24,7 +24,7 @@ import java.util.Map;
 public class SettingsActivity extends AppCompatActivity {
 
     public static final String GATEWAY_CLIENT_SETTINGS = "Gateway Clients";
-    public static final String STORED_ACCESS_SETTINGS = "Stored Access";
+    public static final String STORED_ACCESS_SETTINGS = "Store Access";
 
     public static final Map<String, Integer> SETTINGS_ICON_MAPPER = new HashMap<String, Integer>() {
         {
