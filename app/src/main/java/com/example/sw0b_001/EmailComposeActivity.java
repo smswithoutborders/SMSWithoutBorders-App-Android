@@ -19,6 +19,8 @@ import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Helpers.CustomHelpers;
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
+import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsDao;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
@@ -29,7 +31,6 @@ import com.example.sw0b_001.Providers.Emails.EmailMessage;
 import com.example.sw0b_001.Providers.Emails.EmailMessageDao;
 import com.example.sw0b_001.Providers.Emails.EmailThreads;
 import com.example.sw0b_001.Providers.Emails.EmailThreadsDao;
-import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Security.SecurityHandler;
 
 import java.io.IOException;
@@ -182,7 +183,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                 emailMessage.setThreadId(threadId);
                 emailMessage.setDatetime(CustomHelpers.getDateTime());
 
-                EmailMessageDao platformsDao = databaseConnection.emailDao();
+                EmailMessageDao platformsDao = databaseConnection.emailMessageDao();
                 emailId = platformsDao.insertAll(emailMessage);
             }
         });
@@ -280,6 +281,8 @@ public class EmailComposeActivity extends AppCompatActivity {
                     if(defaultSMSAppIntent.resolveActivity(getPackageManager()) != null) {
                         startActivity(defaultSMSAppIntent);
                         setResult(Activity.RESULT_OK, new Intent());
+
+                        EncryptedContentHandler.store(getApplicationContext(), encryptedContentBase64, gatewayClient.getMSISDN(), platform.getName());
                         finish();
                     }
 

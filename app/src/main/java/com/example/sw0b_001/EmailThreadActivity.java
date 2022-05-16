@@ -67,7 +67,7 @@ public class EmailThreadActivity extends AppCompatActivity {
             public void run() {
                 Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
                         Datastore.class, Datastore.DatabaseName).build();
-                EmailMessageDao emailMessageDao = platformDb.emailDao();
+                EmailMessageDao emailMessageDao = platformDb.emailMessageDao();
                 EmailThreadsDao emailThreadsDao = platformDb.emailThreadDao();
                 emailMessage = emailMessageDao.loadAllByThreadId(new long[]{threadId});
                 emailThreads = emailThreadsDao.loadAllByIds(new long[]{threadId});
@@ -138,7 +138,7 @@ public class EmailThreadActivity extends AppCompatActivity {
                             public void run() {
                                 Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
                                         Datastore.class, Datastore.DatabaseName).build();
-                                EmailMessageDao emailMessageDao = platformDb.emailDao();
+                                EmailMessageDao emailMessageDao = platformDb.emailMessageDao();
                                 emailMessageDao.delete(message);
                             }
                         };

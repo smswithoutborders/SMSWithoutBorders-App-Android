@@ -124,7 +124,7 @@ public class TextMessageRecyclerAdapter extends RecyclerView.Adapter<TextMessage
             threadSubSubject = itemView.findViewById(R.id.subjectSub);
             threadTopRightText = itemView.findViewById(R.id.topRight);
             threadBottomRightText = itemView.findViewById(R.id.bottomRight);
-            image = itemView.findViewById(R.id.image);
+            image = itemView.findViewById(R.id.recents_platform_logo);
 //            mainLayout = itemView.findViewById(R.id.email_thread_card_layout);
         }
     }

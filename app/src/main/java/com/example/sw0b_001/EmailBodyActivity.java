@@ -53,7 +53,7 @@ public class EmailBodyActivity extends AppCompatActivity {
             public void run() {
                 Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
                         Datastore.class, Datastore.DatabaseName).build();
-                EmailMessageDao emailMessageDao = platformDb.emailDao();
+                EmailMessageDao emailMessageDao = platformDb.emailMessageDao();
                 EmailThreadsDao emailThreadsDao = platformDb.emailThreadDao();
                 emailMessage = emailMessageDao.loadAllByEmailId(messageId);
                 emailThreads = emailThreadsDao.loadAllByIds(new long[]{emailMessage.get(0).getThreadId()});
@@ -71,7 +71,7 @@ public class EmailBodyActivity extends AppCompatActivity {
         TextView emailAddress = findViewById(R.id.email_address);
         emailAddress.setText(emailThreads.get(0).getRecipient());
 
-        ImageView emailImage = findViewById(R.id.image);
+        ImageView emailImage = findViewById(R.id.recents_platform_logo);
         emailImage.setImageResource(emailThreads.get(0).getImage());
 
         TextView dateTime = findViewById(R.id.subjectSub);

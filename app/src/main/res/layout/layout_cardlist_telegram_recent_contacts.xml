@@ -22,7 +22,7 @@
             android:layout_height="match_parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/image"
+                android:id="@+id/recents_platform_logo"
                 android:layout_width="53dp"
                 android:layout_height="53dp"
                 android:src="@android:drawable/sym_def_app_icon"
@@ -55,7 +55,7 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.04"
-                app:layout_constraintStart_toEndOf="@+id/image"
+                app:layout_constraintStart_toEndOf="@+id/recents_platform_logo"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

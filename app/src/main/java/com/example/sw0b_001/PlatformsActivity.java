@@ -50,6 +50,13 @@ public class PlatformsActivity extends AppCompatActivity{
         recyclerView.setAdapter(platformsRecyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        changeSupportTextVisibility();
+
+
+    }
+
+
+    private void changeSupportTextVisibility() {
         /*
         if(platforms.size() < 1 ) {
 //            findViewById(R.id.textView3).setVisibility(View.INVISIBLE);
@@ -62,6 +69,7 @@ public class PlatformsActivity extends AppCompatActivity{
 
          */
     }
+
 
     public void linkPrivacyPolicy(View view) {
         Uri intentUri = Uri.parse(getResources().getString(R.string.store_tokens));

@@ -55,7 +55,7 @@ public class TextBodyActivity extends AppCompatActivity {
         TextView subject = findViewById(R.id.text_provider);
         subject.setText(platform.getName());
 //
-        ImageView emailImage = findViewById(R.id.image);
+        ImageView emailImage = findViewById(R.id.recents_platform_logo);
         emailImage.setImageResource(textMessage.getImage());
 
         TextView dateTime = findViewById(R.id.subjectSub);
