@@ -89,7 +89,7 @@ public class TextComposeActivity extends AppCompatActivity {
     }
 
     public void onTweetButtonClick(View view) {
-        EditText bodyEditText = findViewById(R.id.email_body);
+        EditText bodyEditText = findViewById(R.id.tweet_compose_text);
         String body = bodyEditText.getText().toString();
 
         try {

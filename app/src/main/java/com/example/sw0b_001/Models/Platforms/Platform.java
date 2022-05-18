@@ -1,15 +1,8 @@
 package com.example.sw0b_001.Models.Platforms;
 
-import android.content.Context;
-import android.content.Intent;
-
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-
-import com.example.sw0b_001.EmailThreadsActivity;
-import com.example.sw0b_001.TextThreadActivity;
 
 //@DatabaseView("SELECT platform.name, platform.description, platform.provider, platform.image, platform.id FROM platform")
 @Entity(indices = {@Index(value={"name"}, unique = true)})
