@@ -2,32 +2,27 @@ package com.example.sw0b_001;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.SystemClock;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.room.Room;
 
-import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Helpers.CustomHelpers;
-import com.example.sw0b_001.Models.GatewayClients.GatewayClientsDao;
-import com.example.sw0b_001.Models.Platforms.Platform;
-import com.example.sw0b_001.Models.Platforms.PlatformDao;
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
-import com.example.sw0b_001.Providers.Text.TextMessage;
-import com.example.sw0b_001.Providers.Text.TextMessageDao;
+import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
+import com.example.sw0b_001.Models.Platforms.Platform;
+import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
+import com.example.sw0b_001.Models.PublisherHandler;
+import com.example.sw0b_001.Models.SMSHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStoreException;
@@ -55,9 +50,9 @@ public class TextComposeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_text_compose);
+        setContentView(R.layout.activity_tweet_compose);
 
-        Toolbar composeToolbar = (Toolbar) findViewById(R.id.email_compose_toolbar);
+        Toolbar composeToolbar = (Toolbar) findViewById(R.id.tweet_toolbar);
         setSupportActionBar(composeToolbar);
 
         // Get a support ActionBar corresponding to this toolbar
@@ -65,42 +60,22 @@ public class TextComposeActivity extends AppCompatActivity {
 
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
-//        if(!checkPermission(Manifest.permission.SEND_SMS)) {
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, MY_PERMISSIONS_REQUEST_SEND_SMS);
-//        }
-        platformId = getIntent().getLongExtra("platform_id", -1);
 
-        try {
-            Thread getPhonenumber = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Datastore platformDb = Room.databaseBuilder(getApplicationContext(),
-                            Datastore.class, Datastore.DatabaseName).build();
-                    GatewayClientsDao gatewayClientsDao = platformDb.gatewayClientsDao();
-                    phonenumbers = gatewayClientsDao.getAll();
+        autoFocusKeyboard();
+    }
 
-                    PlatformDao platformDao = platformDb.platformDao();
-                    platform = platformDao.get(platformId);
-                }
-            });
-            getPhonenumber.start();
-            try {
-                getPhonenumber.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    private void autoFocusKeyboard() {
+
+        // Focus
+        EditText tweetComposeEditText = findViewById(R.id.tweet_compose_text);
+        tweetComposeEditText.postDelayed(new Runnable() {
+            public void run() {
+                tweetComposeEditText.requestFocus();
+
+                tweetComposeEditText.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_DOWN, 0f, 0f, 0));
+                tweetComposeEditText.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0f, 0f, 0));
             }
-            securityLayer = new SecurityHandler(getApplicationContext());
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        }
+        }, 200);
     }
 
     @Override
@@ -109,146 +84,57 @@ public class TextComposeActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        EditText body = findViewById(R.id.email_body);
-
-        switch (item.getItemId()) {
-            /*
-            case R.id.discard:
-                startActivity(new Intent(this, EmailThreadsActivity.class));
-//                to.setText("");
-//                subject.setText("");
-                body.setText("");
-                finished_thread(null);
-                return true;
-
-             */
-
-            case R.id.action_send:
-                Thread storeEmailMessage = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        TextMessage textMessage = new TextMessage()
-                                .setDatetime(CustomHelpers.getDateTime())
-                                .setStatus("requested")
-                                .setPlatformId(platformId)
-                                .setImage(CustomHelpers.getLetterImage(body.getText().toString().charAt(0)))
-                                .setBody(body.getText().toString());
-                        Datastore textStoreDB = Room.databaseBuilder(getApplicationContext(),
-                                Datastore.class, Datastore.DatabaseName).build();
-
-                        TextMessageDao platformsDao = textStoreDB.textMessageDao();
-                        textMessageId = platformsDao.insertAll(textMessage);
-                    }
-                });
-                storeEmailMessage.start();
-                try {
-                    storeEmailMessage.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    sendMessage(body.getText().toString());
-                } catch (BadPaddingException e) {
-                    e.printStackTrace();
-                } catch (InvalidAlgorithmParameterException e) {
-                    e.printStackTrace();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (IllegalBlockSizeException e) {
-                    e.printStackTrace();
-                } catch (UnrecoverableKeyException e) {
-                    e.printStackTrace();
-                } catch (KeyStoreException e) {
-                    e.printStackTrace();
-                } catch (NoSuchPaddingException e) {
-                    e.printStackTrace();
-                } catch (InvalidKeyException e) {
-                    e.printStackTrace();
-                } catch (CertificateException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (UnrecoverableEntryException e) {
-                    e.printStackTrace();
-                }
-                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
+    private String processTextForEncryption(String platformLetter, String body) {
+        return platformLetter + ":" + body;
     }
 
+    public void onTweetButtonClick(View view) {
+        EditText bodyEditText = findViewById(R.id.email_body);
+        String body = bodyEditText.getText().toString();
 
-    private void sendMessage(String body) throws BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, IllegalBlockSizeException, UnrecoverableEntryException, KeyStoreException, NoSuchPaddingException, InvalidKeyException, CertificateException, IOException {
-//        Toast.makeText(getBaseContext(), "SMS sending...",yy Toast.LENGTH_LONG).show();
-        String phonenumber = "";
-        for(GatewayClient number : phonenumbers) {
-//            Log.i(this.getLocalClassName(), "[+] Number: " + number.getNumber());
-            if(number.isDefault())
-                phonenumber = number.getMSISDN();
+        try {
+
+            long platformId = getIntent().getLongExtra("platform_id", -1);
+            Platform platform = PlatformsHandler.getPlatform(getApplicationContext(), platformId);
+            String formattedContent = processTextForEncryption(platform.getLetter(), body);
+            String encryptedContentBase64 = PublisherHandler.formatForPublishing(getApplicationContext(), formattedContent);
+            String gatewayClientMSISDN = GatewayClientsHandler.getDefaultGatewayClientMSISDN(getApplicationContext());
+
+
+            Intent defaultSMSAppIntent = SMSHandler.transferToDefaultSMSApp(gatewayClientMSISDN, encryptedContentBase64);
+            if(defaultSMSAppIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(defaultSMSAppIntent);
+                setResult(Activity.RESULT_OK, new Intent());
+
+                EncryptedContentHandler.store(getApplicationContext(), encryptedContentBase64, gatewayClientMSISDN, platform.getName());
+                finish();
+            }
+
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableKeyException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (UnrecoverableEntryException e) {
+            e.printStackTrace();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
         }
-
-        if(phonenumber.length() < 1 ) {
-            Toast.makeText(this, "Default number could not be determined", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-//        body = formatForSMS(platforms.getProvider().toLowerCase(), platforms.getName().toLowerCase(), "send", body);
-//            Log.i(this.getLocalClassName(), ">> Body: " + body);
-        body = getEncryptedSMS(body);
-//            Log.i(this.getLocalClassName(), ">> decrypted: " + new String(securityLayer.decrypt_AES(Base64.decode(body.getBytes(), Base64.DEFAULT))));
-//            Log.i(this.getLocalClassName(), ">> iv: " + new String(securityLayer.getIV()));
-//            byte[] byte_encryptedIv = securityLayer.encrypt_AES(securityLayer.getIV(), passwdHash.getBytes());
-//            byte[] fullmessage = securityLayer.encrypt_AES((new String(securityLayer.getIV()) + "_" + body), passwdHash.getBytes("UTF-8"));
-        // body = new String(securityLayer.getIV()) + body;
-//            body = Base64.encodeToString(fullmessage, Base64.DEFAULT);
-//            Log.i(this.getLocalClassName(), "[+] Transmission data: " + body);
-//            CustomHelpers.sendEmailSMS(getBaseContext(), body, phonenumber, emailId);
-        Intent intent = sendSMSMessageIntent(body, phonenumber);
-        finished_thread(intent);
-        // TODO: work out how the IV gets encrypted before sending
-
-    }
-
-    public Intent sendSMSMessageIntent(String text, String phonenumber) {
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("smsto:"+phonenumber));
-        intent.putExtra("sms_body", text);
-
-        return intent;
-    }
-
-    private String formatForSMS(String provider, String platform, String protocol, String body) throws UnsupportedEncodingException {
-       // Gmail = to:subject:body
-        // TODO: put platform and protocol
-        // return provider + ":" + platform + ":" + protocol + ":" + to + ":" + subject + ":" + body;
-        return provider + ":" + platform + ":" + protocol + ":" + body;
-    }
-
-    private void finished_thread(Intent intent) {
-         intent.putExtra("platform_id", platformId);
-        if (intent.resolveActivity(getPackageManager()) != null ) {
-            startActivity(intent);
-            setResult(Activity.RESULT_OK, new Intent());
-            finish();
-        }
-        else {
-            Toast.makeText(this, "Could not transfer to default app", Toast.LENGTH_SHORT).show();
-            Log.i(this.getLocalClassName(), "isPackageManager= " + intent.resolveActivity(getPackageManager()));
-        }
-    }
-
-    private String getEncryptedSMS(String data) throws BadPaddingException, InvalidKeyException, NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException, InvalidAlgorithmParameterException, UnrecoverableEntryException, KeyStoreException, CertificateException, IOException {
-        String randString = securityLayer.generateRandom(16);
-//        Log.i(this.getLocalClassName(), ">> Rand string: " + randString);
-        // byte[] encryptedData = securityLayer.encrypt_AES(data, randString.getBytes());
-        return "";
-        // return Base64.encodeToString(encryptedData, Base64.NO_WRAP);
     }
 
 }

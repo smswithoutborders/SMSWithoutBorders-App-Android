@@ -2,6 +2,7 @@ package com.example.sw0b_001;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
@@ -46,6 +47,12 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
 
         this.gatewayClientsRecyclerAdapter = new GatewayClientsRecyclerAdapter( getApplicationContext(), this);
         populateSettings();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.gateway_client_settings_toolbar, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     public void populateSettings() {

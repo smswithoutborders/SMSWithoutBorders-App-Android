@@ -1,9 +1,7 @@
 package com.example.sw0b_001;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,33 +47,8 @@ public class PlatformsActivity extends AppCompatActivity{
         platformsRecyclerAdapter = new PlatformsRecyclerAdapter(this, platforms, R.layout.layout_cardlist_platforms, this);
         recyclerView.setAdapter(platformsRecyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        changeSupportTextVisibility();
-
-
     }
 
-
-    private void changeSupportTextVisibility() {
-        /*
-        if(platforms.size() < 1 ) {
-//            findViewById(R.id.textView3).setVisibility(View.INVISIBLE);
-            findViewById(R.id.no_platform_txt).setVisibility(View.VISIBLE);
-            findViewById(R.id.btn_store_tokens).setVisibility(View.VISIBLE);
-        }
-
-        findViewById(R.id.no_platform_txt).setVisibility(View.INVISIBLE);
-        findViewById(R.id.btn_store_tokens).setVisibility(View.INVISIBLE);
-
-         */
-    }
-
-
-    public void linkPrivacyPolicy(View view) {
-        Uri intentUri = Uri.parse(getResources().getString(R.string.store_tokens));
-        Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
-        startActivity(intent);
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

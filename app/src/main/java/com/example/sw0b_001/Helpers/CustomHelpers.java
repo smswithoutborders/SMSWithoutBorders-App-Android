@@ -12,6 +12,7 @@ public class CustomHelpers {
         String currentDateandTime = sdf.format(new Date());
         return currentDateandTime;
     }
+
     public static int getLetterImage(char letter) {
         int image = R.drawable.ic_round_message_24;
         switch (Character.toLowerCase(letter)) {

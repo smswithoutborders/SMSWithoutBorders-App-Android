@@ -5,76 +5,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="416dp"
-        android:layout_height="553dp"
-        android:background="#000000"
-        android:backgroundTint="#000000"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tweet_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/default_dark"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/tweet_btn"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="#2196F3"
+        android:onClick="onTweetButtonClick"
+        android:text="Tweet"
+        android:textColor="@color/white"
+        app:cornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tweet_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tweet_toolbar" />
+
+    <EditText
+        android:id="@+id/tweet_compose_text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@null"
+        android:gravity="start|top"
+        android:hint="What's happening?"
+        android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="573dp">
-
-            <EditText
-                android:id="@+id/editTextTextMultiLine2"
-                android:layout_width="420dp"
-                android:layout_height="438dp"
-                android:ems="10"
-                android:gravity="start|top"
-                android:hint="Compose tweet "
-                android:inputType="textMultiLine"
-                android:paddingLeft="16sp"
-                android:paddingTop="16sp"
-                android:paddingRight="16sp"
-                android:paddingBottom="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.454"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.37" />
-
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/editTextTextMultiLine2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.98"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.56"
-                app:srcCompat="@drawable/ic_baseline_cancel_24" />
-
-
-            <Button
-                android:id="@+id/user_password"
-                android:layout_width="156dp"
-
-                android:layout_height="48dp"
-                android:backgroundTint="#81bffc"
-                android:onClick="validateUsersCloudPassword"
-                android:text="tweet"
-                android:textAlignment="center"
-                android:textColor="#061993"
-                android:textSize="20sp"
-                app:cornerRadius="10dp"
-                app:iconTintMode="add"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.87"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine2"
-                app:layout_constraintVertical_bias="0.23000002" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintTop_toBottomOf="@+id/tweet_toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

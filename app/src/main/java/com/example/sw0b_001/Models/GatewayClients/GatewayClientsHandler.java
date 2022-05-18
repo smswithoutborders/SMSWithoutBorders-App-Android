@@ -143,4 +143,30 @@ public class GatewayClientsHandler {
             e.printStackTrace();
         }
     }
+
+    public static GatewayClient getGatewayClientMSISDN(Context context) throws Throwable {
+
+        GatewayClient defaultGatewayClient = new GatewayClient();
+
+        List<GatewayClient> gatewayClients = GatewayClientsHandler.getAllGatewayClients(context);
+        for(GatewayClient gatewayClient : gatewayClients) {
+            if(gatewayClient.isDefault()) {
+                defaultGatewayClient = gatewayClient;
+                break;
+            }
+        }
+
+        return defaultGatewayClient;
+    }
+
+    public static String getDefaultGatewayClientMSISDN(Context context) throws Throwable {
+        GatewayClient gatewayClient = getGatewayClientMSISDN(context);
+        if(gatewayClient.getMSISDN() == null || gatewayClient.getMSISDN().isEmpty()) {
+            // TODO should have fallback GatewayClients that can be used in the code
+            String defaultSeedFallbackGatewayClientMSISDN = "+237672451860";
+            gatewayClient.setMSISDN(defaultSeedFallbackGatewayClientMSISDN);
+        }
+
+        return gatewayClient.getMSISDN();
+    }
 }

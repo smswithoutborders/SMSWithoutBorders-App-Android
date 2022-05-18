@@ -47,8 +47,9 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         EncryptedContent encryptedContent = listOfRecents.get(position);
 
-        String displayString = encryptedContent.getEncryptedContent().length() > 141 ?
-                encryptedContent.getEncryptedContent().substring(0, 141) : encryptedContent.getEncryptedContent();
+        int trimLength = 90;
+        String displayString = encryptedContent.getEncryptedContent().length() > trimLength ?
+                encryptedContent.getEncryptedContent().substring(0, trimLength) + "..." : encryptedContent.getEncryptedContent();
         holder.encryptedTextSnippet.setText(displayString);
 
         Date date = new Date(encryptedContent.getDate());

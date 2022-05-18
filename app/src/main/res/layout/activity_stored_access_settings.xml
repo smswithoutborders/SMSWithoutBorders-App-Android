@@ -40,7 +40,7 @@
         android:layout_marginBottom="571dp"
         android:backgroundTint="@color/default_dark"
         android:elevation="0dp"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="@font/roboto"
         android:onClick="onManualRefreshClick"
         android:text="Manually refresh"
         android:textAlignment="textStart"
