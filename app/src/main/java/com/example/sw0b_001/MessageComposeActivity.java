@@ -9,6 +9,7 @@ import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -16,6 +17,26 @@ import android.widget.EditText;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
+import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
+import com.example.sw0b_001.Models.Platforms.Platform;
+import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
+import com.example.sw0b_001.Models.PublisherHandler;
+import com.example.sw0b_001.Models.SMSHandler;
+
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableEntryException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class MessageComposeActivity extends AppCompatActivity {
 
@@ -46,6 +67,85 @@ public class MessageComposeActivity extends AppCompatActivity {
                 viewEditText.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0f, 0f, 0));
             }
         }, 200);
+    }
+
+    private String processEmailForEncryption(String platformLetter, String to, String message) {
+        return platformLetter + ":" + to + ":" + message;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        EditText toEditText = findViewById(R.id.message_recipient_number_edit_text);
+        EditText messageEditText = findViewById(R.id.message_compose_text);
+
+        switch (item.getItemId()) {
+            case R.id.action_send:
+                String to = toEditText.getText().toString();
+                String message = messageEditText.getText().toString();
+
+                if(to.isEmpty()) {
+                    toEditText.setError("Recipient cannot be empty!");
+                    return false;
+                }
+
+                if(message.isEmpty()) {
+                    messageEditText.setError("Body should not be empty!");
+                    return false;
+                }
+
+                try {
+                    long platformId = getIntent().getLongExtra("platform_id", -1);
+
+                    Platform platform = PlatformsHandler.getPlatform(getApplicationContext(), platformId);
+                    String formattedContent = processEmailForEncryption(platform.getLetter(), to, message);
+                    String encryptedContentBase64 = PublisherHandler.formatForPublishing(getApplicationContext(), formattedContent);
+                    String gatewayClientMSISDN = GatewayClientsHandler.getDefaultGatewayClientMSISDN(getApplicationContext());
+
+
+                    Intent defaultSMSAppIntent = SMSHandler.transferToDefaultSMSApp(gatewayClientMSISDN, encryptedContentBase64);
+                    if(defaultSMSAppIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(defaultSMSAppIntent);
+                        setResult(Activity.RESULT_OK, new Intent());
+
+                        EncryptedContentHandler.store(getApplicationContext(), encryptedContentBase64, gatewayClientMSISDN, platform.getName());
+                        finish();
+                    }
+
+                    return true;
+
+                } catch (BadPaddingException e) {
+                    e.printStackTrace();
+                } catch (InvalidAlgorithmParameterException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (IllegalBlockSizeException e) {
+                    e.printStackTrace();
+                } catch (UnrecoverableKeyException e) {
+                    e.printStackTrace();
+                } catch (KeyStoreException e) {
+                    e.printStackTrace();
+                } catch (NoSuchPaddingException e) {
+                    e.printStackTrace();
+                } catch (InvalidKeyException e) {
+                    e.printStackTrace();
+                } catch (CertificateException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (UnrecoverableEntryException e) {
+                    e.printStackTrace();
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+                return false;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     @Override

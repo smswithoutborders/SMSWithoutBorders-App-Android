@@ -20,6 +20,7 @@ import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
+import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.User.UserHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
 
@@ -133,7 +134,8 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         platform.setLetter(JSONPlatform.getString("letter"));
 
                         // long logoDownloadId = downloadLogoOnline(JSONPlatform.getString("logo"), JSONPlatform.getString("name"));
-                        long logoDownloadId = -1;
+
+                        long logoDownloadId = PlatformsHandler.hardGetLogoByName(getApplicationContext(), platform.getName());
                         platform.setLogo(logoDownloadId);
 
                         platformDao.insert(platform);

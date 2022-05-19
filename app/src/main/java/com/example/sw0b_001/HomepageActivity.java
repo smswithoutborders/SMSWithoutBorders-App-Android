@@ -56,7 +56,10 @@ public class HomepageActivity extends AppCompatActivity {
 
             RecentsRecyclerAdapter recentsRecyclerAdapter = new RecentsRecyclerAdapter(this, encryptedContentList, R.layout.layout_cardlist_recents);
             recentsRecyclerView.setAdapter(recentsRecyclerAdapter);
-            recentsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+            linearLayoutManager.setStackFromEnd(true);
+            linearLayoutManager.setReverseLayout(true);
+            recentsRecyclerView.setLayoutManager(linearLayoutManager);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

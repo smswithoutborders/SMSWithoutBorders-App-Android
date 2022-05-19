@@ -13,6 +13,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
+import com.example.sw0b_001.Models.Platforms.Platform;
+import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -20,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecyclerAdapter.ViewHolder> {
@@ -52,15 +56,26 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
                 encryptedContent.getEncryptedContent().substring(0, trimLength) + "..." : encryptedContent.getEncryptedContent();
         holder.encryptedTextSnippet.setText(displayString);
 
+        Platform platform = PlatformsHandler.getPlatform(this.context, encryptedContent.getPlatformName());
+
+        if(platform.getLogo() != -1)
+            holder.platformLogo.setImageResource((int) platform.getLogo());
+
         Date date = new Date(encryptedContent.getDate());
         if(DateUtils.isToday(encryptedContent.getDate())) {
             DateFormat format = new SimpleDateFormat("HH:mm a");
             holder.date.setText(format.format(date));
         }
         else {
-            DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-            holder.date.setText(format.format(date));
+            DateFormat format = new SimpleDateFormat("MMMM dd");
+
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(date);
+
+            holder.date.setText(format.format(calendar.getTime()));
         }
+
+
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

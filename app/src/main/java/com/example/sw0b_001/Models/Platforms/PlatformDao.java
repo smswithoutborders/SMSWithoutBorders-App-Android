@@ -16,6 +16,9 @@ public interface PlatformDao {
     @Query("SELECT * FROM Platform WHERE id=:platform_id")
     Platform get(long platform_id);
 
+    @Query("SELECT * FROM Platform WHERE name=:platformName")
+    Platform get(String platformName);
+
     @Insert
     void insertAll(Platform... platforms);
 
