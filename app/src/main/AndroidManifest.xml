@@ -28,14 +28,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp"
         android:usesCleartextTraffic="true">
+
         <activity
             android:name=".MessageComposeActivity"
             android:label="Compose new message"
             android:parentActivityName=".PlatformsActivity"
-            android:theme="@style/Theme.MyAppNoBar"></activity>
-        <activity
-            android:name=".SyncHandshakeActivity"
             android:theme="@style/Theme.MyAppNoBar" />
+
+
         <activity
             android:name=".SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -46,13 +46,36 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".SyncHandshakeActivity"
+            android:theme="@style/Theme.MyAppNoBar" />
+
         <activity
             android:name=".WelcomeActivity"
-            android:theme="@style/Theme.MyAppNoBar"></activity>
+            android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:name=".SynchroniseTypeActivity"
             android:label=""
-            android:parentActivityName=".WelcomeActivity"></activity>
+            android:parentActivityName=".WelcomeActivity">
+
+            <intent-filter android:label="pending_name">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
+                <data
+                    android:scheme="apps"
+                    android:host="staging.smswithoutborders.com"
+                    android:pathPrefix="/v2/sync/users/" />
+                <data
+                    android:scheme="app"
+                    android:host="staging.smswithoutborders.com"
+                    android:pathPrefix="/v2/sync/users/" />
+                <!-- note that the leading "/" is required for pathPrefix-->
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".PlatformsActivity"
             android:label="Stored Access"
@@ -64,21 +87,19 @@
         <activity
             android:name=".HomepageActivity"
             android:label=""
-            android:theme="@style/Theme.MyAppNoBar"></activity>
+            android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:name=".SettingsActivities.SettingsActivity"
             android:label="Settings"
-            android:theme="@style/Theme.MyAppNoBar"></activity>
+            android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:name=".GatewayClientsSettingsActivity"
             android:parentActivityName=".SettingsActivities.SettingsActivity"
-            android:theme="@style/Theme.MyAppNoBar">
-        </activity>
-
+            android:theme="@style/Theme.MyAppNoBar"></activity>
         <activity
             android:name=".SettingsActivities.StoreAccessSettingsActivity"
             android:label="Store Access"
-            android:parentActivityName=".SettingsActivities.SettingsActivity"></activity>
+            android:parentActivityName=".SettingsActivities.SettingsActivity" />
         <activity
             android:name=".EmailComposeActivity"
             android:parentActivityName=".PlatformsActivity"

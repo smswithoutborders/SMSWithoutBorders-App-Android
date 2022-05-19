@@ -40,6 +40,7 @@
         android:layout_height="wrap_content"
 
         android:backgroundTint="#FFFFFF"
+        android:onClick="onContinueClick"
         android:text="continue "
         android:textAlignment="center"
         android:textColor="#061993"

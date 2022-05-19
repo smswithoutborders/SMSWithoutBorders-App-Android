@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.net.URL;
+
 public class SynchroniseTypeActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 200;
 
@@ -22,15 +24,39 @@ public class SynchroniseTypeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_synchronise_type);
 
-        /*
-        Toolbar composeToolbar = (Toolbar) findViewById(R.id.synchronise_type_toolbar);
-        setSupportActionBar(composeToolbar);
-         */
 
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
+
+        Intent defaultIntent = getIntent();
+
+        if(defaultIntent.getAction() != null && defaultIntent.getAction().equals(Intent.ACTION_VIEW)) {
+            try {
+                String resultValue = defaultIntent.getDataString();
+
+                if(resultValue.contains("apps://"))
+                    resultValue = resultValue.replace("apps://",  "https://");
+
+                else
+                    resultValue = resultValue.replace("app://", "http://");
+
+                URL resultURL = new URL(resultValue);
+
+                Intent intent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
+                intent.putExtra("state", resultValue);
+
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+
+                finish();
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public void scanQR(View view) {
@@ -43,6 +69,13 @@ public class SynchroniseTypeActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
 
         }
+    }
+
+    public void onContinueClick(View view) {
+        String smswithoutbordersHandshakeUrl = "https://staging.smswithoutborders.com/login";
+        Uri intentUri = Uri.parse(smswithoutbordersHandshakeUrl);
+        Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
+        startActivity(intent);
     }
 
     @Override
@@ -70,13 +103,6 @@ public class SynchroniseTypeActivity extends AppCompatActivity {
         Uri intentUri = Uri.parse(getResources().getString(R.string.privacy_policy));
         Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
         startActivity(intent);
-    }
-
-
-    public void backToWelcome(View view) {
-        Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
-        startActivity(intent);
-
     }
 
 }

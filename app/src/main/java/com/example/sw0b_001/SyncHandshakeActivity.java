@@ -41,10 +41,13 @@ import java.security.cert.CertificateException;
 
 public class SyncHandshakeActivity extends AppCompatActivity {
 
+    public static String AUTO_SYNC = "AUTO_SYNC";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sync_processing);
+        Intent intent = getIntent();
     }
 
 
@@ -52,7 +55,9 @@ public class SyncHandshakeActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
+        Intent intent = getIntent();
         String state = getIntent().getStringExtra("state");
+
         if(state.equals("complete_handshake")) {
             Log.d(this.getLocalClassName(), "Completing handshake");
 

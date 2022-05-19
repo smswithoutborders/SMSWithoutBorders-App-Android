@@ -44,6 +44,7 @@ public class SplashActivity extends AppCompatActivity {
         activitySplashBinding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(activitySplashBinding.getRoot());
         screenContentView = activitySplashBinding.fullscreenContent;
+
     }
 
     @Override
@@ -151,6 +152,7 @@ public class SplashActivity extends AppCompatActivity {
     private void delayedHide(int delayMillis) {
         hideElementsHandler.removeCallbacks(mHideRunnable);
         hideElementsHandler.postDelayed(mHideRunnable, delayMillis);
+
 
         if(checkHasSharedKey()) {
             AccessHomePageActivity();
