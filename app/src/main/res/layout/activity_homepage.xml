@@ -44,7 +44,7 @@
         app:startIconTint="@color/white">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/user_password"
+            android:id="@+id/message_recipient_number_edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Search"
@@ -98,6 +98,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:backgroundTint="#81bffc"
+        app:tint="@color/white"
         android:clickable="true"
         android:onClick="onClickPlatformSelect"
         app:layout_constraintBottom_toTopOf="@id/homepage_bottom_navbar"

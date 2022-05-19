@@ -105,6 +105,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:autoLink="all"
+        android:background="@null"
         android:gravity="start|top"
         android:hint="Compose email"
         android:inputType="textMultiLine"

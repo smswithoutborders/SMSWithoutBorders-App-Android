@@ -58,7 +58,7 @@ public class PasswordActivity extends AppCompatActivity {
 
     public void validateUsersCloudPassword(View view) throws GeneralSecurityException, IOException, InterruptedException {
 
-        EditText passwordField = findViewById(R.id.user_password);
+        EditText passwordField = findViewById(R.id.message_recipient_number_edit_text);
         SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
         GatewayServer gatewayServers[] = {new GatewayServer()};
 

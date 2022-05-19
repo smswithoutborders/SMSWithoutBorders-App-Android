@@ -7,6 +7,7 @@ import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.EmailComposeActivity;
+import com.example.sw0b_001.MessageComposeActivity;
 import com.example.sw0b_001.TextComposeActivity;
 
 import java.util.ArrayList;
@@ -23,6 +24,11 @@ public class PlatformsHandler {
 
             case "text": {
                 intent = new Intent(context, TextComposeActivity.class);
+                break;
+            }
+
+            case "messaging": {
+                intent = new Intent(context, MessageComposeActivity.class);
                 break;
             }
             // TODO: put a default here

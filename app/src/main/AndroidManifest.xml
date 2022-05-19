@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
     package="com.example.sw0b_001">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <queries>
         <intent>
             <action android:name="android.intent.action.SENDTO" />
+
             <data android:scheme="*" />
         </intent>
     </queries>
@@ -26,87 +27,67 @@
         android:roundIcon="@mipmap/main_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp"
-
         android:usesCleartextTraffic="true">
-
-
+        <activity
+            android:name=".MessageComposeActivity"
+            android:label="Compose new message"
+            android:parentActivityName=".PlatformsActivity"
+            android:theme="@style/Theme.MyAppNoBar"></activity>
         <activity
             android:name=".SyncHandshakeActivity"
             android:theme="@style/Theme.MyAppNoBar" />
-
-
         <activity
             android:name=".SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/Theme.MaterialComponents.Fullscreen">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".WelcomeActivity"
-            android:theme="@style/Theme.MyAppNoBar">
-
-        </activity>
-
-
+        <activity
+            android:name=".WelcomeActivity"
+            android:theme="@style/Theme.MyAppNoBar"></activity>
         <activity
             android:name=".SynchroniseTypeActivity"
             android:label=""
-            android:parentActivityName=".WelcomeActivity">
-        </activity>
-
-
-
-
+            android:parentActivityName=".WelcomeActivity"></activity>
         <activity
             android:name=".PlatformsActivity"
-            android:parentActivityName=".HomepageActivity"
-            android:label="Synchronized Platforms" >
+            android:label="Stored Access"
+            android:parentActivityName=".HomepageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomepageActivity" />
         </activity>
-
         <activity
             android:name=".HomepageActivity"
-            android:theme="@style/Theme.MyAppNoBar"
-            android:label="">
-        </activity>
-
+            android:label=""
+            android:theme="@style/Theme.MyAppNoBar"></activity>
         <activity
             android:name=".SettingsActivities.SettingsActivity"
-            android:theme="@style/Theme.MyAppNoBar"
-            android:label="Settings" >
-        </activity>
-
+            android:label="Settings"
+            android:theme="@style/Theme.MyAppNoBar"></activity>
         <activity
             android:name=".GatewayClientsSettingsActivity"
             android:parentActivityName=".SettingsActivities.SettingsActivity"
             android:theme="@style/Theme.MyAppNoBar">
-             >
-
         </activity>
 
         <activity
             android:name=".SettingsActivities.StoreAccessSettingsActivity"
-            android:parentActivityName=".SettingsActivities.SettingsActivity"
             android:label="Store Access"
-            >
-
-        </activity>
-
+            android:parentActivityName=".SettingsActivities.SettingsActivity"></activity>
         <activity
             android:name=".EmailComposeActivity"
             android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".TextComposeActivity"
@@ -114,9 +95,9 @@
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".QRScannerActivity"
