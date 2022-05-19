@@ -1,6 +1,7 @@
 package com.example.sw0b_001.SettingsActivities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -22,5 +23,12 @@ public class StoreAccessSettingsActivity extends AppCompatActivity {
         Intent scanQRCodeIntent = new Intent(this, QRScannerActivity.class);
         startActivity(scanQRCodeIntent);
         finish();
+    }
+
+    public void onContinueClick(View view) {
+        String smswithoutbordersHandshakeUrl = "https://staging.smswithoutborders.com/login";
+        Uri intentUri = Uri.parse(smswithoutbordersHandshakeUrl);
+        Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
+        startActivity(intent);
     }
 }

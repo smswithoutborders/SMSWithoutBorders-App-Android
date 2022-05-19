@@ -14,4 +14,5 @@
     <color name="black_overlay">#66000000</color>
     <color name="highlight_blue">#311B92</color>
     <color name="logo_blue1">#9BBEF1</color>
+    <color name="button_gray">#1B1A1A</color>
 </resources>
