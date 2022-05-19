@@ -108,6 +108,7 @@
         android:background="@null"
         android:gravity="start|top"
         android:hint="Compose email"
+        android:padding="40dp"
         android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

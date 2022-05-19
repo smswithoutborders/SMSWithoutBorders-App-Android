@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -20,7 +19,6 @@ import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.PublisherHandler;
 import com.example.sw0b_001.Models.SMSHandler;
-import com.example.sw0b_001.Security.SecurityHandler;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -38,13 +36,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class TextComposeActivity extends AppCompatActivity {
-
-    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
-    SecurityHandler securityLayer;
-    long textMessageId;
     private List<GatewayClient> phonenumbers = new ArrayList<>();
-    private Platform platform;
-    private long platformId;
 
 
     @Override
@@ -76,12 +68,6 @@ public class TextComposeActivity extends AppCompatActivity {
                 tweetComposeEditText.dispatchTouchEvent(MotionEvent.obtain(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), MotionEvent.ACTION_UP, 0f, 0f, 0));
             }
         }, 200);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.email_compose_toolbar, menu);
-        return super.onCreateOptionsMenu(menu);
     }
 
     private String processTextForEncryption(String platformLetter, String body) {
