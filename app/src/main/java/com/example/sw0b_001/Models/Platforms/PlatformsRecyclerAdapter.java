@@ -1,9 +1,7 @@
 package com.example.sw0b_001.Models.Platforms;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,12 +50,11 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder viewHolder, int position) {
         Platform platform = this.platforms.get(position);
-        viewHolder.name.setText(platform.getName());
-        // viewHolder.image.setImageResource(platform.getLogo());
+        String platformNameFormatted = Character.toUpperCase(platform.getName().charAt(0)) + platform.getName().substring(1);
+        viewHolder.name.setText(platformNameFormatted);
 
-        DownloadManager downloadManager = (DownloadManager) this.context.getSystemService(Context.DOWNLOAD_SERVICE);
-        Uri platformLogoURI = downloadManager.getUriForDownloadedFile(platform.getLogo());
-        viewHolder.image.setImageResource(R.drawable.gmail);
+        if(platform.getLogo() != -1)
+            viewHolder.image.setImageResource((int) platform.getLogo());
 
         viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -78,7 +78,7 @@
 
         <activity
             android:name=".PlatformsActivity"
-            android:label="Stored Access"
+            android:label="Compose for Stored Access"
             android:parentActivityName=".HomepageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
