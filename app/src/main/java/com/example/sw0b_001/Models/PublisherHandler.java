@@ -66,7 +66,8 @@ public class PublisherHandler {
 
             final String encryptedContent = IV + encryptedEmailContent;
 
-            return encryptedContent;
+            String encryptedContentBase64 = Base64.encodeToString(encryptedContent.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+            return encryptedContentBase64;
         }
         catch(Exception e ) {
             throw new Throwable(e);
