@@ -59,6 +59,14 @@ public class SynchroniseTypeActivity extends AppCompatActivity {
 
     }
 
+
+    public void onContinueClick(View view) {
+        String smswithoutbordersHandshakeUrl = "https://staging.smswithoutborders.com/login";
+        Uri intentUri = Uri.parse(smswithoutbordersHandshakeUrl);
+        Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
+        startActivity(intent);
+    }
+
     public void scanQR(View view) {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             Intent intent = new Intent(this, QRScannerActivity.class);
@@ -69,13 +77,6 @@ public class SynchroniseTypeActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
 
         }
-    }
-
-    public void onContinueClick(View view) {
-        String smswithoutbordersHandshakeUrl = "https://staging.smswithoutborders.com/login";
-        Uri intentUri = Uri.parse(smswithoutbordersHandshakeUrl);
-        Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
-        startActivity(intent);
     }
 
     @Override

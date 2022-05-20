@@ -8,11 +8,9 @@
     <color name="pending_gray">#A1A1A1</color>
     <color name="light_blue_600">#FF039BE5</color>
     <color name="success_blue">#FF039BE5</color>
-    <color name="light_blue_900">#FF01579B</color>
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
-    <color name="highlight_blue">#311B92</color>
     <color name="logo_blue1">#9BBEF1</color>
     <color name="button_gray">#1B1A1A</color>
 </resources>

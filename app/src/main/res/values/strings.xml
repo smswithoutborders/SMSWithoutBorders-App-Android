@@ -1,37 +1,8 @@
 <resources>
     <string name="app_name">SWOB</string>
-    <string name="def_text_nobarcode">No barcode detected</string>
 
-    <string-array name="platforms">
-        <item>gmail</item>
-        <item>twitter</item>
-    </string-array>
-
-    <string-array name="description">
-        <item>Send emails using your gmail email address</item>
-        <item>Send tweet using your twitter address</item>
-    </string-array>
-    <string name="title_activity_splash">FullscreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="login_text">
-        The password required here is the same password you will use to log into your online account.
-        You will be required to enter this password only in the event of you logging out of the app
-        or at this moment when you are synchronizing
-    </string>
-    <string name="qr_permission_text">
-        • Go to https://smswithoutborders.com <br /> &#160;&#160;and signup for an account.<br /><br />
-        • Log into your account and use the <br /> &#160;&#160;wallet to save access to your <br />&#160;platforms<br /><br />
-        • Click "Scan QR" below to begin the <br /> &#160;&#160;synchronization process.<br></br>
-    </string>
     <string name="privacy_policy">
         https://smswithoutborders.com/privacy-policy
     </string>
-    <string name="store_tokens">
-        https://smswithoutborders.com/dashboard/wallet
-    </string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="settings">Settings</string>
-    <string name="add_gateway">Add gateway</string>
 </resources>
