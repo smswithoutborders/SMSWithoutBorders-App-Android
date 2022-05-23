@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
@@ -47,7 +48,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sync_processing);
-        Intent intent = getIntent();
     }
 
 
@@ -55,11 +55,18 @@ public class SyncHandshakeActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        Intent intent = getIntent();
         String state = getIntent().getStringExtra("state");
 
         if(state.equals("complete_handshake")) {
             Log.d(this.getLocalClassName(), "Completing handshake");
+
+            try {
+                EncryptedContentHandler.clearedStoredEncryptedContents(getApplicationContext());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
 
             try {
                 JSONObject jsonObject = new JSONObject(getIntent().getStringExtra("payload"));

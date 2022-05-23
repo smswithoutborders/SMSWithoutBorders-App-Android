@@ -20,6 +20,7 @@ import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.RecentsRecyclerAdapter;
 import com.example.sw0b_001.SettingsActivities.SettingsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -87,14 +88,14 @@ public class HomepageActivity extends AppCompatActivity {
 
     public void bottomNavBar(BottomNavigationView bottomNavigationView) {
         bottomNavigationView.setSelectedItemId(R.id.recents);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
                 switch(item.getItemId()) {
                     case R.id.settings: {
                         Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
                         startActivity(settingsIntent);
-                        overridePendingTransition(R.anim.fragment_fade_enter, R.anim.fragment_fade_exit);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         finish();
                     }
                 }

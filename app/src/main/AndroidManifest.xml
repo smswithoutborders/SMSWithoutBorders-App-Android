@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.sw0b_001">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -63,7 +62,6 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
                 <data
                     android:scheme="apps"
                     android:host="staging.smswithoutborders.com"
@@ -72,6 +70,11 @@
                     android:scheme="app"
                     android:host="staging.smswithoutborders.com"
                     android:pathPrefix="/v2/sync/users/" />
+
+                <data
+                    android:scheme="intent"
+                    android:host="staging.smswithoutborders.com"
+                    android:pathPrefix="/sign-up/" />
                 <!-- note that the leading "/" is required for pathPrefix-->
             </intent-filter>
         </activity>
@@ -84,18 +87,25 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomepageActivity" />
         </activity>
+
+
         <activity
             android:name=".HomepageActivity"
             android:label=""
             android:theme="@style/Theme.MyAppNoBar" />
+
+
         <activity
             android:name=".SettingsActivities.SettingsActivity"
             android:label="Settings"
             android:theme="@style/Theme.MyAppNoBar" />
+
+
         <activity
             android:name=".GatewayClientsSettingsActivity"
             android:parentActivityName=".SettingsActivities.SettingsActivity"
             android:theme="@style/Theme.MyAppNoBar"></activity>
+
         <activity
             android:name=".SettingsActivities.StoreAccessSettingsActivity"
             android:label="Store Access"
@@ -110,6 +120,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+
         <activity
             android:name=".TextComposeActivity"
             android:parentActivityName=".PlatformsActivity"

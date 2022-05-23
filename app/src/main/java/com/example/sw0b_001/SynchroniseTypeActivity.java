@@ -39,8 +39,11 @@ public class SynchroniseTypeActivity extends AppCompatActivity {
                 if(resultValue.contains("apps://"))
                     resultValue = resultValue.replace("apps://",  "https://");
 
-                else
+                else if(resultValue.contains("app://"))
                     resultValue = resultValue.replace("app://", "http://");
+
+                else if(resultValue.contains("intent://"))
+                    return;
 
                 URL resultURL = new URL(resultValue);
 

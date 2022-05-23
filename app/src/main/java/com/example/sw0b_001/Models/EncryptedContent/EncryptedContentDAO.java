@@ -15,4 +15,7 @@ public interface EncryptedContentDAO {
     @Query("SELECT * FROM EncryptedContent")
     List<EncryptedContent> getAll();
 
+    @Query("DELETE FROM EncryptedContent")
+    void deleteAll();
+
 }

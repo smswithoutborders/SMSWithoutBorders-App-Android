@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
 import com.example.sw0b_001.QRScannerActivity;
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.SynchroniseTypeActivity;
@@ -27,7 +28,12 @@ public class StoreAccessSettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stored_access_settings);
     }
 
+    private void cleanseEncryptedContentDatabase() {
+        EncryptedContentHandler.clearedStoredEncryptedContents(getApplicationContext());
+    }
+
     public void onContinueClick(View view) {
+        cleanseEncryptedContentDatabase();
         String smswithoutbordersHandshakeUrl = "https://staging.smswithoutborders.com/login";
         Uri intentUri = Uri.parse(smswithoutbordersHandshakeUrl);
         Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
