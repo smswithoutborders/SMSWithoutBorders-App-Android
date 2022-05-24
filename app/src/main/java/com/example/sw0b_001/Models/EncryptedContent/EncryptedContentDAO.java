@@ -18,4 +18,7 @@ public interface EncryptedContentDAO {
     @Query("DELETE FROM EncryptedContent")
     void deleteAll();
 
+    @Query("SELECT * FROM EncryptedContent WHERE id=:encryptedContentId")
+    EncryptedContent get(long encryptedContentId);
+
 }

@@ -2,6 +2,7 @@ package com.example.sw0b_001.Models;
 
 import android.content.Context;
 import android.util.Base64;
+import android.util.Log;
 
 import androidx.room.Room;
 
@@ -39,6 +40,35 @@ public class PublisherHandler {
         return gatewayServers[0];
     }
 
+    public static String getDecryptedEmailContent(Context context, String encryptedContent) throws Throwable {
+        // Transform from Base64
+
+        Log.d("", "** encrypted content: " + encryptedContent);
+        String decodedEncryptedContent = new String(Base64.decode(encryptedContent, Base64.DEFAULT));
+        Log.d("", "** decoded encrypted content: " + decodedEncryptedContent);
+
+        String iv = decodedEncryptedContent.substring(0, 16);
+        String encodedEncryptedContent = decodedEncryptedContent.substring(16);
+        Log.d("", "** iv: " + iv);
+        Log.d("", "** encoded encrypted content: " + encodedEncryptedContent);
+
+
+        SecurityHandler securityHandler = new SecurityHandler(context);
+
+        GatewayServer gatewayServer = getGatewayServers(context).get(0);
+        String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServer.getUrl() );
+
+        try {
+            byte[] decryptedEmailContent = securityHandler.decryptWithSharedKeyAES(
+                    iv.getBytes(), Base64.decode(encodedEncryptedContent, Base64.NO_WRAP), keystoreAlias);
+
+            return new String(decryptedEmailContent, StandardCharsets.UTF_8);
+        }
+        catch(Exception e ) {
+            throw new Throwable(e);
+        }
+    }
+
 
     public static String[] getEncryptEmailContent(Context context, String emailContent) throws Throwable {
         SecurityHandler securityHandler = new SecurityHandler(context);
@@ -66,8 +96,7 @@ public class PublisherHandler {
 
             final String encryptedContent = IV + encryptedEmailContent;
 
-            String encryptedContentBase64 = Base64.encodeToString(encryptedContent.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
-            return encryptedContentBase64;
+            return Base64.encodeToString(encryptedContent.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
         }
         catch(Exception e ) {
             throw new Throwable(e);

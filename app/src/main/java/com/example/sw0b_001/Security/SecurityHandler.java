@@ -11,6 +11,7 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -147,7 +148,7 @@ public class SecurityHandler {
         byte[] ciphertext = null;
         String encryptedSharedKey = this.sharedPreferences.getString(SHARED_SECRET_KEY, "");
 
-        byte[] encryptedSharedKeyDecoded = Base64.decode(encryptedSharedKey, Base64.DEFAULT);
+        byte[] encryptedSharedKeyDecoded = Base64.decode(encryptedSharedKey, Base64.NO_WRAP);
         byte[] sharedKey = this.decryptWithInternalPrivateKey(encryptedSharedKeyDecoded, keystoreAlias);
 
         // Log.d(getClass().getName(), "[*] Decrypted shared key: " + Base64.encodeToString(sharedKey, Base64.DEFAULT));
@@ -168,26 +169,32 @@ public class SecurityHandler {
         return ciphertext;
     }
 
-    /*
-    public byte[] decrypt_AES(byte[] input) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
-        String plainTextByte = this.sharedPreferences.getString(GatewayValues.SHARED_KEY, null);
-        byte[] decryptedKey = decrypt_RSA(plainTextByte.getBytes());
-        this.key = new SecretKeySpec(decryptedKey, "AES");
-        byte[] decBytes = null;
+    public byte[] decryptWithSharedKeyAES(byte[] iv, byte[] input, String keystoreAlias) throws Throwable {
+        byte[] decryptedText = null;
+        String encryptedSharedKey = this.sharedPreferences.getString(SHARED_SECRET_KEY, "");
+
+        byte[] encryptedSharedKeyDecoded = Base64.decode(encryptedSharedKey, Base64.NO_WRAP);
+        byte[] sharedKey = this.decryptWithInternalPrivateKey(encryptedSharedKeyDecoded, keystoreAlias);
+        Log.d(getClass().getName(), "** shared key: " + new String(sharedKey));
+        Log.d(getClass().getName(), "** input: " + input);
+
         try {
-            this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-            this.cipher.init(Cipher.DECRYPT_MODE, this.key, this.iv);
-            decBytes = this.cipher.doFinal(input);
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            SecretKeySpec secretKeySpec = new SecretKeySpec(sharedKey, "AES");
+            Log.d(getClass().getName(), "** " + secretKeySpec.getAlgorithm());
+            IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+            Log.d(getClass().getName(), "** " + new String(ivParameterSpec.getIV()));
+
+            Cipher cipher = Cipher.getInstance(DEFAULT_AES_ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
+            decryptedText = cipher.doFinal(input);
+            Log.d(getClass().getName(), "** " + new String(decryptedText, StandardCharsets.UTF_8));
         }
-        return decBytes;
+        catch (Exception e) {
+            e.printStackTrace();
+            throw new Throwable(e);
+        }
+        return decryptedText;
     }
-     */
 
     public void storeSharedKey(String sharedKey) throws GeneralSecurityException, IOException {
         // TODO: encrypt sharedKey before storing

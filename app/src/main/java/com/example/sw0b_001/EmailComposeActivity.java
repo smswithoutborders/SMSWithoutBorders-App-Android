@@ -3,15 +3,19 @@ package com.example.sw0b_001;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.room.Room;
 
+import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
@@ -29,6 +33,7 @@ import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.crypto.BadPaddingException;
@@ -53,6 +58,72 @@ public class EmailComposeActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
+
+
+        Intent intent = getIntent();
+        if(intent.hasExtra("encrypted_content_id")) {
+            populateEncryptedContent();
+        }
+    }
+
+    private void populateEncryptedContent() {
+        Intent intent = getIntent();
+        Log.d(getLocalClassName(), "Encrypted Content ID: " + intent.getLongExtra("encrypted_content_id", -1));
+
+        long encryptedContentId = intent.getLongExtra("encrypted_content_id", -1);
+        Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
+                Datastore.DatabaseName).build();
+
+        final String[] decryptedEmailContent = {""};
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                EncryptedContentDAO encryptedContentDAO = databaseConnector.encryptedContentDAO();
+                EncryptedContent encryptedContent = encryptedContentDAO.get(encryptedContentId);
+
+                try {
+                    decryptedEmailContent[0] = PublisherHandler.getDecryptedEmailContent(getApplicationContext(), encryptedContent.getEncryptedContent());
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+            populateFields(decryptedEmailContent[0]);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void populateFields(String decryptedEmailContent) {
+        // Parse the input
+        Log.d(getLocalClassName(), "** Decrypted email content components: " + decryptedEmailContent);
+        String[] decryptedEmailContentComponents = decryptedEmailContent.split(":");
+        String to = decryptedEmailContentComponents[1];
+        String cc = decryptedEmailContentComponents[2];
+        String bcc = decryptedEmailContentComponents[3];
+        String subject = decryptedEmailContentComponents[4];
+
+        List bodyList = Arrays.asList(decryptedEmailContentComponents).subList(5, decryptedEmailContentComponents.length);
+        String body = String.join(":", bodyList);
+
+        Log.d(getLocalClassName(), "** To: " + to);
+        Log.d(getLocalClassName(), "** Body: " + body);
+
+        EditText toEditText = findViewById(R.id.email_to);
+        EditText ccEditText = findViewById(R.id.email_cc);
+        EditText bccEditText = findViewById(R.id.email_bcc);
+        EditText subjectEditText = findViewById(R.id.email_subject);
+        EditText bodyEditText = findViewById(R.id.email_body);
+
+        toEditText.setText(to);
+        ccEditText.setText(cc);
+        bccEditText.setText(bcc);
+        subjectEditText.setText(subject);
+        bodyEditText.setText(body);
     }
 
     @Override
@@ -145,20 +216,5 @@ public class EmailComposeActivity extends AppCompatActivity {
     private String processEmailForEncryption(String platformLetter, String to, String cc, String bcc, String subject, String body) throws Throwable {
         String emailContent = platformLetter + ":" + to + ":" + cc + ":" + bcc + ":" + subject + ":" + body;
         return emailContent;
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_SEND_SMS: {
-                if (grantResults.length > 0) {
-                    Toast.makeText(this, "Permission Granted!", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-
     }
 }

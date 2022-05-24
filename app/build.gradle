@@ -8,7 +8,7 @@ android {
     defaultConfig {
         applicationId "com.afkanerd.sw0b"
         minSdkVersion 23
-        targetSdkVersion 32
+        targetSdkVersion 30
         versionCode 15
         versionName "1.0"
 
