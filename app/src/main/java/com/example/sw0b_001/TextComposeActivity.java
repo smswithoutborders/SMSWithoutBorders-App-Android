@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -69,7 +68,6 @@ public class TextComposeActivity extends AppCompatActivity {
 
     private void populateEncryptedContent() {
         Intent intent = getIntent();
-        Log.d(getLocalClassName(), "Encrypted Content ID: " + intent.getLongExtra("encrypted_content_id", -1));
 
         long encryptedContentId = intent.getLongExtra("encrypted_content_id", -1);
         Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
@@ -101,12 +99,10 @@ public class TextComposeActivity extends AppCompatActivity {
 
     private void populateFields(String decryptedEmailContent) {
         // Parse the input
-        Log.d(getLocalClassName(), "** Decrypted email content components: " + decryptedEmailContent);
         String[] decryptedEmailContentComponents = decryptedEmailContent.split(":");
         List bodyList = Arrays.asList(decryptedEmailContentComponents).subList(1, decryptedEmailContentComponents.length);
         String body = String.join(":", bodyList);
 
-        Log.d(getLocalClassName(), "** Body: " + body);
 
         EditText bodyEditText = findViewById(R.id.tweet_compose_text);
         bodyEditText.setText(body);

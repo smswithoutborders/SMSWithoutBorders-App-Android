@@ -3,7 +3,6 @@ package com.example.sw0b_001;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -68,7 +67,6 @@ public class EmailComposeActivity extends AppCompatActivity {
 
     private void populateEncryptedContent() {
         Intent intent = getIntent();
-        Log.d(getLocalClassName(), "Encrypted Content ID: " + intent.getLongExtra("encrypted_content_id", -1));
 
         long encryptedContentId = intent.getLongExtra("encrypted_content_id", -1);
         Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
@@ -100,7 +98,6 @@ public class EmailComposeActivity extends AppCompatActivity {
 
     private void populateFields(String decryptedEmailContent) {
         // Parse the input
-        Log.d(getLocalClassName(), "** Decrypted email content components: " + decryptedEmailContent);
         String[] decryptedEmailContentComponents = decryptedEmailContent.split(":");
         String to = decryptedEmailContentComponents[1];
         String cc = decryptedEmailContentComponents[2];
@@ -110,8 +107,6 @@ public class EmailComposeActivity extends AppCompatActivity {
         List bodyList = Arrays.asList(decryptedEmailContentComponents).subList(5, decryptedEmailContentComponents.length);
         String body = String.join(":", bodyList);
 
-        Log.d(getLocalClassName(), "** To: " + to);
-        Log.d(getLocalClassName(), "** Body: " + body);
 
         EditText toEditText = findViewById(R.id.email_to);
         EditText ccEditText = findViewById(R.id.email_cc);

@@ -21,4 +21,7 @@ public interface EncryptedContentDAO {
     @Query("SELECT * FROM EncryptedContent WHERE id=:encryptedContentId")
     EncryptedContent get(long encryptedContentId);
 
+    @Query("SELECT * FROM EncryptedContent WHERE encryptedContent LIKE '%' || :filterText || '%'")
+    List<EncryptedContent> getForFilterText(String filterText);
+
 }

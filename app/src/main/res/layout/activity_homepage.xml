@@ -35,7 +35,7 @@
         app:boxStrokeColor="@color/logo_blue1"
         app:helperTextEnabled="true"
         app:hintTextColor="@color/light_blue_A400"
-        app:layout_constraintBottom_toTopOf="@+id/cardView2"
+        app:layout_constraintBottom_toTopOf="@+id/recent_messages_constrain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,15 +44,15 @@
         app:startIconTint="@color/white">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/message_recipient_number_edit_text"
+            android:id="@+id/recent_search_edittext"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="Search"
-            android:inputType="number|text|textEmailSubject" />
+            android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cardView2"
+        android:id="@+id/recent_messages_constrain"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/default_dark"
@@ -111,9 +111,8 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/homepage_bottom_navbar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="@color/default_dark"
-        android:visibility="visible"
 
         app:itemIconTint="@color/white"
         app:itemRippleColor="@color/pending_gray"
@@ -122,6 +121,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recent_messages_constrain"
         app:menu="@menu/main_navigation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

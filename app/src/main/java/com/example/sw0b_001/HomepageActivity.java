@@ -2,14 +2,17 @@ package com.example.sw0b_001;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.SearchView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -34,12 +37,62 @@ public class HomepageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
-        SearchView searchView = (SearchView) findViewById(R.id.search_bar);
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.homepage_bottom_navbar);
         bottomNavBar(bottomNavigationView);
 
         populateEncryptedMessages();
+        setSearchListener();
+    }
+
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        EditText searchEditText = findViewById(R.id.recent_search_edittext);
+        searchEditText.clearFocus();
+    }
+
+    public void setSearchListener() {
+        EditText searchEditText = findViewById(R.id.recent_search_edittext);
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                try {
+                    List<EncryptedContent> encryptedContentList = fetchMessagesFromDatabase(charSequence.toString());
+                    populateEncryptedMessages(encryptedContentList);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+    }
+
+    public void populateEncryptedMessages(List<EncryptedContent> encryptedContentList) {
+        RecyclerView recentsRecyclerView = findViewById(R.id.recents_recycler_view);
+        // recentsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+        Log.d(getLocalClassName(), "# Encrypted content size: " + encryptedContentList.size());
+
+        if(!encryptedContentList.isEmpty()) {
+            TextView noRecentMessagesText = findViewById(R.id.no_recent_messages);
+            noRecentMessagesText.setVisibility(View.INVISIBLE);
+        }
+
+        RecentsRecyclerAdapter recentsRecyclerAdapter = new RecentsRecyclerAdapter(this, encryptedContentList, R.layout.layout_cardlist_recents);
+        recentsRecyclerView.setAdapter(recentsRecyclerAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true);
+        linearLayoutManager.setReverseLayout(true);
+        recentsRecyclerView.setLayoutManager(linearLayoutManager);
     }
 
     public void populateEncryptedMessages() {
@@ -64,6 +117,26 @@ public class HomepageActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private List<EncryptedContent> fetchMessagesFromDatabase(String filterText) throws InterruptedException {
+        Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
+                Datastore.DatabaseName).build();
+
+        final List<EncryptedContent>[] encryptedContentList = new List[]{new ArrayList<>()};
+        Thread fetchEmailMessagesThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                EncryptedContentDAO encryptedContentDAO = databaseConnector.encryptedContentDAO();
+                encryptedContentList[0] = encryptedContentDAO.getForFilterText(filterText);
+            }
+        });
+
+        // TODO: Fetch other platforms text from here
+        fetchEmailMessagesThread.start();
+        fetchEmailMessagesThread.join();
+
+        return encryptedContentList[0];
     }
 
     private List<EncryptedContent> fetchMessagesFromDatabase() throws InterruptedException {
@@ -107,5 +180,12 @@ public class HomepageActivity extends AppCompatActivity {
     public void onClickPlatformSelect(View view) {
         Intent platformIntent = new Intent(getApplicationContext(), PlatformsActivity.class);
         startActivity(platformIntent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ConstraintLayout constraintLayout = findViewById(R.id.recent_messages_constrain);
+        constraintLayout.setFocusable(true);
     }
 }

@@ -11,7 +11,6 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -151,8 +150,6 @@ public class SecurityHandler {
         byte[] encryptedSharedKeyDecoded = Base64.decode(encryptedSharedKey, Base64.NO_WRAP);
         byte[] sharedKey = this.decryptWithInternalPrivateKey(encryptedSharedKeyDecoded, keystoreAlias);
 
-        // Log.d(getClass().getName(), "[*] Decrypted shared key: " + Base64.encodeToString(sharedKey, Base64.DEFAULT));
-        Log.d(getClass().getName(), "[*] Decrypted shared key: " + new String(sharedKey, "UTF-8"));
 
         try {
             SecretKeySpec secretKeySpec = new SecretKeySpec(sharedKey, "AES");
@@ -175,19 +172,14 @@ public class SecurityHandler {
 
         byte[] encryptedSharedKeyDecoded = Base64.decode(encryptedSharedKey, Base64.NO_WRAP);
         byte[] sharedKey = this.decryptWithInternalPrivateKey(encryptedSharedKeyDecoded, keystoreAlias);
-        Log.d(getClass().getName(), "** shared key: " + new String(sharedKey));
-        Log.d(getClass().getName(), "** input: " + input);
 
         try {
             SecretKeySpec secretKeySpec = new SecretKeySpec(sharedKey, "AES");
-            Log.d(getClass().getName(), "** " + secretKeySpec.getAlgorithm());
             IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
-            Log.d(getClass().getName(), "** " + new String(ivParameterSpec.getIV()));
 
             Cipher cipher = Cipher.getInstance(DEFAULT_AES_ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
             decryptedText = cipher.doFinal(input);
-            Log.d(getClass().getName(), "** " + new String(decryptedText, StandardCharsets.UTF_8));
         }
         catch (Exception e) {
             e.printStackTrace();

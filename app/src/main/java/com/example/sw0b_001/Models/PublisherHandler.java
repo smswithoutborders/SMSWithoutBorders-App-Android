@@ -2,7 +2,6 @@ package com.example.sw0b_001.Models;
 
 import android.content.Context;
 import android.util.Base64;
-import android.util.Log;
 
 import androidx.room.Room;
 
@@ -43,14 +42,10 @@ public class PublisherHandler {
     public static String getDecryptedEmailContent(Context context, String encryptedContent) throws Throwable {
         // Transform from Base64
 
-        Log.d("", "** encrypted content: " + encryptedContent);
         String decodedEncryptedContent = new String(Base64.decode(encryptedContent, Base64.DEFAULT));
-        Log.d("", "** decoded encrypted content: " + decodedEncryptedContent);
 
         String iv = decodedEncryptedContent.substring(0, 16);
         String encodedEncryptedContent = decodedEncryptedContent.substring(16);
-        Log.d("", "** iv: " + iv);
-        Log.d("", "** encoded encrypted content: " + encodedEncryptedContent);
 
 
         SecurityHandler securityHandler = new SecurityHandler(context);

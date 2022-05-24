@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -68,8 +67,6 @@ public class MessageComposeActivity extends AppCompatActivity {
 
     private void populateEncryptedContent() {
         Intent intent = getIntent();
-        Log.d(getLocalClassName(), "Encrypted Content ID: " + intent.getLongExtra("encrypted_content_id", -1));
-
         long encryptedContentId = intent.getLongExtra("encrypted_content_id", -1);
         Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
                 Datastore.DatabaseName).build();
@@ -100,15 +97,12 @@ public class MessageComposeActivity extends AppCompatActivity {
 
     private void populateFields(String decryptedEmailContent) {
         // Parse the input
-        Log.d(getLocalClassName(), "** Decrypted email content components: " + decryptedEmailContent);
         String[] decryptedEmailContentComponents = decryptedEmailContent.split(":");
         String to = decryptedEmailContentComponents[1];
 
         List bodyList = Arrays.asList(decryptedEmailContentComponents).subList(2, decryptedEmailContentComponents.length);
         String body = String.join(":", bodyList);
 
-        Log.d(getLocalClassName(), "** To: " + to);
-        Log.d(getLocalClassName(), "** Body: " + body);
 
         EditText toEditText = findViewById(R.id.message_recipient_number_edit_text);
         EditText bodyEditText = findViewById(R.id.message_compose_text);
@@ -239,9 +233,6 @@ public class MessageComposeActivity extends AppCompatActivity {
                             EditText numberEditText = findViewById(R.id.message_recipient_number_edit_text);
                             numberEditText.setText(number);
                         }
-                    }
-                    else {
-                        Log.d(getLocalClassName(), "--> contact cursor: " + contactCursor);
                     }
                 }
                 break;
