@@ -9,12 +9,10 @@
         android:id="@+id/gateway_client_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:background="@color/default_dark"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/gateway_clients_recycler_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,6 +20,20 @@
         app:title="Available Gateway Clients"
         tools:visibility="visible" />
 
+    <!-- Linear progress indicator -->
+    <!-- Circular progress indicator -->
+
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/refresh_loader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:indicatorColor="@color/logo_blue1"
+        app:layout_constraintBottom_toTopOf="@+id/gateway_clients_recycler_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gateway_client_toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/gateway_clients_recycler_view"
@@ -32,7 +44,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gateway_client_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/refresh_loader" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/gateway_client_refresh_btn"

@@ -16,6 +16,7 @@ import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsRecyclerAdapter;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,9 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
+
+        LinearProgressIndicator linearProgressIndicator = findViewById(R.id.refresh_loader);
+        linearProgressIndicator.setVisibility(View.INVISIBLE);
 
         this.gatewayClientsLayout = R.layout.layout_cardlist_gateway_clients;
         this.gatewayClientRecyclerView = findViewById(R.id.gateway_clients_recycler_view);
@@ -69,6 +73,8 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
             @Override
             public void run() {
                 populateSettings();
+                LinearProgressIndicator linearProgressIndicator = findViewById(R.id.refresh_loader);
+                linearProgressIndicator.setVisibility(View.INVISIBLE);
             }
         };
 
@@ -80,7 +86,11 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
 
     public void onRefreshButton(View view) throws InterruptedException {
         // TODO put a loader here
+        LinearProgressIndicator linearProgressIndicator = findViewById(R.id.refresh_loader);
+        linearProgressIndicator.setVisibility(View.VISIBLE);
+
         this.refreshGatewayClientsSettings();
         this.gatewayClientsRecyclerAdapter.notifyDataSetChanged();
+
     }
 }
