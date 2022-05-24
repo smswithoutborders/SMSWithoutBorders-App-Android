@@ -17,7 +17,11 @@ import android.widget.EditText;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.room.Room;
 
+import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.Platforms.Platform;
@@ -33,6 +37,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -53,10 +59,65 @@ public class MessageComposeActivity extends AppCompatActivity {
         ab.setDisplayHomeAsUpEnabled(true);
 
         autoFocusKeyboard(R.id.message_recipient_number_edit_text);
+
+        Intent intent = getIntent();
+        if(intent.hasExtra("encrypted_content_id")) {
+            populateEncryptedContent();
+        }
+    }
+
+    private void populateEncryptedContent() {
+        Intent intent = getIntent();
+        Log.d(getLocalClassName(), "Encrypted Content ID: " + intent.getLongExtra("encrypted_content_id", -1));
+
+        long encryptedContentId = intent.getLongExtra("encrypted_content_id", -1);
+        Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
+                Datastore.DatabaseName).build();
+
+        final String[] decryptedEmailContent = {""};
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                EncryptedContentDAO encryptedContentDAO = databaseConnector.encryptedContentDAO();
+                EncryptedContent encryptedContent = encryptedContentDAO.get(encryptedContentId);
+
+                try {
+                    decryptedEmailContent[0] = PublisherHandler.getDecryptedEmailContent(getApplicationContext(), encryptedContent.getEncryptedContent());
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+            populateFields(decryptedEmailContent[0]);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void populateFields(String decryptedEmailContent) {
+        // Parse the input
+        Log.d(getLocalClassName(), "** Decrypted email content components: " + decryptedEmailContent);
+        String[] decryptedEmailContentComponents = decryptedEmailContent.split(":");
+        String to = decryptedEmailContentComponents[1];
+
+        List bodyList = Arrays.asList(decryptedEmailContentComponents).subList(2, decryptedEmailContentComponents.length);
+        String body = String.join(":", bodyList);
+
+        Log.d(getLocalClassName(), "** To: " + to);
+        Log.d(getLocalClassName(), "** Body: " + body);
+
+        EditText toEditText = findViewById(R.id.message_recipient_number_edit_text);
+        EditText bodyEditText = findViewById(R.id.message_compose_text);
+
+        toEditText.setText(to);
+        bodyEditText.setText(body);
     }
 
     private void autoFocusKeyboard(int viewId) {
-
         // Focus
         EditText viewEditText = findViewById(viewId);
         viewEditText.postDelayed(new Runnable() {
