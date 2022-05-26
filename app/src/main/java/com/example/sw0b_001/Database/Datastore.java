@@ -19,7 +19,7 @@ import com.example.sw0b_001.Models.Platforms.PlatformDao;
 
 import org.jetbrains.annotations.NotNull;
 
-@Database(entities = {GatewayServer.class, Platform.class, GatewayClient.class, EncryptedContent.class}, version = 7)
+@Database(entities = {GatewayServer.class, Platform.class, GatewayClient.class, EncryptedContent.class}, version = 8)
 public abstract class Datastore extends RoomDatabase {
     public static String DatabaseName = "SMSWithoutBorders-Android-App-DB";
 

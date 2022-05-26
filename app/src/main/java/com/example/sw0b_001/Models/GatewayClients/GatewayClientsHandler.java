@@ -1,6 +1,7 @@
 package com.example.sw0b_001.Models.GatewayClients;
 
 import android.content.Context;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import androidx.room.Room;
@@ -56,12 +57,21 @@ public class GatewayClientsHandler {
         thread.join();
     }
 
+    public static boolean containsDefaultProperties(Context context, String gatewayClientOperatorId) {
+        TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        String operatorId = telephonyManager.getSimOperator();
+
+        Log.d("", "** operatorID: " + operatorId);
+        return operatorId.equals(gatewayClientOperatorId);
+    }
+
     public static void remoteFetchAndStoreGatewayClients(Context context, String gatewayServerSeedsUrl, Runnable callbackFunction) throws InterruptedException {
         RequestQueue queue = Volley.newRequestQueue(context);
         JsonArrayRequest remoteSeedsRequest = new JsonArrayRequest(Request.Method.GET, gatewayServerSeedsUrl, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray responses) {
-                Log.d(getClass().getName(), "___> got nre response from thread");
+                boolean defaultSet = false;
+
                 for(int i=0;i<responses.length();++i) {
                     try {
                         // TODO: Add algorithm for default Gateway Client
@@ -70,6 +80,7 @@ public class GatewayClientsHandler {
                         String MSISDN = response.getString("MSISDN");
                         String country = response.getString("country");
                         String operatorName = response.getString("operator_name");
+                        String operatorId = response.getString("operator_id");
                         double LPS = response.getDouble("LPS");
                         String seedType = response.getString("seed_type");
 
@@ -79,6 +90,12 @@ public class GatewayClientsHandler {
                         gatewayClient.setLastPingSession(LPS);
                         gatewayClient.setCountry(country);
                         gatewayClient.setOperatorName(operatorName);
+                        gatewayClient.setOperatorId(operatorId);
+
+                        if(!defaultSet && containsDefaultProperties(context, gatewayClient.getOperatorId())) {
+                            gatewayClient.setDefault(true);
+                            defaultSet = true;
+                        }
 
                         GatewayClientsHandler.add(context, gatewayClient);
                         Log.d(getClass().getName(), "-> Added new gateway client: " + gatewayClient.getMSISDN());

@@ -22,6 +22,17 @@ public class GatewayClient {
     @ColumnInfo(name="operator_name")
     String operatorName;
 
+    public String getOperatorId() {
+        return operatorId;
+    }
+
+    public void setOperatorId(String operatorId) {
+        this.operatorId = operatorId;
+    }
+
+    @ColumnInfo(name="operator_id")
+    String operatorId;
+
     @ColumnInfo(name="country")
     String country;
 

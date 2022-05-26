@@ -141,7 +141,8 @@ public class HomepageActivity extends AppCompatActivity {
 
     private List<EncryptedContent> fetchMessagesFromDatabase() throws InterruptedException {
         Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
-                Datastore.DatabaseName).build();
+                Datastore.DatabaseName)
+                .build();
 
         final List<EncryptedContent>[] encryptedContentList = new List[]{new ArrayList<>()};
         Thread fetchEmailMessagesThread = new Thread(new Runnable() {
