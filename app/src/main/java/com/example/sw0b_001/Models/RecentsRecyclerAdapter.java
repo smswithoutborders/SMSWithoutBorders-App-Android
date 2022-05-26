@@ -82,6 +82,7 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
             public void onClick(View v) {
                 Intent platformIntent = PlatformsHandler.getIntent(context, platform.getName(), platform.getType());
                 platformIntent.putExtra("encrypted_content_id", encryptedContent.getId());
+                platformIntent.putExtra("platform_id", platform.getId());
                 context.startActivity(platformIntent);
             }
         });

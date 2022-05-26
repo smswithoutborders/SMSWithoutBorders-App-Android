@@ -56,7 +56,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/gateway_client_MSISDN" />
 
             <TextView
-                android:id="@+id/gateway_client_last_ping_time"
+                android:id="@+id/gateway_client_operator_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="LPS: 2 secs"
@@ -72,7 +72,7 @@
                 android:layout_marginTop="4dp"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
-                app:layout_constraintBottom_toTopOf="@+id/gateway_client_last_ping_time"
+                app:layout_constraintBottom_toTopOf="@+id/gateway_client_operator_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

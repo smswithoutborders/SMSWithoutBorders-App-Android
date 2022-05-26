@@ -44,6 +44,8 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         GatewayClient gatewayClient = this.gatewayClientsSettingsActivity.listOfGateways.get(position);
         holder.MSISDN.setText(gatewayClient.getMSISDN());
+        holder.country.setText(gatewayClient.getCountry());
+        holder.operatorName.setText(gatewayClient.getOperatorName());
 
         holder.switchBtn.setChecked(gatewayClient.isDefault());
 
@@ -94,7 +96,7 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView MSISDN;
         TextView country;
-        TextView lastPing;
+        TextView operatorName;
         Switch switchBtn;
         ConstraintLayout layout;
 
@@ -103,7 +105,7 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
             this.layout = itemView.findViewById(R.id.gateway_client_card_layout);
             this.MSISDN = itemView.findViewById(R.id.gateway_client_MSISDN);
             this.country = itemView.findViewById(R.id.gateway_client_country);
-            this.lastPing = itemView.findViewById(R.id.gateway_client_last_ping_time);
+            this.operatorName = itemView.findViewById(R.id.gateway_client_operator_name);
             this.switchBtn = itemView.findViewById(R.id.gateway_client_radio_btn);
         }
     }

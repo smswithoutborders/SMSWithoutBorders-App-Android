@@ -187,5 +187,7 @@ public class HomepageActivity extends AppCompatActivity {
         super.onResume();
         ConstraintLayout constraintLayout = findViewById(R.id.recent_messages_constrain);
         constraintLayout.setFocusable(true);
+
+        populateEncryptedMessages();
     }
 }

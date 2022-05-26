@@ -132,6 +132,7 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         .fallbackToDestructiveMigration()
                         .build();
                 PlatformDao platformDao = databaseConnector.platformDao();
+                platformDao.deleteAll();
 
                 for(int i=0; i< platforms.length(); ++i ) {
                     try {

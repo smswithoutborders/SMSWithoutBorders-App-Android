@@ -69,6 +69,7 @@ public class GatewayClientsHandler {
                         String IMSI = response.getString("IMSI");
                         String MSISDN = response.getString("MSISDN");
                         String country = response.getString("country");
+                        String operatorName = response.getString("operator_name");
                         double LPS = response.getDouble("LPS");
                         String seedType = response.getString("seed_type");
 
@@ -77,6 +78,7 @@ public class GatewayClientsHandler {
                         gatewayClient.setMSISDN(MSISDN);
                         gatewayClient.setLastPingSession(LPS);
                         gatewayClient.setCountry(country);
+                        gatewayClient.setOperatorName(operatorName);
 
                         GatewayClientsHandler.add(context, gatewayClient);
                         Log.d(getClass().getName(), "-> Added new gateway client: " + gatewayClient.getMSISDN());
