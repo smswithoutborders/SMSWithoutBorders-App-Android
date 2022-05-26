@@ -2,7 +2,6 @@ package com.example.sw0b_001.Models.GatewayClients;
 
 import android.content.Context;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
 import androidx.room.Room;
 
@@ -23,7 +22,6 @@ import java.util.List;
 public class GatewayClientsHandler {
 
     public static long add(Context context, GatewayClient gatewayClient) throws InterruptedException {
-        // Log.d(getClass().getSimpleName(), "Public key for gateway: " + gatewayServer.getPublicKey());
 
         final long[] gatewayClientsInsertId = {-1};
         Thread thread = new Thread(new Runnable() {
@@ -33,7 +31,6 @@ public class GatewayClientsHandler {
                         Datastore.DatabaseName).build();
                 GatewayClientsDao gatewayClientsDao = databaseConnector.gatewayClientsDao();
                 gatewayClientsInsertId[0] = gatewayClientsDao.insert(gatewayClient);
-                Log.d(getClass().getSimpleName(), "Added new gateway client: " + gatewayClient.getMSISDN());
             }
         });
         thread.start();
@@ -61,7 +58,6 @@ public class GatewayClientsHandler {
         TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
         String operatorId = telephonyManager.getSimOperator();
 
-        Log.d("", "** operatorID: " + operatorId);
         return operatorId.equals(gatewayClientOperatorId);
     }
 
@@ -98,7 +94,6 @@ public class GatewayClientsHandler {
                         }
 
                         GatewayClientsHandler.add(context, gatewayClient);
-                        Log.d(getClass().getName(), "-> Added new gateway client: " + gatewayClient.getMSISDN());
                     }
                     catch(Exception e) {
                         e.printStackTrace();

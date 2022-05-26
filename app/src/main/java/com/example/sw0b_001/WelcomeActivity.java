@@ -3,7 +3,6 @@ package com.example.sw0b_001;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +24,6 @@ public class WelcomeActivity extends AppCompatActivity {
         String intentUrl = URLEncoder.encode("intent://staging.smswithoutborders.com/sign-up/", "UTF-8");
         signupURL = signupURL + intentUrl;
 
-        Log.d(getLocalClassName(), signupURL);
         Uri intentUri = Uri.parse(signupURL);
         Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
         startActivity(intent);

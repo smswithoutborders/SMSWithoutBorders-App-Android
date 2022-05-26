@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
@@ -159,7 +158,6 @@ public class SplashActivity extends AppCompatActivity {
             finish();
         }
         else {
-            Log.d(getLocalClassName(), "[*] Does not have shared key stored!");
         }
     }
 }

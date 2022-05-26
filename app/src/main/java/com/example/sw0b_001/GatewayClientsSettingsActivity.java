@@ -61,7 +61,6 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
 
     public void populateSettings() {
         this.listOfGateways = GatewayClientsHandler.getAllGatewayClients(getApplicationContext());
-        Log.d(getLocalClassName(), "# of listed gateway clients: " + this.listOfGateways.size());
         this.gatewayClientRecyclerView.setAdapter(this.gatewayClientsRecyclerAdapter);
     }
 

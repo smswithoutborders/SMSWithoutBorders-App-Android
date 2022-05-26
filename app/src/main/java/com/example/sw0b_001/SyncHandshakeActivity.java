@@ -4,7 +4,6 @@ import android.app.DownloadManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
@@ -58,7 +57,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
         String state = getIntent().getStringExtra("state");
 
         if(state.equals("complete_handshake")) {
-            Log.d(this.getLocalClassName(), "Completing handshake");
 
             try {
                 EncryptedContentHandler.clearedStoredEncryptedContents(getApplicationContext());
@@ -73,7 +71,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                 long gatewayServerId = getIntent().getLongExtra("gatewayserver_id", -1);
 
                 processHandshakePayload(jsonObject, gatewayServerId);
-                Log.d(getLocalClassName(), "Completed handshake and information is stored");
 
                 Intent dashboardIntent = new Intent(getApplicationContext(), HomepageActivity.class);
                 startActivity(dashboardIntent);
@@ -84,7 +81,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
             }
         }
         else {
-            Log.d(this.getLocalClassName(), "Going to public key exchange");
             publicKeyExchange(state);
         }
     }
@@ -108,10 +104,8 @@ public class SyncHandshakeActivity extends AppCompatActivity {
             // TODO securely store the shared key
             String sharedKey = jsonObject.getString("shared_key");
             JSONArray platforms = jsonObject.getJSONArray("user_platforms");
-            Log.d(getLocalClassName(), "Shared Key: " + sharedKey);
 
             String gatewayServerSeedsUrl = jsonObject.getString("seeds_url");
-            Log.d(getLocalClassName(), "Seeds URL: " + gatewayServerSeedsUrl);
 
             processAndUpdateGatewayServerSeedUrl(gatewayServerSeedsUrl, gatewayServerId);
             processAndStoreSharedKey(sharedKey);
@@ -137,8 +131,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                 for(int i=0; i< platforms.length(); ++i ) {
                     try {
                         JSONObject JSONPlatform = platforms.getJSONObject(i);
-                        Log.d(getLocalClassName(), "+ Platform name: " + JSONPlatform.getString("name"));
-                        Log.d(getLocalClassName(), "\t+ Logo: " + JSONPlatform.getString("logo"));
 
                         Platform platform = new Platform();
                         platform.setName(JSONPlatform.getString("name"));
@@ -152,7 +144,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         platform.setLogo(logoDownloadId);
 
                         platformDao.insert(platform);
-                        Log.d(getLocalClassName(), "Platform inserted successfully");
                     }
                     catch(JSONException e) {
                         e.printStackTrace();
@@ -175,7 +166,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
         if (!direct.exists()) {
             direct.mkdirs();
-            Log.d(getLocalClassName(), "Created dir for storing image");
         }
          */
 
@@ -183,7 +173,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
         DownloadManager.Request downloadManagerRequest = new DownloadManager.Request(logoCompleteURLURI);
 
         String requestDescription = "Downloading " + logoCompleteURL;
-        Log.d(getLocalClassName(), "Downloading file: " + requestDescription);
         String requestTitle = "Downloading platform logos";
         downloadManagerRequest.setDescription(requestDescription);
         downloadManagerRequest.setTitle(requestTitle);
@@ -196,7 +185,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
     }
 
     public void publicKeyExchange(String gatewayServerHandshakeUrl) {
-        Log.d(getLocalClassName(), gatewayServerHandshakeUrl);
         try {
             SecurityHandler securityHandler = new SecurityHandler();
 
@@ -206,18 +194,15 @@ public class SyncHandshakeActivity extends AppCompatActivity {
             // Extracting and storing userId from gatewayServerHandshake
             int userIdIndex =4;
             String userId = gatewayServerUrl.getPath().split("/")[userIdIndex];
-            Log.d(getLocalClassName(), "userId: " + userId);
             UserHandler userHandler = new UserHandler(getApplicationContext(), userId);
             userHandler.commitUser();
 
             String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerUrlHost );
-            Log.d(getLocalClassName(), "keystoreAlias: " + keystoreAlias);
             PublicKey publicKeyEncoded = securityHandler.generateKeyPair(keystoreAlias)
                     .generateKeyPair()
                     .getPublic();
 
             String PEMPublicKey = SecurityHandler.convert_to_pem_format(publicKeyEncoded.getEncoded());
-            Log.d(getLocalClassName(), "PEM Public Key: " + PEMPublicKey);
 
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
             JSONObject jsonBody = new JSONObject("{\"public_key\": \"" + PEMPublicKey + "\"}");
@@ -234,10 +219,8 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
                         // TODO: change from "pd" to "public_key"
                         String gatewayServerPublicKey = response.getString("public_key");
-                        Log.d(getLocalClassName(), "Gateway server public key: " + gatewayServerPublicKey);
 
                         String gatewayServerVerifyUrl = response.getString("verification_url");
-                        Log.d(getLocalClassName(), "Verify URL: " + gatewayServerVerifyUrl);
 
 
                         // Formatting public key to work well from here
@@ -245,7 +228,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         gatewayServerPublicKey = gatewayServerPublicKey.replace("-----BEGIN PUBLIC KEY-----\n", "");
                         gatewayServerPublicKey = gatewayServerPublicKey.replace("-----END PUBLIC KEY-----", "");
 
-                        // Log.d(getLocalClassName(), "Server public key: " + serverPublicKey);
                         GatewayServer gatewayServer = new GatewayServer();
                         gatewayServer.setPublicKey(gatewayServerPublicKey);
 
@@ -259,7 +241,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         gatewayServer.setPort(gatewayServerUrlPort);
 
                         gatewayServerVerifyUrl = gatewayServerUrlProtocol + "://" + gatewayServerUrlHost + ":" + gatewayServerUrlPort + gatewayServerVerifyUrl;
-                        Log.d(getLocalClassName(), "Gateway server verification url: " + gatewayServerVerifyUrl);
 
                         GatewayServersHandler gatewayServersHandler = new GatewayServersHandler(getApplicationContext());
                         long gatewayServerId = gatewayServersHandler.add(gatewayServer);

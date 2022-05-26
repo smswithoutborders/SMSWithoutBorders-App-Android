@@ -1,7 +1,6 @@
 package com.example.sw0b_001.Models.GatewayClients;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +88,6 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
 
     @Override
     public int getItemCount() {
-        Log.d(getClass().getName(), "# of gateway clients: " + this.gatewayClientsSettingsActivity.listOfGateways.size());
         return this.gatewayClientsSettingsActivity.listOfGateways.size();
     }
 

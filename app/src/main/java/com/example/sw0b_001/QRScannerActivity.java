@@ -2,7 +2,6 @@ package com.example.sw0b_001;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
@@ -48,7 +47,6 @@ public class QRScannerActivity extends AppCompatActivity {
                         try {
                             String resultValue = result.getText();
 
-                            Log.d(getLocalClassName(), "QR code: " + resultValue);
 
                             // Raises an exception in case result is not a URL
                             URL resultURL = new URL(resultValue);

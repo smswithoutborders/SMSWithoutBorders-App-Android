@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -80,7 +79,6 @@ public class HomepageActivity extends AppCompatActivity {
         RecyclerView recentsRecyclerView = findViewById(R.id.recents_recycler_view);
         // recentsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        Log.d(getLocalClassName(), "# Encrypted content size: " + encryptedContentList.size());
 
         if(!encryptedContentList.isEmpty()) {
             TextView noRecentMessagesText = findViewById(R.id.no_recent_messages);
@@ -101,7 +99,6 @@ public class HomepageActivity extends AppCompatActivity {
 
         try {
             List<EncryptedContent> encryptedContentList = fetchMessagesFromDatabase();
-            Log.d(getLocalClassName(), "# Encrypted content size: " + encryptedContentList.size());
 
             if(!encryptedContentList.isEmpty()) {
                 TextView noRecentMessagesText = findViewById(R.id.no_recent_messages);

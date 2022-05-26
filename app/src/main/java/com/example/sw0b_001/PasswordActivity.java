@@ -105,10 +105,8 @@ public class PasswordActivity extends AppCompatActivity {
                     User user = userHandler.getUser();
 
                     byte[] RSAEncryptedPassword = securityHandler.encryptWithExternalPublicKey(passwordEncoded, gatewayServer.getPublicKey());
-                    Log.d(getLocalClassName(), "RSAEncryptedPassword: " + RSAEncryptedPassword);
 
                     String passwordBase64 = Base64.encodeToString(RSAEncryptedPassword, Base64.DEFAULT);
-                    Log.d(getLocalClassName(), "passwordBase64: " + passwordBase64);
 
                     JSONObject jsonBody = new JSONObject( "{\"password\": \"" + passwordBase64 + "\"}");
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(verificationUrl, jsonBody, new Response.Listener<JSONObject>() {

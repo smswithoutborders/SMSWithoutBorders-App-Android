@@ -1,7 +1,6 @@
 package com.example.sw0b_001.Models.GatewayServers;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.room.Room;
 
@@ -21,7 +20,6 @@ public class GatewayServersHandler {
     }
 
     public long add(GatewayServer gatewayServer) throws InterruptedException {
-        // Log.d(getClass().getSimpleName(), "Public key for gateway: " + gatewayServer.getPublicKey());
         Datastore databaseConnector = Room.databaseBuilder(this.context, Datastore.class,
                 Datastore.DatabaseName).build();
         final long[] gatewayServerInsertId = {-1};
@@ -30,7 +28,6 @@ public class GatewayServersHandler {
             public void run() {
                 GatewayServersDAO gatewayServersDAO = databaseConnector.gatewayServersDAO();
                 gatewayServerInsertId[0] = gatewayServersDAO.insert(gatewayServer);
-                Log.d(getClass().getSimpleName(), "Added new gateway...");
             }
         });
         thread.start();
@@ -47,7 +44,6 @@ public class GatewayServersHandler {
             public void run() {
                 GatewayServersDAO gatewayServersDAO = databaseConnector.gatewayServersDAO();
                 gatewayServersDAO.updateSeedsUrl(seedsUrl, gatewayServerId);
-                Log.d(getClass().getSimpleName(), "Updated seedsUrl for gateway server");
             }
         });
         thread.start();
