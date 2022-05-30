@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GatewayClientsHandler {
 
@@ -66,7 +67,21 @@ public class GatewayClientsHandler {
         JsonArrayRequest remoteSeedsRequest = new JsonArrayRequest(Request.Method.GET, gatewayServerSeedsUrl, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray responses) {
-                boolean defaultSet = false;
+                int defaultCounters = 0;
+                for(int i=0;i<responses.length();++i) {
+                    try {
+                        JSONObject response = responses.getJSONObject(i);
+                        String operatorId = response.getString("operator_id");
+                        if(containsDefaultProperties(context, operatorId)) {
+                            ++defaultCounters;
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
+
+                int findDefaultCounter =0;
+                defaultCounters = new Random().nextInt(defaultCounters);
 
                 for(int i=0;i<responses.length();++i) {
                     try {
@@ -88,11 +103,12 @@ public class GatewayClientsHandler {
                         gatewayClient.setOperatorName(operatorName);
                         gatewayClient.setOperatorId(operatorId);
 
-                        if(!defaultSet && containsDefaultProperties(context, gatewayClient.getOperatorId())) {
-                            gatewayClient.setDefault(true);
-                            defaultSet = true;
+                        // Random Gateway client selector
+                        if(containsDefaultProperties(context, operatorId)) {
+                            if(findDefaultCounter == defaultCounters)
+                                gatewayClient.setDefault(true);
+                            ++findDefaultCounter;
                         }
-
                         GatewayClientsHandler.add(context, gatewayClient);
                     }
                     catch(Exception e) {
