@@ -30,21 +30,32 @@
         android:layout_height="wrap_content"
         android:indeterminate="true"
         app:indicatorColor="@color/logo_blue1"
-        app:layout_constraintBottom_toTopOf="@+id/gateway_clients_recycler_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gateway_client_toolbar" />
+
+    <TextView
+        android:id="@+id/operator_id_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="operator id:"
+        android:textAlignment="center"
+        android:textColor="@color/pending_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/refresh_loader" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/gateway_clients_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/gateway_client_refresh_btn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/refresh_loader" />
+        app:layout_constraintTop_toBottomOf="@+id/operator_id_text" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/gateway_client_refresh_btn"

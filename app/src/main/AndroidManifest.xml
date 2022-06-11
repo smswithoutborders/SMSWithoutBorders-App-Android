@@ -105,7 +105,7 @@
 
         <activity
             android:name=".GatewayClientsSettingsActivity"
-            android:parentActivityName=".SettingsActivities.SettingsActivity"
+            android:parentActivityName=".HomepageActivity"
             android:theme="@style/Theme.MyAppNoBar"></activity>
 
         <activity
@@ -118,7 +118,6 @@
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

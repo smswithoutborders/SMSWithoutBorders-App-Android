@@ -55,10 +55,15 @@ public class GatewayClientsHandler {
         thread.join();
     }
 
-    public static boolean containsDefaultProperties(Context context, String gatewayClientOperatorId) {
+    public static String getOperatorId(Context context) {
         TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
         String operatorId = telephonyManager.getSimOperator();
 
+        return operatorId;
+    }
+
+    public static boolean containsDefaultProperties(Context context, String gatewayClientOperatorId) {
+        String operatorId = getOperatorId(context);
         return operatorId.equals(gatewayClientOperatorId);
     }
 
@@ -68,6 +73,8 @@ public class GatewayClientsHandler {
             @Override
             public void onResponse(JSONArray responses) {
                 int defaultCounters = 0;
+                boolean randomSelectDefault = true;
+
                 for(int i=0;i<responses.length();++i) {
                     try {
                         JSONObject response = responses.getJSONObject(i);
@@ -76,14 +83,19 @@ public class GatewayClientsHandler {
                             ++defaultCounters;
                         }
                     } catch (Exception e) {
-
+                        e.printStackTrace();
                     }
                 }
 
-                int findDefaultCounter =0;
-                defaultCounters = new Random().nextInt(defaultCounters);
+                // If no Gateway client that matches the required ISP
+                // choose from any of the multiples and make default
+                if(defaultCounters < 1) {
+                    defaultCounters = responses.length();
+                    randomSelectDefault = false;
+                }
 
-                for(int i=0;i<responses.length();++i) {
+                defaultCounters = new Random().nextInt(defaultCounters);
+                for(int i=0, findDefaultCounter=0;i<responses.length();++i, ++findDefaultCounter) {
                     try {
                         // TODO: Add algorithm for default Gateway Client
                         JSONObject response = responses.getJSONObject(i);
@@ -104,11 +116,15 @@ public class GatewayClientsHandler {
                         gatewayClient.setOperatorId(operatorId);
 
                         // Random Gateway client selector
-                        if(containsDefaultProperties(context, operatorId)) {
+                        if(!randomSelectDefault) {
+                            if(i == defaultCounters)
+                                gatewayClient.setDefault(true);
+                        }
+                        else if(containsDefaultProperties(context, operatorId)) {
                             if(findDefaultCounter == defaultCounters)
                                 gatewayClient.setDefault(true);
-                            ++findDefaultCounter;
                         }
+
                         GatewayClientsHandler.add(context, gatewayClient);
                     }
                     catch(Exception e) {

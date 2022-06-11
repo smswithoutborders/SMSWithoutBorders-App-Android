@@ -1,9 +1,9 @@
 package com.example.sw0b_001;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,7 +50,16 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
         // gatewayRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         this.gatewayClientsRecyclerAdapter = new GatewayClientsRecyclerAdapter( getApplicationContext(), this);
+        populateOperatorId();
         populateSettings();
+    }
+
+    private void populateOperatorId() {
+        TextView operatorIdTextView = findViewById(R.id.operator_id_text);
+        String operatorId = GatewayClientsHandler.getOperatorId(getApplicationContext());
+
+        String operatorIdText = operatorIdTextView.getText().toString() + " " + operatorId;
+        operatorIdTextView.setText(operatorIdText);
     }
 
     @Override
