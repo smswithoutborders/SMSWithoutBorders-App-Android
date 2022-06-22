@@ -17,10 +17,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.List;
 
 public class PlatformsActivity extends AppCompatActivity{
-    // TODO: Check if user credentials are stored else log them out
-    // TODO: Fill in bottomBar actions (dashboard, settings, logs, exit)
-    // TODO: Include loader when message is sending...
-
     RecyclerView recyclerView;
     PlatformsRecyclerAdapter platformsRecyclerAdapter;
 

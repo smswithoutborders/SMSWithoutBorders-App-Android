@@ -121,7 +121,7 @@ public class HomepageActivity extends AppCompatActivity {
                 Datastore.DatabaseName).build();
 
         final List<EncryptedContent>[] encryptedContentList = new List[]{new ArrayList<>()};
-        Thread fetchEmailMessagesThread = new Thread(new Runnable() {
+        Thread fetchEncryptedMessagesThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 EncryptedContentDAO encryptedContentDAO = databaseConnector.encryptedContentDAO();
@@ -129,9 +129,8 @@ public class HomepageActivity extends AppCompatActivity {
             }
         });
 
-        // TODO: Fetch other platforms text from here
-        fetchEmailMessagesThread.start();
-        fetchEmailMessagesThread.join();
+        fetchEncryptedMessagesThread.start();
+        fetchEncryptedMessagesThread.join();
 
         return encryptedContentList[0];
     }
@@ -142,7 +141,7 @@ public class HomepageActivity extends AppCompatActivity {
                 .build();
 
         final List<EncryptedContent>[] encryptedContentList = new List[]{new ArrayList<>()};
-        Thread fetchEmailMessagesThread = new Thread(new Runnable() {
+        Thread fetchEncryptedMessagesThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 EncryptedContentDAO encryptedContentDAO = databaseConnector.encryptedContentDAO();
@@ -150,9 +149,8 @@ public class HomepageActivity extends AppCompatActivity {
             }
         });
 
-        // TODO: Fetch other platforms text from here
-        fetchEmailMessagesThread.start();
-        fetchEmailMessagesThread.join();
+        fetchEncryptedMessagesThread.start();
+        fetchEncryptedMessagesThread.join();
 
         return encryptedContentList[0];
     }

@@ -1,8 +1,6 @@
 package com.example.sw0b_001;
 
-import android.app.DownloadManager;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -101,7 +99,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
     public void processHandshakePayload(JSONObject jsonObject, long gatewayServerId) throws Exception {
         try {
-            // TODO securely store the shared key
             String sharedKey = jsonObject.getString("shared_key");
             JSONArray platforms = jsonObject.getJSONArray("user_platforms");
 
@@ -157,33 +154,6 @@ public class SyncHandshakeActivity extends AppCompatActivity {
         insertPlatformThread.join();
     }
 
-    public long downloadLogoOnline(String logoCompleteURL, String logoStorageName) {
-        // TODO: construct the logo back into a full URL
-        // TODO: download and store the image from the server
-        // TODO: pass back stored location of image (int) on device to be linked to stored platform
-        /*
-        File direct = new File(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), logoStorageName);
-
-        if (!direct.exists()) {
-            direct.mkdirs();
-        }
-         */
-
-        Uri logoCompleteURLURI = Uri.parse(logoCompleteURL);
-        DownloadManager.Request downloadManagerRequest = new DownloadManager.Request(logoCompleteURLURI);
-
-        String requestDescription = "Downloading " + logoCompleteURL;
-        String requestTitle = "Downloading platform logos";
-        downloadManagerRequest.setDescription(requestDescription);
-        downloadManagerRequest.setTitle(requestTitle);
-        downloadManagerRequest.setMimeType("image/svg+xml");
-        downloadManagerRequest.setDestinationInExternalFilesDir(getApplicationContext(), "logos", logoStorageName + ".svg");
-
-        DownloadManager downloadManager = (DownloadManager) getSystemService(getApplicationContext().DOWNLOAD_SERVICE);
-        long downloadId = downloadManager.enqueue(downloadManagerRequest);
-        return downloadId;
-    }
-
     public void publicKeyExchange(String gatewayServerHandshakeUrl) {
         try {
             SecurityHandler securityHandler = new SecurityHandler();
@@ -217,14 +187,12 @@ public class SyncHandshakeActivity extends AppCompatActivity {
                         - Would receive the shared key if authentication is available
                          */
 
-                        // TODO: change from "pd" to "public_key"
                         String gatewayServerPublicKey = response.getString("public_key");
 
                         String gatewayServerVerifyUrl = response.getString("verification_url");
 
 
                         // Formatting public key to work well from here
-                        // TODO: check to make sure this is working
                         gatewayServerPublicKey = gatewayServerPublicKey.replace("-----BEGIN PUBLIC KEY-----\n", "");
                         gatewayServerPublicKey = gatewayServerPublicKey.replace("-----END PUBLIC KEY-----", "");
 

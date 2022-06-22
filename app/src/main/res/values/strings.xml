@@ -4,5 +4,7 @@
     <string name="privacy_policy">
         https://smswithoutborders.com/privacy-policy
     </string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="gateway_client_seeds">
+        http://seeds.smswithoutborders.com
+    </string>
 </resources>

@@ -73,7 +73,7 @@ public class GatewayClientsHandler {
             @Override
             public void onResponse(JSONArray responses) {
                 int defaultCounters = 0;
-                boolean randomSelectDefault = true;
+                boolean randomSelectDefault = false;
 
                 for(int i=0;i<responses.length();++i) {
                     try {
@@ -89,12 +89,17 @@ public class GatewayClientsHandler {
 
                 // If no Gateway client that matches the required ISP
                 // choose from any of the multiples and make default
-                if(defaultCounters < 1) {
+                if(defaultCounters < 1 && responses.length() > 0) {
                     defaultCounters = responses.length();
-                    randomSelectDefault = false;
+                    randomSelectDefault = true;
                 }
 
-                defaultCounters = new Random().nextInt(defaultCounters);
+                try {
+                    defaultCounters = new Random().nextInt(defaultCounters);
+                }
+                catch(Exception e ) {
+                    e.printStackTrace();
+                }
                 for(int i=0, findDefaultCounter=0;i<responses.length();++i, ++findDefaultCounter) {
                     try {
                         // TODO: Add algorithm for default Gateway Client
@@ -116,7 +121,7 @@ public class GatewayClientsHandler {
                         gatewayClient.setOperatorId(operatorId);
 
                         // Random Gateway client selector
-                        if(!randomSelectDefault) {
+                        if(randomSelectDefault) {
                             if(i == defaultCounters)
                                 gatewayClient.setDefault(true);
                         }
@@ -138,6 +143,7 @@ public class GatewayClientsHandler {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                callbackFunction.run();
             }
         });
         queue.add(remoteSeedsRequest);
