@@ -20,8 +20,9 @@ public class WelcomeActivity extends AppCompatActivity {
     public void onClickSignupBtn(View view) throws UnsupportedEncodingException {
 
         // TODO: change for production
-        String signupURL = "https://staging.smswithoutborders.com/sign-up?ari=";
-        String intentUrl = URLEncoder.encode("intent://staging.smswithoutborders.com/sign-up/", "UTF-8");
+        String signupURL = getString(R.string.smswithoutborders_official_site_signup) + "?ari=";
+        String intentUrl = URLEncoder.encode(
+                getString(R.string.smswithoutborders_official_site_signup_intent), "UTF-8");
         signupURL = signupURL + intentUrl;
 
         Uri intentUri = Uri.parse(signupURL);

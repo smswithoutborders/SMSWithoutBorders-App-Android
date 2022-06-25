@@ -28,7 +28,7 @@ public class StoreAccessSettingsActivity extends AppCompatActivity {
     }
 
     public void onContinueClick(View view) {
-        String smswithoutbordersHandshakeUrl = "https://staging.smswithoutborders.com/login";
+        String smswithoutbordersHandshakeUrl = getString(R.string.smswithoutborders_official_site_login);
         Uri intentUri = Uri.parse(smswithoutbordersHandshakeUrl);
         Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
         startActivity(intent);

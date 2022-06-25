@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -64,7 +65,8 @@ public class SynchroniseTypeActivity extends AppCompatActivity {
 
 
     public void onContinueClick(View view) {
-        String smswithoutbordersHandshakeUrl = "https://staging.smswithoutborders.com/login";
+        String smswithoutbordersHandshakeUrl = getString(R.string.smswithoutborders_official_site_login);
+        Log.d(getLocalClassName(), "** " + smswithoutbordersHandshakeUrl);
         Uri intentUri = Uri.parse(smswithoutbordersHandshakeUrl);
         Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
         startActivity(intent);

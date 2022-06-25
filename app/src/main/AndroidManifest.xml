@@ -65,6 +65,10 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="apps"
+                    android:host="developers.smswithoutborders.com"
+                    android:pathPrefix="/v2/sync/users/" />
+                <data
+                    android:scheme="apps"
                     android:host="staging.smswithoutborders.com"
                     android:pathPrefix="/v2/sync/users/" />
                 <data
@@ -75,6 +79,10 @@
                 <data
                     android:scheme="intent"
                     android:host="staging.smswithoutborders.com"
+                    android:pathPrefix="/sign-up/" />
+                <data
+                    android:scheme="intent"
+                    android:host="smswithoutborders.com"
                     android:pathPrefix="/sign-up/" />
                 <!-- note that the leading "/" is required for pathPrefix-->
             </intent-filter>
