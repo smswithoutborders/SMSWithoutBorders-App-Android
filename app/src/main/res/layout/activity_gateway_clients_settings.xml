@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/gateway_client_settings_toolbar"
-        app:title="Available Gateway Clients"
+        app:title="@string/gateway_clients_settings_header"
         tools:visibility="visible" />
 
     <!-- Linear progress indicator -->
@@ -39,7 +39,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="operator id:"
+        android:text="@string/gateway_clients_settings_operator_id"
         android:textAlignment="center"
         android:textColor="@color/pending_gray"
         app:layout_constraintEnd_toEndOf="parent"

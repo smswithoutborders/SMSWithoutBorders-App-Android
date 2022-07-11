@@ -65,7 +65,7 @@
                 android:id="@+id/message_recipient_number_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="Search"
+                android:hint="@string/message_compose_phonenumber"
                 android:inputType="textShortMessage|textNoSuggestions"
                 android:textCursorDrawable="@null" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -82,9 +82,9 @@
         android:layout_marginBottom="8dp"
         android:background="@color/black"
         android:gravity="start|top"
-        android:hint="Message"
-        android:padding="40dp"
+        android:hint="@string/message_compose_body"
         android:inputType="textMultiLine"
+        android:padding="40dp"
         android:textCursorDrawable="@null"
         app:boxStrokeWidth="2dp"
         app:layout_constraintBottom_toBottomOf="parent"

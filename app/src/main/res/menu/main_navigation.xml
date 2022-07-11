@@ -5,12 +5,12 @@
     <item
         android:id="@+id/recents"
         android:icon="@drawable/ic_baseline_home_24"
-        android:title="Recents" />
+        android:title="@string/main_navigation_recents" />
 
     <item
         android:id="@+id/settings"
         android:icon="@drawable/settings"
-        android:title="Settings" />
+        android:title="@string/main_navigation_settings" />
 
 <!--    <item-->
 <!--        android:id="@+id/logout"-->

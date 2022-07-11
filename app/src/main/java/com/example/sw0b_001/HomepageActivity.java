@@ -80,10 +80,9 @@ public class HomepageActivity extends AppCompatActivity {
         // recentsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
 
-        if(!encryptedContentList.isEmpty()) {
-            TextView noRecentMessagesText = findViewById(R.id.no_recent_messages);
-            noRecentMessagesText.setVisibility(View.INVISIBLE);
-        }
+        TextView noRecentMessagesText = findViewById(R.id.no_recent_messages);
+        if(!encryptedContentList.isEmpty()) noRecentMessagesText.setVisibility(View.INVISIBLE);
+        else noRecentMessagesText.setVisibility(View.VISIBLE);
 
         RecentsRecyclerAdapter recentsRecyclerAdapter = new RecentsRecyclerAdapter(this, encryptedContentList, R.layout.layout_cardlist_recents);
         recentsRecyclerView.setAdapter(recentsRecyclerAdapter);

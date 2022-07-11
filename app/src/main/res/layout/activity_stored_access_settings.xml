@@ -17,31 +17,33 @@
         android:elevation="0dp"
         android:fontFamily="@font/roboto"
         android:onClick="onContinueClick"
-        android:text="Automatic Refresh stored access"
+        android:text="@string/settings_automatically_stored_access"
         android:textAlignment="textStart"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:cornerRadius="0dp"
         app:iconTintMode="add"
-        app:layout_constraintBottom_toTopOf="@+id/textView16"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView16" />
 
     <TextView
         android:id="@+id/textView16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
         android:paddingLeft="12sp"
-        android:text="Warning! Resyncing will clear all previously sent messages."
+        android:text="@string/settings_automatically_stored_access_warning"
         android:textColor="#A19F9F"
-        app:layout_constraintBottom_toTopOf="@+id/manually_refresh_btn"
+        app:layout_constraintBottom_toTopOf="@+id/automatic_refresh_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/automatic_refresh_btn" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/manually_refresh_btn"
@@ -49,21 +51,24 @@
 
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
+        android:layout_marginBottom="423dp"
         android:backgroundTint="@color/button_gray"
         android:elevation="0dp"
         android:fontFamily="@font/roboto"
         android:onClick="onManualRefreshClick"
-        android:text="Refresh with QR Scanner"
+        android:text="@string/settings_manual_stored_access"
         android:textAlignment="textStart"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:cornerRadius="0dp"
         app:iconTintMode="add"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+        app:layout_constraintTop_toBottomOf="@+id/automatic_refresh_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

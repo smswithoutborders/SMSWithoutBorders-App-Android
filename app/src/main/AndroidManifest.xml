@@ -31,7 +31,7 @@
 
         <activity
             android:name=".MessageComposeActivity"
-            android:label="Compose new message"
+            android:label="@string/message_compose_header"
             android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar" />
 
@@ -90,7 +90,7 @@
 
         <activity
             android:name=".PlatformsActivity"
-            android:label="Compose for Stored Access"
+            android:label="@string/platforms_compose_header"
             android:parentActivityName=".HomepageActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -107,7 +107,7 @@
 
         <activity
             android:name=".SettingsActivities.SettingsActivity"
-            android:label="Settings"
+            android:label="@string/settings_settings"
             android:theme="@style/Theme.MyAppNoBar" />
 
 
@@ -118,7 +118,7 @@
 
         <activity
             android:name=".SettingsActivities.StoreAccessSettingsActivity"
-            android:label="Store Access"
+            android:label="@string/settings_store_access_text"
             android:parentActivityName=".SettingsActivities.SettingsActivity" />
         <activity
             android:name=".EmailComposeActivity"
@@ -134,7 +134,7 @@
         <activity
             android:name=".TextComposeActivity"
             android:parentActivityName=".PlatformsActivity"
-            android:label="Compose"
+            android:label="@string/text_compose_compose"
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -144,7 +144,7 @@
         </activity>
         <activity
             android:name=".QRScannerActivity"
-            android:label="QR Scanner"
+            android:label="@string/synchronize_type_header_manual_synchronize_text_continue"
             android:parentActivityName=".PasswordActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

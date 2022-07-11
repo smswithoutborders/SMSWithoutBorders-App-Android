@@ -139,12 +139,18 @@ public class MessageComposeActivity extends AppCompatActivity {
                 String message = messageEditText.getText().toString();
 
                 if(to.isEmpty()) {
-                    toEditText.setError("Recipient cannot be empty!");
+                    toEditText.setError(getString(R.string.message_compose_empty_recipient));
+                    return false;
+                }
+
+                // Till I find a cleaner version
+                if(! to.matches("^\\+[1-9]\\d{1,14}$")) {
+                    toEditText.setError(getString(R.string.message_compose_invalid_number));
                     return false;
                 }
 
                 if(message.isEmpty()) {
-                    messageEditText.setError("Body should not be empty!");
+                    messageEditText.setError(getString(R.string.message_compose_empty_body));
                     return false;
                 }
 
