@@ -38,7 +38,7 @@
     </string>
 
     <string name="email_compose_body">
-       Compose email
+        Compose email
     </string>
 
     <string name="gateway_clients_settings_operator_id">
@@ -179,5 +179,9 @@
 
     <string name="gateway_clients_settings_header">
         Available Gateway Clients
+    </string>
+
+    <string name="settings_gateway_clients_text">
+        Gateway Clients
     </string>
 </resources>
