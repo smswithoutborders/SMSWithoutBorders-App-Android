@@ -184,4 +184,8 @@
     <string name="settings_gateway_clients_text">
         Gateway Clients
     </string>
+
+    <string name="password_failed">
+        Failed to authenticate! Please try again...
+    </string>
 </resources>
