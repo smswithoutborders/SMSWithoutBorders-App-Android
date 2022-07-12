@@ -188,4 +188,8 @@
     <string name="password_failed">
         Failed to authenticate! Please try again...
     </string>
+
+    <string name="password_empty">
+        Password cannot be empty!
+    </string>
 </resources>

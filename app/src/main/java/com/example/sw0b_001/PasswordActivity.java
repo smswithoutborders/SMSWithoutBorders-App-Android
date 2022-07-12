@@ -63,7 +63,7 @@ public class PasswordActivity extends AppCompatActivity {
         GatewayServer gatewayServers[] = {new GatewayServer()};
 
         if(passwordField.getText().toString().isEmpty()) {
-            passwordField.setError("Password cannot be empty!");
+            passwordField.setError(getString(R.string.password_empty));
             return;
         }
 

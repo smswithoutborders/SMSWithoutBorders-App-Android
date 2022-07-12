@@ -48,4 +48,5 @@
     <string name="gateway_clients_settings_header">Clients Gateway disponibles</string>
     <string name="settings_gateway_clients_text">Client Gateway</string>
     <string name="password_failed">Échec de l\'authentification ! Veuillez réessayer...</string>
+    <string name="password_empty">Le mot de passe ne peut pas être vide !</string>
 </resources>
