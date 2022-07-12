@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sw0b_001.GatewayClientsSettingsActivity;
+import com.example.sw0b_001.SettingsActivities.GatewayClientsSettingsActivity;
 import com.example.sw0b_001.R;
 
 import org.jetbrains.annotations.NotNull;

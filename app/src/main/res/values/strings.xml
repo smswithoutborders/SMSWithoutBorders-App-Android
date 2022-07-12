@@ -192,4 +192,20 @@
     <string name="password_empty">
         Password cannot be empty!
     </string>
+
+    <string name="settings_language">
+        Language
+    </string>
+
+    <string name="settings_language_preferred_language_text">
+        Select your preferred language
+    </string>
+
+    <string name="settings_language_supported_language_en">
+        English
+    </string>
+
+    <string name="settings_language_supported_language_fr">
+        French
+    </string>
 </resources>

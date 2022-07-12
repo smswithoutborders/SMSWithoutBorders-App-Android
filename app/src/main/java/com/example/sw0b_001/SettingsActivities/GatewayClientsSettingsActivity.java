@@ -1,4 +1,4 @@
-package com.example.sw0b_001;
+package com.example.sw0b_001.SettingsActivities;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,6 +16,7 @@ import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsRecyclerAdapter;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
+import com.example.sw0b_001.R;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;

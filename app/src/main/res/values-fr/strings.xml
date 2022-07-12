@@ -49,4 +49,8 @@
     <string name="settings_gateway_clients_text">Client Gateway</string>
     <string name="password_failed">Échec de l\'authentification ! Veuillez réessayer...</string>
     <string name="password_empty">Le mot de passe ne peut pas être vide !</string>
+    <string name="settings_language">Langue</string>
+    <string name="settings_language_preferred_language_text">Sélectionnez votre langue préférée</string>
+    <string name="settings_language_supported_language_en">Anglais</string>
+    <string name="settings_language_supported_language_fr">Français</string>
 </resources>

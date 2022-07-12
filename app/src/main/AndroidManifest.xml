@@ -3,7 +3,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <queries>
         <intent>
@@ -28,14 +28,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".SettingsActivities.LanguageSettingsActivity"
+            android:exported="false" />
 
         <activity
             android:name=".MessageComposeActivity"
             android:label="@string/message_compose_header"
             android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar" />
-
-
         <activity
             android:name=".SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -46,11 +47,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".SyncHandshakeActivity"
             android:theme="@style/Theme.MyAppNoBar" />
-
         <activity
             android:name=".WelcomeActivity"
             android:theme="@style/Theme.MyAppNoBar" />
@@ -58,36 +57,35 @@
             android:name=".SynchroniseTypeActivity"
             android:label=""
             android:parentActivityName=".WelcomeActivity">
-
             <intent-filter android:label="pending_name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="apps"
-                    android:host="developers.smswithoutborders.com"
-                    android:pathPrefix="/v2/sync/users/" />
-                <data
-                    android:scheme="apps"
-                    android:host="staging.smswithoutborders.com"
-                    android:pathPrefix="/v2/sync/users/" />
-                <data
-                    android:scheme="app"
-                    android:host="staging.smswithoutborders.com"
-                    android:pathPrefix="/v2/sync/users/" />
 
                 <data
-                    android:scheme="intent"
-                    android:host="staging.smswithoutborders.com"
-                    android:pathPrefix="/sign-up/" />
+                    android:host="developers.smswithoutborders.com"
+                    android:pathPrefix="/v2/sync/users/"
+                    android:scheme="apps" />
                 <data
-                    android:scheme="intent"
+                    android:host="staging.smswithoutborders.com"
+                    android:pathPrefix="/v2/sync/users/"
+                    android:scheme="apps" />
+                <data
+                    android:host="staging.smswithoutborders.com"
+                    android:pathPrefix="/v2/sync/users/"
+                    android:scheme="app" />
+                <data
+                    android:host="staging.smswithoutborders.com"
+                    android:pathPrefix="/sign-up/"
+                    android:scheme="intent" />
+                <data
                     android:host="smswithoutborders.com"
-                    android:pathPrefix="/sign-up/" />
-                <!-- note that the leading "/" is required for pathPrefix-->
+                    android:pathPrefix="/sign-up/"
+                    android:scheme="intent" />
+                <!-- note that the leading "/" is required for pathPrefix -->
             </intent-filter>
         </activity>
-
         <activity
             android:name=".PlatformsActivity"
             android:label="@string/platforms_compose_header"
@@ -96,26 +94,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomepageActivity" />
         </activity>
-
-
         <activity
             android:name=".HomepageActivity"
             android:label=""
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/Theme.MyAppNoBar" />
-
-
+            android:theme="@style/Theme.MyAppNoBar"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".SettingsActivities.SettingsActivity"
             android:label="@string/settings_settings"
             android:theme="@style/Theme.MyAppNoBar" />
-
-
         <activity
-            android:name=".GatewayClientsSettingsActivity"
+            android:name=".SettingsActivities.GatewayClientsSettingsActivity"
             android:parentActivityName=".HomepageActivity"
-            android:theme="@style/Theme.MyAppNoBar"></activity>
-
+            android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:name=".SettingsActivities.StoreAccessSettingsActivity"
             android:label="@string/settings_store_access_text"
@@ -126,15 +117,14 @@
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".TextComposeActivity"
-            android:parentActivityName=".PlatformsActivity"
             android:label="@string/text_compose_compose"
+            android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -153,10 +143,6 @@
         <activity
             android:name=".PasswordActivity"
             android:theme="@style/Theme.MyAppNoBar" />
-
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
