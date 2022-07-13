@@ -52,7 +52,11 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
 
         this.gatewayClientsRecyclerAdapter = new GatewayClientsRecyclerAdapter( getApplicationContext(), this);
         populateOperatorId();
-        populateSettings();
+        try {
+            populateSettings();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void populateOperatorId() {
@@ -69,7 +73,7 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void populateSettings() {
+    public void populateSettings() throws InterruptedException {
         this.listOfGateways = GatewayClientsHandler.getAllGatewayClients(getApplicationContext());
         this.gatewayClientRecyclerView.setAdapter(this.gatewayClientsRecyclerAdapter);
     }
@@ -81,7 +85,11 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
         Runnable callbackFunction = new Runnable() {
             @Override
             public void run() {
-                populateSettings();
+                try {
+                    populateSettings();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 LinearProgressIndicator linearProgressIndicator = findViewById(R.id.refresh_loader);
                 linearProgressIndicator.setVisibility(View.INVISIBLE);
             }

@@ -12,6 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -149,7 +150,33 @@ public class GatewayClientsHandler {
         queue.add(remoteSeedsRequest);
     }
 
-    public static List<GatewayClient> getAllGatewayClients(Context context) {
+    private static List<GatewayClient> appendDefaultGatewayClients(Context context, List<GatewayClient> gatewayClientList) throws InterruptedException {
+        GatewayClient gatewayClient = new GatewayClient();
+        gatewayClient.setCountry("Cameroon");
+        gatewayClient.setMSISDN(context.getString(R.string.default_gateway_MSISDN_0));
+        gatewayClient.setOperatorName("MTN Cameroon");
+        gatewayClient.setOperatorId("62401");
+
+        GatewayClient gatewayClient1 = new GatewayClient();
+        gatewayClient1.setCountry("Cameroon");
+        gatewayClient1.setMSISDN(context.getString(R.string.default_gateway_MSISDN_1));
+        gatewayClient1.setOperatorName("MTN Cameroon");
+        gatewayClient1.setOperatorId("62401");
+
+        GatewayClient gatewayClient2 = new GatewayClient();
+        gatewayClient2.setCountry("Cameroon");
+        gatewayClient2.setMSISDN(context.getString(R.string.default_gateway_MSISDN_2));
+        gatewayClient2.setOperatorName("Orange Cameroon");
+        gatewayClient2.setOperatorId("62402");
+
+        gatewayClientList.add(gatewayClient);
+        gatewayClientList.add(gatewayClient1);
+        gatewayClientList.add(gatewayClient2);
+
+        return gatewayClientList;
+    }
+
+    public static List<GatewayClient> getAllGatewayClients(Context context) throws InterruptedException {
         final List<GatewayClient>[] gatewayClients = new List[]{new ArrayList<>()};
 
         Thread fetchGatewayClientThread = new Thread(new Runnable() {
@@ -171,6 +198,7 @@ public class GatewayClientsHandler {
             e.printStackTrace();
         }
 
+        gatewayClients[0] = appendDefaultGatewayClients(context, gatewayClients[0]);
         return gatewayClients[0];
     }
 
@@ -213,9 +241,10 @@ public class GatewayClientsHandler {
 
     public static String getDefaultGatewayClientMSISDN(Context context) throws Throwable {
         GatewayClient gatewayClient = getGatewayClientMSISDN(context);
+
         if(gatewayClient.getMSISDN() == null || gatewayClient.getMSISDN().isEmpty()) {
             // TODO should have fallback GatewayClients that can be used in the code
-            String defaultSeedFallbackGatewayClientMSISDN = "+237672451860";
+            String defaultSeedFallbackGatewayClientMSISDN = context.getString(R.string.default_gateway_MSISDN_1);
             gatewayClient.setMSISDN(defaultSeedFallbackGatewayClientMSISDN);
         }
 
