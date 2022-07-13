@@ -8,7 +8,9 @@ import android.util.Log;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.sw0b_001.Models.LanguageHandler;
 import com.example.sw0b_001.R;
@@ -19,6 +21,14 @@ public class LanguageSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_language_settings);
+
+        Toolbar gatewayClientToolbar = (Toolbar) findViewById(R.id.language_settings_toolbar);
+        setSupportActionBar(gatewayClientToolbar);
+
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
 
         LanguageHandler.getPersistedData(getApplicationContext());
 

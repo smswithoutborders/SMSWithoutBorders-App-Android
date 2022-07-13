@@ -43,7 +43,7 @@
         app:layout_constraintBottom_toTopOf="@+id/automatic_refresh_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/stored_access_toolbar" />
 
     <Button
         android:id="@+id/manually_refresh_btn"
@@ -70,5 +70,17 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/automatic_refresh_btn" />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/stored_access_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/default_dark"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/settings_store_access_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

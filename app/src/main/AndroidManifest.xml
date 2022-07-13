@@ -30,7 +30,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".SettingsActivities.LanguageSettingsActivity"
-            android:label="@string/settings_language"
+            android:theme="@style/Theme.MyAppNoBar"
             android:parentActivityName=".SettingsActivities.SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -39,8 +39,8 @@
 
         <activity
             android:name=".MessageComposeActivity"
-            android:label="@string/message_compose_header"
             android:parentActivityName=".PlatformsActivity"
+            android:label="@string/message_compose_header"
             android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:name=".SplashActivity"
@@ -91,14 +91,12 @@
                 <!-- note that the leading "/" is required for pathPrefix -->
             </intent-filter>
         </activity>
+
         <activity
             android:name=".PlatformsActivity"
-            android:label="@string/platforms_compose_header"
-            android:parentActivityName=".HomepageActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HomepageActivity" />
-        </activity>
+            android:parentActivityName=".HomepageActivity"
+            android:theme="@style/Theme.MyAppNoBar"/>
+
         <activity
             android:name=".HomepageActivity"
             android:label=""
@@ -106,7 +104,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".SettingsActivities.SettingsActivity"
-            android:label="@string/settings_settings"
+            android:label=""
             android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:name=".SettingsActivities.GatewayClientsSettingsActivity"
@@ -114,8 +112,9 @@
             android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:name=".SettingsActivities.StoreAccessSettingsActivity"
-            android:label="@string/settings_store_access_text"
+            android:theme="@style/Theme.MyAppNoBar"
             android:parentActivityName=".SettingsActivities.SettingsActivity" />
+
         <activity
             android:name=".EmailComposeActivity"
             android:parentActivityName=".PlatformsActivity"
@@ -128,7 +127,7 @@
         </activity>
         <activity
             android:name=".TextComposeActivity"
-            android:label="@string/text_compose_compose"
+            android:label=""
             android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
@@ -139,7 +138,7 @@
         </activity>
         <activity
             android:name=".QRScannerActivity"
-            android:label="@string/synchronize_type_header_manual_synchronize_text_continue"
+            android:label=""
             android:parentActivityName=".PasswordActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

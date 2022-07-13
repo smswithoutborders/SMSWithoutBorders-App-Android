@@ -41,7 +41,6 @@
     <string name="welcome_synchronize">Synchroniser</string>
     <string name="main_navigation_recents">Récent</string>
     <string name="main_navigation_settings">Paramètres</string>
-    <string name="message_compose_header">Composez...</string>
     <string name="platforms_compose_header">Composer pour un accès stocké</string>
     <string name="text_compose_compose">Composer</string>
     <string name="settings_store_access_text">Accès en magasin à votre compte</string>
@@ -53,4 +52,5 @@
     <string name="settings_language_preferred_language_text">Sélectionnez votre langue préférée</string>
     <string name="settings_language_supported_language_en">Anglais</string>
     <string name="settings_language_supported_language_fr">Français</string>
+    <string name="message_compose_header">Message...</string>
 </resources>
