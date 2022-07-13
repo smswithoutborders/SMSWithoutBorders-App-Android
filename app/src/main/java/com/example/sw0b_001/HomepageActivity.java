@@ -44,6 +44,7 @@ public class HomepageActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onPostResume() {
         super.onPostResume();
