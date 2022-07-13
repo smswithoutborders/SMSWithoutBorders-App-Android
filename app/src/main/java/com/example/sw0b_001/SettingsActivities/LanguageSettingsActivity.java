@@ -1,19 +1,17 @@
 package com.example.sw0b_001.SettingsActivities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sw0b_001.Models.LanguageHandler;
 import com.example.sw0b_001.R;
-
-import java.util.Locale;
 
 public class LanguageSettingsActivity extends AppCompatActivity {
 
@@ -22,47 +20,53 @@ public class LanguageSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_language_settings);
 
+        LanguageHandler.getPersistedData(getApplicationContext());
+
         populateLanguages();
     }
 
 
+    @SuppressLint("ResourceType")
     private void populateLanguages() {
-
-        RadioGroup group = (RadioGroup) findViewById(R.id.language_radio);
-
         RadioButton enLanguageRadioButton = new RadioButton(this);
-        enLanguageRadioButton.setId(0);
         enLanguageRadioButton.setText(R.string.settings_language_supported_language_en);
 
         RadioButton frLanguageRadioButton = new RadioButton(this);
-        frLanguageRadioButton.setId(1);
         frLanguageRadioButton.setText(R.string.settings_language_supported_language_fr);
 
-        group.addView(enLanguageRadioButton);
-        group.addView(frLanguageRadioButton);
+        enLanguageRadioButton.setId(0);
+        frLanguageRadioButton.setId(1);
 
-        Intent intent = getIntent();
+        final boolean[] isCustomChecked = {false};
 
-        String defaultLanguage = "";
-        if(intent.hasExtra("custom_language"))
-            defaultLanguage = intent.getStringExtra("custom_language");
-        else
-            defaultLanguage = Locale.getDefault().getLanguage();
+        if(LanguageHandler.hasPersistedData(getApplicationContext())) {
+            switch(LanguageHandler.getPersistedData(getApplicationContext())) {
+                case "en": {
+                    enLanguageRadioButton.setChecked(true);
+                    isCustomChecked[0] = true;
+                    break;
+                }
 
-        switch (defaultLanguage) {
-            case "en":
-                enLanguageRadioButton.setChecked(true);
-                break;
-
-            case "fr":
-                frLanguageRadioButton.setChecked(true);
-                break;
+                case "fr": {
+                    frLanguageRadioButton.setChecked(true);
+                    isCustomChecked[0] = true;
+                    break;
+                }
+            }
         }
 
+        RadioGroup group = (RadioGroup) findViewById(R.id.language_radio);
         group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                Log.d(getLocalClassName(), "** language ID: " + i);
+
+                if(isCustomChecked[0]) {
+
+                    isCustomChecked[0] = false;
+
+                    return;
+                }
 
                 String customLanguage = "";
                 switch(i) {
@@ -75,21 +79,23 @@ public class LanguageSettingsActivity extends AppCompatActivity {
                         break;
                 }
 
-                Locale locale = new Locale(customLanguage);
-
                 Resources resources = getResources();
-                DisplayMetrics displayMetrics = resources.getDisplayMetrics();
 
-                Configuration configuration = resources.getConfiguration();
-                configuration.locale = locale;
+                LanguageHandler.updateLanguage(resources, customLanguage);
 
-                resources.updateConfiguration(configuration, displayMetrics);
+                LanguageHandler.persistLanguage(getApplicationContext(), customLanguage);
 
                 Intent languageIntent = new Intent(getApplicationContext(), LanguageSettingsActivity.class);
-                languageIntent.putExtra("custom_language", customLanguage);
+
                 startActivity(languageIntent);
+
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
                 finish();
             }
         });
+
+        group.addView(enLanguageRadioButton);
+        group.addView(frLanguageRadioButton);
     }
 }
