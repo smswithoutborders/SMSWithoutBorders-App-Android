@@ -19,7 +19,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class GatewayClientsHandler {
 
@@ -88,19 +87,6 @@ public class GatewayClientsHandler {
                     }
                 }
 
-                // If no Gateway client that matches the required ISP
-                // choose from any of the multiples and make default
-                if(defaultCounters < 1 && responses.length() > 0) {
-                    defaultCounters = responses.length();
-                    randomSelectDefault = true;
-                }
-
-                try {
-                    defaultCounters = new Random().nextInt(defaultCounters);
-                }
-                catch(Exception e ) {
-                    e.printStackTrace();
-                }
                 for(int i=0, findDefaultCounter=0;i<responses.length();++i, ++findDefaultCounter) {
                     try {
                         // TODO: Add algorithm for default Gateway Client
@@ -122,18 +108,32 @@ public class GatewayClientsHandler {
                         gatewayClient.setOperatorId(operatorId);
 
                         // Random Gateway client selector
-                        if(randomSelectDefault) {
-                            if(i == defaultCounters)
-                                gatewayClient.setDefault(true);
-                        }
-                        else if(containsDefaultProperties(context, operatorId)) {
-                            if(findDefaultCounter == defaultCounters)
-                                gatewayClient.setDefault(true);
-                        }
-
                         GatewayClientsHandler.add(context, gatewayClient);
                     }
                     catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                List<GatewayClient> gatewayClients = new ArrayList<>();
+                try {
+                    gatewayClients = appendDefaultGatewayClients(context, gatewayClients);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                boolean defaultSet = false;
+                for(GatewayClient gatewayClient : gatewayClients) {
+                    try {
+                        if(!defaultSet && containsDefaultProperties(context, gatewayClient.getOperatorId())) {
+
+                            gatewayClient.setDefault(true);
+
+                            defaultSet = true;
+                        }
+
+                        GatewayClientsHandler.add(context, gatewayClient);
+
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
@@ -198,7 +198,6 @@ public class GatewayClientsHandler {
             e.printStackTrace();
         }
 
-        gatewayClients[0] = appendDefaultGatewayClients(context, gatewayClients[0]);
         return gatewayClients[0];
     }
 
@@ -244,7 +243,7 @@ public class GatewayClientsHandler {
 
         if(gatewayClient.getMSISDN() == null || gatewayClient.getMSISDN().isEmpty()) {
             // TODO should have fallback GatewayClients that can be used in the code
-            String defaultSeedFallbackGatewayClientMSISDN = context.getString(R.string.default_gateway_MSISDN_1);
+            String defaultSeedFallbackGatewayClientMSISDN = context.getString(R.string.default_gateway_MSISDN_0);
             gatewayClient.setMSISDN(defaultSeedFallbackGatewayClientMSISDN);
         }
 
