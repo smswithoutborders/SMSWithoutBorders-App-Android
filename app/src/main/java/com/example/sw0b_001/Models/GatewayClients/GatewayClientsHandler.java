@@ -72,21 +72,6 @@ public class GatewayClientsHandler {
         JsonArrayRequest remoteSeedsRequest = new JsonArrayRequest(Request.Method.GET, gatewayServerSeedsUrl, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray responses) {
-                int defaultCounters = 0;
-                boolean randomSelectDefault = false;
-
-                for(int i=0;i<responses.length();++i) {
-                    try {
-                        JSONObject response = responses.getJSONObject(i);
-                        String operatorId = response.getString("operator_id");
-                        if(containsDefaultProperties(context, operatorId)) {
-                            ++defaultCounters;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
                 for(int i=0, findDefaultCounter=0;i<responses.length();++i, ++findDefaultCounter) {
                     try {
                         // TODO: Add algorithm for default Gateway Client
