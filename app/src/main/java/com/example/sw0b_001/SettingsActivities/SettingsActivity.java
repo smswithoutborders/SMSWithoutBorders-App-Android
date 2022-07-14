@@ -60,7 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
         RecyclerView settingsRecyclerView = findViewById(R.id.settings_recycler_view);
         // settingsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        SettingsRecyclerAdapter settingsRecyclerAdapter = new SettingsRecyclerAdapter(this, listOfSettings, R.layout.layout_cardlist_settings);
+        SettingsRecyclerAdapter settingsRecyclerAdapter = new SettingsRecyclerAdapter(this, listOfSettings, R.layout.layout_cardlist_settings, this);
         settingsRecyclerView.setAdapter(settingsRecyclerAdapter);
         settingsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

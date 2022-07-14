@@ -12,6 +12,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.example.sw0b_001.HomepageActivity;
 import com.example.sw0b_001.Models.LanguageHandler;
 import com.example.sw0b_001.R;
 
@@ -95,7 +96,7 @@ public class LanguageSettingsActivity extends AppCompatActivity {
 
                 LanguageHandler.persistLanguage(getApplicationContext(), customLanguage);
 
-                Intent languageIntent = new Intent(getApplicationContext(), LanguageSettingsActivity.class);
+                Intent languageIntent = new Intent(getApplicationContext(), HomepageActivity.class);
 
                 startActivity(languageIntent);
 
