@@ -99,28 +99,10 @@ public class GatewayClientsHandler {
                         e.printStackTrace();
                     }
                 }
-                List<GatewayClient> gatewayClients = new ArrayList<>();
                 try {
-                    gatewayClients = appendDefaultGatewayClients(context, gatewayClients);
+                    storeDefaults(context);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
-
-                boolean defaultSet = false;
-                for(GatewayClient gatewayClient : gatewayClients) {
-                    try {
-                        if(!defaultSet && containsDefaultProperties(context, gatewayClient.getOperatorId())) {
-
-                            gatewayClient.setDefault(true);
-
-                            defaultSet = true;
-                        }
-
-                        GatewayClientsHandler.add(context, gatewayClient);
-
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 }
                 if(callbackFunction != null)
                     callbackFunction.run();
@@ -129,10 +111,78 @@ public class GatewayClientsHandler {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                try {
+                    storeDefaults(context);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 callbackFunction.run();
             }
         });
         queue.add(remoteSeedsRequest);
+    }
+
+    private static void storeDefaults(Context context) throws InterruptedException {
+        List<GatewayClient> gatewayClients = new ArrayList<>();
+        try {
+            gatewayClients = appendDefaultGatewayClients(context, gatewayClients);
+
+            boolean defaultSet = false;
+            for(GatewayClient gatewayClient : gatewayClients) {
+                try {
+                    if(!defaultSet && containsDefaultProperties(context, gatewayClient.getOperatorId())) {
+
+                        gatewayClient.setDefault(true);
+
+                        defaultSet = true;
+                    }
+
+                    GatewayClientsHandler.add(context, gatewayClient);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if(!defaultSet) {
+                // probably an international number from CM
+                // orange CM would be best to handle this request
+                gatewayClients = findForOperatorId(context, "62402");
+
+                // going with the first available option now
+                for(GatewayClient gatewayClient : gatewayClients) {
+                    gatewayClient.setDefault(true);
+                    toggleDefault(context, gatewayClient);
+                    break;
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<GatewayClient> findForOperatorId(Context context, String operatorId) {
+        final List<GatewayClient>[] gatewayClients = new List[]{new ArrayList<>()};
+
+        Thread fetchGatewayClientThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Datastore databaseConnection = Room.databaseBuilder(context,
+                                Datastore.class, Datastore.DatabaseName)
+                        .fallbackToDestructiveMigration()
+                        .build();
+
+                GatewayClientsDao gatewayClientsDao = databaseConnection.gatewayClientsDao();
+                gatewayClients[0] = gatewayClientsDao.findForOperaetorId(operatorId);
+            }
+        });
+        fetchGatewayClientThread.start();
+        try {
+            fetchGatewayClientThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return gatewayClients[0];
     }
 
     private static List<GatewayClient> appendDefaultGatewayClients(Context context, List<GatewayClient> gatewayClientList) throws InterruptedException {
