@@ -3,7 +3,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <queries>
         <intent>
@@ -28,14 +28,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".SettingsActivities.LanguageSettingsActivity"
+            android:theme="@style/Theme.MyAppNoBar"
+            android:parentActivityName=".SettingsActivities.SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SettingsActivities.SettingsActivity" />
+        </activity>
 
         <activity
             android:name=".MessageComposeActivity"
-            android:label="Compose new message"
             android:parentActivityName=".PlatformsActivity"
+            android:label="@string/message_compose_header"
             android:theme="@style/Theme.MyAppNoBar" />
-
-
         <activity
             android:name=".SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -46,11 +52,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".SyncHandshakeActivity"
             android:theme="@style/Theme.MyAppNoBar" />
-
         <activity
             android:name=".WelcomeActivity"
             android:theme="@style/Theme.MyAppNoBar" />
@@ -58,83 +62,73 @@
             android:name=".SynchroniseTypeActivity"
             android:label=""
             android:parentActivityName=".WelcomeActivity">
-
             <intent-filter android:label="pending_name">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="apps"
-                    android:host="developers.smswithoutborders.com"
-                    android:pathPrefix="/v2/sync/users/" />
-                <data
-                    android:scheme="apps"
-                    android:host="staging.smswithoutborders.com"
-                    android:pathPrefix="/v2/sync/users/" />
-                <data
-                    android:scheme="app"
-                    android:host="staging.smswithoutborders.com"
-                    android:pathPrefix="/v2/sync/users/" />
 
                 <data
-                    android:scheme="intent"
-                    android:host="staging.smswithoutborders.com"
-                    android:pathPrefix="/sign-up/" />
+                    android:host="developers.smswithoutborders.com"
+                    android:pathPrefix="/v2/sync/users/"
+                    android:scheme="apps" />
                 <data
-                    android:scheme="intent"
+                    android:host="staging.smswithoutborders.com"
+                    android:pathPrefix="/v2/sync/users/"
+                    android:scheme="apps" />
+                <data
+                    android:host="staging.smswithoutborders.com"
+                    android:pathPrefix="/v2/sync/users/"
+                    android:scheme="app" />
+                <data
+                    android:host="staging.smswithoutborders.com"
+                    android:pathPrefix="/sign-up/"
+                    android:scheme="intent" />
+                <data
                     android:host="smswithoutborders.com"
-                    android:pathPrefix="/sign-up/" />
-                <!-- note that the leading "/" is required for pathPrefix-->
+                    android:pathPrefix="/sign-up/"
+                    android:scheme="intent" />
+                <!-- note that the leading "/" is required for pathPrefix -->
             </intent-filter>
         </activity>
 
         <activity
             android:name=".PlatformsActivity"
-            android:label="Compose for Stored Access"
-            android:parentActivityName=".HomepageActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HomepageActivity" />
-        </activity>
-
+            android:parentActivityName=".HomepageActivity"
+            android:theme="@style/Theme.MyAppNoBar"/>
 
         <activity
             android:name=".HomepageActivity"
             android:label=""
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/Theme.MyAppNoBar" />
-
-
+            android:theme="@style/Theme.MyAppNoBar"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".SettingsActivities.SettingsActivity"
-            android:label="Settings"
+            android:label=""
             android:theme="@style/Theme.MyAppNoBar" />
-
-
         <activity
-            android:name=".GatewayClientsSettingsActivity"
+            android:name=".SettingsActivities.GatewayClientsSettingsActivity"
             android:parentActivityName=".HomepageActivity"
-            android:theme="@style/Theme.MyAppNoBar"></activity>
-
+            android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:name=".SettingsActivities.StoreAccessSettingsActivity"
-            android:label="Store Access"
+            android:theme="@style/Theme.MyAppNoBar"
             android:parentActivityName=".SettingsActivities.SettingsActivity" />
+
         <activity
             android:name=".EmailComposeActivity"
             android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".TextComposeActivity"
+            android:label=""
             android:parentActivityName=".PlatformsActivity"
-            android:label="Compose"
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -144,7 +138,7 @@
         </activity>
         <activity
             android:name=".QRScannerActivity"
-            android:label="QR Scanner"
+            android:label=""
             android:parentActivityName=".PasswordActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -153,10 +147,6 @@
         <activity
             android:name=".PasswordActivity"
             android:theme="@style/Theme.MyAppNoBar" />
-
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Recents"
+        android:text="@string/homepage_recent"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
@@ -47,7 +47,7 @@
             android:id="@+id/recent_search_edittext"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Search"
+            android:hint="@string/homepage_search"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center"
             android:inputType="textPersonName"
-            android:text="No recent messages"
+            android:text="@string/homepage_no_recent_messages"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textColor="#B6B6B6"
             app:layout_constraintBottom_toBottomOf="parent"

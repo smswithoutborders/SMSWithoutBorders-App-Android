@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <array name="preloaded_fonts" translatable="false">
-        <item>@font/monda</item>
-        <item>@font/press_start_2p</item>
-        <item>@font/quicksand_medium</item>
-    </array>
-</resources>

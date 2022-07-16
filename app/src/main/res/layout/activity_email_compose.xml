@@ -44,7 +44,7 @@
                 android:id="@+id/email_to"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="To"
+                android:hint="@string/email_compose_to"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/default_dark"
-                android:hint="Cc"
+                android:hint="@string/email_compose_cc"
                 android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -73,7 +73,7 @@
                 android:id="@+id/email_bcc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Bcc"
+                android:hint="@string/email_compose_bcc"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -82,14 +82,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
-            android:layout_marginEnd="0dp"
-            android:hint="Subject">
+            android:layout_marginEnd="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email_subject"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/default_dark"
+                android:hint="@string/email_compose_subject"
                 android:inputType="textEmailSubject"
                 app:endIconMode="clear_text" />
 
@@ -107,9 +107,9 @@
         android:autoLink="all"
         android:background="@null"
         android:gravity="start|top"
-        android:hint="Compose email"
-        android:padding="40dp"
+        android:hint="@string/email_compose_body"
         android:inputType="textMultiLine"
+        android:padding="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

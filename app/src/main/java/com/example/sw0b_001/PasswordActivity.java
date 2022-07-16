@@ -63,7 +63,7 @@ public class PasswordActivity extends AppCompatActivity {
         GatewayServer gatewayServers[] = {new GatewayServer()};
 
         if(passwordField.getText().toString().isEmpty()) {
-            passwordField.setError("Password cannot be empty!");
+            passwordField.setError(getString(R.string.password_empty));
             return;
         }
 
@@ -125,7 +125,7 @@ public class PasswordActivity extends AppCompatActivity {
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            passwordField.setError("Authentication Failed! Please try again...");
+                            passwordField.setError(getString(R.string.password_failed));
                             error.printStackTrace();
 
                             passwordValidationProgressBar.setVisibility(View.INVISIBLE);

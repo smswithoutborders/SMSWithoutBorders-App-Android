@@ -145,11 +145,11 @@ public class EmailComposeActivity extends AppCompatActivity {
                 String subject = subjectEditText.getText().toString();
 
                 if(to.isEmpty()) {
-                    toEditText.setError("Recipient cannot be empty!");
+                    toEditText.setError(getString(R.string.message_compose_empty_recipient));
                     return false;
                 }
                 if(body.isEmpty()) {
-                    bodyEditText.setError("Body should not be empty!");
+                    bodyEditText.setError(getString(R.string.message_compose_empty_body));
                     return false;
                 }
 

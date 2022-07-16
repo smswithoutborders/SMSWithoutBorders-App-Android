@@ -13,6 +13,9 @@ public interface GatewayClientsDao {
     @Query("SELECT * FROM GatewayClient")
     List<GatewayClient> getAll();
 
+    @Query("SELECT * FROM GatewayClient WHERE operator_id=:operator_id")
+    List<GatewayClient> findForOperaetorId(String operator_id);
+
     @Insert
     void insertAll(GatewayClient... gatewayClients);
 

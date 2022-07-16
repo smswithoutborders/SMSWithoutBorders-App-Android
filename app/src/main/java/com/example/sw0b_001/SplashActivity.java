@@ -4,11 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sw0b_001.Models.LanguageHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.databinding.ActivitySplashBinding;
 
@@ -17,6 +19,7 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.Locale;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -44,6 +47,21 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(activitySplashBinding.getRoot());
         screenContentView = activitySplashBinding.fullscreenContent;
 
+        updateLanguage();
+
+    }
+
+    private void updateLanguage() {
+        if(LanguageHandler.hasPersistedData(getApplicationContext())) {
+            String persistedLanguage = LanguageHandler.getPersistedData(getApplicationContext());
+            if(Locale.getDefault().getLanguage().equals(persistedLanguage)) {
+                return;
+            }
+            else {
+                LanguageHandler.updateLanguage(getResources(), persistedLanguage);
+                Log.d(getLocalClassName(), "** New locale default: " + Locale.getDefault().getLanguage());
+            }
+        }
     }
 
     @Override
