@@ -24,20 +24,25 @@ import java.util.Map;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    public static final String GATEWAY_CLIENT_SETTINGS = "Gateway Clients";
-    public static final String STORED_ACCESS_SETTINGS = "Store Access";
+    public static String GATEWAY_CLIENT_SETTINGS = "";
+    public static String STORED_ACCESS_SETTINGS = "";
+    public static String LANGUAGE_SETTINGS = "";
 
-    public static final Map<String, Integer> SETTINGS_ICON_MAPPER = new HashMap<String, Integer>() {
-        {
-            put(GATEWAY_CLIENT_SETTINGS, R.drawable.ic_round_router_24);
-            put(STORED_ACCESS_SETTINGS, R.drawable.ic_round_sync_24);
-        }};
+    public static final Map<String, Integer> SETTINGS_ICON_MAPPER = new HashMap<String, Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_settings);
+
+        GATEWAY_CLIENT_SETTINGS = getString(R.string.settings_gateway_clients_text);
+        STORED_ACCESS_SETTINGS = getString(R.string.settings_store_access_text);
+        LANGUAGE_SETTINGS = getString(R.string.settings_language);
+
+        SETTINGS_ICON_MAPPER.put(GATEWAY_CLIENT_SETTINGS, R.drawable.ic_round_router_24);
+        SETTINGS_ICON_MAPPER.put(STORED_ACCESS_SETTINGS, R.drawable.ic_round_sync_24);
+        SETTINGS_ICON_MAPPER.put(LANGUAGE_SETTINGS, R.drawable.ic_round_language_24);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.homepage_bottom_navbar);
         bottomNavBar(bottomNavigationView);
@@ -50,11 +55,12 @@ public class SettingsActivity extends AppCompatActivity {
         List<String> listOfSettings = new ArrayList<>();
         listOfSettings.add(GATEWAY_CLIENT_SETTINGS);
         listOfSettings.add(STORED_ACCESS_SETTINGS);
+        listOfSettings.add(LANGUAGE_SETTINGS);
 
         RecyclerView settingsRecyclerView = findViewById(R.id.settings_recycler_view);
         // settingsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        SettingsRecyclerAdapter settingsRecyclerAdapter = new SettingsRecyclerAdapter(this, listOfSettings, R.layout.layout_cardlist_settings);
+        SettingsRecyclerAdapter settingsRecyclerAdapter = new SettingsRecyclerAdapter(this, listOfSettings, R.layout.layout_cardlist_settings, this);
         settingsRecyclerView.setAdapter(settingsRecyclerAdapter);
         settingsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

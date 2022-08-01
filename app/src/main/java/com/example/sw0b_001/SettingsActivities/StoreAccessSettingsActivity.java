@@ -9,7 +9,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -25,6 +27,14 @@ public class StoreAccessSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_stored_access_settings);
+
+        Toolbar gatewayClientToolbar = (Toolbar) findViewById(R.id.stored_access_toolbar);
+        setSupportActionBar(gatewayClientToolbar);
+
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     public void onContinueClick(View view) {

@@ -1,5 +1,6 @@
 package com.example.sw0b_001.Models;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -12,8 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sw0b_001.GatewayClientsSettingsActivity;
 import com.example.sw0b_001.R;
+import com.example.sw0b_001.SettingsActivities.GatewayClientsSettingsActivity;
+import com.example.sw0b_001.SettingsActivities.LanguageSettingsActivity;
 import com.example.sw0b_001.SettingsActivities.SettingsActivity;
 import com.example.sw0b_001.SettingsActivities.StoreAccessSettingsActivity;
 
@@ -26,11 +28,13 @@ public class SettingsRecyclerAdapter extends RecyclerView.Adapter<SettingsRecycl
     Context context;
     List<String> listOfSettings;
     int settingsRenderLayout;
+    Activity activity;
 
-    public SettingsRecyclerAdapter(Context context, List<String> listOfSettings, int settingsRenderLayout){
+    public SettingsRecyclerAdapter(Context context, List<String> listOfSettings, int settingsRenderLayout, Activity activity){
         this.context = context;
         this.listOfSettings = listOfSettings;
         this.settingsRenderLayout = settingsRenderLayout;
+        this.activity = activity;
     }
 
     @NonNull
@@ -58,6 +62,11 @@ public class SettingsRecyclerAdapter extends RecyclerView.Adapter<SettingsRecycl
                 else if(settings.equals(SettingsActivity.STORED_ACCESS_SETTINGS)) {
                     Intent storeAccessIntent = new Intent(context, StoreAccessSettingsActivity.class);
                     context.startActivity(storeAccessIntent);
+                }
+                else if(settings.equals(SettingsActivity.LANGUAGE_SETTINGS)) {
+                    Intent storeAccessIntent = new Intent(context, LanguageSettingsActivity.class);
+                    context.startActivity(storeAccessIntent);
+                    activity.finish();
                 }
             }
         });

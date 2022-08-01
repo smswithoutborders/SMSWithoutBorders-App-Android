@@ -12,13 +12,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class GatewayClientsHandler {
 
@@ -72,34 +72,6 @@ public class GatewayClientsHandler {
         JsonArrayRequest remoteSeedsRequest = new JsonArrayRequest(Request.Method.GET, gatewayServerSeedsUrl, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray responses) {
-                int defaultCounters = 0;
-                boolean randomSelectDefault = false;
-
-                for(int i=0;i<responses.length();++i) {
-                    try {
-                        JSONObject response = responses.getJSONObject(i);
-                        String operatorId = response.getString("operator_id");
-                        if(containsDefaultProperties(context, operatorId)) {
-                            ++defaultCounters;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                // If no Gateway client that matches the required ISP
-                // choose from any of the multiples and make default
-                if(defaultCounters < 1 && responses.length() > 0) {
-                    defaultCounters = responses.length();
-                    randomSelectDefault = true;
-                }
-
-                try {
-                    defaultCounters = new Random().nextInt(defaultCounters);
-                }
-                catch(Exception e ) {
-                    e.printStackTrace();
-                }
                 for(int i=0, findDefaultCounter=0;i<responses.length();++i, ++findDefaultCounter) {
                     try {
                         // TODO: Add algorithm for default Gateway Client
@@ -121,20 +93,16 @@ public class GatewayClientsHandler {
                         gatewayClient.setOperatorId(operatorId);
 
                         // Random Gateway client selector
-                        if(randomSelectDefault) {
-                            if(i == defaultCounters)
-                                gatewayClient.setDefault(true);
-                        }
-                        else if(containsDefaultProperties(context, operatorId)) {
-                            if(findDefaultCounter == defaultCounters)
-                                gatewayClient.setDefault(true);
-                        }
-
                         GatewayClientsHandler.add(context, gatewayClient);
                     }
                     catch(Exception e) {
                         e.printStackTrace();
                     }
+                }
+                try {
+                    storeDefaults(context);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 if(callbackFunction != null)
                     callbackFunction.run();
@@ -143,13 +111,107 @@ public class GatewayClientsHandler {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                try {
+                    storeDefaults(context);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 callbackFunction.run();
             }
         });
         queue.add(remoteSeedsRequest);
     }
 
-    public static List<GatewayClient> getAllGatewayClients(Context context) {
+    private static void storeDefaults(Context context) throws InterruptedException {
+        List<GatewayClient> gatewayClients = new ArrayList<>();
+        try {
+            gatewayClients = appendDefaultGatewayClients(context, gatewayClients);
+
+            boolean defaultSet = false;
+            for(GatewayClient gatewayClient : gatewayClients) {
+                try {
+                    if(!defaultSet && containsDefaultProperties(context, gatewayClient.getOperatorId())) {
+
+                        gatewayClient.setDefault(true);
+
+                        defaultSet = true;
+                    }
+
+                    GatewayClientsHandler.add(context, gatewayClient);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if(!defaultSet) {
+                // probably an international number from CM
+                // orange CM would be best to handle this request
+                gatewayClients = findForOperatorId(context, "62402");
+
+                // going with the first available option now
+                for(GatewayClient gatewayClient : gatewayClients) {
+                    gatewayClient.setDefault(true);
+                    toggleDefault(context, gatewayClient);
+                    break;
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<GatewayClient> findForOperatorId(Context context, String operatorId) {
+        final List<GatewayClient>[] gatewayClients = new List[]{new ArrayList<>()};
+
+        Thread fetchGatewayClientThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Datastore databaseConnection = Room.databaseBuilder(context,
+                                Datastore.class, Datastore.DatabaseName)
+                        .fallbackToDestructiveMigration()
+                        .build();
+
+                GatewayClientsDao gatewayClientsDao = databaseConnection.gatewayClientsDao();
+                gatewayClients[0] = gatewayClientsDao.findForOperaetorId(operatorId);
+            }
+        });
+        fetchGatewayClientThread.start();
+        try {
+            fetchGatewayClientThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return gatewayClients[0];
+    }
+
+    private static List<GatewayClient> appendDefaultGatewayClients(Context context, List<GatewayClient> gatewayClientList) throws InterruptedException {
+        GatewayClient gatewayClient = new GatewayClient();
+        gatewayClient.setCountry("Cameroon");
+        gatewayClient.setMSISDN(context.getString(R.string.default_gateway_MSISDN_0));
+        gatewayClient.setOperatorName("MTN Cameroon");
+        gatewayClient.setOperatorId("62401");
+
+        GatewayClient gatewayClient1 = new GatewayClient();
+        gatewayClient1.setCountry("Cameroon");
+        gatewayClient1.setMSISDN(context.getString(R.string.default_gateway_MSISDN_1));
+        gatewayClient1.setOperatorName("MTN Cameroon");
+        gatewayClient1.setOperatorId("62401");
+
+        GatewayClient gatewayClient2 = new GatewayClient();
+        gatewayClient2.setCountry("Cameroon");
+        gatewayClient2.setMSISDN(context.getString(R.string.default_gateway_MSISDN_2));
+        gatewayClient2.setOperatorName("Orange Cameroon");
+        gatewayClient2.setOperatorId("62402");
+
+        gatewayClientList.add(gatewayClient);
+        gatewayClientList.add(gatewayClient1);
+        gatewayClientList.add(gatewayClient2);
+
+        return gatewayClientList;
+    }
+
+    public static List<GatewayClient> getAllGatewayClients(Context context) throws InterruptedException {
         final List<GatewayClient>[] gatewayClients = new List[]{new ArrayList<>()};
 
         Thread fetchGatewayClientThread = new Thread(new Runnable() {
@@ -213,9 +275,10 @@ public class GatewayClientsHandler {
 
     public static String getDefaultGatewayClientMSISDN(Context context) throws Throwable {
         GatewayClient gatewayClient = getGatewayClientMSISDN(context);
+
         if(gatewayClient.getMSISDN() == null || gatewayClient.getMSISDN().isEmpty()) {
             // TODO should have fallback GatewayClients that can be used in the code
-            String defaultSeedFallbackGatewayClientMSISDN = "+237672451860";
+            String defaultSeedFallbackGatewayClientMSISDN = context.getString(R.string.default_gateway_MSISDN_0);
             gatewayClient.setMSISDN(defaultSeedFallbackGatewayClientMSISDN);
         }
 

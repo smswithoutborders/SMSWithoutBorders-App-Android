@@ -1,7 +1,5 @@
 package com.example.sw0b_001.Helpers;
 
-import com.example.sw0b_001.R;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -11,95 +9,6 @@ public class CustomHelpers {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-d HH:mm", Locale.getDefault());
         String currentDateandTime = sdf.format(new Date());
         return currentDateandTime;
-    }
-
-    public static int getLetterImage(char letter) {
-        int image = R.drawable.ic_round_message_24;
-        switch (Character.toLowerCase(letter)) {
-            case 'a':
-                image = R.mipmap.letter_a;
-                break;
-            case 'b':
-                image = R.mipmap.letter_b;
-                break;
-            case 'c':
-                image = R.mipmap.letter_c;
-                break;
-            case 'd':
-                image = R.mipmap.letter_d;
-                break;
-            case 'e':
-                image = R.mipmap.letter_e;
-                break;
-            case 'f':
-                image = R.mipmap.letter_f;
-                break;
-            case 'g':
-                image = R.mipmap.letter_g;
-                break;
-            case 'h':
-                image = R.mipmap.letter_h;
-                break;
-            case 'i':
-                image = R.mipmap.letter_i;
-                break;
-            case 'j':
-                image = R.mipmap.letter_j;
-                break;
-            case 'k':
-                image = R.mipmap.letter_k;
-                break;
-            case 'l':
-                image = R.mipmap.letter_l;
-                break;
-            case 'm':
-                image = R.mipmap.letter_m;
-                break;
-            case 'n':
-                image = R.mipmap.letter_n;
-                break;
-            case 'o':
-                image = R.mipmap.letter_o;
-                break;
-            case 'p':
-                image = R.mipmap.letter_p;
-                break;
-            case 'q':
-                image = R.mipmap.letter_q;
-                break;
-            case 'r':
-                image = R.mipmap.letter_r;
-                break;
-            case 's':
-                image = R.mipmap.letter_s;
-                break;
-            case 't':
-                image = R.mipmap.letter_t;
-                break;
-            case 'u':
-                image = R.mipmap.letter_u;
-                break;
-            case 'v':
-                image = R.mipmap.letter_v;
-                break;
-            case 'w':
-                image = R.mipmap.letter_w;
-                break;
-            case 'x':
-                image = R.mipmap.letter_x;
-                break;
-            case 'y':
-                image = R.mipmap.letter_y;
-            break;
-            case 'z':
-                image = R.mipmap.letter_z;
-            break;
-
-            default:
-                // image = R.mipmap.no_letter;
-                image = R.drawable.no_letter_foreground;
-        }
-        return image;
     }
 
 
