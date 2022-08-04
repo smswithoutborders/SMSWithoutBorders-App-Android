@@ -131,24 +131,32 @@ public class MessageComposeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         EditText toEditText = findViewById(R.id.message_recipient_number_edit_text);
+        EditText groupEditText = findViewById(R.id.message_recipient_group_edit_text);
         EditText messageEditText = findViewById(R.id.message_compose_text);
 
         switch (item.getItemId()) {
             case R.id.action_send:
-                String to = toEditText.getText().toString();
-                String message = messageEditText.getText().toString();
+                String to = new String();
+
+                if(groupEditText.getText().toString().isEmpty()) {
+                    to = toEditText.getText().toString();
+
+                    // Till I find a cleaner version
+                    if (!to.matches("^\\+[1-9]\\d{1,14}$")) {
+                        toEditText.setError(getString(R.string.message_compose_invalid_number));
+                        return false;
+                    }
+                }
+                else
+                    to = groupEditText.getText().toString();
+
 
                 if(to.isEmpty()) {
-                    toEditText.setError(getString(R.string.message_compose_empty_recipient));
+                    groupEditText.setError(getString(R.string.message_compose_empty_recipient));
                     return false;
                 }
 
-                // Till I find a cleaner version
-                if(! to.matches("^\\+[1-9]\\d{1,14}$")) {
-                    toEditText.setError(getString(R.string.message_compose_invalid_number));
-                    return false;
-                }
-
+                String message = messageEditText.getText().toString();
                 if(message.isEmpty()) {
                     messageEditText.setError(getString(R.string.message_compose_empty_body));
                     return false;

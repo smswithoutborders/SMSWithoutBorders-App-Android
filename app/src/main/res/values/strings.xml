@@ -220,4 +220,12 @@
     <string name="default_gateway_MSISDN_2">
         +237690826242
     </string>
+
+    <string name="message_compose_groups_option">
+        Message Group (optional)
+    </string>
+
+    <string name="message_compose_groups_name">
+        Group\'s name
+    </string>
 </resources>
