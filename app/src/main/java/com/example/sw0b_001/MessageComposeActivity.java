@@ -104,7 +104,10 @@ public class MessageComposeActivity extends AppCompatActivity {
         String body = String.join(":", bodyList);
 
 
-        EditText toEditText = findViewById(R.id.message_recipient_number_edit_text);
+        EditText toEditText = to.matches("^\\+[1-9]\\d{1,14}$") ?
+                findViewById(R.id.message_recipient_number_edit_text) :
+                findViewById(R.id.message_recipient_username_edit_text);
+
         EditText bodyEditText = findViewById(R.id.message_compose_text);
 
         toEditText.setText(to);
@@ -131,7 +134,7 @@ public class MessageComposeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         EditText toEditText = findViewById(R.id.message_recipient_number_edit_text);
-        EditText groupEditText = findViewById(R.id.message_recipient_group_edit_text);
+        EditText groupEditText = findViewById(R.id.message_recipient_username_edit_text);
         EditText messageEditText = findViewById(R.id.message_compose_text);
 
         switch (item.getItemId()) {

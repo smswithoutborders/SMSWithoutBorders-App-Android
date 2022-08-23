@@ -56,6 +56,6 @@
     <string name="default_gateway_MSISDN_0">+237679466332</string>
     <string name="default_gateway_MSISDN_1">+237672451860</string>
     <string name="default_gateway_MSISDN_2">+237690826242</string>
-    <string name="message_compose_groups_option">Envoyer un message à un groupe (facultatif)</string>
-    <string name="message_compose_groups_name">Nom du groupe</string>
+    <string name="message_compose_groups_option">Message avec le nom de l\'utilisateur (facultatif)</string>
+    <string name="message_compose_groups_name">Nom de l\'utilisateur</string>
 </resources>

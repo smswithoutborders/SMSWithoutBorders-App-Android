@@ -222,10 +222,10 @@
     </string>
 
     <string name="message_compose_groups_option">
-        Message Group (optional)
+        Message with user\'s name
     </string>
 
     <string name="message_compose_groups_name">
-        Group\'s name
+        User\'s name
     </string>
 </resources>

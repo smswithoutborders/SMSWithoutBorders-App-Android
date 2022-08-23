@@ -99,7 +99,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView2">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/message_recipient_group_edit_text"
+                android:id="@+id/message_recipient_username_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/message_compose_groups_name" />
