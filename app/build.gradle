@@ -9,8 +9,8 @@ android {
         applicationId "com.afkanerd.sw0b"
         minSdkVersion 23
         targetSdkVersion 31
-        versionCode 26
-        versionName "2.1.6"
+        versionCode 27
+        versionName "2.1.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 //        vectorDrawables.useSupportLibrary = true
