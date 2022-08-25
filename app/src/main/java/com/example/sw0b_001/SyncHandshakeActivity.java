@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -176,7 +177,8 @@ public class SyncHandshakeActivity extends AppCompatActivity {
 
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
             JSONObject jsonBody = new JSONObject("{\"public_key\": \"" + PEMPublicKey + "\"}");
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(gatewayServerHandshakeUrl, jsonBody, new Response.Listener<JSONObject>() {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                    gatewayServerHandshakeUrl, jsonBody, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {

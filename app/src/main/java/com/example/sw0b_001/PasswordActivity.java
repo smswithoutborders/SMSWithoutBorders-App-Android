@@ -12,6 +12,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -109,7 +110,8 @@ public class PasswordActivity extends AppCompatActivity {
                     String passwordBase64 = Base64.encodeToString(RSAEncryptedPassword, Base64.DEFAULT);
 
                     JSONObject jsonBody = new JSONObject( "{\"password\": \"" + passwordBase64 + "\"}");
-                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(verificationUrl, jsonBody, new Response.Listener<JSONObject>() {
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                            Request.Method.POST, verificationUrl, jsonBody, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             if (getIntent().hasExtra("callbackIntent")) {
