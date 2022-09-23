@@ -142,6 +142,7 @@ public class MessageComposeActivity extends AppCompatActivity {
         EditText groupEditText = findViewById(R.id.message_recipient_username_edit_text);
         EditText messageEditText = findViewById(R.id.message_compose_text);
 
+
         switch (item.getItemId()) {
             case R.id.action_send:
                 String to = new String();
