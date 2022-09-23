@@ -104,7 +104,7 @@ public class MessageComposeActivity extends AppCompatActivity {
         String body = String.join(":", bodyList);
 
 
-        EditText toEditText = to.matches("^\\+[1-9]\\d{1,14}$") ?
+        EditText toEditText = verifyPhoneNumberFormat(to) ?
                 findViewById(R.id.message_recipient_number_edit_text) :
                 findViewById(R.id.message_recipient_username_edit_text);
 
@@ -131,6 +131,11 @@ public class MessageComposeActivity extends AppCompatActivity {
         return platformLetter + ":" + to + ":" + message;
     }
 
+    private Boolean verifyPhoneNumberFormat(String phonenumber) {
+        phonenumber = phonenumber.replace(" ", "");
+        return phonenumber.matches("^\\+[1-9]\\d{1,14}$");
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         EditText toEditText = findViewById(R.id.message_recipient_number_edit_text);
@@ -145,14 +150,11 @@ public class MessageComposeActivity extends AppCompatActivity {
                     to = toEditText.getText().toString();
 
                     // Till I find a cleaner version
-                    if (!to.matches("^\\+[1-9]\\d{1,14}$")) {
+                    if(!verifyPhoneNumberFormat(to))
                         toEditText.setError(getString(R.string.message_compose_invalid_number));
-                        return false;
-                    }
                 }
                 else
                     to = groupEditText.getText().toString();
-
 
                 if(to.isEmpty()) {
                     groupEditText.setError(getString(R.string.message_compose_empty_recipient));
@@ -172,7 +174,6 @@ public class MessageComposeActivity extends AppCompatActivity {
                     String formattedContent = processEmailForEncryption(platform.getLetter(), to, message);
                     String encryptedContentBase64 = PublisherHandler.formatForPublishing(getApplicationContext(), formattedContent);
                     String gatewayClientMSISDN = GatewayClientsHandler.getDefaultGatewayClientMSISDN(getApplicationContext());
-
 
                     Intent defaultSMSAppIntent = SMSHandler.transferToDefaultSMSApp(gatewayClientMSISDN, encryptedContentBase64);
                     if(defaultSMSAppIntent.resolveActivity(getPackageManager()) != null) {
