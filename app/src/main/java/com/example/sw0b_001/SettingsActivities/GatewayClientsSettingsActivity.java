@@ -125,6 +125,25 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
         newGatewayClientConstrain.setVisibility(View.GONE);
     }
 
+    public void onAddNewGatewayClient(View view ) throws InterruptedException {
+        TextInputEditText gatewayClientNumberText = findViewById(R.id.new_gateway_client_text_input);
+        String newGatewayClientNumber = gatewayClientNumberText.getText().toString();
+
+        if(newGatewayClientNumber.isEmpty()) {
+            // TODO: raise an error
+            return;
+        }
+
+        GatewayClient gatewayClient = new GatewayClient();
+        gatewayClient.setType("custom");
+        gatewayClient.setMSISDN(newGatewayClientNumber);
+
+        GatewayClientsHandler.add(getApplicationContext(), gatewayClient);
+
+        cancelNewGatewayClient(view);
+        onRefreshButton(view);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d("", "Plus button clicked");

@@ -25,7 +25,7 @@ public interface GatewayClientsDao {
     @Delete
     void delete(GatewayClient GatewayClient);
 
-    @Query("DELETE FROM GatewayClient")
+    @Query("DELETE FROM GatewayClient WHERE type IS NOT 'custom'")
     void deleteAll();
 
     @Query("UPDATE GatewayClient SET `default` = :setDefault WHERE id=:id")
