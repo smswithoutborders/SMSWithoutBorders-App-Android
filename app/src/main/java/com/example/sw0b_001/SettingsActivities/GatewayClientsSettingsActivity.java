@@ -1,13 +1,22 @@
 package com.example.sw0b_001.SettingsActivities;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +27,7 @@ import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.R;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,5 +118,54 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
         this.refreshGatewayClientsSettings();
         this.gatewayClientsRecyclerAdapter.notifyDataSetChanged();
 
+    }
+
+    public void cancelNewGatewayClient(View view) {
+        ConstraintLayout newGatewayClientConstrain = findViewById(R.id.new_gateway_client_constraint);
+        newGatewayClientConstrain.setVisibility(View.GONE);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d("", "Plus button clicked");
+        ConstraintLayout newGatewayClientConstrain = findViewById(R.id.new_gateway_client_constraint);
+        TextInputEditText gatewayClientInput = findViewById(R.id.new_gateway_client_text_input);
+
+        switch(item.getItemId()) {
+            case R.id.add_gateway:
+                newGatewayClientConstrain.setVisibility(View.VISIBLE);
+                gatewayClientInput.setText("");
+                break;
+        }
+        return false;
+    }
+
+    public void onContactsClick(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+        startActivityForResult(intent, 1);
+    }
+
+
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+
+        switch (reqCode) {
+            case (1) :
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri contactData = data.getData();
+                    Cursor contactCursor = getApplicationContext().getContentResolver().query(contactData, null, null, null, null);
+                    if(contactCursor != null) {
+                        if (contactCursor.moveToFirst()) {
+                            int contactIndexInformation = contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                            String number = contactCursor.getString(contactIndexInformation);
+
+                            EditText numberEditText = findViewById(R.id.new_gateway_client_text_input);
+                            numberEditText.setText(number);
+                        }
+                    }
+                }
+                break;
+        }
     }
 }
