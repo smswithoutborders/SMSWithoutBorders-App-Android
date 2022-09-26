@@ -77,6 +77,7 @@
         android:id="@+id/new_gateway_client_constraint"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@id/gateway_clients_recycler_view"
         app:layout_constraintEnd_toEndOf="@id/gateway_clients_recycler_view"
         app:layout_constraintStart_toStartOf="@id/gateway_clients_recycler_view"
