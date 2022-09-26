@@ -130,7 +130,7 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
         String newGatewayClientNumber = gatewayClientNumberText.getText().toString();
 
         if(newGatewayClientNumber.isEmpty()) {
-            // TODO: raise an error
+            gatewayClientNumberText.setError(getString(R.string.gateway_client_settings_add_custom_empty_error));
             return;
         }
 
