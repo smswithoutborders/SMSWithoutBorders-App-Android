@@ -222,7 +222,7 @@
     </string>
 
     <string name="message_compose_groups_option">
-        Message with user\'s name
+        Telegram user\'s name (optional)
     </string>
 
     <string name="message_compose_groups_name">
