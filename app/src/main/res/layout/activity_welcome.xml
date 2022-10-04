@@ -71,17 +71,19 @@
         android:id="@+id/containedButton1"
         android:layout_width="282dp"
         android:layout_height="52dp"
-        android:backgroundTint="#FFFFFF"
-        android:onClick="onClickSynchroniseBtn"
+        android:backgroundTint="#00FFFFFF"
+        android:onClick="onContinueClick"
         android:text="@string/welcome_synchronize"
         android:textAlignment="center"
-        android:textColor="#061993"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:cornerRadius="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.519"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+        app:layout_constraintTop_toBottomOf="@+id/textView13"
+        app:strokeColor="#FFFFFF"
+        app:strokeWidth="2dp" />
 
     <TextView
         android:id="@+id/textView13"
