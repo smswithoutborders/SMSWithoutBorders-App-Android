@@ -38,7 +38,7 @@
     <string name="welcome_welcome">Bienvenue !</string>
     <string name="welcome_signup">S\'INSCRIRE</string>
     <string name="welcome_login_prompt">Vous avez déjà un compte ?</string>
-    <string name="welcome_synchronize">Synchroniser</string>
+    <string name="welcome_synchronize">" S'identifier"</string>
     <string name="main_navigation_recents">Récent</string>
     <string name="main_navigation_settings">Paramètres</string>
     <string name="platforms_compose_header">Composer pour un accès stocké</string>
