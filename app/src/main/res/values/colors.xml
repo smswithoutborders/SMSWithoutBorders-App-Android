@@ -13,4 +13,5 @@
     <color name="black_overlay">#66000000</color>
     <color name="logo_blue1">#9BBEF1</color>
     <color name="button_gray">#1B1A1A</color>
+    <color name="text_box">#242f35</color>
 </resources>

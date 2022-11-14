@@ -27,6 +27,7 @@ import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.PublisherHandler;
 import com.example.sw0b_001.Models.SMSHandler;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -63,6 +64,15 @@ public class MessageComposeActivity extends AppCompatActivity {
         if(intent.hasExtra("encrypted_content_id")) {
             populateEncryptedContent();
         }
+
+        TextInputLayout textInputLayout = findViewById(R.id.message_recipient_number_container);
+        textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                startActivityForResult(intent, 1);
+            }
+        });
     }
 
     private void populateEncryptedContent() {
@@ -227,13 +237,6 @@ public class MessageComposeActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.email_compose_toolbar, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
-
-    public void onContactsClick(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-        startActivityForResult(intent, 1);
-    }
-
 
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
