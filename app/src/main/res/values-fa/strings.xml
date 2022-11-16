@@ -13,4 +13,8 @@
     <string name="message_compose_empty_recipient">گیرنده نمی تواند خالی باشد!</string>
     <string name="homepage_enter_password_prompt">همان رمز عبوری که هنگام ایجاد حساب کاربری خود استفاده می کنید</string>
     <string name="homepage_read_our_privacy_policy">سیاست حفظ حریم خصوصی ما را بخوانید</string>
+    <string name="settings_settings">تنظیمات</string>
+    <string name="settings_automatically_stored_access_warning">هشدار! همگام سازی مجدد همه پیام های ارسال شده قبلی را پاک می کند.</string>
+    <string name="synchronize_type_header_automatic_synchronize_text_continue">ادامه دهید</string>
+    <string name="synchronize_type_header_manual_synchronize_text">برنامه خود را به صورت دستی با حساب آنلاین خود پیوند دهید</string>
 </resources>
