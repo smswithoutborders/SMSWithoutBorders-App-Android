@@ -17,4 +17,8 @@
     <string name="settings_automatically_stored_access_warning">هشدار! همگام سازی مجدد همه پیام های ارسال شده قبلی را پاک می کند.</string>
     <string name="synchronize_type_header_automatic_synchronize_text_continue">ادامه دهید</string>
     <string name="synchronize_type_header_manual_synchronize_text">برنامه خود را به صورت دستی با حساب آنلاین خود پیوند دهید</string>
+    <string name="welcome_welcome">خوش آمدی</string>
+    <string name="welcome_login_prompt">از قبل حساب کاربری دارید؟</string>
+    <string name="main_navigation_settings">تنظیمات</string>
+    <string name="message_compose_header">پیام...</string>
 </resources>
