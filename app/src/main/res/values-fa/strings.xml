@@ -21,4 +21,13 @@
     <string name="welcome_login_prompt">از قبل حساب کاربری دارید؟</string>
     <string name="main_navigation_settings">تنظیمات</string>
     <string name="message_compose_header">پیام...</string>
+    <string name="password_failed">احراز هویت ناموفق بود! لطفا دوباره تلاش کنید...</string>
+    <string name="password_empty">رمز عبور نمی تواند خالی باشد!</string>
+    <string name="settings_language">زبان</string>
+    <string name="settings_language_preferred_language_text">زبان مورد نظر خود را انتخاب کنید</string>
+    <string name="settings_language_supported_language_en">انگلیسی</string>
+    <string name="settings_language_supported_language_fr">فرانسوی</string>
+    <string name="gateway_client_settings_add_custom_gateway_cancel_btn">لغو کنید</string>
+    <string name="gateway_client_settings_add_custom_gateway_add_btn">اضافه کردن</string>
+    <string name="gateway_client_settings_add_custom_empty_error">لطفا یک شماره تلفن ارائه دهید</string>
 </resources>
