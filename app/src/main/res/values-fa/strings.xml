@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SWOB</string>
+    <string name="email_compose_to">به</string>
+    <string name="email_compose_subject">موضوع</string>
+    <string name="email_compose_body">ایمیل بنویسید</string>
+    <string name="gateway_clients_settings_operator_id">شناسه اپراتور شما</string>
+    <string name="homepage_search">جستجو کردن</string>
+    <string name="homepage_no_recent_messages">هیچ پیام جدیدی وجود ندارد</string>
+    <string name="message_compose_phonenumber">شماره تلفن تماس</string>
+    <string name="message_compose_body">پیام</string>
+    <string name="message_compose_invalid_number">لطفاً بررسی کنید شماره معتبر است و دارای کد کشور است</string>
+    <string name="message_compose_empty_recipient">گیرنده نمی تواند خالی باشد!</string>
+    <string name="homepage_enter_password_prompt">همان رمز عبوری که هنگام ایجاد حساب کاربری خود استفاده می کنید</string>
+    <string name="homepage_read_our_privacy_policy">سیاست حفظ حریم خصوصی ما را بخوانید</string>
+</resources>

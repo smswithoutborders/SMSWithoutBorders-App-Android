@@ -37,13 +37,9 @@
        subject
     </string>
 
-    <string name="email_compose_body">
-        Compose email
-    </string>
+    <string name="email_compose_body">"         Compose email     "</string>
 
-    <string name="gateway_clients_settings_operator_id">
-        Your Operator ID
-    </string>
+    <string name="gateway_clients_settings_operator_id">"         Your Operator ID     "</string>
 
     <string name="homepage_recent">
         Recent
@@ -53,45 +49,25 @@
         Search
     </string>
 
-    <string name="homepage_no_recent_messages">
-        No Recent Messages
-    </string>
+    <string name="homepage_no_recent_messages">"         No Recent Messages     "</string>
 
-    <string name="message_compose_phonenumber">
-        Contact\'s phone number
-    </string>
+    <string name="message_compose_phonenumber">"         Contact's phone number     "</string>
 
-    <string name="message_compose_body">
-        Message
-    </string>
+    <string name="message_compose_body">"         Message     "</string>
 
-    <string name="message_compose_invalid_number">
-        Please check the number is valid and has a country code
-    </string>
+    <string name="message_compose_invalid_number">"         Please check the number is valid and has a country code     "</string>
 
-    <string name="message_compose_empty_recipient">
-        Recipient cannot be empty!
-    </string>
+    <string name="message_compose_empty_recipient">"         Recipient cannot be empty!     "</string>
 
-    <string name="message_compose_empty_body">
-        Body should not be empty!
-    </string>
+    <string name="message_compose_empty_body">"         Body should not be empty!     "</string>
 
-    <string name="homepage_confirm">
-        Confirm
-    </string>
+    <string name="homepage_confirm">"         Confirm     "</string>
 
-    <string name="homepage_enter_password">
-        Enter Password
-    </string>
+    <string name="homepage_enter_password">"         Enter Password     "</string>
 
-    <string name="homepage_enter_password_prompt">
-        Same password used when creating your account
-    </string>
+    <string name="homepage_enter_password_prompt">"         Same password used when creating your account     "</string>
 
-    <string name="homepage_read_our_privacy_policy">
-        Read our privacy policy
-    </string>
+    <string name="homepage_read_our_privacy_policy">"         Read our privacy policy     "</string>
 
     <string name="settings_settings">
         Settings
