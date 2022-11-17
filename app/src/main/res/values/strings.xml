@@ -67,7 +67,7 @@
 
     <string name="homepage_enter_password_prompt">Same password used when creating your account</string>
 
-    <string name="homepage_read_our_privacy_policy">Read our privacy policy</string>
+    <string name="homepage_read_our_privacy_policy" translatable="false">Read our privacy policy</string>
 
     <string name="settings_settings">Settings</string>
 

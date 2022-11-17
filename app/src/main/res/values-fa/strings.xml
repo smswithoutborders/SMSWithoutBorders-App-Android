@@ -30,4 +30,17 @@
     <string name="gateway_client_settings_add_custom_gateway_cancel_btn">لغو کنید</string>
     <string name="gateway_client_settings_add_custom_gateway_add_btn">اضافه کردن</string>
     <string name="gateway_client_settings_add_custom_empty_error">لطفا یک شماره تلفن ارائه دهید</string>
+    <string name="main_navigation_recents">اخیر</string>
+    <string name="welcome_signup">ثبت نام</string>
+    <string name="welcome_synchronize">ورود</string>
+    <string name="default_gateway_MSISDN_0">+237679466332</string>
+    <string name="default_gateway_MSISDN_1">+237672451860</string>
+    <string name="default_gateway_MSISDN_2">+237690826242</string>
+    <string name="homepage_recent">اخیر</string>
+    <string name="email_compose_cc">cc</string>
+    <string name="email_compose_bcc">bcc</string>
+    <string name="message_compose_empty_body">بدن نباید خالی باشد!</string>
+    <string name="homepage_enter_password">رمز عبور را وارد کنید</string>
+    <string name="homepage_confirm">انجام شده</string>
+    <string name="settings_automatically_stored_access">همگام سازی برنامه</string>
 </resources>
