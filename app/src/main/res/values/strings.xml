@@ -51,7 +51,7 @@
 
     <string name="homepage_no_recent_messages">No Recent Messages</string>
 
-    <string name="message_compose_phonenumber">Contact's phone number</string>
+    <string name="message_compose_phonenumber">Contact\'s phone number</string>
 
     <string name="message_compose_body">Message</string>
 
@@ -89,7 +89,7 @@
 
     <string name="tweet_compose_tweet">Tweet </string>
 
-    <string name="tweet_compose_prompt">What's happening?</string>
+    <string name="tweet_compose_prompt">What\'s happening?</string>
 
     <string name="welcome_welcome">Welcome </string>
 
@@ -149,7 +149,7 @@
         Telegram user\'s name (optional)
     </string>
 
-    <string name="message_compose_groups_name">User's name</string>
+    <string name="message_compose_groups_name">User\'s name</string>
 
     <string name="gateway_client_settings_add_custom_gateway_text">
        Add new Gateway Client Address

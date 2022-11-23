@@ -2,6 +2,7 @@ package com.example.sw0b_001;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,24 +11,29 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
 import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter;
+import com.example.sw0b_001.databinding.ActivityPasswordBinding;
+import com.example.sw0b_001.databinding.ActivityPlatformsBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
-public class PlatformsActivity extends AppCompatActivity{
+public class PlatformsActivity extends AppCompactActivityRtlEnabled {
     RecyclerView recyclerView;
     PlatformsRecyclerAdapter platformsRecyclerAdapter;
 
-    BottomNavigationView bottomNavigationView;
+    private ActivityPlatformsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding = ActivityPlatformsBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
-        setContentView(R.layout.activity_platforms);
         List<Platform> platforms = PlatformsHandler.getAllPlatforms(getApplicationContext());
 
         Toolbar gatewayClientToolbar = (Toolbar) findViewById(R.id.platforms_toolbar);

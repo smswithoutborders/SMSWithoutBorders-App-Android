@@ -29,15 +29,6 @@
         android:usesCleartextTraffic="true"
         android:allowBackup="false"
         android:fullBackupContent="false">
-        <activity
-            android:name=".SettingsActivities.LanguageSettingsActivity"
-            android:theme="@style/Theme.MyAppNoBar"
-            android:exported="false"
-            android:parentActivityName=".SettingsActivities.SettingsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SettingsActivities.SettingsActivity" />
-        </activity>
 
         <activity
             android:name=".MessageComposeActivity"
@@ -111,6 +102,17 @@
             android:label=""
             android:theme="@style/Theme.MyAppNoBar"
             android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".SettingsActivities.LanguageSettingsActivity"
+            android:theme="@style/Theme.MyAppNoBar"
+            android:exported="false"
+            android:parentActivityName=".SettingsActivities.SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SettingsActivities.SettingsActivity" />
+        </activity>
+
         <activity
             android:exported="false"
             android:name=".SettingsActivities.SettingsActivity"

@@ -8,10 +8,12 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends AppCompactActivityRtlEnabled {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,11 +32,6 @@ public class WelcomeActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
         startActivity(intent);
     }
-
-//    public void onClickSynchroniseBtn(View view) {
-//        Intent synchroniseTypeActivityIntent = new Intent(getApplicationContext(), SynchroniseTypeActivity.class);
-//        startActivity(synchroniseTypeActivityIntent);
-//    }
 
     public void onContinueClick(View view) {
         String smswithoutbordersHandshakeUrl = getString(R.string.smswithoutborders_official_site_login);

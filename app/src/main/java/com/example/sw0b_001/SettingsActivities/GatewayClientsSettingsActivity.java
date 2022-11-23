@@ -20,29 +20,35 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsRecyclerAdapter;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.R;
+import com.example.sw0b_001.databinding.ActivityGatewayClientsSettingsBinding;
+import com.example.sw0b_001.databinding.ActivityTweetComposeBinding;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GatewayClientsSettingsActivity extends AppCompatActivity {
+public class GatewayClientsSettingsActivity extends AppCompactActivityRtlEnabled {
     public RecyclerView gatewayClientRecyclerView;
     public GatewayClientsRecyclerAdapter gatewayClientsRecyclerAdapter;
     public List<GatewayClient> listOfGateways = new ArrayList<>();
     public int gatewayClientsLayout;
 
+    private ActivityGatewayClientsSettingsBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_gateway_clients_settings);
+        binding = ActivityGatewayClientsSettingsBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         Toolbar gatewayClientToolbar = (Toolbar) findViewById(R.id.gateway_client_toolbar);
         setSupportActionBar(gatewayClientToolbar);

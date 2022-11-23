@@ -10,6 +10,7 @@ import android.view.View;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
 import com.example.sw0b_001.Models.LanguageHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.databinding.ActivitySplashBinding;
@@ -25,7 +26,7 @@ import java.util.Locale;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompactActivityRtlEnabled {
     /**
      * Some older devices needs a small delay between UI widget updates
      * and a change of the status and navigation bar.

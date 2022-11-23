@@ -5,6 +5,10 @@ plugins {
 android {
     compileSdkVersion 32
 
+    buildFeatures {
+        viewBinding true
+    }
+
     defaultConfig {
         applicationId "com.afkanerd.sw0b"
         minSdkVersion 23

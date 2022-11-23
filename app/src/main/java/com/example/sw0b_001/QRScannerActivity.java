@@ -14,27 +14,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
+import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
+import com.example.sw0b_001.databinding.ActivityPlatformsBinding;
+import com.example.sw0b_001.databinding.ActivityQrscannerBinding;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.zxing.Result;
 
 import java.net.URL;
 
-public class QRScannerActivity extends AppCompatActivity {
+public class QRScannerActivity extends AppCompactActivityRtlEnabled {
 
-    Button scanButton;
-    private BarcodeDetector barcodeDetector;
-    private CameraSource cameraSource;
-    SurfaceView surfaceView;
     private boolean requestingPermission = false;
     private CodeScanner codeScanner;
-    private View loaderView;
-    private TextView syncText;
+
+    private ActivityQrscannerBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qrscanner);
+        binding = ActivityQrscannerBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+
         CodeScannerView scannerView = findViewById(R.id.scanner_view);
         codeScanner = new CodeScanner(this, scannerView);
         codeScanner.setDecodeCallback(new DecodeCallback() {

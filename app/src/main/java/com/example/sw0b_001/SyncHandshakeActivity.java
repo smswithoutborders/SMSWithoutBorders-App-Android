@@ -2,6 +2,7 @@ package com.example.sw0b_001;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
@@ -13,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
@@ -22,6 +24,8 @@ import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.User.UserHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
+import com.example.sw0b_001.databinding.ActivityQrscannerBinding;
+import com.example.sw0b_001.databinding.ActivitySyncProcessingBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,16 +42,17 @@ import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
 
-public class SyncHandshakeActivity extends AppCompatActivity {
+public class SyncHandshakeActivity extends AppCompactActivityRtlEnabled {
 
-    public static String AUTO_SYNC = "AUTO_SYNC";
+    private ActivitySyncProcessingBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sync_processing);
+        binding = ActivitySyncProcessingBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
     }
-
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

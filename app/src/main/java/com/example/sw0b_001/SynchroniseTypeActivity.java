@@ -15,16 +15,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
+import com.example.sw0b_001.databinding.ActivitySyncProcessingBinding;
+import com.example.sw0b_001.databinding.ActivitySynchroniseTypeBinding;
+
 import java.net.URL;
 
-public class SynchroniseTypeActivity extends AppCompatActivity {
+public class SynchroniseTypeActivity extends AppCompactActivityRtlEnabled {
     private static final int REQUEST_CAMERA_PERMISSION = 200;
+
+    private ActivitySynchroniseTypeBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_synchronise_type);
-
+        binding = ActivitySynchroniseTypeBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         // Get a support ActionBar corresponding to this toolbar
         ActionBar ab = getSupportActionBar();
