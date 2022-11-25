@@ -43,4 +43,21 @@
     <string name="homepage_enter_password">رمز عبور را وارد کنید</string>
     <string name="homepage_confirm">انجام شده</string>
     <string name="settings_automatically_stored_access">همگام سازی برنامه</string>
+    <string name="settings_manual_stored_access">با استفاده از کد QR بازخوانی کنید</string>
+    <string name="synchronize_type_header">همگام سازی کنید</string>
+    <string name="synchronize_type_header_automatic_synchronize_text">به طور خودکار برنامه خود را با حساب آنلاین خود پیوند دهید</string>
+    <string name="synchronize_type_header_manual_synchronize_text_continue">اسکن QR</string>
+    <string name="tweet_compose_tweet">توییت</string>
+    <string name="tweet_compose_prompt">چه اتفاقی دارد می افتد</string>
+    <string name="platforms_compose_header">نوشتن برای دسترسی ذخیره شده</string>
+    <string name="text_compose_compose">نوشتن</string>
+    <string name="settings_store_access_text">اجازه دسترسی</string>
+    <string name="gateway_clients_settings_header">نقاط پایانی پیامک موجود</string>
+    <string name="settings_gateway_clients_text">نقاط پایانی پیامک</string>
+    <string name="message_compose_groups_option">نام کاربری تلگرام</string>
+    <string name="message_compose_groups_name">نام کاربری تلگرام</string>
+    <string name="gateway_client_settings_add_custom_gateway_text">نقطه پایانی پیامک جدید اضافه کنید</string>
+    <string name="gateway_client_settings_add_custom_gateway_text">نقطه پایانی پیامک جدید اضافه کنید</string>
+    <string name="smswithoutborders_official_site_login">https://smswithoutborders.com/login/fa</string>
+    <string name="smswithoutborders_official_site_signup">https://smswithoutborders.com/sign-up/fa</string>
 </resources>

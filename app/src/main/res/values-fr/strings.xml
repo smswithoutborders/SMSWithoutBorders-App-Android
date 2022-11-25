@@ -4,7 +4,7 @@
     <string name="homepage_recent">Récent</string>
     <string name="privacy_policy">https://smswithoutborders.com/privacy-policy</string>
     <string name="gateway_client_seeds">"http://seeds.smswithoutborders.com     "</string>
-    <string name="smswithoutborders_official_site_login">"https://smswithoutborders.com/login/fr    "</string>
+    <string name="smswithoutborders_official_site_login">https://smswithoutborders.com/login/fr</string>
     <string name="smswithoutborders_official_site_signup">https://smswithoutborders.com/sign-up/fr</string>
     <string name="smswithoutborders_official_site_signup_intent">"intent://smswithoutborders.com/sign-up     "</string>
     <string name="email_compose_to">À</string>

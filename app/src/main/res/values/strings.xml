@@ -79,8 +79,6 @@
 
     <string name="synchronize_type_header">Synchronize</string>
 
-    <string name="synchronize_type_header_automatic_synchronize_text">Automatically link your app with your online account</string>
-
     <string name="synchronize_type_header_automatic_synchronize_text_continue">Continue</string>
 
     <string name="synchronize_type_header_manual_synchronize_text">Manually link your app with your online account</string>
@@ -160,4 +158,5 @@
     <string name="gateway_client_settings_add_custom_gateway_add_btn">Add</string>
 
     <string name="gateway_client_settings_add_custom_empty_error">Please provide a phone number</string>
+    <string name="synchronize_type_header_automatic_synchronize_text">Automatically link your app with your online account</string>
 </resources>
