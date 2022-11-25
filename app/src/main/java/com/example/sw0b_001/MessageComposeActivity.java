@@ -19,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
@@ -27,6 +28,7 @@ import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.PublisherHandler;
 import com.example.sw0b_001.Models.SMSHandler;
+import com.example.sw0b_001.databinding.ActivityMessageComposeBinding;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
@@ -44,12 +46,16 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-public class MessageComposeActivity extends AppCompatActivity {
+public class MessageComposeActivity extends AppCompactActivityRtlEnabled {
+
+    private ActivityMessageComposeBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message_compose);
+        binding = ActivityMessageComposeBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         Toolbar composeToolbar = (Toolbar) findViewById(R.id.message_compose_toolbar);
         setSupportActionBar(composeToolbar);

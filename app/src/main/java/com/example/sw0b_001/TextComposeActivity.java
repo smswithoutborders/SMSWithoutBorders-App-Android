@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
@@ -23,6 +24,8 @@ import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.PublisherHandler;
 import com.example.sw0b_001.Models.SMSHandler;
+import com.example.sw0b_001.databinding.ActivitySynchroniseTypeBinding;
+import com.example.sw0b_001.databinding.ActivityTweetComposeBinding;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -40,14 +43,15 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-public class TextComposeActivity extends AppCompatActivity {
-    private List<GatewayClient> phonenumbers = new ArrayList<>();
-
+public class TextComposeActivity extends AppCompactActivityRtlEnabled {
+    private ActivityTweetComposeBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tweet_compose);
+        binding = ActivityTweetComposeBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         Toolbar composeToolbar = (Toolbar) findViewById(R.id.tweet_toolbar);
         setSupportActionBar(composeToolbar);

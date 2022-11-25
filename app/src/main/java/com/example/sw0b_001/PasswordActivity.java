@@ -19,11 +19,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
 import com.example.sw0b_001.Models.User.User;
 import com.example.sw0b_001.Models.User.UserHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
+import com.example.sw0b_001.databinding.ActivityMessageComposeBinding;
+import com.example.sw0b_001.databinding.ActivityPasswordBinding;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
 import org.json.JSONObject;
@@ -35,15 +38,17 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
-public class PasswordActivity extends AppCompatActivity {
+public class PasswordActivity extends AppCompactActivityRtlEnabled {
     SecurityHandler securityLayer;
-    private static final int REQUEST_CAMERA_PERMISSION = 200;
-
+    private ActivityPasswordBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_password);
+        binding = ActivityPasswordBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+
         try {
             securityLayer = new SecurityHandler();
         } catch (KeyStoreException e) {
