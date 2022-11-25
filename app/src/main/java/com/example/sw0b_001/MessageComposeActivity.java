@@ -28,8 +28,6 @@ import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.PublisherHandler;
 import com.example.sw0b_001.Models.SMSHandler;
-import com.example.sw0b_001.databinding.ActivityEmailComposeBinding;
-import com.example.sw0b_001.databinding.ActivityHomepageBinding;
 import com.example.sw0b_001.databinding.ActivityMessageComposeBinding;
 
 import java.io.IOException;
