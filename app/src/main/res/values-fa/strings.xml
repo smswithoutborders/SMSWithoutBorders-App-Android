@@ -57,7 +57,6 @@
     <string name="message_compose_groups_option">نام کاربری تلگرام</string>
     <string name="message_compose_groups_name">نام کاربری تلگرام</string>
     <string name="gateway_client_settings_add_custom_gateway_text">نقطه پایانی پیامک جدید اضافه کنید</string>
-    <string name="gateway_client_settings_add_custom_gateway_text">نقطه پایانی پیامک جدید اضافه کنید</string>
     <string name="smswithoutborders_official_site_login">https://smswithoutborders.com/login/fa</string>
     <string name="smswithoutborders_official_site_signup">https://smswithoutborders.com/sign-up/fa</string>
 </resources>
