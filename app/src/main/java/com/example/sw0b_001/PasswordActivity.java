@@ -9,37 +9,45 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
+import androidx.annotation.Nullable;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
-import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
-import com.example.sw0b_001.Models.User.User;
-import com.example.sw0b_001.Models.User.UserHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
-import com.example.sw0b_001.databinding.ActivityMessageComposeBinding;
+import com.example.sw0b_001.Security.SecurityHelpers;
+import com.example.sw0b_001.Security.SecurityRSA;
 import com.example.sw0b_001.databinding.ActivityPasswordBinding;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
+import java.security.PublicKey;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLPeerUnverifiedException;
 
 public class PasswordActivity extends AppCompactActivityRtlEnabled {
-    SecurityHandler securityLayer;
     private ActivityPasswordBinding binding;
 
     @Override
@@ -48,25 +56,74 @@ public class PasswordActivity extends AppCompactActivityRtlEnabled {
         binding = ActivityPasswordBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        if(!validateSession())
+            finish();
+    }
+
+    private Boolean validateSession() {
+        Intent intent = getIntent();
+        if(!intent.hasExtra("callbackIntent"))
+            return false;
+        if(!intent.hasExtra("public_key"))
+            return false;
+        return true;
+    }
+
+    private void transmitPassword(byte[] password, PublicKey gatewayServerPublicKey) throws GeneralSecurityException, IOException, JSONException, ExecutionException, InterruptedException, TimeoutException, VolleyError {
+        SecurityRSA securityRSA = new SecurityRSA(this);
+        String publicKey = getIntent().getStringExtra("public_key");
+
+        String gatewayServerVerificationUrl = new String();
+
+        if(BuildConfig.DEBUG)
+            gatewayServerVerificationUrl = getString(R.string.official_staging_site_verification_url);
+        else
+            gatewayServerVerificationUrl = getString(R.string.official_site_verification_url);
+
+        byte[] encryptedPassword = securityRSA.encrypt(
+                password,
+                gatewayServerPublicKey);
+        String passwordBase64 = Base64.encodeToString(encryptedPassword, Base64.DEFAULT);
+        Log.d(getLocalClassName(), "Enc Password: " + passwordBase64);
 
         try {
-            securityLayer = new SecurityHandler();
-        } catch (KeyStoreException e) {
+            JSONObject jsonBody = new JSONObject(
+                    "{\"public_key\": \"" + publicKey + "\"}" +
+                            "{\"mgf1ParameterSpec\": \"" + SecurityHandler.MGF1ParameterSpecValue + "\"}" +
+                            "{\"password\": \"" + encryptedPassword + "\"}");
+            RequestFuture<JSONObject> future = RequestFuture.newFuture();
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.POST,
+                    gatewayServerVerificationUrl,
+                    jsonBody, future, future);
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+            jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    0,
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+            requestQueue.add(jsonObjectRequest);
+            JSONObject response = future.get(30, TimeUnit.SECONDS);
+        } catch (ExecutionException e){
+            throw e;
+        } catch(InterruptedException  | TimeoutException e ) {
             e.printStackTrace();
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            throw new VolleyError(e);
+        } catch(JSONException e ) {
+            throw e;
+        } catch(Exception e ) {
+            throw e;
         }
     }
 
-    public void validateUsersCloudPassword(View view) throws GeneralSecurityException, IOException, InterruptedException {
-
+    public void onClickVerifyPassword(View view) throws GeneralSecurityException, IOException, InterruptedException, JSONException, VolleyError, ExecutionException, TimeoutException {
         EditText passwordField = findViewById(R.id.message_recipient_number_edit_text);
-        SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
-        GatewayServer gatewayServers[] = {new GatewayServer()};
 
         if(passwordField.getText().toString().isEmpty()) {
             passwordField.setError(getString(R.string.password_empty));
@@ -79,74 +136,65 @@ public class PasswordActivity extends AppCompactActivityRtlEnabled {
         CircularProgressIndicator passwordValidationProgressBar = findViewById(R.id.password_validation_progress_bar);
         passwordValidationProgressBar.setVisibility(View.VISIBLE);
 
-        if(getIntent().hasExtra("gatewayserver_id")) {
-            long gatewayServerId = getIntent().getLongExtra("gatewayserver_id", -1);
+        byte[] passwordEncoded = passwordField.getText().toString().getBytes(StandardCharsets.UTF_8);
 
-            // TODO check if has verification url
-            String verificationUrl = getIntent().getStringExtra("verification_url");
-
-            if(gatewayServerId == -1) {
-                Log.e(getLocalClassName(), "GatewayServer ID is incorrect currently = -1");
-            }
-            else {
-                Thread extractGatewayInformationThread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(),
-                                Datastore.class, Datastore.DatabaseName).build();
-                        GatewayServersDAO gatewayServersDAO = databaseConnector.gatewayServersDAO();
-                        gatewayServers[0] = gatewayServersDAO.getById(gatewayServerId);
-
-                    }
-                });
-                extractGatewayInformationThread.start();
-                extractGatewayInformationThread.join();
-
-                byte[] passwordEncoded = passwordField.getText().toString().getBytes(StandardCharsets.UTF_8);
-                try {
-                    GatewayServer gatewayServer = gatewayServers[0];
-
-                    // TODO start a loader here, in case of a slow internet connection
-                    UserHandler userHandler = new UserHandler(getApplicationContext());
-                    User user = userHandler.getUser();
-
-                    byte[] RSAEncryptedPassword = securityHandler.encryptWithExternalPublicKey(passwordEncoded, gatewayServer.getPublicKey());
-
-                    String passwordBase64 = Base64.encodeToString(RSAEncryptedPassword, Base64.DEFAULT);
-
-                    JSONObject jsonBody = new JSONObject( "{\"password\": \"" + passwordBase64 + "\"}");
-                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                            Request.Method.POST, verificationUrl, jsonBody, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            if (getIntent().hasExtra("callbackIntent")) {
-                                Object callbackObject = getIntent().getExtras().get("callbackIntent");
-                                if (callbackObject.getClass() == Intent.class) {
-                                    Intent callbackIntent = (Intent) callbackObject;
-                                    callbackIntent.putExtra("payload", response.toString());
-                                    startActivity(callbackIntent);
-                                    finish();
-                                }
-                            }
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            passwordField.setError(getString(R.string.password_failed));
-                            error.printStackTrace();
-
-                            passwordValidationProgressBar.setVisibility(View.INVISIBLE);
-                            validationButton.setVisibility(View.VISIBLE);
-                        }
-                    });
-                    RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                    queue.add(jsonObjectRequest);
-                }
-                catch(Exception e) {
-                    e.printStackTrace();
-                }
-            }
+        PublicKey gatewayServerPublicKey = getGatewayServerPublicKey();
+        try {
+            transmitPassword(passwordEncoded, gatewayServerPublicKey);
         }
+        catch(Exception e ) {
+            e.printStackTrace();
+
+            // TODO: should handle the issues seperately
+            passwordField.setError(getString(R.string.password_failed));
+            passwordValidationProgressBar.setVisibility(View.INVISIBLE);
+            validationButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private PublicKey getGatewayServerPublicKey() throws IOException {
+        String primaryKeySite = new String();
+        if(BuildConfig.DEBUG)
+            primaryKeySite = getString(R.string.official_staging_site);
+        else
+            primaryKeySite = getString(R.string.official_site);
+        Log.d(getLocalClassName(), primaryKeySite);
+
+        URL url = new URL(primaryKeySite);
+        HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+        final Certificate[][] certificates = new Certificate[1][1];
+        try {
+            Thread threading = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                        certificates[0] = urlConnection.getServerCertificates();
+//                        for(Certificate certificate: certificates[0]) {
+//                            PublicKey publicKey = certificate.getPublicKey();
+//                            Log.d(getLocalClassName(), "Cert det: " +
+//                                    Base64.encodeToString(publicKey.getEncoded(), Base64.NO_PADDING) +
+//                                    certificate.getType() );
+//                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
+            threading.start();
+            threading.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            urlConnection.disconnect();
+        }
+
+        // Returns the certificate
+        // return certificates[0][0].getEncoded();
+
+        return certificates[0][0].getPublicKey();
     }
 
     public void linkPrivacyPolicy(View view) {

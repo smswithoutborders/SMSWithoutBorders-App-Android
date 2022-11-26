@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.room.Room;
 
@@ -18,13 +17,11 @@ import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
-import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.PublisherHandler;
 import com.example.sw0b_001.Models.SMSHandler;
-import com.example.sw0b_001.databinding.ActivitySynchroniseTypeBinding;
 import com.example.sw0b_001.databinding.ActivityTweetComposeBinding;
 
 import java.io.IOException;
@@ -35,7 +32,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -85,7 +81,7 @@ public class TextComposeActivity extends AppCompactActivityRtlEnabled {
                 EncryptedContent encryptedContent = encryptedContentDAO.get(encryptedContentId);
 
                 try {
-                    decryptedEmailContent[0] = PublisherHandler.getDecryptedEmailContent(getApplicationContext(), encryptedContent.getEncryptedContent());
+                    decryptedEmailContent[0] = PublisherHandler.decryptPublishedContent(getApplicationContext(), encryptedContent.getEncryptedContent());
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

@@ -9,7 +9,10 @@ import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
+import com.example.sw0b_001.Security.SecurityAES;
 import com.example.sw0b_001.Security.SecurityHandler;
+import com.example.sw0b_001.Security.SecurityHelpers;
+import com.example.sw0b_001.Security.SecurityRSA;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -17,45 +20,21 @@ import java.util.List;
 
 public class PublisherHandler {
 
-    private static List<GatewayServer> getGatewayServers(Context context) throws Throwable {
-        Datastore databaseConnection = Room.databaseBuilder(context,
-                Datastore.class, Datastore.DatabaseName).build();
-        final List<GatewayServer>[] gatewayServers = new List[]{new ArrayList<>()};
-        Thread fetchGatewayClientThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                GatewayServersDAO gatewayServerDao = databaseConnection.gatewayServersDAO();
-                gatewayServers[0] = gatewayServerDao.getAll();
-            }
-        });
 
-        try {
-            fetchGatewayClientThread.start();
-            fetchGatewayClientThread.join();
-        } catch (InterruptedException e) {
-            throw e.fillInStackTrace();
-        }
-
-        return gatewayServers[0];
-    }
-
-    public static String getDecryptedEmailContent(Context context, String encryptedContent) throws Throwable {
+    public static String decryptPublishedContent(Context context, String encryptedContent) throws Throwable {
         // Transform from Base64
-
         String decodedEncryptedContent = new String(Base64.decode(encryptedContent, Base64.DEFAULT));
 
         String iv = decodedEncryptedContent.substring(0, 16);
         String encodedEncryptedContent = decodedEncryptedContent.substring(16);
 
-
-        SecurityHandler securityHandler = new SecurityHandler(context);
-
-        GatewayServer gatewayServer = getGatewayServers(context).get(0);
-        String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServer.getUrl() );
-
+        SecurityAES securityAES = new SecurityAES(context);
         try {
-            byte[] decryptedEmailContent = securityHandler.decryptWithSharedKeyAES(
-                    iv.getBytes(), Base64.decode(encodedEncryptedContent, Base64.NO_WRAP), keystoreAlias);
+            byte[] sharedKey = SecurityHelpers.getDecryptedSharedKey(context);
+            byte[] decryptedEmailContent = securityAES.decrypt(
+                    iv.getBytes(),
+                    Base64.decode(encodedEncryptedContent, Base64.NO_WRAP),
+                    sharedKey);
 
             return new String(decryptedEmailContent, StandardCharsets.UTF_8);
         }
@@ -65,17 +44,19 @@ public class PublisherHandler {
     }
 
 
-    public static String[] getEncryptEmailContent(Context context, String emailContent) throws Throwable {
+    public static String[] encryptContentForPublishing(Context context, String emailContent) throws Throwable {
         SecurityHandler securityHandler = new SecurityHandler(context);
         String randomStringForIv = securityHandler.generateRandom(16);
 
-        GatewayServer gatewayServer = getGatewayServers(context).get(0);
-        String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServer.getUrl() );
-
+        SecurityAES securityAES = new SecurityAES(context);
         try {
-            byte[] encryptedEmailContent = securityHandler.encryptWithSharedKeyAES(randomStringForIv.getBytes(), emailContent.getBytes(StandardCharsets.UTF_8), keystoreAlias);
+            byte[] sharedKey = SecurityHelpers.getDecryptedSharedKey(context);
+            byte[] encryptedContent = securityAES.encrypt(
+                    randomStringForIv.getBytes(),
+                    emailContent.getBytes(StandardCharsets.UTF_8),
+                    sharedKey);
 
-            return new String[]{randomStringForIv, Base64.encodeToString(encryptedEmailContent, Base64.NO_WRAP)};
+            return new String[]{randomStringForIv, Base64.encodeToString(encryptedContent, Base64.NO_WRAP)};
         }
         catch(Exception e ) {
             throw new Throwable(e);
@@ -84,7 +65,7 @@ public class PublisherHandler {
 
     public static String formatForPublishing(Context context, String formattedContent) throws Throwable {
         try {
-            String[] encryptedIVEmailContent = getEncryptEmailContent(context, formattedContent);
+            String[] encryptedIVEmailContent = encryptContentForPublishing(context, formattedContent);
 
             String IV = encryptedIVEmailContent[0];
             String encryptedEmailContent = encryptedIVEmailContent[1];

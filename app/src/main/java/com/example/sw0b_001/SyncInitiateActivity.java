@@ -10,18 +10,17 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
-import com.example.sw0b_001.databinding.ActivitySyncProcessingBinding;
 import com.example.sw0b_001.databinding.ActivitySynchroniseTypeBinding;
 
 import java.net.URL;
 
-public class SynchroniseTypeActivity extends AppCompactActivityRtlEnabled {
+public class SyncInitiateActivity extends AppCompactActivityRtlEnabled {
     private static final int REQUEST_CAMERA_PERMISSION = 200;
 
     private ActivitySynchroniseTypeBinding binding;
@@ -37,39 +36,44 @@ public class SynchroniseTypeActivity extends AppCompactActivityRtlEnabled {
         ActionBar ab = getSupportActionBar();
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
+    }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
         Intent defaultIntent = getIntent();
 
         if(defaultIntent.getAction() != null && defaultIntent.getAction().equals(Intent.ACTION_VIEW)) {
-            try {
-                String resultValue = defaultIntent.getDataString();
-
-                if(resultValue.contains("apps://"))
-                    resultValue = resultValue.replace("apps://",  "https://");
-
-                else if(resultValue.contains("app://"))
-                    resultValue = resultValue.replace("app://", "http://");
-
-                else if(resultValue.contains("intent://"))
-                    return;
-
-                URL resultURL = new URL(resultValue);
-
-                Intent intent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
-                intent.putExtra("state", resultValue);
-
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-
-                finish();
-            }
-            catch(Exception e) {
-                e.printStackTrace();
-            }
+            String deepLinkUrl = defaultIntent.getDataString();
+            handleIncomingDeepLink(deepLinkUrl);
         }
-
     }
 
+    private void handleIncomingDeepLink(String deepLinkUrl) {
+        try {
+            if(deepLinkUrl.contains("apps://"))
+                deepLinkUrl = deepLinkUrl.replace("apps://",  "https://");
+
+            else if(deepLinkUrl.contains("app://"))
+                deepLinkUrl = deepLinkUrl.replace("app://", "http://");
+
+            else if(deepLinkUrl.contains("intent://"))
+                return;
+
+            URL resultURL = new URL(deepLinkUrl);
+
+            Intent intent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
+            intent.putExtra("state", deepLinkUrl);
+
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
+            finish();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void onContinueClick(View view) {
         String smswithoutbordersHandshakeUrl = getString(R.string.smswithoutborders_official_site_login);
@@ -105,7 +109,7 @@ public class SynchroniseTypeActivity extends AppCompactActivityRtlEnabled {
             }
             else {
                 Toast.makeText(this, "Camera Permission Denied", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, SynchroniseTypeActivity.class);
+                Intent intent = new Intent(this, SyncInitiateActivity.class);
                 startActivity(intent);
             }
         }

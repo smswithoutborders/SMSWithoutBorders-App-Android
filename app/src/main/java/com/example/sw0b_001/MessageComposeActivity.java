@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.room.Room;
 
@@ -95,7 +94,7 @@ public class MessageComposeActivity extends AppCompactActivityRtlEnabled {
                 EncryptedContent encryptedContent = encryptedContentDAO.get(encryptedContentId);
 
                 try {
-                    decryptedEmailContent[0] = PublisherHandler.getDecryptedEmailContent(getApplicationContext(), encryptedContent.getEncryptedContent());
+                    decryptedEmailContent[0] = PublisherHandler.decryptPublishedContent(getApplicationContext(), encryptedContent.getEncryptedContent());
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

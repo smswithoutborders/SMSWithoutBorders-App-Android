@@ -57,7 +57,7 @@
             android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:exported="true"
-            android:name=".SynchroniseTypeActivity"
+            android:name=".SyncInitiateActivity"
             android:label=""
             android:parentActivityName=".WelcomeActivity">
             <intent-filter android:label="pending_name">

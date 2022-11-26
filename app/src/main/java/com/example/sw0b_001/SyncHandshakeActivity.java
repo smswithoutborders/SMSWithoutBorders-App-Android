@@ -1,5 +1,6 @@
 package com.example.sw0b_001;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,12 +19,15 @@ import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.User.UserHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
+import com.example.sw0b_001.Security.SecurityHelpers;
+import com.example.sw0b_001.Security.SecurityRSA;
 import com.example.sw0b_001.databinding.ActivityQrscannerBinding;
 import com.example.sw0b_001.databinding.ActivitySyncProcessingBinding;
 
@@ -41,10 +45,14 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
+import java.security.spec.MGF1ParameterSpec;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SyncHandshakeActivity extends AppCompactActivityRtlEnabled {
 
     private ActivitySyncProcessingBinding binding;
+    private final String SYNC_KEY = "state";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +66,11 @@ public class SyncHandshakeActivity extends AppCompactActivityRtlEnabled {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        String state = getIntent().getStringExtra("state");
+        if(!getIntent().hasExtra(SYNC_KEY)) {
+            finish();
+        }
 
+        String state = getIntent().getStringExtra(SYNC_KEY);
         if(state.equals("complete_handshake")) {
 
             try {
@@ -160,9 +171,20 @@ public class SyncHandshakeActivity extends AppCompactActivityRtlEnabled {
         insertPlatformThread.join();
     }
 
+
+    private void updateSharedKeyEncryption(PublicKey publicKey) throws Throwable {
+        SecurityRSA securityRSA = new SecurityRSA(this);
+        byte[] sharedKey = SecurityHelpers.getDecryptedSharedKey(this);
+        byte[] encryptedSharedKey = securityRSA.encrypt( sharedKey, publicKey);
+
+        SecurityHandler securityHandler = new SecurityHandler(this);
+        securityHandler.storeSharedKey(String.valueOf(encryptedSharedKey));
+    }
+
     public void publicKeyExchange(String gatewayServerHandshakeUrl) {
         try {
-            SecurityHandler securityHandler = new SecurityHandler();
+            SecurityRSA securityRSA = new SecurityRSA(this);
+            SecurityHandler securityHandler = new SecurityHandler(this);
 
             URL gatewayServerUrl = new URL(gatewayServerHandshakeUrl);
             String gatewayServerUrlHost = gatewayServerUrl.getHost();
@@ -174,80 +196,40 @@ public class SyncHandshakeActivity extends AppCompactActivityRtlEnabled {
             userHandler.commitUser();
 
             String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerUrlHost );
-            PublicKey publicKeyEncoded = securityHandler.generateKeyPair(keystoreAlias)
+            PublicKey publicKeyEncoded = securityRSA.generateKeyPair(keystoreAlias)
                     .generateKeyPair()
                     .getPublic();
 
-            String PEMPublicKey = SecurityHandler.convert_to_pem_format(publicKeyEncoded.getEncoded());
+            // TODO: requires testing if re-encryption of key works
+            if(securityHandler.hasSharedKey())
+                updateSharedKeyEncryption(publicKeyEncoded);
 
-            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-            JSONObject jsonBody = new JSONObject("{\"public_key\": \"" + PEMPublicKey + "\"}");
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                    gatewayServerHandshakeUrl, jsonBody, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        /*
-                        - Should receive server's public key
-                            - should store the key after receiving it
-                        - Would need to send password to the server after that
-                        - Would receive the shared key if authentication is available
-                         */
+            /*
+            - key pinning for public key
+            - encrypt and send password along public key
+             */
+            /*
+            JSONObject jsonBody = new JSONObject(
+                    "{\"public_key\": \"" + PEMPublicKey + "\"}" +
+                    "{\"mgf1ParameterSpec\": \"" + SecurityHandler.MGF1ParameterSpecValue + "\"}" +
+                    "{\"password\": \"" + encryptedPassword + "\"}");
 
-                        String gatewayServerPublicKey = response.getString("public_key");
+             */
 
-                        String gatewayServerVerifyUrl = response.getString("verification_url");
+            String PEMPublicKey = SecurityHelpers.convert_to_pem_format(publicKeyEncoded.getEncoded());
+            Intent passwordActivityIntent = new Intent(getApplicationContext(), PasswordActivity.class);
 
+            Intent syncHandshakeIntent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
+            syncHandshakeIntent.putExtra("state", "complete_handshake");
 
-                        // Formatting public key to work well from here
-                        gatewayServerPublicKey = gatewayServerPublicKey.replace("-----BEGIN PUBLIC KEY-----\n", "");
-                        gatewayServerPublicKey = gatewayServerPublicKey.replace("-----END PUBLIC KEY-----", "");
+            passwordActivityIntent.putExtra("callbackIntent", syncHandshakeIntent);
+            passwordActivityIntent.putExtra("public_key", PEMPublicKey);
 
-                        GatewayServer gatewayServer = new GatewayServer();
-                        gatewayServer.setPublicKey(gatewayServerPublicKey);
-
-                        String gatewayServerUrlHost = new URL(gatewayServerHandshakeUrl).getHost();
-                        gatewayServer.setUrl(gatewayServerUrlHost);
-
-                        String gatewayServerUrlProtocol = new URL(gatewayServerHandshakeUrl).getProtocol();
-                        gatewayServer.setProtocol(gatewayServerUrlProtocol);
-
-                        Integer gatewayServerUrlPort = new URL(gatewayServerHandshakeUrl).getPort();
-                        gatewayServer.setPort(gatewayServerUrlPort);
-
-                        gatewayServerVerifyUrl = gatewayServerUrlProtocol + "://" + gatewayServerUrlHost + ":" + gatewayServerUrlPort + gatewayServerVerifyUrl;
-
-                        GatewayServersHandler gatewayServersHandler = new GatewayServersHandler(getApplicationContext());
-                        long gatewayServerId = gatewayServersHandler.add(gatewayServer);
-
-                        // Navigating user to password intent
-                        Intent passwordActivityIntent = new Intent(getApplicationContext(), PasswordActivity.class);
-
-                        Intent syncHandshakeIntent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
-                        syncHandshakeIntent.putExtra("state", "complete_handshake");
-                        syncHandshakeIntent.putExtra("gatewayserver_id", gatewayServerId);
-
-                        passwordActivityIntent.putExtra("callbackIntent", syncHandshakeIntent);
-                        passwordActivityIntent.putExtra("gatewayserver_id", gatewayServerId);
-                        passwordActivityIntent.putExtra("verification_url", gatewayServerVerifyUrl);
-                        startActivity(passwordActivityIntent);
-
-                        finish();
-                    } catch (JSONException | InterruptedException | MalformedURLException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-//                    System.out.println("Failed: " + error);
-                    // Log.e(this.getClass().getSimpleName(), error.toString());
-                    error.printStackTrace();
-                }
-            });
-            queue.add(jsonObjectRequest);
+            startActivity(passwordActivityIntent);
+            finish();
         } catch (KeyStoreException | NoSuchProviderException | CertificateException | NoSuchAlgorithmException | IOException | JSONException | InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (Throwable e) {
             e.printStackTrace();
         }
     }
