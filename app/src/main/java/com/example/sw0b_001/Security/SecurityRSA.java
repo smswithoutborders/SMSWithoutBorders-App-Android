@@ -21,6 +21,7 @@ import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.RSAKeyGenParameterSpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.BadPaddingException;
@@ -29,6 +30,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class SecurityRSA extends SecurityHandler {
+
 
     public SecurityRSA() throws CertificateException, KeyStoreException, NoSuchAlgorithmException, IOException {
         super();
@@ -84,7 +86,7 @@ public class SecurityRSA extends SecurityHandler {
             PrivateKey privateKey = privateKeyEntry.getPrivateKey();
 
             Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-            cipher.init(Cipher.DECRYPT_MODE, privateKey, param);
+            cipher.init(Cipher.DECRYPT_MODE, privateKey, paramSha1);
 
             decryptedBytes = cipher.doFinal(encryptedInput);
         } catch (NoSuchAlgorithmException e) {
