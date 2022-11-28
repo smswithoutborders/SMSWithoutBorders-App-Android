@@ -2,6 +2,7 @@ package com.example.sw0b_001;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 
@@ -11,6 +12,7 @@ import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
@@ -74,7 +76,7 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
 
             try {
                 JSONObject jsonObject = new JSONObject(getIntent().getStringExtra("payload"));
-                long gatewayServerId = getIntent().getLongExtra("gatewayserver_id", -1);
+                long gatewayServerId = getIntent().getLongExtra("gateway_server_id", -1);
 
                 processHandshakePayload(jsonObject, gatewayServerId);
 
@@ -113,11 +115,10 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
 
 //            String gatewayServerSeedsUrl = jsonObject.getString("seeds_url");
 
-//            processAndUpdateGatewayServerSeedUrl(gatewayServerSeedsUrl, gatewayServerId);
-            GatewayClientsHandler.storeDefaults(this);
+            processAndUpdateGatewayServerSeedUrl(getString(R.string.default_seeds_url), gatewayServerId);
             processAndStoreSharedKey(sharedKey);
             processAndStorePlatforms(platforms);
-//            remoteFetchAndStoreGatewayClients(gatewayServerSeedsUrl);
+            remoteFetchAndStoreGatewayClients(getString(R.string.default_seeds_url));
 
         } catch (JSONException | InterruptedException | CertificateException | KeyStoreException | NoSuchAlgorithmException | IOException e) {
             throw new Exception(e);
@@ -207,9 +208,8 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
                         }
 
                         GatewayServer gatewayServer = new GatewayServer();
-                        gatewayServer.setPublicKey(gatewayServerPublicKey);
+                        gatewayServer.setPublicKey(Base64.encodeToString(gatewayServerPublicKey.getEncoded(), Base64.DEFAULT));
 
-                        String gatewayServerUrlHost = new URL(gatewayServerHandshakeUrl).getHost();
                         gatewayServer.setUrl(gatewayServerUrlHost);
 
                         String gatewayServerUrlProtocol = new URL(gatewayServerHandshakeUrl).getProtocol();
@@ -218,16 +218,14 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
                         Integer gatewayServerUrlPort = new URL(gatewayServerHandshakeUrl).getPort();
                         gatewayServer.setPort(gatewayServerUrlPort);
 
-                        gatewayServerVerifyUrl = gatewayServerUrlProtocol + "://" + gatewayServerUrlHost + ":" + gatewayServerUrlPort + gatewayServerVerifyUrl;
-
                         GatewayServersHandler gatewayServersHandler = new GatewayServersHandler(getApplicationContext());
                         long gatewayServerId = gatewayServersHandler.add(gatewayServer);
-
 
                         String PEMPublicKey = SecurityHelpers.convert_to_pem_format(publicKeyEncoded.getEncoded());
                         Intent passwordActivityIntent = new Intent(getApplicationContext(), PasswordActivity.class);
 
                         Intent syncHandshakeIntent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
+                        syncHandshakeIntent.putExtra("gateway_server_id", gatewayServerId);
                         syncHandshakeIntent.putExtra("state", "complete_handshake");
 
                         passwordActivityIntent.putExtra("callbackIntent", syncHandshakeIntent);

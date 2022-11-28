@@ -116,7 +116,8 @@ public class GatewayClientsHandler {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                callbackFunction.run();
+                if(callbackFunction != null)
+                    callbackFunction.run();
             }
         });
         queue.add(remoteSeedsRequest);

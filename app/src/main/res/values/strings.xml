@@ -163,4 +163,8 @@
 
     <string name="gateway_client_settings_add_custom_empty_error">Please provide a phone number</string>
     <string name="synchronize_type_header_automatic_synchronize_text">Automatically link your app with your online account</string>
+
+    <string name="default_seeds_url">
+        http://seeds.smswithoutborders.com
+    </string>
 </resources>
