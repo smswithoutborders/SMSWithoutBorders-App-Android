@@ -6,14 +6,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-public class WelcomeActivity extends AppCompactActivityRtlEnabled {
+public class WelcomeActivity extends AppCompactActivityCustomized {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

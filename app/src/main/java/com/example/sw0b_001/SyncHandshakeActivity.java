@@ -1,25 +1,15 @@
 package com.example.sw0b_001;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
@@ -28,7 +18,6 @@ import com.example.sw0b_001.Models.User.UserHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Security.SecurityHelpers;
 import com.example.sw0b_001.Security.SecurityRSA;
-import com.example.sw0b_001.databinding.ActivityQrscannerBinding;
 import com.example.sw0b_001.databinding.ActivitySyncProcessingBinding;
 
 import org.json.JSONArray;
@@ -36,7 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
@@ -45,11 +33,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
-import java.security.spec.MGF1ParameterSpec;
-import java.util.ArrayList;
-import java.util.List;
 
-public class SyncHandshakeActivity extends AppCompactActivityRtlEnabled {
+public class SyncHandshakeActivity extends AppCompactActivityCustomized {
 
     private ActivitySyncProcessingBinding binding;
     private final String SYNC_KEY = "state";
@@ -204,18 +189,6 @@ public class SyncHandshakeActivity extends AppCompactActivityRtlEnabled {
             if(securityHandler.hasSharedKey())
                 updateSharedKeyEncryption(publicKeyEncoded);
 
-            /*
-            - key pinning for public key
-            - encrypt and send password along public key
-             */
-            /*
-            JSONObject jsonBody = new JSONObject(
-                    "{\"public_key\": \"" + PEMPublicKey + "\"}" +
-                    "{\"mgf1ParameterSpec\": \"" + SecurityHandler.MGF1ParameterSpecValue + "\"}" +
-                    "{\"password\": \"" + encryptedPassword + "\"}");
-
-             */
-
             String PEMPublicKey = SecurityHelpers.convert_to_pem_format(publicKeyEncoded.getEncoded());
             Intent passwordActivityIntent = new Intent(getApplicationContext(), PasswordActivity.class);
 
@@ -223,6 +196,7 @@ public class SyncHandshakeActivity extends AppCompactActivityRtlEnabled {
             syncHandshakeIntent.putExtra("state", "complete_handshake");
 
             passwordActivityIntent.putExtra("callbackIntent", syncHandshakeIntent);
+            passwordActivityIntent.putExtra("user_id", userId);
             passwordActivityIntent.putExtra("public_key", PEMPublicKey);
 
             startActivity(passwordActivityIntent);

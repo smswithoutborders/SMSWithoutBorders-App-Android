@@ -14,13 +14,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsRecyclerAdapter;
@@ -28,14 +27,13 @@ import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.databinding.ActivityGatewayClientsSettingsBinding;
-import com.example.sw0b_001.databinding.ActivityTweetComposeBinding;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GatewayClientsSettingsActivity extends AppCompactActivityRtlEnabled {
+public class GatewayClientsSettingsActivity extends AppCompactActivityCustomized {
     public RecyclerView gatewayClientRecyclerView;
     public GatewayClientsRecyclerAdapter gatewayClientsRecyclerAdapter;
     public List<GatewayClient> listOfGateways = new ArrayList<>();

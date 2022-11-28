@@ -14,15 +14,12 @@ import androidx.annotation.Nullable;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
-import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Security.SecurityHandler;
-import com.example.sw0b_001.Security.SecurityHelpers;
 import com.example.sw0b_001.Security.SecurityRSA;
 import com.example.sw0b_001.databinding.ActivityPasswordBinding;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
@@ -33,21 +30,18 @@ import org.json.JSONObject;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
-import java.security.cert.CertificateEncodingException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLPeerUnverifiedException;
 
-public class PasswordActivity extends AppCompactActivityRtlEnabled {
+public class PasswordActivity extends AppCompactActivityCustomized {
     private ActivityPasswordBinding binding;
 
     @Override
@@ -70,6 +64,8 @@ public class PasswordActivity extends AppCompactActivityRtlEnabled {
         if(!intent.hasExtra("callbackIntent"))
             return false;
         if(!intent.hasExtra("public_key"))
+            return false;
+        if(!intent.hasExtra("user_id"))
             return false;
         return true;
     }

@@ -15,12 +15,12 @@ import androidx.appcompat.app.ActionBar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.databinding.ActivitySynchroniseTypeBinding;
 
 import java.net.URL;
 
-public class SyncInitiateActivity extends AppCompactActivityRtlEnabled {
+public class SyncInitiateActivity extends AppCompactActivityCustomized {
     private static final int REQUEST_CAMERA_PERMISSION = 200;
 
     private ActivitySynchroniseTypeBinding binding;
@@ -60,6 +60,7 @@ public class SyncInitiateActivity extends AppCompactActivityRtlEnabled {
             else if(deepLinkUrl.contains("intent://"))
                 return;
 
+            // If not a link would crash the app
             URL resultURL = new URL(deepLinkUrl);
 
             Intent intent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
@@ -72,6 +73,9 @@ public class SyncInitiateActivity extends AppCompactActivityRtlEnabled {
         }
         catch(Exception e) {
             e.printStackTrace();
+        }
+        finally {
+            finish();
         }
     }
 

@@ -5,23 +5,20 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter;
-import com.example.sw0b_001.databinding.ActivityPasswordBinding;
 import com.example.sw0b_001.databinding.ActivityPlatformsBinding;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
-public class PlatformsActivity extends AppCompactActivityRtlEnabled {
+public class PlatformsActivity extends AppCompactActivityCustomized {
     RecyclerView recyclerView;
     PlatformsRecyclerAdapter platformsRecyclerAdapter;
 

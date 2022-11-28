@@ -14,13 +14,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.QRScannerActivity;
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.SyncInitiateActivity;
 import com.example.sw0b_001.databinding.ActivityStoredAccessSettingsBinding;
 
-public class StoreAccessSettingsActivity extends AppCompactActivityRtlEnabled {
+public class StoreAccessSettingsActivity extends AppCompactActivityCustomized {
     private static final int REQUEST_CAMERA_PERMISSION = 200;
 
     private ActivityStoredAccessSettingsBinding binding;
