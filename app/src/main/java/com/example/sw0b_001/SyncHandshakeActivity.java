@@ -2,6 +2,7 @@ package com.example.sw0b_001;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.room.Room;
@@ -18,13 +19,15 @@ import com.example.sw0b_001.Models.User.UserHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Security.SecurityHelpers;
 import com.example.sw0b_001.Security.SecurityRSA;
-import com.example.sw0b_001.databinding.ActivitySyncProcessingBinding;
+import com.example.sw0b_001.databinding.ActivitySyncInitBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.security.InvalidAlgorithmParameterException;
@@ -32,17 +35,20 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PublicKey;
+import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class SyncHandshakeActivity extends AppCompactActivityCustomized {
 
-    private ActivitySyncProcessingBinding binding;
+    private ActivitySyncInitBinding binding;
     private final String SYNC_KEY = "state";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivitySyncProcessingBinding.inflate(getLayoutInflater());
+        binding = ActivitySyncInitBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
     }
@@ -102,14 +108,16 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
     public void processHandshakePayload(JSONObject jsonObject, long gatewayServerId) throws Exception {
         try {
             String sharedKey = jsonObject.getString("shared_key");
-            JSONArray platforms = jsonObject.getJSONArray("user_platforms");
+            JSONArray platforms = jsonObject.getJSONObject("user_platforms")
+                    .getJSONArray("saved_platforms");
 
-            String gatewayServerSeedsUrl = jsonObject.getString("seeds_url");
+//            String gatewayServerSeedsUrl = jsonObject.getString("seeds_url");
 
-            processAndUpdateGatewayServerSeedUrl(gatewayServerSeedsUrl, gatewayServerId);
+//            processAndUpdateGatewayServerSeedUrl(gatewayServerSeedsUrl, gatewayServerId);
+            GatewayClientsHandler.storeDefaults(this);
             processAndStoreSharedKey(sharedKey);
             processAndStorePlatforms(platforms);
-            remoteFetchAndStoreGatewayClients(gatewayServerSeedsUrl);
+//            remoteFetchAndStoreGatewayClients(gatewayServerSeedsUrl);
 
         } catch (JSONException | InterruptedException | CertificateException | KeyStoreException | NoSuchAlgorithmException | IOException e) {
             throw new Exception(e);
@@ -172,39 +180,101 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
             SecurityHandler securityHandler = new SecurityHandler(this);
 
             URL gatewayServerUrl = new URL(gatewayServerHandshakeUrl);
-            String gatewayServerUrlHost = gatewayServerUrl.getHost();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Log.d(getLocalClassName(), "gateway server: " + gatewayServerUrl);
+                        String gatewayServerHost = gatewayServerUrl.getProtocol() + "://" +
+                                gatewayServerUrl.getHost();
 
-            // Extracting and storing userId from gatewayServerHandshake
-            int userIdIndex =4;
-            String userId = gatewayServerUrl.getPath().split("/")[userIdIndex];
-            UserHandler userHandler = new UserHandler(getApplicationContext(), userId);
-            userHandler.commitUser();
+                        String gatewayServerUrlHost = gatewayServerUrl.getHost();
+                        // Extracting and storing userId from gatewayServerHandshake
+                        int userIdIndex =4;
+                        String userId = gatewayServerUrl.getPath().split("/")[userIdIndex];
+                        UserHandler userHandler = new UserHandler(getApplicationContext(), userId);
+                        userHandler.commitUser();
 
-            String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerUrlHost );
-            PublicKey publicKeyEncoded = securityRSA.generateKeyPair(keystoreAlias)
-                    .generateKeyPair()
-                    .getPublic();
+                        String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerUrlHost );
+                        PublicKey publicKeyEncoded = securityRSA.generateKeyPair(keystoreAlias)
+                                .generateKeyPair()
+                                .getPublic();
 
-            // TODO: requires testing if re-encryption of key works
-            if(securityHandler.hasSharedKey())
-                updateSharedKeyEncryption(publicKeyEncoded);
+                        PublicKey gatewayServerPublicKey = getGatewayServerPublicKey(gatewayServerHost);
+                        // TODO: requires testing if re-encryption of key works
+                        if(securityHandler.hasSharedKey() && gatewayServerPublicKey != null) {
+                            updateSharedKeyEncryption(publicKeyEncoded);
+                        }
 
-            String PEMPublicKey = SecurityHelpers.convert_to_pem_format(publicKeyEncoded.getEncoded());
-            Intent passwordActivityIntent = new Intent(getApplicationContext(), PasswordActivity.class);
+                        GatewayServer gatewayServer = new GatewayServer();
+                        gatewayServer.setPublicKey(gatewayServerPublicKey);
 
-            Intent syncHandshakeIntent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
-            syncHandshakeIntent.putExtra("state", "complete_handshake");
+                        String gatewayServerUrlHost = new URL(gatewayServerHandshakeUrl).getHost();
+                        gatewayServer.setUrl(gatewayServerUrlHost);
 
-            passwordActivityIntent.putExtra("callbackIntent", syncHandshakeIntent);
-            passwordActivityIntent.putExtra("user_id", userId);
-            passwordActivityIntent.putExtra("public_key", PEMPublicKey);
+                        String gatewayServerUrlProtocol = new URL(gatewayServerHandshakeUrl).getProtocol();
+                        gatewayServer.setProtocol(gatewayServerUrlProtocol);
 
-            startActivity(passwordActivityIntent);
-            finish();
-        } catch (KeyStoreException | NoSuchProviderException | CertificateException | NoSuchAlgorithmException | IOException | JSONException | InvalidAlgorithmParameterException e) {
+                        Integer gatewayServerUrlPort = new URL(gatewayServerHandshakeUrl).getPort();
+                        gatewayServer.setPort(gatewayServerUrlPort);
+
+                        gatewayServerVerifyUrl = gatewayServerUrlProtocol + "://" + gatewayServerUrlHost + ":" + gatewayServerUrlPort + gatewayServerVerifyUrl;
+
+                        GatewayServersHandler gatewayServersHandler = new GatewayServersHandler(getApplicationContext());
+                        long gatewayServerId = gatewayServersHandler.add(gatewayServer);
+
+
+                        String PEMPublicKey = SecurityHelpers.convert_to_pem_format(publicKeyEncoded.getEncoded());
+                        Intent passwordActivityIntent = new Intent(getApplicationContext(), PasswordActivity.class);
+
+                        Intent syncHandshakeIntent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
+                        syncHandshakeIntent.putExtra("state", "complete_handshake");
+
+                        passwordActivityIntent.putExtra("callbackIntent", syncHandshakeIntent);
+                        passwordActivityIntent.putExtra("user_id", userId);
+                        passwordActivityIntent.putExtra("public_key", PEMPublicKey);
+                        passwordActivityIntent.putExtra("gateway_server_url", gatewayServerHandshakeUrl);
+                        passwordActivityIntent.putExtra("gateway_server_public_key", gatewayServerPublicKey);
+
+                        startActivity(passwordActivityIntent);
+                        finish();
+                    } catch(Exception e ) {
+                        e.printStackTrace();
+                        finish();
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        } catch (KeyStoreException | NoSuchProviderException | CertificateException | NoSuchAlgorithmException | IOException | InvalidAlgorithmParameterException e) {
             e.printStackTrace();
         } catch (Throwable e) {
             e.printStackTrace();
         }
+    }
+
+    private PublicKey getGatewayServerPublicKey(String gatewayServerUrl) throws IOException, InterruptedException {
+        String primaryKeySite = new String();
+        Log.d(getLocalClassName(), "Acquiring pub key: " + gatewayServerUrl);
+        /*
+        if(BuildConfig.DEBUG)
+            primaryKeySite = getString(R.string.official_staging_site);
+        else
+            primaryKeySite = getString(R.string.official_site);
+
+         */
+        Log.d(getLocalClassName(), primaryKeySite);
+
+        URL url = new URL(gatewayServerUrl);
+        HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+        InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+        Certificate[] certificate = urlConnection.getServerCertificates();
+//                        for(Certificate certificate: certificates[0]) {
+//                            PublicKey publicKey = certificate.getPublicKey();
+//                            Log.d(getLocalClassName(), "Cert det: " +
+//                                    Base64.encodeToString(publicKey.getEncoded(), Base64.NO_PADDING) +
+//                                    certificate.getType() );
+//                        }
+        return certificate[0].getPublicKey();
     }
 }

@@ -122,7 +122,7 @@ public class GatewayClientsHandler {
         queue.add(remoteSeedsRequest);
     }
 
-    private static void storeDefaults(Context context) throws InterruptedException {
+    public static void storeDefaults(Context context) throws InterruptedException {
         List<GatewayClient> gatewayClients = new ArrayList<>();
         try {
             gatewayClients = appendDefaultGatewayClients(context, gatewayClients);

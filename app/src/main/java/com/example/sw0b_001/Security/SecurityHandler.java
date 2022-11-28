@@ -46,7 +46,7 @@ public class SecurityHandler {
     OAEPParameterSpec param = new OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, PSource.PSpecified.DEFAULT);
     MasterKey masterKeyAlias;
 
-    public static final String MGF1ParameterSpecValue = "SHA256";
+    public static final String MGF1ParameterSpecValue = "sha256";
     public static final String DEFAULT_KEYPAIR_ALGORITHM_PADDING = "RSA/ECB/" + KeyProperties.ENCRYPTION_PADDING_RSA_OAEP;
     public static final String DEFAULT_AES_ALGORITHM = "AES/CBC/PKCS5Padding";
     public static final String DEFAULT_KEYSTORE_PROVIDER = "AndroidKeyStore";

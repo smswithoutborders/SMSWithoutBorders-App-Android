@@ -5,18 +5,6 @@
         https://smswithoutborders.com
     </string>
 
-    <string name="official_staging_site">
-        https://staging.smswithoutborders.com
-    </string>
-
-    <string name="official_site_verification_url">
-        https://smswithoutborders.com:15000
-    </string>
-
-    <string name="official_staging_site_verification_url">
-        https://staging.smswithoutborders.com:15000
-    </string>
-
     <string name="privacy_policy">
         https://smswithoutborders.com/privacy-policy
     </string>
