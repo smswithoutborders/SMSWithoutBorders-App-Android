@@ -4,6 +4,7 @@ import android.content.Context;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
+import android.util.Log;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -21,7 +22,7 @@ import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.RSAKeyGenParameterSpec;
+import java.security.spec.MGF1ParameterSpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.BadPaddingException;
@@ -49,7 +50,8 @@ public class SecurityRSA extends SecurityHandler {
                 new KeyGenParameterSpec.Builder(
                         keystoreAlias,
                         KeyProperties.PURPOSE_DECRYPT | KeyProperties.PURPOSE_ENCRYPT)
-                        .setDigests(KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
+                        .setKeySize(2048)
+                        .setDigests(KeyProperties.DIGEST_SHA1, KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
                         .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
                         .build());
         return keygen;
@@ -66,27 +68,29 @@ public class SecurityRSA extends SecurityHandler {
     public byte[] encrypt(byte[] input, String publicKeyBase64) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
         PublicKey publicKey = getPublicKeyFromBase64String(publicKeyBase64);
         Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-        cipher.init(Cipher.ENCRYPT_MODE, publicKey, param);
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey, encryptionDigestParam);
         return cipher.doFinal(input);
     }
 
     public byte[] encrypt(byte[] input, PublicKey publicKey) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableEntryException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
         Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-        cipher.init(Cipher.ENCRYPT_MODE, publicKey, param);
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey, encryptionDigestParam);
         return cipher.doFinal(input);
     }
 
     // Requirements to use this: input has to be Base64 encoded
     public byte[] decrypt(byte[] encryptedInput, String keyStoreAlias) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
+        Log.d(getClass().getName(), "Decryption keystore alias: " + keyStoreAlias);
         byte[] decryptedBytes = null;
         try {
-            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)this.keyStore.getEntry(
+            KeyStore keyStore = getKeyStore();
+            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(
                     keyStoreAlias, null);
 
             PrivateKey privateKey = privateKeyEntry.getPrivateKey();
 
             Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-            cipher.init(Cipher.DECRYPT_MODE, privateKey, paramSha1);
+            cipher.init(Cipher.DECRYPT_MODE, privateKey, decryptionDigestParam);
 
             decryptedBytes = cipher.doFinal(encryptedInput);
         } catch (NoSuchAlgorithmException e) {
@@ -98,6 +102,10 @@ public class SecurityRSA extends SecurityHandler {
         } catch (UnrecoverableEntryException e) {
             e.printStackTrace();
         } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         } catch (InvalidAlgorithmParameterException e) {
             e.printStackTrace();

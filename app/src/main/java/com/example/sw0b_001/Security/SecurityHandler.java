@@ -2,7 +2,6 @@ package com.example.sw0b_001.Security;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
 import android.util.Log;
@@ -12,43 +11,30 @@ import androidx.security.crypto.MasterKey;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.KeyFactory;
-import java.security.KeyPairGenerator;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.SecureRandom;
-import java.security.UnrecoverableEntryException;
-import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.MGF1ParameterSpec;
-import java.security.spec.X509EncodedKeySpec;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.OAEPParameterSpec;
 import javax.crypto.spec.PSource;
-import javax.crypto.spec.SecretKeySpec;
 
 public class SecurityHandler {
     KeyStore keyStore;
     Context context;
     SharedPreferences sharedPreferences;
-    OAEPParameterSpec param = new OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA256, PSource.PSpecified.DEFAULT);
-    OAEPParameterSpec paramSha1 = new OAEPParameterSpec("SHA-256", "MGF1", MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT);
+
+    public static MGF1ParameterSpec defaultEncryptionDigest = MGF1ParameterSpec.SHA256;
+    public static MGF1ParameterSpec defaultDecryptionDigest = MGF1ParameterSpec.SHA1;
+
+    OAEPParameterSpec encryptionDigestParam = new OAEPParameterSpec("SHA-256", "MGF1", defaultEncryptionDigest, PSource.PSpecified.DEFAULT);
+    OAEPParameterSpec decryptionDigestParam = new OAEPParameterSpec("SHA-256", "MGF1", defaultDecryptionDigest, PSource.PSpecified.DEFAULT);
     MasterKey masterKeyAlias;
 
-    public static final String MGF1ParameterSpecValue = "sha256";
     public static final String DEFAULT_KEYPAIR_ALGORITHM_PADDING = "RSA/ECB/" + KeyProperties.ENCRYPTION_PADDING_RSA_OAEP;
+
     public static final String DEFAULT_AES_ALGORITHM = "AES/CBC/PKCS5Padding";
     public static final String DEFAULT_KEYSTORE_PROVIDER = "AndroidKeyStore";
     final String SHARED_SECRET_KEY = "SHARED_SECRET_KEY";
@@ -56,6 +42,13 @@ public class SecurityHandler {
     public SecurityHandler() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
         this.keyStore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
         this.keyStore.load(null);
+    }
+
+    public KeyStore getKeyStore() throws KeyStoreException, CertificateException, IOException, NoSuchAlgorithmException {
+        this.keyStore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
+        this.keyStore.load(null);
+
+        return this.keyStore;
     }
 
     public SecurityHandler(Context context) throws GeneralSecurityException, IOException {
@@ -102,7 +95,7 @@ public class SecurityHandler {
     public byte[] getSharedKey() {
         String encryptedSharedKey = this.sharedPreferences.getString(SHARED_SECRET_KEY, "");
 
-        byte[] encryptedSharedKeyDecoded = Base64.decode(encryptedSharedKey, Base64.NO_WRAP);
+        byte[] encryptedSharedKeyDecoded = Base64.decode(encryptedSharedKey, Base64.DEFAULT);
 
         return encryptedSharedKeyDecoded;
     }

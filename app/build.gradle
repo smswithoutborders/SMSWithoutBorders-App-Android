@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     buildFeatures {
         viewBinding true
@@ -85,5 +85,5 @@ dependencies {
     implementation "androidx.work:work-runtime:$work_version"
     implementation 'com.budiyev.android:code-scanner:2.1.0'
 
-    implementation 'androidx.security:security-crypto:1.1.0-alpha03'
+    implementation 'androidx.security:security-crypto:1.1.0-alpha04'
 }

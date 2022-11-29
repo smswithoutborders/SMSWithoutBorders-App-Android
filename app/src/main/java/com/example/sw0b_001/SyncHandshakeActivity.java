@@ -166,18 +166,32 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
     }
 
 
-    private void updateSharedKeyEncryption(PublicKey publicKey) throws Throwable {
+    private PublicKey updateSharedKeyEncryption(String gatewayServerUrlHost) throws Throwable {
         SecurityRSA securityRSA = new SecurityRSA(this);
         byte[] sharedKey = SecurityHelpers.getDecryptedSharedKey(this);
-        byte[] encryptedSharedKey = securityRSA.encrypt( sharedKey, publicKey);
+        Log.d(getLocalClassName(), "Decrypted shared key: " + sharedKey);
+
+        PublicKey publicKeyEncoded = getNewPublicKey(gatewayServerUrlHost);
+        byte[] encryptedSharedKey = securityRSA.encrypt( sharedKey, publicKeyEncoded);
 
         SecurityHandler securityHandler = new SecurityHandler(this);
         securityHandler.storeSharedKey(String.valueOf(encryptedSharedKey));
+
+        return publicKeyEncoded;
+    }
+
+    private PublicKey getNewPublicKey(String gatewayServerUrlHost) throws GeneralSecurityException, IOException {
+        SecurityRSA securityRSA = new SecurityRSA(this);
+        String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerUrlHost );
+        PublicKey publicKeyEncoded = securityRSA.generateKeyPair(keystoreAlias)
+                .generateKeyPair()
+                .getPublic();
+
+        return publicKeyEncoded;
     }
 
     public void publicKeyExchange(String gatewayServerHandshakeUrl) {
         try {
-            SecurityRSA securityRSA = new SecurityRSA(this);
             SecurityHandler securityHandler = new SecurityHandler(this);
 
             URL gatewayServerUrl = new URL(gatewayServerHandshakeUrl);
@@ -196,16 +210,11 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
                         UserHandler userHandler = new UserHandler(getApplicationContext(), userId);
                         userHandler.commitUser();
 
-                        String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerUrlHost );
-                        PublicKey publicKeyEncoded = securityRSA.generateKeyPair(keystoreAlias)
-                                .generateKeyPair()
-                                .getPublic();
-
                         PublicKey gatewayServerPublicKey = getGatewayServerPublicKey(gatewayServerHost);
                         // TODO: requires testing if re-encryption of key works
-                        if(securityHandler.hasSharedKey() && gatewayServerPublicKey != null) {
-                            updateSharedKeyEncryption(publicKeyEncoded);
-                        }
+                        PublicKey publicKeyEncoded = (securityHandler.hasSharedKey() && gatewayServerPublicKey != null) ?
+                                updateSharedKeyEncryption(gatewayServerUrlHost) :
+                                getNewPublicKey(gatewayServerUrlHost);
 
                         GatewayServer gatewayServer = new GatewayServer();
                         gatewayServer.setPublicKey(Base64.encodeToString(gatewayServerPublicKey.getEncoded(), Base64.DEFAULT));

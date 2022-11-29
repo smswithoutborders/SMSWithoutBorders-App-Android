@@ -37,6 +37,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
+import java.security.spec.MGF1ParameterSpec;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -67,6 +68,12 @@ public class PasswordActivity extends AppCompactActivityCustomized {
 
     }
 
+    public String getEncryptionDigest() {
+       if(SecurityHandler.defaultEncryptionDigest.equals(MGF1ParameterSpec.SHA256))
+           return "sha256";
+       return "sha1";
+    }
+
     private void transmitPassword(byte[] password, PublicKey gatewayServerPublicKey, String gatewayServerVerificationUrl) throws GeneralSecurityException, IOException, JSONException, ExecutionException, InterruptedException, TimeoutException, VolleyError {
         SecurityRSA securityRSA = new SecurityRSA(this);
         String publicKey = getIntent().getStringExtra("public_key");
@@ -80,7 +87,7 @@ public class PasswordActivity extends AppCompactActivityCustomized {
         try {
             JSONObject jsonBody = new JSONObject(
                     "{\"public_key\": \"" + publicKey + "\"," +
-                            "\"mgf1ParameterSpec\": \"" + SecurityHandler.MGF1ParameterSpecValue + "\"," +
+                            "\"mgf1ParameterSpec\": \"" + getEncryptionDigest() + "\"," +
                             "\"password\": \"" + passwordBase64 + "\"}");
             RequestFuture<JSONObject> future = RequestFuture.newFuture();
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
