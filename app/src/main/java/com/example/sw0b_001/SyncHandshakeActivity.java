@@ -172,10 +172,11 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
         Log.d(getLocalClassName(), "Decrypted shared key: " + sharedKey);
 
         PublicKey publicKeyEncoded = getNewPublicKey(gatewayServerUrlHost);
-        byte[] encryptedSharedKey = securityRSA.encrypt( sharedKey, publicKeyEncoded);
+        byte[] encryptedSharedKey = securityRSA.encrypt( sharedKey, publicKeyEncoded, SecurityHandler.decryptionDigestParam);
 
         SecurityHandler securityHandler = new SecurityHandler(this);
-        securityHandler.storeSharedKey(String.valueOf(encryptedSharedKey));
+        String encryptedSharedKeyB64 = Base64.encodeToString(encryptedSharedKey, Base64.DEFAULT);
+        securityHandler.storeSharedKey(encryptedSharedKeyB64);
 
         return publicKeyEncoded;
     }

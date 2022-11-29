@@ -33,7 +33,7 @@ public class PublisherHandler {
             byte[] sharedKey = SecurityHelpers.getDecryptedSharedKey(context);
             byte[] decryptedEmailContent = securityAES.decrypt(
                     iv.getBytes(),
-                    Base64.decode(encodedEncryptedContent, Base64.NO_WRAP),
+                    Base64.decode(encodedEncryptedContent, Base64.DEFAULT),
                     sharedKey);
 
             return new String(decryptedEmailContent, StandardCharsets.UTF_8);
