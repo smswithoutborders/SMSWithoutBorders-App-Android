@@ -41,7 +41,7 @@
             app:helperTextEnabled="true"
             app:hintTextColor="@color/light_blue_A400"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5"
+            app:layout_constraintTop_toTopOf="parent"
             app:startIconDrawable="@drawable/ic_round_phone_android_24"
             app:startIconTint="@color/white">
 
@@ -74,14 +74,15 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:backgroundTint="#EAB6B6"
+            android:backgroundTint="#A80000"
             android:onClick="cancelNewGatewayClient"
             android:text="@string/gateway_client_settings_add_custom_gateway_cancel_btn"
-            android:textColor="@color/button_gray"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/new_gateway_client_add"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:rippleColor="#FFFFFF" />
 
         <Button
             android:id="@+id/new_gateway_client_add"
@@ -91,7 +92,7 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:backgroundTint="@color/logo_blue1"
+            android:backgroundTint="@color/light_blue_600"
             android:onClick="onAddNewGatewayClient"
             android:text="@string/gateway_client_settings_add_custom_gateway_add_btn"
             android:textColor="@color/white"
