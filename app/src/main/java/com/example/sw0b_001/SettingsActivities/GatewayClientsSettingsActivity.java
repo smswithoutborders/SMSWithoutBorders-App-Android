@@ -20,6 +20,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sw0b_001.AddNewGatewayActivity;
 import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
@@ -158,8 +159,10 @@ public class GatewayClientsSettingsActivity extends AppCompactActivityRtlEnabled
 
         switch(item.getItemId()) {
             case R.id.add_gateway:
-                newGatewayClientConstrain.setVisibility(View.VISIBLE);
-                gatewayClientInput.setText("");
+
+                Intent addGatewayIntent = new Intent(getApplicationContext(), AddNewGatewayActivity.class);
+                startActivity(addGatewayIntent);
+
                 break;
         }
         return false;
