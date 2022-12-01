@@ -127,10 +127,7 @@ public class GatewayClientsSettingsActivity extends AppCompactActivityRtlEnabled
 
     }
 
-    public void cancelNewGatewayClient(View view) {
-        ConstraintLayout newGatewayClientConstrain = findViewById(R.id.new_gateway_client_constraint);
-        newGatewayClientConstrain.setVisibility(View.GONE);
-    }
+
 
 //    public void onAddNewGatewayClient(View view ) throws InterruptedException {
 //        TextInputEditText gatewayClientNumberText = findViewById(R.id.new_gateway_client_text_input);
@@ -166,11 +163,6 @@ public class GatewayClientsSettingsActivity extends AppCompactActivityRtlEnabled
                 break;
         }
         return false;
-    }
-
-    public void onContactsClick(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-        startActivityForResult(intent, 1);
     }
 
 
