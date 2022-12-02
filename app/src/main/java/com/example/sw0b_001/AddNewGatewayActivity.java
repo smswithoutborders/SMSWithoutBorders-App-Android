@@ -4,11 +4,15 @@ package com.example.sw0b_001;
 
 import static com.example.sw0b_001.R.id.new_gateway_toolbar;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.provider.ContactsContract;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -23,7 +27,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class AddNewGatewayActivity extends AppCompactActivityRtlEnabled {
 
-    GatewayClientsSettingsActivity gatewayClientsSettingsActivity = new GatewayClientsSettingsActivity();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,18 +57,34 @@ public class AddNewGatewayActivity extends AppCompactActivityRtlEnabled {
         gatewayClient.setMSISDN(newGatewayClientNumber);
 
         GatewayClientsHandler.add(getApplicationContext(), gatewayClient);
-        cancelNewGatewayClient(view);
-
+        finish();
     }
     public void onContactsClick(View view) {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
         startActivityForResult(intent, 1);
     }
 
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
 
-    public void cancelNewGatewayClient(View view) {
-        Intent cancelAddGatewayIntent = new Intent(getApplicationContext(), GatewayClientsSettingsActivity.class);
-        startActivity(cancelAddGatewayIntent);
+        switch (reqCode) {
+            case (1) :
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri contactData = data.getData();
+                    Cursor contactCursor = getApplicationContext().getContentResolver().query(contactData, null, null, null, null);
+                    if(contactCursor != null) {
+                        if (contactCursor.moveToFirst()) {
+                            int contactIndexInformation = contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                            String number = contactCursor.getString(contactIndexInformation);
+
+                            EditText numberEditText = findViewById(R.id.new_gateway_client_text_input);
+                            numberEditText.setText(number);
+                        }
+                    }
+                }
+                break;
+        }
     }
 }
 
