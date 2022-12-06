@@ -123,6 +123,13 @@
             android:name=".SettingsActivities.GatewayClientsSettingsActivity"
             android:parentActivityName=".HomepageActivity"
             android:theme="@style/Theme.MyAppNoBar" />
+
+        <activity
+            android:exported="false"
+            android:name=".AddNewGatewayActivity"
+            android:parentActivityName=".SettingsActivities.GatewayClientsSettingsActivity"
+            android:theme="@style/Theme.MyAppNoBar" />
+
         <activity
             android:exported="false"
             android:name=".SettingsActivities.StoreAccessSettingsActivity"
