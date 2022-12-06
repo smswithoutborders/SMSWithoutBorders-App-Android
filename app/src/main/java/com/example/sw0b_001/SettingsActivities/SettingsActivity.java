@@ -6,15 +6,13 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw0b_001.HomepageActivity;
-import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.SettingsRecyclerAdapter;
 import com.example.sw0b_001.R;
-import com.example.sw0b_001.databinding.ActivityLanguageSettingsBinding;
 import com.example.sw0b_001.databinding.ActivitySettingsBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -26,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SettingsActivity extends AppCompactActivityRtlEnabled {
+public class SettingsActivity extends AppCompactActivityCustomized {
 
     public static String GATEWAY_CLIENT_SETTINGS = "";
     public static String STORED_ACCESS_SETTINGS = "";

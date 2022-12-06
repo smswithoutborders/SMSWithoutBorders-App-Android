@@ -4,26 +4,22 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.LocaleList;
-import android.util.Log;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.sw0b_001.HomepageActivity;
-import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.LanguageHandler;
 import com.example.sw0b_001.R;
-import com.example.sw0b_001.databinding.ActivityGatewayClientsSettingsBinding;
 import com.example.sw0b_001.databinding.ActivityLanguageSettingsBinding;
 
 import java.util.Locale;
 
-public class LanguageSettingsActivity extends AppCompactActivityRtlEnabled {
+public class LanguageSettingsActivity extends AppCompactActivityCustomized {
 
     private String[] supportedLanguages = new String[]{"en", "fr", "fa"};
 

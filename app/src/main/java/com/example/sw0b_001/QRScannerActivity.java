@@ -2,28 +2,21 @@ package com.example.sw0b_001;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
-import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
-import com.example.sw0b_001.databinding.ActivityPlatformsBinding;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.databinding.ActivityQrscannerBinding;
-import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.zxing.Result;
 
 import java.net.URL;
 
-public class QRScannerActivity extends AppCompactActivityRtlEnabled {
+public class QRScannerActivity extends AppCompactActivityCustomized {
 
     private boolean requestingPermission = false;
     private CodeScanner codeScanner;

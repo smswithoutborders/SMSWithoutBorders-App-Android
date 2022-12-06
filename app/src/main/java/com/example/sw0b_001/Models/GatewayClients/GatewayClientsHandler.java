@@ -116,13 +116,14 @@ public class GatewayClientsHandler {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                callbackFunction.run();
+                if(callbackFunction != null)
+                    callbackFunction.run();
             }
         });
         queue.add(remoteSeedsRequest);
     }
 
-    private static void storeDefaults(Context context) throws InterruptedException {
+    public static void storeDefaults(Context context) throws InterruptedException {
         List<GatewayClient> gatewayClients = new ArrayList<>();
         try {
             gatewayClients = appendDefaultGatewayClients(context, gatewayClients);
