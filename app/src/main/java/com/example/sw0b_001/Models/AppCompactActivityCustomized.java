@@ -25,7 +25,8 @@ public class AppCompactActivityCustomized extends AppCompatActivity {
 
     private void customizeViewForLanguage(View view) {
         Locale locale = getResources().getConfiguration().locale;
-        if(locale.equals(Locale.forLanguageTag("fa")))
+        if(locale.equals(Locale.forLanguageTag("fa"))) {
             view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
     }
 }
