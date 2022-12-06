@@ -4,6 +4,7 @@ import android.content.Context;
 import android.telephony.TelephonyManager;
 
 import androidx.room.Room;
+import androidx.work.DelegatingWorkerFactory;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -67,159 +68,58 @@ public class GatewayClientsHandler {
         return operatorId.equals(gatewayClientOperatorId);
     }
 
-    public static void remoteFetchAndStoreGatewayClients(Context context, String gatewayServerSeedsUrl, Runnable callbackFunction) throws InterruptedException {
-        RequestQueue queue = Volley.newRequestQueue(context);
-        JsonArrayRequest remoteSeedsRequest = new JsonArrayRequest(Request.Method.GET, gatewayServerSeedsUrl, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray responses) {
-                for(int i=0, findDefaultCounter=0;i<responses.length();++i, ++findDefaultCounter) {
-                    try {
-                        // TODO: Add algorithm for default Gateway Client
-                        JSONObject response = responses.getJSONObject(i);
-                        String IMSI = response.getString("IMSI");
-                        String MSISDN = response.getString("MSISDN");
-                        String country = response.getString("country");
-                        String operatorName = response.getString("operator_name");
-                        String operatorId = response.getString("operator_id");
-                        double LPS = response.getDouble("LPS");
-                        String seedType = response.getString("seed_type");
+    public static void remoteFetchAndStoreGatewayClients(Context context) throws InterruptedException {
+        // TODO: add support for remote fetching gateway clients
+        List<GatewayClient> gatewayClients = getAllGatewayClients(context);
 
-                        GatewayClient gatewayClient = new GatewayClient();
-                        gatewayClient.setType(seedType);
-                        gatewayClient.setMSISDN(MSISDN);
-                        gatewayClient.setLastPingSession(LPS);
-                        gatewayClient.setCountry(country);
-                        gatewayClient.setOperatorName(operatorName);
-                        gatewayClient.setOperatorId(operatorId);
+        if(gatewayClients.size() < 1)
+            gatewayClients = getDefaultGatewayClients(context);
 
-                        // Random Gateway client selector
-                        GatewayClientsHandler.add(context, gatewayClient);
-                    }
-                    catch(Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                try {
-                    storeDefaults(context);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if(callbackFunction != null)
-                    callbackFunction.run();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                try {
-                    storeDefaults(context);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if(callbackFunction != null)
-                    callbackFunction.run();
-            }
-        });
-        queue.add(remoteSeedsRequest);
+        gatewayClients = setDefaults(context, gatewayClients);
+        storeGatewayClients(context, gatewayClients);
     }
 
-    public static void storeDefaults(Context context) throws InterruptedException {
-        List<GatewayClient> gatewayClients = new ArrayList<>();
-        try {
-            gatewayClients = appendDefaultGatewayClients(context, gatewayClients);
+    public static void storeGatewayClients(Context context, List<GatewayClient> gatewayClients) {
+       for(GatewayClient gatewayClient : gatewayClients) {
+           try {
+               add(context, gatewayClient);
+           } catch(Exception e) {
+               e.printStackTrace();
+           }
+       }
+    }
 
-            boolean defaultSet = false;
-            for(GatewayClient gatewayClient : gatewayClients) {
-                try {
-                    if(!defaultSet && containsDefaultProperties(context, gatewayClient.getOperatorId())) {
+    public static List<GatewayClient> setDefaults(Context context, List<GatewayClient> gatewayClients) throws InterruptedException {
+        for(GatewayClient gatewayClient : gatewayClients)
+            if (gatewayClient.isDefault)
+                return gatewayClients;
 
-                        gatewayClient.setDefault(true);
-
-                        defaultSet = true;
-                    }
-
-                    GatewayClientsHandler.add(context, gatewayClient);
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if(!defaultSet) {
-                // probably an international number from CM
-                // orange CM would be best to handle this request
-                gatewayClients = findForOperatorId(context, "62402");
-
-                // going with the first available option now
-                for(GatewayClient gatewayClient : gatewayClients) {
-                    gatewayClient.setDefault(true);
-                    toggleDefault(context, gatewayClient);
-                    break;
-                }
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        for(GatewayClient gatewayClient : gatewayClients) {
+            if(containsDefaultProperties(context, gatewayClient.getOperatorId()))
+                gatewayClient.setDefault(true);
+                return gatewayClients;
         }
+
+        // probably an international number from CM
+        // orange CM would be best to handle this request
+        // going with the first available option now
+        String defaultOperatorId = context.getString(R.string.default_operator_id);
+        for(GatewayClient gatewayClient : gatewayClients) {
+            if(gatewayClient.getOperatorId().equals(defaultOperatorId))
+                gatewayClient.setDefault(true);
+                break;
+        }
+
+        return gatewayClients;
     }
 
-    public static List<GatewayClient> findForOperatorId(Context context, String operatorId) {
+    public static List<GatewayClient> getAllGatewayClients(Context context) throws InterruptedException {
         final List<GatewayClient>[] gatewayClients = new List[]{new ArrayList<>()};
-
         Thread fetchGatewayClientThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 Datastore databaseConnection = Room.databaseBuilder(context,
                                 Datastore.class, Datastore.DatabaseName)
-                        .fallbackToDestructiveMigration()
-                        .build();
-
-                GatewayClientsDao gatewayClientsDao = databaseConnection.gatewayClientsDao();
-                gatewayClients[0] = gatewayClientsDao.findForOperaetorId(operatorId);
-            }
-        });
-        fetchGatewayClientThread.start();
-        try {
-            fetchGatewayClientThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return gatewayClients[0];
-    }
-
-    private static List<GatewayClient> appendDefaultGatewayClients(Context context, List<GatewayClient> gatewayClientList) throws InterruptedException {
-        GatewayClient gatewayClient = new GatewayClient();
-        gatewayClient.setCountry("Cameroon");
-        gatewayClient.setMSISDN(context.getString(R.string.default_gateway_MSISDN_0));
-        gatewayClient.setOperatorName("MTN Cameroon");
-        gatewayClient.setOperatorId("62401");
-
-        GatewayClient gatewayClient1 = new GatewayClient();
-        gatewayClient1.setCountry("Cameroon");
-        gatewayClient1.setMSISDN(context.getString(R.string.default_gateway_MSISDN_1));
-        gatewayClient1.setOperatorName("MTN Cameroon");
-        gatewayClient1.setOperatorId("62401");
-
-        GatewayClient gatewayClient2 = new GatewayClient();
-        gatewayClient2.setCountry("Cameroon");
-        gatewayClient2.setMSISDN(context.getString(R.string.default_gateway_MSISDN_2));
-        gatewayClient2.setOperatorName("Orange Cameroon");
-        gatewayClient2.setOperatorId("62402");
-
-        gatewayClientList.add(gatewayClient);
-        gatewayClientList.add(gatewayClient1);
-        gatewayClientList.add(gatewayClient2);
-
-        return gatewayClientList;
-    }
-
-    public static List<GatewayClient> getAllGatewayClients(Context context) throws InterruptedException {
-        final List<GatewayClient>[] gatewayClients = new List[]{new ArrayList<>()};
-
-        Thread fetchGatewayClientThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Datastore databaseConnection = Room.databaseBuilder(context,
-                        Datastore.class, Datastore.DatabaseName)
                         .fallbackToDestructiveMigration()
                         .build();
 
@@ -237,26 +137,24 @@ public class GatewayClientsHandler {
         return gatewayClients[0];
     }
 
-    public static void clearStoredGatewayClients(Context context) {
+    private static List<GatewayClient> getDefaultGatewayClients(Context context) throws InterruptedException {
+        List<GatewayClient> gatewayClientList = new ArrayList<>();
+        GatewayClient gatewayClient = new GatewayClient();
+        gatewayClient.setCountry("Cameroon");
+        gatewayClient.setMSISDN(context.getString(R.string.default_gateway_MSISDN_0));
+        gatewayClient.setOperatorName("MTN Cameroon");
+        gatewayClient.setOperatorId("62401");
 
-        Thread clearGatewayClientsThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Datastore databaseConnection = Room.databaseBuilder(context,
-                        Datastore.class, Datastore.DatabaseName)
-                        .fallbackToDestructiveMigration()
-                        .build();
+        GatewayClient gatewayClient2 = new GatewayClient();
+        gatewayClient2.setCountry("Cameroon");
+        gatewayClient2.setMSISDN(context.getString(R.string.default_gateway_MSISDN_2));
+        gatewayClient2.setOperatorName("Orange Cameroon");
+        gatewayClient2.setOperatorId("62402");
 
-                GatewayClientsDao gatewayClientsDao = databaseConnection.gatewayClientsDao();
-                gatewayClientsDao.deleteAll();
-            }
-        });
-        clearGatewayClientsThread.start();
-        try {
-            clearGatewayClientsThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        gatewayClientList.add(gatewayClient);
+        gatewayClientList.add(gatewayClient2);
+
+        return gatewayClientList;
     }
 
     public static GatewayClient getGatewayClientMSISDN(Context context) throws Throwable {

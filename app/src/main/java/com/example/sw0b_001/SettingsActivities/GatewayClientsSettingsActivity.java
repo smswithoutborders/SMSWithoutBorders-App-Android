@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -22,7 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw0b_001.Models.AppCompactActivityCustomized;
-import com.example.sw0b_001.AddNewGatewayActivity
+import com.example.sw0b_001.AddNewGatewayActivity;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsRecyclerAdapter;
@@ -37,10 +38,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GatewayClientsSettingsActivity extends AppCompactActivityCustomized {
-    public RecyclerView gatewayClientRecyclerView;
-    public GatewayClientsRecyclerAdapter gatewayClientsRecyclerAdapter;
-    public List<GatewayClient> listOfGateways = new ArrayList<>();
-    public int gatewayClientsLayout;
 
     private ActivityGatewayClientsSettingsBinding binding;
 
@@ -61,17 +58,14 @@ public class GatewayClientsSettingsActivity extends AppCompactActivityCustomized
 
         LinearProgressIndicator linearProgressIndicator = findViewById(R.id.refresh_loader);
         linearProgressIndicator.setVisibility(View.INVISIBLE);
-
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        Log.d(getLocalClassName(), "Resuming");
         try {
-            refreshGatewayClientsSettings();
-            this.gatewayClientsRecyclerAdapter.notifyDataSetChanged();
+            populateSettings();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -80,12 +74,6 @@ public class GatewayClientsSettingsActivity extends AppCompactActivityCustomized
     @Override
     public void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        this.gatewayClientsLayout = R.layout.layout_cardlist_gateway_clients;
-        this.gatewayClientRecyclerView = findViewById(R.id.gateway_clients_recycler_view);
-        this.gatewayClientRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        // gatewayRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-
-        this.gatewayClientsRecyclerAdapter = new GatewayClientsRecyclerAdapter( getApplicationContext(), this);
         populateOperatorId();
         try {
             populateSettings();
@@ -110,13 +98,29 @@ public class GatewayClientsSettingsActivity extends AppCompactActivityCustomized
     }
 
     public void populateSettings() throws InterruptedException {
-        this.listOfGateways = GatewayClientsHandler.getAllGatewayClients(getApplicationContext());
-        this.gatewayClientRecyclerView.setAdapter(this.gatewayClientsRecyclerAdapter);
+        List<GatewayClient> listOfGateways = GatewayClientsHandler.getAllGatewayClients(
+                getApplicationContext());
+
+        RecyclerView gatewayClientRecyclerView;
+        GatewayClientsRecyclerAdapter gatewayClientsRecyclerAdapter;
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+
+        gatewayClientRecyclerView = findViewById(R.id.gateway_clients_recycler_view);
+        gatewayClientRecyclerView.setLayoutManager(linearLayoutManager);
+
+        gatewayClientsRecyclerAdapter = new GatewayClientsRecyclerAdapter(
+                getApplicationContext(), listOfGateways,
+                R.layout.layout_cardlist_gateway_clients, this);
+
+        gatewayClientRecyclerView.setAdapter(gatewayClientsRecyclerAdapter);
     }
 
     public void refreshGatewayClientsSettings() throws InterruptedException {
-        List<GatewayServer> gatewayServerList = GatewayServersHandler.getAllGatewayServers(getApplicationContext());
-        GatewayClientsHandler.clearStoredGatewayClients(getApplicationContext());
+        List<GatewayServer> gatewayServerList = GatewayServersHandler.getAllGatewayServers(
+                getApplicationContext());
 
         Runnable callbackFunction = new Runnable() {
             @Override
@@ -133,7 +137,7 @@ public class GatewayClientsSettingsActivity extends AppCompactActivityCustomized
 
         for(GatewayServer gatewayServer : gatewayServerList) {
             String gatewayServerSeedsUrl = gatewayServer.getSeedsUrl();
-            GatewayClientsHandler.remoteFetchAndStoreGatewayClients(getApplicationContext(), gatewayServerSeedsUrl, callbackFunction);
+            GatewayClientsHandler.remoteFetchAndStoreGatewayClients(getApplicationContext());
         }
     }
 
@@ -142,24 +146,14 @@ public class GatewayClientsSettingsActivity extends AppCompactActivityCustomized
         linearProgressIndicator.setVisibility(View.VISIBLE);
 
         this.refreshGatewayClientsSettings();
-        this.gatewayClientsRecyclerAdapter.notifyDataSetChanged();
-
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d("", "Plus button clicked");
-        ConstraintLayout newGatewayClientConstrain = findViewById(R.id.new_gateway_client_constraint);
-        TextInputEditText gatewayClientInput = findViewById(R.id.new_gateway_client_text_input);
-
         switch(item.getItemId()) {
             case R.id.add_gateway:
-
                 Intent addGatewayIntent = new Intent(getApplicationContext(), AddNewGatewayActivity.class);
                 startActivity(addGatewayIntent);
-
                 break;
         }
         return false;

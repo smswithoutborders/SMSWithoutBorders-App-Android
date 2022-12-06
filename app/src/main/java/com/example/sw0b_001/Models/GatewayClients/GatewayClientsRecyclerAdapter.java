@@ -1,6 +1,8 @@
 package com.example.sw0b_001.Models.GatewayClients;
 
 import android.content.Context;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,17 +19,21 @@ import com.example.sw0b_001.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayClientsRecyclerAdapter.ViewHolder> {
 
     Context context;
+    List<GatewayClient> gatewayClientList;
+    int renderLayout;
     GatewayClientsSettingsActivity gatewayClientsSettingsActivity;
 
-    public GatewayClientsRecyclerAdapter(Context context, GatewayClientsSettingsActivity gatewayClientsSettingsActivity){
+    public GatewayClientsRecyclerAdapter(Context context, List<GatewayClient> gatewayClientList,
+                                         int renderLayout, GatewayClientsSettingsActivity gatewayClientsSettingsActivity){
         this.context = context;
+        this.gatewayClientList = gatewayClientList;
+        this.renderLayout = renderLayout;
         this.gatewayClientsSettingsActivity = gatewayClientsSettingsActivity;
-    }
-
-    public GatewayClientsRecyclerAdapter() {
     }
 
     @NonNull
@@ -35,50 +41,36 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(this.context);
-        View view = inflater.inflate(gatewayClientsSettingsActivity.gatewayClientsLayout, parent, false);
+        View view = inflater.inflate(this.renderLayout, parent, false);
         return new GatewayClientsRecyclerAdapter.ViewHolder(view);
+    }
+
+    public void handleCheckedSwitch(GatewayClient gatewayClient) {
+        gatewayClient.setDefault(true);
+        try {
+            GatewayClientsHandler.toggleDefault(context, gatewayClient);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        GatewayClient gatewayClient = this.gatewayClientsSettingsActivity.listOfGateways.get(position);
+        GatewayClient gatewayClient = this.gatewayClientList.get(position);
+        Log.d(getClass().getName(), "View attaching");
+
         holder.MSISDN.setText(gatewayClient.getMSISDN());
         holder.country.setText(gatewayClient.getCountry());
         holder.operatorName.setText(gatewayClient.getOperatorName());
 
         holder.switchBtn.setChecked(gatewayClient.isDefault());
 
-        holder.switchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    gatewayClient.setDefault(true);
-                    try {
-                        GatewayClientsHandler.toggleDefault(context, gatewayClient);
-
-                        gatewayClientsSettingsActivity.populateSettings();
-
-                        notifyDataSetChanged();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else {
-                   buttonView.setChecked(true);
-                }
-            }
-        });
-
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gatewayClient.setDefault(true);
+                handleCheckedSwitch(gatewayClient);
                 try {
-                    GatewayClientsHandler.toggleDefault(context, gatewayClient );
-
                     gatewayClientsSettingsActivity.populateSettings();
-
-                    notifyDataSetChanged();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -88,7 +80,7 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
 
     @Override
     public int getItemCount() {
-        return this.gatewayClientsSettingsActivity.listOfGateways.size();
+        return this.gatewayClientList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

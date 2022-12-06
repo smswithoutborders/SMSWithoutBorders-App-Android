@@ -93,7 +93,8 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         if(!encryptedContentList.isEmpty()) noRecentMessagesText.setVisibility(View.INVISIBLE);
         else noRecentMessagesText.setVisibility(View.VISIBLE);
 
-        RecentsRecyclerAdapter recentsRecyclerAdapter = new RecentsRecyclerAdapter(this, encryptedContentList, R.layout.layout_cardlist_recents);
+        RecentsRecyclerAdapter recentsRecyclerAdapter = new RecentsRecyclerAdapter(this,
+                encryptedContentList, R.layout.layout_cardlist_recents);
         recentsRecyclerView.setAdapter(recentsRecyclerAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);

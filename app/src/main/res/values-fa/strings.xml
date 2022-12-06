@@ -33,9 +33,6 @@
     <string name="main_navigation_recents">اخیر</string>
     <string name="welcome_signup">ثبت نام</string>
     <string name="welcome_synchronize">ورود</string>
-    <string name="default_gateway_MSISDN_0">+237679466332</string>
-    <string name="default_gateway_MSISDN_1">+237672451860</string>
-    <string name="default_gateway_MSISDN_2">+237690826242</string>
     <string name="homepage_recent">اخیر</string>
     <string name="email_compose_cc">cc</string>
     <string name="email_compose_bcc">bcc</string>

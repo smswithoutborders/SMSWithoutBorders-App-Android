@@ -19,13 +19,13 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.sw0b_001.Models.AppCompactActivityRtlEnabled;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.SettingsActivities.GatewayClientsSettingsActivity;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class AddNewGatewayActivity extends AppCompactActivityRtlEnabled {
+public class AddNewGatewayActivity extends AppCompactActivityCustomized {
 
 
     @Override
