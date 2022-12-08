@@ -76,6 +76,20 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
                 }
             }
         });
+
+        holder.switchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    handleCheckedSwitch(gatewayClient);
+                    try {
+                        gatewayClientsSettingsActivity.populateSettings();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     @Override
