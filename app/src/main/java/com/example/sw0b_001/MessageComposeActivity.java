@@ -166,8 +166,10 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
                     to = toEditText.getText().toString();
 
                     // Till I find a cleaner version
-                    if(!verifyPhoneNumberFormat(to))
+                    if(!verifyPhoneNumberFormat(to)) {
                         toEditText.setError(getString(R.string.message_compose_invalid_number));
+                        return false;
+                    }
                 }
                 else
                     to = groupEditText.getText().toString();
