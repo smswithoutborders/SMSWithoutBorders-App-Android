@@ -169,4 +169,7 @@
     <string name="new_gateway_client_alias">
         Alias (optional)
     </string>
+    <string name="new_gateway_client_custom_alias">
+        Custom Gateway Client
+    </string>
 </resources>

@@ -60,4 +60,5 @@
     <string name="gateway_client_settings_add_custom_gateway_add_btn">Ajouter</string>
     <string name="gateway_client_settings_add_custom_empty_error">Veuillez fournir un numéro de téléphone</string>
     <string name="new_gateway_client_alias">Alias (facultatif)</string>
+    <string name="new_gateway_client_custom_alias">Client SMS personnalisé</string>
 </resources>

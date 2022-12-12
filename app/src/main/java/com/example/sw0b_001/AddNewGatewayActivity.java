@@ -66,7 +66,9 @@ public class AddNewGatewayActivity extends AppCompactActivityCustomized {
         }
 
         GatewayClient gatewayClient = new GatewayClient();
-        String type = newGatewayClientName.isEmpty() ? "Custom Gateway" : newGatewayClientName;
+        String type = newGatewayClientName.isEmpty() ?
+                getString(R.string.new_gateway_client_custom_alias) : newGatewayClientName;
+
         gatewayClient.setType(type);
         gatewayClient.setMSISDN(newGatewayClientNumber);
 
