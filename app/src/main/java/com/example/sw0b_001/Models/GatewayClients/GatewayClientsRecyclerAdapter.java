@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sw0b_001.Helpers.CustomHelpers;
 import com.example.sw0b_001.SettingsActivities.GatewayClientsSettingsActivity;
 import com.example.sw0b_001.R;
 
@@ -60,7 +61,12 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
         Log.d(getClass().getName(), "View attaching");
 
         holder.MSISDN.setText(gatewayClient.getMSISDN());
-        holder.country.setText(gatewayClient.getCountry());
+        if(gatewayClient.getType() == null)
+            holder.country.setText(gatewayClient.getCountry());
+        else {
+            holder.country.setText(gatewayClient.getType());
+        }
+
         holder.operatorName.setText(gatewayClient.getOperatorName());
 
         holder.switchBtn.setChecked(gatewayClient.isDefault());

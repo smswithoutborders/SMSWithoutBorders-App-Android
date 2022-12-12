@@ -165,4 +165,8 @@
     <string name="default_seeds_url">
         http://seeds.smswithoutborders.com
     </string>
+
+    <string name="new_gateway_client_alias">
+        Alias (optional)
+    </string>
 </resources>

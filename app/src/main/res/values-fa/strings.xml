@@ -56,4 +56,5 @@
     <string name="gateway_client_settings_add_custom_gateway_text">نقطه پایانی پیامک جدید اضافه کنید</string>
     <string name="smswithoutborders_official_site_login">https://smswithoutborders.com/login/fa</string>
     <string name="smswithoutborders_official_site_signup">https://smswithoutborders.com/sign-up/fa</string>
+    <string name="new_gateway_client_alias">نام مستعار (اختیاری)</string>
 </resources>

@@ -24,6 +24,7 @@ import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.SettingsActivities.GatewayClientsSettingsActivity;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class AddNewGatewayActivity extends AppCompactActivityCustomized {
 
@@ -40,12 +41,24 @@ public class AddNewGatewayActivity extends AppCompactActivityCustomized {
         ActionBar ab = getSupportActionBar();
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
+
+        TextInputLayout textInputLayout = findViewById(R.id.new_gateway_client_text_holder);
+        textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                startActivityForResult(intent, 1);
+            }
+        });
     }
 
 
     public void onAddNewGatewayClient(View view ) throws InterruptedException {
         TextInputEditText gatewayClientNumberText = findViewById(R.id.new_gateway_client_text_input);
+        TextInputEditText gatewayClientNameText = findViewById(R.id.new_gateway_client_custom_name_input);
+
         String newGatewayClientNumber = gatewayClientNumberText.getText().toString();
+        String newGatewayClientName = gatewayClientNameText.getText().toString();
 
         if(newGatewayClientNumber.isEmpty()) {
             gatewayClientNumberText.setError(getString(R.string.gateway_client_settings_add_custom_empty_error));
@@ -53,15 +66,12 @@ public class AddNewGatewayActivity extends AppCompactActivityCustomized {
         }
 
         GatewayClient gatewayClient = new GatewayClient();
-        gatewayClient.setType("custom");
+        String type = newGatewayClientName.isEmpty() ? "Custom Gateway" : newGatewayClientName;
+        gatewayClient.setType(type);
         gatewayClient.setMSISDN(newGatewayClientNumber);
 
         GatewayClientsHandler.add(getApplicationContext(), gatewayClient);
         finish();
-    }
-    public void onContactsClick(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-        startActivityForResult(intent, 1);
     }
 
     @Override
@@ -76,10 +86,16 @@ public class AddNewGatewayActivity extends AppCompactActivityCustomized {
                     if(contactCursor != null) {
                         if (contactCursor.moveToFirst()) {
                             int contactIndexInformation = contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                            int contactNameIndexInformation = contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+
                             String number = contactCursor.getString(contactIndexInformation);
+                            String name = contactCursor.getString(contactNameIndexInformation);
 
                             EditText numberEditText = findViewById(R.id.new_gateway_client_text_input);
+                            EditText nameEditText = findViewById(R.id.new_gateway_client_custom_name_input);
+
                             numberEditText.setText(number);
+                            nameEditText.setText(name);
                         }
                     }
                 }

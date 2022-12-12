@@ -28,22 +28,29 @@
         app:layout_constraintTop_toBottomOf="@+id/new_gateway_toolbar">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textView4"
+            android:id="@+id/new_gateway_client_text_holder"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-
-            app:boxBackgroundColor="@color/black"
-            app:boxStrokeColor="@color/default_blue"
-            app:helperText="@string/homepage_enter_password_prompt"
-            app:helperTextEnabled="true"
-            app:hintTextColor="@color/light_blue_A400"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="sans-serif-thin"
+            app:boxBackgroundColor="@color/text_box"
+            app:boxCornerRadiusBottomEnd="25dp"
+            app:boxCornerRadiusBottomStart="25dp"
+            app:boxCornerRadiusTopEnd="25dp"
+            app:boxCornerRadiusTopStart="25dp"
+            app:boxStrokeColor="@color/white"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:endIconDrawable="@drawable/ic_round_contacts_24"
+            app:endIconMode="custom"
+            app:endIconTint="@color/pending_gray"
+            app:hintEnabled="false"
+            app:hintTextColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:startIconDrawable="@drawable/ic_round_phone_android_24"
-            app:startIconTint="@color/white">
+            app:startIconTint="@color/pending_gray">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/new_gateway_client_text_input"
@@ -53,35 +60,71 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/new_gateway_client_custom_name"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:onClick="onContactsClick"
-            app:layout_constraintBottom_toBottomOf="@+id/textView4"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="sans-serif-thin"
+            app:boxBackgroundColor="@color/text_box"
+            app:boxCornerRadiusBottomEnd="25dp"
+            app:boxCornerRadiusBottomStart="25dp"
+            app:boxCornerRadiusTopEnd="25dp"
+            app:boxCornerRadiusTopStart="25dp"
+            app:boxStrokeColor="@color/white"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:endIconMode="custom"
+            app:endIconTint="@color/pending_gray"
+            app:hintEnabled="false"
+            app:hintTextColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView4"
-            app:layout_constraintTop_toTopOf="@+id/textView4"
-            app:srcCompat="@drawable/ic_round_contacts_24" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_new_gateway_client_custom_name_tag"
+            app:startIconTint="@color/pending_gray">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/new_gateway_client_custom_name_input"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="phone" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
 
         <Button
             android:id="@+id/new_gateway_client_add"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="65dp"
             android:layout_marginTop="24dp"
+            android:layout_marginEnd="64dp"
             android:layout_marginBottom="8dp"
             android:backgroundTint="@color/light_blue_600"
             android:onClick="onAddNewGatewayClient"
             android:text="@string/gateway_client_settings_add_custom_gateway_add_btn"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/new_gateway_client_custom_name"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <TextView
+            android:id="@+id/add_new_gateway_client_custom_name_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/new_gateway_client_alias"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/new_gateway_client_custom_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/new_gateway_client_text_holder" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
