@@ -76,6 +76,14 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
             holder.date.setText(format.format(calendar.getTime()));
         }
 
+        if (DateUtils.isToday(encryptedContent.getDate())) {
+            holder.date.setText("Today");
+        }
+        else {
+            DateFormat dateFormat = new SimpleDateFormat("MMM dd");
+            holder.date.setText(dateFormat.format(encryptedContent.getDate()));
+        }
+//        holder.date.setText(date);
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override

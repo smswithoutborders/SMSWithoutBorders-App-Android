@@ -95,9 +95,11 @@ public class GatewayClientsHandler {
                 return gatewayClients;
 
         for(GatewayClient gatewayClient : gatewayClients) {
-            if(containsDefaultProperties(context, gatewayClient.getOperatorId()))
+            if(containsDefaultProperties(context, gatewayClient.getOperatorId())) {
                 gatewayClient.setDefault(true);
+                toggleDefault(context, gatewayClient);
                 return gatewayClients;
+            }
         }
 
         // probably an international number from CM
@@ -105,9 +107,11 @@ public class GatewayClientsHandler {
         // going with the first available option now
         String defaultOperatorId = context.getString(R.string.default_operator_id);
         for(GatewayClient gatewayClient : gatewayClients) {
-            if(gatewayClient.getOperatorId().equals(defaultOperatorId))
+            if(gatewayClient.getOperatorId().equals(defaultOperatorId)) {
                 gatewayClient.setDefault(true);
+                toggleDefault(context, gatewayClient);
                 break;
+            }
         }
 
         return gatewayClients;
