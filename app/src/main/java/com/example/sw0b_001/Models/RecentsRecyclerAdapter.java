@@ -54,13 +54,16 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
 
         int trimLength = 90;
         String displayString = encryptedContent.getEncryptedContent().length() > trimLength ?
-                encryptedContent.getEncryptedContent().substring(0, trimLength) + "..." : encryptedContent.getEncryptedContent();
+                encryptedContent.getEncryptedContent().substring(0, trimLength) + "..." :
+                encryptedContent.getEncryptedContent();
+
         holder.encryptedTextSnippet.setText(displayString);
 
-        Platform platform = PlatformsHandler.getPlatform(this.context, encryptedContent.getPlatformName());
+        Platform platform = PlatformsHandler.getPlatform(this.context,
+                encryptedContent.getPlatformName());
 
-        if(platform.getLogo() != -1)
-            holder.platformLogo.setImageResource((int) platform.getLogo());
+        holder.platformLogo.setImageResource(
+                (int) PlatformsHandler.hardGetLogoByName(context, platform.getName()));
 
         Date date = new Date(encryptedContent.getDate());
         if(DateUtils.isToday(encryptedContent.getDate())) {
@@ -83,7 +86,6 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
             DateFormat dateFormat = new SimpleDateFormat("MMM dd");
             holder.date.setText(dateFormat.format(encryptedContent.getDate()));
         }
-//        holder.date.setText(date);
 
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
