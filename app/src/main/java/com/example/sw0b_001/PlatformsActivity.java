@@ -42,7 +42,7 @@ public class PlatformsActivity extends AppCompactActivityCustomized {
         ab.setDisplayHomeAsUpEnabled(true);
 
         recyclerView = findViewById(R.id.list_synced_platforms);
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+//        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         platformsRecyclerAdapter = new PlatformsRecyclerAdapter(this, platforms, R.layout.layout_cardlist_platforms, this);
         recyclerView.setAdapter(platformsRecyclerAdapter);
