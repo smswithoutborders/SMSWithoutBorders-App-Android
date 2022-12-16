@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">SWOB</string>
 
+    <string name="official_site">
+        https://smswithoutborders.com
+    </string>
+
     <string name="privacy_policy">
         https://smswithoutborders.com/privacy-policy
     </string>
@@ -37,13 +41,9 @@
        subject
     </string>
 
-    <string name="email_compose_body">
-        Compose email
-    </string>
+    <string name="email_compose_body">Compose email</string>
 
-    <string name="gateway_clients_settings_operator_id">
-        Your Operator ID
-    </string>
+    <string name="gateway_clients_settings_operator_id">Your Operator ID</string>
 
     <string name="homepage_recent">
         Recent
@@ -53,133 +53,71 @@
         Search
     </string>
 
-    <string name="homepage_no_recent_messages">
-        No Recent Messages
-    </string>
+    <string name="homepage_no_recent_messages">No Recent Messages</string>
 
-    <string name="message_compose_phonenumber">
-        Contact\'s phone number
-    </string>
+    <string name="message_compose_phonenumber">Contact\'s phone number</string>
 
-    <string name="message_compose_body">
-        Message
-    </string>
+    <string name="message_compose_body">Message</string>
 
-    <string name="message_compose_invalid_number">
-        Please check the number is valid and has a country code
-    </string>
+    <string name="message_compose_invalid_number">Please check the number is valid and has a country code</string>
 
-    <string name="message_compose_empty_recipient">
-        Recipient cannot be empty!
-    </string>
+    <string name="message_compose_empty_recipient">Recipient cannot be empty!</string>
 
-    <string name="message_compose_empty_body">
-        Body should not be empty!
-    </string>
+    <string name="message_compose_empty_body">Body should not be empty!</string>
 
-    <string name="homepage_confirm">
-        Confirm
-    </string>
+    <string name="homepage_confirm">Confirm </string>
 
-    <string name="homepage_enter_password">
-        Enter Password
-    </string>
+    <string name="homepage_enter_password">Enter Password</string>
 
-    <string name="homepage_enter_password_prompt">
-        Same password used when creating your account
-    </string>
+    <string name="homepage_enter_password_prompt">Same password used when creating your account</string>
 
-    <string name="homepage_read_our_privacy_policy">
-        Read our privacy policy
-    </string>
+    <string name="homepage_read_our_privacy_policy" translatable="false">Read our privacy policy</string>
 
-    <string name="settings_settings">
-        Settings
-    </string>
+    <string name="settings_settings">Settings</string>
 
-    <string name="settings_automatically_stored_access">
-        Automatic Refresh stored access
-    </string>
+    <string name="settings_automatically_stored_access">Automatic Refresh stored access</string>
 
-    <string name="settings_automatically_stored_access_warning">
-        Warning! Resyncing will clear all previously sent messages.
-    </string>
+    <string name="settings_automatically_stored_access_warning">Warning! Resyncing will clear all previously sent messages.</string>
 
-    <string name="settings_manual_stored_access">
-        Refresh with QR Scanner
-    </string>
+    <string name="settings_manual_stored_access">Refresh with QR Scanner</string>
 
-    <string name="synchronize_type_header">
-        Synchronize
-    </string>
+    <string name="synchronize_type_header">Synchronize</string>
 
-    <string name="synchronize_type_header_automatic_synchronize_text">
-        Automatically link your app with your online account
-    </string>
+    <string name="synchronize_type_header_automatic_synchronize_text_continue">Continue</string>
 
-    <string name="synchronize_type_header_automatic_synchronize_text_continue">
-        Continue
-    </string>
+    <string name="synchronize_type_header_manual_synchronize_text">Manually link your app with your online account</string>
 
-    <string name="synchronize_type_header_manual_synchronize_text">
-        Manually link your app with your online account
-    </string>
+    <string name="synchronize_type_header_manual_synchronize_text_continue">Scan QR</string>
 
-    <string name="synchronize_type_header_manual_synchronize_text_continue">
-        Scan QR
-    </string>
+    <string name="tweet_compose_tweet">Tweet </string>
 
-    <string name="tweet_compose_tweet">
-        Tweet
-    </string>
+    <string name="tweet_compose_prompt">What\'s happening?</string>
 
-    <string name="tweet_compose_prompt">
-        What\'s happening?
-    </string>
+    <string name="welcome_welcome">Welcome </string>
 
-    <string name="welcome_welcome">
-        Welcome
-    </string>
+    <string name="welcome_signup">SIGNUP</string>
 
-    <string name="welcome_signup">
-        SIGNUP
-    </string>
+    <string name="welcome_login_prompt">Already have an account?</string>
 
-    <string name="welcome_login_prompt">
-        Already have an account?
-    </string>
+    <string name="welcome_synchronize">SIGNIN</string>
 
-    <string name="welcome_synchronize">
-        SYNCHRONIZE
-    </string>
+    <string name="main_navigation_recents">Recent</string>
 
-    <string name="main_navigation_recents">
-        Recent
-    </string>
+    <string name="main_navigation_settings">Settings</string>
 
-    <string name="main_navigation_settings">
-        Settings
-    </string>
-
-    <string name="message_compose_header">
-        Message...
-    </string>
+    <string name="message_compose_header">Message...</string>
 
     <string name="platforms_compose_header">
         Compose for Stored Access
     </string>
 
-    <string name="text_compose_compose">
-        Compose
-    </string>
+    <string name="text_compose_compose">Compose</string>
 
     <string name="settings_store_access_text">
         Store Access
     </string>
 
-    <string name="gateway_clients_settings_header">
-        Available Gateway Clients
-    </string>
+    <string name="gateway_clients_settings_header">Available Gateway Clients</string>
 
     <string name="settings_gateway_clients_text">
         Gateway Clients
@@ -189,35 +127,49 @@
         Failed to authenticate! Please try again...
     </string>
 
-    <string name="password_empty">
-        Password cannot be empty!
-    </string>
+    <string name="password_empty">Password cannot be empty!</string>
 
-    <string name="settings_language">
-        Language
-    </string>
+    <string name="settings_language">Language</string>
 
-    <string name="settings_language_preferred_language_text">
-        Select your preferred language
-    </string>
+    <string name="settings_language_preferred_language_text">Select your preferred language</string>
 
-    <string name="settings_language_supported_language_en">
-        English
-    </string>
+    <string name="settings_language_supported_language_en">English</string>
 
-    <string name="settings_language_supported_language_fr">
-        French
-    </string>
+    <string name="settings_language_supported_language_fr">French</string>
 
-    <string name="default_gateway_MSISDN_0">
-        +237679466332
-    </string>
-
-    <string name="default_gateway_MSISDN_1">
-        +237672451860
-    </string>
+    <string name="default_gateway_MSISDN_0">+237679466332</string>
 
     <string name="default_gateway_MSISDN_2">
         +237690826242
+    </string>
+
+    <string name="default_operator_id">62402 </string>
+
+    <string name="message_compose_groups_option">
+        Telegram user\'s name (optional)
+    </string>
+
+    <string name="message_compose_groups_name">User\'s name</string>
+
+    <string name="gateway_client_settings_add_custom_gateway_text">
+       Add new Gateway Client Address
+    </string>
+
+    <string name="gateway_client_settings_add_custom_gateway_cancel_btn">Cancel</string>
+
+    <string name="gateway_client_settings_add_custom_gateway_add_btn">Add</string>
+
+    <string name="gateway_client_settings_add_custom_empty_error">Please provide a phone number</string>
+    <string name="synchronize_type_header_automatic_synchronize_text">Automatically link your app with your online account</string>
+
+    <string name="default_seeds_url">
+        http://seeds.smswithoutborders.com
+    </string>
+
+    <string name="new_gateway_client_alias">
+        Alias (optional)
+    </string>
+    <string name="new_gateway_client_custom_alias">
+        Custom Gateway Client
     </string>
 </resources>

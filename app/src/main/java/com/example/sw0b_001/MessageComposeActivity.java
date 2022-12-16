@@ -14,11 +14,11 @@ import android.view.View;
 import android.widget.EditText;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
@@ -27,6 +27,8 @@ import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.PublisherHandler;
 import com.example.sw0b_001.Models.SMSHandler;
+import com.example.sw0b_001.databinding.ActivityMessageComposeBinding;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -43,12 +45,16 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-public class MessageComposeActivity extends AppCompatActivity {
+public class MessageComposeActivity extends AppCompactActivityCustomized {
+
+    private ActivityMessageComposeBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message_compose);
+        binding = ActivityMessageComposeBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         Toolbar composeToolbar = (Toolbar) findViewById(R.id.message_compose_toolbar);
         setSupportActionBar(composeToolbar);
@@ -63,6 +69,15 @@ public class MessageComposeActivity extends AppCompatActivity {
         if(intent.hasExtra("encrypted_content_id")) {
             populateEncryptedContent();
         }
+
+        TextInputLayout textInputLayout = findViewById(R.id.message_recipient_number_container);
+        textInputLayout.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+                startActivityForResult(intent, 1);
+            }
+        });
     }
 
     private void populateEncryptedContent() {
@@ -79,7 +94,7 @@ public class MessageComposeActivity extends AppCompatActivity {
                 EncryptedContent encryptedContent = encryptedContentDAO.get(encryptedContentId);
 
                 try {
-                    decryptedEmailContent[0] = PublisherHandler.getDecryptedEmailContent(getApplicationContext(), encryptedContent.getEncryptedContent());
+                    decryptedEmailContent[0] = PublisherHandler.decryptPublishedContent(getApplicationContext(), encryptedContent.getEncryptedContent());
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
@@ -104,7 +119,10 @@ public class MessageComposeActivity extends AppCompatActivity {
         String body = String.join(":", bodyList);
 
 
-        EditText toEditText = findViewById(R.id.message_recipient_number_edit_text);
+        EditText toEditText = verifyPhoneNumberFormat(to) ?
+                findViewById(R.id.message_recipient_number_edit_text) :
+                findViewById(R.id.message_recipient_username_edit_text);
+
         EditText bodyEditText = findViewById(R.id.message_compose_text);
 
         toEditText.setText(to);
@@ -128,27 +146,40 @@ public class MessageComposeActivity extends AppCompatActivity {
         return platformLetter + ":" + to + ":" + message;
     }
 
+    private Boolean verifyPhoneNumberFormat(String phonenumber) {
+        phonenumber = phonenumber.replace(" ", "");
+        return phonenumber.matches("^\\+[1-9]\\d{1,14}$");
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         EditText toEditText = findViewById(R.id.message_recipient_number_edit_text);
+        EditText groupEditText = findViewById(R.id.message_recipient_username_edit_text);
         EditText messageEditText = findViewById(R.id.message_compose_text);
+
 
         switch (item.getItemId()) {
             case R.id.action_send:
-                String to = toEditText.getText().toString();
-                String message = messageEditText.getText().toString();
+                String to = new String();
+
+                if(groupEditText.getText().toString().isEmpty()) {
+                    to = toEditText.getText().toString();
+
+                    // Till I find a cleaner version
+                    if(!verifyPhoneNumberFormat(to)) {
+                        toEditText.setError(getString(R.string.message_compose_invalid_number));
+                        return false;
+                    }
+                }
+                else
+                    to = groupEditText.getText().toString();
 
                 if(to.isEmpty()) {
-                    toEditText.setError(getString(R.string.message_compose_empty_recipient));
+                    groupEditText.setError(getString(R.string.message_compose_empty_recipient));
                     return false;
                 }
 
-                // Till I find a cleaner version
-                if(! to.matches("^\\+[1-9]\\d{1,14}$")) {
-                    toEditText.setError(getString(R.string.message_compose_invalid_number));
-                    return false;
-                }
-
+                String message = messageEditText.getText().toString();
                 if(message.isEmpty()) {
                     messageEditText.setError(getString(R.string.message_compose_empty_body));
                     return false;
@@ -161,7 +192,6 @@ public class MessageComposeActivity extends AppCompatActivity {
                     String formattedContent = processEmailForEncryption(platform.getLetter(), to, message);
                     String encryptedContentBase64 = PublisherHandler.formatForPublishing(getApplicationContext(), formattedContent);
                     String gatewayClientMSISDN = GatewayClientsHandler.getDefaultGatewayClientMSISDN(getApplicationContext());
-
 
                     Intent defaultSMSAppIntent = SMSHandler.transferToDefaultSMSApp(gatewayClientMSISDN, encryptedContentBase64);
                     if(defaultSMSAppIntent.resolveActivity(getPackageManager()) != null) {
@@ -214,13 +244,6 @@ public class MessageComposeActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.email_compose_toolbar, menu);
         return super.onCreateOptionsMenu(menu);
     }
-
-
-    public void onContactsClick(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
-        startActivityForResult(intent, 1);
-    }
-
 
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {

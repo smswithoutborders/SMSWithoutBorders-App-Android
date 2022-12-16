@@ -5,23 +5,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
-import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.PublisherHandler;
 import com.example.sw0b_001.Models.SMSHandler;
+import com.example.sw0b_001.databinding.ActivityEmailComposeBinding;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -31,7 +32,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,17 +39,16 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-public class EmailComposeActivity extends AppCompatActivity {
+public class EmailComposeActivity extends AppCompactActivityCustomized {
 
-    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
-    long emailId;
-    private List<GatewayClient> phonenumbers = new ArrayList<>();
-    private Platform platform;
+    private ActivityEmailComposeBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_email_compose);
+        binding = ActivityEmailComposeBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         Toolbar composeToolbar = (Toolbar) findViewById(R.id.tweet_toolbar);
         setSupportActionBar(composeToolbar);
@@ -57,7 +56,6 @@ public class EmailComposeActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
-
 
         Intent intent = getIntent();
         if(intent.hasExtra("encrypted_content_id")) {
@@ -80,7 +78,7 @@ public class EmailComposeActivity extends AppCompatActivity {
                 EncryptedContent encryptedContent = encryptedContentDAO.get(encryptedContentId);
 
                 try {
-                    decryptedEmailContent[0] = PublisherHandler.getDecryptedEmailContent(getApplicationContext(), encryptedContent.getEncryptedContent());
+                    decryptedEmailContent[0] = PublisherHandler.decryptPublishedContent(getApplicationContext(), encryptedContent.getEncryptedContent());
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }

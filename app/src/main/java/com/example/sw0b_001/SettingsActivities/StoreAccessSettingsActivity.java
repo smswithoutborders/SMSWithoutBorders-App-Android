@@ -10,23 +10,27 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.QRScannerActivity;
 import com.example.sw0b_001.R;
-import com.example.sw0b_001.SynchroniseTypeActivity;
+import com.example.sw0b_001.SyncInitiateActivity;
+import com.example.sw0b_001.databinding.ActivityStoredAccessSettingsBinding;
 
-public class StoreAccessSettingsActivity extends AppCompatActivity {
+public class StoreAccessSettingsActivity extends AppCompactActivityCustomized {
     private static final int REQUEST_CAMERA_PERMISSION = 200;
+
+    private ActivityStoredAccessSettingsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_stored_access_settings);
+        binding = ActivityStoredAccessSettingsBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         Toolbar gatewayClientToolbar = (Toolbar) findViewById(R.id.stored_access_toolbar);
         setSupportActionBar(gatewayClientToolbar);
@@ -70,7 +74,7 @@ public class StoreAccessSettingsActivity extends AppCompatActivity {
             }
             else {
                 Toast.makeText(this, "Camera Permission Denied", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, SynchroniseTypeActivity.class);
+                Intent intent = new Intent(this, SyncInitiateActivity.class);
                 startActivity(intent);
             }
         }

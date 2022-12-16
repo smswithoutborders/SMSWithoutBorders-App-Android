@@ -3,14 +3,15 @@ package com.example.sw0b_001;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends AppCompactActivityCustomized {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,9 +31,12 @@ public class WelcomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onClickSynchroniseBtn(View view) {
-        Intent synchroniseTypeActivityIntent = new Intent(getApplicationContext(), SynchroniseTypeActivity.class);
-        startActivity(synchroniseTypeActivityIntent);
+    public void onContinueClick(View view) {
+        String smswithoutbordersHandshakeUrl = getString(R.string.smswithoutborders_official_site_login);
+        Log.d(getLocalClassName(), "** " + smswithoutbordersHandshakeUrl);
+        Uri intentUri = Uri.parse(smswithoutbordersHandshakeUrl);
+        Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
+        startActivity(intent);
     }
 
 

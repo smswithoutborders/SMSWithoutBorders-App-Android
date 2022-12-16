@@ -53,8 +53,10 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
         String platformNameFormatted = Character.toUpperCase(platform.getName().charAt(0)) + platform.getName().substring(1);
         viewHolder.name.setText(platformNameFormatted);
 
-        if(platform.getLogo() != -1)
-            viewHolder.image.setImageResource((int) platform.getLogo());
+//        if(platform.getLogo() != -1)
+//            viewHolder.image.setImageResource((int) platform.getLogo());
+        viewHolder.image.setImageResource((int) PlatformsHandler.hardGetLogoByName(context,
+                platform.getName()));
 
         viewHolder.layout.setOnClickListener(new View.OnClickListener() {
             @Override

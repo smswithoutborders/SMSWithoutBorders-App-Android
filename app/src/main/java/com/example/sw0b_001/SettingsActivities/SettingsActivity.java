@@ -3,15 +3,17 @@ package com.example.sw0b_001.SettingsActivities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw0b_001.HomepageActivity;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.SettingsRecyclerAdapter;
 import com.example.sw0b_001.R;
+import com.example.sw0b_001.databinding.ActivitySettingsBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -22,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompactActivityCustomized {
 
     public static String GATEWAY_CLIENT_SETTINGS = "";
     public static String STORED_ACCESS_SETTINGS = "";
@@ -30,11 +32,14 @@ public class SettingsActivity extends AppCompatActivity {
 
     public static final Map<String, Integer> SETTINGS_ICON_MAPPER = new HashMap<String, Integer>();
 
+    private ActivitySettingsBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_settings);
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         GATEWAY_CLIENT_SETTINGS = getString(R.string.settings_gateway_clients_text);
         STORED_ACCESS_SETTINGS = getString(R.string.settings_store_access_text);

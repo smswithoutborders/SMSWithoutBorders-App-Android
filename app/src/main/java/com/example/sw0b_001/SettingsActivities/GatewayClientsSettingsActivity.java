@@ -1,38 +1,52 @@
 package com.example.sw0b_001.SettingsActivities;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
+import com.example.sw0b_001.AddNewGatewayActivity;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsRecyclerAdapter;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.R;
+import com.example.sw0b_001.databinding.ActivityGatewayClientsSettingsBinding;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GatewayClientsSettingsActivity extends AppCompatActivity {
-    public RecyclerView gatewayClientRecyclerView;
-    public GatewayClientsRecyclerAdapter gatewayClientsRecyclerAdapter;
-    public List<GatewayClient> listOfGateways = new ArrayList<>();
-    public int gatewayClientsLayout;
+public class GatewayClientsSettingsActivity extends AppCompactActivityCustomized {
+
+    private ActivityGatewayClientsSettingsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_gateway_clients_settings);
+        binding = ActivityGatewayClientsSettingsBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
         Toolbar gatewayClientToolbar = (Toolbar) findViewById(R.id.gateway_client_toolbar);
         setSupportActionBar(gatewayClientToolbar);
@@ -44,19 +58,29 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
 
         LinearProgressIndicator linearProgressIndicator = findViewById(R.id.refresh_loader);
         linearProgressIndicator.setVisibility(View.INVISIBLE);
+    }
 
-        this.gatewayClientsLayout = R.layout.layout_cardlist_gateway_clients;
-        this.gatewayClientRecyclerView = findViewById(R.id.gateway_clients_recycler_view);
-        this.gatewayClientRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        // gatewayRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(getLocalClassName(), "Resuming");
+        try {
+            populateSettings();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
-        this.gatewayClientsRecyclerAdapter = new GatewayClientsRecyclerAdapter( getApplicationContext(), this);
+    @Override
+    public void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
         populateOperatorId();
         try {
             populateSettings();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
     }
 
     private void populateOperatorId() {
@@ -74,13 +98,29 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
     }
 
     public void populateSettings() throws InterruptedException {
-        this.listOfGateways = GatewayClientsHandler.getAllGatewayClients(getApplicationContext());
-        this.gatewayClientRecyclerView.setAdapter(this.gatewayClientsRecyclerAdapter);
+        List<GatewayClient> listOfGateways = GatewayClientsHandler.getAllGatewayClients(
+                getApplicationContext());
+
+        RecyclerView gatewayClientRecyclerView;
+        GatewayClientsRecyclerAdapter gatewayClientsRecyclerAdapter;
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+
+        gatewayClientRecyclerView = findViewById(R.id.gateway_clients_recycler_view);
+        gatewayClientRecyclerView.setLayoutManager(linearLayoutManager);
+
+        gatewayClientsRecyclerAdapter = new GatewayClientsRecyclerAdapter(
+                getApplicationContext(), listOfGateways,
+                R.layout.layout_cardlist_gateway_clients, this);
+
+        gatewayClientRecyclerView.setAdapter(gatewayClientsRecyclerAdapter);
     }
 
     public void refreshGatewayClientsSettings() throws InterruptedException {
-        List<GatewayServer> gatewayServerList = GatewayServersHandler.getAllGatewayServers(getApplicationContext());
-        GatewayClientsHandler.clearStoredGatewayClients(getApplicationContext());
+        List<GatewayServer> gatewayServerList = GatewayServersHandler.getAllGatewayServers(
+                getApplicationContext());
 
         Runnable callbackFunction = new Runnable() {
             @Override
@@ -97,7 +137,7 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
 
         for(GatewayServer gatewayServer : gatewayServerList) {
             String gatewayServerSeedsUrl = gatewayServer.getSeedsUrl();
-            GatewayClientsHandler.remoteFetchAndStoreGatewayClients(getApplicationContext(), gatewayServerSeedsUrl, callbackFunction);
+            GatewayClientsHandler.remoteFetchAndStoreGatewayClients(getApplicationContext());
         }
     }
 
@@ -106,7 +146,16 @@ public class GatewayClientsSettingsActivity extends AppCompatActivity {
         linearProgressIndicator.setVisibility(View.VISIBLE);
 
         this.refreshGatewayClientsSettings();
-        this.gatewayClientsRecyclerAdapter.notifyDataSetChanged();
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.add_gateway:
+                Intent addGatewayIntent = new Intent(getApplicationContext(), AddNewGatewayActivity.class);
+                startActivity(addGatewayIntent);
+                break;
+        }
+        return false;
     }
 }

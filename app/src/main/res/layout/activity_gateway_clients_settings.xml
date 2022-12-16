@@ -65,6 +65,7 @@
         android:layout_marginBottom="32dp"
         android:clickable="true"
         android:onClick="onRefreshButton"
+        android:visibility="gone"
         app:backgroundTint="#81bffc"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

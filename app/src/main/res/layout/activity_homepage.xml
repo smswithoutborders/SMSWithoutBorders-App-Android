@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
+        android:id="@+id/message_recipient_number_container"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -31,8 +31,14 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="15dp"
         android:fontFamily="sans-serif-thin"
-        app:boxBackgroundColor="@color/black"
+        app:boxBackgroundColor="@color/text_box"
         app:boxStrokeColor="@color/logo_blue1"
+        app:boxCornerRadiusBottomEnd="25dp"
+        app:boxCornerRadiusBottomStart="25dp"
+        app:boxCornerRadiusTopEnd="25dp"
+        app:boxCornerRadiusTopStart="25dp"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
         app:helperTextEnabled="true"
         app:hintTextColor="@color/light_blue_A400"
         app:layout_constraintBottom_toTopOf="@+id/recent_messages_constrain"
@@ -60,7 +66,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+        app:layout_constraintTop_toBottomOf="@+id/message_recipient_number_container">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recents_recycler_view"

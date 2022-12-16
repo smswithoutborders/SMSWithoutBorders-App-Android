@@ -10,17 +10,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.RecentsRecyclerAdapter;
 import com.example.sw0b_001.SettingsActivities.SettingsActivity;
+import com.example.sw0b_001.databinding.ActivityHomepageBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -29,21 +31,27 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomepageActivity extends AppCompatActivity {
+public class HomepageActivity extends AppCompactActivityCustomized {
+
+    private ActivityHomepageBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_homepage);
+        binding = ActivityHomepageBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
+    }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
         BottomNavigationView bottomNavigationView = findViewById(R.id.homepage_bottom_navbar);
         bottomNavBar(bottomNavigationView);
 
         populateEncryptedMessages();
         setSearchListener();
     }
-
-
 
     @Override
     protected void onPostResume() {
@@ -85,7 +93,8 @@ public class HomepageActivity extends AppCompatActivity {
         if(!encryptedContentList.isEmpty()) noRecentMessagesText.setVisibility(View.INVISIBLE);
         else noRecentMessagesText.setVisibility(View.VISIBLE);
 
-        RecentsRecyclerAdapter recentsRecyclerAdapter = new RecentsRecyclerAdapter(this, encryptedContentList, R.layout.layout_cardlist_recents);
+        RecentsRecyclerAdapter recentsRecyclerAdapter = new RecentsRecyclerAdapter(this,
+                encryptedContentList, R.layout.layout_cardlist_recents);
         recentsRecyclerView.setAdapter(recentsRecyclerAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
