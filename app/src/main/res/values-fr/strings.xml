@@ -61,4 +61,5 @@
     <string name="gateway_client_settings_add_custom_empty_error">Veuillez fournir un numéro de téléphone</string>
     <string name="new_gateway_client_alias">Alias (facultatif)</string>
     <string name="new_gateway_client_custom_alias">Client SMS personnalisé</string>
+    <string name="choose_sms_app">Sélectionnez une application de messagerie SMS</string>
 </resources>

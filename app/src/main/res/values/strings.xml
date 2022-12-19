@@ -172,4 +172,8 @@
     <string name="new_gateway_client_custom_alias">
         Custom Gateway Client
     </string>
+
+    <string name="choose_sms_app">
+        Select an SMS messaging app
+    </string>
 </resources>

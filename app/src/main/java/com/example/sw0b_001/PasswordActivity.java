@@ -1,5 +1,6 @@
 package com.example.sw0b_001;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -108,9 +109,13 @@ public class PasswordActivity extends AppCompactActivityCustomized {
 
             if (callbackObject.getClass() == Intent.class) {
                 Intent callbackIntent = (Intent) callbackObject;
-                callbackIntent.putExtra("payload", response.toString());
-                startActivity(callbackIntent);
-                finish();
+                ComponentName name = callbackIntent.resolveActivity(getPackageManager());
+                if(name.getPackageName().equals(getPackageName()) &&
+                        name.getClassName().equals(SyncHandshakeActivity.class.getName())) {
+                    callbackIntent.putExtra("payload", response.toString());
+                    startActivity(callbackIntent);
+                    finish();
+                }
             }
         } catch(InterruptedException  | TimeoutException | ExecutionException e) {
             throw e;

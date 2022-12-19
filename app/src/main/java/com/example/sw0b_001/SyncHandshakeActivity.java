@@ -1,5 +1,6 @@
 package com.example.sw0b_001;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Base64;
@@ -65,7 +66,6 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
 
         String state = getIntent().getStringExtra(SYNC_KEY);
         if(state.equals("complete_handshake")) {
-
             try {
                 EncryptedContentHandler.clearedStoredEncryptedContents(getApplicationContext());
             }
@@ -235,6 +235,9 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
                         Intent passwordActivityIntent = new Intent(getApplicationContext(), PasswordActivity.class);
 
                         Intent syncHandshakeIntent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
+                        if(BuildConfig.DEBUG)
+                            Log.d(getLocalClassName(), getPackageName());
+                        syncHandshakeIntent.setPackage(getPackageName());
                         syncHandshakeIntent.putExtra("gateway_server_id", gatewayServerId);
                         syncHandshakeIntent.putExtra("state", "complete_handshake");
 

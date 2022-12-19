@@ -12,8 +12,8 @@ android {
     defaultConfig {
         applicationId "com.afkanerd.sw0b"
         minSdkVersion 23
-        targetSdkVersion 31
-        versionCode 29
+        targetSdkVersion 33
+        versionCode 30
         versionName "2.1.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

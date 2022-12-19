@@ -90,7 +90,7 @@
                 android:id="@+id/new_gateway_client_custom_name_input"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="phone" />
+                android:inputType="textShortMessage" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

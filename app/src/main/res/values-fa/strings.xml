@@ -58,4 +58,5 @@
     <string name="smswithoutborders_official_site_signup">https://smswithoutborders.com/sign-up/fa</string>
     <string name="new_gateway_client_alias">نام مستعار (اختیاری)</string>
     <string name="new_gateway_client_custom_alias">سرویس گیرنده پیامک سفارشی</string>
+    <string name="choose_sms_app">یک برنامه پیام کوتاه را انتخاب کنید</string>
 </resources>
