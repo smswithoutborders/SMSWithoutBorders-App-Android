@@ -20,7 +20,12 @@ public class AppCompactActivityCustomized extends AppCompatActivity {
     @Override
     public void setContentView(View view) {
         customizeViewForLanguage(view);
+        implementViewSecurities(view);
         super.setContentView(view);
+    }
+
+    private void implementViewSecurities(View view) {
+        view.setFilterTouchesWhenObscured(true);
     }
 
     private void customizeViewForLanguage(View view) {

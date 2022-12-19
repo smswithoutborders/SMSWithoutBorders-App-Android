@@ -83,7 +83,7 @@ public class SecurityHandler {
 
     public String generateRandom(int length) {
 //        char[] charsArray = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '@', '#', '$', '%', '^', '*'};
-        char[] charsArray = "abcdefghijklmnopqrstuvwxyz1234567890".toCharArray();
+        char[] charsArray = "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()-+}|[]:\"';,./><?\\|".toCharArray();
         SecureRandom rand = new SecureRandom();
         StringBuilder password = new StringBuilder();
         for (int i = 0; i < length; i++) {
