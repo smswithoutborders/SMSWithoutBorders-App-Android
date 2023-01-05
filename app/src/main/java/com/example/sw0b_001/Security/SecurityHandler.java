@@ -1,13 +1,21 @@
 package com.example.sw0b_001.Security;
 
+import static android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+import static android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.hardware.biometrics.BiometricManager;
+import android.os.Build;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
 import android.util.Log;
 
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
+
+import com.example.sw0b_001.BuildConfig;
+import com.example.sw0b_001.Models.PublisherHandler;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -120,5 +128,40 @@ public class SecurityHandler {
         }
 
     }
+
+    public boolean phoneCredentialsPossible() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            BiometricManager biometricManager = (BiometricManager) context.getSystemService(Context.BIOMETRIC_SERVICE);
+            switch (biometricManager.canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)) {
+                case BiometricManager.BIOMETRIC_SUCCESS:
+                    if (BuildConfig.DEBUG)
+                        Log.d(PublisherHandler.class.getName(), "App can authenticate using biometrics.");
+                    return true;
+
+                case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+                    if (BuildConfig.DEBUG)
+                        Log.e("MY_APP_TAG", "No biometric features available on this device.");
+                    break;
+                case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+                    if (BuildConfig.DEBUG)
+                        Log.e("MY_APP_TAG", "Biometric features are currently unavailable.");
+                    break;
+//                case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+//                    // Prompts the user to create credentials that your app accepts.
+//                    final Intent enrollIntent = new Intent(Settings.ACTION_BIOMETRIC_ENROLL);
+//                    enrollIntent.putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+//                            BIOMETRIC_STRONG | DEVICE_CREDENTIAL);
+////                    startActivityForResult(enrollIntent, REQUEST_CODE);
+//                    break;
+//                case BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED:
+//                    // TODO:
+//                    break;
+                default:
+                    break;
+            }
+        }
+        return false;
+    }
+
 
 }

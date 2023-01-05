@@ -1,10 +1,26 @@
 package com.example.sw0b_001.Security;
 
+import static android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+import static android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+
 import android.content.Context;
+import android.content.Intent;
+import android.hardware.biometrics.BiometricManager;
+import android.os.Build;
+import android.os.CancellationSignal;
+import android.provider.Settings;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
+
+import com.example.sw0b_001.BuildConfig;
+import com.example.sw0b_001.Models.PublisherHandler;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -24,6 +40,7 @@ import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.MGF1ParameterSpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.concurrent.Executor;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -32,15 +49,30 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.OAEPParameterSpec;
 
 public class SecurityRSA extends SecurityHandler {
+    CancellationSignal cancellationSignal = new CancellationSignal();
 
-
-    public SecurityRSA() throws CertificateException, KeyStoreException, NoSuchAlgorithmException, IOException {
-        super();
-
-    }
+    private Executor executor;
+    private android.hardware.biometrics.BiometricPrompt biometricPrompt;
 
     public SecurityRSA(Context context) throws GeneralSecurityException, IOException {
         super(context);
+
+        executor = ContextCompat.getMainExecutor(context);
+        cancellationSignal.setOnCancelListener(new CancellationSignal.OnCancelListener() {
+            @Override
+            public void onCancel() {
+
+            }
+        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            biometricPrompt = new android.hardware.biometrics.BiometricPrompt.Builder(context)
+                    .setTitle("Biometric Login")
+                    .setSubtitle("Log in using your biometric credential")
+                    .setDescription("Touch the sensor to use your biometric credential")
+                    .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
+                    .build();
+        }
     }
 
     public KeyPairGenerator generateKeyPair(String keystoreAlias) throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException, KeyStoreException {
@@ -97,6 +129,7 @@ public class SecurityRSA extends SecurityHandler {
             PrivateKey privateKey = privateKeyEntry.getPrivateKey();
 
             Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
+
             cipher.init(Cipher.DECRYPT_MODE, privateKey, decryptionDigestParam);
 
             decryptedBytes = cipher.doFinal(encryptedInput);
@@ -118,6 +151,42 @@ public class SecurityRSA extends SecurityHandler {
             e.printStackTrace();
         }
         return decryptedBytes;
+    }
+
+    public void decryptWithPhoneSecurity(Intent callbackIntent) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            biometricPrompt.authenticate(cancellationSignal,
+                    executor, new android.hardware.biometrics.BiometricPrompt.AuthenticationCallback() {
+                        @Override
+                        public void onAuthenticationError(int errorCode,
+                                                          @NonNull CharSequence errString) {
+                            super.onAuthenticationError(errorCode, errString);
+                            if (BuildConfig.DEBUG) {
+                                Toast.makeText(context,
+                                                "Authentication error: " + errorCode + ":" + errString, Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+                        }
+
+                        @Override
+                        public void onAuthenticationSucceeded(
+                                @NonNull android.hardware.biometrics.BiometricPrompt.AuthenticationResult result) {
+                            super.onAuthenticationSucceeded(result);
+                            if (BuildConfig.DEBUG)
+                                Toast.makeText(context,
+                                        "Authentication succeeded!", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        @Override
+                        public void onAuthenticationFailed() {
+                            super.onAuthenticationFailed();
+                            if (BuildConfig.DEBUG)
+                                Toast.makeText(context, "Authentication failed",
+                                        Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
     }
 
 }

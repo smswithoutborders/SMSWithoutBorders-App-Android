@@ -1,10 +1,24 @@
 package com.example.sw0b_001.Models;
 
-import android.content.Context;
-import android.util.Base64;
+import static android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+import static android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
+import android.content.Context;
+import android.content.Intent;
+import android.hardware.biometrics.BiometricManager;
+import android.hardware.biometrics.BiometricPrompt;
+import android.os.Build;
+import android.os.CancellationSignal;
+import android.provider.Settings;
+import android.util.Base64;
+import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.room.Room;
 
+import com.example.sw0b_001.BuildConfig;
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
@@ -17,12 +31,13 @@ import com.example.sw0b_001.Security.SecurityRSA;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 public class PublisherHandler {
 
-
     public static String decryptPublishedContent(Context context, String encryptedContent) throws Throwable {
         // Transform from Base64
+        Log.d(PublisherHandler.class.getName(), "Yes unlocked!");
         String decodedEncryptedContent = new String(Base64.decode(encryptedContent, Base64.DEFAULT));
 
         String iv = decodedEncryptedContent.substring(0, 16);
@@ -37,8 +52,7 @@ public class PublisherHandler {
                     sharedKey);
 
             return new String(decryptedEmailContent, StandardCharsets.UTF_8);
-        }
-        catch(Exception e ) {
+        } catch (Exception e) {
             throw new Throwable(e);
         }
     }
