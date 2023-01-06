@@ -95,7 +95,7 @@
             android:theme="@style/Theme.MyAppNoBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".LanguageSettingsActivity"
+            android:name=".SettingsActivities.LanguageSettingsActivity"
             android:exported="false"
             android:parentActivityName=".SettingsActivities.SettingsActivity"
             android:theme="@style/Theme.MyAppNoBar">
@@ -107,6 +107,7 @@
             android:name=".SettingsActivities.SettingsActivity"
             android:exported="false"
             android:label=""
+            android:launchMode="singleTask"
             android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:name=".SettingsActivities.GatewayClientsSettingsActivity"

@@ -6,10 +6,8 @@
         app:icon="@drawable/ic_round_language_24"
         app:key="language_settings"
         app:summary="Report technical issues or suggest new features"
+        app:fragment="com.example.sw0b_001.SettingsActivities.SecurityPrivacyFragment"
         app:title="@string/settings_language" >
-        <intent
-            android:targetPackage="com.example.sw0b_001"
-            android:targetClass="com.example.sw0b_001.LanguageSettingsActivity" />
     </Preference>
 
     <Preference

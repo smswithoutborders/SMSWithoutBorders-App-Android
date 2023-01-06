@@ -1,0 +1,31 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:key="lock_screen"
+        app:title="@string/settings_lock_screen_preference_category">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="lock_screen_always_on"
+            app:summary="Report technical issues or suggest new features"
+            app:title="@string/settings_security_and_privacy_enable_lockscreen_open" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="lock_screen_for_encryption"
+            app:summary="Report technical issues or suggest new features"
+            app:title="@string/settings_security_and_privacy_enable_lockscreen_read_encrypted" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:key="secure_pin"
+        app:title="@string/settings_pin_preference_category">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="pin_code_for_encryption"
+            app:summary="Report technical issues or suggest new features"
+            app:title="@string/settings_security_and_privacy_enable_pin" />
+    </PreferenceCategory>
+</PreferenceScreen>

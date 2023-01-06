@@ -1,4 +1,4 @@
-package com.example.sw0b_001;
+package com.example.sw0b_001.SettingsActivities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import com.example.sw0b_001.HomepageActivity;
 import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.LanguageHandler;
 import com.example.sw0b_001.R;
+import com.example.sw0b_001.SplashActivity;
 import com.example.sw0b_001.databinding.ActivityLanguageSettingsBinding;
 
 import java.util.Locale;
@@ -73,7 +74,7 @@ public class LanguageSettingsActivity extends AppCompactActivityCustomized {
                 LanguageHandler.updateLanguage(resources, supportedLanguages[i]);
                 LanguageHandler.persistLanguage(getApplicationContext(), supportedLanguages[i]);
 
-                Intent languageIntent = new Intent(getApplicationContext(), HomepageActivity.class);
+                Intent languageIntent = new Intent(getApplicationContext(), SplashActivity.class);
                 startActivity(languageIntent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 

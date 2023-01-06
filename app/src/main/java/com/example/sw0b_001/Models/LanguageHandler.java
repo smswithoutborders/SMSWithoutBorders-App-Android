@@ -29,7 +29,8 @@ public class LanguageHandler {
         SharedPreferences.Editor editor = preferences.edit();
 
         editor.putString(customSelectedLanguage, language);
-        editor.apply();
+        editor.commit();
+        // editor.apply();
     }
 
 
