@@ -1,6 +1,7 @@
 package com.example.sw0b_001;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -77,6 +78,9 @@ public class SplashActivity extends AppCompactActivityCustomized {
         else {
             if(BuildConfig.DEBUG)
                 Log.d(getLocalClassName(), "No show splash screen!");
+            ActivityOptions options = ActivityOptions.makeCustomAnimation(getApplicationContext(),
+                    android.R.anim.fade_in, android.R.anim.fade_out);
+            startActivity(intent, options.toBundle());
         }
         return false;
     }
