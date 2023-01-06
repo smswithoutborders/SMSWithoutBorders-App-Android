@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.SettingsActivities.GatewayClientsSettingsActivity;
-import com.example.sw0b_001.SettingsActivities.LanguageSettingsActivity;
+import com.example.sw0b_001.LanguageSettingsActivity;
 import com.example.sw0b_001.SettingsActivities.SettingsActivity;
 import com.example.sw0b_001.SettingsActivities.StoreAccessSettingsActivity;
 

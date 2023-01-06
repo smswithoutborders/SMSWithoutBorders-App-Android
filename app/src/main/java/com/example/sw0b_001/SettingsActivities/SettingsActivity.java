@@ -2,10 +2,13 @@ package com.example.sw0b_001.SettingsActivities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +16,7 @@ import com.example.sw0b_001.HomepageActivity;
 import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.SettingsRecyclerAdapter;
 import com.example.sw0b_001.R;
+import com.example.sw0b_001.SettingsFragment;
 import com.example.sw0b_001.databinding.ActivitySettingsBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -26,9 +30,10 @@ import java.util.Map;
 
 public class SettingsActivity extends AppCompactActivityCustomized {
 
-    public static String GATEWAY_CLIENT_SETTINGS = "";
-    public static String STORED_ACCESS_SETTINGS = "";
     public static String LANGUAGE_SETTINGS = "";
+    public static String STORED_ACCESS_SETTINGS = "";
+    public static String SECURITY_SETTINGS = "";
+    public static String GATEWAY_CLIENT_SETTINGS = "";
 
     public static final Map<String, Integer> SETTINGS_ICON_MAPPER = new HashMap<String, Integer>();
 
@@ -40,34 +45,41 @@ public class SettingsActivity extends AppCompactActivityCustomized {
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+//
+//        GATEWAY_CLIENT_SETTINGS = getString(R.string.settings_gateway_clients_text);
+//        STORED_ACCESS_SETTINGS = getString(R.string.settings_store_access_text);
+//        LANGUAGE_SETTINGS = getString(R.string.settings_language);
+//        SECURITY_SETTINGS = getString(R.string.settings_security_and_privacy);
+//
+//        SETTINGS_ICON_MAPPER.put(GATEWAY_CLIENT_SETTINGS, R.drawable.ic_round_router_24);
+//        SETTINGS_ICON_MAPPER.put(STORED_ACCESS_SETTINGS, R.drawable.ic_round_sync_24);
+//        SETTINGS_ICON_MAPPER.put(LANGUAGE_SETTINGS, R.drawable.ic_round_language_24);
+//        SETTINGS_ICON_MAPPER.put(SECURITY_SETTINGS, R.drawable.ic_baseline_security_24);
 
-        GATEWAY_CLIENT_SETTINGS = getString(R.string.settings_gateway_clients_text);
-        STORED_ACCESS_SETTINGS = getString(R.string.settings_store_access_text);
-        LANGUAGE_SETTINGS = getString(R.string.settings_language);
+//        getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.settings_fragment, new SettingsFragment())
+//                .commit();
 
-        SETTINGS_ICON_MAPPER.put(GATEWAY_CLIENT_SETTINGS, R.drawable.ic_round_router_24);
-        SETTINGS_ICON_MAPPER.put(STORED_ACCESS_SETTINGS, R.drawable.ic_round_sync_24);
-        SETTINGS_ICON_MAPPER.put(LANGUAGE_SETTINGS, R.drawable.ic_round_language_24);
+//        BottomNavigationView bottomNavigationView = findViewById(R.id.homepage_bottom_navbar);
+//        bottomNavBar(bottomNavigationView);
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.homepage_bottom_navbar);
-        bottomNavBar(bottomNavigationView);
-
-        populateSettings();
-
+//        populateSettings();
     }
 
     public void populateSettings() {
         List<String> listOfSettings = new ArrayList<>();
-        listOfSettings.add(GATEWAY_CLIENT_SETTINGS);
-        listOfSettings.add(STORED_ACCESS_SETTINGS);
         listOfSettings.add(LANGUAGE_SETTINGS);
+        listOfSettings.add(SECURITY_SETTINGS);
+        listOfSettings.add(STORED_ACCESS_SETTINGS);
+        listOfSettings.add(GATEWAY_CLIENT_SETTINGS);
 
-        RecyclerView settingsRecyclerView = findViewById(R.id.settings_recycler_view);
+//        RecyclerView settingsRecyclerView = findViewById(R.id.settings_recycler_view);
         // settingsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-        SettingsRecyclerAdapter settingsRecyclerAdapter = new SettingsRecyclerAdapter(this, listOfSettings, R.layout.layout_cardlist_settings, this);
-        settingsRecyclerView.setAdapter(settingsRecyclerAdapter);
-        settingsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        SettingsRecyclerAdapter settingsRecyclerAdapter = new SettingsRecyclerAdapter(this, listOfSettings, R.layout.layout_cardlist_settings, this);
+//        settingsRecyclerView.setAdapter(settingsRecyclerAdapter);
+//        settingsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     public void bottomNavBar(BottomNavigationView bottomNavigationView) {

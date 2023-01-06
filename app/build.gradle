@@ -64,6 +64,10 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
 
+    def fragment_version = "1.5.5"
+
+    // Java language implementation
+    implementation "androidx.fragment:fragment:$fragment_version"
 
 
     implementation 'com.google.android.gms:play-services-vision:20.1.3'

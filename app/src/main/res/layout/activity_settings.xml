@@ -8,7 +8,7 @@
     android:background="@color/default_dark">
 
     <TextView
-        android:id="@+id/textView24"
+        android:id="@+id/settings_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -22,18 +22,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/settings_recycler_view"
-        android:layout_width="match_parent"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container_view"
+        android:name="com.example.sw0b_001.SettingsFragment"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/default_dark"
-        app:layout_constraintBottom_toTopOf="@+id/homepage_bottom_navbar"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toTopOf="@id/homepage_bottom_navbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView24" />
+        app:layout_constraintTop_toBottomOf="@id/settings_text" />
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/homepage_bottom_navbar"
@@ -50,5 +50,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/main_navigation" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

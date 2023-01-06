@@ -117,6 +117,10 @@
         Store Access
     </string>
 
+    <string name="settings_security_and_privacy">
+        Security and Privacy
+    </string>
+
     <string name="gateway_clients_settings_header">Available Gateway Clients</string>
 
     <string name="settings_gateway_clients_text">
@@ -176,4 +180,28 @@
     <string name="choose_sms_app">
         Select an SMS messaging app
     </string>
+
+    <string name="settings_security_and_privacy_enable_lockscreen_open">
+        Enable lockscreen
+    </string>
+    <string name="settings_security_and_privacy_enable_lockscreen_read_encrypted">
+        Enable lockscreen for decryption
+    </string>
+    <string name="settings_security_and_privacy_enable_pin">
+        Enable PIN for decryption
+    </string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>

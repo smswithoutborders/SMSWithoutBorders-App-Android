@@ -1,4 +1,4 @@
-package com.example.sw0b_001.SettingsActivities;
+package com.example.sw0b_001;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
