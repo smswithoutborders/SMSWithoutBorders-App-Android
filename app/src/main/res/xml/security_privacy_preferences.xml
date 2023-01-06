@@ -4,13 +4,13 @@
         app:iconSpaceReserved="false"
         app:key="lock_screen"
         app:title="@string/settings_lock_screen_preference_category">
-        <Preference
+        <SwitchPreferenceCompat
             app:iconSpaceReserved="false"
             app:key="lock_screen_always_on"
             app:summary="Report technical issues or suggest new features"
             app:title="@string/settings_security_and_privacy_enable_lockscreen_open" />
 
-        <Preference
+        <SwitchPreferenceCompat
             app:iconSpaceReserved="false"
             app:key="lock_screen_for_encryption"
             app:summary="Report technical issues or suggest new features"

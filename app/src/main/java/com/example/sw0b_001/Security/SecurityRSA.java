@@ -57,22 +57,6 @@ public class SecurityRSA extends SecurityHandler {
     public SecurityRSA(Context context) throws GeneralSecurityException, IOException {
         super(context);
 
-        executor = ContextCompat.getMainExecutor(context);
-        cancellationSignal.setOnCancelListener(new CancellationSignal.OnCancelListener() {
-            @Override
-            public void onCancel() {
-
-            }
-        });
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            biometricPrompt = new android.hardware.biometrics.BiometricPrompt.Builder(context)
-                    .setTitle("Biometric Login")
-                    .setSubtitle("Log in using your biometric credential")
-                    .setDescription("Touch the sensor to use your biometric credential")
-                    .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
-                    .build();
-        }
     }
 
     public KeyPairGenerator generateKeyPair(String keystoreAlias) throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException, KeyStoreException {
@@ -153,40 +137,5 @@ public class SecurityRSA extends SecurityHandler {
         return decryptedBytes;
     }
 
-    public void decryptWithPhoneSecurity(Intent callbackIntent) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            biometricPrompt.authenticate(cancellationSignal,
-                    executor, new android.hardware.biometrics.BiometricPrompt.AuthenticationCallback() {
-                        @Override
-                        public void onAuthenticationError(int errorCode,
-                                                          @NonNull CharSequence errString) {
-                            super.onAuthenticationError(errorCode, errString);
-                            if (BuildConfig.DEBUG) {
-                                Toast.makeText(context,
-                                                "Authentication error: " + errorCode + ":" + errString, Toast.LENGTH_SHORT)
-                                        .show();
-                            }
-                        }
-
-                        @Override
-                        public void onAuthenticationSucceeded(
-                                @NonNull android.hardware.biometrics.BiometricPrompt.AuthenticationResult result) {
-                            super.onAuthenticationSucceeded(result);
-                            if (BuildConfig.DEBUG)
-                                Toast.makeText(context,
-                                        "Authentication succeeded!", Toast.LENGTH_SHORT).show();
-
-                        }
-
-                        @Override
-                        public void onAuthenticationFailed() {
-                            super.onAuthenticationFailed();
-                            if (BuildConfig.DEBUG)
-                                Toast.makeText(context, "Authentication failed",
-                                        Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        }
-    }
 
 }
