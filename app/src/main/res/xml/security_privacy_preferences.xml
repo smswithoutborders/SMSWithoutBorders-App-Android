@@ -7,13 +7,13 @@
         <SwitchPreferenceCompat
             app:iconSpaceReserved="false"
             app:key="lock_screen_always_on"
-            app:summary="Report technical issues or suggest new features"
+            app:summary="@string/settings_security_and_privacy_enable_lockscreen_open_summary"
             app:title="@string/settings_security_and_privacy_enable_lockscreen_open" />
 
         <SwitchPreferenceCompat
             app:iconSpaceReserved="false"
             app:key="lock_screen_for_encryption"
-            app:summary="Report technical issues or suggest new features"
+            app:summary="@string/settings_security_and_privacy_enable_lockscreen_read_encrypted_summary"
             app:title="@string/settings_security_and_privacy_enable_lockscreen_read_encrypted" />
 
     </PreferenceCategory>
@@ -25,7 +25,7 @@
         <Preference
             app:iconSpaceReserved="false"
             app:key="pin_code_for_encryption"
-            app:summary="Report technical issues or suggest new features"
+            app:summary="@string/settings_security_and_privacy_enable_pin_summary"
             app:title="@string/settings_security_and_privacy_enable_pin" />
     </PreferenceCategory>
 </PreferenceScreen>
