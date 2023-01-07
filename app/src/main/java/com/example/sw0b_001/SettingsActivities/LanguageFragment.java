@@ -8,6 +8,7 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.example.sw0b_001.Models.LanguageHandler;
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.SplashActivity;
 
@@ -21,8 +22,12 @@ public class LanguageFragment extends PreferenceFragmentCompat {
         languagePreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
-                Intent splashScreenIntent = new Intent(getContext(), SplashActivity.class);
-                startActivity(splashScreenIntent);
+                String languageLocale = (String) newValue;
+                LanguageHandler.updateLanguage(getResources(), languageLocale);
+//                startActivity(new Intent(getContext(), SplashActivity.class));
+
+                getActivity().finish();
+                startActivity(getActivity().getIntent());
                 return true;
             }
         });

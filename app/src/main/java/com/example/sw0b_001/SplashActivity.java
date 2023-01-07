@@ -102,9 +102,10 @@ public class SplashActivity extends AppCompactActivityCustomized {
 
         // Get the state of the SwitchPreferenceCompact
         String languageLocale = prefs.getString("language_options", languageCode);
+        Log.d(getLocalClassName(), "Language code: " + languageCode);
+        Log.d(getLocalClassName(), "Language locale: " + languageLocale);
 
-        Resources resources = getResources();
-        LanguageHandler.updateLanguage(resources, languageLocale);
+        LanguageHandler.updateLanguage(getResources(), languageLocale);
     }
 
     @Override

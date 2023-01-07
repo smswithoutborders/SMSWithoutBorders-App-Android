@@ -1,5 +1,6 @@
 package com.example.sw0b_001.Models;
 
+import android.app.LocaleConfig;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -12,12 +13,15 @@ import java.util.Locale;
 
 public class LanguageHandler {
 
-    public static void updateLanguage(Resources resources, String language) {
-        Locale locale = new Locale(language);
-        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
-        Configuration configuration = resources.getConfiguration();
 
-        configuration.setLocale(locale);
-        resources.updateConfiguration(configuration, displayMetrics);
+    public static boolean updateLanguage(Resources resources, String language) {
+        Configuration config = resources.getConfiguration();
+        Locale locale = new Locale(language);
+        config.setLocale(locale);
+
+        Locale.setDefault(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+
+        return true;
     }
 }
