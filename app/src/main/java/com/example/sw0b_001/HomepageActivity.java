@@ -20,7 +20,7 @@ import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
-import com.example.sw0b_001.Models.RecentsRecyclerAdapter;
+import com.example.sw0b_001.Models.HomepageRecyclerAdapter;
 import com.example.sw0b_001.SettingsActivities.SettingsActivity;
 import com.example.sw0b_001.databinding.ActivityHomepageBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -28,6 +28,8 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +77,10 @@ public class HomepageActivity extends AppCompactActivityCustomized {
                     populateEncryptedMessages(encryptedContentList);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                } catch (GeneralSecurityException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -84,7 +90,7 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         });
     }
 
-    public void populateEncryptedMessages(List<EncryptedContent> encryptedContentList) {
+    public void populateEncryptedMessages(List<EncryptedContent> encryptedContentList) throws GeneralSecurityException, IOException {
         RecyclerView recentsRecyclerView = findViewById(R.id.recents_recycler_view);
         // recentsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
@@ -93,9 +99,9 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         if(!encryptedContentList.isEmpty()) noRecentMessagesText.setVisibility(View.INVISIBLE);
         else noRecentMessagesText.setVisibility(View.VISIBLE);
 
-        RecentsRecyclerAdapter recentsRecyclerAdapter = new RecentsRecyclerAdapter(this,
+        HomepageRecyclerAdapter homepageRecyclerAdapter = new HomepageRecyclerAdapter(this,
                 encryptedContentList, R.layout.layout_cardlist_recents);
-        recentsRecyclerView.setAdapter(recentsRecyclerAdapter);
+        recentsRecyclerView.setAdapter(homepageRecyclerAdapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         linearLayoutManager.setReverseLayout(true);
@@ -114,13 +120,17 @@ public class HomepageActivity extends AppCompactActivityCustomized {
                 noRecentMessagesText.setVisibility(View.INVISIBLE);
             }
 
-            RecentsRecyclerAdapter recentsRecyclerAdapter = new RecentsRecyclerAdapter(this, encryptedContentList, R.layout.layout_cardlist_recents);
-            recentsRecyclerView.setAdapter(recentsRecyclerAdapter);
+            HomepageRecyclerAdapter homepageRecyclerAdapter = new HomepageRecyclerAdapter(this, encryptedContentList, R.layout.layout_cardlist_recents);
+            recentsRecyclerView.setAdapter(homepageRecyclerAdapter);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
             linearLayoutManager.setStackFromEnd(true);
             linearLayoutManager.setReverseLayout(true);
             recentsRecyclerView.setLayoutManager(linearLayoutManager);
         } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

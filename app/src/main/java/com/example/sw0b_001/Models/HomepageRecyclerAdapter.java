@@ -1,8 +1,11 @@
 package com.example.sw0b_001.Models;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +14,20 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.sw0b_001.BuildConfig;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.R;
+import com.example.sw0b_001.Security.SecurityHandler;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,16 +35,19 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecyclerAdapter.ViewHolder> {
+public class HomepageRecyclerAdapter extends RecyclerView.Adapter<HomepageRecyclerAdapter.ViewHolder> {
 
     Context context;
     List<EncryptedContent> listOfRecents;
     int recentsRenderLayout;
 
-    public RecentsRecyclerAdapter(Context context, List<EncryptedContent> listOfRecents, int recentsRenderLayout){
+    SecurityHandler securityHandler;
+
+    public HomepageRecyclerAdapter(Context context, List<EncryptedContent> listOfRecents, int recentsRenderLayout) throws GeneralSecurityException, IOException {
         this.context = context;
         this.listOfRecents = listOfRecents;
         this.recentsRenderLayout = recentsRenderLayout;
+        securityHandler = new SecurityHandler(context);
     }
 
     @NonNull
@@ -45,7 +56,7 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(this.context);
         View view = inflater.inflate(this.recentsRenderLayout, parent, false);
-        return new RecentsRecyclerAdapter.ViewHolder(view);
+        return new HomepageRecyclerAdapter.ViewHolder(view);
     }
 
     @Override
@@ -93,9 +104,44 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
                 Intent platformIntent = PlatformsHandler.getIntent(context, platform.getName(), platform.getType());
                 platformIntent.putExtra("encrypted_content_id", encryptedContent.getId());
                 platformIntent.putExtra("platform_id", platform.getId());
-                context.startActivity(platformIntent);
+                try {
+                    checkHasDecryptionLockScreen(platformIntent);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
+    }
+
+    private boolean checkHasDecryptionLockScreen(Intent intent) throws InterruptedException {
+        // Get the SharedPreferences
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        // Get the state of the SwitchPreferenceCompact
+        boolean isChecked = prefs.getBoolean("lock_screen_for_encryption", false);
+
+        if(isChecked) {
+            Thread bioMetricThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        securityHandler.authenticateWithLockScreen(intent);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            bioMetricThread.start();
+            bioMetricThread.join();
+
+            return true;
+        }
+        else {
+            ActivityOptions options = ActivityOptions.makeCustomAnimation(context,
+                    android.R.anim.fade_in, android.R.anim.fade_out);
+            context.startActivity(intent, options.toBundle());
+        }
+        return false;
     }
 
     @Override
