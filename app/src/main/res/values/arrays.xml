@@ -1,17 +1,12 @@
 <resources>
-    <!-- Reply Preference -->
-<!--    <string-array name="reply_entries">-->
-<!--        <item>Reply</item>-->
-<!--        <item>Reply to all</item>-->
-<!--    </string-array>-->
-<!--    -->
-<!--    <string-array name="reply_entries">-->
-<!--        <item>Reply</item>-->
-<!--        <item>Reply to all</item>-->
-<!--    </string-array>-->
-
-<!--    <string-array name="reply_values">-->
-<!--        <item>reply</item>-->
-<!--        <item>reply_all</item>-->
-<!--    </string-array>-->
+    <string-array name="language_options">
+        <item>@string/language_english</item>
+        <item>@string/language_french</item>
+        <item>@string/language_farsi</item>
+    </string-array>
+    <string-array name="language_values">
+        <item>@string/language_english_value</item>
+        <item>@string/language_french_value</item>
+        <item>@string/language_farsi_value</item>
+    </string-array>
 </resources>

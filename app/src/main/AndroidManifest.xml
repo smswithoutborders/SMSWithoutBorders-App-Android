@@ -96,15 +96,6 @@
             android:theme="@style/Theme.MyAppNoBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".SettingsActivities.LanguageSettingsActivity"
-            android:exported="false"
-            android:parentActivityName=".SettingsActivities.SettingsActivity"
-            android:theme="@style/Theme.MyAppNoBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SettingsActivities.SettingsActivity" />
-        </activity>
-        <activity
             android:name=".SettingsActivities.SettingsActivity"
             android:exported="false"
             android:label=""

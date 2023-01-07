@@ -21,17 +21,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Preference gatewayClientsPreference = findPreference("gateway_server_settings");
 
         securityPrivacyPreference.setFragment(SecurityPrivacyFragment.class.getCanonicalName());
+        languagePreference.setFragment(LanguageFragment.class.getCanonicalName());
 
-
-        languagePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(@NonNull Preference preference) {
-                // TODO: change language to fragments
-                Intent languageIntent = new Intent(getContext(), LanguageSettingsActivity.class);
-                startActivity(languageIntent);
-                return false;
-            }
-        });
         storeAccessPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(@NonNull Preference preference) {
@@ -41,6 +32,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return false;
             }
         });
+
         gatewayClientsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(@NonNull Preference preference) {

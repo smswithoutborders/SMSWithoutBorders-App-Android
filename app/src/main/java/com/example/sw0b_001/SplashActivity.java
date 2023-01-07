@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -46,7 +47,14 @@ public class SplashActivity extends AppCompactActivityCustomized {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        activitySplashBinding = ActivitySplashBinding.inflate(getLayoutInflater());
+        setContentView(activitySplashBinding.getRoot());
 
+        ActionBar ab = getSupportActionBar();
+        // Enable the Up button
+        ab.hide();
+
+        updateLanguage();
     }
 
     private boolean checkHasLockScreenAlways(Intent intent) throws InterruptedException {
@@ -86,32 +94,25 @@ public class SplashActivity extends AppCompactActivityCustomized {
     }
 
     private void updateLanguage() {
-        if(LanguageHandler.hasPersistedData(getApplicationContext())) {
-            String persistedLanguage = LanguageHandler.getPersistedData(getApplicationContext());
-            if(Locale.getDefault().getLanguage().equals(persistedLanguage)) {
-                return;
-            }
-            else {
-                LanguageHandler.updateLanguage(getResources(), persistedLanguage);
-                Log.d(getLocalClassName(), "** New locale default: " + Locale.getDefault().getLanguage());
-            }
-        }
+        // Get the SharedPreferences
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        Locale locale = Locale.getDefault();
+        String languageCode = locale.getLanguage();
+
+        // Get the state of the SwitchPreferenceCompact
+        String languageLocale = prefs.getString("language_options", languageCode);
+
+        Resources resources = getResources();
+        LanguageHandler.updateLanguage(resources, languageLocale);
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        activitySplashBinding = ActivitySplashBinding.inflate(getLayoutInflater());
-        setContentView(activitySplashBinding.getRoot());
-
-        ActionBar ab = getSupportActionBar();
-        // Enable the Up button
-        ab.hide();
-
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
-        updateLanguage();
         try {
             securityHandler = new SecurityHandler(getApplicationContext());
 
