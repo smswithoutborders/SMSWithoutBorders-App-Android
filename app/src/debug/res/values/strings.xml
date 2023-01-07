@@ -20,7 +20,7 @@
         intent://staging.smswithoutborders.com/sign-up
     </string>
 
-    <string name="default_seeds_url">
+    <string name="default_seeds_url" translatable="false">
         http://seeds.smswithoutborders.com
     </string>
 </resources>

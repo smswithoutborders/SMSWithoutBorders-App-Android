@@ -1,5 +1,6 @@
 package com.example.sw0b_001.Models;
 
+import android.app.LocaleConfig;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -12,33 +13,15 @@ import java.util.Locale;
 
 public class LanguageHandler {
 
-    public static final String customSelectedLanguage = "CUSTOM_SELECTED_LANGUAGE";
 
-    public static boolean hasPersistedData(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.contains(customSelectedLanguage);
-    }
-
-    public static String getPersistedData(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getString(customSelectedLanguage, "en");
-    }
-
-    public static void persistLanguage(Context context, String language) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-
-        editor.putString(customSelectedLanguage, language);
-        editor.apply();
-    }
-
-
-    public static void updateLanguage(Resources resources, String language) {
+    public static boolean updateLanguage(Resources resources, String language) {
+        Configuration config = resources.getConfiguration();
         Locale locale = new Locale(language);
-        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
-        Configuration configuration = resources.getConfiguration();
+        config.setLocale(locale);
 
-        configuration.setLocale(locale);
-        resources.updateConfiguration(configuration, displayMetrics);
+        Locale.setDefault(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+
+        return true;
     }
 }

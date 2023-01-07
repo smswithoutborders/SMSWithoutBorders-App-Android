@@ -1,13 +1,17 @@
 package com.example.sw0b_001;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.preference.PreferenceManager;
 
 import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.LanguageHandler;
@@ -35,6 +39,7 @@ public class SplashActivity extends AppCompactActivityCustomized {
 
     private View screenContentView;
     private ActivitySplashBinding activitySplashBinding;
+    SecurityHandler securityHandler;
 
     // milliseconds
     private final int SPLASH_DELAY_DURATION = 3000;
@@ -42,37 +47,94 @@ public class SplashActivity extends AppCompactActivityCustomized {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         activitySplashBinding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(activitySplashBinding.getRoot());
-        screenContentView = activitySplashBinding.fullscreenContent;
+
+        ActionBar ab = getSupportActionBar();
+        // Enable the Up button
+        ab.hide();
 
         updateLanguage();
+    }
 
+    private boolean checkHasLockScreenAlways(Intent intent) throws InterruptedException {
+        // Get the SharedPreferences
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Get the state of the SwitchPreferenceCompact
+        boolean isChecked = prefs.getBoolean("lock_screen_always_on", false);
+
+        if(isChecked) {
+            if(BuildConfig.DEBUG)
+                Log.d(getLocalClassName(), "Yes show splash screen!");
+
+            Thread bioMetricThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        securityHandler.authenticateWithLockScreen(intent);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            bioMetricThread.start();
+            bioMetricThread.join();
+
+            return true;
+        }
+        else {
+            if(BuildConfig.DEBUG)
+                Log.d(getLocalClassName(), "No show splash screen!");
+            ActivityOptions options = ActivityOptions.makeCustomAnimation(getApplicationContext(),
+                    android.R.anim.fade_in, android.R.anim.fade_out);
+            startActivity(intent, options.toBundle());
+        }
+        return false;
     }
 
     private void updateLanguage() {
-        if(LanguageHandler.hasPersistedData(getApplicationContext())) {
-            String persistedLanguage = LanguageHandler.getPersistedData(getApplicationContext());
-            if(Locale.getDefault().getLanguage().equals(persistedLanguage)) {
-                return;
-            }
-            else {
-                LanguageHandler.updateLanguage(getResources(), persistedLanguage);
-                Log.d(getLocalClassName(), "** New locale default: " + Locale.getDefault().getLanguage());
-            }
-        }
+        // Get the SharedPreferences
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        Locale locale = Locale.getDefault();
+        String languageCode = locale.getLanguage();
+
+        // Get the state of the SwitchPreferenceCompact
+        String languageLocale = prefs.getString("language_options", languageCode);
+        Log.d(getLocalClassName(), "Language code: " + languageCode);
+        Log.d(getLocalClassName(), "Language locale: " + languageLocale);
+
+        LanguageHandler.updateLanguage(getResources(), languageLocale);
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
-        delayedHide(0);
+        try {
+            securityHandler = new SecurityHandler(getApplicationContext());
 
+            if(checkHasSharedKey()) {
+                Intent intent = new Intent(getApplicationContext(), HomepageActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if(!checkHasLockScreenAlways(intent)) {
+                    finish();
+                }
+            }
+            else {
+                screenContentView = activitySplashBinding.fullscreenContent;
+                delayedHide(0);
+            }
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void AccessWelcomeActivity() {
@@ -82,8 +144,6 @@ public class SplashActivity extends AppCompactActivityCustomized {
     }
 
     private void AccessHomePageActivity() {
-        Intent intent = new Intent(this, HomepageActivity.class);
-        startActivity(intent);
     }
 
 
@@ -149,11 +209,10 @@ public class SplashActivity extends AppCompactActivityCustomized {
 
     private boolean checkHasSharedKey() {
         try {
-            SecurityHandler securityLayer = new SecurityHandler(getApplicationContext());
-            if(securityLayer.hasSharedKey()) {
+            if(securityHandler.hasSharedKey()) {
                 return true;
             }
-        } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
+        } catch (KeyStoreException e) {
             e.printStackTrace();
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
@@ -166,16 +225,8 @@ public class SplashActivity extends AppCompactActivityCustomized {
      * Schedules a call to hide() in delay milliseconds, canceling any
      * previously scheduled calls.
      */
-    private void delayedHide(int delayMillis) {
+    private void delayedHide(int delayMillis) throws InterruptedException {
         hideElementsHandler.removeCallbacks(mHideRunnable);
         hideElementsHandler.postDelayed(mHideRunnable, delayMillis);
-
-
-        if(checkHasSharedKey()) {
-            AccessHomePageActivity();
-            finish();
-        }
-        else {
-        }
     }
 }

@@ -3,6 +3,7 @@ package com.example.sw0b_001.Security;
 import android.content.Context;
 import android.util.Base64;
 
+import androidx.annotation.NonNull;
 import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
@@ -52,6 +53,7 @@ public class SecurityHelpers {
         return decryptedSharedKey;
     }
 
+    @NonNull
     public static String convert_to_pem_format(byte[] key) {
         String keyString = Base64.encodeToString(key, Base64.DEFAULT);
         keyString = "-----BEGIN PUBLIC KEY-----\n" + keyString;

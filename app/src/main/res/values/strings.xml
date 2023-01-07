@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SWOB</string>
+    <string name="app_name">SMSWithoutBorders</string>
 
     <string name="official_site">
         https://smswithoutborders.com
@@ -21,7 +21,7 @@
         https://smswithoutborders.com/sign-up
     </string>
 
-    <string name="smswithoutborders_official_site_signup_intent">
+    <string name="smswithoutborders_official_site_signup_intent" translatable="false">
         intent://smswithoutborders.com/sign-up
     </string>
 
@@ -71,11 +71,11 @@
 
     <string name="homepage_enter_password_prompt">Same password used when creating your account</string>
 
-    <string name="homepage_read_our_privacy_policy" translatable="false">Read our privacy policy</string>
+    <string name="homepage_read_our_privacy_policy">Read our privacy policy</string>
 
     <string name="settings_settings">Settings</string>
 
-    <string name="settings_automatically_stored_access">Automatic Refresh stored access</string>
+    <string name="settings_automatically_stored_access">Refresh saved platforms</string>
 
     <string name="settings_automatically_stored_access_warning">Warning! Resyncing will clear all previously sent messages.</string>
 
@@ -113,23 +113,96 @@
 
     <string name="text_compose_compose">Compose</string>
 
+    <!-- settings saved platform -->
+    <string name="settings_custom_platforms_category">
+        Saved platforms
+    </string>
     <string name="settings_store_access_text">
         Store Access
     </string>
+    <string name="settings_store_access_text_summary">
+        Add more platforms to use offline
+    </string>
 
-    <string name="gateway_clients_settings_header">Available Gateway Clients</string>
+    <string name="settings_accessibility_category">
+        Accessibility
+    </string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_summary" translatable="false"></string>
 
+    <string name="settings_security_category">
+        Security and Privacy
+    </string>
+    <string name="settings_security">
+        Security
+    </string>
+    <string name="settings_security_category_summary">
+        Enable app locks and pin codes
+    </string>
+
+    <string name="settings_advanced_category">Advanced settings</string>
     <string name="settings_gateway_clients_text">
         Gateway Clients
     </string>
+    <string name="settings_gateway_clients_text_summary">
+        Add/Remove Gateway clients for SMS routing
+    </string>
 
+    <!-- settings security -->
+    <string name="settings_lock_screen_preference_category">
+        Phone Lockscreen options
+    </string>
+    <string name="settings_security_and_privacy_enable_lockscreen_open">
+        Enable lockscreen
+    </string>
+    <string name="settings_security_and_privacy_enable_lockscreen_open_summary">"Require lockscreen pin/fingerprint when starting the app     "</string>
+
+    <string name="settings_security_and_privacy_enable_lockscreen_read_encrypted">
+        Enable lockscreen for decryption
+    </string>
+    <string name="settings_security_and_privacy_enable_lockscreen_read_encrypted_summary">"Require lockscreen pin/fingerprint when decryption is required in app e.g opening up         previously messages     "</string>
+
+    <string name="settings_pin_preference_category">
+        Custom PIN options
+    </string>
+    <string name="settings_security_and_privacy_enable_pin">
+        Enable PIN for decryption
+    </string>
+    <string name="settings_security_and_privacy_enable_pin_summary">
+        Unavailable
+    </string>
+
+    <!-- settings language -->
+    <string name="language_choose_text">
+        Choose your preferred language
+    </string>
+    <string name="language_english">
+        English
+    </string>
+    <string name="language_french">
+        French
+    </string>
+    <string name="language_farsi">
+        Farsi
+    </string>
+    <string name="language_english_value" translatable="false">
+        en
+    </string>
+    <string name="language_french_value" translatable="false">
+        fr
+    </string>
+    <string name="language_farsi_value" translatable="false">
+        fa
+    </string>
+
+
+    <string name="gateway_clients_settings_header">Available Gateway Clients</string>
     <string name="password_failed">
         Failed to authenticate! Please try again...
     </string>
 
     <string name="password_empty">Password cannot be empty!</string>
 
-    <string name="settings_language">Language</string>
 
     <string name="settings_language_preferred_language_text">Select your preferred language</string>
 
@@ -137,13 +210,13 @@
 
     <string name="settings_language_supported_language_fr">French</string>
 
-    <string name="default_gateway_MSISDN_0">+237679466332</string>
+    <string name="default_gateway_MSISDN_0" translatable="false">+237679466332</string>
 
-    <string name="default_gateway_MSISDN_2">
+    <string name="default_gateway_MSISDN_2" translatable="false">
         +237690826242
     </string>
 
-    <string name="default_operator_id">62402 </string>
+    <string name="default_operator_id" translatable="false">62402 </string>
 
     <string name="message_compose_groups_option">
         Telegram user\'s name (optional)
@@ -162,7 +235,7 @@
     <string name="gateway_client_settings_add_custom_empty_error">Please provide a phone number</string>
     <string name="synchronize_type_header_automatic_synchronize_text">Automatically link your app with your online account</string>
 
-    <string name="default_seeds_url">
+    <string name="default_seeds_url" translatable="false">
         http://seeds.smswithoutborders.com
     </string>
 
@@ -176,4 +249,6 @@
     <string name="choose_sms_app">
         Select an SMS messaging app
     </string>
+
+
 </resources>

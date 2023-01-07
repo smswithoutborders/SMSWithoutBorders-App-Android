@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SWOB</string>
+    <string name="app_name">SMSWithoutBorders</string>
     <string name="homepage_recent">Récent</string>
     <string name="privacy_policy">https://smswithoutborders.com/privacy-policy</string>
     <string name="gateway_client_seeds">"http://seeds.smswithoutborders.com     "</string>
@@ -45,7 +45,7 @@
     <string name="text_compose_compose">Composer</string>
     <string name="settings_store_access_text">Accès en magasin à votre compte</string>
     <string name="gateway_clients_settings_header">Clients Gateway disponibles</string>
-    <string name="settings_gateway_clients_text">Client Gateway</string>
+    <string name="settings_gateway_clients_text">Passerelles de routage SMS</string>
     <string name="password_failed">Échec de l\'authentification ! Veuillez réessayer...</string>
     <string name="password_empty">Le mot de passe ne peut pas être vide !</string>
     <string name="settings_language">Langue</string>
@@ -62,4 +62,24 @@
     <string name="new_gateway_client_alias">Alias (facultatif)</string>
     <string name="new_gateway_client_custom_alias">Client SMS personnalisé</string>
     <string name="choose_sms_app">Sélectionnez une application de messagerie SMS</string>
+    <string name="settings_custom_platforms_category">Plates-formes personnalisées enregistrées</string>
+    <string name="settings_store_access_text_summary">Ajouter plus de plates-formes à utiliser hors ligne</string>
+    <string name="settings_accessibility_category">Accessibilité</string>
+    <string name="settings_security_category">Sécurité et confidentialité</string>
+    <string name="settings_security">Sécurité</string>
+    <string name="settings_security_category_summary">Activer les verrous d\'application et les codes PIN</string>
+    <string name="settings_gateway_clients_text_summary">Ajouter/supprimer des numéros de routage SMS</string>
+    <string name="settings_lock_screen_preference_category">Options de l\'écran de verrouillage du téléphone</string>
+    <string name="settings_security_and_privacy_enable_lockscreen_open">Activer l\'écran de verrouillage</string>
+    <string name="settings_security_and_privacy_enable_lockscreen_open_summary">Exiger un code PIN/empreinte digitale de l\'écran de verrouillage lors du démarrage de l\'application</string>
+    <string name="settings_security_and_privacy_enable_lockscreen_read_encrypted">Activer l\'écran de verrouillage pour le décryptage</string>
+    <string name="settings_security_and_privacy_enable_lockscreen_read_encrypted_summary">Nécessite une broche / une empreinte digitale de l\'écran de verrouillage lorsque le décryptage est requis dans l\'application, par exemple l\'ouverture des messages précédents</string>
+    <string name="settings_pin_preference_category">Options de broches personnalisées</string>
+    <string name="settings_security_and_privacy_enable_pin">Activer la broche pour le décryptage</string>
+    <string name="settings_security_and_privacy_enable_pin_summary">Indisponible</string>
+    <string name="language_choose_text">Choisissez votre langue préférée</string>
+    <string name="language_english">Anglaise</string>
+    <string name="language_french">Français</string>
+    <string name="language_farsi">Farsi</string>
+    <string name="settings_advanced_category">Réglages avancés</string>
 </resources>

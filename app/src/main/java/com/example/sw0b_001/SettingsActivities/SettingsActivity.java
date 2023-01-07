@@ -6,12 +6,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw0b_001.HomepageActivity;
 import com.example.sw0b_001.Models.AppCompactActivityCustomized;
-import com.example.sw0b_001.Models.SettingsRecyclerAdapter;
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.databinding.ActivitySettingsBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -26,9 +23,10 @@ import java.util.Map;
 
 public class SettingsActivity extends AppCompactActivityCustomized {
 
-    public static String GATEWAY_CLIENT_SETTINGS = "";
-    public static String STORED_ACCESS_SETTINGS = "";
     public static String LANGUAGE_SETTINGS = "";
+    public static String STORED_ACCESS_SETTINGS = "";
+    public static String SECURITY_SETTINGS = "";
+    public static String GATEWAY_CLIENT_SETTINGS = "";
 
     public static final Map<String, Integer> SETTINGS_ICON_MAPPER = new HashMap<String, Integer>();
 
@@ -41,33 +39,9 @@ public class SettingsActivity extends AppCompactActivityCustomized {
         View view = binding.getRoot();
         setContentView(view);
 
-        GATEWAY_CLIENT_SETTINGS = getString(R.string.settings_gateway_clients_text);
-        STORED_ACCESS_SETTINGS = getString(R.string.settings_store_access_text);
-        LANGUAGE_SETTINGS = getString(R.string.settings_language);
-
-        SETTINGS_ICON_MAPPER.put(GATEWAY_CLIENT_SETTINGS, R.drawable.ic_round_router_24);
-        SETTINGS_ICON_MAPPER.put(STORED_ACCESS_SETTINGS, R.drawable.ic_round_sync_24);
-        SETTINGS_ICON_MAPPER.put(LANGUAGE_SETTINGS, R.drawable.ic_round_language_24);
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.homepage_bottom_navbar);
         bottomNavBar(bottomNavigationView);
-
-        populateSettings();
-
-    }
-
-    public void populateSettings() {
-        List<String> listOfSettings = new ArrayList<>();
-        listOfSettings.add(GATEWAY_CLIENT_SETTINGS);
-        listOfSettings.add(STORED_ACCESS_SETTINGS);
-        listOfSettings.add(LANGUAGE_SETTINGS);
-
-        RecyclerView settingsRecyclerView = findViewById(R.id.settings_recycler_view);
-        // settingsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-
-        SettingsRecyclerAdapter settingsRecyclerAdapter = new SettingsRecyclerAdapter(this, listOfSettings, R.layout.layout_cardlist_settings, this);
-        settingsRecyclerView.setAdapter(settingsRecyclerAdapter);
-        settingsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        bottomNavBar(bottomNavigationView);
     }
 
     public void bottomNavBar(BottomNavigationView bottomNavigationView) {
@@ -88,11 +62,11 @@ public class SettingsActivity extends AppCompactActivityCustomized {
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(this, HomepageActivity.class);
-        startActivity(intent);
-        finish();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        Intent intent = new Intent(this, HomepageActivity.class);
+//        startActivity(intent);
+//        finish();
+//    }
 }

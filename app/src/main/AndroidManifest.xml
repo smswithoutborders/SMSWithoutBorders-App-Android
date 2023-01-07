@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
     <queries>
         <intent>
@@ -16,30 +17,24 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
-    <meta-data
-        android:name="com.google.android.gms.vision.DEPENDENCIES"
-        android:value="barcode" />
-
     <application
         android:icon="@mipmap/main_icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/main_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp"
-        android:usesCleartextTraffic="true"
-        android:allowBackup="false"
-        android:fullBackupContent="false">
-
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MessageComposeActivity"
             android:exported="false"
-            android:parentActivityName=".PlatformsActivity"
             android:label="@string/message_compose_header"
+            android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:name=".SplashActivity"
-            android:exported="true"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="true"
+            android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,16 +43,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:exported="false"
             android:name=".SyncHandshakeActivity"
-            android:theme="@style/Theme.MyAppNoBar" />
-        <activity
             android:exported="false"
-            android:name=".WelcomeActivity"
             android:theme="@style/Theme.MyAppNoBar" />
         <activity
-            android:exported="true"
+            android:name=".WelcomeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MyAppNoBar" />
+        <activity
             android:name=".SyncInitiateActivity"
+            android:exported="true"
             android:label=""
             android:parentActivityName=".WelcomeActivity">
             <intent-filter android:label="pending_name">
@@ -89,56 +84,41 @@
                 <!-- note that the leading "/" is required for pathPrefix -->
             </intent-filter>
         </activity>
-
         <activity
-            android:exported="false"
             android:name=".PlatformsActivity"
-            android:parentActivityName=".HomepageActivity"
-            android:theme="@style/Theme.MyAppNoBar"/>
-
-        <activity
             android:exported="false"
+            android:parentActivityName=".HomepageActivity"
+            android:theme="@style/Theme.MyAppNoBar" />
+        <activity
             android:name=".HomepageActivity"
+            android:exported="false"
             android:label=""
             android:theme="@style/Theme.MyAppNoBar"
             android:windowSoftInputMode="adjustPan" />
-
         <activity
-            android:name=".SettingsActivities.LanguageSettingsActivity"
-            android:theme="@style/Theme.MyAppNoBar"
-            android:exported="false"
-            android:parentActivityName=".SettingsActivities.SettingsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SettingsActivities.SettingsActivity" />
-        </activity>
-
-        <activity
-            android:exported="false"
             android:name=".SettingsActivities.SettingsActivity"
+            android:exported="false"
             android:label=""
+            android:launchMode="singleTask"
             android:theme="@style/Theme.MyAppNoBar" />
         <activity
-            android:exported="false"
             android:name=".SettingsActivities.GatewayClientsSettingsActivity"
+            android:exported="false"
             android:parentActivityName=".HomepageActivity"
             android:theme="@style/Theme.MyAppNoBar" />
-
         <activity
-            android:exported="false"
             android:name=".AddNewGatewayActivity"
+            android:exported="false"
             android:parentActivityName=".SettingsActivities.GatewayClientsSettingsActivity"
             android:theme="@style/Theme.MyAppNoBar" />
-
         <activity
-            android:exported="false"
             android:name=".SettingsActivities.StoreAccessSettingsActivity"
-            android:theme="@style/Theme.MyAppNoBar"
-            android:parentActivityName=".SettingsActivities.SettingsActivity" />
-
-        <activity
             android:exported="false"
+            android:parentActivityName=".SettingsActivities.SettingsActivity"
+            android:theme="@style/Theme.MyAppNoBar" />
+        <activity
             android:name=".EmailComposeActivity"
+            android:exported="false"
             android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
@@ -148,8 +128,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:exported="false"
             android:name=".TextComposeActivity"
+            android:exported="false"
             android:label=""
             android:parentActivityName=".PlatformsActivity"
             android:theme="@style/Theme.MyAppNoBar">
@@ -160,8 +140,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:exported="false"
             android:name=".QRScannerActivity"
+            android:exported="false"
             android:label=""
             android:parentActivityName=".PasswordActivity">
             <meta-data
@@ -169,8 +149,8 @@
                 android:value=".PasswordActivity" />
         </activity>
         <activity
-            android:exported="false"
             android:name=".PasswordActivity"
+            android:exported="false"
             android:theme="@style/Theme.MyAppNoBar" />
     </application>
 
