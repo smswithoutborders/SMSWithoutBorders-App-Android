@@ -2,30 +2,49 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <Preference
-        app:icon="@drawable/ic_round_language_24"
-        app:key="language_settings"
-        app:summary="Report technical issues or suggest new features"
-        app:fragment="com.example.sw0b_001.SettingsActivities.SecurityPrivacyFragment"
-        app:title="@string/settings_language" >
-    </Preference>
+    <PreferenceCategory
+        app:key="refresh_token"
+        app:title="@string/settings_custom_platforms_category">
+        <Preference
+            app:icon="@drawable/ic_baseline_apps_24"
+            app:key="refresh_platforms_settings"
+            app:summary="Report technical issues or suggest new features"
+            app:title="@string/settings_store_access_text" />
 
-    <Preference
-        app:icon="@drawable/ic_baseline_security_24"
-        app:key="security_settings"
-        app:summary="Report technical issues or suggest new features"
-        app:title="@string/settings_security_and_privacy" />
+    </PreferenceCategory>
 
-    <Preference
-        app:icon="@drawable/ic_baseline_apps_24"
-        app:key="refresh_platforms_settings"
-        app:summary="Report technical issues or suggest new features"
-        app:title="@string/settings_store_access_text" />
+    <PreferenceCategory
+        app:key="accessibility_settings"
+        app:title="@string/settings_accessibility_category">
+        <Preference
+            app:icon="@drawable/ic_round_language_24"
+            app:key="language_settings"
+            app:summary="Report technical issues or suggest new features"
+            app:fragment="com.example.sw0b_001.SettingsActivities.SecurityPrivacyFragment"
+            app:title="@string/settings_language" >
+        </Preference>
+    </PreferenceCategory>
 
-    <Preference
-        app:icon="@drawable/ic_round_router_24"
-        app:key="gateway_server_settings"
-        app:summary="Report technical issues or suggest new features"
-        app:title="@string/settings_gateway_clients_text" />
+    <PreferenceCategory
+        app:key="security_and_privacy_settings"
+        app:title="@string/settings_security_category">
+        <Preference
+            app:icon="@drawable/ic_baseline_security_24"
+            app:key="security_settings"
+            app:summary="Report technical issues or suggest new features"
+            app:title="@string/settings_security" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        app:key="advance_settings"
+        app:title="@string/settings_advanced_category">
+        <Preference
+            app:icon="@drawable/ic_round_router_24"
+            app:key="gateway_server_settings"
+            app:summary="Report technical issues or suggest new features"
+            app:title="@string/settings_gateway_clients_text" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

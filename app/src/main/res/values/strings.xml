@@ -117,8 +117,8 @@
         Store Access
     </string>
 
-    <string name="settings_security_and_privacy">
-        Security and Privacy
+    <string name="settings_security">
+        Security
     </string>
 
     <string name="gateway_clients_settings_header">Available Gateway Clients</string>
@@ -216,5 +216,17 @@
     </string>
     <string name="language_farsi_value">
         fa
+    </string>
+    <string name="settings_accessibility_category">
+        Accessibility
+    </string>
+    <string name="settings_custom_platforms_category">
+        Saved platforms
+    </string>
+    <string name="settings_security_category">
+        Security and Privacy
+    </string>
+    <string name="settings_advanced_category">
+        Advance settings
     </string>
 </resources>
