@@ -16,11 +16,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import com.example.sw0b_001.BuildConfig;
+import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.PublisherHandler;
 import com.example.sw0b_001.R;
 
@@ -174,7 +176,7 @@ public class SecurityHandler {
         return false;
     }
 
-    public void authenticateWithLockScreen(Intent callbackIntent) throws InterruptedException {
+    public void authenticateWithLockScreen(Intent callbackIntent, AppCompactActivityCustomized parent) throws InterruptedException {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 
             Executor executor = ContextCompat.getMainExecutor(context);
@@ -218,6 +220,9 @@ public class SecurityHandler {
                             ActivityOptions options = ActivityOptions.makeCustomAnimation(context,
                                     android.R.anim.fade_in, android.R.anim.fade_out);
                             context.startActivity(callbackIntent, options.toBundle());
+
+                            if(parent!=null && parent instanceof AppCompactActivityCustomized)
+                                parent.finish();
                         }
 
                         @Override
