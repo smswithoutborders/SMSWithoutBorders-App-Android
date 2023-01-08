@@ -121,19 +121,7 @@ public class HomepageRecyclerAdapter extends RecyclerView.Adapter<HomepageRecycl
         boolean isChecked = prefs.getBoolean("lock_screen_for_encryption", false);
 
         if(isChecked) {
-            Thread bioMetricThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        securityHandler.authenticateWithLockScreen(intent);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            bioMetricThread.start();
-            bioMetricThread.join();
-
+            securityHandler.authenticateWithLockScreen(intent, null);
             return true;
         }
         else {

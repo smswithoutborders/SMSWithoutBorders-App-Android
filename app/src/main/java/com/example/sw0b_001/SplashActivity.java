@@ -44,53 +44,57 @@ public class SplashActivity extends AppCompactActivityCustomized {
     // milliseconds
     private final int SPLASH_DELAY_DURATION = 3000;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        activitySplashBinding = ActivitySplashBinding.inflate(getLayoutInflater());
-        setContentView(activitySplashBinding.getRoot());
-
-        ActionBar ab = getSupportActionBar();
-        // Enable the Up button
-        ab.hide();
-
-        updateLanguage();
-    }
-
-    private boolean checkHasLockScreenAlways(Intent intent) throws InterruptedException {
+    private boolean checkHasLockScreenAlways() {
         // Get the SharedPreferences
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Get the state of the SwitchPreferenceCompact
         boolean isChecked = prefs.getBoolean("lock_screen_always_on", false);
+        return isChecked;
+    }
 
-        if(isChecked) {
-            if(BuildConfig.DEBUG)
-                Log.d(getLocalClassName(), "Yes show splash screen!");
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        updateLanguage();
+        try {
+            securityHandler = new SecurityHandler(getApplicationContext());
+            activitySplashBinding = ActivitySplashBinding.inflate(getLayoutInflater());
+            setContentView(activitySplashBinding.getRoot());
 
-            Thread bioMetricThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        securityHandler.authenticateWithLockScreen(intent);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+            ActionBar ab = getSupportActionBar();
+            // Enable the Up button
+            ab.hide();
+            screenContentView = activitySplashBinding.fullscreenContent;
+
+            if(checkHasSharedKey()) {
+                if(checkHasLockScreenAlways()) {
+                    enableLockScreen();
                 }
-            });
-            bioMetricThread.start();
-            bioMetricThread.join();
+                else {
+                    Intent intent = new Intent(getApplicationContext(), HomepageActivity.class);
+                    ActivityOptions options = ActivityOptions.makeCustomAnimation(getApplicationContext(),
+                            android.R.anim.fade_in, android.R.anim.fade_out);
+                    startActivity(intent, options.toBundle());
+                    finish();
+                }
+            }
+            else {
+                delayedHide(0);
+            }
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
-            return true;
-        }
-        else {
-            if(BuildConfig.DEBUG)
-                Log.d(getLocalClassName(), "No show splash screen!");
-            ActivityOptions options = ActivityOptions.makeCustomAnimation(getApplicationContext(),
-                    android.R.anim.fade_in, android.R.anim.fade_out);
-            startActivity(intent, options.toBundle());
-        }
-        return false;
+    private void enableLockScreen() throws InterruptedException {
+        Intent intent = new Intent(getApplicationContext(), HomepageActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        securityHandler.authenticateWithLockScreen(intent, this);
     }
 
     private void updateLanguage() {
@@ -108,44 +112,11 @@ public class SplashActivity extends AppCompactActivityCustomized {
         LanguageHandler.updateLanguage(getResources(), languageLocale);
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
-        // are available.
-        try {
-            securityHandler = new SecurityHandler(getApplicationContext());
-
-            if(checkHasSharedKey()) {
-                Intent intent = new Intent(getApplicationContext(), HomepageActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                if(!checkHasLockScreenAlways(intent)) {
-                    finish();
-                }
-            }
-            else {
-                screenContentView = activitySplashBinding.fullscreenContent;
-                delayedHide(0);
-            }
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void AccessWelcomeActivity() {
         Intent intent = new Intent(this, WelcomeActivity.class);
         startActivity(intent);
         return;
     }
-
-    private void AccessHomePageActivity() {
-    }
-
 
     private void hideUIElements() throws InterruptedException, CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException {
         // Hide UI first
