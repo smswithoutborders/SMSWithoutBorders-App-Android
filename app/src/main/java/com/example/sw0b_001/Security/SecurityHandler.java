@@ -4,7 +4,9 @@ import static android.hardware.biometrics.BiometricManager.Authenticators.BIOMET
 import static android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
 import android.app.ActivityOptions;
+import android.app.KeyguardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.biometrics.BiometricManager;
@@ -145,7 +147,8 @@ public class SecurityHandler {
     public boolean phoneCredentialsPossible() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             BiometricManager biometricManager = (BiometricManager) context.getSystemService(Context.BIOMETRIC_SERVICE);
-            switch (biometricManager.canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)) {
+            int canAuthenticate = biometricManager.canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL);
+            switch (canAuthenticate) {
                 case BiometricManager.BIOMETRIC_SUCCESS:
                     if (BuildConfig.DEBUG)
                         Log.d(PublisherHandler.class.getName(), "App can authenticate using biometrics.");
@@ -170,31 +173,41 @@ public class SecurityHandler {
 //                    // TODO:
 //                    break;
                 default:
+                    Log.d(getClass().getName(), "Defaulting for authentication");
                     break;
             }
+        }
+        else {
+            KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+            return keyguardManager.isDeviceSecure();
         }
         return false;
     }
 
     public void authenticateWithLockScreen(Intent callbackIntent, AppCompactActivityCustomized parent) throws InterruptedException {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        Executor executor = ContextCompat.getMainExecutor(context);
+        CancellationSignal cancellationSignal = new CancellationSignal();
+        cancellationSignal.setOnCancelListener(new CancellationSignal.OnCancelListener() {
+            @Override
+            public void onCancel() {
 
-            Executor executor = ContextCompat.getMainExecutor(context);
+            }
+        });
 
-            CancellationSignal cancellationSignal = new CancellationSignal();
-            cancellationSignal.setOnCancelListener(new CancellationSignal.OnCancelListener() {
-                @Override
-                public void onCancel() {
-
-                }
-            });
-
-            android.hardware.biometrics.BiometricPrompt biometricPrompt = new android.hardware.biometrics.BiometricPrompt.Builder(context)
-                    .setTitle("Biometric Login")
-                    .setSubtitle("Log in using your biometric credential")
-                    .setDescription("Touch the sensor to use your biometric credential")
-                    .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
-                    .build();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            android.hardware.biometrics.BiometricPrompt biometricPrompt = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) ?
+                new android.hardware.biometrics.BiometricPrompt.Builder(context)
+                        .setTitle("Biometric Login")
+                        .setSubtitle("Log in using your biometric credential")
+                        .setDescription("Touch the sensor to use your biometric credential")
+                        .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
+                        .build() :
+                new android.hardware.biometrics.BiometricPrompt.Builder(context)
+                        .setTitle("Biometric Login")
+                        .setSubtitle("Log in using your biometric credential")
+                        .setDescription("Touch the sensor to use your biometric credential")
+                        .setDeviceCredentialAllowed(true)
+                        .build();
 
             biometricPrompt.authenticate(cancellationSignal,
                     executor, new android.hardware.biometrics.BiometricPrompt.AuthenticationCallback() {
@@ -221,7 +234,7 @@ public class SecurityHandler {
                                     android.R.anim.fade_in, android.R.anim.fade_out);
                             context.startActivity(callbackIntent, options.toBundle());
 
-                            if(parent!=null && parent instanceof AppCompactActivityCustomized)
+                            if(parent != null)
                                 parent.finish();
                         }
 
@@ -232,8 +245,7 @@ public class SecurityHandler {
                                 Toast.makeText(context, "Authentication failed",
                                         Toast.LENGTH_SHORT).show();
                         }
-            });
+                    });
         }
-
     }
 }
