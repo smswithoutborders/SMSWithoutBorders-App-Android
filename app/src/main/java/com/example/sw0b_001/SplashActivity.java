@@ -68,7 +68,7 @@ public class SplashActivity extends AppCompactActivityCustomized {
             screenContentView = activitySplashBinding.fullscreenContent;
 
             if(checkHasSharedKey()) {
-                if(checkHasLockScreenAlways()) {
+                if(checkHasLockScreenAlways() && securityHandler.phoneCredentialsPossible()) {
                     enableLockScreen();
                 }
                 else {

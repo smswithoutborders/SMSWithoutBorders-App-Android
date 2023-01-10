@@ -120,7 +120,7 @@ public class HomepageRecyclerAdapter extends RecyclerView.Adapter<HomepageRecycl
         // Get the state of the SwitchPreferenceCompact
         boolean isChecked = prefs.getBoolean("lock_screen_for_encryption", false);
 
-        if(isChecked) {
+        if(isChecked && securityHandler.phoneCredentialsPossible()) {
             securityHandler.authenticateWithLockScreen(intent, null);
             return true;
         }
