@@ -26,8 +26,9 @@ public class LanguageFragment extends PreferenceFragmentCompat {
                 LanguageHandler.updateLanguage(getResources(), languageLocale);
 //                startActivity(new Intent(getContext(), SplashActivity.class));
 
-                getActivity().finish();
-                startActivity(getActivity().getIntent());
+//                getActivity().finish();
+//                startActivity(getActivity().getIntent());
+                getActivity().recreate();
                 return true;
             }
         });

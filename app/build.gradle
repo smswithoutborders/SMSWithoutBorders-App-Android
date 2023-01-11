@@ -25,6 +25,8 @@ android {
             }
         }
 
+        resConfigs "en", "fr", "fa"
+
     }
 
     buildTypes {
@@ -49,7 +51,7 @@ android {
 dependencies {
 
     // implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.51'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0-alpha01'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.annotation:annotation:1.5.0'

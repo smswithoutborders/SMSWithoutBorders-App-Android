@@ -3,6 +3,7 @@ package com.example.sw0b_001;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
@@ -32,6 +33,8 @@ public class HomepageActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager = getSupportFragmentManager();
 
+    final String SETTINGS_FRAGMENT_TAG = "SETTINGS_FRAGMENT_TAG";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +44,14 @@ public class HomepageActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.recents);
 
         TextView textView = findViewById(R.id.fragment_title);
+
+        Fragment currentFragment = fragmentManager.findFragmentByTag(SETTINGS_FRAGMENT_TAG);
+
+        if(currentFragment instanceof SettingsFragment) {
+            textView.setText(R.string.settings_settings);
+            textView.setVisibility(View.VISIBLE);
+        }
+
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
@@ -62,7 +73,7 @@ public class HomepageActivity extends AppCompatActivity {
                         textView.setText(R.string.settings_settings);
                         textView.setVisibility(View.VISIBLE);
                         fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
-                                SettingsFragment.class, null)
+                                SettingsFragment.class, null, SETTINGS_FRAGMENT_TAG)
                                 .setReorderingAllowed(true)
                                 .setCustomAnimations(android.R.anim.slide_in_left,
                                         android.R.anim.slide_out_right,
@@ -108,26 +119,5 @@ public class HomepageActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        SplitInstallManager splitInstallManager = SplitInstallManagerFactory.create(getBaseContext());
-        final String[] supportedLanguages = getResources().getStringArray(R.array.language_values);
-        final Set<String> installedLangs = splitInstallManager.getInstalledLanguages();
-
-        for(String supportedLanguage : supportedLanguages) {
-            if(installedLangs.contains(supportedLanguage))
-                continue;
-
-            SplitInstallRequest request =
-                    SplitInstallRequest.newBuilder()
-                            .addLanguage(Locale.forLanguageTag(supportedLanguage))
-                            .build();
-            splitInstallManager.startInstall(request);
-            splitInstallManager.registerListener(new SplitInstallStateUpdatedListener() {
-                @Override
-                public void onStateUpdate(@NonNull SplitInstallSessionState splitInstallSessionState) {
-//                    if(splitInstallSessionState.status() == SplitInstallSessionStatus.INSTALLED){
-//                    }
-                }
-            });
-        }
     }
 }
