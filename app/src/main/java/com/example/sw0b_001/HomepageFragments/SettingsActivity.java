@@ -1,4 +1,4 @@
-package com.example.sw0b_001.SettingsActivities;
+package com.example.sw0b_001.HomepageFragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.example.sw0b_001.HomepageActivity;
+import com.example.sw0b_001.HomepageOldActivity;
 import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.databinding.ActivitySettingsBinding;
@@ -16,19 +16,7 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class SettingsActivity extends AppCompactActivityCustomized {
-
-    public static String LANGUAGE_SETTINGS = "";
-    public static String STORED_ACCESS_SETTINGS = "";
-    public static String SECURITY_SETTINGS = "";
-    public static String GATEWAY_CLIENT_SETTINGS = "";
-
-    public static final Map<String, Integer> SETTINGS_ICON_MAPPER = new HashMap<String, Integer>();
 
     private ActivitySettingsBinding binding;
 
@@ -51,7 +39,7 @@ public class SettingsActivity extends AppCompactActivityCustomized {
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
                 switch(item.getItemId()) {
                     case R.id.recents: {
-                        Intent recentsIntent = new Intent(getApplicationContext(), HomepageActivity.class);
+                        Intent recentsIntent = new Intent(getApplicationContext(), HomepageOldActivity.class);
                         startActivity(recentsIntent);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         finish();

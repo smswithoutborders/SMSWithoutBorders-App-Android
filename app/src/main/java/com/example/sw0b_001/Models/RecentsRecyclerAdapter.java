@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +14,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sw0b_001.BuildConfig;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
@@ -35,19 +35,18 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-public class HomepageRecyclerAdapter extends RecyclerView.Adapter<HomepageRecyclerAdapter.ViewHolder> {
+public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecyclerAdapter.ViewHolder> {
+    private final AsyncListDiffer<EncryptedContent> mDiffer = new AsyncListDiffer(this, DIFF_CALLBACK);
 
     Context context;
-    List<EncryptedContent> listOfRecents;
     int recentsRenderLayout;
 
     SecurityHandler securityHandler;
 
-    public HomepageRecyclerAdapter(Context context, List<EncryptedContent> listOfRecents, int recentsRenderLayout) throws GeneralSecurityException, IOException {
+    public RecentsRecyclerAdapter(Context context, int recentsRenderLayout) throws GeneralSecurityException, IOException {
         this.context = context;
-        this.listOfRecents = listOfRecents;
         this.recentsRenderLayout = recentsRenderLayout;
-        securityHandler = new SecurityHandler(context);
+        this.securityHandler = new SecurityHandler(context);
     }
 
     @NonNull
@@ -56,12 +55,12 @@ public class HomepageRecyclerAdapter extends RecyclerView.Adapter<HomepageRecycl
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(this.context);
         View view = inflater.inflate(this.recentsRenderLayout, parent, false);
-        return new HomepageRecyclerAdapter.ViewHolder(view);
+        return new RecentsRecyclerAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        EncryptedContent encryptedContent = listOfRecents.get(position);
+        EncryptedContent encryptedContent = mDiffer.getCurrentList().get(position);
 
         int trimLength = 90;
         String displayString = encryptedContent.getEncryptedContent().length() > trimLength ?
@@ -132,9 +131,13 @@ public class HomepageRecyclerAdapter extends RecyclerView.Adapter<HomepageRecycl
         return false;
     }
 
+    public void submitList(List<EncryptedContent> encryptedContentList) {
+        mDiffer.submitList(encryptedContentList);
+    }
+
     @Override
     public int getItemCount() {
-        return this.listOfRecents.size();
+        return this.mDiffer.getCurrentList().size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -151,4 +154,17 @@ public class HomepageRecyclerAdapter extends RecyclerView.Adapter<HomepageRecycl
             this.platformLogo = itemView.findViewById(R.id.recents_platform_logo);
         }
     }
+
+    public static final DiffUtil.ItemCallback<EncryptedContent> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<EncryptedContent>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull EncryptedContent oldItem, @NonNull EncryptedContent newItem) {
+                    return oldItem.getId() == newItem.getId();
+                }
+
+                @Override
+                public boolean areContentsTheSame(@NonNull EncryptedContent oldItem, @NonNull EncryptedContent newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
 }

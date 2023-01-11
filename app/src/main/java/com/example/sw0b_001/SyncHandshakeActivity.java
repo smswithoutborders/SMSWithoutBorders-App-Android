@@ -1,6 +1,5 @@
 package com.example.sw0b_001;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Base64;
@@ -80,7 +79,7 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
 
                 processHandshakePayload(jsonObject, gatewayServerId);
 
-                Intent dashboardIntent = new Intent(getApplicationContext(), HomepageActivity.class);
+                Intent dashboardIntent = new Intent(getApplicationContext(), HomepageOldActivity.class);
                 startActivity(dashboardIntent);
                 finish();
             } catch (Exception e) {

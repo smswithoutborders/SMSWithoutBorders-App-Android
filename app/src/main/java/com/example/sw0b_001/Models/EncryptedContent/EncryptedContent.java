@@ -1,5 +1,6 @@
 package com.example.sw0b_001.Models.EncryptedContent;
 
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -80,5 +81,20 @@ public class EncryptedContent {
     long date;
 
     public EncryptedContent() {
+    }
+
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(obj instanceof EncryptedContent) {
+            EncryptedContent encryptedContent = (EncryptedContent) obj;
+            return encryptedContent.id == this.id &&
+                    encryptedContent.platformId == this.platformId &&
+                    encryptedContent.platformName.equals(this.platformName) &&
+                    encryptedContent.date == this.date &&
+                    encryptedContent.type.equals(this.type) &&
+                    encryptedContent.encryptedContent.equals(this.encryptedContent);
+        }
+        return false;
     }
 }

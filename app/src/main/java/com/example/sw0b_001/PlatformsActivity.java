@@ -6,7 +6,6 @@ import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -55,7 +54,7 @@ public class PlatformsActivity extends AppCompactActivityCustomized {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && requestCode == 1) {
-            Intent homepageIntent = new Intent(getApplicationContext(), HomepageActivity.class);
+            Intent homepageIntent = new Intent(getApplicationContext(), HomepageOldActivity.class);
             startActivity(homepageIntent);
             finish();
         }
