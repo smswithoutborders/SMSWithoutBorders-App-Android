@@ -17,17 +17,9 @@ import com.example.sw0b_001.HomepageFragments.RecentsFragment;
 import com.example.sw0b_001.HomepageFragments.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.play.core.splitinstall.SplitInstallManager;
-import com.google.android.play.core.splitinstall.SplitInstallManagerFactory;
-import com.google.android.play.core.splitinstall.SplitInstallRequest;
-import com.google.android.play.core.splitinstall.SplitInstallSessionState;
-import com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListener;
-import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
-import java.util.Set;
 
 public class HomepageActivity extends AppCompatActivity {
 
@@ -112,12 +104,5 @@ public class HomepageActivity extends AppCompatActivity {
                         android.R.anim.fade_in,
                         android.R.anim.fade_out)
                 .commit();
-    }
-
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
     }
 }
