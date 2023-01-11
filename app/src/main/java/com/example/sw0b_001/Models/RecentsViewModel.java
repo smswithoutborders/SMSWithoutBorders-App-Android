@@ -22,6 +22,10 @@ public class RecentsViewModel extends ViewModel {
         return messagesList;
     }
 
+    public void informChanges(EncryptedContentDAO encryptedContentDAO) {
+        loadEncryptedContents(encryptedContentDAO);
+    }
+
     private void loadEncryptedContents(EncryptedContentDAO encryptedContentDAO) {
         messagesList = encryptedContentDAO.getAll();
     }

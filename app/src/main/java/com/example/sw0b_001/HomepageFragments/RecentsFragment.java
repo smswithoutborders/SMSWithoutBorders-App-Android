@@ -1,5 +1,6 @@
 package com.example.sw0b_001.HomepageFragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,8 @@ import java.util.List;
 
 public class RecentsFragment extends Fragment {
     // TODO: Implement search with LiveData
+    RecentsViewModel recentsViewModel;
+    EncryptedContentDAO encryptedContentDAO;
 
     public RecentsFragment() {
         // Required empty public constructor
@@ -52,13 +56,13 @@ public class RecentsFragment extends Fragment {
             recentsRecyclerView.setLayoutManager(linearLayoutManager);
             recentsRecyclerView.setAdapter(recentsRecyclerAdapter);
 
-            RecentsViewModel recentsViewModel = new ViewModelProvider(this).get(
+            recentsViewModel = new ViewModelProvider(this).get(
                     RecentsViewModel.class );
 
             Datastore databaseConnector = Room.databaseBuilder(getContext(), Datastore.class,
                     Datastore.DatabaseName).build();
 
-            EncryptedContentDAO encryptedContentDAO = databaseConnector.encryptedContentDAO();
+            encryptedContentDAO = databaseConnector.encryptedContentDAO();
             recentsViewModel.getMessages(encryptedContentDAO).observe(getViewLifecycleOwner(), new Observer<List<EncryptedContent>>() {
                 @Override
                 public void onChanged(List<EncryptedContent> encryptedContents) {
@@ -84,4 +88,5 @@ public class RecentsFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_recents, container, false);
     }
+
 }

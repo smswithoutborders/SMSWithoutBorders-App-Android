@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +26,7 @@ public class HomepageActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager = getSupportFragmentManager();
 
+    final String RECENTS_FRAGMENT_TAG = "RECENTS_FRAGMENT_TAG";
     final String SETTINGS_FRAGMENT_TAG = "SETTINGS_FRAGMENT_TAG";
 
     @Override
@@ -37,8 +39,16 @@ public class HomepageActivity extends AppCompatActivity {
 
         TextView textView = findViewById(R.id.fragment_title);
 
-        Fragment currentFragment = fragmentManager.findFragmentByTag(SETTINGS_FRAGMENT_TAG);
+        fragmentManager.beginTransaction().add(R.id.homepage_fragment_container_view,
+                        RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
+                .setReorderingAllowed(true)
+                .setCustomAnimations(android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right,
+                        android.R.anim.fade_in,
+                        android.R.anim.fade_out)
+                .commitNow();
 
+        Fragment currentFragment = fragmentManager.findFragmentByTag(SETTINGS_FRAGMENT_TAG);
         if(currentFragment instanceof SettingsFragment) {
             textView.setText(R.string.settings_settings);
             textView.setVisibility(View.VISIBLE);
@@ -52,7 +62,7 @@ public class HomepageActivity extends AppCompatActivity {
                 switch(itemId) {
                     case R.id.recents: {
                         fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
-                                RecentsFragment.class, null)
+                                RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
                                 .setReorderingAllowed(true)
                                 .setCustomAnimations(android.R.anim.slide_in_left,
                                         android.R.anim.slide_out_right,
@@ -104,5 +114,21 @@ public class HomepageActivity extends AppCompatActivity {
                         android.R.anim.fade_in,
                         android.R.anim.fade_out)
                 .commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Fragment currentFragment = fragmentManager.findFragmentByTag(RECENTS_FRAGMENT_TAG);
+        if (currentFragment instanceof RecentsFragment) {
+            fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
+                            RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
+                    .setReorderingAllowed(true)
+                    .setCustomAnimations(android.R.anim.slide_in_left,
+                            android.R.anim.slide_out_right,
+                            android.R.anim.fade_in,
+                            android.R.anim.fade_out)
+                    .commit();
+        }
     }
 }
