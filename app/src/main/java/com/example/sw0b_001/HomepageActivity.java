@@ -72,19 +72,19 @@ public class HomepageActivity extends AppCompatActivity {
                         return true;
                     }
 
-//                    case R.id.messages: {
-//                        textView.setText(R.string.messages_title);
-//                        textView.setVisibility(View.VISIBLE);
-//                        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
-//                                        NotificationsFragment.class, null)
-//                                .setReorderingAllowed(true)
-//                                .setCustomAnimations(android.R.anim.slide_in_left,
-//                                        android.R.anim.slide_out_right,
-//                                        android.R.anim.fade_in,
-//                                        android.R.anim.fade_out)
-//                                .commit();
-//                        return true;
-//                    }
+                    case R.id.messages: {
+                        textView.setText(R.string.messages_title);
+                        textView.setVisibility(View.VISIBLE);
+                        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
+                                        NotificationsFragment.class, null)
+                                .setReorderingAllowed(true)
+                                .setCustomAnimations(android.R.anim.slide_in_left,
+                                        android.R.anim.slide_out_right,
+                                        android.R.anim.fade_in,
+                                        android.R.anim.fade_out)
+                                .commit();
+                        return true;
+                    }
                 }
                 return false;
             }
