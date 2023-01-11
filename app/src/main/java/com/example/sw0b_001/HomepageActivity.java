@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.sw0b_001.HomepageFragments.AvailablePlatformsFragment;
 import com.example.sw0b_001.HomepageFragments.MessagesFragment;
@@ -30,11 +31,14 @@ public class HomepageActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.homepage_bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.recents);
+
+        TextView textView = findViewById(R.id.fragment_title);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-                findViewById(R.id.fragment_title).setVisibility(View.GONE);
-                switch(item.getItemId()) {
+                textView.setVisibility(View.GONE);
+                final int itemId = item.getItemId();
+                switch(itemId) {
                     case R.id.recents: {
                         fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
                                 RecentsFragment.class, null)
@@ -44,10 +48,11 @@ public class HomepageActivity extends AppCompatActivity {
                                         android.R.anim.fade_in,
                                         android.R.anim.fade_out)
                                 .commit();
-                        break;
+                        return true;
                     }
                     case R.id.settings: {
-                        findViewById(R.id.fragment_title).setVisibility(View.VISIBLE);
+                        textView.setText(R.string.settings_settings);
+                        textView.setVisibility(View.VISIBLE);
                         fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
                                 SettingsFragment.class, null)
                                 .setReorderingAllowed(true)
@@ -56,10 +61,12 @@ public class HomepageActivity extends AppCompatActivity {
                                         android.R.anim.fade_in,
                                         android.R.anim.fade_out)
                                 .commit();
-                        break;
+                        return true;
                     }
 
                     case R.id.messages: {
+                        textView.setText(R.string.messages_title);
+                        textView.setVisibility(View.VISIBLE);
                         fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
                                         MessagesFragment.class, null)
                                 .setReorderingAllowed(true)
@@ -68,7 +75,7 @@ public class HomepageActivity extends AppCompatActivity {
                                         android.R.anim.fade_in,
                                         android.R.anim.fade_out)
                                 .commit();
-                        break;
+                        return true;
                     }
                 }
                 return false;

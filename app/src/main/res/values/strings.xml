@@ -55,7 +55,7 @@
     </string>
 
     <string name="homepage_messages">
-        Messages
+        Notifications
     </string>
 
     <string name="homepage_no_recent_messages">No Recent Messages</string>
@@ -254,8 +254,9 @@
     <string name="choose_sms_app">
         Select an SMS messaging app
     </string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="messages_title">
+        Notifications
+    </string>
 
 </resources>
