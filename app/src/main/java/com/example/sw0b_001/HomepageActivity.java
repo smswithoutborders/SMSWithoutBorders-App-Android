@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.sw0b_001.HomepageFragments.AvailablePlatformsFragment;
+import com.example.sw0b_001.HomepageFragments.MessagesFragment;
 import com.example.sw0b_001.HomepageFragments.RecentsFragment;
 import com.example.sw0b_001.HomepageFragments.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -59,9 +60,15 @@ public class HomepageActivity extends AppCompatActivity {
                     }
 
                     case R.id.messages: {
-//                        Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
-//                        startActivity(settingsIntent);
-//                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
+                                        MessagesFragment.class, null)
+                                .setReorderingAllowed(true)
+                                .setCustomAnimations(android.R.anim.slide_in_left,
+                                        android.R.anim.slide_out_right,
+                                        android.R.anim.fade_in,
+                                        android.R.anim.fade_out)
+                                .commit();
+                        break;
                     }
                 }
                 return false;
