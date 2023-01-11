@@ -1,9 +1,7 @@
 package com.example.sw0b_001;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
@@ -12,7 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.sw0b_001.HomepageFragments.AvailablePlatformsFragment;
-import com.example.sw0b_001.HomepageFragments.MessagesFragment;
+import com.example.sw0b_001.HomepageFragments.NotificationsFragment;
 import com.example.sw0b_001.HomepageFragments.RecentsFragment;
 import com.example.sw0b_001.HomepageFragments.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -68,7 +66,7 @@ public class HomepageActivity extends AppCompatActivity {
                         textView.setText(R.string.messages_title);
                         textView.setVisibility(View.VISIBLE);
                         fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
-                                        MessagesFragment.class, null)
+                                        NotificationsFragment.class, null)
                                 .setReorderingAllowed(true)
                                 .setCustomAnimations(android.R.anim.slide_in_left,
                                         android.R.anim.slide_out_right,

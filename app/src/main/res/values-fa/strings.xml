@@ -79,4 +79,8 @@
     <string name="language_french">فرانسوی</string>
     <string name="language_farsi">فارسی</string>
     <string name="settings_advanced_category">تنظیمات پیشرفته</string>
+    <string name="messages_title">اطلاعیه</string>
+    <string name="settings_biometric_login">ورود بیومتریک</string>
+    <string name="settings_biometric_login_subtitle">با استفاده از اعتبار بیومتریک خود وارد شوید</string>
+    <string name="settings_biometric_login_description">برای استفاده از اعتبار بیومتریک خود، حسگر را لمس کنید</string>
 </resources>

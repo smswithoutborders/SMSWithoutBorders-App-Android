@@ -54,10 +54,6 @@
         Search
     </string>
 
-    <string name="homepage_messages">
-        Notifications
-    </string>
-
     <string name="homepage_no_recent_messages">No Recent Messages</string>
 
     <string name="message_compose_phonenumber">Contact\'s phone number</string>
@@ -258,5 +254,11 @@
     <string name="messages_title">
         Notifications
     </string>
+
+    <string name="settings_biometric_login">
+        Biometric Login
+    </string>
+    <string name="settings_biometric_login_subtitle">Log in using your biometric credential</string>
+    <string name="settings_biometric_login_description">Touch the sensor to use your biometric credential</string>
 
 </resources>

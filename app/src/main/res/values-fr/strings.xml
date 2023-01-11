@@ -82,4 +82,8 @@
     <string name="language_french">Français</string>
     <string name="language_farsi">Farsi</string>
     <string name="settings_advanced_category">Réglages avancés</string>
+    <string name="messages_title">Avis</string>
+    <string name="settings_biometric_login">Connexion biométrique</string>
+    <string name="settings_biometric_login_subtitle">Connectez-vous à l\'aide de votre identifiant biométrique</string>
+    <string name="settings_biometric_login_description">Touchez le capteur pour utiliser votre identifiant biométrique</string>
 </resources>

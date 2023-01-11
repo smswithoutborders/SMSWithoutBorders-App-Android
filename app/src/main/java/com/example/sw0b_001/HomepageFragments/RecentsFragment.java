@@ -28,6 +28,8 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 
 public class RecentsFragment extends Fragment {
+    // TODO: Implement search with LiveData
+
     public RecentsFragment() {
         // Required empty public constructor
     }

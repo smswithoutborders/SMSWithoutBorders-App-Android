@@ -197,15 +197,15 @@ public class SecurityHandler {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
             android.hardware.biometrics.BiometricPrompt biometricPrompt = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) ?
                 new android.hardware.biometrics.BiometricPrompt.Builder(context)
-                        .setTitle("Biometric Login")
-                        .setSubtitle("Log in using your biometric credential")
-                        .setDescription("Touch the sensor to use your biometric credential")
+                        .setTitle(context.getString(R.string.settings_biometric_login))
+                        .setSubtitle(context.getString(R.string.settings_biometric_login_subtitle))
+                        .setDescription(context.getString(R.string.settings_biometric_login_description))
                         .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
                         .build() :
                 new android.hardware.biometrics.BiometricPrompt.Builder(context)
-                        .setTitle("Biometric Login")
-                        .setSubtitle("Log in using your biometric credential")
-                        .setDescription("Touch the sensor to use your biometric credential")
+                        .setTitle(context.getString(R.string.settings_biometric_login))
+                        .setSubtitle(context.getString(R.string.settings_biometric_login_subtitle))
+                        .setDescription(context.getString(R.string.settings_biometric_login_description))
                         .setDeviceCredentialAllowed(true)
                         .build();
 
