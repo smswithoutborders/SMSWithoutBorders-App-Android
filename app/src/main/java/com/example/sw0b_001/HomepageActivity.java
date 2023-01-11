@@ -38,7 +38,6 @@ public class HomepageActivity extends AppCompatActivity {
                         fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
                                 RecentsFragment.class, null)
                                 .setReorderingAllowed(true)
-                                .addToBackStack(null)
                                 .setCustomAnimations(android.R.anim.slide_in_left,
                                         android.R.anim.slide_out_right,
                                         android.R.anim.fade_in,
@@ -51,7 +50,6 @@ public class HomepageActivity extends AppCompatActivity {
                         fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
                                 SettingsFragment.class, null)
                                 .setReorderingAllowed(true)
-                                .addToBackStack(null)
                                 .setCustomAnimations(android.R.anim.slide_in_left,
                                         android.R.anim.slide_out_right,
                                         android.R.anim.fade_in,
