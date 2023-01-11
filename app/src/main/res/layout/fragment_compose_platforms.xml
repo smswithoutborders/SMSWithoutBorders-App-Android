@@ -6,17 +6,16 @@
     android:layout_height="match_parent"
     android:backgroundTint="#00FFFFFF">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/platforms_toolbar"
+    <TextView
+        android:id="@+id/compose_platform_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/default_dark"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
+        android:text="@string/platforms_compose_header"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/platforms_compose_header" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_synced_platforms"
@@ -30,6 +29,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/platforms_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/compose_platform_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

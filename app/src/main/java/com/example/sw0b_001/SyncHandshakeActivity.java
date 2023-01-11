@@ -79,7 +79,7 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
 
                 processHandshakePayload(jsonObject, gatewayServerId);
 
-                Intent dashboardIntent = new Intent(getApplicationContext(), HomepageOldActivity.class);
+                Intent dashboardIntent = new Intent(getApplicationContext(), HomepageActivity.class);
                 startActivity(dashboardIntent);
                 finish();
             } catch (Exception e) {

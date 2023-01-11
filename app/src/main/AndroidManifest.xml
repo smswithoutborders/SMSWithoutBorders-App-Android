@@ -44,7 +44,7 @@
             android:name=".MessageComposeActivity"
             android:exported="false"
             android:label="@string/message_compose_header"
-            android:parentActivityName=".PlatformsActivity"
+            android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment"
             android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:name=".SplashActivity"
@@ -101,21 +101,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PlatformsActivity"
+            android:name=".HomepageFragments.AvailablePlatformsFragment"
             android:exported="false"
             android:parentActivityName=".HomepageOldActivity"
-            android:theme="@style/Theme.MyAppNoBar" />
-        <activity
-            android:name=".HomepageOldActivity"
-            android:exported="false"
-            android:label=""
-            android:theme="@style/Theme.MyAppNoBar"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".HomepageFragments.SettingsActivity"
-            android:exported="false"
-            android:label=""
-            android:launchMode="singleTask"
             android:theme="@style/Theme.MyAppNoBar" />
         <activity
             android:name=".SettingsActivities.GatewayClientsSettingsActivity"
@@ -135,7 +123,7 @@
         <activity
             android:name=".EmailComposeActivity"
             android:exported="false"
-            android:parentActivityName=".PlatformsActivity"
+            android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment"
             android:theme="@style/Theme.MyAppNoBar" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -147,7 +135,7 @@
             android:name=".TextComposeActivity"
             android:exported="false"
             android:label=""
-            android:parentActivityName=".PlatformsActivity"
+            android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment"
             android:theme="@style/Theme.MyAppNoBar" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

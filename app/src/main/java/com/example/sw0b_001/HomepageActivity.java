@@ -1,17 +1,17 @@
 package com.example.sw0b_001;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.example.sw0b_001.HomepageFragments.AvailablePlatformsFragment;
 import com.example.sw0b_001.HomepageFragments.RecentsFragment;
-import com.example.sw0b_001.HomepageFragments.SettingsActivity;
 import com.example.sw0b_001.HomepageFragments.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -20,35 +20,44 @@ import org.jetbrains.annotations.NotNull;
 
 public class HomepageActivity extends AppCompatActivity {
 
+    FragmentManager fragmentManager = getSupportFragmentManager();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.homepage_bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.recents);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
+                findViewById(R.id.fragment_title).setVisibility(View.GONE);
                 switch(item.getItemId()) {
                     case R.id.recents: {
-                        fragmentTransaction.replace(R.id.homepage_fragment_container_view, RecentsFragment.class, null)
+                        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
+                                RecentsFragment.class, null)
+                                .setReorderingAllowed(true)
+                                .addToBackStack(null)
                                 .setCustomAnimations(android.R.anim.slide_in_left,
                                         android.R.anim.slide_out_right,
                                         android.R.anim.fade_in,
                                         android.R.anim.fade_out)
-                                .commitNow();
+                                .commit();
+                        break;
                     }
                     case R.id.settings: {
-                        fragmentTransaction.replace(R.id.homepage_fragment_container_view, SettingsFragment.class, null)
+                        findViewById(R.id.fragment_title).setVisibility(View.VISIBLE);
+                        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
+                                SettingsFragment.class, null)
+                                .setReorderingAllowed(true)
+                                .addToBackStack(null)
                                 .setCustomAnimations(android.R.anim.slide_in_left,
                                         android.R.anim.slide_out_right,
                                         android.R.anim.fade_in,
                                         android.R.anim.fade_out)
-                                .commitNow();
+                                .commit();
+                        break;
                     }
 
                     case R.id.messages: {
@@ -60,5 +69,17 @@ public class HomepageActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    public void onComposePlatformClick(View view) {
+        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
+                        AvailablePlatformsFragment.class, null)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .setCustomAnimations(android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right,
+                        android.R.anim.fade_in,
+                        android.R.anim.fade_out)
+                .commit();
     }
 }
