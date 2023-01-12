@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -24,6 +24,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".AppLockBiometricActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".MessageComposeActivity"
             android:exported="false"
@@ -150,6 +157,11 @@
         </activity>
         <activity
             android:name=".PasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MyAppNoBar" />
+
+        <activity
+            android:name=".AppLockBiometricActivity"
             android:exported="false"
             android:theme="@style/Theme.MyAppNoBar" />
     </application>
