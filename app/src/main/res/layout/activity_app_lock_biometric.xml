@@ -7,16 +7,18 @@
     android:background="#F6F6F6"
     tools:context=".AppLockBiometricActivity">
 
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="48dp"
         android:text="Enable lockscreen"
         android:textColor="@color/text_box"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
@@ -25,13 +27,12 @@
         android:id="@+id/imageView2"
         android:layout_width="332dp"
         android:layout_height="318dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/page_1" />
-
 
     <Button
         android:id="@+id/button"
@@ -39,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
         android:layout_marginBottom="88dp"
-        android:backgroundTint="#3F51B5"
+        android:backgroundTint="#004aad"
         android:text="Button"
         android:textColor="#FFFDFD"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,14 +51,12 @@
         android:id="@+id/textView3"
         android:layout_width="0dp"
         android:layout_height="73dp"
-        android:layout_marginTop="32dp"
-        android:lines="2"
-        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
         android:paddingLeft="30sp"
         android:paddingRight="30sp"
         android:text="@string/settings_security_and_privacy_enable_lockscreen_open_summary"
-        android:textAlignment="center"
-        android:textColor="#3F51B5"
+        android:textColor="#004aad"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -71,7 +70,7 @@
         android:layout_marginStart="124dp"
         android:layout_marginBottom="104dp"
         android:text="Not now"
-        android:textColor="#3F51B5"
+        android:textColor="#004aad"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
