@@ -101,6 +101,11 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
         securityHandler.storeSharedKey(sharedKey);
     }
 
+    private void processAndStoreMSISDN(String msisdnHash) throws GeneralSecurityException, IOException {
+        SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
+        securityHandler.storeMSISDN(msisdnHash);
+    }
+
     private void processAndUpdateGatewayServerSeedUrl(String gatewayServerSeedsUrl, long gatewayServerId) throws InterruptedException {
         GatewayServersHandler gatewayServersHandler = new GatewayServersHandler(getApplicationContext());
         gatewayServersHandler.updateSeedsUrl(gatewayServerSeedsUrl, gatewayServerId);
@@ -109,6 +114,8 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
     public void processHandshakePayload(JSONObject jsonObject, long gatewayServerId) throws Exception {
         try {
             String sharedKey = jsonObject.getString("shared_key");
+            String msisdnHash = jsonObject.getString("msisdn_hash");
+
             JSONArray platforms = jsonObject.getJSONObject("user_platforms")
                     .getJSONArray("saved_platforms");
 
@@ -117,6 +124,14 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
             processAndUpdateGatewayServerSeedUrl(getString(R.string.default_seeds_url), gatewayServerId);
             processAndStoreSharedKey(sharedKey);
             processAndStorePlatforms(platforms);
+
+            // Note: This affects only notifications so app can survive without it
+            try {
+                processAndStoreMSISDN(msisdnHash);
+            } catch(Exception e ) {
+                e.printStackTrace();
+            }
+
             remoteFetchAndStoreGatewayClients(getString(R.string.default_seeds_url));
 
         } catch (JSONException | InterruptedException | CertificateException | KeyStoreException | NoSuchAlgorithmException | IOException e) {

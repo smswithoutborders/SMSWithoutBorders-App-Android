@@ -9,13 +9,37 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.sw0b_001.Models.RabbitMQ;
 import com.example.sw0b_001.R;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeoutException;
 
 public class NotificationsFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    RabbitMQ rabbitMQ = new RabbitMQ(getContext());
+
+                    rabbitMQ.publish();
+
+//                    rabbitMQ.consume();
+                } catch (IOException | URISyntaxException | NoSuchAlgorithmException | KeyManagementException | TimeoutException e) {
+                    e.printStackTrace();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override

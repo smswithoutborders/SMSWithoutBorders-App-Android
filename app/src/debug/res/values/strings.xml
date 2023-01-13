@@ -23,4 +23,16 @@
     <string name="default_seeds_url" translatable="false">
         http://seeds.smswithoutborders.com
     </string>
+
+    <string name="notifications_queue_name" translatable="false">
+        notifications-smswithoutborders-
+    </string>
+
+    <string name="notifications_exchange_name" translatable="false">
+        notifications-smswithoutborders-exchange
+    </string>
+
+    <string name="notifications_url" translatable="false">
+        staging.smswithoutborders.com
+    </string>
 </resources>

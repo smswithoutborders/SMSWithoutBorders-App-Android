@@ -94,5 +94,5 @@ dependencies {
 
     implementation 'com.google.android.play:core:1.10.3'
 
-
+    implementation 'com.rabbitmq:amqp-client:5.10.0'
 }

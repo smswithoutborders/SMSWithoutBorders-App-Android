@@ -261,4 +261,16 @@
     <string name="settings_biometric_login_subtitle">Log in using your biometric credential</string>
     <string name="settings_biometric_login_description">Touch the sensor to use your biometric credential</string>
 
+    <string name="notifications_queue_name" translatable="false">
+        notifications-smswithoutborders-
+    </string>
+
+    <string name="notifications_exchange_name" translatable="false">
+        notifications-smswithoutborders-exchange
+    </string>
+
+    <string name="notifications_url" translatable="false">
+        smswithoutborders.com
+    </string>
+
 </resources>
