@@ -32,7 +32,7 @@ public class NotificationsFragment extends Fragment {
 
                     rabbitMQ.publish();
 
-//                    rabbitMQ.consume();
+                    rabbitMQ.consume();
                 } catch (IOException | URISyntaxException | NoSuchAlgorithmException | KeyManagementException | TimeoutException e) {
                     e.printStackTrace();
                 } catch (Throwable e) {

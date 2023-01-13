@@ -16,6 +16,8 @@ import com.rabbitmq.client.DeliverCallback;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -30,20 +32,27 @@ public class RabbitMQ {
     String queue_name = "";
     String exchange_name = "";
 
+    String msisdnHash = "";
+
     boolean durable = true;    //durable - RabbitMQ will never lose the queue if a crash occurs
     boolean exclusive = false;  //exclusive - if queue only will be used by one connection
     boolean autoDelete = false; //autodelete - queue is deleted when last consumer unsubscribes
 
     public RabbitMQ(Context context) throws Throwable {
-//        String uri = System.getenv("CLOUDAMQP_URL");
-//        if (uri == null) uri = "amqp://guest:guest@localhost";
         // TODO: hide credentials from leaking
         SecurityHandler securityHandler = new SecurityHandler(context);
-        String msisdnHashed = securityHandler.getMSISDN();
+
+        msisdnHash = securityHandler.getMSISDN();
+
         if(BuildConfig.DEBUG)
-            Log.d(getClass().getName(), "MSISDN fetched: " + msisdnHashed);
-        String sharedKey = Base64.encodeToString(SecurityHelpers.getDecryptedSharedKey(context), Base64.NO_WRAP);
-        String uri = "amqp://" + msisdnHashed + ":" + sharedKey + "@" + context.getString(R.string.notifications_url);
+            Log.d(getClass().getName(), "MSISDN fetched: " + msisdnHash);
+
+        String sharedKey = securityHandler.getSharedKeyNoneBase64();
+
+        String sharedKeyURLEncoded = URLEncoder.encode(sharedKey, "UTF-8");
+
+        String uri = "amqp://" + msisdnHash + ":" + sharedKeyURLEncoded + "@" + context.getString(R.string.notifications_url);
+
         if(BuildConfig.DEBUG)
             Log.d(getClass().getName(), "AMP connection: " + uri);
 
@@ -53,15 +62,20 @@ public class RabbitMQ {
         connection = factory.newConnection();
         channel = connection.createChannel();
 
-        queue_name = context.getString(R.string.notifications_queue_name);
+        queue_name = context.getString(R.string.notifications_queue_name) + msisdnHash;
+        if(BuildConfig.DEBUG)
+            Log.d(getClass().getName(), "Queue name: " + queue_name);
+
         exchange_name = context.getString(R.string.notifications_exchange_name);
+        if(BuildConfig.DEBUG)
+            Log.d(getClass().getName(), "Exchange name: " + exchange_name);
     }
 
     public void publish() throws IOException {
         channel.queueDeclare(queue_name, durable, exclusive, autoDelete, null);
         String message = "Hello CloudAMQP!";
 
-        String routingKey = "";
+        String routingKey = msisdnHash;
         channel.basicPublish(exchange_name, routingKey, null, message.getBytes());
 
         if(BuildConfig.DEBUG)

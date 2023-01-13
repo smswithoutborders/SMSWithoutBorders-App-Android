@@ -114,6 +114,10 @@ public class SecurityHandler {
         return password.toString();
     }
 
+    public String getSharedKeyNoneBase64() {
+        return this.sharedPreferences.getString(SHARED_SECRET_KEY, "");
+    }
+
     public byte[] getSharedKey() {
         String encryptedSharedKey = this.sharedPreferences.getString(SHARED_SECRET_KEY, "");
 
