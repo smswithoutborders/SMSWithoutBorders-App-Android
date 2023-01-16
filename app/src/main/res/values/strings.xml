@@ -273,4 +273,8 @@
         smswithoutborders.com
     </string>
 
+    <string name="no_notifications">
+        No Recent Notifications
+    </string>
+
 </resources>

@@ -1,7 +1,5 @@
 package com.example.sw0b_001.HomepageFragments;
 
-import android.app.Notification;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,19 +19,14 @@ import android.widget.TextView;
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
-import com.example.sw0b_001.Models.NotificationsHandler;
-import com.example.sw0b_001.Models.RabbitMQ;
+import com.example.sw0b_001.Models.Notifications.NotificationsHandler;
 import com.example.sw0b_001.Models.RecentsRecyclerAdapter;
 import com.example.sw0b_001.Models.RecentsViewModel;
 import com.example.sw0b_001.R;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 public class RecentsFragment extends Fragment {
     // TODO: Implement search with LiveData
@@ -48,10 +40,7 @@ public class RecentsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if(!NotificationsHandler.checkNotificationsListenersRunning(getContext())) {
-           NotificationsHandler.beginNotificationsListeners(getContext());
-        }
+        NotificationsHandler.beginNotificationsListeners(getContext());
     }
 
     @Override

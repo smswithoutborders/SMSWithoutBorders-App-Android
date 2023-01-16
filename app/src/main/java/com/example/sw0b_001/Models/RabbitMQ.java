@@ -62,7 +62,7 @@ public class RabbitMQ {
         factory.setHost(context.getString(R.string.notifications_url));
         factory.setPort(5672);
         factory.setConnectionTimeout(30000);
-        factory.setAutomaticRecoveryEnabled(false);
+//        factory.setAutomaticRecoveryEnabled(false);
 
         setFactoryExceptionHandlers();
 
@@ -102,14 +102,7 @@ public class RabbitMQ {
             Log.d(getClass().getName(), "[+] RMQ published successfully!");
     }
 
-    public void consume() throws IOException {
-        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-            String message = new String(delivery.getBody(), "UTF-8");
-
-            if(BuildConfig.DEBUG)
-                Log.d(getClass().getName(), "[x] Received '" + message + "'");
-        };
-
+    public void consume(DeliverCallback deliverCallback) throws IOException {
         channel.queueDeclare(queue_name, durable, exclusive, autoDelete, null);
         channel.basicConsume(queue_name, true, deliverCallback, consumerTag -> { });
     }

@@ -86,4 +86,5 @@
     <string name="settings_biometric_login">Connexion biométrique</string>
     <string name="settings_biometric_login_subtitle">Connectez-vous à l\'aide de votre identifiant biométrique</string>
     <string name="settings_biometric_login_description">Touchez le capteur pour utiliser votre identifiant biométrique</string>
+    <string name="no_notifications">Aucune notification récente</string>
 </resources>
