@@ -18,6 +18,9 @@ public class Notifications {
     @ColumnInfo(name="notifications_message")
     public String message;
 
+    @ColumnInfo(name="notifications_seen", defaultValue = "false")
+    public boolean seen;
+
     @Override
     public boolean equals(@Nullable Object obj) {
         if(obj instanceof Notifications) {
@@ -29,4 +32,6 @@ public class Notifications {
         }
         return false;
     }
+
+
 }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.room.Room;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
@@ -47,6 +49,15 @@ public class NotificationsHandler {
         return false;
     }
 
+
+    public static final Migration MIGRATION_9_10 = new Migration(9, 10) {
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE Notifications "
+                    + " ADD COLUMN seen BOOLEAN DEFAULT 0");
+        }
+    };
+
     public static void storeNotification(Context context, long id, String message) {
         Notifications notifications = new Notifications();
         notifications.id = id;
@@ -54,8 +65,12 @@ public class NotificationsHandler {
         notifications.date = new Date().getTime();
 
         // TODO: add to some database and get in notifications
-        Datastore databaseConnector = Room.databaseBuilder(context, Datastore.class,
-                Datastore.DatabaseName).build();
+//        Datastore databaseConnector = Room.databaseBuilder(context,
+//                Datastore.class, Datastore.DatabaseName)
+//                .addMigrations(MIGRATION_9_10)
+//                .build();
+        Datastore databaseConnector = Room.databaseBuilder(context,
+                        Datastore.class, Datastore.DatabaseName).build();
         NotificationsDAO notificationsDAO = databaseConnector.notificationsDAO();
         notificationsDAO.insert(notifications);
     }
