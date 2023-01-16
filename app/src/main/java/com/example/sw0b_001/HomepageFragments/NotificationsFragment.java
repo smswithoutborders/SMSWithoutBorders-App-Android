@@ -23,23 +23,6 @@ public class NotificationsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    RabbitMQ rabbitMQ = new RabbitMQ(getContext());
-
-                    rabbitMQ.publish();
-
-                    rabbitMQ.consume();
-                } catch (IOException | URISyntaxException | NoSuchAlgorithmException | KeyManagementException | TimeoutException e) {
-                    e.printStackTrace();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
     }
 
     @Override

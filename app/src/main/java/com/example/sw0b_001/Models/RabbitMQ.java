@@ -12,7 +12,11 @@ import com.example.sw0b_001.Security.SecurityHelpers;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DeliverCallback;
+import com.rabbitmq.client.ExceptionHandler;
+import com.rabbitmq.client.TopologyRecoveryException;
+import com.rabbitmq.client.impl.DefaultExceptionHandler;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -34,12 +38,15 @@ public class RabbitMQ {
 
     String msisdnHash = "";
 
+    String connectionName = "Android-User";
+
     boolean durable = true;    //durable - RabbitMQ will never lose the queue if a crash occurs
     boolean exclusive = false;  //exclusive - if queue only will be used by one connection
     boolean autoDelete = false; //autodelete - queue is deleted when last consumer unsubscribes
 
     public RabbitMQ(Context context) throws Throwable {
         // TODO: hide credentials from leaking
+        // https://www.rabbitmq.com/api-guide.html#connecting
         SecurityHandler securityHandler = new SecurityHandler(context);
 
         msisdnHash = securityHandler.getMSISDN();
@@ -49,18 +56,15 @@ public class RabbitMQ {
 
         String sharedKey = securityHandler.getSharedKeyNoneBase64();
 
-        String sharedKeyURLEncoded = URLEncoder.encode(sharedKey, "UTF-8");
-
-        String uri = "amqp://" + msisdnHash + ":" + sharedKeyURLEncoded + "@" + context.getString(R.string.notifications_url);
-
-        if(BuildConfig.DEBUG)
-            Log.d(getClass().getName(), "AMP connection: " + uri);
-
-        factory.setUri(uri);
+        factory.setUsername(msisdnHash);
+        factory.setPassword(sharedKey);
+        factory.setVirtualHost("/");
+        factory.setHost(context.getString(R.string.notifications_url));
+        factory.setPort(5672);
         factory.setConnectionTimeout(30000);
+        factory.setAutomaticRecoveryEnabled(false);
 
-        connection = factory.newConnection();
-        channel = connection.createChannel();
+        setFactoryExceptionHandlers();
 
         queue_name = context.getString(R.string.notifications_queue_name) + msisdnHash;
         if(BuildConfig.DEBUG)
@@ -71,9 +75,25 @@ public class RabbitMQ {
             Log.d(getClass().getName(), "Exchange name: " + exchange_name);
     }
 
-    public void publish() throws IOException {
+    public Connection getConnection() {
+        return this.connection;
+    }
+
+    public boolean isOpen() {
+        return connection != null && connection.isOpen();
+    }
+
+    public void startConnection() throws IOException, TimeoutException {
+        connection = factory.newConnection(connectionName);
+        channel = connection.createChannel();
+    }
+
+    private void setFactoryExceptionHandlers() {
+        factory.setExceptionHandler(new DefaultExceptionHandler());
+    }
+
+    public void publish(String message) throws IOException {
         channel.queueDeclare(queue_name, durable, exclusive, autoDelete, null);
-        String message = "Hello CloudAMQP!";
 
         String routingKey = msisdnHash;
         channel.basicPublish(exchange_name, routingKey, null, message.getBytes());
