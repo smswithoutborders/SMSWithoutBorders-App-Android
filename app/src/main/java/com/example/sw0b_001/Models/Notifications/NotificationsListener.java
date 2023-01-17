@@ -59,7 +59,11 @@ public class NotificationsListener extends Worker {
                         long id = jsonObject.getLong("id");
                         String message = jsonObject.getString("message");
 
-                        NotificationsHandler.storeNotification(context, id, message);
+                        String type = new String();
+                        if(jsonObject.has("type"))
+                            type = jsonObject.getString("type");
+
+                        NotificationsHandler.storeNotification(context, id, message, type);
 
                     } catch (JSONException e) {
                         e.printStackTrace();

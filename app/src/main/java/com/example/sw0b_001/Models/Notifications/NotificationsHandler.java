@@ -58,10 +58,11 @@ public class NotificationsHandler {
         }
     };
 
-    public static void storeNotification(Context context, long id, String message) {
+    public static void storeNotification(Context context, long id, String message, String type) {
         Notifications notifications = new Notifications();
         notifications.id = id;
         notifications.message = message;
+        notifications.type = type;
         notifications.date = new Date().getTime();
 
         // TODO: add to some database and get in notifications
