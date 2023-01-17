@@ -1,9 +1,5 @@
 <resources>
 
-    <string name="official_site">
-        https://staging.smswithoutborders.com
-    </string>
-
     <string name="privacy_policy">
         https://staging.smswithoutborders.com/privacy-policy
     </string>

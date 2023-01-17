@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -56,7 +57,7 @@ public class SplashActivity extends AppCompactActivityCustomized {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            securityHandler = new SecurityHandler(getBaseContext());
+            securityHandler = new SecurityHandler(getApplicationContext());
             activitySplashBinding = ActivitySplashBinding.inflate(getLayoutInflater());
             setContentView(activitySplashBinding.getRoot());
 

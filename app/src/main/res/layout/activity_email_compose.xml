@@ -35,7 +35,6 @@
         app:layout_constraintTop_toBottomOf="@+id/tweet_toolbar">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layer_email_to"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:boxBackgroundColor="@color/default_dark">
@@ -49,7 +48,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layer_email_cc"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -64,7 +62,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layer_email_bcc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:boxBackgroundColor="@color/default_dark">
@@ -78,7 +75,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layer_email_subject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"

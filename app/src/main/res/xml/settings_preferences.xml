@@ -16,13 +16,15 @@
     <PreferenceCategory
         app:key="accessibility_settings"
         app:title="@string/settings_accessibility_category">
-        <Preference
+        <ListPreference
             app:icon="@drawable/ic_round_language_24"
-            app:key="language_settings"
-            app:summary="@string/settings_language_summary"
-            app:fragment="com.example.sw0b_001.SettingsActivities.SecurityPrivacyFragment"
-            app:title="@string/settings_language" >
-        </Preference>
+            app:defaultValue="@string/language_english_value"
+            app:entries="@array/language_options"
+            app:entryValues="@array/language_values"
+            app:iconSpaceReserved="false"
+            app:key="language_options"
+            app:title="@string/settings_language"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
     <PreferenceCategory

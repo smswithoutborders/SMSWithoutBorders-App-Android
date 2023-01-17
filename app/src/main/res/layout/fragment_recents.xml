@@ -50,7 +50,6 @@
         app:startIconTint="@color/white">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/recent_search_edittext"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/homepage_search"
@@ -100,7 +99,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/platform_select_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
