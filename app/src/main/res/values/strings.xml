@@ -160,7 +160,7 @@
     <string name="settings_security_and_privacy_enable_lockscreen_read_encrypted">
         Enable lockscreen for decryption
     </string>
-    <string name="settings_security_and_privacy_enable_lockscreen_read_encrypted_summary">"Require lockscreen pin/fingerprint when decryption is required in app e.g opening up         previously messages     "</string>
+    <string name="settings_security_and_privacy_enable_lockscreen_read_encrypted_summary">"Require lockscreen pin/fingerprint when decryption is required in app e.g opening up previously messages"</string>
 
     <string name="settings_pin_preference_category">
         Custom PIN options
