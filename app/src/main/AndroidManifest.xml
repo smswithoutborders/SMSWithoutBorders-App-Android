@@ -158,12 +158,9 @@
         <activity
             android:name=".PasswordActivity"
             android:exported="false"
-            android:theme="@style/Theme.MyAppNoBar" />
+            android:theme="@style/Theme.MyAppNoBar" >
+    </activity>
 
-        <activity
-            android:name=".AppLockBiometricActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MyAppNoBar" />
     </application>
 
 </manifest>
