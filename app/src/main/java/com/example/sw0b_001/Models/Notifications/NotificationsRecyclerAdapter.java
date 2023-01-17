@@ -30,8 +30,8 @@ public class NotificationsRecyclerAdapter extends RecyclerView.Adapter<Notificat
     int renderLayout;
 
     public NotificationsRecyclerAdapter(Context context, int renderLayout) {
-        context = context;
-        renderLayout = renderLayout;
+        this.context = context;
+        this.renderLayout = renderLayout;
     }
 
     @NonNull

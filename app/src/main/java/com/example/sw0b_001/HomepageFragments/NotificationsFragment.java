@@ -14,9 +14,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.example.sw0b_001.BuildConfig;
+import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.Notifications.Notifications;
+import com.example.sw0b_001.Models.Notifications.NotificationsDAO;
 import com.example.sw0b_001.Models.Notifications.NotificationsHandler;
 import com.example.sw0b_001.Models.Notifications.NotificationsRecyclerAdapter;
 import com.example.sw0b_001.Models.Notifications.NotificationsViewModel;
@@ -34,7 +37,6 @@ public class NotificationsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        NotificationsHandler.beginNotificationsListeners(getContext());
     }
 
     @Override
@@ -57,7 +59,12 @@ public class NotificationsFragment extends Fragment {
 
         try {
             TextView noRecentNotifications = view.findViewById(R.id.no_recent_notifications);
-            notificationsViewModel.getNotifications().observe(getViewLifecycleOwner(), new Observer<List<Notifications>>() {
+
+            Datastore databaseConnector = Room.databaseBuilder(getContext(), Datastore.class,
+                    Datastore.DatabaseName).build();
+
+            NotificationsDAO notificationsDAO = databaseConnector.notificationsDAO();
+            notificationsViewModel.getNotifications(notificationsDAO).observe(getViewLifecycleOwner(), new Observer<List<Notifications>>() {
                 @Override
                 public void onChanged(List<Notifications> notificationsList) {
                     Log.d(getClass().getName(), "Notifications list should come");

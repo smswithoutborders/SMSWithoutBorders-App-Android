@@ -23,17 +23,18 @@ import java.util.Set;
 import java.util.concurrent.TimeoutException;
 
 public class NotificationsViewModel extends ViewModel {
-    public MutableLiveData<List<Notifications>> notificationsLiveData;
+    public LiveData<List<Notifications>> notifications;
 
-    public LiveData<List<Notifications>> getNotifications() throws Throwable {
-        if(notificationsLiveData == null) {
-            notificationsLiveData = new MutableLiveData<>();
-            loadNotifications();
+    public LiveData<List<Notifications>> getNotifications(NotificationsDAO notificationsDAO) throws Throwable {
+        if(notifications == null) {
+            notifications = new MutableLiveData<>();
+            loadNotifications(notificationsDAO);
         }
 
-        return notificationsLiveData;
+        return notifications;
     }
 
-    private void loadNotifications() {
+    private void loadNotifications(NotificationsDAO notificationsDAO) {
+        notifications = notificationsDAO.getAll();
     }
 }
