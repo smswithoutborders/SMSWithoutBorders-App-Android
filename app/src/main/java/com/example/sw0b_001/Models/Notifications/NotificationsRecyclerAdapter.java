@@ -3,6 +3,7 @@ package com.example.sw0b_001.Models.Notifications;
 import static com.example.sw0b_001.Models.RecentsRecyclerAdapter.DIFF_CALLBACK;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,11 @@ import com.example.sw0b_001.R;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class NotificationsRecyclerAdapter extends RecyclerView.Adapter<NotificationsRecyclerAdapter.ViewHolder>{
@@ -46,7 +52,31 @@ public class NotificationsRecyclerAdapter extends RecyclerView.Adapter<Notificat
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Notifications notifications = mDiffer.getCurrentList().get(position);
 
+        holder.type.setText(notifications.message);
         holder.message.setText(notifications.message);
+//        holder.date.setText(notifications.date);
+
+        Date date = new Date(notifications.date);
+        if(DateUtils.isToday(notifications.date)) {
+            DateFormat format = new SimpleDateFormat("HH:mm a");
+            holder.date.setText(format.format(date));
+        }
+        else {
+            DateFormat format = new SimpleDateFormat("MMMM dd");
+
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(date);
+
+            holder.date.setText(format.format(calendar.getTime()));
+        }
+
+        if (DateUtils.isToday(notifications.date)) {
+            holder.date.setText("Today");
+        }
+        else {
+            DateFormat dateFormat = new SimpleDateFormat("MMM dd");
+            holder.date.setText(dateFormat.format(notifications.date));
+        }
     }
 
 
@@ -61,10 +91,14 @@ public class NotificationsRecyclerAdapter extends RecyclerView.Adapter<Notificat
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView message;
+        TextView type;
+        TextView date;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            this.message = itemView.findViewById(R.id.notification_text);
+            this.type = itemView.findViewById(R.id.notification_text);
+            this.message = itemView.findViewById(R.id.notification_summary);
+            this.date = itemView.findViewById(R.id.notification_date);
         }
     }
 

@@ -18,6 +18,9 @@ public class Notifications {
     @ColumnInfo(name="notifications_message")
     public String message;
 
+    @ColumnInfo(name="notifications_message", defaultValue = "app_notification")
+    public String type;
+
     @ColumnInfo(name="notifications_seen", defaultValue = "false")
     public boolean seen;
 
@@ -28,6 +31,7 @@ public class Notifications {
 
             return notifications.id == this.id &&
                     notifications.message.equals(this.message) &&
+                    notifications.type.equals(this.type) &&
                     notifications.date == this.date;
         }
         return false;

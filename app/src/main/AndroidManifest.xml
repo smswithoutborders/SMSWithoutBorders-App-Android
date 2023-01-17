@@ -166,6 +166,10 @@
             android:name=".PasswordActivity"
             android:exported="false"
             android:theme="@style/Theme.MyAppNoBar" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
