@@ -15,16 +15,15 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="10dp"
-        app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="30dp"
+        app:cardBackgroundColor="@color/text_box"
+        app:cardCornerRadius="50dp"
         app:cardElevation="10dp"
         app:contentPadding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="@color/main_icon_background"
-        app:strokeWidth=".75dp">
+      >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
