@@ -1,16 +1,8 @@
 <resources>
     <string name="app_name">SMSWOB</string>
 
-    <string name="official_site">
-        https://smswithoutborders.com
-    </string>
-
     <string name="privacy_policy">
         https://smswithoutborders.com/privacy-policy
-    </string>
-
-    <string name="gateway_client_seeds">
-        http://seeds.smswithoutborders.com
     </string>
 
     <string name="smswithoutborders_official_site_login">
@@ -45,6 +37,7 @@
 
     <string name="gateway_clients_settings_operator_id">Your Operator ID</string>
 
+    <!-- Homepage menu -->
     <string name="homepage_recent">
         Recent
     </string>
@@ -79,8 +72,6 @@
 
     <string name="settings_automatically_stored_access_warning">Warning! Resyncing will clear all previously sent messages.</string>
 
-    <string name="settings_manual_stored_access">Refresh with QR Scanner</string>
-
     <string name="synchronize_type_header">Synchronize</string>
 
     <string name="synchronize_type_header_automatic_synchronize_text_continue">Continue</string>
@@ -110,8 +101,6 @@
     <string name="platforms_compose_header">
         Compose for Stored Access
     </string>
-
-    <string name="text_compose_compose">Compose</string>
 
     <!-- settings saved platform -->
     <string name="settings_custom_platforms_category">
@@ -202,12 +191,6 @@
     <string name="password_empty">Password cannot be empty!</string>
 
 
-    <string name="settings_language_preferred_language_text">Select your preferred language</string>
-
-    <string name="settings_language_supported_language_en">English</string>
-
-    <string name="settings_language_supported_language_fr">French</string>
-
     <string name="default_gateway_MSISDN_0" translatable="false">+237679466332</string>
 
     <string name="default_gateway_MSISDN_2" translatable="false">
@@ -221,12 +204,6 @@
     </string>
 
     <string name="message_compose_groups_name">User\'s name</string>
-
-    <string name="gateway_client_settings_add_custom_gateway_text">
-       Add new Gateway Client Address
-    </string>
-
-    <string name="gateway_client_settings_add_custom_gateway_cancel_btn">Cancel</string>
 
     <string name="gateway_client_settings_add_custom_gateway_add_btn">Add</string>
 
@@ -248,5 +225,30 @@
         Select an SMS messaging app
     </string>
 
+    <string name="messages_title">
+        Notifications
+    </string>
+
+    <string name="settings_biometric_login">
+        Biometric Login
+    </string>
+    <string name="settings_biometric_login_subtitle">Log in using your biometric credential</string>
+    <string name="settings_biometric_login_description">Touch the sensor to use your biometric credential</string>
+
+    <string name="notifications_queue_name" translatable="false">
+        notifications-smswithoutborders-
+    </string>
+
+    <string name="notifications_exchange_name" translatable="false">
+        notifications-smswithoutborders-exchange
+    </string>
+
+    <string name="notifications_url" translatable="false">
+        smswithoutborders.com
+    </string>
+
+    <string name="no_notifications">
+        No Recent Notifications
+    </string>
 
 </resources>

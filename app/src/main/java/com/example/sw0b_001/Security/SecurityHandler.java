@@ -59,12 +59,11 @@ public class SecurityHandler {
     public static final String DEFAULT_AES_ALGORITHM = "AES/CBC/PKCS5Padding";
     public static final String DEFAULT_KEYSTORE_PROVIDER = "AndroidKeyStore";
     final String SHARED_SECRET_KEY = "SHARED_SECRET_KEY";
+    final String MSISDN_HASH = "MSISDN_HASH";
 
     public SecurityHandler() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
         this.keyStore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
         this.keyStore.load(null);
-
-
     }
 
     public KeyStore getKeyStore() throws KeyStoreException, CertificateException, IOException, NoSuchAlgorithmException {
@@ -115,12 +114,52 @@ public class SecurityHandler {
         return password.toString();
     }
 
+    public String getSharedKeyNoneBase64() {
+        return this.sharedPreferences.getString(SHARED_SECRET_KEY, "");
+    }
+
     public byte[] getSharedKey() {
         String encryptedSharedKey = this.sharedPreferences.getString(SHARED_SECRET_KEY, "");
 
         byte[] encryptedSharedKeyDecoded = Base64.decode(encryptedSharedKey, Base64.DEFAULT);
 
         return encryptedSharedKeyDecoded;
+    }
+
+    public String getMSISDN() throws GeneralSecurityException, IOException {
+        SharedPreferences encryptedSharedPreferences = EncryptedSharedPreferences.create(
+                context,
+                MSISDN_HASH,
+                this.masterKeyAlias,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM );
+
+        return encryptedSharedPreferences.getString(MSISDN_HASH, "");
+    }
+
+    public void storeMSISDN(String msisdnHash) throws GeneralSecurityException, IOException {
+        SharedPreferences encryptedSharedPreferences = EncryptedSharedPreferences.create(
+                context,
+                MSISDN_HASH,
+                this.masterKeyAlias,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM );
+
+        SharedPreferences.Editor sharedPreferencesEditor = encryptedSharedPreferences.edit();
+
+        if(BuildConfig.DEBUG)
+            Log.d(getClass().getName(), "storing MSISDN: " + msisdnHash);
+        sharedPreferencesEditor.putString(MSISDN_HASH, msisdnHash);
+        if(!sharedPreferencesEditor.commit()) {
+            if(BuildConfig.DEBUG)
+                Log.e(getClass().getName(), "- Failed to store MSISDN");
+            throw new RuntimeException("Failed to store MSISDN");
+        }
+        else {
+            if(BuildConfig.DEBUG)
+                Log.i(getClass().getName(), "+ MSISDN hash stored successfully");
+        }
+
     }
 
     public void storeSharedKey(String sharedKey) throws GeneralSecurityException, IOException {
@@ -133,7 +172,7 @@ public class SecurityHandler {
 
         SharedPreferences.Editor sharedPreferencesEditor = encryptedSharedPreferences.edit();
 
-        sharedPreferencesEditor.putString(this.SHARED_SECRET_KEY, sharedKey);
+        sharedPreferencesEditor.putString(SHARED_SECRET_KEY, sharedKey);
         if(!sharedPreferencesEditor.commit()) {
             Log.e(getClass().getName(), "- Failed to store shared key!");
             throw new RuntimeException("Failed to store shared key!");
@@ -197,15 +236,15 @@ public class SecurityHandler {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
             android.hardware.biometrics.BiometricPrompt biometricPrompt = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) ?
                 new android.hardware.biometrics.BiometricPrompt.Builder(context)
-                        .setTitle("Biometric Login")
-                        .setSubtitle("Log in using your biometric credential")
-                        .setDescription("Touch the sensor to use your biometric credential")
+                        .setTitle(context.getString(R.string.settings_biometric_login))
+                        .setSubtitle(context.getString(R.string.settings_biometric_login_subtitle))
+                        .setDescription(context.getString(R.string.settings_biometric_login_description))
                         .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
                         .build() :
                 new android.hardware.biometrics.BiometricPrompt.Builder(context)
-                        .setTitle("Biometric Login")
-                        .setSubtitle("Log in using your biometric credential")
-                        .setDescription("Touch the sensor to use your biometric credential")
+                        .setTitle(context.getString(R.string.settings_biometric_login))
+                        .setSubtitle(context.getString(R.string.settings_biometric_login_subtitle))
+                        .setDescription(context.getString(R.string.settings_biometric_login_description))
                         .setDeviceCredentialAllowed(true)
                         .build();
 

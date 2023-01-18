@@ -1,5 +1,6 @@
 package com.example.sw0b_001.Models.EncryptedContent;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -13,7 +14,7 @@ public interface EncryptedContentDAO {
     long insert(EncryptedContent encryptedContent);
 
     @Query("SELECT * FROM EncryptedContent")
-    List<EncryptedContent> getAll();
+    LiveData<List<EncryptedContent>> getAll();
 
     @Query("DELETE FROM EncryptedContent")
     void deleteAll();

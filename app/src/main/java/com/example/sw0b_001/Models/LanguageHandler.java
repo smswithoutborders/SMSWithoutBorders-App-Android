@@ -1,27 +1,33 @@
 package com.example.sw0b_001.Models;
 
-import android.app.LocaleConfig;
+import android.app.LocaleManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.util.DisplayMetrics;
+import android.os.LocaleList;
 
-import androidx.preference.PreferenceManager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.os.LocaleListCompat;
 
 import java.util.Locale;
 
 public class LanguageHandler {
 
+    public static void updateLanguage(Resources resources, String language) {
+//        Configuration config = resources.getConfiguration();
+//        Locale locale = new Locale(language);
+//        config.setLocale(locale);
+//
+//        Locale.setDefault(locale);
+//        resources.updateConfiguration(config, resources.getDisplayMetrics());
+//
+//        AppCompatDelegate.setApplicationLocales();
 
-    public static boolean updateLanguage(Resources resources, String language) {
-        Configuration config = resources.getConfiguration();
-        Locale locale = new Locale(language);
-        config.setLocale(locale);
+        LocaleListCompat appLocale = LocaleListCompat.forLanguageTags(language);
+        // Call this on the main thread as it may require Activity.restart()
+        AppCompatDelegate.setApplicationLocales(appLocale);
 
-        Locale.setDefault(locale);
-        resources.updateConfiguration(config, resources.getDisplayMetrics());
-
-        return true;
     }
 }

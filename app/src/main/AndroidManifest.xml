@@ -15,149 +15,158 @@
 
 <uses-feature android:name="android.hardware.camera" />
 <uses-feature android:name="android.hardware.camera.autofocus" />
+    <application
+        android:icon="@mipmap/main_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/main_icon_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MyApp"
+        android:localeConfig="@xml/locales_config"
+        android:usesCleartextTraffic="true" >
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
+        </service>
 
-<application
-    android:icon="@mipmap/main_icon"
-    android:label="@string/app_name"
-    android:roundIcon="@mipmap/main_icon_round"
-    android:supportsRtl="true"
-    android:theme="@style/Theme.MyApp"
-    android:usesCleartextTraffic="true">
-    <activity
-        android:name=".AppLockBiometricActivity"
-        android:exported="false">
-        <meta-data
-            android:name="android.app.lib_name"
-            android:value="" />
-    </activity>
-    <activity
-        android:name=".MessageComposeActivity"
-        android:exported="false"
-        android:label="@string/message_compose_header"
-        android:parentActivityName=".PlatformsActivity"
-        android:theme="@style/Theme.MyAppNoBar" />
-    <activity
-        android:name=".SplashActivity"
-        android:configChanges="orientation|keyboardHidden|screenSize"
-        android:exported="true"
-        android:launchMode="singleTask"
-        android:theme="@style/Theme.MaterialComponents.Fullscreen">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name=".HomepageActivity"
+            android:theme="@style/Theme.MyAppNoBar"
+            android:launchMode="singleTask"
+            android:exported="false" >
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".MessagesActivity"
+            android:exported="false" >
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".MessageComposeActivity"
+            android:exported="false"
+            android:label="@string/message_compose_header"
+            android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment"
+            android:theme="@style/Theme.MyAppNoBar" />
+        <activity
+            android:name=".SplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.MaterialComponents.Fullscreen" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-    <activity
-        android:name=".SyncHandshakeActivity"
-        android:exported="false"
-        android:theme="@style/Theme.MyAppNoBar" />
-    <activity
-        android:name=".WelcomeActivity"
-        android:exported="false"
-        android:theme="@style/Theme.MyAppNoBar" />
-    <activity
-        android:name=".SyncInitiateActivity"
-        android:exported="true"
-        android:label=""
-        android:parentActivityName=".WelcomeActivity">
-        <intent-filter android:label="pending_name">
-            <action android:name="android.intent.action.VIEW" />
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SyncHandshakeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MyAppNoBar" />
+        <activity
+            android:name=".WelcomeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MyAppNoBar" />
+        <activity
+            android:name=".SyncInitiateActivity"
+            android:exported="true"
+            android:label=""
+            android:parentActivityName=".WelcomeActivity" >
+            <intent-filter android:label="pending_name" >
+                <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="developers.smswithoutborders.com"
+                    android:pathPrefix="/v2/sync/users/"
+                    android:scheme="apps" />
+                <data
+                    android:host="staging.smswithoutborders.com"
+                    android:pathPrefix="/v2/sync/users/"
+                    android:scheme="apps" />
+                <data
+                    android:host="staging.smswithoutborders.com"
+                    android:pathPrefix="/v2/sync/users/"
+                    android:scheme="app" />
+                <data
+                    android:host="staging.smswithoutborders.com"
+                    android:pathPrefix="/sign-up/"
+                    android:scheme="intent" />
+                <data
+                    android:host="smswithoutborders.com"
+                    android:pathPrefix="/sign-up/"
+                    android:scheme="intent" />
+                <!-- note that the leading "/" is required for pathPrefix -->
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".HomepageFragments.AvailablePlatformsFragment"
+            android:exported="false"
+            android:parentActivityName=".HomepageOldActivity"
+            android:theme="@style/Theme.MyAppNoBar" />
+        <activity
+            android:name=".SettingsActivities.GatewayClientsSettingsActivity"
+            android:exported="false"
+            android:parentActivityName=".HomepageOldActivity"
+            android:theme="@style/Theme.MyAppNoBar" />
+        <activity
+            android:name=".AddNewGatewayActivity"
+            android:exported="false"
+            android:parentActivityName=".SettingsActivities.GatewayClientsSettingsActivity"
+            android:theme="@style/Theme.MyAppNoBar" />
+        <activity
+            android:name=".SettingsActivities.StoreAccessSettingsActivity"
+            android:exported="false"
+            android:parentActivityName=".HomepageFragments.SettingsActivity"
+            android:theme="@style/Theme.MyAppNoBar" />
+        <activity
+            android:name=".EmailComposeActivity"
+            android:exported="false"
+            android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment"
+            android:theme="@style/Theme.MyAppNoBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
 
-            <data
-                android:host="developers.smswithoutborders.com"
-                android:pathPrefix="/v2/sync/users/"
-                android:scheme="apps" />
-            <data
-                android:host="staging.smswithoutborders.com"
-                android:pathPrefix="/v2/sync/users/"
-                android:scheme="apps" />
-            <data
-                android:host="staging.smswithoutborders.com"
-                android:pathPrefix="/v2/sync/users/"
-                android:scheme="app" />
-            <data
-                android:host="staging.smswithoutborders.com"
-                android:pathPrefix="/sign-up/"
-                android:scheme="intent" />
-            <data
-                android:host="smswithoutborders.com"
-                android:pathPrefix="/sign-up/"
-                android:scheme="intent" />
-            <!-- note that the leading "/" is required for pathPrefix -->
-        </intent-filter>
-    </activity>
-    <activity
-        android:name=".PlatformsActivity"
-        android:exported="false"
-        android:parentActivityName=".HomepageActivity"
-        android:theme="@style/Theme.MyAppNoBar" />
-    <activity
-        android:name=".HomepageActivity"
-        android:exported="false"
-        android:label=""
-        android:theme="@style/Theme.MyAppNoBar"
-        android:windowSoftInputMode="adjustPan" />
-    <activity
-        android:name=".SettingsActivities.SettingsActivity"
-        android:exported="false"
-        android:label=""
-        android:launchMode="singleTask"
-        android:theme="@style/Theme.MyAppNoBar" />
-    <activity
-        android:name=".SettingsActivities.GatewayClientsSettingsActivity"
-        android:exported="false"
-        android:parentActivityName=".HomepageActivity"
-        android:theme="@style/Theme.MyAppNoBar" />
-    <activity
-        android:name=".AddNewGatewayActivity"
-        android:exported="false"
-        android:parentActivityName=".SettingsActivities.GatewayClientsSettingsActivity"
-        android:theme="@style/Theme.MyAppNoBar" />
-    <activity
-        android:name=".SettingsActivities.StoreAccessSettingsActivity"
-        android:exported="false"
-        android:parentActivityName=".SettingsActivities.SettingsActivity"
-        android:theme="@style/Theme.MyAppNoBar" />
-    <activity
-        android:name=".EmailComposeActivity"
-        android:exported="false"
-        android:parentActivityName=".PlatformsActivity"
-        android:theme="@style/Theme.MyAppNoBar">
-        <intent-filter>
-            <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TextComposeActivity"
+            android:exported="false"
+            android:label=""
+            android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment"
+            android:theme="@style/Theme.MyAppNoBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
 
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-    </activity>
-    <activity
-        android:name=".TextComposeActivity"
-        android:exported="false"
-        android:label=""
-        android:parentActivityName=".PlatformsActivity"
-        android:theme="@style/Theme.MyAppNoBar">
-        <intent-filter>
-            <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".QRScannerActivity"
+            android:exported="false"
+            android:label=""
+            android:parentActivityName=".PasswordActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".PasswordActivity" />
+        </activity>
+        <activity
+            android:name=".PasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MyAppNoBar" />
 
-            <category android:name="android.intent.category.DEFAULT" />
-        </intent-filter>
-    </activity>
-    <activity
-        android:name=".QRScannerActivity"
-        android:exported="false"
-        android:label=""
-        android:parentActivityName=".PasswordActivity">
         <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value=".PasswordActivity" />
-    </activity>
-    <activity
-        android:name=".PasswordActivity"
-        android:exported="false"
-        android:theme="@style/Theme.MyAppNoBar" />
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
 
     <activity
         android:name=".MessageLockBiometrics"

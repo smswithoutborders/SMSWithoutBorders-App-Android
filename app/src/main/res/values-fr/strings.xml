@@ -3,7 +3,6 @@
     <string name="app_name">SMSWithoutBorders</string>
     <string name="homepage_recent">Récent</string>
     <string name="privacy_policy">https://smswithoutborders.com/privacy-policy</string>
-    <string name="gateway_client_seeds">"http://seeds.smswithoutborders.com     "</string>
     <string name="smswithoutborders_official_site_login">https://smswithoutborders.com/login/fr</string>
     <string name="smswithoutborders_official_site_signup">https://smswithoutborders.com/sign-up/fr</string>
     <string name="smswithoutborders_official_site_signup_intent">"intent://smswithoutborders.com/sign-up     "</string>
@@ -27,7 +26,6 @@
     <string name="settings_settings">Paramètres</string>
     <string name="settings_automatically_stored_access">Rafraîchissement automatique Accès stocké</string>
     <string name="settings_automatically_stored_access_warning">Attention ! La resynchronisation efface tous les messages envoyés précédemment.</string>
-    <string name="settings_manual_stored_access">Rafraîchir avec le scanner QR</string>
     <string name="synchronize_type_header">Synchroniser</string>
     <string name="synchronize_type_header_automatic_synchronize_text">Reliez automatiquement votre application à votre compte en ligne</string>
     <string name="synchronize_type_header_automatic_synchronize_text_continue">Continuer</string>
@@ -42,21 +40,15 @@
     <string name="main_navigation_recents">Récent</string>
     <string name="main_navigation_settings">Paramètres</string>
     <string name="platforms_compose_header">Composer pour un accès stocké</string>
-    <string name="text_compose_compose">Composer</string>
     <string name="settings_store_access_text">Accès en magasin à votre compte</string>
     <string name="gateway_clients_settings_header">Clients Gateway disponibles</string>
     <string name="settings_gateway_clients_text">Passerelles de routage SMS</string>
     <string name="password_failed">Échec de l\'authentification ! Veuillez réessayer...</string>
     <string name="password_empty">Le mot de passe ne peut pas être vide !</string>
     <string name="settings_language">Langue</string>
-    <string name="settings_language_preferred_language_text">Sélectionnez votre langue préférée</string>
-    <string name="settings_language_supported_language_en">Anglais</string>
-    <string name="settings_language_supported_language_fr">Français</string>
     <string name="message_compose_header">Message...</string>
     <string name="message_compose_groups_option">Nom de l\'utilisateur du Telegram (facultatif)</string>
     <string name="message_compose_groups_name">Nom de l\'utilisateur du Telegram</string>
-    <string name="gateway_client_settings_add_custom_gateway_text">Ajouter une nouvelle adresse de client de passerelle</string>
-    <string name="gateway_client_settings_add_custom_gateway_cancel_btn">Annuler</string>
     <string name="gateway_client_settings_add_custom_gateway_add_btn">Ajouter</string>
     <string name="gateway_client_settings_add_custom_empty_error">Veuillez fournir un numéro de téléphone</string>
     <string name="new_gateway_client_alias">Alias (facultatif)</string>
@@ -82,4 +74,9 @@
     <string name="language_french">Français</string>
     <string name="language_farsi">Farsi</string>
     <string name="settings_advanced_category">Réglages avancés</string>
+    <string name="messages_title">Avis</string>
+    <string name="settings_biometric_login">Connexion biométrique</string>
+    <string name="settings_biometric_login_subtitle">Connectez-vous à l\'aide de votre identifiant biométrique</string>
+    <string name="settings_biometric_login_description">Touchez le capteur pour utiliser votre identifiant biométrique</string>
+    <string name="no_notifications">Aucune notification récente</string>
 </resources>
