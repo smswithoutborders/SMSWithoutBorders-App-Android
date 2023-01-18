@@ -28,28 +28,6 @@ public class NotificationsHandler {
     public static final String NOTIFICATIONS_TAG = "notifications-listener-tag";
     public static final String UNIQUE_NAME = "notifications-listener-unique-name";
 
-    public static boolean checkNotificationsListenersRunning(Context context) {
-        WorkQuery workQuery = WorkQuery.Builder
-                .fromTags(Collections.singletonList(
-                        NotificationsHandler.NOTIFICATIONS_TAG))
-                .addStates(Collections.singletonList(
-                        WorkInfo.State.RUNNING))
-                .build();
-
-        WorkManager workManager = WorkManager.getInstance(context);
-        ListenableFuture<List<WorkInfo>> workInfos = workManager.getWorkInfos(workQuery);
-
-        try {
-            List<WorkInfo> workInfoList = workInfos.get();
-            return workInfoList.size() > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-
     public static final Migration MIGRATION_9_10 = new Migration(9, 10) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
