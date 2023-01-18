@@ -10,23 +10,20 @@
 
   <ImageView
       android:id="@+id/imageView2"
-      android:layout_width="0dp"
-      android:layout_height="319dp"
-      android:layout_marginTop="40dp"
+      android:layout_width="409dp"
+      android:layout_height="0dp"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.493"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:srcCompat="@drawable/page_2" />
 
+
   <TextView
       android:id="@+id/textView"
-      android:layout_width="407dp"
-      android:layout_height="88dp"
-      android:layout_marginTop="12dp"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
       android:gravity="center"
       android:text="@string/settings_security_and_privacy_enable_lockscreen_read_encrypted"
-      android:textAlignment="center"
       android:textColor="@color/text_box"
       android:textSize="30sp"
       android:textStyle="bold"
@@ -35,49 +32,62 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
-  <Button
-      android:id="@+id/button"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="36dp"
-      android:backgroundTint="#004aad"
-      android:text="Button"
-      android:textColor="#FFFDFD"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textView3"
-      tools:text="Enable" />
-
   <TextView
       android:id="@+id/textView3"
-      android:layout_width="0dp"
-      android:layout_height="73dp"
-      android:layout_marginTop="20dp"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
       android:gravity="center"
       android:paddingLeft="30sp"
       android:paddingRight="30sp"
       android:text="@string/settings_security_and_privacy_enable_lockscreen_read_encrypted_summary"
-      android:textAlignment="viewStart"
       android:textColor="#004aad"
       android:textSize="20sp"
+      app:layout_constraintBottom_toTopOf="@+id/constraintLayout3"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/textView" />
+      app:layout_constraintTop_toBottomOf="@+id/textView"
+      app:layout_constraintVertical_bias="0.033" />
 
-  <TextView
-      android:id="@+id/textView4"
-      android:layout_width="wrap_content"
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/constraintLayout3"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_marginStart="124dp"
-      android:text="Not now"
-      android:textColor="#004aad"
-      android:textSize="16sp"
-      android:textStyle="bold"
+      android:layout_marginBottom="50dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.505"
-      app:layout_constraintStart_toEndOf="@+id/button"
-      app:layout_constraintTop_toBottomOf="@+id/textView3" />
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toStartOf="parent">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#004aad"
+        android:text="Button"
+        android:textColor="#FFFDFD"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/textView4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="Enable" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Not now"
+        android:textColor="#004aad"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.78"
+        app:layout_constraintStart_toEndOf="@+id/button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.518" />
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
