@@ -23,6 +23,7 @@ import com.rabbitmq.client.ShutdownSignalException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +35,7 @@ public class NotificationsListener extends Worker {
 
     public NotificationsListener(@NonNull Context context, @NonNull WorkerParameters workerParams) throws Throwable {
         super(context, workerParams);
-        rabbitMQ = new RabbitMQ(getApplicationContext());
+        rabbitMQ = new RabbitMQ(context);
         this.context = context;
     }
 
@@ -42,9 +43,6 @@ public class NotificationsListener extends Worker {
     @Override
     public Result doWork() {
         try {
-            if(rabbitMQ.isOpen())
-                rabbitMQ.getConnection().close();
-
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
                 String messageBase64 = new String(delivery.getBody(), "UTF-8");

@@ -8,6 +8,8 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -16,10 +18,18 @@ import com.example.sw0b_001.HomepageFragments.AvailablePlatformsFragment;
 import com.example.sw0b_001.HomepageFragments.NotificationsFragment;
 import com.example.sw0b_001.HomepageFragments.RecentsFragment;
 import com.example.sw0b_001.HomepageFragments.SettingsFragment;
+import com.example.sw0b_001.Models.Notifications.NotificationsHandler;
+import com.example.sw0b_001.Models.RabbitMQ;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.rabbitmq.client.DeliverCallback;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 
 public class HomepageActivity extends AppCompatActivity {
@@ -28,6 +38,8 @@ public class HomepageActivity extends AppCompatActivity {
 
     final String RECENTS_FRAGMENT_TAG = "RECENTS_FRAGMENT_TAG";
     final String SETTINGS_FRAGMENT_TAG = "SETTINGS_FRAGMENT_TAG";
+
+    RabbitMQ rabbitMQ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +51,11 @@ public class HomepageActivity extends AppCompatActivity {
 
         TextView textView = findViewById(R.id.fragment_title);
 
+        try {
+            rabbitMQ = new RabbitMQ(getApplicationContext());
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
         fragmentManager.beginTransaction().add(R.id.homepage_fragment_container_view,
                         RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
                 .setReorderingAllowed(true)
@@ -102,6 +119,53 @@ public class HomepageActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        try {
+            connectRMQForNotifications();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void connectRMQForNotifications() throws Throwable {
+        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+
+            String messageBase64 = new String(delivery.getBody(), "UTF-8");
+            if(BuildConfig.DEBUG)
+                Log.d(getClass().getName(), "[x] Received Base64'" + messageBase64 + "'");
+
+            try {
+                String notificationData = new String(Base64.decode(messageBase64, Base64.DEFAULT), StandardCharsets.UTF_8);
+
+                if(BuildConfig.DEBUG)
+                    Log.d(getClass().getName(), "[x] Received '" + notificationData + "'");
+
+                JSONObject jsonObject = new JSONObject(notificationData);
+                long id = jsonObject.getLong("id");
+                String message = jsonObject.getString("message");
+
+                String type = new String();
+                if(jsonObject.has("type"))
+                    type = jsonObject.getString("type");
+
+                NotificationsHandler.storeNotification(getBaseContext(), id, message, type);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        };
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    rabbitMQ.startConnection();
+                    rabbitMQ.consume(deliverCallback);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     public void onComposePlatformClick(View view) {
@@ -130,5 +194,33 @@ public class HomepageActivity extends AppCompatActivity {
                             android.R.anim.fade_out)
                     .commit();
         }
+//        if(!rabbitMQ.isOpen()) {
+//            try {
+//                connectRMQForNotifications();
+//            } catch (Throwable e) {
+//                e.printStackTrace();
+//            }
+//        }
+    }
+
+    @Override
+    protected void onStop() {
+        Thread rmqThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    rabbitMQ.getConnection().close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        rmqThread.start();
+        try {
+            rmqThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        super.onStop();
     }
 }

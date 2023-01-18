@@ -13,6 +13,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Consumer;
+import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.DeliverCallback;
 import com.rabbitmq.client.ExceptionHandler;
 import com.rabbitmq.client.TopologyRecoveryException;
@@ -61,9 +62,7 @@ public class RabbitMQ {
         factory.setVirtualHost("/");
         factory.setHost(context.getString(R.string.notifications_url));
         factory.setPort(5672);
-        factory.setConnectionTimeout(3000);
-        factory.setAutomaticRecoveryEnabled(false);
-        factory.setRequestedHeartbeat(30);
+        factory.setConnectionTimeout(10000);
 
         setFactoryExceptionHandlers();
 
