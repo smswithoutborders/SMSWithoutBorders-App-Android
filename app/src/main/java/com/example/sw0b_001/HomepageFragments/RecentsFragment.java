@@ -40,7 +40,6 @@ public class RecentsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        NotificationsHandler.beginNotificationsListeners(getContext());
     }
 
     @Override
