@@ -42,40 +42,38 @@ public class NotificationsListener extends Worker {
     @Override
     public Result doWork() {
         try {
-            if(!rabbitMQ.isOpen()) {
-                DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+            if(rabbitMQ.isOpen())
+                rabbitMQ.getConnection().close();
 
-                    String messageBase64 = new String(delivery.getBody(), "UTF-8");
+            DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+
+                String messageBase64 = new String(delivery.getBody(), "UTF-8");
+                if(BuildConfig.DEBUG)
+                    Log.d(getClass().getName(), "[x] Received Base64'" + messageBase64 + "'");
+
+                try {
+                    String notificationData = new String(Base64.decode(messageBase64, Base64.DEFAULT), StandardCharsets.UTF_8);
+
                     if(BuildConfig.DEBUG)
-                        Log.d(getClass().getName(), "[x] Received Base64'" + messageBase64 + "'");
+                        Log.d(getClass().getName(), "[x] Received '" + notificationData + "'");
 
-                    try {
-                        String notificationData = new String(Base64.decode(messageBase64, Base64.DEFAULT), StandardCharsets.UTF_8);
+                    JSONObject jsonObject = new JSONObject(notificationData);
+                    long id = jsonObject.getLong("id");
+                    String message = jsonObject.getString("message");
 
-                        if(BuildConfig.DEBUG)
-                            Log.d(getClass().getName(), "[x] Received '" + notificationData + "'");
+                    String type = new String();
+                    if(jsonObject.has("type"))
+                        type = jsonObject.getString("type");
 
-                        JSONObject jsonObject = new JSONObject(notificationData);
-                        long id = jsonObject.getLong("id");
-                        String message = jsonObject.getString("message");
+                    NotificationsHandler.storeNotification(context, id, message, type);
 
-                        String type = new String();
-                        if(jsonObject.has("type"))
-                            type = jsonObject.getString("type");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            };
 
-                        NotificationsHandler.storeNotification(context, id, message, type);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                };
-
-                rabbitMQ.startConnection();
-                rabbitMQ.consume(deliverCallback);
-            }
-            else {
-                Log.d(getClass().getName(), "Connection already opened");
-            }
+            rabbitMQ.startConnection();
+            rabbitMQ.consume(deliverCallback);
         } catch(Throwable e ) {
             e.printStackTrace();
             return Result.retry();

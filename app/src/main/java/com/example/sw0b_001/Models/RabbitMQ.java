@@ -61,8 +61,9 @@ public class RabbitMQ {
         factory.setVirtualHost("/");
         factory.setHost(context.getString(R.string.notifications_url));
         factory.setPort(5672);
-        factory.setConnectionTimeout(30000);
-//        factory.setAutomaticRecoveryEnabled(false);
+        factory.setConnectionTimeout(3000);
+        factory.setAutomaticRecoveryEnabled(false);
+        factory.setRequestedHeartbeat(30);
 
         setFactoryExceptionHandlers();
 
