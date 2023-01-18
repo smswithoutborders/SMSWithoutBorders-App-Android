@@ -209,7 +209,8 @@ public class HomepageActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    rabbitMQ.getConnection().close();
+                    if(rabbitMQ.getConnection() != null)
+                        rabbitMQ.getConnection().close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

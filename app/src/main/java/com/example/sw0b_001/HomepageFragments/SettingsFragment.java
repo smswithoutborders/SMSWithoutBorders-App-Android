@@ -13,6 +13,7 @@ import com.example.sw0b_001.R;
 import com.example.sw0b_001.SettingsActivities.GatewayClientsSettingsActivity;
 import com.example.sw0b_001.SettingsActivities.SecurityPrivacyFragment;
 import com.example.sw0b_001.SettingsActivities.StoreAccessSettingsActivity;
+import com.example.sw0b_001.SplashActivity;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
@@ -32,7 +33,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
                 String languageLocale = (String) newValue;
                 LanguageHandler.updateLanguage(getResources(), languageLocale);
-                getActivity().recreate();
+
+                startActivity(new Intent(getContext(), SplashActivity.class));
+                getActivity().finish();
                 return true;
             }
         });

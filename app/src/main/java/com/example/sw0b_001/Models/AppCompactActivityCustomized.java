@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.example.sw0b_001.BuildConfig;
+import com.example.sw0b_001.R;
 
 import java.util.Locale;
 
@@ -35,11 +36,15 @@ public class AppCompactActivityCustomized extends AppCompatActivity {
 
     private void customizeViewForLanguage(View view) {
 //        updateLanguage();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        Locale locale = getResources().getConfiguration().locale;
-        if(locale.equals(Locale.forLanguageTag("fa"))) {
-            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        }
+        // Get the state of the SwitchPreferenceCompact
+        String localeLanguage = prefs.getString("language_options", getString(R.string.language_english_value));
+        Log.d(getLocalClassName(), "Locale language: " + localeLanguage);
+
+//        if(new Locale(localeLanguage).equals(Locale.forLanguageTag("fa"))) {
+//            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+//        }
     }
 
     private void updateLanguage() {
