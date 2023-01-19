@@ -65,6 +65,12 @@
             android:launchMode="singleTask"
             android:theme="@style/Theme.MaterialComponents.Fullscreen">
 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
         </activity>
         <activity
             android:name=".SyncHandshakeActivity"
@@ -173,11 +179,7 @@
             android:exported="false"
             android:theme="@style/Theme.MyAppNoBar" >
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
     </application>
