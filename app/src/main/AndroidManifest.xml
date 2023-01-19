@@ -1,28 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-<uses-permission android:name="android.permission.CAMERA" />
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-<uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
 
-<queries>
-    <intent>
-        <action android:name="android.intent.action.SENDTO" />
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
 
-        <data android:scheme="*" />
-    </intent>
-</queries>
+            <data android:scheme="*" />
+        </intent>
+    </queries>
 
-<uses-feature android:name="android.hardware.camera" />
-<uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <application
         android:icon="@mipmap/main_icon"
         android:label="@string/app_name"
+        android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/main_icon_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp"
-        android:localeConfig="@xml/locales_config"
-        android:usesCleartextTraffic="true" >
+        android:usesCleartextTraffic="true">
+
+
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
             android:enabled="false"
@@ -34,16 +38,16 @@
 
         <activity
             android:name=".HomepageActivity"
-            android:theme="@style/Theme.MyAppNoBar"
+            android:exported="false"
             android:launchMode="singleTask"
-            android:exported="false" >
+            android:theme="@style/Theme.MyAppNoBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".MessagesActivity"
-            android:exported="false" >
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -59,12 +63,8 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
             android:launchMode="singleTask"
-            android:theme="@style/Theme.MaterialComponents.Fullscreen" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:theme="@style/Theme.MaterialComponents.Fullscreen">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".SyncHandshakeActivity"
@@ -78,11 +78,13 @@
             android:name=".SyncInitiateActivity"
             android:exported="true"
             android:label=""
-            android:parentActivityName=".WelcomeActivity" >
-            <intent-filter android:label="pending_name" >
+            android:parentActivityName=".WelcomeActivity">
+            <intent-filter android:label="pending_name">
                 <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="developers.smswithoutborders.com"
                     android:pathPrefix="/v2/sync/users/"
@@ -129,7 +131,7 @@
             android:name=".EmailComposeActivity"
             android:exported="false"
             android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment"
-            android:theme="@style/Theme.MyAppNoBar" >
+            android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -141,7 +143,7 @@
             android:exported="false"
             android:label=""
             android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment"
-            android:theme="@style/Theme.MyAppNoBar" >
+            android:theme="@style/Theme.MyAppNoBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -152,7 +154,7 @@
             android:name=".QRScannerActivity"
             android:exported="false"
             android:label=""
-            android:parentActivityName=".PasswordActivity" >
+            android:parentActivityName=".PasswordActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PasswordActivity" />
@@ -161,12 +163,23 @@
             android:name=".PasswordActivity"
             android:exported="false"
             android:theme="@style/Theme.MyAppNoBar" />
+        <activity
+            android:name=".MessageLockBiometrics"
+            android:exported="false"
+            android:theme="@style/Theme.MyAppNoBar" />
 
+        <activity
+            android:name=".PinLockActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MyAppNoBar" >
 
-    <activity
-        android:name=".MessageLockBiometrics"
-        android:exported="false"
-        android:theme="@style/Theme.MyAppNoBar" />
-</application>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+    </application>
 
 </manifest>
