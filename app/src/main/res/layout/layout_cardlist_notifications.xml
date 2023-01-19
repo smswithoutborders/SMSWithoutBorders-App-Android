@@ -11,7 +11,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:elevation="20dp"
-        app:cardBackgroundColor="@android:color/transparent"
+        app:cardBackgroundColor="@color/text_box"
+        app:cardCornerRadius="12dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -27,8 +29,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/open_sans_semibold"
+                android:padding="8dp"
                 android:text="TextView"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#FFFFFF"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,8 +40,8 @@
                 android:id="@+id/notification_summary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:padding="10dp"
                 android:text="TextView"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/notification_text"
@@ -46,12 +50,13 @@
             <TextView
                 android:id="@+id/notification_date"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="240dp"
+                android:layout_height="0dp"
                 android:layout_marginTop="8dp"
                 android:text="TextView"
-                android:textColor="@color/pending_gray"
+                android:textColor="@color/light_blue_A400"
                 android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.885"
                 app:layout_constraintStart_toEndOf="@+id/notification_text"
                 app:layout_constraintTop_toTopOf="@+id/notification_text" />
 
