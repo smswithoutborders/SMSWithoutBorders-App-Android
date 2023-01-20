@@ -6,7 +6,6 @@ import static android.hardware.biometrics.BiometricManager.Authenticators.DEVICE
 import android.app.ActivityOptions;
 import android.app.KeyguardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.biometrics.BiometricManager;
@@ -18,7 +17,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
@@ -60,6 +58,8 @@ public class SecurityHandler {
     public static final String DEFAULT_KEYSTORE_PROVIDER = "AndroidKeyStore";
     final String SHARED_SECRET_KEY = "SHARED_SECRET_KEY";
     final String MSISDN_HASH = "MSISDN_HASH";
+    final String BIOMETRIC_CHECK_ALWAYS_ON = "BIOMETRIC_CHECK_ALWAYS_ON";
+    final String BIOMETRIC_CHECK_DECRYPTION = "BIOMETRIC_CHECK_DECRYPTION";
 
     public SecurityHandler() throws KeyStoreException, CertificateException, NoSuchAlgorithmException, IOException {
         this.keyStore = KeyStore.getInstance(DEFAULT_KEYSTORE_PROVIDER);
@@ -286,5 +286,73 @@ public class SecurityHandler {
                         }
                     });
         }
+    }
+
+    public boolean seenBiometricCheckAlwaysOn() throws GeneralSecurityException, IOException {
+        SharedPreferences encryptedSharedPreferences = EncryptedSharedPreferences.create(
+                context,
+                BIOMETRIC_CHECK_ALWAYS_ON,
+                this.masterKeyAlias,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM );
+
+        return encryptedSharedPreferences.contains(BIOMETRIC_CHECK_ALWAYS_ON);
+    }
+
+    public boolean seenBiometricCheckDecyption() throws GeneralSecurityException, IOException {
+        SharedPreferences encryptedSharedPreferences = EncryptedSharedPreferences.create(
+                context,
+                BIOMETRIC_CHECK_DECRYPTION,
+                this.masterKeyAlias,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM );
+
+        return encryptedSharedPreferences.contains(BIOMETRIC_CHECK_DECRYPTION);
+    }
+
+    public void setSeenBiometricScreenAlwaysOn(boolean seen) throws GeneralSecurityException, IOException {
+        SharedPreferences encryptedSharedPreferences = EncryptedSharedPreferences.create(
+                context,
+                BIOMETRIC_CHECK_ALWAYS_ON,
+                this.masterKeyAlias,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM );
+
+        SharedPreferences.Editor sharedPreferencesEditor = encryptedSharedPreferences.edit();
+
+        sharedPreferencesEditor.putBoolean(BIOMETRIC_CHECK_ALWAYS_ON, seen);
+        if(!sharedPreferencesEditor.commit()) {
+            if(BuildConfig.DEBUG)
+                Log.e(getClass().getName(), "Failed to Update biometric check seen");
+            throw new RuntimeException("Failed to store MSISDN");
+        }
+        else {
+            if(BuildConfig.DEBUG)
+                Log.i(getClass().getName(), "Stored biometric check seen");
+        }
+
+    }
+
+    public void setSeenBiometricScreenDecryption(boolean seen) throws GeneralSecurityException, IOException {
+        SharedPreferences encryptedSharedPreferences = EncryptedSharedPreferences.create(
+                context,
+                BIOMETRIC_CHECK_DECRYPTION,
+                this.masterKeyAlias,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM );
+
+        SharedPreferences.Editor sharedPreferencesEditor = encryptedSharedPreferences.edit();
+
+        sharedPreferencesEditor.putBoolean(BIOMETRIC_CHECK_DECRYPTION, seen);
+        if(!sharedPreferencesEditor.commit()) {
+            if(BuildConfig.DEBUG)
+                Log.e(getClass().getName(), "Failed to Update biometric check seen");
+            throw new RuntimeException("Failed to store MSISDN");
+        }
+        else {
+            if(BuildConfig.DEBUG)
+                Log.i(getClass().getName(), "Stored biometric check seen");
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 package com.example.sw0b_001;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
@@ -8,39 +9,38 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Security.SecurityHandler;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
-public class AppLockBiometricActivity extends AppCompactActivityCustomized {
+public class MessageLockBiometricsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_app_lock_biometric);
+        setContentView(R.layout.activity_message_lock_biometrics);
     }
 
     private void navigateAway() throws GeneralSecurityException, IOException {
         SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
-        securityHandler.setSeenBiometricScreenAlwaysOn(true);
+        securityHandler.setSeenBiometricScreenDecryption(true);
 
         startActivity(new Intent(this, HomepageActivity.class));
         finish();
     }
 
-    public void enableClicked(View view) throws GeneralSecurityException, IOException {
-       if(BuildConfig.DEBUG)
-           Log.d(getClass().getName(), "Enabled clicked");
+    public void enabledDecryptionClicked(View view) throws GeneralSecurityException, IOException {
+        if(BuildConfig.DEBUG)
+            Log.d(getClass().getName(), "Enabled clicked");
 
-       SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-       prefs.edit().putBoolean("lock_screen_always_on", true).apply();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.edit().putBoolean("lock_screen_for_encryption", true).apply();
 
-       navigateAway();
+        navigateAway();
     }
 
-    public void notNowClicked(View view) throws GeneralSecurityException, IOException {
+    public void notNOwDecryptionClicked(View view) throws GeneralSecurityException, IOException {
         if(BuildConfig.DEBUG)
             Log.d(getClass().getName(), "Not now clicked");
 
