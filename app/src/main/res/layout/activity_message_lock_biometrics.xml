@@ -63,31 +63,32 @@
       app:layout_constraintStart_toStartOf="parent">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/message_lock_biometrics_enable_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="#004aad"
-        android:text="Button"
+        android:text="@string/settings_biometric_enable_btn"
         android:textColor="#FFFDFD"
+        android:onClick="enabledDecryptionClicked"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/textView4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:text="Enable" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Not now"
+        android:text="@string/settings_biometric_not_now_btn"
         android:textColor="#004aad"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:onClick="notNOwDecryptionClicked"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.78"
-        app:layout_constraintStart_toEndOf="@+id/button"
+        app:layout_constraintStart_toEndOf="@+id/message_lock_biometrics_enable_btn"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.518" />
   </androidx.constraintlayout.widget.ConstraintLayout>

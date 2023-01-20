@@ -62,7 +62,6 @@
             android:theme="@style/Theme.MaterialComponents.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -162,11 +161,16 @@
             android:exported="false"
             android:theme="@style/Theme.MyAppNoBar" />
 
+        <activity
+            android:name=".MessageLockBiometricsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MyAppNoBar" />
 
-    <activity
-        android:name=".MessageLockBiometrics"
-        android:exported="false"
-        android:theme="@style/Theme.MyAppNoBar" />
-</application>
+        <activity
+            android:name=".AppLockBiometricActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MyAppNoBar" />
+
+    </application>
 
 </manifest>

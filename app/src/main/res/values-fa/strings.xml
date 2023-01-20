@@ -77,4 +77,6 @@
     <string name="settings_biometric_login_subtitle">با استفاده از اعتبار بیومتریک خود وارد شوید</string>
     <string name="settings_biometric_login_description">برای استفاده از اعتبار بیومتریک خود، حسگر را لمس کنید</string>
     <string name="no_notifications">بدون اطلاعیه اخیر</string>
+    <string name="settings_biometric_not_now_btn">الان الان</string>
+    <string name="settings_biometric_enable_btn">فعال کردن</string>
 </resources>

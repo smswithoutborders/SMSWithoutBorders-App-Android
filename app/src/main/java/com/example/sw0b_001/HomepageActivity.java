@@ -1,7 +1,6 @@
 package com.example.sw0b_001;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -20,6 +19,7 @@ import com.example.sw0b_001.HomepageFragments.RecentsFragment;
 import com.example.sw0b_001.HomepageFragments.SettingsFragment;
 import com.example.sw0b_001.Models.Notifications.NotificationsHandler;
 import com.example.sw0b_001.Models.RabbitMQ;
+import com.example.sw0b_001.Security.SecurityHandler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.rabbitmq.client.DeliverCallback;
@@ -30,6 +30,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
 
 
 public class HomepageActivity extends AppCompatActivity {
@@ -46,6 +47,27 @@ public class HomepageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
+        try {
+            SecurityHandler securityHandler = new SecurityHandler(getBaseContext());
+            if(securityHandler.phoneCredentialsPossible() ) {
+                if (!securityHandler.seenBiometricCheckAlwaysOn()) {
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    startActivity(new Intent(this, AppLockBiometricActivity.class));
+                    finish();
+                }
+
+                if (!securityHandler.seenBiometricCheckDecyption()) {
+                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                    startActivity(new Intent(this, MessageLockBiometricsActivity.class));
+                    finish();
+                }
+            }
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.homepage_bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.recents);
 
@@ -56,6 +78,7 @@ public class HomepageActivity extends AppCompatActivity {
         } catch (Throwable e) {
             e.printStackTrace();
         }
+
         fragmentManager.beginTransaction().add(R.id.homepage_fragment_container_view,
                         RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
                 .setReorderingAllowed(true)
@@ -119,12 +142,11 @@ public class HomepageActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        try {
-            connectRMQForNotifications();
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
+//        try {
+//            connectRMQForNotifications();
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void connectRMQForNotifications() throws Throwable {
