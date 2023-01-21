@@ -50,14 +50,13 @@ public class HomepageActivity extends AppCompatActivity {
         try {
             SecurityHandler securityHandler = new SecurityHandler(getBaseContext());
             if(securityHandler.phoneCredentialsPossible() ) {
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 if (!securityHandler.seenBiometricCheckAlwaysOn()) {
-                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                     startActivity(new Intent(this, AppLockBiometricActivity.class));
                     finish();
                 }
 
                 if (!securityHandler.seenBiometricCheckDecyption()) {
-                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                     startActivity(new Intent(this, MessageLockBiometricsActivity.class));
                     finish();
                 }
