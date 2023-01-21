@@ -1,208 +1,248 @@
 package com.example.sw0b_001;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
-
-import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Models.AppCompactActivityCustomized;
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
-import com.example.sw0b_001.Models.HomepageRecyclerAdapter;
-import com.example.sw0b_001.SettingsActivities.SettingsActivity;
-import com.example.sw0b_001.databinding.ActivityHomepageBinding;
+import com.example.sw0b_001.HomepageFragments.AvailablePlatformsFragment;
+import com.example.sw0b_001.HomepageFragments.NotificationsFragment;
+import com.example.sw0b_001.HomepageFragments.RecentsFragment;
+import com.example.sw0b_001.HomepageFragments.SettingsFragment;
+import com.example.sw0b_001.Models.Notifications.NotificationsHandler;
+import com.example.sw0b_001.Models.RabbitMQ;
+import com.example.sw0b_001.Security.SecurityHandler;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.rabbitmq.client.DeliverCallback;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.List;
 
-public class HomepageActivity extends AppCompactActivityCustomized {
 
-    private ActivityHomepageBinding binding;
+public class HomepageActivity extends AppCompatActivity {
+
+    FragmentManager fragmentManager = getSupportFragmentManager();
+
+    final String RECENTS_FRAGMENT_TAG = "RECENTS_FRAGMENT_TAG";
+    final String SETTINGS_FRAGMENT_TAG = "SETTINGS_FRAGMENT_TAG";
+
+    RabbitMQ rabbitMQ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityHomepageBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        BottomNavigationView bottomNavigationView = findViewById(R.id.homepage_bottom_navbar);
-        bottomNavBar(bottomNavigationView);
-
-        populateEncryptedMessages();
-        setSearchListener();
-    }
-
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        EditText searchEditText = findViewById(R.id.recent_search_edittext);
-        searchEditText.clearFocus();
-    }
-
-    public void setSearchListener() {
-        EditText searchEditText = findViewById(R.id.recent_search_edittext);
-        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                try {
-                    List<EncryptedContent> encryptedContentList = fetchMessagesFromDatabase(charSequence.toString());
-                    populateEncryptedMessages(encryptedContentList);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (GeneralSecurityException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-    }
-
-    public void populateEncryptedMessages(List<EncryptedContent> encryptedContentList) throws GeneralSecurityException, IOException {
-        RecyclerView recentsRecyclerView = findViewById(R.id.recents_recycler_view);
-        // recentsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-
-
-        TextView noRecentMessagesText = findViewById(R.id.no_recent_messages);
-        if(!encryptedContentList.isEmpty()) noRecentMessagesText.setVisibility(View.INVISIBLE);
-        else noRecentMessagesText.setVisibility(View.VISIBLE);
-
-        HomepageRecyclerAdapter homepageRecyclerAdapter = new HomepageRecyclerAdapter(this,
-                encryptedContentList, R.layout.layout_cardlist_recents);
-        recentsRecyclerView.setAdapter(homepageRecyclerAdapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setStackFromEnd(true);
-        linearLayoutManager.setReverseLayout(true);
-        recentsRecyclerView.setLayoutManager(linearLayoutManager);
-    }
-
-    public void populateEncryptedMessages() {
-        RecyclerView recentsRecyclerView = findViewById(R.id.recents_recycler_view);
-        // recentsRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        setContentView(R.layout.activity_homepage);
 
         try {
-            List<EncryptedContent> encryptedContentList = fetchMessagesFromDatabase();
+            SecurityHandler securityHandler = new SecurityHandler(getBaseContext());
+            if(securityHandler.phoneCredentialsPossible() ) {
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                if (!securityHandler.seenBiometricCheckAlwaysOn()) {
+                    startActivity(new Intent(this, AppLockBiometricActivity.class));
+                    finish();
+                }
 
-            if(!encryptedContentList.isEmpty()) {
-                TextView noRecentMessagesText = findViewById(R.id.no_recent_messages);
-                noRecentMessagesText.setVisibility(View.INVISIBLE);
+                else if (!securityHandler.seenBiometricCheckDecyption()) {
+                    startActivity(new Intent(this, MessageLockBiometricsActivity.class));
+                    finish();
+                }
             }
-
-            HomepageRecyclerAdapter homepageRecyclerAdapter = new HomepageRecyclerAdapter(this, encryptedContentList, R.layout.layout_cardlist_recents);
-            recentsRecyclerView.setAdapter(homepageRecyclerAdapter);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-            linearLayoutManager.setStackFromEnd(true);
-            linearLayoutManager.setReverseLayout(true);
-            recentsRecyclerView.setLayoutManager(linearLayoutManager);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
 
-    private List<EncryptedContent> fetchMessagesFromDatabase(String filterText) throws InterruptedException {
-        Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
-                Datastore.DatabaseName).build();
-
-        final List<EncryptedContent>[] encryptedContentList = new List[]{new ArrayList<>()};
-        Thread fetchEncryptedMessagesThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                EncryptedContentDAO encryptedContentDAO = databaseConnector.encryptedContentDAO();
-                encryptedContentList[0] = encryptedContentDAO.getForFilterText(filterText);
-            }
-        });
-
-        fetchEncryptedMessagesThread.start();
-        fetchEncryptedMessagesThread.join();
-
-        return encryptedContentList[0];
-    }
-
-    private List<EncryptedContent> fetchMessagesFromDatabase() throws InterruptedException {
-        Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
-                Datastore.DatabaseName)
-                .build();
-
-        final List<EncryptedContent>[] encryptedContentList = new List[]{new ArrayList<>()};
-        Thread fetchEncryptedMessagesThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                EncryptedContentDAO encryptedContentDAO = databaseConnector.encryptedContentDAO();
-                encryptedContentList[0] = encryptedContentDAO.getAll();
-            }
-        });
-
-        fetchEncryptedMessagesThread.start();
-        fetchEncryptedMessagesThread.join();
-
-        return encryptedContentList[0];
-    }
-
-    public void bottomNavBar(BottomNavigationView bottomNavigationView) {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.homepage_bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.recents);
+
+        TextView textView = findViewById(R.id.fragment_title);
+
+        try {
+            rabbitMQ = new RabbitMQ(getApplicationContext());
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        fragmentManager.beginTransaction().add(R.id.homepage_fragment_container_view,
+                        RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
+                .setReorderingAllowed(true)
+                .setCustomAnimations(android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right,
+                        android.R.anim.fade_in,
+                        android.R.anim.fade_out)
+                .commitNow();
+
+        Fragment currentFragment = fragmentManager.findFragmentByTag(SETTINGS_FRAGMENT_TAG);
+        if(currentFragment instanceof SettingsFragment) {
+            textView.setText(R.string.settings_settings);
+            textView.setVisibility(View.VISIBLE);
+        }
+
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-                switch(item.getItemId()) {
+                textView.setVisibility(View.GONE);
+                final int itemId = item.getItemId();
+                switch(itemId) {
+                    case R.id.recents: {
+                        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
+                                RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
+                                .setReorderingAllowed(true)
+                                .setCustomAnimations(android.R.anim.slide_in_left,
+                                        android.R.anim.slide_out_right,
+                                        android.R.anim.fade_in,
+                                        android.R.anim.fade_out)
+                                .commit();
+                        return true;
+                    }
                     case R.id.settings: {
-                        Intent settingsIntent = new Intent(getApplicationContext(), SettingsActivity.class);
-                        startActivity(settingsIntent);
-                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                        finish();
+                        textView.setText(R.string.settings_settings);
+                        textView.setVisibility(View.VISIBLE);
+                        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
+                                SettingsFragment.class, null, SETTINGS_FRAGMENT_TAG)
+                                .setReorderingAllowed(true)
+                                .setCustomAnimations(android.R.anim.slide_in_left,
+                                        android.R.anim.slide_out_right,
+                                        android.R.anim.fade_in,
+                                        android.R.anim.fade_out)
+                                .commit();
+                        return true;
+                    }
+
+                    case R.id.messages: {
+                        textView.setText(R.string.messages_title);
+                        textView.setVisibility(View.VISIBLE);
+                        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
+                                        NotificationsFragment.class, null)
+                                .setReorderingAllowed(true)
+                                .setCustomAnimations(android.R.anim.slide_in_left,
+                                        android.R.anim.slide_out_right,
+                                        android.R.anim.fade_in,
+                                        android.R.anim.fade_out)
+                                .commit();
+                        return true;
                     }
                 }
                 return false;
             }
         });
+//        try {
+//            connectRMQForNotifications();
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        }
     }
 
-    public void onClickPlatformSelect(View view) {
-        Intent platformIntent = new Intent(getApplicationContext(), PlatformsActivity.class);
-        startActivity(platformIntent);
+    private void connectRMQForNotifications() throws Throwable {
+        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+
+            String messageBase64 = new String(delivery.getBody(), "UTF-8");
+            if(BuildConfig.DEBUG)
+                Log.d(getClass().getName(), "[x] Received Base64'" + messageBase64 + "'");
+
+            try {
+                String notificationData = new String(Base64.decode(messageBase64, Base64.DEFAULT), StandardCharsets.UTF_8);
+
+                if(BuildConfig.DEBUG)
+                    Log.d(getClass().getName(), "[x] Received '" + notificationData + "'");
+
+                JSONObject jsonObject = new JSONObject(notificationData);
+                long id = jsonObject.getLong("id");
+                String message = jsonObject.getString("message");
+
+                String type = new String();
+                if(jsonObject.has("type"))
+                    type = jsonObject.getString("type");
+
+                NotificationsHandler.storeNotification(getBaseContext(), id, message, type);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        };
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    rabbitMQ.startConnection();
+                    rabbitMQ.consume(deliverCallback);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void onComposePlatformClick(View view) {
+        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
+                        AvailablePlatformsFragment.class, null)
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .setCustomAnimations(android.R.anim.slide_in_left,
+                        android.R.anim.slide_out_right,
+                        android.R.anim.fade_in,
+                        android.R.anim.fade_out)
+                .commit();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        ConstraintLayout constraintLayout = findViewById(R.id.recent_messages_constrain);
-        constraintLayout.setFocusable(true);
+        Fragment currentFragment = fragmentManager.findFragmentByTag(RECENTS_FRAGMENT_TAG);
+        if (currentFragment instanceof RecentsFragment) {
+            fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
+                            RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
+                    .setReorderingAllowed(true)
+                    .setCustomAnimations(android.R.anim.slide_in_left,
+                            android.R.anim.slide_out_right,
+                            android.R.anim.fade_in,
+                            android.R.anim.fade_out)
+                    .commit();
+        }
+//        if(!rabbitMQ.isOpen()) {
+//            try {
+//                connectRMQForNotifications();
+//            } catch (Throwable e) {
+//                e.printStackTrace();
+//            }
+//        }
+    }
 
-        populateEncryptedMessages();
+    @Override
+    protected void onStop() {
+        Thread rmqThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if(rabbitMQ.getConnection() != null)
+                        rabbitMQ.getConnection().close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        rmqThread.start();
+        try {
+            rmqThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        super.onStop();
     }
 }

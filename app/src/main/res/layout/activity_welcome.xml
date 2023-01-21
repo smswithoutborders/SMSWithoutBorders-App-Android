@@ -68,7 +68,6 @@
 
 
     <Button
-        android:id="@+id/containedButton1"
         android:layout_width="282dp"
         android:layout_height="52dp"
         android:backgroundTint="#00FFFFFF"

@@ -56,7 +56,6 @@ public class SplashActivity extends AppCompactActivityCustomized {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        updateLanguage();
         try {
             securityHandler = new SecurityHandler(getApplicationContext());
             activitySplashBinding = ActivitySplashBinding.inflate(getLayoutInflater());
@@ -68,7 +67,7 @@ public class SplashActivity extends AppCompactActivityCustomized {
             screenContentView = activitySplashBinding.fullscreenContent;
 
             if(checkHasSharedKey()) {
-                if(checkHasLockScreenAlways()) {
+                if(checkHasLockScreenAlways() && securityHandler.phoneCredentialsPossible()) {
                     enableLockScreen();
                 }
                 else {
@@ -92,25 +91,11 @@ public class SplashActivity extends AppCompactActivityCustomized {
     }
 
     private void enableLockScreen() throws InterruptedException {
-        Intent intent = new Intent(getApplicationContext(), HomepageActivity.class);
+        Intent intent = new Intent(getBaseContext(), HomepageActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         securityHandler.authenticateWithLockScreen(intent, this);
     }
 
-    private void updateLanguage() {
-        // Get the SharedPreferences
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        Locale locale = Locale.getDefault();
-        String languageCode = locale.getLanguage();
-
-        // Get the state of the SwitchPreferenceCompact
-        String languageLocale = prefs.getString("language_options", languageCode);
-        Log.d(getLocalClassName(), "Language code: " + languageCode);
-        Log.d(getLocalClassName(), "Language locale: " + languageLocale);
-
-        LanguageHandler.updateLanguage(getResources(), languageLocale);
-    }
 
     private void AccessWelcomeActivity() {
         Intent intent = new Intent(this, WelcomeActivity.class);

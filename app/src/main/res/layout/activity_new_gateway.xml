@@ -96,7 +96,6 @@
 
 
         <Button
-            android:id="@+id/new_gateway_client_add"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="65dp"

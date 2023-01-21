@@ -3,14 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/default_dark">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tweet_toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/default_dark"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
@@ -35,10 +33,8 @@
         app:layout_constraintTop_toBottomOf="@+id/tweet_toolbar">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layer_email_to"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:boxBackgroundColor="@color/default_dark">
+            android:layout_height="match_parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email_to"
@@ -49,7 +45,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layer_email_cc"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -57,17 +52,14 @@
                 android:id="@+id/email_cc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/default_dark"
                 android:hint="@string/email_compose_cc"
                 android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layer_email_bcc"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:boxBackgroundColor="@color/default_dark">
+            android:layout_height="match_parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email_bcc"
@@ -78,7 +70,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layer_email_subject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
@@ -88,7 +79,6 @@
                 android:id="@+id/email_subject"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/default_dark"
                 android:hint="@string/email_compose_subject"
                 android:inputType="textEmailSubject"
                 app:endIconMode="clear_text" />

@@ -8,12 +8,13 @@
         android:title="@string/main_navigation_recents" />
 
     <item
+        android:id="@+id/messages"
+        android:icon="@drawable/ic_round_notifications_24"
+        android:title="@string/messages_title" />
+
+    <item
         android:id="@+id/settings"
         android:icon="@drawable/settings"
         android:title="@string/main_navigation_settings" />
 
-<!--    <item-->
-<!--        android:id="@+id/logout"-->
-<!--        android:icon="@drawable/logout"-->
-<!--        android:title="Exit" />-->
 </menu>
