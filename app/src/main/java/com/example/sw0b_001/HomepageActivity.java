@@ -56,7 +56,7 @@ public class HomepageActivity extends AppCompatActivity {
                     finish();
                 }
 
-                if (!securityHandler.seenBiometricCheckDecyption()) {
+                else if (!securityHandler.seenBiometricCheckDecyption()) {
                     startActivity(new Intent(this, MessageLockBiometricsActivity.class));
                     finish();
                 }
