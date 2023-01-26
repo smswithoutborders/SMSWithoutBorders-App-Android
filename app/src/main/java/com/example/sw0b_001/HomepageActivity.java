@@ -141,11 +141,11 @@ public class HomepageActivity extends AppCompatActivity {
                 return false;
             }
         });
-//        try {
-//            connectRMQForNotifications();
-//        } catch (Throwable e) {
-//            e.printStackTrace();
-//        }
+        try {
+            connectRMQForNotifications();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     private void connectRMQForNotifications() throws Throwable {
