@@ -13,7 +13,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;

@@ -22,7 +22,7 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import com.example.sw0b_001.BuildConfig;
-import com.example.sw0b_001.Models.AppCompactActivityCustomized;
+import com.example.sw0b_001.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.PublisherHandler;
 import com.example.sw0b_001.R;
 
@@ -354,5 +354,9 @@ public class SecurityHandler {
                 Log.i(getClass().getName(), "Stored biometric check seen");
         }
 
+    }
+
+    public boolean requiresSyncing() throws GeneralSecurityException, IOException {
+        return getMSISDN().isEmpty();
     }
 }

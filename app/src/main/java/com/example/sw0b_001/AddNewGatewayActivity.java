@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.EditText;
@@ -17,12 +16,9 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
-import com.example.sw0b_001.SettingsActivities.GatewayClientsSettingsActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 

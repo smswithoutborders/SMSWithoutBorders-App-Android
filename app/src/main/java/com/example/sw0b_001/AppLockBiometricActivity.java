@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Security.SecurityHandler;
 
 import java.io.IOException;

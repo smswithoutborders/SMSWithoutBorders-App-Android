@@ -14,7 +14,7 @@ import com.example.sw0b_001.Security.SecurityHandler;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 
-public class MessageLockBiometricsActivity extends AppCompatActivity {
+public class MessageLockBiometricsActivity extends AppCompactActivityCustomized {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

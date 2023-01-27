@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
-import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.databinding.ActivityQrscannerBinding;
 import com.google.zxing.Result;
 

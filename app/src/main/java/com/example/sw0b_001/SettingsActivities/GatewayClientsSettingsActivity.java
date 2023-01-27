@@ -1,28 +1,20 @@
 package com.example.sw0b_001.SettingsActivities;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sw0b_001.Models.AppCompactActivityCustomized;
+import com.example.sw0b_001.AppCompactActivityCustomized;
 import com.example.sw0b_001.AddNewGatewayActivity;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
@@ -32,9 +24,7 @@ import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.databinding.ActivityGatewayClientsSettingsBinding;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
-import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GatewayClientsSettingsActivity extends AppCompactActivityCustomized {
