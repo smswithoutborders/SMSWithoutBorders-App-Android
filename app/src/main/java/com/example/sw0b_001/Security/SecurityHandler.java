@@ -137,6 +137,18 @@ public class SecurityHandler {
         return encryptedSharedPreferences.getString(MSISDN_HASH, "");
     }
 
+    public void removeSharedKey() throws GeneralSecurityException, IOException {
+        SharedPreferences encryptedSharedPreferences = EncryptedSharedPreferences.create(
+                context,
+                this.SHARED_SECRET_KEY,
+                this.masterKeyAlias,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM );
+
+        SharedPreferences.Editor sharedPreferencesEditor = encryptedSharedPreferences.edit();
+        sharedPreferencesEditor.remove(SHARED_SECRET_KEY);
+    }
+
     public void storeMSISDN(String msisdnHash) throws GeneralSecurityException, IOException {
         SharedPreferences encryptedSharedPreferences = EncryptedSharedPreferences.create(
                 context,
