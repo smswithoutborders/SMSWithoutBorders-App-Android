@@ -22,7 +22,7 @@ import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import com.example.sw0b_001.BuildConfig;
-import com.example.sw0b_001.Models.AppCompactActivityCustomized;
+import com.example.sw0b_001.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.PublisherHandler;
 import com.example.sw0b_001.R;
 
@@ -135,6 +135,18 @@ public class SecurityHandler {
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM );
 
         return encryptedSharedPreferences.getString(MSISDN_HASH, "");
+    }
+
+    public void removeSharedKey() throws GeneralSecurityException, IOException {
+        SharedPreferences encryptedSharedPreferences = EncryptedSharedPreferences.create(
+                context,
+                this.SHARED_SECRET_KEY,
+                this.masterKeyAlias,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM );
+
+        SharedPreferences.Editor sharedPreferencesEditor = encryptedSharedPreferences.edit();
+        sharedPreferencesEditor.remove(SHARED_SECRET_KEY);
     }
 
     public void storeMSISDN(String msisdnHash) throws GeneralSecurityException, IOException {
@@ -354,5 +366,9 @@ public class SecurityHandler {
                 Log.i(getClass().getName(), "Stored biometric check seen");
         }
 
+    }
+
+    public boolean requiresSyncing() throws GeneralSecurityException, IOException {
+        return getMSISDN().isEmpty();
     }
 }

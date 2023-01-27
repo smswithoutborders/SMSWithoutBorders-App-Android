@@ -15,7 +15,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.databinding.ActivitySynchroniseTypeBinding;
 
 import java.net.URL;

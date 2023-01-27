@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import com.example.sw0b_001.Models.AppCompactActivityCustomized;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 

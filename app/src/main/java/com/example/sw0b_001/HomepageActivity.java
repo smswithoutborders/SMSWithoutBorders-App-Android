@@ -33,7 +33,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 
 
-public class HomepageActivity extends AppCompatActivity {
+public class HomepageActivity extends AppCompactActivityCustomized {
 
     FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -49,6 +49,13 @@ public class HomepageActivity extends AppCompatActivity {
 
         try {
             SecurityHandler securityHandler = new SecurityHandler(getBaseContext());
+            if(securityHandler.requiresSyncing()) {
+                securityHandler.removeSharedKey();
+                startActivity(new Intent(this, SplashActivity.class));
+                finish();
+                return;
+            }
+
             if(securityHandler.phoneCredentialsPossible() ) {
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 if (!securityHandler.seenBiometricCheckAlwaysOn()) {
@@ -141,11 +148,11 @@ public class HomepageActivity extends AppCompatActivity {
                 return false;
             }
         });
-//        try {
-//            connectRMQForNotifications();
-//        } catch (Throwable e) {
-//            e.printStackTrace();
-//        }
+        try {
+            connectRMQForNotifications();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     private void connectRMQForNotifications() throws Throwable {

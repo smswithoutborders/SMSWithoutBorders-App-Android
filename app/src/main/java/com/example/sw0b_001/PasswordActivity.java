@@ -10,10 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.android.volley.ClientError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,7 +17,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
-import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Security.SecurityRSA;
 import com.example.sw0b_001.databinding.ActivityPasswordBinding;
@@ -30,20 +25,14 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.PublicKey;
-import java.security.cert.Certificate;
 import java.security.spec.MGF1ParameterSpec;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class PasswordActivity extends AppCompactActivityCustomized {
     private ActivityPasswordBinding binding;

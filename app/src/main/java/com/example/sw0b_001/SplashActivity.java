@@ -4,17 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.preference.PreferenceManager;
 
-import com.example.sw0b_001.Models.AppCompactActivityCustomized;
-import com.example.sw0b_001.Models.LanguageHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.databinding.ActivitySplashBinding;
 
@@ -23,7 +19,6 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.util.Locale;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.

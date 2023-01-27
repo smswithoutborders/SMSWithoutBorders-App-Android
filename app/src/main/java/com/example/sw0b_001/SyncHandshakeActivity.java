@@ -8,12 +8,8 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.room.Room;
-import androidx.work.WorkInfo;
-import androidx.work.WorkManager;
-import androidx.work.WorkQuery;
 
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Models.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
@@ -28,7 +24,6 @@ import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Security.SecurityHelpers;
 import com.example.sw0b_001.Security.SecurityRSA;
 import com.example.sw0b_001.databinding.ActivitySyncInitBinding;
-import com.google.common.util.concurrent.ListenableFuture;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,8 +41,6 @@ import java.security.NoSuchProviderException;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
-import java.util.Collections;
-import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 

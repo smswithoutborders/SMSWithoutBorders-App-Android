@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class MessagesActivity extends AppCompatActivity {
+public class MessagesActivity extends AppCompactActivityCustomized {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
