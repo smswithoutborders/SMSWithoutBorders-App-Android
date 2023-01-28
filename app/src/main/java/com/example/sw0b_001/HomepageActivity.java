@@ -49,27 +49,24 @@ public class HomepageActivity extends AppCompactActivityCustomized {
 
         try {
             SecurityHandler securityHandler = new SecurityHandler(getBaseContext());
-            securityHandler.removeSharedKey();
-            finish();
-            return;
-//            if(securityHandler.requiresSyncing()) {
-//                startActivity(new Intent(this, SplashActivity.class));
-//                finish();
-//                return;
-//            }
-//
-//            if(securityHandler.phoneCredentialsPossible() ) {
-//                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-//                if (!securityHandler.seenBiometricCheckAlwaysOn()) {
-//                    startActivity(new Intent(this, AppLockBiometricActivity.class));
-//                    finish();
-//                }
-//
-//                else if (!securityHandler.seenBiometricCheckDecyption()) {
-//                    startActivity(new Intent(this, MessageLockBiometricsActivity.class));
-//                    finish();
-//                }
-//            }
+            if(securityHandler.requiresSyncing()) {
+                startActivity(new Intent(this, SplashActivity.class));
+                finish();
+                return;
+            }
+
+            if(securityHandler.phoneCredentialsPossible() ) {
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                if (!securityHandler.seenBiometricCheckAlwaysOn()) {
+                    startActivity(new Intent(this, AppLockBiometricActivity.class));
+                    finish();
+                }
+
+                else if (!securityHandler.seenBiometricCheckDecyption()) {
+                    startActivity(new Intent(this, MessageLockBiometricsActivity.class));
+                    finish();
+                }
+            }
         } catch (GeneralSecurityException e) {
             e.printStackTrace();
         } catch (IOException e) {
