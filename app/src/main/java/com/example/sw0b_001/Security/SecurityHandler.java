@@ -17,6 +17,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
@@ -147,6 +148,7 @@ public class SecurityHandler {
 
         SharedPreferences.Editor sharedPreferencesEditor = encryptedSharedPreferences.edit();
         sharedPreferencesEditor.remove(SHARED_SECRET_KEY);
+        sharedPreferencesEditor.apply();
     }
 
     public void storeMSISDN(String msisdnHash) throws GeneralSecurityException, IOException {
@@ -235,7 +237,7 @@ public class SecurityHandler {
         return false;
     }
 
-    public void authenticateWithLockScreen(Intent callbackIntent, AppCompactActivityCustomized parent) throws InterruptedException {
+    public void authenticateWithLockScreen(Intent callbackIntent, AppCompatActivity parent) throws InterruptedException {
         Executor executor = ContextCompat.getMainExecutor(context);
         CancellationSignal cancellationSignal = new CancellationSignal();
         cancellationSignal.setOnCancelListener(new CancellationSignal.OnCancelListener() {
