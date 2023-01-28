@@ -25,17 +25,6 @@ public class AppCompactActivityCustomized extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         // TODO: check if shared key is available else kill
         super.onCreate(savedInstanceState);
-
-        try {
-            if(!new SecurityHandler(getApplicationContext()).hasSharedKey()) {
-                startActivity(new Intent(this, SplashActivity.class));
-                finish();
-            }
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.example.sw0b_001.Security.SecurityHandler;
@@ -24,7 +25,7 @@ import java.security.cert.CertificateException;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class SplashActivity extends AppCompactActivityCustomized {
+public class SplashActivity extends AppCompatActivity {
     /**
      * Some older devices needs a small delay between UI widget updates
      * and a change of the status and navigation bar.
