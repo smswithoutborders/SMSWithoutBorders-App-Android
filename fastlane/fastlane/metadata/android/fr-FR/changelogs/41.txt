@@ -1,0 +1,4 @@
+- Plus de fonctionnalités de sécurité mises en œuvre
+- Amélioration de l'expérience utilisateur
+- Les utilisateurs peuvent désormais recevoir des notifications
+- Corrections de bugs

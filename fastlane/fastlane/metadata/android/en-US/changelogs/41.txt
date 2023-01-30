@@ -1,0 +1,4 @@
+- More security features implemented
+- Improved User experience
+- Users can now receive notifications
+- Bug fixes
