@@ -21,6 +21,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp"
+        android:versionCode="42"
+        android:versionName="2.5.6"
         android:localeConfig="@xml/locales_config"
         android:usesCleartextTraffic="true" >
         <service
