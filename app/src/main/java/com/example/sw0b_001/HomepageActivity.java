@@ -50,6 +50,7 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         try {
             SecurityHandler securityHandler = new SecurityHandler(getBaseContext());
             if(securityHandler.requiresSyncing()) {
+                securityHandler.removeSharedKey();
                 startActivity(new Intent(this, SplashActivity.class));
                 finish();
                 return;
