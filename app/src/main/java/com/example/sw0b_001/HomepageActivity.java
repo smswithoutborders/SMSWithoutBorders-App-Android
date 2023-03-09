@@ -232,24 +232,25 @@ public class HomepageActivity extends AppCompactActivityCustomized {
     }
 
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
         Thread rmqThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    if(rabbitMQ.getConnection() != null)
+                    if (rabbitMQ.getConnection() != null)
                         rabbitMQ.getConnection().close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
+
         rmqThread.start();
         try {
             rmqThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        super.onStop();
+        super.onDestroy();
     }
 }
