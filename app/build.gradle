@@ -13,7 +13,7 @@ android {
         applicationId "com.afkanerd.sw0b"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 44
+        versionCode 45
         versionName "2.5.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
