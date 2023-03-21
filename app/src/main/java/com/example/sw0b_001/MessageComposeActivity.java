@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -85,7 +86,7 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
         Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
                 Datastore.DatabaseName).build();
 
-        final String[] decryptedEmailContent = {""};
+//        final String[] decryptedEmailContent = {""};
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -93,20 +94,23 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
                 EncryptedContent encryptedContent = encryptedContentDAO.get(encryptedContentId);
 
                 try {
-                    decryptedEmailContent[0] = PublisherHandler.decryptPublishedContent(getApplicationContext(), encryptedContent.getEncryptedContent());
+                    final String decryptedEmailContent = PublisherHandler.decryptPublishedContent(
+                            getApplicationContext(), encryptedContent.getEncryptedContent());
+                    if(BuildConfig.DEBUG)
+                        Log.d(getLocalClassName(), "Decrypted content: " + decryptedEmailContent);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            populateFields(decryptedEmailContent);
+                        }
+                    });
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
+
             }
         });
         thread.start();
-        try {
-            thread.join();
-            populateFields(decryptedEmailContent[0]);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private void populateFields(String decryptedEmailContent) {

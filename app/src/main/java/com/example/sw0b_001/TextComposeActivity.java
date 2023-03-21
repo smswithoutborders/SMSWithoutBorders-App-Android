@@ -72,7 +72,6 @@ public class TextComposeActivity extends AppCompactActivityCustomized {
         Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
                 Datastore.DatabaseName).build();
 
-        final String[] decryptedEmailContent = {""};
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -80,20 +79,21 @@ public class TextComposeActivity extends AppCompactActivityCustomized {
                 EncryptedContent encryptedContent = encryptedContentDAO.get(encryptedContentId);
 
                 try {
-                    decryptedEmailContent[0] = PublisherHandler.decryptPublishedContent(getApplicationContext(), encryptedContent.getEncryptedContent());
+                    final String decryptedEmailContent = PublisherHandler.decryptPublishedContent(
+                            getApplicationContext(), encryptedContent.getEncryptedContent());
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            populateFields(decryptedEmailContent);
+                        }
+                    });
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
         });
         thread.start();
-        try {
-            thread.join();
-            populateFields(decryptedEmailContent[0]);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private void populateFields(String decryptedEmailContent) {
