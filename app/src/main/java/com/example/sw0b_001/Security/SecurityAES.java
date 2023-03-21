@@ -55,11 +55,14 @@ public class SecurityAES extends SecurityHandler {
             byte[] iv = new byte[16];
             System.arraycopy(input, 0, iv, 0, 16);
 
+            byte[] content = new byte[input.length - 16];
+            System.arraycopy(input, 16, content, 0, content.length);
+
             IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
 
             Cipher cipher = Cipher.getInstance(DEFAULT_AES_ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
-            decryptedText = cipher.doFinal(input);
+            decryptedText = cipher.doFinal(content);
         }
         catch (Exception e) {
             e.printStackTrace();
