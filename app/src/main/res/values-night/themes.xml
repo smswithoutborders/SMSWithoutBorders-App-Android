@@ -29,4 +29,8 @@
     <style name="Theme.button_primary" parent="Theme.button">
         <item name="android:backgroundTint">@color/logo_secondary</item>
     </style>
+
+    <style name="Theme.password" parent="">
+        <item name="android:strokeColor">@color/pending_gray</item>
+    </style>
 </resources>
