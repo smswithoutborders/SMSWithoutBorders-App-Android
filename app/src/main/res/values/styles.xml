@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:statusBarColor">@color/default_dark</item>
-        <item name="colorAccent">@color/white</item>
+<!--        <item name="android:statusBarColor">@color/default_dark</item>-->
+<!--        <item name="colorAccent">@color/white</item>-->
     </style>
 </resources>

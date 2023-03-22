@@ -57,9 +57,9 @@ public class SplashActivity extends AppCompatActivity {
             activitySplashBinding = ActivitySplashBinding.inflate(getLayoutInflater());
             setContentView(activitySplashBinding.getRoot());
 
-            ActionBar ab = getSupportActionBar();
-            // Enable the Up button
-            ab.hide();
+//            ActionBar ab = getSupportActionBar();
+//            // Enable the Up button
+//            ab.hide();
             screenContentView = activitySplashBinding.fullscreenContent;
 
             if(checkHasSharedKey()) {

@@ -143,6 +143,7 @@
             android:name=".QRScannerActivity"
             android:exported="false"
             android:label=""
+            android:theme="@style/Theme.main"
             android:parentActivityName=".PasswordActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

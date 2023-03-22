@@ -1,12 +1,11 @@
 <resources>
 
     <style name="Theme.main" parent="Theme.MyApp">
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:windowBackground">@null</item>
         <item name="android:textColorPrimary">@color/ic_launcher_background</item>
         <item name="android:colorPrimary">@color/ic_launcher_background</item>
         <item name="android:textColor">@color/ic_launcher_background</item>
         <item name="android:colorAccent">@color/ic_launcher_background</item>
+        <item name="android:backgroundTint">@color/default_dark</item>
     </style>
 
     <style name="Theme.editBox" parent="Theme.main">
