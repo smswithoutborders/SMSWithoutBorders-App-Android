@@ -2,7 +2,13 @@
 <resources>
 
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-<!--        <item name="android:statusBarColor">@color/default_dark</item>-->
-<!--        <item name="colorAccent">@color/white</item>-->
+        <!-- TODO: put logic to fill toolbar with image color -->
+    </style>
+
+    <style name="Theme.button_primary" parent="Theme.MyApp">
+        <item name="android:backgroundTint">@color/logo_primary</item>
+    </style>
+    <style name="Theme.button_secondary" parent="Theme.MyApp">
+        <item name="android:backgroundTint">@color/logo_secondary</item>
     </style>
 </resources>

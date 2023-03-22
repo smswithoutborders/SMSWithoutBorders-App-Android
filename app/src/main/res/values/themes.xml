@@ -12,4 +12,9 @@
         <item name="android:textColor">@color/ic_launcher_background</item>
         <item name="android:tint">@color/white</item>
     </style>
+
+    <style name="Theme.welcome_header" parent="Theme.main">
+        <item name="android:textColor">@color/logo_primary</item>
+    </style>
+
 </resources>

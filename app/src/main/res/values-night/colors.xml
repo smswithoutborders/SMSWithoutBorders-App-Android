@@ -2,4 +2,5 @@
 <resources>
     <color name="menu_icon_tint">#FFFFFFFF</color>
     <color name="send_icon_color">@color/white</color>
+    <color name="link_color">@color/logo_secondary</color>
 </resources>

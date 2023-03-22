@@ -42,6 +42,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity
             android:name=".MessagesActivity"
             android:exported="false" >
@@ -49,11 +50,13 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity
             android:name=".MessageComposeActivity"
             android:exported="false"
             android:label="@string/message_compose_header"
             android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment" />
+
         <activity
             android:name=".SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -68,9 +71,11 @@
         <activity
             android:name=".SyncHandshakeActivity"
             android:exported="false" />
+
         <activity
             android:name=".WelcomeActivity"
             android:exported="false" />
+
         <activity
             android:name=".SyncInitiateActivity"
             android:exported="true"
@@ -103,6 +108,7 @@
                 <!-- note that the leading "/" is required for pathPrefix -->
             </intent-filter>
         </activity>
+
         <activity
             android:name=".HomepageFragments.AvailablePlatformsFragment"
             android:exported="false" />

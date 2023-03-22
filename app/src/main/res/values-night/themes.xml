@@ -13,4 +13,20 @@
         <item name="android:textColorHint">@color/ic_launcher_background</item>
         <item name="android:textColor">@color/ic_launcher_background</item>
     </style>
+
+    <style name="Theme.welcome_header" parent="Theme.main">
+        <item name="android:textColor">@color/logo_secondary</item>
+    </style>
+
+    <style name="Theme.button" parent="Theme.main">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Theme.button_secondary" parent="Theme.button">
+        <item name="android:backgroundTint">@color/logo_primary</item>
+    </style>
+
+    <style name="Theme.button_primary" parent="Theme.button">
+        <item name="android:backgroundTint">@color/logo_secondary</item>
+    </style>
 </resources>
