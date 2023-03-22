@@ -5,7 +5,22 @@
         <!-- TODO: put logic to fill toolbar with image color -->
         <item name="android:statusBarColor">@color/primary_background_color</item>
         <item name="bottomNavigationStyle">@style/BottomNavigationViewStyle</item>
+        <item name="android:backgroundTint">@color/primary_background_color</item>
+
+        <item name="android:textColorPrimary">@color/primary_color_text</item>
+        <item name="android:colorPrimary">@color/primary_color_text</item>
+        <item name="android:textColor">@color/primary_color_text</item>
+        <item name="android:colorAccent">@color/primary_color_text</item>
+<!--        <item name="preferenceTheme">@style/preference</item>-->
     </style>
+
+<!--    <style name="preference" parent="">-->
+<!--        <item name="android:textColor">#FFC107</item>-->
+<!--        <item name="android:colorAccent">#FFC107</item>-->
+<!--        <item name="android:textColorHighlight">#FFC107</item>-->
+<!--        <item name="android:textColorPrimary">#E91E63</item>-->
+<!--        <item name="android:textColorSecondary">#3F51B5</item>-->
+<!--    </style>-->
 
     <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="android:background">@color/primary_background_color</item>

@@ -1,11 +1,10 @@
 <resources>
 
     <style name="Theme.main" parent="Theme.MyApp">
-        <item name="android:textColorPrimary">@color/ic_launcher_background</item>
-        <item name="android:colorPrimary">@color/ic_launcher_background</item>
-        <item name="android:textColor">@color/ic_launcher_background</item>
-        <item name="android:colorAccent">@color/ic_launcher_background</item>
-        <item name="android:backgroundTint">@color/default_dark</item>
+<!--        <item name="android:textColorPrimary">@color/primary_color_text</item>-->
+<!--        <item name="android:colorPrimary">@color/primary_color_text</item>-->
+<!--        <item name="android:textColor">@color/primary_color_text</item>-->
+<!--        <item name="android:colorAccent">@color/primary_color_text</item>-->
     </style>
 
     <style name="Theme.editBox" parent="Theme.main">

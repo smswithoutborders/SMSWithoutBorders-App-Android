@@ -14,7 +14,6 @@
         android:fontFamily="sans-serif-medium"
         android:text="@string/main_navigation_settings"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:theme="@style/Theme.main"
         android:visibility="gone"
         app:layout_constraintEnd_toStartOf="@+id/homepage_fragment_container_view"
         app:layout_constraintStart_toStartOf="parent"

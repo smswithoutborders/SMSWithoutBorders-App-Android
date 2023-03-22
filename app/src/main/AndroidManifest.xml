@@ -37,6 +37,7 @@
         <activity
             android:name=".HomepageActivity"
             android:launchMode="singleTask"
+            android:theme="@style/Theme.main"
             android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"
