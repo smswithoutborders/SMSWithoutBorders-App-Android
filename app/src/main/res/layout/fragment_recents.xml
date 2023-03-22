@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_constrain"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/default_dark">
+    android:layout_height="match_parent">
 
     <TextView
+        android:theme="@style/Theme.main"
         android:id="@+id/settings_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,7 +15,6 @@
         android:layout_marginTop="16dp"
         android:text="@string/homepage_recent"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-        android:textColor="#FFFFFF"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -24,30 +23,22 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/message_recipient_number_container"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="15dp"
+        android:background="@drawable/edit_text_round"
         android:fontFamily="sans-serif-thin"
-        app:boxBackgroundColor="@color/text_box"
-        app:boxStrokeColor="@color/logo_blue1"
-        app:boxCornerRadiusBottomEnd="25dp"
-        app:boxCornerRadiusBottomStart="25dp"
-        app:boxCornerRadiusTopEnd="25dp"
-        app:boxCornerRadiusTopStart="25dp"
+        android:theme="@style/Theme.editBox"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
         app:helperTextEnabled="true"
-        app:hintTextColor="@color/light_blue_A400"
         app:layout_constraintBottom_toTopOf="@+id/recent_messages_constrain"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settings_text"
-        app:startIconDrawable="@drawable/ic_baseline_search_24"
-        app:startIconTint="@color/white">
+        app:startIconDrawable="@drawable/ic_baseline_search_24">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -60,7 +51,6 @@
         android:id="@+id/recent_messages_constrain"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/default_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -74,7 +64,6 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="8dp"
-            android:background="@color/default_dark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,7 +76,6 @@
             android:gravity="center_vertical|center"
             android:text="@string/homepage_no_recent_messages"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="#B6B6B6"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -101,15 +89,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:backgroundTint="#81bffc"
         android:clickable="true"
         android:onClick="onComposePlatformClick"
+        android:theme="@style/Theme.editBox"
+        app:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/main_constrain"
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="@id/main_constrain"
         app:srcCompat="@drawable/ic_baseline_edit_24"
-        app:tint="@color/white"
         tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

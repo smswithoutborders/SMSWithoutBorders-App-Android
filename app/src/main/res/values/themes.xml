@@ -1,15 +1,17 @@
 <resources>
 
-    <style name="Theme.MaterialComponents.Fullscreen" parent="Theme.MaterialComponents">
-        <item name="android:actionBarStyle">
-            @style/Widget.Theme.MaterialComponents.ActionBar.Fullscreen
-        </item>
+    <style name="Theme.main" parent="Theme.MyApp">
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowBackground">@null</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:colorPrimary">@color/ic_launcher_background</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
-    <style name="ThemeOverlay.Sw0b_001.FullscreenContainer" parent="">
-        <item name="fullscreenBackgroundColor">@color/black</item>
-        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    <style name="Theme.editBox" parent="Theme.main">
+        <item name="android:backgroundTint">@color/light_blue_A400</item>
+        <item name="android:textColorHint">@color/ic_launcher_background</item>
+        <item name="android:textColor">@color/ic_launcher_background</item>
+        <item name="android:tint">@color/white</item>
     </style>
 </resources>

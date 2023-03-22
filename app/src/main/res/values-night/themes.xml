@@ -1,7 +1,17 @@
 <resources>
 
-    <style name="ThemeOverlay.Sw0b_001.FullscreenContainer" parent="">
-        <item name="fullscreenBackgroundColor">@color/black</item>
-        <item name="fullscreenTextColor">@color/light_blue_A400</item>
+    <style name="Theme.main" parent="Theme.MyApp">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowBackground">@null</item>
+        <item name="android:textColorPrimary">@color/ic_launcher_background</item>
+        <item name="android:colorPrimary">@color/ic_launcher_background</item>
+        <item name="android:textColor">@color/ic_launcher_background</item>
+        <item name="android:colorAccent">@color/ic_launcher_background</item>
+    </style>
+
+    <style name="Theme.editBox" parent="Theme.main">
+        <item name="android:backgroundTint">@color/light_blue_A400</item>
+        <item name="android:textColorHint">@color/ic_launcher_background</item>
+        <item name="android:textColor">@color/ic_launcher_background</item>
     </style>
 </resources>

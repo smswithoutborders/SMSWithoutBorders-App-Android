@@ -36,7 +36,6 @@
 
         <activity
             android:name=".HomepageActivity"
-            android:theme="@style/Theme.MyAppNoBar"
             android:launchMode="singleTask"
             android:exported="false" >
             <meta-data
@@ -54,27 +53,24 @@
             android:name=".MessageComposeActivity"
             android:exported="false"
             android:label="@string/message_compose_header"
-            android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment"
-            android:theme="@style/Theme.MyAppNoBar" />
+            android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment" />
         <activity
             android:name=".SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.MaterialComponents.Fullscreen" >
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".SyncHandshakeActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MyAppNoBar" />
+            android:exported="false" />
         <activity
             android:name=".WelcomeActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MyAppNoBar" />
+            android:exported="false" />
         <activity
             android:name=".SyncInitiateActivity"
             android:exported="true"
@@ -109,28 +105,23 @@
         </activity>
         <activity
             android:name=".HomepageFragments.AvailablePlatformsFragment"
-            android:exported="false"
-            android:theme="@style/Theme.MyAppNoBar" />
+            android:exported="false" />
         <activity
             android:name=".SettingsActivities.GatewayClientsSettingsActivity"
             android:exported="false"
-            android:parentActivityName=".HomepageActivity"
-            android:theme="@style/Theme.MyAppNoBar" />
+            android:parentActivityName=".HomepageActivity" />
         <activity
             android:name=".AddNewGatewayActivity"
             android:exported="false"
-            android:parentActivityName=".SettingsActivities.GatewayClientsSettingsActivity"
-            android:theme="@style/Theme.MyAppNoBar" />
+            android:parentActivityName=".SettingsActivities.GatewayClientsSettingsActivity" />
         <activity
             android:name=".SettingsActivities.StoreAccessSettingsActivity"
             android:exported="false"
-            android:parentActivityName=".HomepageActivity"
-            android:theme="@style/Theme.MyAppNoBar" />
+            android:parentActivityName=".HomepageActivity" />
         <activity
             android:name=".EmailComposeActivity"
             android:exported="false"
-            android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment"
-            android:theme="@style/Theme.MyAppNoBar" >
+            android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -141,8 +132,7 @@
             android:name=".TextComposeActivity"
             android:exported="false"
             android:label=""
-            android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment"
-            android:theme="@style/Theme.MyAppNoBar" >
+            android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -160,19 +150,15 @@
         </activity>
         <activity
             android:name=".PasswordActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MyAppNoBar" />
+            android:exported="false" />
 
         <activity
             android:name=".MessageLockBiometricsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MyAppNoBar" />
+            android:exported="false" />
 
         <activity
             android:name=".AppLockBiometricActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MyAppNoBar" />
-
+            android:exported="false" />
     </application>
 
 </manifest>
