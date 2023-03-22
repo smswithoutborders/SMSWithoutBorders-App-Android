@@ -3,10 +3,15 @@
 
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- TODO: put logic to fill toolbar with image color -->
-        <item name="android:statusBarColor">@color/primary_background_color</item>
         <item name="bottomNavigationStyle">@style/BottomNavigationViewStyle</item>
-        <item name="android:backgroundTint">@color/primary_background_color</item>
 
+        <item name="android:statusBarColor">@color/primary_background_color</item>
+
+        <item name="android:windowActionBarOverlay">true</item>
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
+        <item name="android:windowLightStatusBar">true</item>
+
+        <item name="android:backgroundTint">@color/primary_background_color</item>
         <item name="android:textColorPrimary">@color/primary_color_text</item>
         <item name="android:colorPrimary">@color/primary_color_text</item>
         <item name="android:textColor">@color/primary_color_text</item>
