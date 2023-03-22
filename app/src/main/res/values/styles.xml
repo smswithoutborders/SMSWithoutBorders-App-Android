@@ -3,6 +3,14 @@
 
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- TODO: put logic to fill toolbar with image color -->
+        <item name="android:statusBarColor">@color/primary_background_color</item>
+        <item name="bottomNavigationStyle">@style/BottomNavigationViewStyle</item>
+    </style>
+
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="android:background">@color/primary_background_color</item>
+        <item name="itemTextColor">@color/bottom_nav_item_color</item>
+        <item name="itemIconTint">@color/bottom_nav_item_color</item>
     </style>
 
     <style name="Theme.button_primary" parent="Theme.MyApp">
@@ -11,4 +19,5 @@
     <style name="Theme.button_secondary" parent="Theme.MyApp">
         <item name="android:backgroundTint">@color/logo_secondary</item>
     </style>
+
 </resources>

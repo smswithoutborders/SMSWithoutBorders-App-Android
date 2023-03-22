@@ -19,4 +19,6 @@
     <color name="logo_primary">#061892</color>
     <color name="logo_secondary">#9bbef1</color>
     <color name="link_color">@color/default_blue</color>
+    <color name="primary_color_text">@color/black</color>
+    <color name="primary_background_color">@color/white</color>
 </resources>

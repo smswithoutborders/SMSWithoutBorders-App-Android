@@ -32,9 +32,9 @@ public class SyncInitiateActivity extends AppCompactActivityCustomized {
         setContentView(view);
 
         // Get a support ActionBar corresponding to this toolbar
-        ActionBar ab = getSupportActionBar();
-        // Enable the Up button
-        ab.setDisplayHomeAsUpEnabled(true);
+//        ActionBar ab = getSupportActionBar();
+//        // Enable the Up button
+//        ab.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
