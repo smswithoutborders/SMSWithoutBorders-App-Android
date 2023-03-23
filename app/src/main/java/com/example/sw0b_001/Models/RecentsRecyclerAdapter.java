@@ -105,21 +105,16 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
                 platformIntent.putExtra("platform_id", platform.getId());
                 try {
                     checkHasDecryptionLockScreen(platformIntent);
-                } catch (InterruptedException e) {
+                } catch (InterruptedException | GeneralSecurityException | IOException e) {
                     e.printStackTrace();
                 }
             }
         });
     }
 
-    private boolean checkHasDecryptionLockScreen(Intent intent) throws InterruptedException {
-        // Get the SharedPreferences
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        // Get the state of the SwitchPreferenceCompact
-        boolean isChecked = prefs.getBoolean("lock_screen_for_encryption", false);
-
-        if(isChecked && securityHandler.phoneCredentialsPossible()) {
+    private boolean checkHasDecryptionLockScreen(Intent intent) throws InterruptedException, GeneralSecurityException, IOException {
+        if(SecurityHandler.checkHasLockDecryption(context) &&
+                SecurityHandler.phoneCredentialsPossible(context)) {
             securityHandler.authenticateWithLockScreen(intent, null);
             return true;
         }

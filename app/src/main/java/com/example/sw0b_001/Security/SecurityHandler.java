@@ -18,12 +18,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import com.example.sw0b_001.BuildConfig;
-import com.example.sw0b_001.AppCompactActivityCustomized;
 import com.example.sw0b_001.Models.PublisherHandler;
 import com.example.sw0b_001.R;
 
@@ -197,7 +198,7 @@ public class SecurityHandler {
 
     }
 
-    public boolean phoneCredentialsPossible() {
+    public static boolean phoneCredentialsPossible(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             BiometricManager biometricManager = (BiometricManager) context.getSystemService(Context.BIOMETRIC_SERVICE);
             int canAuthenticate = biometricManager.canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL);
@@ -226,7 +227,6 @@ public class SecurityHandler {
 //                    // TODO:
 //                    break;
                 default:
-                    Log.d(getClass().getName(), "Defaulting for authentication");
                     break;
             }
         }
@@ -302,6 +302,69 @@ public class SecurityHandler {
         }
     }
 
+    public void authenticateWithLockScreen(Runnable successRunnable, Runnable failedRunnable) throws InterruptedException {
+        Executor executor = ContextCompat.getMainExecutor(context);
+        CancellationSignal cancellationSignal = new CancellationSignal();
+        cancellationSignal.setOnCancelListener(new CancellationSignal.OnCancelListener() {
+            @Override
+            public void onCancel() {
+            }
+        });
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            android.hardware.biometrics.BiometricPrompt biometricPrompt = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) ?
+                    new android.hardware.biometrics.BiometricPrompt.Builder(context)
+                            .setTitle(context.getString(R.string.settings_biometric_login))
+                            .setSubtitle(context.getString(R.string.settings_biometric_login_subtitle))
+                            .setDescription(context.getString(R.string.settings_biometric_login_description))
+                            .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
+                            .build() :
+                    new android.hardware.biometrics.BiometricPrompt.Builder(context)
+                            .setTitle(context.getString(R.string.settings_biometric_login))
+                            .setSubtitle(context.getString(R.string.settings_biometric_login_subtitle))
+                            .setDescription(context.getString(R.string.settings_biometric_login_description))
+                            .setDeviceCredentialAllowed(true)
+                            .build();
+
+            biometricPrompt.authenticate(cancellationSignal,
+                    executor, new android.hardware.biometrics.BiometricPrompt.AuthenticationCallback() {
+                        @Override
+                        public void onAuthenticationError(int errorCode,
+                                                          @NonNull CharSequence errString) {
+                            super.onAuthenticationError(errorCode, errString);
+                            if (BuildConfig.DEBUG) {
+                                Toast.makeText(context,
+                                                "Authentication error: " + errorCode + ":" + errString, Toast.LENGTH_SHORT)
+                                        .show();
+                                failedRunnable.run();
+                            }
+                        }
+
+                        @Override
+                        public void onAuthenticationSucceeded(
+                                @NonNull android.hardware.biometrics.BiometricPrompt.AuthenticationResult result) {
+                            super.onAuthenticationSucceeded(result);
+                            if (BuildConfig.DEBUG)
+                                Toast.makeText(context,
+                                        "Authentication succeeded!", Toast.LENGTH_SHORT).show();
+
+//                            ActivityOptions options = ActivityOptions.makeCustomAnimation(context,
+//                                    android.R.anim.fade_in, android.R.anim.fade_out);
+//                            context.startActivity(callbackIntent, options.toBundle());
+                            successRunnable.run();
+                        }
+
+                        @Override
+                        public void onAuthenticationFailed() {
+                            super.onAuthenticationFailed();
+                            if (BuildConfig.DEBUG)
+                                Toast.makeText(context, "Authentication failed",
+                                        Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
     public boolean seenBiometricCheckAlwaysOn() throws GeneralSecurityException, IOException {
         SharedPreferences encryptedSharedPreferences = EncryptedSharedPreferences.create(
                 context,
@@ -313,7 +376,7 @@ public class SecurityHandler {
         return encryptedSharedPreferences.contains(BIOMETRIC_CHECK_ALWAYS_ON);
     }
 
-    public boolean seenBiometricCheckDecyption() throws GeneralSecurityException, IOException {
+    public boolean seenBiometricCheckDecryption() throws GeneralSecurityException, IOException {
         SharedPreferences encryptedSharedPreferences = EncryptedSharedPreferences.create(
                 context,
                 BIOMETRIC_CHECK_DECRYPTION,
@@ -372,5 +435,21 @@ public class SecurityHandler {
 
     public boolean requiresSyncing() throws GeneralSecurityException, IOException {
         return getMSISDN().isEmpty();
+    }
+
+    public static boolean checkHasLockScreenAlways(Context context) {
+        // Get the SharedPreferences
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        // Get the state of the SwitchPreferenceCompact
+        return prefs.getBoolean("lock_screen_always_on", false);
+    }
+
+    public static boolean checkHasLockDecryption(Context context) {
+        // Get the SharedPreferences
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        // Get the state of the SwitchPreferenceCompact
+        return prefs.getBoolean("lock_screen_for_encryption", false);
     }
 }

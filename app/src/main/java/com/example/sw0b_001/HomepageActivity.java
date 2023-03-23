@@ -1,7 +1,6 @@
 package com.example.sw0b_001;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -56,14 +55,14 @@ public class HomepageActivity extends AppCompactActivityCustomized {
                 return;
             }
 
-            if(securityHandler.phoneCredentialsPossible() ) {
+            if(SecurityHandler.phoneCredentialsPossible(getApplicationContext()) ) {
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 if (!securityHandler.seenBiometricCheckAlwaysOn()) {
                     startActivity(new Intent(this, AppLockBiometricActivity.class));
                     finish();
                 }
 
-                else if (!securityHandler.seenBiometricCheckDecyption()) {
+                else if (!securityHandler.seenBiometricCheckDecryption()) {
                     startActivity(new Intent(this, MessageLockBiometricsActivity.class));
                     finish();
                 }

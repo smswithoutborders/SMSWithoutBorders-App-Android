@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
@@ -20,6 +21,39 @@ public class SecurityPrivacyFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+
+        if((SecurityHandler.checkHasLockScreenAlways(getContext()) ||
+                SecurityHandler.checkHasLockDecryption(getContext())) &&
+                SecurityHandler.phoneCredentialsPossible(getContext())) {
+            try {
+                SecurityHandler securityHandler = new SecurityHandler(getContext());
+
+                Runnable successRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        loadView(rootKey);
+                    }
+                };
+
+                Runnable failedRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        getParentFragmentManager().popBackStackImmediate();
+                    }
+                };
+
+                securityHandler.authenticateWithLockScreen(successRunnable, failedRunnable);
+            } catch (GeneralSecurityException | InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            loadView(rootKey);
+        }
+    }
+
+    private void loadView(String rootKey) {
         setPreferencesFromResource(R.xml.security_privacy_preferences, rootKey);
 
         Preference accountLogoutPreference = findPreference("logout");
