@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sw0b_001.Helpers.CustomHelpers;
 import com.example.sw0b_001.SettingsActivities.GatewayClientsSettingsActivity;
 import com.example.sw0b_001.R;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -107,7 +108,7 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
         TextView MSISDN;
         TextView country;
         TextView operatorName;
-        Switch switchBtn;
+        SwitchMaterial switchBtn;
         ConstraintLayout layout;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
