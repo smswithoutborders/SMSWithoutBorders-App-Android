@@ -59,7 +59,6 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         GatewayClient gatewayClient = this.gatewayClientList.get(position);
-        Log.d(getClass().getName(), "View attaching");
 
         holder.MSISDN.setText(gatewayClient.getMSISDN());
         if(gatewayClient.getType() == null)

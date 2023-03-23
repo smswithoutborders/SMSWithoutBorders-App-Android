@@ -162,19 +162,10 @@ public class SecurityHandler {
 
         SharedPreferences.Editor sharedPreferencesEditor = encryptedSharedPreferences.edit();
 
-        if(BuildConfig.DEBUG)
-            Log.d(getClass().getName(), "storing MSISDN: " + msisdnHash);
         sharedPreferencesEditor.putString(MSISDN_HASH, msisdnHash);
         if(!sharedPreferencesEditor.commit()) {
-            if(BuildConfig.DEBUG)
-                Log.e(getClass().getName(), "- Failed to store MSISDN");
             throw new RuntimeException("Failed to store MSISDN");
         }
-        else {
-            if(BuildConfig.DEBUG)
-                Log.i(getClass().getName(), "+ MSISDN hash stored successfully");
-        }
-
     }
 
     public void storeSharedKey(String sharedKey) throws GeneralSecurityException, IOException {
@@ -189,13 +180,8 @@ public class SecurityHandler {
 
         sharedPreferencesEditor.putString(SHARED_SECRET_KEY, sharedKey);
         if(!sharedPreferencesEditor.commit()) {
-            Log.e(getClass().getName(), "- Failed to store shared key!");
             throw new RuntimeException("Failed to store shared key!");
         }
-        else {
-            Log.i(getClass().getName(), "+ Shared key stored successfully");
-        }
-
     }
 
     public static boolean phoneCredentialsPossible(Context context) {
@@ -204,17 +190,11 @@ public class SecurityHandler {
             int canAuthenticate = biometricManager.canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL);
             switch (canAuthenticate) {
                 case BiometricManager.BIOMETRIC_SUCCESS:
-                    if (BuildConfig.DEBUG)
-                        Log.d(PublisherHandler.class.getName(), "App can authenticate using biometrics.");
                     return true;
 
                 case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
-                    if (BuildConfig.DEBUG)
-                        Log.e("MY_APP_TAG", "No biometric features available on this device.");
                     break;
                 case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
-                    if (BuildConfig.DEBUG)
-                        Log.e("MY_APP_TAG", "Biometric features are currently unavailable.");
                     break;
 //                case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
 //                    // Prompts the user to create credentials that your app accepts.
@@ -399,15 +379,8 @@ public class SecurityHandler {
 
         sharedPreferencesEditor.putBoolean(BIOMETRIC_CHECK_ALWAYS_ON, seen);
         if(!sharedPreferencesEditor.commit()) {
-            if(BuildConfig.DEBUG)
-                Log.e(getClass().getName(), "Failed to Update biometric check seen");
             throw new RuntimeException("Failed to store MSISDN");
         }
-        else {
-            if(BuildConfig.DEBUG)
-                Log.i(getClass().getName(), "Stored biometric check seen");
-        }
-
     }
 
     public void setSeenBiometricScreenDecryption(boolean seen) throws GeneralSecurityException, IOException {
@@ -422,15 +395,8 @@ public class SecurityHandler {
 
         sharedPreferencesEditor.putBoolean(BIOMETRIC_CHECK_DECRYPTION, seen);
         if(!sharedPreferencesEditor.commit()) {
-            if(BuildConfig.DEBUG)
-                Log.e(getClass().getName(), "Failed to Update biometric check seen");
             throw new RuntimeException("Failed to store MSISDN");
         }
-        else {
-            if(BuildConfig.DEBUG)
-                Log.i(getClass().getName(), "Stored biometric check seen");
-        }
-
     }
 
     public boolean requiresSyncing() throws GeneralSecurityException, IOException {

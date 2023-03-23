@@ -53,7 +53,6 @@ public class GatewayClientsSettingsActivity extends AppCompactActivityCustomized
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(getLocalClassName(), "Resuming");
         try {
             populateSettings();
         } catch (InterruptedException e) {

@@ -52,9 +52,6 @@ public class RabbitMQ {
 
         msisdnHash = securityHandler.getMSISDN();
 
-        if(BuildConfig.DEBUG)
-            Log.d(getClass().getName(), "MSISDN fetched: " + msisdnHash);
-
         String sharedKey = securityHandler.getSharedKeyNoneBase64();
 
         factory.setUsername(msisdnHash);
@@ -67,12 +64,8 @@ public class RabbitMQ {
         setFactoryExceptionHandlers();
 
         queue_name = context.getString(R.string.notifications_queue_name) + msisdnHash;
-        if(BuildConfig.DEBUG)
-            Log.d(getClass().getName(), "Queue name: " + queue_name);
 
         exchange_name = context.getString(R.string.notifications_exchange_name);
-        if(BuildConfig.DEBUG)
-            Log.d(getClass().getName(), "Exchange name: " + exchange_name);
     }
 
     public Connection getConnection() {
@@ -97,9 +90,6 @@ public class RabbitMQ {
 
         String routingKey = msisdnHash;
         channel.basicPublish(exchange_name, routingKey, null, message.getBytes());
-
-        if(BuildConfig.DEBUG)
-            Log.d(getClass().getName(), "[+] RMQ published successfully!");
     }
 
     public void consume(DeliverCallback deliverCallback) throws IOException {

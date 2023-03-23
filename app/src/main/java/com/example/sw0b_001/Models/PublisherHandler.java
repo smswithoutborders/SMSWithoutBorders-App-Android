@@ -38,7 +38,6 @@ public class PublisherHandler {
     // TODO: clean up methods using this method
     public static String decryptPublishedContent(Context context, String encryptedContent) throws Throwable {
         // Transform from Base64
-        Log.d(PublisherHandler.class.getName(), "Yes unlocked!");
 
         byte[] decodedEncryptedContent = Base64.decode(encryptedContent, Base64.DEFAULT);
 

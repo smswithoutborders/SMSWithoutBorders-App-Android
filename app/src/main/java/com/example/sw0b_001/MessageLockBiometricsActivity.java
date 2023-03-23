@@ -31,9 +31,6 @@ public class MessageLockBiometricsActivity extends AppCompactActivityCustomized 
     }
 
     public void enabledDecryptionClicked(View view) throws GeneralSecurityException, IOException {
-        if(BuildConfig.DEBUG)
-            Log.d(getClass().getName(), "Enabled clicked");
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().putBoolean("lock_screen_for_encryption", true).apply();
 
@@ -41,9 +38,6 @@ public class MessageLockBiometricsActivity extends AppCompactActivityCustomized 
     }
 
     public void notNOwDecryptionClicked(View view) throws GeneralSecurityException, IOException {
-        if(BuildConfig.DEBUG)
-            Log.d(getClass().getName(), "Not now clicked");
-
         navigateAway();
     }
 }

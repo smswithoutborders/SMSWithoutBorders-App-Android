@@ -103,7 +103,6 @@ public class SecurityRSA extends SecurityHandler {
 
     // Requirements to use this: input has to be Base64 encoded
     public byte[] decrypt(byte[] encryptedInput, String keyStoreAlias) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
-        Log.d(getClass().getName(), "Decryption keystore alias: " + keyStoreAlias);
         byte[] decryptedBytes = null;
         try {
             KeyStore keyStore = getKeyStore();

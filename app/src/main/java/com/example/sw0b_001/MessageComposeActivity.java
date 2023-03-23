@@ -96,8 +96,6 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
                 try {
                     final String decryptedEmailContent = PublisherHandler.decryptPublishedContent(
                             getApplicationContext(), encryptedContent.getEncryptedContent());
-                    if(BuildConfig.DEBUG)
-                        Log.d(getLocalClassName(), "Decrypted content: " + decryptedEmailContent);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
