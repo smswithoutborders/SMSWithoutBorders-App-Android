@@ -47,7 +47,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 // TODO: change stored access to fragments
                 Intent storeAccessIntent = new Intent(getContext(), StoreAccessSettingsActivity.class);
                 startActivity(storeAccessIntent);
-                return false;
+                return true;
             }
         });
 
@@ -56,7 +56,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceClick(@NonNull Preference preference) {
                 Intent gatewayClientIntent = new Intent(getContext(), GatewayClientsSettingsActivity.class);
                 startActivity(gatewayClientIntent);
-                return false;
+                return true;
             }
         });
     }

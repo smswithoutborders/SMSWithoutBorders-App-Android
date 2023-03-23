@@ -72,8 +72,6 @@ public class PasswordActivity extends AppCompactActivityCustomized {
                 password,
                 gatewayServerPublicKey);
         String passwordBase64 = Base64.encodeToString(encryptedPassword, Base64.DEFAULT);
-        Log.d(getLocalClassName(), "Enc Password: " + passwordBase64);
-
         try {
             JSONObject jsonBody = new JSONObject(
                     "{\"public_key\": \"" + publicKey + "\"," +
@@ -131,8 +129,6 @@ public class PasswordActivity extends AppCompactActivityCustomized {
         byte[] passwordEncoded = passwordField.getText().toString().getBytes(StandardCharsets.UTF_8);
 
         PublicKey gatewayServerPublicKey = (PublicKey) getIntent().getExtras().get("gateway_server_public_key");
-        Log.d(getLocalClassName(), "Pub key: " +
-                Base64.encodeToString(gatewayServerPublicKey.getEncoded(), Base64.DEFAULT));
 
         String gatewayServerUrl = getIntent().getStringExtra("gateway_server_url");
         Thread transmissionThread = new Thread(new Runnable() {

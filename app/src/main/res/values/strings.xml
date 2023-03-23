@@ -147,7 +147,7 @@
 
     <string name="settings_security_and_privacy_enable_lockscreen_read_encrypted">Enable lockscreen for decryption
     </string>
-    <string name="settings_security_and_privacy_enable_lockscreen_read_encrypted_summary">Require lockscreen pin/fingerprint when decryption is required in app e.g opening up previously messages</string>
+    <string name="settings_security_and_privacy_enable_lockscreen_read_encrypted_summary">Require lockscreen pin/fingerprint when decryption is required in app e.g opening sent messages</string>
     <string name="settings_biometric_enable_btn">Enable</string>
     <string name="settings_biometric_not_now_btn">Not now</string>
 
@@ -160,6 +160,23 @@
     <string name="settings_security_and_privacy_enable_pin_summary">
         Unavailable
     </string>
+    <string name="settings_security_and_privacy_account">
+        Account
+    </string>
+    <string name="settings_security_and_privacy_account_logout">
+        Logout
+    </string>
+    <string name="settings_security_and_privacy_account_logout_summary">Logout of your account. You can always log back in, however you current messages would be deleted. </string>
+
+    <string name="settings_security_and_privacy_account_delete">
+        Delete
+    </string>
+
+    <string name="settings_security_and_privacy_account_delete_summary">
+        Deleting your account means deleting all your saved accounts online. You can always recreate your account once needed.
+    </string>
+
+    <string name="settings_security_and_privacy_account_delete_url" translatable="false">https://smswithoutborders.github.io/docs/tutorials/delete-account/</string>
 
     <!-- settings language -->
     <string name="language_choose_text">

@@ -189,7 +189,6 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
     private PublicKey updateSharedKeyEncryption(String gatewayServerUrlHost) throws Throwable {
         SecurityRSA securityRSA = new SecurityRSA(this);
         byte[] sharedKey = SecurityHelpers.getDecryptedSharedKey(this);
-        Log.d(getLocalClassName(), "Decrypted shared key: " + sharedKey);
 
         PublicKey publicKeyEncoded = getNewPublicKey(gatewayServerUrlHost);
         byte[] encryptedSharedKey = securityRSA.encrypt( sharedKey, publicKeyEncoded, SecurityHandler.decryptionDigestParam);
@@ -220,7 +219,6 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
                 @Override
                 public void run() {
                     try {
-                        Log.d(getLocalClassName(), "gateway server: " + gatewayServerUrl);
                         String gatewayServerHost = gatewayServerUrl.getProtocol() + "://" +
                                 gatewayServerUrl.getHost();
 
@@ -255,8 +253,6 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
                         Intent passwordActivityIntent = new Intent(getApplicationContext(), PasswordActivity.class);
 
                         Intent syncHandshakeIntent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
-                        if(BuildConfig.DEBUG)
-                            Log.d(getLocalClassName(), getPackageName());
                         syncHandshakeIntent.setPackage(getPackageName());
                         syncHandshakeIntent.putExtra("gateway_server_id", gatewayServerId);
                         syncHandshakeIntent.putExtra("state", "complete_handshake");
@@ -286,7 +282,6 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
 
     private PublicKey getGatewayServerPublicKey(String gatewayServerUrl) throws IOException, InterruptedException {
         String primaryKeySite = new String();
-        Log.d(getLocalClassName(), "Acquiring pub key: " + gatewayServerUrl);
         /*
         if(BuildConfig.DEBUG)
             primaryKeySite = getString(R.string.official_staging_site);
@@ -294,8 +289,6 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
             primaryKeySite = getString(R.string.official_site);
 
          */
-        Log.d(getLocalClassName(), primaryKeySite);
-
         URL url = new URL(gatewayServerUrl);
         HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
         InputStream in = new BufferedInputStream(urlConnection.getInputStream());

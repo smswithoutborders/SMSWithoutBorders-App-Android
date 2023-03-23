@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/Theme.main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -23,9 +24,6 @@
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@color/default_dark"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/email_body"
         app:layout_constraintEnd_toEndOf="parent"
@@ -92,8 +90,6 @@
         android:id="@+id/email_body"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
         android:autoLink="all"
         android:background="@null"
         android:gravity="start|top"

@@ -30,9 +30,6 @@ public class AppLockBiometricActivity extends AppCompactActivityCustomized {
     }
 
     public void enableClicked(View view) throws GeneralSecurityException, IOException {
-       if(BuildConfig.DEBUG)
-           Log.d(getClass().getName(), "Enabled clicked");
-
        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
        prefs.edit().putBoolean("lock_screen_always_on", true).apply();
 
@@ -40,9 +37,6 @@ public class AppLockBiometricActivity extends AppCompactActivityCustomized {
     }
 
     public void notNowClicked(View view) throws GeneralSecurityException, IOException {
-        if(BuildConfig.DEBUG)
-            Log.d(getClass().getName(), "Not now clicked");
-
         navigateAway();
     }
 }

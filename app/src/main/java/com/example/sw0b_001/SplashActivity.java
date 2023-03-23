@@ -40,14 +40,6 @@ public class SplashActivity extends AppCompatActivity {
     // milliseconds
     private final int SPLASH_DELAY_DURATION = 3000;
 
-    private boolean checkHasLockScreenAlways() {
-        // Get the SharedPreferences
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        // Get the state of the SwitchPreferenceCompact
-        boolean isChecked = prefs.getBoolean("lock_screen_always_on", false);
-        return isChecked;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +49,14 @@ public class SplashActivity extends AppCompatActivity {
             activitySplashBinding = ActivitySplashBinding.inflate(getLayoutInflater());
             setContentView(activitySplashBinding.getRoot());
 
-            ActionBar ab = getSupportActionBar();
-            // Enable the Up button
-            ab.hide();
+//            ActionBar ab = getSupportActionBar();
+//            // Enable the Up button
+//            ab.hide();
             screenContentView = activitySplashBinding.fullscreenContent;
 
             if(checkHasSharedKey()) {
-                if(checkHasLockScreenAlways() && securityHandler.phoneCredentialsPossible()) {
+                if(SecurityHandler.checkHasLockScreenAlways(getApplicationContext()) &&
+                        SecurityHandler.phoneCredentialsPossible(getApplicationContext())) {
                     enableLockScreen();
                 }
                 else {

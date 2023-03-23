@@ -66,8 +66,6 @@ public class NotificationsHandler {
     }
 
     public static void beginNotificationsListeners(Context context) {
-        if(BuildConfig.DEBUG)
-            Log.d(NotificationsHandler.class.getName(), "Starting notifications listeners");
 
         Constraints constraints = new Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)

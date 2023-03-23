@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sw0b_001.Helpers.CustomHelpers;
 import com.example.sw0b_001.SettingsActivities.GatewayClientsSettingsActivity;
 import com.example.sw0b_001.R;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -58,7 +59,6 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         GatewayClient gatewayClient = this.gatewayClientList.get(position);
-        Log.d(getClass().getName(), "View attaching");
 
         holder.MSISDN.setText(gatewayClient.getMSISDN());
         if(gatewayClient.getType() == null)
@@ -107,7 +107,7 @@ public class GatewayClientsRecyclerAdapter extends RecyclerView.Adapter<GatewayC
         TextView MSISDN;
         TextView country;
         TextView operatorName;
-        Switch switchBtn;
+        SwitchMaterial switchBtn;
         ConstraintLayout layout;
 
         public ViewHolder(@NonNull @NotNull View itemView) {

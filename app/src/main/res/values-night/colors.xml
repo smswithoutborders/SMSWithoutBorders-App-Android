@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="menu_icon_tint">#FFFFFFFF</color>
+    <color name="send_icon_color">@color/white</color>
+    <color name="link_color">@color/logo_secondary</color>
+    <color name="primary_color_text">@color/white</color>
+    <color name="primary_background_color">@color/default_dark</color>
+</resources>

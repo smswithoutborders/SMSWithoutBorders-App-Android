@@ -1,7 +1,6 @@
 package com.example.sw0b_001;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -56,14 +55,14 @@ public class HomepageActivity extends AppCompactActivityCustomized {
                 return;
             }
 
-            if(securityHandler.phoneCredentialsPossible() ) {
+            if(SecurityHandler.phoneCredentialsPossible(getApplicationContext()) ) {
                 overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 if (!securityHandler.seenBiometricCheckAlwaysOn()) {
                     startActivity(new Intent(this, AppLockBiometricActivity.class));
                     finish();
                 }
 
-                else if (!securityHandler.seenBiometricCheckDecyption()) {
+                else if (!securityHandler.seenBiometricCheckDecryption()) {
                     startActivity(new Intent(this, MessageLockBiometricsActivity.class));
                     finish();
                 }
@@ -85,20 +84,20 @@ public class HomepageActivity extends AppCompactActivityCustomized {
             e.printStackTrace();
         }
 
-        fragmentManager.beginTransaction().add(R.id.homepage_fragment_container_view,
-                        RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
-                .setReorderingAllowed(true)
-                .setCustomAnimations(android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right,
-                        android.R.anim.fade_in,
-                        android.R.anim.fade_out)
-                .commitNow();
-
-        Fragment currentFragment = fragmentManager.findFragmentByTag(SETTINGS_FRAGMENT_TAG);
-        if(currentFragment instanceof SettingsFragment) {
-            textView.setText(R.string.settings_settings);
-            textView.setVisibility(View.VISIBLE);
-        }
+//        fragmentManager.beginTransaction().add(R.id.homepage_fragment_container_view,
+//                        RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
+//                .setReorderingAllowed(true)
+//                .setCustomAnimations(android.R.anim.slide_in_left,
+//                        android.R.anim.slide_out_right,
+//                        android.R.anim.fade_in,
+//                        android.R.anim.fade_out)
+//                .commitNow();
+//
+//        Fragment currentFragment = fragmentManager.findFragmentByTag(SETTINGS_FRAGMENT_TAG);
+//        if(currentFragment instanceof SettingsFragment) {
+//            textView.setText(R.string.settings_settings);
+//            textView.setVisibility(View.VISIBLE);
+//        }
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -159,14 +158,9 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
             String messageBase64 = new String(delivery.getBody(), "UTF-8");
-            if(BuildConfig.DEBUG)
-                Log.d(getClass().getName(), "[x] Received Base64'" + messageBase64 + "'");
 
             try {
                 String notificationData = new String(Base64.decode(messageBase64, Base64.DEFAULT), StandardCharsets.UTF_8);
-
-                if(BuildConfig.DEBUG)
-                    Log.d(getClass().getName(), "[x] Received '" + notificationData + "'");
 
                 JSONObject jsonObject = new JSONObject(notificationData);
                 long id = jsonObject.getLong("id");

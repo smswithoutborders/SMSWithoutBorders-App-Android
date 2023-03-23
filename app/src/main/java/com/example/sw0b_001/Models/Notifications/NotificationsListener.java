@@ -46,14 +46,9 @@ public class NotificationsListener extends Worker {
             DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 
                 String messageBase64 = new String(delivery.getBody(), "UTF-8");
-                if(BuildConfig.DEBUG)
-                    Log.d(getClass().getName(), "[x] Received Base64'" + messageBase64 + "'");
 
                 try {
                     String notificationData = new String(Base64.decode(messageBase64, Base64.DEFAULT), StandardCharsets.UTF_8);
-
-                    if(BuildConfig.DEBUG)
-                        Log.d(getClass().getName(), "[x] Received '" + notificationData + "'");
 
                     JSONObject jsonObject = new JSONObject(notificationData);
                     long id = jsonObject.getLong("id");

@@ -35,21 +35,27 @@ import java.util.concurrent.Executor;
 
 public class PublisherHandler {
 
+    // TODO: clean up methods using this method
     public static String decryptPublishedContent(Context context, String encryptedContent) throws Throwable {
         // Transform from Base64
-        Log.d(PublisherHandler.class.getName(), "Yes unlocked!");
-        String decodedEncryptedContent = new String(Base64.decode(encryptedContent, Base64.DEFAULT));
 
-        String iv = decodedEncryptedContent.substring(0, 16);
-        String encodedEncryptedContent = decodedEncryptedContent.substring(16);
+        byte[] decodedEncryptedContent = Base64.decode(encryptedContent, Base64.DEFAULT);
 
         SecurityAES securityAES = new SecurityAES(context);
         try {
             byte[] sharedKey = SecurityHelpers.getDecryptedSharedKey(context);
-            byte[] decryptedEmailContent = securityAES.decrypt(
-                    iv.getBytes(),
-                    Base64.decode(encodedEncryptedContent, Base64.DEFAULT),
-                    sharedKey);
+            byte[] encodedContent = new byte[decodedEncryptedContent.length - 16];
+
+            System.arraycopy(decodedEncryptedContent, 16, encodedContent, 0, encodedContent.length);
+            byte[] decodedContent = Base64.decode(encodedContent, Base64.DEFAULT);
+            byte[] originalContent = new byte[16 + decodedContent.length];
+
+            // copy iv
+            System.arraycopy(decodedEncryptedContent, 0, originalContent, 0, 16);
+            // copy content
+            System.arraycopy(decodedContent, 0, originalContent, 16, decodedContent.length);
+
+            byte[] decryptedEmailContent = securityAES.decrypt(originalContent, sharedKey);
 
             return new String(decryptedEmailContent, StandardCharsets.UTF_8);
         } catch (Exception e) {
@@ -58,19 +64,13 @@ public class PublisherHandler {
     }
 
 
-    public static String[] encryptContentForPublishing(Context context, String emailContent) throws Throwable {
-        SecurityHandler securityHandler = new SecurityHandler(context);
-        String randomStringForIv = securityHandler.generateRandom(16);
-
+    public static byte[] encryptContentForPublishing(Context context, String emailContent) throws Throwable {
         SecurityAES securityAES = new SecurityAES(context);
         try {
             byte[] sharedKey = SecurityHelpers.getDecryptedSharedKey(context);
-            byte[] encryptedContent = securityAES.encrypt(
-                    randomStringForIv.getBytes(),
-                    emailContent.getBytes(StandardCharsets.UTF_8),
+            return securityAES.encrypt(emailContent.getBytes(StandardCharsets.UTF_8),
                     sharedKey);
 
-            return new String[]{randomStringForIv, Base64.encodeToString(encryptedContent, Base64.NO_WRAP)};
         }
         catch(Exception e ) {
             throw new Throwable(e);
@@ -79,14 +79,20 @@ public class PublisherHandler {
 
     public static String formatForPublishing(Context context, String formattedContent) throws Throwable {
         try {
-            String[] encryptedIVEmailContent = encryptContentForPublishing(context, formattedContent);
+            byte[] encryptedContent = encryptContentForPublishing(context, formattedContent);
 
-            String IV = encryptedIVEmailContent[0];
-            String encryptedEmailContent = encryptedIVEmailContent[1];
+            byte[] iv = new byte[16];
+            byte[] content = new byte[encryptedContent.length - 16];
 
-            final String encryptedContent = IV + encryptedEmailContent;
+            System.arraycopy(encryptedContent, 0, iv, 0, iv.length);
+            System.arraycopy(encryptedContent, 16, content, 0, content.length);
+            byte[] encodedContent = Base64.encode(content, Base64.DEFAULT);
+            byte[] finalContent = new byte[16 + encodedContent.length];
 
-            return Base64.encodeToString(encryptedContent.getBytes(StandardCharsets.UTF_8), Base64.DEFAULT);
+            System.arraycopy(iv, 0, finalContent, 0, iv.length);
+            System.arraycopy(encodedContent, 0, finalContent, 16, encodedContent.length);
+
+            return Base64.encodeToString(finalContent, Base64.DEFAULT);
         }
         catch(Exception e ) {
             throw new Throwable(e);

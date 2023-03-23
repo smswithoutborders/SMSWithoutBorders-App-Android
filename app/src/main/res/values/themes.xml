@@ -1,15 +1,21 @@
 <resources>
 
-    <style name="Theme.MaterialComponents.Fullscreen" parent="Theme.MaterialComponents">
-        <item name="android:actionBarStyle">
-            @style/Widget.Theme.MaterialComponents.ActionBar.Fullscreen
-        </item>
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:windowBackground">@null</item>
+    <style name="Theme.main" parent="Theme.MyApp">
+<!--        <item name="android:textColorPrimary">@color/primary_color_text</item>-->
+<!--        <item name="android:colorPrimary">@color/primary_color_text</item>-->
+<!--        <item name="android:textColor">@color/primary_color_text</item>-->
+<!--        <item name="android:colorAccent">@color/primary_color_text</item>-->
     </style>
 
-    <style name="ThemeOverlay.Sw0b_001.FullscreenContainer" parent="">
-        <item name="fullscreenBackgroundColor">@color/black</item>
-        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    <style name="Theme.editBox" parent="Theme.main">
+        <item name="android:backgroundTint">@color/logo_secondary</item>
+        <item name="android:textColorHint">@color/primary_color_text</item>
+        <item name="android:textColor">@color/primary_color_text</item>
+        <item name="android:tint">@color/white</item>
     </style>
+
+    <style name="Theme.welcome_header" parent="Theme.main">
+        <item name="android:textColor">@color/logo_primary</item>
+    </style>
+
 </resources>

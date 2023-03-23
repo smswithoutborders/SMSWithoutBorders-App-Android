@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/Theme.main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,7 +10,6 @@
         android:id="@+id/tweet_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/default_dark"
         android:minHeight="?attr/actionBarSize"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,13 +33,11 @@
 
     <EditText
         android:id="@+id/tweet_compose_text"
+        android:theme="@style/Theme.editBox"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/text_box"
+        android:background="@drawable/edit_text_semi_round"
         android:gravity="start|top"
         android:hint="@string/tweet_compose_prompt"
         android:inputType="textMultiLine"

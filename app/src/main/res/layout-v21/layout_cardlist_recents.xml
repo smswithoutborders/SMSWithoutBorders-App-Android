@@ -9,9 +9,9 @@
     android:foreground="?attr/selectableItemBackground">
 
     <androidx.cardview.widget.CardView
+        android:theme="@style/Theme.main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:backgroundTint="@color/default_dark"
         android:clickable="false"
         android:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"

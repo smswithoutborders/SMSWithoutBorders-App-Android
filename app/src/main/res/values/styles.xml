@@ -1,28 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.MyApp" parent="Theme.MaterialComponents">
-        <item name="android:statusBarColor">@color/default_dark</item>
-        <item name="colorAccent">@color/white</item>
+    <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- TODO: put logic to fill toolbar with image color -->
+        <item name="bottomNavigationStyle">@style/BottomNavigationViewStyle</item>
+
+        <item name="android:statusBarColor">@color/primary_background_color</item>
+
+        <item name="android:windowActionBarOverlay">true</item>
+<!--        <item name="android:windowTranslucentStatus">true</item>-->
+        <item name="android:windowLightStatusBar">true</item>
+
+        <item name="android:backgroundTint">@color/primary_background_color</item>
+        <item name="android:textColorPrimary">@color/primary_color_text</item>
+        <item name="android:colorPrimary">@color/primary_color_text</item>
+        <item name="android:textColor">@color/primary_color_text</item>
+        <item name="android:colorAccent">@color/primary_color_text</item>
+<!--        <item name="preferenceTheme">@style/preference</item>-->
     </style>
 
-    <style name="Theme.MyAppNoBar" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="android:statusBarColor">@color/default_dark</item>
-        <item name="colorAccent">@color/white</item>
-        <item name="colorPrimary">@color/white</item>
+<!--    <style name="preference" parent="">-->
+<!--        <item name="android:textColor">#FFC107</item>-->
+<!--        <item name="android:colorAccent">#FFC107</item>-->
+<!--        <item name="android:textColorHighlight">#FFC107</item>-->
+<!--        <item name="android:textColorPrimary">#E91E63</item>-->
+<!--        <item name="android:textColorSecondary">#3F51B5</item>-->
+<!--    </style>-->
+
+    <style name="BottomNavigationViewStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="android:background">@color/primary_background_color</item>
+        <item name="itemTextColor">@color/bottom_nav_item_color</item>
+        <item name="itemIconTint">@color/bottom_nav_item_color</item>
     </style>
 
-    <style name="Widget.Theme.MaterialComponents.ActionBar.Fullscreen" parent="Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/black_overlay</item>
+    <style name="Theme.button_primary" parent="Theme.MyApp">
+        <item name="android:backgroundTint">@color/logo_primary</item>
+    </style>
+    <style name="Theme.button_secondary" parent="Theme.MyApp">
+        <item name="android:backgroundTint">@color/logo_secondary</item>
     </style>
 
-
-    <style name="Widget.App.CircularProgressIndicator" parent="Widget.MaterialComponents.CircularProgressIndicator">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.App.CircularProgressIndicator</item>
-        <item name="trackThickness">20dp</item>
-    </style>
-
-    <style name="ThemeOverlay.App.CircularProgressIndicator" parent="">
-        <item name="colorPrimary">@color/logo_blue1</item>
-    </style>
 </resources>

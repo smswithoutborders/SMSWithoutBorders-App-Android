@@ -67,7 +67,6 @@ public class NotificationsFragment extends Fragment {
             notificationsViewModel.getNotifications(notificationsDAO).observe(getViewLifecycleOwner(), new Observer<List<Notifications>>() {
                 @Override
                 public void onChanged(List<Notifications> notificationsList) {
-                    Log.d(getClass().getName(), "Notifications list should come");
                     if(!notificationsList.isEmpty()) noRecentNotifications.setVisibility(View.INVISIBLE);
                     else noRecentNotifications.setVisibility(View.VISIBLE);
 

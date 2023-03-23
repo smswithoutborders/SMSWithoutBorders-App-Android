@@ -81,4 +81,9 @@
     <string name="no_notifications">Aucune notification récente</string>
     <string name="settings_biometric_not_now_btn">Maintenant maintenant</string>
     <string name="settings_biometric_enable_btn">Permettre</string>
+    <string name="settings_security_and_privacy_account">Votre compte</string>
+    <string name="settings_security_and_privacy_account_logout">Se déconnecter</string>
+    <string name="settings_security_and_privacy_account_logout_summary">Déconnexion de votre compte. Vous pouvez toujours vous reconnecter, mais vos messages actuels seront supprimés.</string>
+    <string name="settings_security_and_privacy_account_delete">Supprimer le compte</string>
+    <string name="settings_security_and_privacy_account_delete_summary">Supprimer votre compte signifie supprimer tous vos comptes enregistrés en ligne. Vous pouvez toujours recréer votre compte une fois nécessaire.</string>
 </resources>

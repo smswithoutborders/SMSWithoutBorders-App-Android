@@ -31,7 +31,6 @@ public class WelcomeActivity extends AppCompactActivityCustomized {
 
     public void onContinueClick(View view) {
         String smswithoutbordersHandshakeUrl = getString(R.string.smswithoutborders_official_site_login);
-        Log.d(getLocalClassName(), "** " + smswithoutbordersHandshakeUrl);
         Uri intentUri = Uri.parse(smswithoutbordersHandshakeUrl);
         Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
         startActivity(intent);
