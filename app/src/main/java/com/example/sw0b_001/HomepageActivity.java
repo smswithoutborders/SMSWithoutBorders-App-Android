@@ -84,20 +84,20 @@ public class HomepageActivity extends AppCompactActivityCustomized {
             e.printStackTrace();
         }
 
-        fragmentManager.beginTransaction().add(R.id.homepage_fragment_container_view,
-                        RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
-                .setReorderingAllowed(true)
-                .setCustomAnimations(android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right,
-                        android.R.anim.fade_in,
-                        android.R.anim.fade_out)
-                .commitNow();
-
-        Fragment currentFragment = fragmentManager.findFragmentByTag(SETTINGS_FRAGMENT_TAG);
-        if(currentFragment instanceof SettingsFragment) {
-            textView.setText(R.string.settings_settings);
-            textView.setVisibility(View.VISIBLE);
-        }
+//        fragmentManager.beginTransaction().add(R.id.homepage_fragment_container_view,
+//                        RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
+//                .setReorderingAllowed(true)
+//                .setCustomAnimations(android.R.anim.slide_in_left,
+//                        android.R.anim.slide_out_right,
+//                        android.R.anim.fade_in,
+//                        android.R.anim.fade_out)
+//                .commitNow();
+//
+//        Fragment currentFragment = fragmentManager.findFragmentByTag(SETTINGS_FRAGMENT_TAG);
+//        if(currentFragment instanceof SettingsFragment) {
+//            textView.setText(R.string.settings_settings);
+//            textView.setVisibility(View.VISIBLE);
+//        }
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
