@@ -1,6 +1,7 @@
 package com.example.sw0b_001.SettingsActivities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -57,6 +58,7 @@ public class SecurityPrivacyFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.security_privacy_preferences, rootKey);
 
         Preference accountLogoutPreference = findPreference("logout");
+        Preference accountDeletePreference = findPreference("delete");
 
         accountLogoutPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -67,12 +69,23 @@ public class SecurityPrivacyFragment extends PreferenceFragmentCompat {
 
                     startActivity(new Intent(getContext(), SplashActivity.class));
                     getActivity().finish();
+                    return true;
                 } catch (GeneralSecurityException e) {
                     throw new RuntimeException(e);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                return false;
+            }
+        });
+
+
+        accountDeletePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(@NonNull Preference preference) {
+                Uri intentUri = Uri.parse(getResources().getString(R.string.settings_security_and_privacy_account_delete_url));
+                Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
+                startActivity(intent);
+                return true;
             }
         });
     }

@@ -37,5 +37,11 @@
             app:key="logout"
             app:summary="@string/settings_security_and_privacy_account_logout_summary"
             app:title="@string/settings_security_and_privacy_account_logout" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="delete"
+            app:summary="@string/settings_security_and_privacy_account_delete_summary"
+            app:title="@string/settings_security_and_privacy_account_delete" />
     </PreferenceCategory>
 </PreferenceScreen>

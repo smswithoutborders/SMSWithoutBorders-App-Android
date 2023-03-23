@@ -82,4 +82,6 @@
     <string name="settings_security_and_privacy_account">حساب شما</string>
     <string name="settings_security_and_privacy_account_logout">خروج</string>
     <string name="settings_security_and_privacy_account_logout_summary">از حساب خود خارج شوید شما همیشه می توانید دوباره وارد شوید، با این حال پیام های فعلی شما حذف خواهند شد.</string>
+    <string name="settings_security_and_privacy_account_delete">حذف حساب کاربری</string>
+    <string name="settings_security_and_privacy_account_delete_summary">حذف اکانت به معنای حذف تمام حساب های ذخیره شده به صورت آنلاین است. شما همیشه می توانید حساب خود را پس از نیاز دوباره ایجاد کنید.</string>
 </resources>
