@@ -20,7 +20,6 @@ import java.security.GeneralSecurityException;
 import java.util.Locale;
 
 public class AppCompactActivityCustomized extends AppCompatActivity {
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         // TODO: check if shared key is available else kill
