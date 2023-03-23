@@ -8,9 +8,9 @@
     </style>
 
     <style name="Theme.editBox" parent="Theme.main">
-        <item name="android:backgroundTint">@color/light_blue_A400</item>
-        <item name="android:textColorHint">@color/ic_launcher_background</item>
-        <item name="android:textColor">@color/ic_launcher_background</item>
+        <item name="android:backgroundTint">@color/logo_secondary</item>
+        <item name="android:textColorHint">@color/primary_color_text</item>
+        <item name="android:textColor">@color/primary_color_text</item>
         <item name="android:tint">@color/white</item>
     </style>
 

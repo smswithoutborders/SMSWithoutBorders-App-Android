@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/Theme.main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MessageComposeActivity">
@@ -23,7 +24,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:backgroundTint="@color/default_dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/message_compose_toolbar">
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/edit_text_round"
+            android:background="@drawable/edit_text_message_round"
             android:fontFamily="sans-serif-thin"
             android:theme="@style/Theme.editBox"
             app:boxStrokeWidth="0dp"
@@ -46,15 +46,15 @@
             app:layout_constraintBottom_toTopOf="@+id/textView2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:startIconTint="@color/pending_gray">
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/message_recipient_number_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/message_compose_phonenumber"
-                android:inputType="textShortMessage|textNoSuggestions" />
+                android:inputType="phone|textNoSuggestions"
+                android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -80,11 +80,10 @@
             app:boxCornerRadiusBottomStart="25dp"
             app:boxCornerRadiusTopEnd="25dp"
             app:boxCornerRadiusTopStart="25dp"
-            app:boxStrokeColor="@color/white"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:hintEnabled="false"
-            app:hintTextColor="@color/white"
+            app:hintTextColor="@color/primary_color_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -104,13 +103,14 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/text_box"
+        android:background="@drawable/edit_text_semi_round"
         android:gravity="start|top"
         android:hint="@string/message_compose_body"
         android:inputType="textMultiLine"
         android:padding="40dp"
         android:textCursorDrawable="@null"
+        android:textSize="14sp"
+        android:theme="@style/Theme.editBox"
         app:boxStrokeWidth="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
