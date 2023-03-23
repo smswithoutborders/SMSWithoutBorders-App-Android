@@ -79,4 +79,7 @@
     <string name="no_notifications">بدون اطلاعیه اخیر</string>
     <string name="settings_biometric_not_now_btn">الان الان</string>
     <string name="settings_biometric_enable_btn">فعال کردن</string>
+    <string name="settings_security_and_privacy_account">حساب شما</string>
+    <string name="settings_security_and_privacy_account_logout">خروج</string>
+    <string name="settings_security_and_privacy_account_logout_summary">از حساب خود خارج شوید شما همیشه می توانید دوباره وارد شوید، با این حال پیام های فعلی شما حذف خواهند شد.</string>
 </resources>

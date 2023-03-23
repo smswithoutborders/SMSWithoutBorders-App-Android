@@ -160,6 +160,13 @@
     <string name="settings_security_and_privacy_enable_pin_summary">
         Unavailable
     </string>
+    <string name="settings_security_and_privacy_account">
+        Account
+    </string>
+    <string name="settings_security_and_privacy_account_logout">
+        Logout
+    </string>
+    <string name="settings_security_and_privacy_account_logout_summary">Logout of your account. You can always log back in, however you current messages would be deleted. </string>
 
     <!-- settings language -->
     <string name="language_choose_text">

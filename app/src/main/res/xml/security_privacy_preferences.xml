@@ -28,4 +28,14 @@
             app:summary="@string/settings_security_and_privacy_enable_pin_summary"
             app:title="@string/settings_security_and_privacy_enable_pin" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/settings_security_and_privacy_account">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="logout"
+            app:summary="@string/settings_security_and_privacy_account_logout_summary"
+            app:title="@string/settings_security_and_privacy_account_logout" />
+    </PreferenceCategory>
 </PreferenceScreen>
