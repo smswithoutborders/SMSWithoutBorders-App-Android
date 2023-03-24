@@ -31,10 +31,9 @@
         android:background="@drawable/edit_text_round"
         android:fontFamily="sans-serif-thin"
         android:theme="@style/Theme.editBox"
+        app:hintEnabled="false"
         app:boxStrokeWidth="0dp"
         app:boxStrokeWidthFocused="0dp"
-        app:helperTextEnabled="true"
-        app:helperTextTextColor="@color/primary_color_text"
         app:layout_constraintBottom_toTopOf="@+id/recent_messages_constrain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +44,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/homepage_search"
-            android:inputType="text" />
+            android:inputType="text"
+            android:textSize="14sp"
+            app:hintTextColor="@color/text_box" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

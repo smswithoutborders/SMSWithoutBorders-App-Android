@@ -9,7 +9,7 @@
 
     <style name="Theme.editBox" parent="Theme.main">
         <item name="android:backgroundTint">@color/light_blue_A400</item>
-        <item name="android:textColorHint">@color/ic_launcher_background</item>
+        <item name="android:textColorHint">@color/text_box</item>
         <item name="android:textColor">@color/ic_launcher_background</item>
     </style>
 
