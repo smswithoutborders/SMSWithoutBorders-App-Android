@@ -21,10 +21,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApp"
-        android:versionCode="42"
-        android:versionName="2.5.6"
-        android:localeConfig="@xml/locales_config"
-        android:usesCleartextTraffic="true" >
+        android:versionCode="48"
+        android:versionName="2.5.8"
+        android:usesCleartextTraffic="false"
+        android:localeConfig="@xml/locales_config">
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
             android:enabled="false"
