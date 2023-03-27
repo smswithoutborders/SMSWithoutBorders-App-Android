@@ -5,6 +5,8 @@
 <!--        <item name="android:colorPrimary">@color/primary_color_text</item>-->
 <!--        <item name="android:textColor">@color/primary_color_text</item>-->
 <!--        <item name="android:colorAccent">@color/primary_color_text</item>-->
+
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="Theme.editBox" parent="Theme.main">
