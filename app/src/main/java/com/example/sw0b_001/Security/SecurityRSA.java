@@ -82,24 +82,24 @@ public class SecurityRSA extends SecurityHandler {
         return pubKey;
     }
 
-    public byte[] encrypt(byte[] input, String publicKeyBase64) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
-        PublicKey publicKey = getPublicKeyFromBase64String(publicKeyBase64);
+//    public byte[] encrypt(byte[] input, String publicKeyBase64) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
+//        PublicKey publicKey = getPublicKeyFromBase64String(publicKeyBase64);
+//        Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
+//        cipher.init(Cipher.ENCRYPT_MODE, publicKey, encryptionDigestParam);
+//        return cipher.doFinal(input);
+//    }
+//
+    public byte[] encrypt(byte[] input, PublicKey publicKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException {
         Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
         cipher.init(Cipher.ENCRYPT_MODE, publicKey, encryptionDigestParam);
         return cipher.doFinal(input);
     }
 
-    public byte[] encrypt(byte[] input, PublicKey publicKey) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableEntryException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
-        Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-        cipher.init(Cipher.ENCRYPT_MODE, publicKey, encryptionDigestParam);
-        return cipher.doFinal(input);
-    }
-
-    public byte[] encrypt(byte[] input, PublicKey publicKey, OAEPParameterSpec oaepParameterSpec) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableEntryException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
-        Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-        cipher.init(Cipher.ENCRYPT_MODE, publicKey, oaepParameterSpec);
-        return cipher.doFinal(input);
-    }
+//    public byte[] encrypt(byte[] input, PublicKey publicKey, OAEPParameterSpec oaepParameterSpec) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableEntryException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
+//        Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
+//        cipher.init(Cipher.ENCRYPT_MODE, publicKey, oaepParameterSpec);
+//        return cipher.doFinal(input);
+//    }
 
     // Requirements to use this: input has to be Base64 encoded
     public byte[] decrypt(byte[] encryptedInput, String keyStoreAlias) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {

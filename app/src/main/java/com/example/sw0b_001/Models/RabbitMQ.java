@@ -1,31 +1,16 @@
 package com.example.sw0b_001.Models;
 
 import android.content.Context;
-import android.os.Build;
-import android.util.Base64;
-import android.util.Log;
 
-import com.example.sw0b_001.BuildConfig;
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.Security.SecurityHandler;
-import com.example.sw0b_001.Security.SecurityHelpers;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Consumer;
-import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.DeliverCallback;
-import com.rabbitmq.client.ExceptionHandler;
-import com.rabbitmq.client.TopologyRecoveryException;
 import com.rabbitmq.client.impl.DefaultExceptionHandler;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
 public class RabbitMQ {
@@ -52,7 +37,7 @@ public class RabbitMQ {
 
         msisdnHash = securityHandler.getMSISDN();
 
-        String sharedKey = securityHandler.getSharedKeyNoneBase64();
+        String sharedKey = securityHandler.getEncryptedBase64SharedKey();
 
         factory.setUsername(msisdnHash);
         factory.setPassword(sharedKey);

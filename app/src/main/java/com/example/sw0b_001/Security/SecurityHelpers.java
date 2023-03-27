@@ -48,9 +48,8 @@ public class SecurityHelpers {
         String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServer.getUrl() );
 
         byte[] sharedKey = securityHandler.getSharedKey();
-        byte[] decryptedSharedKey = securityRSA.decrypt(sharedKey, keystoreAlias);
 
-        return decryptedSharedKey;
+        return securityRSA.decrypt(sharedKey, keystoreAlias);
     }
 
     @NonNull

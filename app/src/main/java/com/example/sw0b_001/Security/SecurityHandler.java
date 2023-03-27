@@ -13,19 +13,16 @@ import android.os.Build;
 import android.os.CancellationSignal;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
 import com.example.sw0b_001.BuildConfig;
-import com.example.sw0b_001.Models.PublisherHandler;
 import com.example.sw0b_001.R;
 
 import java.io.IOException;
@@ -116,7 +113,7 @@ public class SecurityHandler {
         return password.toString();
     }
 
-    public String getSharedKeyNoneBase64() {
+    public String getEncryptedBase64SharedKey() {
         return this.sharedPreferences.getString(SHARED_SECRET_KEY, "");
     }
 
