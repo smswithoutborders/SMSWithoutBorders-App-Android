@@ -86,4 +86,5 @@
     <string name="settings_security_and_privacy_account_logout_summary">Déconnexion de votre compte. Vous pouvez toujours vous reconnecter, mais vos messages actuels seront supprimés.</string>
     <string name="settings_security_and_privacy_account_delete">Supprimer le compte</string>
     <string name="settings_security_and_privacy_account_delete_summary">Supprimer votre compte signifie supprimer tous vos comptes enregistrés en ligne. Vous pouvez toujours recréer votre compte une fois nécessaire.</string>
+    <string name="settings_security_and_privacy_account_delete_url">https://smswithoutborders.github.io/fr/docs/tutorials/delete-account/</string>
 </resources>

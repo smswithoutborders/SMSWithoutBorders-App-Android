@@ -188,12 +188,13 @@ public class HomepageActivity extends AppCompactActivityCustomized {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
-                gatewayServerList.get(0).composeFullURL() + "/v2/sync/users/" + msisdn + "/verification",
+                gatewayServerList.get(0).composeFullURL()
+                        + "/v2/sync/users/" + msisdn + "/verification",
                 new JSONObject(), future, future);
+
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
-                0,
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy( 0,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
@@ -210,12 +211,14 @@ public class HomepageActivity extends AppCompactActivityCustomized {
                     String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerList.get(0).getUrl());
                     SecurityRSA securityRSA = new SecurityRSA(getApplicationContext());
 
-                    if (!new String(securityRSA.decrypt(decodedRxSharedKey, keystoreAlias)).equals(
+                    if(!new String(securityRSA.decrypt(decodedRxSharedKey, keystoreAlias)).equals(
                             new String(decryptedSharedKey, StandardCharsets.UTF_8))) {
                         securityHandler.removeSharedKey();
                         startActivity(new Intent(getApplicationContext(), SplashActivity.class));
                         finish();
                     }
+                    if(BuildConfig.DEBUG)
+                        Log.d(getLocalClassName(), "Verification passed!");
                 } catch(Throwable e ) {
                     e.printStackTrace();
                 }
@@ -223,6 +226,7 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         } catch(TimeoutException | InterruptedException e) {
             e.printStackTrace();
         } catch(ExecutionException e) {
+            e.printStackTrace();
             Throwable cause = e.getCause();
             if (cause instanceof VolleyError) {
                 VolleyError error = (VolleyError) cause;

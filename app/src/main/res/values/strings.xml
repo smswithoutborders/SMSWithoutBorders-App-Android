@@ -176,7 +176,7 @@
         Deleting your account means deleting all your saved accounts online. You can always recreate your account once needed.
     </string>
 
-    <string name="settings_security_and_privacy_account_delete_url" translatable="false">https://smswithoutborders.github.io/docs/tutorials/delete-account/</string>
+    <string name="settings_security_and_privacy_account_delete_url">https://smswithoutborders.github.io/docs/tutorials/delete-account/</string>
 
     <!-- settings language -->
     <string name="language_choose_text">
