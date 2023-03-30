@@ -73,4 +73,8 @@ public class GatewayServer {
     }
 
     public GatewayServer(){}
+
+    public String composeFullURL() {
+        return this.protocol + "://" + this.url + ":" + this.port;
+    }
 }

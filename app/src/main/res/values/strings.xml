@@ -9,9 +9,7 @@
         https://smswithoutborders.com/login
     </string>
 
-    <string name="smswithoutborders_official_site_signup">
-        https://smswithoutborders.com/sign-up
-    </string>
+    <string name="smswithoutborders_official_site_signup">https://smswithoutborders.com/sign-up</string>
 
     <string name="smswithoutborders_official_site_signup_intent" translatable="false">
         intent://smswithoutborders.com/sign-up
@@ -59,6 +57,8 @@
     <string name="message_compose_empty_body">Body should not be empty!</string>
 
     <string name="homepage_confirm">Confirm </string>
+
+    <string name="homepage_snackbar_cannot_sign_key">A stronger security is present, please log out and back in to update your security.</string>
 
     <string name="homepage_enter_password">Enter Password</string>
 
@@ -176,7 +176,7 @@
         Deleting your account means deleting all your saved accounts online. You can always recreate your account once needed.
     </string>
 
-    <string name="settings_security_and_privacy_account_delete_url" translatable="false">https://smswithoutborders.github.io/docs/tutorials/delete-account/</string>
+    <string name="settings_security_and_privacy_account_delete_url">https://smswithoutborders.github.io/docs/tutorials/delete-account/</string>
 
     <!-- settings language -->
     <string name="language_choose_text">

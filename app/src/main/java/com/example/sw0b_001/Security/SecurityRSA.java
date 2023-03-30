@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.CancellationSignal;
 import android.provider.Settings;
 import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyInfo;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
 import android.util.Log;
@@ -34,11 +35,15 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.MGF1ParameterSpec;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.PSSParameterSpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.concurrent.Executor;
 
@@ -66,8 +71,11 @@ public class SecurityRSA extends SecurityHandler {
         keygen.initialize(
                 new KeyGenParameterSpec.Builder(
                         keystoreAlias,
-                        KeyProperties.PURPOSE_DECRYPT | KeyProperties.PURPOSE_ENCRYPT)
+                        KeyProperties.PURPOSE_DECRYPT
+                                | KeyProperties.PURPOSE_ENCRYPT
+                                | KeyProperties.PURPOSE_SIGN)
                         .setKeySize(2048)
+                        .setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PSS)
                         .setDigests(KeyProperties.DIGEST_SHA1, KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
                         .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
                         .build());
@@ -82,24 +90,24 @@ public class SecurityRSA extends SecurityHandler {
         return pubKey;
     }
 
-    public byte[] encrypt(byte[] input, String publicKeyBase64) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
-        PublicKey publicKey = getPublicKeyFromBase64String(publicKeyBase64);
+//    public byte[] encrypt(byte[] input, String publicKeyBase64) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
+//        PublicKey publicKey = getPublicKeyFromBase64String(publicKeyBase64);
+//        Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
+//        cipher.init(Cipher.ENCRYPT_MODE, publicKey, encryptionDigestParam);
+//        return cipher.doFinal(input);
+//    }
+//
+    public byte[] encrypt(byte[] input, PublicKey publicKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException {
         Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
         cipher.init(Cipher.ENCRYPT_MODE, publicKey, encryptionDigestParam);
         return cipher.doFinal(input);
     }
 
-    public byte[] encrypt(byte[] input, PublicKey publicKey) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableEntryException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
-        Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-        cipher.init(Cipher.ENCRYPT_MODE, publicKey, encryptionDigestParam);
-        return cipher.doFinal(input);
-    }
-
-    public byte[] encrypt(byte[] input, PublicKey publicKey, OAEPParameterSpec oaepParameterSpec) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableEntryException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
-        Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-        cipher.init(Cipher.ENCRYPT_MODE, publicKey, oaepParameterSpec);
-        return cipher.doFinal(input);
-    }
+//    public byte[] encrypt(byte[] input, PublicKey publicKey, OAEPParameterSpec oaepParameterSpec) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableEntryException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
+//        Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
+//        cipher.init(Cipher.ENCRYPT_MODE, publicKey, oaepParameterSpec);
+//        return cipher.doFinal(input);
+//    }
 
     // Requirements to use this: input has to be Base64 encoded
     public byte[] decrypt(byte[] encryptedInput, String keyStoreAlias) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
@@ -136,5 +144,34 @@ public class SecurityRSA extends SecurityHandler {
         return decryptedBytes;
     }
 
+    public boolean canSign(String keyStoreAlias) throws UnrecoverableEntryException, KeyStoreException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
+        KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(
+                keyStoreAlias, null);
 
+        KeyFactory keyFactory = KeyFactory.getInstance(
+                privateKeyEntry.getPrivateKey().getAlgorithm(), DEFAULT_KEYSTORE_PROVIDER);
+        KeyInfo keyInfo = keyFactory.getKeySpec(
+                privateKeyEntry.getPrivateKey(), KeyInfo.class);
+
+        // Check if the private key has the "SIGN_DATA" purpose
+//        return keyInfo.isInsideSecureHardware()
+//                && keyInfo.getPurposes() == (KeyProperties.PURPOSE_SIGN
+//                | KeyProperties.PURPOSE_ENCRYPT
+//                | KeyProperties.PURPOSE_DECRYPT);
+
+        return keyInfo.getPurposes() == (KeyProperties.PURPOSE_SIGN
+                | KeyProperties.PURPOSE_ENCRYPT
+                | KeyProperties.PURPOSE_DECRYPT);
+
+    }
+
+    public byte[] sign(byte[] message, String keyStoreAlias) throws UnrecoverableEntryException, KeyStoreException, NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(
+                keyStoreAlias, null);
+
+        Signature s = Signature.getInstance("SHA512withRSA/PSS");
+        s.initSign(privateKeyEntry.getPrivateKey());
+        s.update(message);
+        return s.sign();
+    }
 }

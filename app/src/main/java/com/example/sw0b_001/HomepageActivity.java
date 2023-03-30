@@ -12,15 +12,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.RequestFuture;
+import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.HomepageFragments.AvailablePlatformsFragment;
 import com.example.sw0b_001.HomepageFragments.NotificationsFragment;
 import com.example.sw0b_001.HomepageFragments.RecentsFragment;
 import com.example.sw0b_001.HomepageFragments.SettingsFragment;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.Models.Notifications.NotificationsHandler;
 import com.example.sw0b_001.Models.RabbitMQ;
 import com.example.sw0b_001.Security.SecurityHandler;
+import com.example.sw0b_001.Security.SecurityHelpers;
+import com.example.sw0b_001.Security.SecurityRSA;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.rabbitmq.client.DeliverCallback;
 
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +44,11 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
+import java.security.spec.MGF1ParameterSpec;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 
 public class HomepageActivity extends AppCompactActivityCustomized {
@@ -147,10 +166,123 @@ public class HomepageActivity extends AppCompactActivityCustomized {
                 return false;
             }
         });
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    checkAccountSynchronization();
+                    connectRMQForNotifications();
+                } catch(Throwable e ) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public String getEncryptionDigest() {
+        if(SecurityHandler.defaultEncryptionDigest.equals(MGF1ParameterSpec.SHA256))
+            return "sha256";
+        return "sha1";
+    }
+
+    private void checkAccountSynchronization() throws InterruptedException, GeneralSecurityException, IOException, JSONException {
+        // TODO: should become a WorkManager if fails
+        SecurityRSA securityRSA = new SecurityRSA(getApplicationContext());
+        SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
+
+        List<GatewayServer> gatewayServerList = GatewayServersHandler.getAllGatewayServers(getApplicationContext());
+
+        String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerList.get(0).getUrl());
+
+        if(!securityRSA.canSign(keystoreAlias)) {
+            Snackbar mySnackbar = Snackbar.make(findViewById(R.id.cordinator_layout),
+                    R.string.homepage_snackbar_cannot_sign_key, BaseTransientBottomBar.LENGTH_INDEFINITE);
+            mySnackbar.setTextColor(getResources().getColor(R.color.white, getTheme()));
+            mySnackbar.setBackgroundTint(getResources().getColor(R.color.text_box, getTheme()));
+            mySnackbar.setAction(R.string.settings_security_and_privacy_account_logout, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        securityHandler.removeSharedKey();
+                        startActivity(new Intent(getApplicationContext(), SplashActivity.class));
+                        finish();
+                    } catch (GeneralSecurityException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+            mySnackbar.show();
+            return;
+        }
+
+        RequestFuture<JSONObject> future = RequestFuture.newFuture();
+
+        String msisdn = securityHandler.getMSISDN();
+
+        byte[] msisdnSigned = securityRSA.sign(msisdn.getBytes(StandardCharsets.UTF_8), keystoreAlias);
+        String msisdnSignedEncoded = Base64.encodeToString(msisdnSigned, Base64.DEFAULT);
+
+        String gatewayServerPublicKey = gatewayServerList.get(0).getPublicKey();
+        byte[] encryptedMsisdn = securityRSA.encrypt(msisdn.getBytes(StandardCharsets.UTF_8),
+                SecurityRSA.getPublicKeyFromBase64String(gatewayServerPublicKey));
+        msisdn = Base64.encodeToString(encryptedMsisdn, Base64.DEFAULT);
+
+        JSONObject jsonBody = new JSONObject( "{\"msisdn\": \"" + msisdn + "\", " +
+                "\"msisdn_signature\": \"" + msisdnSignedEncoded + "\", " +
+                "\"mgf1ParameterSpec\": \"" + getEncryptionDigest() +"\"}");
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                gatewayServerList.get(0).composeFullURL()
+                        + "/v2/sync/users/verification",
+                jsonBody, future, future);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy( 0,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         try {
-            connectRMQForNotifications();
-        } catch (Throwable e) {
+            requestQueue.add(jsonObjectRequest);
+
+            JSONObject response = future.get(15, TimeUnit.SECONDS);
+            if(response.has("shared_key")) {
+                try {
+                    String rxSharedKey = (String) response.get("shared_key");
+                    byte[] decryptedSharedKey = SecurityHelpers.getDecryptedSharedKey(getApplicationContext());
+                    byte[] decodedRxSharedKey = Base64.decode(rxSharedKey, Base64.DEFAULT);
+
+                    if(!new String(securityRSA.decrypt(decodedRxSharedKey, keystoreAlias)).equals(
+                            new String(decryptedSharedKey, StandardCharsets.UTF_8))) {
+                        securityHandler.removeSharedKey();
+                        startActivity(new Intent(getApplicationContext(), SplashActivity.class));
+                        finish();
+                    }
+                } catch(Throwable e ) {
+                    e.printStackTrace();
+                }
+            }
+        } catch(TimeoutException | InterruptedException e) {
             e.printStackTrace();
+        } catch(ExecutionException e) {
+            e.printStackTrace();
+            Throwable cause = e.getCause();
+            if (cause instanceof VolleyError) {
+                VolleyError error = (VolleyError) cause;
+                NetworkResponse networkResponse = error.networkResponse;
+                if(networkResponse != null && networkResponse.statusCode == 403) {
+                    securityHandler.removeSharedKey();
+                    startActivity(new Intent(getApplicationContext(), SplashActivity.class));
+                    finish();
+                }
+                else if(networkResponse != null && networkResponse.statusCode == 404) {
+                    if(BuildConfig.DEBUG)
+                        Log.d(getLocalClassName(), "Verification code said it's 404...");
+                }
+            }
         }
     }
 

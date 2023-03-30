@@ -2,6 +2,9 @@
 <resources>
 
     <style name="Theme.MyApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary_color_text</item>
+        <item name="colorOnBackground">@color/primary_color_text</item>
+        <item name="buttonTint">@color/logo_primary</item>
         <!-- TODO: put logic to fill toolbar with image color -->
         <item name="bottomNavigationStyle">@style/BottomNavigationViewStyle</item>
 
@@ -9,13 +12,13 @@
 
         <item name="android:windowActionBarOverlay">true</item>
 <!--        <item name="android:windowTranslucentStatus">true</item>-->
-        <item name="android:windowLightStatusBar">true</item>
 
         <item name="android:backgroundTint">@color/primary_background_color</item>
         <item name="android:textColorPrimary">@color/primary_color_text</item>
         <item name="android:colorPrimary">@color/primary_color_text</item>
         <item name="android:textColor">@color/primary_color_text</item>
         <item name="android:colorAccent">@color/primary_color_text</item>
+
 <!--        <item name="preferenceTheme">@style/preference</item>-->
     </style>
 

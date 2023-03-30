@@ -73,8 +73,7 @@ public class PasswordActivity extends AppCompactActivityCustomized {
                 gatewayServerPublicKey);
         String passwordBase64 = Base64.encodeToString(encryptedPassword, Base64.DEFAULT);
         try {
-            JSONObject jsonBody = new JSONObject(
-                    "{\"public_key\": \"" + publicKey + "\"," +
+            JSONObject jsonBody = new JSONObject( "{\"public_key\": \"" + publicKey + "\"," +
                             "\"mgf1ParameterSpec\": \"" + getEncryptionDigest() + "\"," +
                             "\"password\": \"" + passwordBase64 + "\"}");
             RequestFuture<JSONObject> future = RequestFuture.newFuture();

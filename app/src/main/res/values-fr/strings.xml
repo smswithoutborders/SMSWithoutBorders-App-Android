@@ -2,10 +2,9 @@
 <resources>
     <string name="app_name">SMSWithoutBorders</string>
     <string name="homepage_recent">Récent</string>
-    <string name="privacy_policy">https://smswithoutborders.com/privacy-policy</string>
-    <string name="smswithoutborders_official_site_login">https://smswithoutborders.com/login/fr</string>
-    <string name="smswithoutborders_official_site_signup">https://smswithoutborders.com/sign-up/fr</string>
-    <string name="smswithoutborders_official_site_signup_intent">"intent://smswithoutborders.com/sign-up     "</string>
+    <string name="privacy_policy">https://smswithoutborders.com/privacy-policy/?lng=fr</string>
+    <string name="smswithoutborders_official_site_login">https://smswithoutborders.com/login/?lng=fr</string>
+    <string name="smswithoutborders_official_site_signup">"         https://smswithoutborders.com/sign-up/?lng=fr"</string>
     <string name="email_compose_to">À</string>
     <string name="email_compose_cc">cc</string>
     <string name="email_compose_bcc">bcc</string>
@@ -20,6 +19,7 @@
     <string name="message_compose_empty_recipient">Le destinataire ne peut pas être vide !</string>
     <string name="message_compose_empty_body">Le corps ne doit pas être vide !</string>
     <string name="homepage_confirm">Confirmer</string>
+    <string name="homepage_snackbar_cannot_sign_key">Une sécurité renforcée est présente, veuillez vous déconnecter et vous reconnecter pour mettre à jour votre sécurité.</string>
     <string name="homepage_enter_password">Entrez le mot de passe</string>
     <string name="homepage_enter_password_prompt">Même mot de passe que celui utilisé lors de la création de votre compte</string>
     <string name="homepage_read_our_privacy_policy">Lire notre politique de confidentialité</string>
@@ -86,4 +86,5 @@
     <string name="settings_security_and_privacy_account_logout_summary">Déconnexion de votre compte. Vous pouvez toujours vous reconnecter, mais vos messages actuels seront supprimés.</string>
     <string name="settings_security_and_privacy_account_delete">Supprimer le compte</string>
     <string name="settings_security_and_privacy_account_delete_summary">Supprimer votre compte signifie supprimer tous vos comptes enregistrés en ligne. Vous pouvez toujours recréer votre compte une fois nécessaire.</string>
+    <string name="settings_security_and_privacy_account_delete_url">https://smswithoutborders.github.io/fr/docs/tutorials/delete-account/</string>
 </resources>
