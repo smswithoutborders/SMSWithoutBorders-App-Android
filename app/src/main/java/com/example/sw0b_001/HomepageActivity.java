@@ -337,6 +337,23 @@ public class HomepageActivity extends AppCompactActivityCustomized {
     @Override
     protected void onResume() {
         super.onResume();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    checkAccountSynchronization();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                } catch (GeneralSecurityException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
+
         Fragment currentFragment = fragmentManager.findFragmentByTag(RECENTS_FRAGMENT_TAG);
         if (currentFragment instanceof RecentsFragment) {
             fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,

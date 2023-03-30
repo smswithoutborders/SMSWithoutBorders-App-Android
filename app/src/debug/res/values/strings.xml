@@ -4,7 +4,7 @@
         https://staging.smswithoutborders.com/privacy-policy
     </string>
 
-    <string name="smswithoutborders_official_site_login">"         https://staging.smswithoutborders.com/login     "</string>
+    <string name="smswithoutborders_official_site_login">https://staging.smswithoutborders.com/login</string>
 
     <string name="smswithoutborders_official_site_signup">
         https://staging.smswithoutborders.com/sign-up
