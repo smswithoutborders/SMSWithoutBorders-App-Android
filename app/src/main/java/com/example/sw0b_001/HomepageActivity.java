@@ -42,6 +42,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
+import java.security.PublicKey;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -177,7 +178,7 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         }).start();
     }
 
-    private void checkAccountSynchronization() throws InterruptedException, GeneralSecurityException, IOException {
+    private void checkAccountSynchronization() throws InterruptedException, GeneralSecurityException, IOException, JSONException {
         // TODO: should become a WorkManager if fails
 
         List<GatewayServer> gatewayServerList = GatewayServersHandler.getAllGatewayServers(getApplicationContext());
@@ -186,11 +187,23 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
         String msisdn = securityHandler.getMSISDN();
 
+        SecurityRSA securityRSA = new SecurityRSA(getApplicationContext());
+        String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerList.get(0).getUrl());
+        byte[] msisdnSigned = securityRSA.sign(msisdn.getBytes(StandardCharsets.UTF_8), keystoreAlias);
+        String msisdnEncoded = Base64.encodeToString(msisdnSigned, Base64.DEFAULT);
+
+        String gatewayServerPublicKey = gatewayServerList.get(0).getPublicKey();
+        byte[] encryptedMsisdn = securityRSA.encrypt(msisdn.getBytes(StandardCharsets.UTF_8),
+                SecurityRSA.getPublicKeyFromBase64String(gatewayServerPublicKey));
+        msisdn = Base64.encodeToString(encryptedMsisdn, Base64.DEFAULT);
+
+        JSONObject jsonBody = new JSONObject( "{\"msisdn\": \"" + msisdn + "\"}");
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 gatewayServerList.get(0).composeFullURL()
-                        + "/v2/sync/users/" + msisdn + "/verification",
-                new JSONObject(), future, future);
+                        + "/v2/sync/users/" + msisdnEncoded + "/verification",
+                jsonBody, future, future);
 
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
@@ -207,9 +220,6 @@ public class HomepageActivity extends AppCompactActivityCustomized {
                     String rxSharedKey = (String) response.get("shared_key");
                     byte[] decryptedSharedKey = SecurityHelpers.getDecryptedSharedKey(getApplicationContext());
                     byte[] decodedRxSharedKey = Base64.decode(rxSharedKey, Base64.DEFAULT);
-
-                    String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerList.get(0).getUrl());
-                    SecurityRSA securityRSA = new SecurityRSA(getApplicationContext());
 
                     if(!new String(securityRSA.decrypt(decodedRxSharedKey, keystoreAlias)).equals(
                             new String(decryptedSharedKey, StandardCharsets.UTF_8))) {

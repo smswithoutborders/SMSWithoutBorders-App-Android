@@ -34,11 +34,15 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
 import java.security.UnrecoverableEntryException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.MGF1ParameterSpec;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.PSSParameterSpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.concurrent.Executor;
 
@@ -136,5 +140,13 @@ public class SecurityRSA extends SecurityHandler {
         return decryptedBytes;
     }
 
-
+    public byte[] sign(byte[] message, String keyStoreAlias) throws UnrecoverableEntryException, KeyStoreException, NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(
+                keyStoreAlias, null);
+        PrivateKey privateKey = privateKeyEntry.getPrivateKey();
+        Signature s = Signature.getInstance("SHA512withRSA/PSS");
+        s.initSign(privateKey);
+        s.update(message);
+        return s.sign();
+    }
 }
