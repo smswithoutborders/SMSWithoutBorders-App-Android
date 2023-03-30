@@ -261,8 +261,6 @@ public class HomepageActivity extends AppCompactActivityCustomized {
                         startActivity(new Intent(getApplicationContext(), SplashActivity.class));
                         finish();
                     }
-                    if(BuildConfig.DEBUG)
-                        Log.d(getLocalClassName(), "Verification passed!");
                 } catch(Throwable e ) {
                     e.printStackTrace();
                 }
