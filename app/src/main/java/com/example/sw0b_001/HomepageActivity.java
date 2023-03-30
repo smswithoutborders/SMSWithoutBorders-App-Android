@@ -44,6 +44,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
+import java.security.spec.MGF1ParameterSpec;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -178,6 +179,12 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         }).start();
     }
 
+    public String getEncryptionDigest() {
+        if(SecurityHandler.defaultEncryptionDigest.equals(MGF1ParameterSpec.SHA256))
+            return "sha256";
+        return "sha1";
+    }
+
     private void checkAccountSynchronization() throws InterruptedException, GeneralSecurityException, IOException, JSONException {
         // TODO: should become a WorkManager if fails
         SecurityRSA securityRSA = new SecurityRSA(getApplicationContext());
@@ -215,19 +222,21 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         String msisdn = securityHandler.getMSISDN();
 
         byte[] msisdnSigned = securityRSA.sign(msisdn.getBytes(StandardCharsets.UTF_8), keystoreAlias);
-        String msisdnEncoded = Base64.encodeToString(msisdnSigned, Base64.URL_SAFE);
+        String msisdnSignedEncoded = Base64.encodeToString(msisdnSigned, Base64.DEFAULT);
 
         String gatewayServerPublicKey = gatewayServerList.get(0).getPublicKey();
         byte[] encryptedMsisdn = securityRSA.encrypt(msisdn.getBytes(StandardCharsets.UTF_8),
                 SecurityRSA.getPublicKeyFromBase64String(gatewayServerPublicKey));
         msisdn = Base64.encodeToString(encryptedMsisdn, Base64.DEFAULT);
 
-        JSONObject jsonBody = new JSONObject( "{\"msisdn\": \"" + msisdn + "\"}");
+        JSONObject jsonBody = new JSONObject( "{\"msisdn\": \"" + msisdn + "\", " +
+                "\"msisdn_signature\": \"" + msisdnSignedEncoded + "\", " +
+                "\"mgf1ParameterSpec\": \"" + getEncryptionDigest() +"\"}");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
                 gatewayServerList.get(0).composeFullURL()
-                        + "/v2/sync/users/" + msisdnEncoded + "/verification",
+                        + "/v2/sync/users/verification",
                 jsonBody, future, future);
 
         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -272,7 +281,8 @@ public class HomepageActivity extends AppCompactActivityCustomized {
                     finish();
                 }
                 else if(networkResponse != null && networkResponse.statusCode == 404) {
-                    Log.d(getLocalClassName(), "Verification code said it's 404...");
+                    if(BuildConfig.DEBUG)
+                        Log.d(getLocalClassName(), "Verification code said it's 404...");
                 }
             }
         }

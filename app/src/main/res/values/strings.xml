@@ -9,9 +9,7 @@
         https://smswithoutborders.com/login
     </string>
 
-    <string name="smswithoutborders_official_site_signup">
-        https://smswithoutborders.com/sign-up
-    </string>
+    <string name="smswithoutborders_official_site_signup">https://smswithoutborders.com/sign-up</string>
 
     <string name="smswithoutborders_official_site_signup_intent" translatable="false">
         intent://smswithoutborders.com/sign-up

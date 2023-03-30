@@ -48,8 +48,9 @@
     <string name="settings_gateway_clients_text">دروازه های مسیریابی اس ام اس</string>
     <string name="message_compose_groups_option">نام کاربری تلگرام</string>
     <string name="message_compose_groups_name">نام کاربری تلگرام</string>
-    <string name="smswithoutborders_official_site_login">https://smswithoutborders.com/login/fa</string>
-    <string name="smswithoutborders_official_site_signup">https://smswithoutborders.com/sign-up/fa</string>
+    <string name="privacy_policy">https://smswithoutborders.com/privacy-policy/?lng=fa</string>
+    <string name="smswithoutborders_official_site_login">https://smswithoutborders.com/login/?lng=fa</string>
+    <string name="smswithoutborders_official_site_signup">"         https://smswithoutborders.com/sign-up/?lng=fa"</string>
     <string name="new_gateway_client_alias">نام مستعار (اختیاری)</string>
     <string name="new_gateway_client_custom_alias">سرویس گیرنده پیامک سفارشی</string>
     <string name="choose_sms_app">یک برنامه پیام کوتاه را انتخاب کنید</string>
