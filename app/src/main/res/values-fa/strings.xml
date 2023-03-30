@@ -33,6 +33,7 @@
     <string name="email_compose_cc">cc</string>
     <string name="email_compose_bcc">bcc</string>
     <string name="message_compose_empty_body">بدن نباید خالی باشد!</string>
+    <string name="homepage_snackbar_cannot_sign_key">امنیت قوی‌تری وجود دارد، لطفاً از سیستم خارج شوید و دوباره وارد شوید تا امنیت خود را به‌روزرسانی کنید.</string>
     <string name="homepage_enter_password">رمز عبور را وارد کنید</string>
     <string name="homepage_confirm">انجام شده</string>
     <string name="settings_automatically_stored_access">همگام سازی برنامه</string>

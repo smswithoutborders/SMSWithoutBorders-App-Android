@@ -33,6 +33,8 @@ import com.example.sw0b_001.Security.SecurityHelpers;
 import com.example.sw0b_001.Security.SecurityRSA;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.rabbitmq.client.DeliverCallback;
 
 import org.jetbrains.annotations.NotNull;
@@ -42,8 +44,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-import java.security.PublicKey;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -180,17 +180,42 @@ public class HomepageActivity extends AppCompactActivityCustomized {
 
     private void checkAccountSynchronization() throws InterruptedException, GeneralSecurityException, IOException, JSONException {
         // TODO: should become a WorkManager if fails
+        SecurityRSA securityRSA = new SecurityRSA(getApplicationContext());
+        SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
 
         List<GatewayServer> gatewayServerList = GatewayServersHandler.getAllGatewayServers(getApplicationContext());
+
+        String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerList.get(0).getUrl());
+
+        if(!securityRSA.canSign(keystoreAlias)) {
+            Snackbar mySnackbar = Snackbar.make(findViewById(R.id.cordinator_layout),
+                    R.string.homepage_snackbar_cannot_sign_key, BaseTransientBottomBar.LENGTH_INDEFINITE);
+            mySnackbar.setTextColor(getResources().getColor(R.color.white, getTheme()));
+            mySnackbar.setBackgroundTint(getResources().getColor(R.color.text_box, getTheme()));
+            mySnackbar.setAction(R.string.settings_security_and_privacy_account_logout, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        securityHandler.removeSharedKey();
+                        startActivity(new Intent(getApplicationContext(), SplashActivity.class));
+                        finish();
+                    } catch (GeneralSecurityException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+            mySnackbar.show();
+            return;
+        }
+
         RequestFuture<JSONObject> future = RequestFuture.newFuture();
 
-        SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
         String msisdn = securityHandler.getMSISDN();
 
-        SecurityRSA securityRSA = new SecurityRSA(getApplicationContext());
-        String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerList.get(0).getUrl());
         byte[] msisdnSigned = securityRSA.sign(msisdn.getBytes(StandardCharsets.UTF_8), keystoreAlias);
-        String msisdnEncoded = Base64.encodeToString(msisdnSigned, Base64.DEFAULT);
+        String msisdnEncoded = Base64.encodeToString(msisdnSigned, Base64.URL_SAFE);
 
         String gatewayServerPublicKey = gatewayServerList.get(0).getPublicKey();
         byte[] encryptedMsisdn = securityRSA.encrypt(msisdn.getBytes(StandardCharsets.UTF_8),

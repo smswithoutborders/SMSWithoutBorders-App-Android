@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.CancellationSignal;
 import android.provider.Settings;
 import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyInfo;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
 import android.util.Log;
@@ -70,8 +71,11 @@ public class SecurityRSA extends SecurityHandler {
         keygen.initialize(
                 new KeyGenParameterSpec.Builder(
                         keystoreAlias,
-                        KeyProperties.PURPOSE_DECRYPT | KeyProperties.PURPOSE_ENCRYPT)
+                        KeyProperties.PURPOSE_DECRYPT
+                                | KeyProperties.PURPOSE_ENCRYPT
+                                | KeyProperties.PURPOSE_SIGN)
                         .setKeySize(2048)
+                        .setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PSS)
                         .setDigests(KeyProperties.DIGEST_SHA1, KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
                         .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
                         .build());
@@ -140,12 +144,33 @@ public class SecurityRSA extends SecurityHandler {
         return decryptedBytes;
     }
 
+    public boolean canSign(String keyStoreAlias) throws UnrecoverableEntryException, KeyStoreException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
+        KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(
+                keyStoreAlias, null);
+
+        KeyFactory keyFactory = KeyFactory.getInstance(
+                privateKeyEntry.getPrivateKey().getAlgorithm(), DEFAULT_KEYSTORE_PROVIDER);
+        KeyInfo keyInfo = keyFactory.getKeySpec(
+                privateKeyEntry.getPrivateKey(), KeyInfo.class);
+
+        // Check if the private key has the "SIGN_DATA" purpose
+//        return keyInfo.isInsideSecureHardware()
+//                && keyInfo.getPurposes() == (KeyProperties.PURPOSE_SIGN
+//                | KeyProperties.PURPOSE_ENCRYPT
+//                | KeyProperties.PURPOSE_DECRYPT);
+
+        return keyInfo.getPurposes() == (KeyProperties.PURPOSE_SIGN
+                | KeyProperties.PURPOSE_ENCRYPT
+                | KeyProperties.PURPOSE_DECRYPT);
+
+    }
+
     public byte[] sign(byte[] message, String keyStoreAlias) throws UnrecoverableEntryException, KeyStoreException, NoSuchAlgorithmException, InvalidKeyException, SignatureException {
         KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(
                 keyStoreAlias, null);
-        PrivateKey privateKey = privateKeyEntry.getPrivateKey();
+
         Signature s = Signature.getInstance("SHA512withRSA/PSS");
-        s.initSign(privateKey);
+        s.initSign(privateKeyEntry.getPrivateKey());
         s.update(message);
         return s.sign();
     }

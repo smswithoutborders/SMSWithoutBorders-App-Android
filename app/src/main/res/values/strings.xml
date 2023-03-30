@@ -60,6 +60,8 @@
 
     <string name="homepage_confirm">Confirm </string>
 
+    <string name="homepage_snackbar_cannot_sign_key">A stronger security is present, please log out and back in to update your security.</string>
+
     <string name="homepage_enter_password">Enter Password</string>
 
     <string name="homepage_enter_password_prompt">Same password used when creating your account</string>
