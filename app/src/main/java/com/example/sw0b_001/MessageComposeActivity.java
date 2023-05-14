@@ -148,7 +148,8 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
     }
 
     private Boolean verifyPhoneNumberFormat(String phonenumber) {
-        phonenumber = phonenumber.replace(" ", "");
+        phonenumber = phonenumber
+                .replaceAll("[\\s-]", "");
         return phonenumber.matches("^\\+[1-9]\\d{1,14}$");
     }
 
@@ -197,10 +198,11 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
                     Intent defaultSMSAppIntent = SMSHandler.transferToDefaultSMSApp(
                             getApplicationContext(), gatewayClientMSISDN, encryptedContentBase64);
                     if(defaultSMSAppIntent.resolveActivity(getPackageManager()) != null) {
+//                        startActivityForResult(defaultSMSAppIntent, RESULT_OK);
                         startActivity(defaultSMSAppIntent);
-                        setResult(Activity.RESULT_OK, new Intent());
 
                         EncryptedContentHandler.store(getApplicationContext(), encryptedContentBase64, gatewayClientMSISDN, platform.getName());
+//                        setResult(Activity.RESULT_OK, new Intent());
                         finish();
                     }
 

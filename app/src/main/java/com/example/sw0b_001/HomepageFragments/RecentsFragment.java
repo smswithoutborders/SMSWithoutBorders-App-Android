@@ -88,4 +88,9 @@ public class RecentsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_recents, container, false);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        recentsViewModel.informChanges(encryptedContentDAO);
+    }
 }
