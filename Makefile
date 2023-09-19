@@ -1,5 +1,6 @@
 pass=$$(cat $(jks_pass))
 branch_name=$$(git symbolic-ref HEAD)
+status=$(status)
 
 branch=$$(git symbolic-ref HEAD | cut -d "/" -f 3)
 # track = 'internal', 'alpha', 'beta', 'production'
@@ -117,8 +118,8 @@ commit-check: _commit-check clean
 
 check-diffoscope: ks.passwd
 	@echo "Building apk output: ${APP_1}"
-	docker build -t ${docker_apk_image} --target apk-builder .
-	docker run --name ${CONTAINER_NAME} -e PASS=$(pass) ${docker_apk_image} && \
+	@docker build -t ${docker_apk_image} --target apk-builder .
+	@docker run --name ${CONTAINER_NAME} -e PASS=$(pass) ${docker_apk_image} && \
 		docker cp ${CONTAINER_NAME}:/android/app/build/outputs/apk/release/app-release.apk apk-outputs/${APP_1}
 	@sleep 3
 	@echo "Building apk output: ${APP_2}"
@@ -211,7 +212,7 @@ release-cd: clean requirements.txt bump_version info docker-build-aab clean
 			--track ${track} \
 			--app_bundle_file apk-outputs/${aab_output} \
 			--app_apk_file apk-outputs/${apk_output} \
-			--status "completed" \
+			--status $(status) \
 			--platform "all" \
 			--github_url "${github_url}" \
 	)
