@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 def versionsPropertiesFile = rootProject.file("version.properties")
@@ -23,7 +24,7 @@ android {
     defaultConfig {
         applicationId "com.afkanerd.sw0b"
         minSdkVersion 23
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode tagVersion
         versionName releaseVersion+"."+stagingVersion+"."+nightlyVersion
 
@@ -56,6 +57,10 @@ android {
     lint {
         checkReleaseBuilds false
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     namespace 'com.example.sw0b_001'
 }
 
@@ -65,10 +70,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0-alpha03'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.annotation:annotation:1.6.0'
+    implementation 'androidx.annotation:annotation:1.7.0'
     implementation group: 'androidx.lifecycle', name: 'lifecycle-extensions', version: '2.2.0'
 //    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'androidx.databinding:baseLibrary:3.2.0-alpha11'
