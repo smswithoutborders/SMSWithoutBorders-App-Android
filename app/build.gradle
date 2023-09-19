@@ -24,8 +24,8 @@ android {
                                       "$projectDir/schemas".toString()]
             }
         }
+        resourceConfigurations += ['en', 'fr', 'fa']
 
-        resConfigs "en", "fr", "fa"
 
     }
 
@@ -51,15 +51,15 @@ android {
 dependencies {
 
     // implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.51'
-    implementation 'androidx.appcompat:appcompat:1.7.0-alpha01'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0-alpha03'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.annotation:annotation:1.5.0'
+    implementation 'androidx.annotation:annotation:1.6.0'
     implementation group: 'androidx.lifecycle', name: 'lifecycle-extensions', version: '2.2.0'
 //    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.preference:preference:1.2.0'
+    implementation 'androidx.preference:preference:1.2.1'
     implementation 'androidx.databinding:baseLibrary:3.2.0-alpha11'
 //    implementation 'com.android.support:appcompat-v7:28.0.0'
     testImplementation 'junit:junit:4.13.2'
@@ -67,22 +67,22 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // Java language implementation
-    implementation "androidx.fragment:fragment:1.5.5"
+    implementation "androidx.fragment:fragment:1.6.1"
 
 //    implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
-    implementation "androidx.room:room-runtime:2.4.3"
+    implementation "androidx.room:room-runtime:2.5.2"
     implementation 'com.google.android.material:material:<version>'
-    annotationProcessor "androidx.room:room-compiler:2.4.3"
+    annotationProcessor "androidx.room:room-compiler:2.5.2"
 
 
     // (Java only)
-    implementation "androidx.work:work-runtime:2.7.1"
+    implementation "androidx.work:work-runtime:2.8.1"
     implementation 'com.budiyev.android:code-scanner:2.1.0'
 
-    implementation 'androidx.security:security-crypto:1.1.0-alpha04'
+    implementation 'androidx.security:security-crypto:1.1.0-alpha06'
 
     implementation "androidx.biometric:biometric:1.1.0"
 
