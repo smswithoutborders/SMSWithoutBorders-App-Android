@@ -2,19 +2,30 @@ plugins {
     id 'com.android.application'
 }
 
+def versionsPropertiesFile = rootProject.file("version.properties")
+def versionProperties = new Properties()
+versionProperties.load(new FileInputStream(versionsPropertiesFile))
+
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     buildFeatures {
         viewBinding true
     }
 
+	def nightlyVersion = Integer.parseInt(versionProperties['nightlyVersion'])
+    def stagingVersion = Integer.parseInt(versionProperties['stagingVersion'])
+    def releaseVersion = Integer.parseInt(versionProperties['releaseVersion'])
+    def tagVersion = Integer.parseInt(versionProperties['tagVersion'])
+
+    println(tagVersion)
+
     defaultConfig {
         applicationId "com.afkanerd.sw0b"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 50
-        versionName "2.5.10"
+        versionCode tagVersion
+        versionName releaseVersion+"."+stagingVersion+"."+nightlyVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 //        vectorDrawables.useSupportLibrary = true

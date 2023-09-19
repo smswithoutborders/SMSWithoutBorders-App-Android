@@ -18,9 +18,9 @@ apk_output=${label}.apk
 APP_1=${label}.apk
 APP_2=${label}_1.apk
 
-CONTAINER_NAME=deku_sms_container_${label}
-CONTAINER_NAME_1=deku_sms_container_${label}_1
-CONTAINER_NAME_BUNDLE=deku_sms_container_${label}_bundle
+CONTAINER_NAME=swob_app_container_${label}
+CONTAINER_NAME_1=swob_app_container_${label}_1
+CONTAINER_NAME_BUNDLE=swob_app_container_${label}_bundle
 CONTAINER_NAME_COMMIT_CHECK=$(commit)_commit_check
 
 minSdk=24
@@ -34,14 +34,15 @@ KEYSTORE_PASSWD = ks.passwd
 DOCKERFILE_FILENAME = Dockerfile
 TRACK_FILENAME = track.py
 
-github_url=https://api.github.com/repos/deku-messaging/Deku-SMS-Android/releases
+# github_url=https://api.github.com/repos/deku-messaging/Deku-SMS-Android/releases
+github_url=https://api.github.com/repos/smswithoutborders/SMSWithoutBorders-App-Android/releases
 
-docker_apk_image=deku_sms_apk_image
+docker_apk_image=swob_app_apk_image
 docker_apk_image_commit_check=docker_apk_image_commit_check
-docker_app_image=deku_sms_app_image
+docker_app_image=swob_app_app_image
 
 config: download
-	@mkdir -p apk-outputs
+	@mkdir -p apk-outputs app/keys
 	@cp release.properties.example release.properties
 
 download:
@@ -116,8 +117,8 @@ commit-check: _commit-check clean
 
 check-diffoscope: ks.passwd
 	@echo "Building apk output: ${APP_1}"
-	@docker build -t ${docker_apk_image} --target apk-builder .
-	@docker run --name ${CONTAINER_NAME} -e PASS=$(pass) ${docker_apk_image} && \
+	docker build -t ${docker_apk_image} --target apk-builder .
+	docker run --name ${CONTAINER_NAME} -e PASS=$(pass) ${docker_apk_image} && \
 		docker cp ${CONTAINER_NAME}:/android/app/build/outputs/apk/release/app-release.apk apk-outputs/${APP_1}
 	@sleep 3
 	@echo "Building apk output: ${APP_2}"
