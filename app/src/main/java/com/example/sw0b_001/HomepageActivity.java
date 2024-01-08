@@ -3,8 +3,21 @@ package com.example.sw0b_001;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
+import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.IntentSender;
+import android.credentials.Credential;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -20,17 +33,30 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
+import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.HomepageFragments.AvailablePlatformsFragment;
 import com.example.sw0b_001.HomepageFragments.NotificationsFragment;
 import com.example.sw0b_001.HomepageFragments.RecentsFragment;
 import com.example.sw0b_001.HomepageFragments.SettingsFragment;
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.Models.Notifications.NotificationsHandler;
 import com.example.sw0b_001.Models.RabbitMQ;
+import com.example.sw0b_001.Models.RecentsRecyclerAdapter;
+import com.example.sw0b_001.Models.RecentsViewModel;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Security.SecurityHelpers;
 import com.example.sw0b_001.Security.SecurityRSA;
+import com.google.android.gms.auth.api.credentials.Credentials;
+import com.google.android.gms.auth.api.credentials.HintRequest;
+import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.gms.common.api.CommonStatusCodes;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -60,11 +86,7 @@ public class HomepageActivity extends AppCompactActivityCustomized {
 
     RabbitMQ rabbitMQ;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_homepage);
-
+    private void securityChecks() {
         try {
             SecurityHandler securityHandler = new SecurityHandler(getBaseContext());
             if(securityHandler.requiresSyncing()) {
@@ -86,97 +108,60 @@ public class HomepageActivity extends AppCompactActivityCustomized {
                     finish();
                 }
             }
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
+    }
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.homepage_bottom_nav);
-        bottomNavigationView.setSelectedItemId(R.id.recents);
+    RecentsViewModel recentsViewModel;
+    Datastore databaseConnector;
+    SecurityHandler securityHandler;
 
-        TextView textView = findViewById(R.id.fragment_title);
+    private void configureRecyclerHandlers() throws GeneralSecurityException, IOException {
+        RecentsRecyclerAdapter recentsRecyclerAdapter = new RecentsRecyclerAdapter(securityHandler);
 
-        try {
-            rabbitMQ = new RabbitMQ(getApplicationContext());
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setStackFromEnd(true);
+        linearLayoutManager.setReverseLayout(true);
 
-//        fragmentManager.beginTransaction().add(R.id.homepage_fragment_container_view,
-//                        RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
-//                .setReorderingAllowed(true)
-//                .setCustomAnimations(android.R.anim.slide_in_left,
-//                        android.R.anim.slide_out_right,
-//                        android.R.anim.fade_in,
-//                        android.R.anim.fade_out)
-//                .commitNow();
-//
-//        Fragment currentFragment = fragmentManager.findFragmentByTag(SETTINGS_FRAGMENT_TAG);
-//        if(currentFragment instanceof SettingsFragment) {
-//            textView.setText(R.string.settings_settings);
-//            textView.setVisibility(View.VISIBLE);
-//        }
+        RecyclerView recentsRecyclerView = findViewById(R.id.recents_recycler_view);
+        recentsRecyclerView.setLayoutManager(linearLayoutManager);
+        recentsRecyclerView.setAdapter(recentsRecyclerAdapter);
 
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        recentsViewModel = new ViewModelProvider(this).get( RecentsViewModel.class );
+
+        databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
+                Datastore.DatabaseName).build();
+
+        EncryptedContentDAO encryptedContentDAO = databaseConnector.encryptedContentDAO();
+        recentsViewModel.getMessages(encryptedContentDAO).observe(this, new Observer<List<EncryptedContent>>() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull @NotNull MenuItem item) {
-                textView.setVisibility(View.GONE);
-                final int itemId = item.getItemId();
-                switch(itemId) {
-                    case R.id.recents: {
-                        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
-                                RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
-                                .setReorderingAllowed(true)
-                                .setCustomAnimations(android.R.anim.slide_in_left,
-                                        android.R.anim.slide_out_right,
-                                        android.R.anim.fade_in,
-                                        android.R.anim.fade_out)
-                                .commit();
-                        return true;
-                    }
-                    case R.id.settings: {
-                        textView.setText(R.string.settings_settings);
-                        textView.setVisibility(View.VISIBLE);
-                        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
-                                SettingsFragment.class, null, SETTINGS_FRAGMENT_TAG)
-                                .setReorderingAllowed(true)
-                                .setCustomAnimations(android.R.anim.slide_in_left,
-                                        android.R.anim.slide_out_right,
-                                        android.R.anim.fade_in,
-                                        android.R.anim.fade_out)
-                                .commit();
-                        return true;
-                    }
+            public void onChanged(List<EncryptedContent> encryptedContents) {
+                TextView noRecentMessagesText = findViewById(R.id.no_recent_messages);
 
-                    case R.id.messages: {
-                        textView.setText(R.string.messages_title);
-                        textView.setVisibility(View.VISIBLE);
-                        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
-                                        NotificationsFragment.class, null)
-                                .setReorderingAllowed(true)
-                                .setCustomAnimations(android.R.anim.slide_in_left,
-                                        android.R.anim.slide_out_right,
-                                        android.R.anim.fade_in,
-                                        android.R.anim.fade_out)
-                                .commit();
-                        return true;
-                    }
-                }
-                return false;
+                if(!encryptedContents.isEmpty()) noRecentMessagesText.setVisibility(View.INVISIBLE);
+                else noRecentMessagesText.setVisibility(View.VISIBLE);
+
+                recentsRecyclerAdapter.submitList(encryptedContents);
             }
         });
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    checkAccountSynchronization();
-                    connectRMQForNotifications();
-                } catch(Throwable e ) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_homepage);
+
+        try {
+            securityHandler = new SecurityHandler(getApplicationContext());
+            configureRecyclerHandlers();
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+        }
+
+        // TODO: for verification
+        IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
+        registerReceiver(smsVerificationReceiver, intentFilter);
     }
 
     public String getEncryptionDigest() {
@@ -193,29 +178,6 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         List<GatewayServer> gatewayServerList = GatewayServersHandler.getAllGatewayServers(getApplicationContext());
 
         String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerList.get(0).getUrl());
-
-        if(!securityRSA.canSign(keystoreAlias)) {
-            Snackbar mySnackbar = Snackbar.make(findViewById(R.id.cordinator_layout),
-                    R.string.homepage_snackbar_cannot_sign_key, BaseTransientBottomBar.LENGTH_INDEFINITE);
-            mySnackbar.setTextColor(getResources().getColor(R.color.white, getTheme()));
-            mySnackbar.setBackgroundTint(getResources().getColor(R.color.text_box, getTheme()));
-            mySnackbar.setAction(R.string.settings_security_and_privacy_account_logout, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        securityHandler.removeSharedKey();
-                        startActivity(new Intent(getApplicationContext(), SplashActivity.class));
-                        finish();
-                    } catch (GeneralSecurityException e) {
-                        throw new RuntimeException(e);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            });
-            mySnackbar.show();
-            return;
-        }
 
         RequestFuture<JSONObject> future = RequestFuture.newFuture();
 
@@ -286,85 +248,57 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         }
     }
 
-    private void connectRMQForNotifications() throws Throwable {
-        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
-
-            String messageBase64 = new String(delivery.getBody(), "UTF-8");
-
-            try {
-                String notificationData = new String(Base64.decode(messageBase64, Base64.DEFAULT), StandardCharsets.UTF_8);
-
-                JSONObject jsonObject = new JSONObject(notificationData);
-                long id = jsonObject.getLong("id");
-                String message = jsonObject.getString("message");
-
-                String type = new String();
-                if(jsonObject.has("type"))
-                    type = jsonObject.getString("type");
-
-                NotificationsHandler.storeNotification(getBaseContext(), id, message, type);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        };
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-
-                    rabbitMQ.startConnection();
-                    rabbitMQ.consume(deliverCallback);
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    public void onComposePlatformClick(View view) {
-        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
-                        AvailablePlatformsFragment.class, null)
-                .setReorderingAllowed(true)
-                .addToBackStack(null)
-                .setCustomAnimations(android.R.anim.slide_in_left,
-                        android.R.anim.slide_out_right,
-                        android.R.anim.fade_in,
-                        android.R.anim.fade_out)
-                .commit();
-    }
+//    public void onComposePlatformClick(View view) {
+//        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
+//                        AvailablePlatformsFragment.class, null)
+//                .setReorderingAllowed(true)
+//                .addToBackStack(null)
+//                .setCustomAnimations(android.R.anim.slide_in_left,
+//                        android.R.anim.slide_out_right,
+//                        android.R.anim.fade_in,
+//                        android.R.anim.fade_out)
+//                .commit();
+//    }
 
     @Override
     protected void onResume() {
         super.onResume();
+        securityChecks();
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     checkAccountSynchronization();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                } catch (GeneralSecurityException e) {
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                } catch(Throwable e ) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    checkAccountSynchronization();
+                } catch (InterruptedException | GeneralSecurityException | IOException |
+                         JSONException e) {
+                    e.printStackTrace();
                 }
             }
         }).start();
 
         Fragment currentFragment = fragmentManager.findFragmentByTag(RECENTS_FRAGMENT_TAG);
-        if (currentFragment instanceof RecentsFragment) {
-            fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
-                            RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
-                    .setReorderingAllowed(true)
-                    .setCustomAnimations(android.R.anim.slide_in_left,
-                            android.R.anim.slide_out_right,
-                            android.R.anim.fade_in,
-                            android.R.anim.fade_out)
-                    .commit();
-        }
+//        if (currentFragment instanceof RecentsFragment) {
+//            fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
+//                            RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
+//                    .setReorderingAllowed(true)
+//                    .setCustomAnimations(android.R.anim.slide_in_left,
+//                            android.R.anim.slide_out_right,
+//                            android.R.anim.fade_in,
+//                            android.R.anim.fade_out)
+//                    .commit();
+//        }
 //        if(!rabbitMQ.isOpen()) {
 //            try {
 //                connectRMQForNotifications();
@@ -376,6 +310,10 @@ public class HomepageActivity extends AppCompactActivityCustomized {
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
+        if(databaseConnector != null)
+            databaseConnector.close();
+
         Thread rmqThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -394,6 +332,78 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        super.onDestroy();
     }
+
+    private static final int CREDENTIAL_PICKER_REQUEST = 1;  // Set to an unused request code
+    private static final int RESOLVE_HINT = 2;  // Set to an unused request code
+
+    public void startSMSVerificationListener(View view) {
+        // Start listening for SMS User Consent broadcasts from senderPhoneNumber
+        // The Task<Void> will be successful if SmsRetriever was able to start
+        // SMS User Consent, and will error if there was an error starting.
+        String senderPhoneNumber = "SWOB ONLINE";
+        Task<Void> task = SmsRetriever.getClient(getApplicationContext())
+                .startSmsUserConsent(senderPhoneNumber /* or null */);
+        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d(getLocalClassName(), "+ OTP task success");
+            }
+        });
+
+        task.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(getLocalClassName(), "+ OTP task failure");
+                e.printStackTrace();
+            }
+        });
+
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SMS_CONSENT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                // Get SMS message content
+                String message = data.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE);
+                // Extract one-time code from the message and complete verification
+                // `sms` contains the entire text of the SMS message, so you will need
+                // to parse the string.
+                Log.d(getLocalClassName(), "+ OTP code: " + message);
+                // send one time code to the server
+            }
+        }
+    }
+
+    private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code
+    private final BroadcastReceiver smsVerificationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (SmsRetriever.SMS_RETRIEVED_ACTION.equals(intent.getAction())) {
+                Bundle extras = intent.getExtras();
+                Status smsRetrieverStatus = (Status) extras.get(SmsRetriever.EXTRA_STATUS);
+
+                switch (smsRetrieverStatus.getStatusCode()) {
+                    case CommonStatusCodes.SUCCESS:
+                        // Get consent intent
+                        Intent consentIntent = extras.getParcelable(SmsRetriever.EXTRA_CONSENT_INTENT);
+                        try {
+                            // Start activity to show consent dialog to user, activity must be started in
+                            // 5 minutes, otherwise you'll receive another TIMEOUT intent
+                            startActivityForResult(consentIntent, SMS_CONSENT_REQUEST);
+                        } catch (ActivityNotFoundException e) {
+                            // Handle the exception ...
+                        }
+                        break;
+                    case CommonStatusCodes.TIMEOUT:
+                        // Time out occurred, handle the error.
+                        break;
+                }
+            }
+        }
+    };
+
 }

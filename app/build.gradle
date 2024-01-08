@@ -17,6 +17,7 @@ android {
 	def nightlyVersion = Integer.parseInt(versionProperties['nightlyVersion'])
     def stagingVersion = Integer.parseInt(versionProperties['stagingVersion'])
     def releaseVersion = Integer.parseInt(versionProperties['releaseVersion'])
+    def _versionName = versionProperties['versionName']
     def tagVersion = Integer.parseInt(versionProperties['tagVersion'])
 
     println(tagVersion)
@@ -26,10 +27,9 @@ android {
         minSdkVersion 23
         targetSdkVersion 34
         versionCode tagVersion
-        versionName releaseVersion+"."+stagingVersion+"."+nightlyVersion
+        versionName _versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-//        vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += ["room.schemaLocation":
@@ -103,4 +103,8 @@ dependencies {
     implementation "androidx.biometric:biometric:1.1.0"
 
     implementation 'com.rabbitmq:amqp-client:5.10.0'
+
+    implementation 'com.google.android.gms:play-services-auth:20.7.0'
+    implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
+
 }

@@ -32,7 +32,6 @@
 
     <TextView
         android:id="@+id/textView9"
-        android:theme="@style/Theme.welcome_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
@@ -46,7 +45,6 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/sync_continue_btn"
-        android:theme="@style/Theme.button_primary"
         android:layout_width="282dp"
         android:layout_height="52dp"
         android:layout_marginTop="29dp"
@@ -67,7 +65,6 @@
 
 
     <com.google.android.material.button.MaterialButton
-        android:theme="@style/Theme.button_secondary"
         android:layout_width="282dp"
         android:layout_height="52dp"
         android:onClick="onContinueClick"

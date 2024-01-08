@@ -45,48 +45,14 @@ public class RecentsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        try {
-            RecentsRecyclerAdapter recentsRecyclerAdapter = new RecentsRecyclerAdapter(getContext(), R.layout.layout_cardlist_recents);
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-            linearLayoutManager.setStackFromEnd(true);
-            linearLayoutManager.setReverseLayout(true);
-
-            RecyclerView recentsRecyclerView = view.findViewById(R.id.recents_recycler_view);
-            recentsRecyclerView.setLayoutManager(linearLayoutManager);
-            recentsRecyclerView.setAdapter(recentsRecyclerAdapter);
-
-            recentsViewModel = new ViewModelProvider(this).get(
-                    RecentsViewModel.class );
-
-            Datastore databaseConnector = Room.databaseBuilder(getContext(), Datastore.class,
-                    Datastore.DatabaseName).build();
-
-            encryptedContentDAO = databaseConnector.encryptedContentDAO();
-            recentsViewModel.getMessages(encryptedContentDAO).observe(getViewLifecycleOwner(), new Observer<List<EncryptedContent>>() {
-                @Override
-                public void onChanged(List<EncryptedContent> encryptedContents) {
-                    TextView noRecentMessagesText = view.findViewById(R.id.no_recent_messages);
-
-                    if(!encryptedContents.isEmpty()) noRecentMessagesText.setVisibility(View.INVISIBLE);
-                    else noRecentMessagesText.setVisibility(View.VISIBLE);
-
-                    recentsRecyclerAdapter.submitList(encryptedContents);
-                }
-            });
-
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recents, container, false);
-    }
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        // Inflate the layout for this fragment
+////        return inflater.inflate(R.layout.fragment_recents, container, false);
+//    }
 
     @Override
     public void onResume() {

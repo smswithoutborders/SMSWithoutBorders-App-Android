@@ -34,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.zip.Inflater;
 
 public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecyclerAdapter.ViewHolder> {
     private final AsyncListDiffer<EncryptedContent> mDiffer = new AsyncListDiffer(this, DIFF_CALLBACK);
@@ -43,18 +44,18 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
 
     SecurityHandler securityHandler;
 
-    public RecentsRecyclerAdapter(Context context, int recentsRenderLayout) throws GeneralSecurityException, IOException {
-        this.context = context;
-        this.recentsRenderLayout = recentsRenderLayout;
-        this.securityHandler = new SecurityHandler(context);
+    View view;
+
+    public RecentsRecyclerAdapter(SecurityHandler securityHandler) throws GeneralSecurityException, IOException {
+        this.securityHandler = securityHandler;
     }
 
     @NonNull
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(this.context);
-        View view = inflater.inflate(this.recentsRenderLayout, parent, false);
+        view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.layout_cardlist_recents, parent, false);
         return new RecentsRecyclerAdapter.ViewHolder(view);
     }
 
@@ -69,7 +70,7 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
 
         holder.encryptedTextSnippet.setText(displayString);
 
-        Platform platform = PlatformsHandler.getPlatform(this.context,
+        Platform platform = PlatformsHandler.getPlatform(holder.itemView.getContext(),
                 encryptedContent.getPlatformName());
 
         holder.platformLogo.setImageResource(
