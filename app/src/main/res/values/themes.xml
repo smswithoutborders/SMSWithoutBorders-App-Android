@@ -1,8 +1,7 @@
 <resources>
 
     <style name="Theme.main" parent="Theme.MyApp">
-        <item name="colorPrimary">@color/logo_primary</item>
-        <item name="colorSecondary">@color/logo_secondary</item>
+<!--        <item name="colorPrimary">@color/logo_primary</item>-->
+<!--        <item name="colorSecondary">@color/logo_secondary</item>-->
     </style>
-
 </resources>

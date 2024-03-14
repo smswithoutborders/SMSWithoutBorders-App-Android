@@ -269,5 +269,8 @@
     <string name="no_notifications">
         No Recent Notifications
     </string>
+    <string name="title_activity_onboarding">OnboardingActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 
 </resources>
