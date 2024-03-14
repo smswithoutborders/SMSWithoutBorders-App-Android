@@ -49,8 +49,6 @@ import com.example.sw0b_001.Models.RecentsViewModel;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Security.SecurityHelpers;
 import com.example.sw0b_001.Security.SecurityRSA;
-import com.google.android.gms.auth.api.credentials.Credentials;
-import com.google.android.gms.auth.api.credentials.HintRequest;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.common.api.Status;
