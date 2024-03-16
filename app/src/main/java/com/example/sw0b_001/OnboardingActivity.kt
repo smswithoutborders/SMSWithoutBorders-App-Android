@@ -42,6 +42,12 @@ class OnboardingActivity : AppCompatActivity() {
         val nextButton = findViewById<MaterialButton>(R.id.onboard_next_button);
         val prevButton = findViewById<MaterialButton>(R.id.onboard_back_button);
         val dotIndicatorLayout = findViewById<LinearLayout>(R.id.onboard_dot_indicator_layout)
+        val skipAllBtn = findViewById<MaterialTextView>(R.id.onboard_skip_all)
+
+        skipAllBtn.setOnClickListener {
+            TODO("[Localization] Add this to string.xml for translation")
+            TODO("[Implementation] Skip all to get started")
+        }
 
         fragmentIterator.observe(this) {
             dotIndicatorLayout.removeAllViews()
@@ -57,7 +63,6 @@ class OnboardingActivity : AppCompatActivity() {
             when {
                 it >= fragmentList.size - 1 -> {
                     nextButton.text = "Finish"
-                    TODO("[Localization] Add this to string.xml for translation")
                 }
                 else -> {
                     nextButton.text = "Next"
@@ -66,9 +71,11 @@ class OnboardingActivity : AppCompatActivity() {
             when(it) {
                 0 -> {
                     prevButton.visibility = View.GONE
+                    skipAllBtn.visibility = View.GONE
                 }
                 else -> {
                     prevButton.visibility = View.VISIBLE
+                    skipAllBtn.visibility = View.VISIBLE
                     prevButton.text = "Previous"
                 }
             }
