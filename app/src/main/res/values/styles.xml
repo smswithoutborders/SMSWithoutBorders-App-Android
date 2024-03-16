@@ -7,6 +7,10 @@
 
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowLightStatusBar">true</item>
+
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:cursorVisible">true</item>
     </style>
 
 </resources>

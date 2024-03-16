@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Onboarding.WelcomeFragment">
+    android:layout_height="match_parent" >
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Welcome" />
+        android:text="Welcome" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
