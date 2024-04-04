@@ -44,15 +44,15 @@ class BackendCommunications(val uid: String) {
     companion object {
         fun login(phoneNumber: String, password: String, url: String): Result<String, Exception> {
             val payload = Json.encodeToString(UserCredentials(phoneNumber, password))
-            try {
+            return try {
                 val (_, _, result) = Fuel.post(url)
                         .jsonBody(payload)
                         .responseString()
-                return Result.Success(result.get())
+                Result.Success(result.get())
             } catch (e: HttpException) {
-                return Result.Failure(e)
+                Result.Failure(e)
             } catch(e: Exception) {
-                return Result.error(e)
+                Result.error(e)
             }
         }
     }
@@ -66,7 +66,7 @@ class BackendCommunications(val uid: String) {
     }
 
     private val userDetailsFilename = "user_details_pref"
-    fun storeUID(context: Context) {
+    fun storeUID(context: Context, url: String) {
         val masterKey = MasterKey.Builder(context)
                 .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
                 .build()
@@ -82,6 +82,9 @@ class BackendCommunications(val uid: String) {
         // use the shared preferences and editor as you normally would
 
         // use the shared preferences and editor as you normally would
-        sharedPreferences.edit().putString("uid", uid).apply()
+        sharedPreferences.edit()
+                .putString("uid", uid)
+                .putString("uid_url", url)
+                .apply()
     }
 }

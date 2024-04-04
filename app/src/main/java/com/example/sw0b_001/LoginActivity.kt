@@ -1,5 +1,6 @@
 package com.example.sw0b_001
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -58,7 +59,8 @@ class LoginActivity : AppCompatActivity() {
                 is Result.Success -> {
                     Log.d(javaClass.name, "Storing UID for user")
                     val obj = Json.decodeFromString<BackendCommunications.UID>(res.get())
-                    BackendCommunications(obj.uid).storeUID(applicationContext)
+                    BackendCommunications(obj.uid).storeUID(applicationContext, url)
+                    startActivity(Intent(this, HomepageActivity::class.java))
                 }
                 is Result.Failure -> {
                     val errorTextView = findViewById<MaterialTextView>(R.id.login_error_text)

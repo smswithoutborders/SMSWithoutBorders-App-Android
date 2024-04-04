@@ -255,32 +255,32 @@ public class HomepageActivity extends AppCompactActivityCustomized {
     @Override
     protected void onResume() {
         super.onResume();
-        securityChecks();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    checkAccountSynchronization();
-                } catch(Throwable e ) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    checkAccountSynchronization();
-                } catch (InterruptedException | GeneralSecurityException | IOException |
-                         JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-        Fragment currentFragment = fragmentManager.findFragmentByTag(RECENTS_FRAGMENT_TAG);
+//        securityChecks();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    checkAccountSynchronization();
+//                } catch(Throwable e ) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+//
+//
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    checkAccountSynchronization();
+//                } catch (InterruptedException | GeneralSecurityException | IOException |
+//                         JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+//
+//        Fragment currentFragment = fragmentManager.findFragmentByTag(RECENTS_FRAGMENT_TAG);
 //        if (currentFragment instanceof RecentsFragment) {
 //            fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
 //                            RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
