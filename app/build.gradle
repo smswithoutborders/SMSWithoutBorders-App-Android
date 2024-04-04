@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+//    id 'org.jetbrains.kotlin.jvm' version '1.9.23'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.23'
 }
 
 def versionsPropertiesFile = rootProject.file("version.properties")
@@ -63,7 +65,6 @@ android {
 
 dependencies {
 
-    // implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.51'
     implementation 'androidx.appcompat:appcompat:1.7.0-alpha03'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -75,6 +76,7 @@ dependencies {
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'androidx.databinding:baseLibrary:3.2.0-alpha11'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0'
+    implementation 'androidx.activity:activity:1.8.0'
 //    implementation 'com.android.support:appcompat-v7:28.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -88,7 +90,6 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     implementation "androidx.room:room-runtime:2.6.1"
-    implementation 'com.google.android.material:material:<version>'
     annotationProcessor "androidx.room:room-compiler:2.6.1"
 
 
@@ -102,8 +103,24 @@ dependencies {
 
     implementation 'com.rabbitmq:amqp-client:5.20.0'
 
-    implementation 'com.google.android.gms:play-services-auth:21.0.0'
-    implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.2'
 
     implementation 'com.github.tizisdeepan:dots:1.0.1'
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
+
+    def fuelVersion = "2.2.1"
+    implementation "com.github.kittinunf.fuel:fuel:$fuelVersion" //for JVM
+    testImplementation "com.github.kittinunf.fuel:fuel:$fuelVersion" //for JVM
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1-Beta'//
+
+     implementation "com.github.kittinunf.fuel:fuel-android:$fuelVersion" //for Android
+//    implementation "com.github.kittinunf.fuel:fuel-livedata:$fuelVersion" //for LiveData support
+//    implementation "com.github.kittinunf.fuel:fuel-rxjava:$fuelVersion" //for RxJava support
+    implementation "com.github.kittinunf.fuel:fuel-coroutines:$fuelVersion"
+//    //for Kotlin Coroutines support
+//    implementation "com.github.kittinunf.fuel:fuel-gson:$fuelVersion" //for Gson support
+//    implementation "com.github.kittinunf.fuel:fuel-jackson:$fuelVersion" //for Jackson support
+//    implementation "com.github.kittinunf.fuel:fuel-moshi:$fuelVersion" //for Moshi support
+//    implementation "com.github.kittinunf.fuel:fuel-forge:$fuelVersion" //for Forge support
+//    implementation "com.github.kittinunf.fuel:fuel-reactor:$fuelVersion" //for Reactor support}
 }

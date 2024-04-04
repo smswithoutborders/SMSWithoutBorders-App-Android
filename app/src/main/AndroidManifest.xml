@@ -28,6 +28,9 @@
         android:versionCode="48"
         android:versionName="2.5.8">
         <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".OnboardingActivity"
             android:exported="true"
             android:label="@string/title_activity_onboarding"

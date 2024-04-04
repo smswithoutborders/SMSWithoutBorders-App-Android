@@ -83,8 +83,10 @@ public class AddNewGatewayActivity extends AppCompactActivityCustomized {
                     Cursor contactCursor = getApplicationContext().getContentResolver().query(contactData, null, null, null, null);
                     if(contactCursor != null) {
                         if (contactCursor.moveToFirst()) {
-                            int contactIndexInformation = contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                            int contactNameIndexInformation = contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                            int contactIndexInformation = contactCursor
+                                    .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                            int contactNameIndexInformation = contactCursor
+                                    .getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
 
                             String number = contactCursor.getString(contactIndexInformation);
                             String name = contactCursor.getString(contactNameIndexInformation);
