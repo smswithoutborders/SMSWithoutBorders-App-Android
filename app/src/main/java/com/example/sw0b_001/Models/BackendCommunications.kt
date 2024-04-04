@@ -23,6 +23,21 @@ class BackendCommunications(val uid: String) {
     @Serializable
     data class UID(val uid: String)
 
+    @Serializable
+    data class PlatformDescription(val en: String, val fr: String, val fa: String)
+
+    @Serializable
+    data class Platform(val name: String,
+                        val description: PlatformDescription,
+                        val logo: String,
+                        val initialization_url: String,
+                        val type: String,
+                        val letter: String)
+
+    @Serializable
+    data class Platforms(val unsaved_platforms: ArrayList<Platform>,
+                         val saved_platforms: ArrayList<Platform>)
+
     companion object {
         fun login(phoneNumber: String, password: String, url: String) : ResponseResultOf<String> {
             val payload = Json.encodeToString(UserCredentials(phoneNumber, password))

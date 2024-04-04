@@ -8,6 +8,8 @@ import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.result.Result
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -52,5 +54,9 @@ class LoginTest {
                 .getPlatforms("https://staging.smswithoutborders.com:9000", response.headers)
         assertEquals(200, response1.statusCode)
         Log.d(javaClass.name, "Platforms: " + result1.get())
+
+        val platformsObjs = Json.decodeFromString<BackendCommunications.Platforms>(result1.get())
+        assertFalse(platformsObjs.saved_platforms.isNullOrEmpty())
+        assertFalse(platformsObjs.unsaved_platforms.isNullOrEmpty())
     }
 }
