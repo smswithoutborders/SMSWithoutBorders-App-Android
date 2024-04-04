@@ -9,11 +9,15 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.sw0b_001.Models.BackendCommunications
 import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.github.kittinunf.fuel.core.HttpException
+import com.github.kittinunf.result.Result
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
+import kotlinx.serialization.json.Json
+import java.util.concurrent.TimeUnit
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,40 +36,48 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun login(view: View) {
+        val cardView = findViewById<MaterialCardView>(R.id.login_status_card)
+        cardView.visibility = View.GONE
+
         val phoneNumber = findViewById<TextInputEditText>(R.id.login_phonenumber_text_input)
                 .text.toString()
         val password = findViewById<TextInputEditText>(R.id.login_password_text_input)
                 .text.toString()
         val customUrl = findViewById<TextInputEditText>(R.id.login_url_input)
 
-        val url = getString(R.string.default_url)
+        val url = getString(R.string.default_login_url)
         if(customUrl != null && customUrl.text != null)
             customUrl.text.toString()
 
         val progressIndicator = findViewById<LinearProgressIndicator>(R.id.login_progress_bar)
         progressIndicator.visibility = View.VISIBLE
-        ThreadExecutorPool.executorService.execute(Runnable {
-            try {
-                val (_, response, result) = BackendCommunications.login(phoneNumber, password, url)
-                if (response.statusCode != 200) {
-                    findViewById<MaterialCardView>(R.id.login_status_card).visibility = View.VISIBLE
-                    val errorTextView = findViewById<MaterialTextView>(R.id.login_error_text)
-                    errorTextView.text = result.get()
-                } else {
-                    Log.d(javaClass.name, "Storing UID for user")
-                }
-            } catch(e: Exception) {
-                Log.e(javaClass.name, "Exception: $e")
-                findViewById<MaterialCardView>(R.id.login_status_card).visibility = View.VISIBLE
-                val errorTextView = findViewById<MaterialTextView>(R.id.login_error_text)
-                errorTextView.text = e.message
 
-                findViewById<MaterialButton>(R.id.login_retry_btn).visibility = View.VISIBLE
-            } finally {
-                runOnUiThread(Runnable {
-                    progressIndicator.visibility = View.GONE
-                })
+        ThreadExecutorPool.executorService.execute(Runnable {
+            val res = BackendCommunications.login(phoneNumber, password, url)
+            when(res) {
+                is Result.Success -> {
+                    Log.d(javaClass.name, "Storing UID for user")
+                    val obj = Json.decodeFromString<BackendCommunications.UID>(res.get())
+                    BackendCommunications(obj.uid).storeUID(applicationContext)
+                }
+                is Result.Failure -> {
+                    val errorTextView = findViewById<MaterialTextView>(R.id.login_error_text)
+                    runOnUiThread(Runnable {
+                        cardView.visibility = View.VISIBLE
+                        errorTextView.visibility = View.VISIBLE
+                        errorTextView.text = "Wrong number or password, please try again..."
+                    })
+                }
+                else -> {
+                    runOnUiThread(Runnable {
+                        cardView.visibility = View.VISIBLE
+                        findViewById<MaterialButton>(R.id.login_retry_btn).visibility = View.VISIBLE
+                    })
+                }
             }
+            runOnUiThread(Runnable {
+                progressIndicator.visibility = View.GONE
+            })
         })
     }
 }

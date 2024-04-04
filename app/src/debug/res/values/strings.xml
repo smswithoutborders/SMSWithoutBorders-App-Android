@@ -30,8 +30,8 @@
         staging.smswithoutborders.com
     </string>
 
-    <string name="default_url" translatable="false">
-        https://staging.smswithoutborders.com
+    <string name="default_login_url" translatable="false">
+        https://staging.smswithoutborders.com:9000/v2/login
     </string>
 
 </resources>
