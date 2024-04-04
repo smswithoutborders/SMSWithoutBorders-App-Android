@@ -16,6 +16,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.serialization.json.Json
 import java.util.concurrent.TimeUnit
@@ -34,6 +35,14 @@ class LoginActivity : AppCompatActivity() {
         findViewById<MaterialButton>(R.id.login_btn).setOnClickListener {
             login(it)
         }
+
+        val customUrlView = findViewById<TextInputLayout>(R.id.login_url)
+        findViewById<MaterialTextView>(R.id.login_advanced_toggle).setOnClickListener {
+            if(customUrlView.visibility == View.VISIBLE)
+                customUrlView.visibility = View.INVISIBLE
+            else
+                customUrlView.visibility = View.VISIBLE
+        }
     }
 
     private fun login(view: View) {
@@ -46,9 +55,9 @@ class LoginActivity : AppCompatActivity() {
                 .text.toString()
         val customUrl = findViewById<TextInputEditText>(R.id.login_url_input)
 
-        val url = getString(R.string.default_login_url)
+        var url = getString(R.string.default_login_url)
         if(customUrl != null && customUrl.text != null)
-            customUrl.text.toString()
+            url = customUrl.text.toString()
 
         val progressIndicator = findViewById<LinearProgressIndicator>(R.id.login_progress_bar)
         progressIndicator.visibility = View.VISIBLE
@@ -57,7 +66,6 @@ class LoginActivity : AppCompatActivity() {
             val res = BackendCommunications.login(phoneNumber, password, url)
             when(res) {
                 is Result.Success -> {
-                    Log.d(javaClass.name, "Storing UID for user")
                     val obj = Json.decodeFromString<BackendCommunications.UID>(res.get())
                     BackendCommunications(obj.uid).storeUID(applicationContext, url)
                     startActivity(Intent(this, HomepageActivity::class.java))
