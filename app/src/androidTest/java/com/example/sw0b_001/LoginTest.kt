@@ -50,7 +50,7 @@ class LoginTest {
         val user = BackendCommunications(uid)
         val (_, response1, result1) = user
                 .getPlatforms("https://staging.smswithoutborders.com:9000", response.headers)
-//        assertEquals(200, response1.statusCode)
+        assertEquals(200, response1.statusCode)
         Log.d(javaClass.name, "Platforms: " + result1.get())
     }
 }
