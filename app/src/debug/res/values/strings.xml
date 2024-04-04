@@ -30,4 +30,8 @@
         staging.smswithoutborders.com
     </string>
 
+    <string name="default_url" translatable="false">
+        https://staging.smswithoutborders.com
+    </string>
+
 </resources>

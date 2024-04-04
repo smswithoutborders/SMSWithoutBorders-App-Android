@@ -29,17 +29,23 @@
         android:versionName="2.5.8">
         <activity
             android:name=".LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OnboardingActivity"
-            android:exported="true"
-            android:label="@string/title_activity_onboarding"
-            android:theme="@style/Theme.main">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".OnboardingActivity"
+            android:exported="true"
+            android:label="@string/title_activity_onboarding"
+            android:theme="@style/Theme.main">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
 
         <service
