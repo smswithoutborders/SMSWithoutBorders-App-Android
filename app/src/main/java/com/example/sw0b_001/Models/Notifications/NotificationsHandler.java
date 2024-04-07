@@ -1,36 +1,19 @@
 package com.example.sw0b_001.Models.Notifications;
 
-import android.app.PendingIntent;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.room.Room;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.work.Constraints;
-import androidx.work.Data;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
-import androidx.work.WorkQuery;
-import androidx.work.WorkRequest;
 
-import com.example.sw0b_001.BuildConfig;
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Models.RabbitMQ;
-import com.example.sw0b_001.Security.SecurityHandler;
-import com.example.sw0b_001.Security.SecurityHelpers;
-import com.example.sw0b_001.Security.SecurityRSA;
-import com.google.common.util.concurrent.ListenableFuture;
 
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class NotificationsHandler {
@@ -59,7 +42,7 @@ public class NotificationsHandler {
 //                .addMigrations(MIGRATION_9_10)
 //                .build();
         Datastore databaseConnector = Room.databaseBuilder(context,
-                        Datastore.class, Datastore.DatabaseName)
+                        Datastore.class, Datastore.databaseName)
                 .build();
         NotificationsDAO notificationsDAO = databaseConnector.notificationsDAO();
         notificationsDAO.insert(notifications);

@@ -36,8 +36,6 @@ public class WelcomeActivity extends AppCompactActivityCustomized {
         startActivity(intent);
     }
 
-
-
     public void linkPrivacyPolicy(View view) {
         // TODO: check for production
         Uri intentUri = Uri.parse(getResources().getString(R.string.privacy_policy));

@@ -4,19 +4,9 @@ import android.content.Context;
 import android.telephony.TelephonyManager;
 
 import androidx.room.Room;
-import androidx.work.DelegatingWorkerFactory;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.R;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +20,7 @@ public class GatewayClientsHandler {
             @Override
             public void run() {
                 Datastore databaseConnector = Room.databaseBuilder(context, Datastore.class,
-                        Datastore.DatabaseName).build();
+                        Datastore.databaseName).build();
                 GatewayClientsDao gatewayClientsDao = databaseConnector.gatewayClientsDao();
                 gatewayClientsInsertId[0] = gatewayClientsDao.insert(gatewayClient);
             }
@@ -46,7 +36,7 @@ public class GatewayClientsHandler {
             @Override
             public void run() {
                 Datastore databaseConnector = Room.databaseBuilder(context, Datastore.class,
-                        Datastore.DatabaseName).build();
+                        Datastore.databaseName).build();
                 GatewayClientsDao gatewayClientsDao = databaseConnector.gatewayClientsDao();
                 gatewayClientsDao.resetAllDefaults();
                 gatewayClientsDao.updateDefault(gatewayClient.isDefault(), gatewayClient.getId());
@@ -123,7 +113,7 @@ public class GatewayClientsHandler {
             @Override
             public void run() {
                 Datastore databaseConnection = Room.databaseBuilder(context,
-                                Datastore.class, Datastore.DatabaseName)
+                                Datastore.class, Datastore.databaseName)
                         .fallbackToDestructiveMigration()
                         .build();
 

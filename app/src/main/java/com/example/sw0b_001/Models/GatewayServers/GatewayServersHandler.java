@@ -21,7 +21,7 @@ public class GatewayServersHandler {
 
     public long add(GatewayServer gatewayServer) throws InterruptedException {
         Datastore databaseConnector = Room.databaseBuilder(this.context, Datastore.class,
-                Datastore.DatabaseName).build();
+                Datastore.databaseName).build();
         final long[] gatewayServerInsertId = {-1};
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -37,7 +37,7 @@ public class GatewayServersHandler {
 
     public void updateSeedsUrl(String seedsUrl, long gatewayServerId) throws InterruptedException {
         Datastore databaseConnector = Room.databaseBuilder(this.context, Datastore.class,
-                Datastore.DatabaseName).build();
+                Datastore.databaseName).build();
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -60,7 +60,7 @@ public class GatewayServersHandler {
 
     public static List<GatewayServer> getAllGatewayServers(Context context) throws InterruptedException {
         Datastore databaseConnector = Room.databaseBuilder(context, Datastore.class,
-                Datastore.DatabaseName).build();
+                Datastore.databaseName).build();
 
         final List<GatewayServer>[] gatewayServerList = new List[]{new ArrayList<>()};
         Thread thread = new Thread(new Runnable() {

@@ -31,19 +31,8 @@ public class SyncInitiateActivity extends AppCompactActivityCustomized {
         View view = binding.getRoot();
         setContentView(view);
 
-        // Get a support ActionBar corresponding to this toolbar
-//        ActionBar ab = getSupportActionBar();
-//        // Enable the Up button
-//        ab.setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        Intent defaultIntent = getIntent();
-
-        if(defaultIntent.getAction() != null && defaultIntent.getAction().equals(Intent.ACTION_VIEW)) {
-            String deepLinkUrl = defaultIntent.getDataString();
+        if(getIntent().getAction() != null && getIntent().getAction().equals(Intent.ACTION_VIEW)) {
+            String deepLinkUrl = getIntent().getDataString();
             handleIncomingDeepLink(deepLinkUrl);
         }
     }
@@ -68,61 +57,12 @@ public class SyncInitiateActivity extends AppCompactActivityCustomized {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
             startActivity(intent);
-
-            finish();
         }
         catch(Exception e) {
-            e.printStackTrace();
+            Log.e(getLocalClassName(), "Exception with DeepLink", e);
         }
         finally {
             finish();
         }
     }
-
-    public void onContinueClick(View view) {
-        String smswithoutbordersHandshakeUrl = getString(R.string.smswithoutborders_official_site_login);
-        Uri intentUri = Uri.parse(smswithoutbordersHandshakeUrl);
-        Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
-        startActivity(intent);
-    }
-
-    public void scanQR(View view) {
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            Intent intent = new Intent(this, QRScannerActivity.class);
-            startActivity(intent);
-            finish();
-        }
-        else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
-
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            // Checking whether user granted the permission or not.
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Showing the toast message
-                Toast.makeText(getApplicationContext(), "Camera Permission Granted", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, QRScannerActivity.class);
-                startActivity(intent);
-            }
-            else {
-                Toast.makeText(this, "Camera Permission Denied", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, SyncInitiateActivity.class);
-                startActivity(intent);
-            }
-        }
-        finish();
-    }
-
-    public void linkPrivacyPolicy(View view) {
-        Uri intentUri = Uri.parse(getResources().getString(R.string.privacy_policy));
-        Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
-        startActivity(intent);
-    }
-
 }

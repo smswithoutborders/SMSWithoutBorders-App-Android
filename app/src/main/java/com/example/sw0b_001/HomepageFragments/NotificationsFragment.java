@@ -1,7 +1,6 @@
 package com.example.sw0b_001.HomepageFragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,19 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
-import com.example.sw0b_001.BuildConfig;
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.Notifications.Notifications;
 import com.example.sw0b_001.Models.Notifications.NotificationsDAO;
-import com.example.sw0b_001.Models.Notifications.NotificationsHandler;
 import com.example.sw0b_001.Models.Notifications.NotificationsRecyclerAdapter;
 import com.example.sw0b_001.Models.Notifications.NotificationsViewModel;
-import com.example.sw0b_001.Models.RecentsViewModel;
 import com.example.sw0b_001.R;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class NotificationsFragment extends Fragment {
 
@@ -61,7 +55,7 @@ public class NotificationsFragment extends Fragment {
             TextView noRecentNotifications = view.findViewById(R.id.no_recent_notifications);
 
             Datastore databaseConnector = Room.databaseBuilder(getContext(), Datastore.class,
-                    Datastore.DatabaseName).build();
+                    Datastore.databaseName).build();
 
             NotificationsDAO notificationsDAO = databaseConnector.notificationsDAO();
             notificationsViewModel.getNotifications(notificationsDAO).observe(getViewLifecycleOwner(), new Observer<List<Notifications>>() {

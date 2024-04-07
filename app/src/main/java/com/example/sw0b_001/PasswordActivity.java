@@ -128,7 +128,6 @@ public class PasswordActivity extends AppCompactActivityCustomized {
         byte[] passwordEncoded = passwordField.getText().toString().getBytes(StandardCharsets.UTF_8);
 
         PublicKey gatewayServerPublicKey = (PublicKey) getIntent().getExtras().get("gateway_server_public_key");
-
         String gatewayServerUrl = getIntent().getStringExtra("gateway_server_url");
         Thread transmissionThread = new Thread(new Runnable() {
             @Override

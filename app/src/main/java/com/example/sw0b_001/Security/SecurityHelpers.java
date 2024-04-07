@@ -11,7 +11,6 @@ import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class SecurityHelpers {
 
     private static List<GatewayServer> getGatewayServers(Context context) throws Throwable {
         Datastore databaseConnection = Room.databaseBuilder(context,
-                Datastore.class, Datastore.DatabaseName).build();
+                Datastore.class, Datastore.databaseName).build();
         final List<GatewayServer>[] gatewayServers = new List[]{new ArrayList<>()};
         Thread fetchGatewayClientThread = new Thread(new Runnable() {
             @Override

@@ -60,7 +60,7 @@ public class PlatformsHandler {
             @Override
             public void run() {
                 Datastore databaseConnection = Room.databaseBuilder(context,
-                        Datastore.class, Datastore.DatabaseName)
+                        Datastore.class, Datastore.databaseName)
                         .fallbackToDestructiveMigration()
                         .build();
 
@@ -85,7 +85,7 @@ public class PlatformsHandler {
             @Override
             public void run() {
                 Datastore databaseConnection = Room.databaseBuilder(context,
-                        Datastore.class, Datastore.DatabaseName)
+                        Datastore.class, Datastore.databaseName)
                         .fallbackToDestructiveMigration()
                         .build();
 
@@ -133,7 +133,7 @@ public class PlatformsHandler {
             @Override
             public void run() {
                 Datastore platformDb = Room.databaseBuilder(context,
-                        Datastore.class, Datastore.DatabaseName)
+                        Datastore.class, Datastore.databaseName)
                         .fallbackToDestructiveMigration()
                         .build();
                 PlatformDao platformsDao = platformDb.platformDao();

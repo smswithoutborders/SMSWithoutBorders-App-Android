@@ -1,7 +1,5 @@
 package com.example.sw0b_001;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -9,19 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
-import android.app.PendingIntent;
-import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.IntentSender;
-import android.credentials.Credential;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -34,28 +23,18 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.HomepageFragments.AvailablePlatformsFragment;
-import com.example.sw0b_001.HomepageFragments.NotificationsFragment;
-import com.example.sw0b_001.HomepageFragments.RecentsFragment;
-import com.example.sw0b_001.HomepageFragments.SettingsFragment;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
-import com.example.sw0b_001.Models.Notifications.NotificationsHandler;
 import com.example.sw0b_001.Models.RabbitMQ;
 import com.example.sw0b_001.Models.RecentsRecyclerAdapter;
 import com.example.sw0b_001.Models.RecentsViewModel;
+import com.example.sw0b_001.Models.ThreadExecutorPool;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Security.SecurityHelpers;
 import com.example.sw0b_001.Security.SecurityRSA;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
-import com.rabbitmq.client.DeliverCallback;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -65,16 +44,27 @@ import java.security.GeneralSecurityException;
 import java.security.spec.MGF1ParameterSpec;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+/**
+ * TODO: Security checks
+ * - Checks if username is present - if valid username, continue with user in the app
+ * - what if username gets spoofed (security keys won't match tho)
+ */
 
 public class HomepageActivity extends AppCompactActivityCustomized {
 
     FragmentManager fragmentManager = getSupportFragmentManager();
 
+    RecentsViewModel recentsViewModel;
+    SecurityHandler securityHandler;
+
     final String RECENTS_FRAGMENT_TAG = "RECENTS_FRAGMENT_TAG";
     final String SETTINGS_FRAGMENT_TAG = "SETTINGS_FRAGMENT_TAG";
+
+    private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code
 
     RabbitMQ rabbitMQ;
 
@@ -105,10 +95,6 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         }
     }
 
-    RecentsViewModel recentsViewModel;
-    Datastore databaseConnector;
-    SecurityHandler securityHandler;
-
     private void configureRecyclerHandlers() throws GeneralSecurityException, IOException {
         RecentsRecyclerAdapter recentsRecyclerAdapter = new RecentsRecyclerAdapter(securityHandler);
 
@@ -122,10 +108,8 @@ public class HomepageActivity extends AppCompactActivityCustomized {
 
         recentsViewModel = new ViewModelProvider(this).get( RecentsViewModel.class );
 
-        databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
-                Datastore.DatabaseName).build();
-
-        EncryptedContentDAO encryptedContentDAO = databaseConnector.encryptedContentDAO();
+        EncryptedContentDAO encryptedContentDAO = Datastore.getDatastore(getApplicationContext())
+                .encryptedContentDAO();
         recentsViewModel.getMessages(encryptedContentDAO).observe(this, new Observer<List<EncryptedContent>>() {
             @Override
             public void onChanged(List<EncryptedContent> encryptedContents) {
@@ -240,7 +224,23 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         }
     }
 
-//    public void onComposePlatformClick(View view) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ThreadExecutorPool.executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    checkAccountSynchronization();
+                } catch (InterruptedException | JSONException | IOException |
+                         GeneralSecurityException e) {
+                    Log.e(getLocalClassName(), "Exception", e);
+                }
+            }
+        });
+    }
+
+    //    public void onComposePlatformClick(View view) {
 //        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
 //                        AvailablePlatformsFragment.class, null)
 //                .setReorderingAllowed(true)
@@ -251,80 +251,6 @@ public class HomepageActivity extends AppCompactActivityCustomized {
 //                        android.R.anim.fade_out)
 //                .commit();
 //    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        securityChecks();
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    checkAccountSynchronization();
-//                } catch(Throwable e ) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
-//
-//
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    checkAccountSynchronization();
-//                } catch (InterruptedException | GeneralSecurityException | IOException |
-//                         JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }).start();
-//
-//        Fragment currentFragment = fragmentManager.findFragmentByTag(RECENTS_FRAGMENT_TAG);
-//        if (currentFragment instanceof RecentsFragment) {
-//            fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
-//                            RecentsFragment.class, null, RECENTS_FRAGMENT_TAG)
-//                    .setReorderingAllowed(true)
-//                    .setCustomAnimations(android.R.anim.slide_in_left,
-//                            android.R.anim.slide_out_right,
-//                            android.R.anim.fade_in,
-//                            android.R.anim.fade_out)
-//                    .commit();
-//        }
-//        if(!rabbitMQ.isOpen()) {
-//            try {
-//                connectRMQForNotifications();
-//            } catch (Throwable e) {
-//                e.printStackTrace();
-//            }
-//        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(databaseConnector != null)
-            databaseConnector.close();
-
-        Thread rmqThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (rabbitMQ.getConnection() != null)
-                        rabbitMQ.getConnection().close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        rmqThread.start();
-        try {
-            rmqThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     private static final int CREDENTIAL_PICKER_REQUEST = 1;  // Set to an unused request code
     private static final int RESOLVE_HINT = 2;  // Set to an unused request code
@@ -370,7 +296,6 @@ public class HomepageActivity extends AppCompactActivityCustomized {
 //        }
 //    }
 
-    private static final int SMS_CONSENT_REQUEST = 2;  // Set to an unused request code
 
 //    private final BroadcastReceiver smsVerificationReceiver = new BroadcastReceiver() {
 //        @Override

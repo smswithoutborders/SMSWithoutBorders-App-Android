@@ -70,7 +70,7 @@ public class TextComposeActivity extends AppCompactActivityCustomized {
 
         long encryptedContentId = intent.getLongExtra("encrypted_content_id", -1);
         Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
-                Datastore.DatabaseName).build();
+                Datastore.databaseName).build();
 
         Thread thread = new Thread(new Runnable() {
             @Override

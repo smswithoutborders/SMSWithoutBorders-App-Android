@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -84,7 +83,7 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
         Intent intent = getIntent();
         long encryptedContentId = intent.getLongExtra("encrypted_content_id", -1);
         Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
-                Datastore.DatabaseName).build();
+                Datastore.databaseName).build();
 
 //        final String[] decryptedEmailContent = {""};
         Thread thread = new Thread(new Runnable() {

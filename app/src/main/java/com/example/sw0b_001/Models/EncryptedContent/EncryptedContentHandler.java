@@ -12,7 +12,7 @@ public class EncryptedContentHandler {
 
     public static void clearedStoredEncryptedContents(Context context) {
         Datastore databaseConnector = Room.databaseBuilder(context, Datastore.class,
-                Datastore.DatabaseName).build();
+                Datastore.databaseName).build();
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -31,7 +31,7 @@ public class EncryptedContentHandler {
 
     public static void store(Context context, String encryptedContentBase64, String gatewayClientMSISDN, String platformName) throws InterruptedException {
         Datastore databaseConnector = Room.databaseBuilder(context, Datastore.class,
-                Datastore.DatabaseName).build();
+                Datastore.databaseName).build();
 
         EncryptedContent encryptedContent = new EncryptedContent();
         encryptedContent.setEncryptedContent(encryptedContentBase64);

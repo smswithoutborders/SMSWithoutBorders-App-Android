@@ -28,35 +28,11 @@ public class AppCompactActivityCustomized extends AppCompatActivity {
 
     @Override
     public void setContentView(View view) {
-//        customizeViewForLanguage(view);
         implementViewSecurities(view);
         super.setContentView(view);
     }
 
     private void implementViewSecurities(View view) {
         view.setFilterTouchesWhenObscured(true);
-    }
-
-    private void customizeViewForLanguage(View view) {
-//        updateLanguage();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        // Get the state of the SwitchPreferenceCompact
-        String localeLanguage = prefs.getString("language_options", getString(R.string.language_english_value));
-//        if(new Locale(localeLanguage).equals(Locale.forLanguageTag("fa"))) {
-//            view.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-//        }
-    }
-
-    private void updateLanguage() {
-        // Get the SharedPreferences
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        Locale locale = Locale.getDefault();
-        String languageCode = locale.getLanguage();
-
-        // Get the state of the SwitchPreferenceCompact
-        String languageLocale = prefs.getString("language_options", languageCode);
-        LanguageHandler.updateLanguage(getResources(), languageLocale);
     }
 }

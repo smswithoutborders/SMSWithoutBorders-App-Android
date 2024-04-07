@@ -55,23 +55,23 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
         binding = ActivitySyncInitBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+        processSynchronization();
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-
+    private void processSynchronization() {
         if(!getIntent().hasExtra(SYNC_KEY)) {
             finish();
         }
 
         String state = getIntent().getStringExtra(SYNC_KEY);
-        if(state.equals("complete_handshake")) {
+        if(state != null && state.equals("complete_handshake")) {
+            // TODO: remove this - encryption should happen on device and not with shared key
             try {
                 EncryptedContentHandler.clearedStoredEncryptedContents(getApplicationContext());
             }
             catch (Exception e) {
-                e.printStackTrace();
+                Log.e(getLocalClassName(), "Exception clearing content", e);
                 throw new RuntimeException(e);
             }
 
@@ -81,14 +81,11 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
 
                 processHandshakePayload(jsonObject, gatewayServerId);
 
-                WorkManagerHandler.cancelNotificationsByTag(getApplicationContext(),
-                        NotificationsHandler.NOTIFICATIONS_TAG);
-
                 Intent dashboardIntent = new Intent(getApplicationContext(), SplashActivity.class);
                 startActivity(dashboardIntent);
                 finish();
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(getLocalClassName(), "Exception syncing", e);
                 throw new RuntimeException(e);
             }
         }
@@ -96,7 +93,6 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
             publicKeyExchange(state);
         }
     }
-
 
     private void remoteFetchAndStoreGatewayClients(String gatewayServerSeedsUrl) throws InterruptedException {
         GatewayClientsHandler.remoteFetchAndStoreGatewayClients(getApplicationContext());
@@ -150,7 +146,7 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
             @Override
             public void run() {
                 Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.DatabaseName)
+                        Datastore.class, Datastore.databaseName)
                         .fallbackToDestructiveMigration()
                         .build();
                 PlatformDao platformDao = databaseConnector.platformDao();
