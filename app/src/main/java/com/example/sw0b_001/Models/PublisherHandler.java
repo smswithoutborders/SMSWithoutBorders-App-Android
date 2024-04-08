@@ -1,37 +1,12 @@
 package com.example.sw0b_001.Models;
 
-import static android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG;
-import static android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
-
 import android.content.Context;
-import android.content.Intent;
-import android.hardware.biometrics.BiometricManager;
-import android.hardware.biometrics.BiometricPrompt;
-import android.os.Build;
-import android.os.CancellationSignal;
-import android.provider.Settings;
 import android.util.Base64;
-import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.room.Room;
-
-import com.example.sw0b_001.BuildConfig;
-import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
 import com.example.sw0b_001.Security.SecurityAES;
-import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Security.SecurityHelpers;
-import com.example.sw0b_001.Security.SecurityRSA;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executor;
 
 public class PublisherHandler {
 

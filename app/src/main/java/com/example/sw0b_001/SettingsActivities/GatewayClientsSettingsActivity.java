@@ -2,7 +2,6 @@ package com.example.sw0b_001.SettingsActivities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +19,7 @@ import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsRecyclerAdapter;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
+import com.example.sw0b_001.Models.GatewayServers._GatewayServersHandler;
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.databinding.ActivityGatewayClientsSettingsBinding;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -108,7 +107,7 @@ public class GatewayClientsSettingsActivity extends AppCompactActivityCustomized
     }
 
     public void refreshGatewayClientsSettings() throws InterruptedException {
-        List<GatewayServer> gatewayServerList = GatewayServersHandler.getAllGatewayServers(
+        List<GatewayServer> gatewayServerList = _GatewayServersHandler.getAllGatewayServers(
                 getApplicationContext());
 
         Runnable callbackFunction = new Runnable() {

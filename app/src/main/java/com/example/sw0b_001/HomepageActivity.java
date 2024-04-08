@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +25,7 @@ import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
+import com.example.sw0b_001.Models.GatewayServers._GatewayServersHandler;
 import com.example.sw0b_001.Models.RabbitMQ;
 import com.example.sw0b_001.Models.RecentsRecyclerAdapter;
 import com.example.sw0b_001.Models.RecentsViewModel;
@@ -44,7 +43,6 @@ import java.security.GeneralSecurityException;
 import java.security.spec.MGF1ParameterSpec;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -151,9 +149,9 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         SecurityRSA securityRSA = new SecurityRSA(getApplicationContext());
         SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
 
-        List<GatewayServer> gatewayServerList = GatewayServersHandler.getAllGatewayServers(getApplicationContext());
+        List<GatewayServer> gatewayServerList = _GatewayServersHandler.getAllGatewayServers(getApplicationContext());
 
-        String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerList.get(0).getUrl());
+        String keystoreAlias = _GatewayServersHandler.buildKeyStoreAlias(gatewayServerList.get(0).getUrl());
 
         RequestFuture<JSONObject> future = RequestFuture.newFuture();
 

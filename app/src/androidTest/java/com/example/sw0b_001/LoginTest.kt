@@ -29,8 +29,9 @@ class LoginTest {
         val phonenumber = "+237123456789"
         val password = "dummy_password"
 
-        val result = BackendCommunications.login(phonenumber, password, url)
-        Log.d(javaClass.name, "Result data: " + result.get())
+        val networkResponseResults = BackendCommunications.login(phonenumber, password, url)
+        Log.d(javaClass.name, "Result data: " + networkResponseResults.result.get());
+        assertEquals(200, networkResponseResults.response?.statusCode)
     }
 
     @Test
@@ -40,22 +41,29 @@ class LoginTest {
         val phonenumber = "+237123456789"
         val password = "dummy_password"
 
-        val result = BackendCommunications.login(phonenumber, password, url)
-        Log.d(javaClass.name, "Result data: " + result.get())
-//        assertEquals(200, response.statusCode)
+        val networkResponseResults = BackendCommunications.login(phonenumber, password, url)
+        Log.d(javaClass.name, "Result data: " + networkResponseResults.result.get())
+        assertEquals(200, networkResponseResults.response?.statusCode)
 
-        val obj = Json.decodeFromString<BackendCommunications.UID>(result.get())
+        val obj = Json
+                .decodeFromString<BackendCommunications.UID>(networkResponseResults.result.get())
         val uid = "a81d750e-a733-11ee-92f4-0242ac17000a"
         assertEquals(uid, obj.uid)
 
         val user = BackendCommunications(uid)
         val (_, response1, result1) = user
-                .getPlatforms("https://staging.smswithoutborders.com:9000", response.headers)
+                .getPlatforms("https://staging.smswithoutborders.com:9000",
+                        networkResponseResults.response!!.headers)
         assertEquals(200, response1.statusCode)
         Log.d(javaClass.name, "Platforms: " + result1.get())
 
         val platformsObjs = Json.decodeFromString<BackendCommunications.Platforms>(result1.get())
         assertFalse(platformsObjs.saved_platforms.isNullOrEmpty())
         assertFalse(platformsObjs.unsaved_platforms.isNullOrEmpty())
+    }
+
+    @Test
+    fun makeSyncTest() {
+
     }
 }

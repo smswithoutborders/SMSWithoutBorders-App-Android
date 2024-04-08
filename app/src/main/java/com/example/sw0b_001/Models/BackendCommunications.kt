@@ -42,22 +42,20 @@ class BackendCommunications(val uid: String) {
     data class Platforms(val unsaved_platforms: ArrayList<Platform>,
                          val saved_platforms: ArrayList<Platform>)
 
-    data class NetworkResponseResults(val response: Response,
+    data class NetworkResponseResults(val response: Response?,
                                       val result: Result<String, java.lang.Exception>)
     companion object {
-        fun login(phoneNumber: String, password: String, url: String): Result<String, Exception> {
+        fun login(phoneNumber: String, password: String, url: String): NetworkResponseResults {
             val payload = Json.encodeToString(UserCredentials(phoneNumber, password))
-            try {
+            return try {
                 val (_, response, result) = Fuel.post(url)
                         .jsonBody(payload)
                         .responseString()
-                Result.Success(result.get())
-
-                return (response, result)
+                NetworkResponseResults(response, Result.Success(result.get()))
             } catch (e: HttpException) {
-                Result.Failure(e)
+                NetworkResponseResults(null, Result.Failure(e))
             } catch(e: Exception) {
-                Result.error(e)
+                NetworkResponseResults(null, Result.error(e))
             }
         }
     }

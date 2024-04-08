@@ -13,13 +13,11 @@ import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
-import com.example.sw0b_001.Models.Notifications.NotificationsHandler;
+import com.example.sw0b_001.Models.GatewayServers._GatewayServersHandler;
 import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.User.UserHandler;
-import com.example.sw0b_001.Models.WorkManagers.WorkManagerHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Security.SecurityHelpers;
 import com.example.sw0b_001.Security.SecurityRSA;
@@ -109,7 +107,7 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
     }
 
     private void processAndUpdateGatewayServerSeedUrl(String gatewayServerSeedsUrl, long gatewayServerId) throws InterruptedException {
-        GatewayServersHandler gatewayServersHandler = new GatewayServersHandler(getApplicationContext());
+        _GatewayServersHandler gatewayServersHandler = new _GatewayServersHandler(getApplicationContext());
         gatewayServersHandler.updateSeedsUrl(gatewayServerSeedsUrl, gatewayServerId);
     }
 
@@ -198,7 +196,7 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
 
     private PublicKey getNewPublicKey(String gatewayServerUrlHost) throws GeneralSecurityException, IOException {
         SecurityRSA securityRSA = new SecurityRSA(this);
-        String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServerUrlHost );
+        String keystoreAlias = _GatewayServersHandler.buildKeyStoreAlias(gatewayServerUrlHost );
         PublicKey publicKeyEncoded = securityRSA.generateKeyPair(keystoreAlias)
                 .generateKeyPair()
                 .getPublic();
@@ -242,7 +240,7 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
                         Integer gatewayServerUrlPort = new URL(gatewayServerHandshakeUrl).getPort();
                         gatewayServer.setPort(gatewayServerUrlPort);
 
-                        GatewayServersHandler gatewayServersHandler = new GatewayServersHandler(getApplicationContext());
+                        _GatewayServersHandler gatewayServersHandler = new _GatewayServersHandler(getApplicationContext());
                         long gatewayServerId = gatewayServersHandler.add(gatewayServer);
 
                         String PEMPublicKey = SecurityHelpers.convert_to_pem_format(publicKeyEncoded.getEncoded());

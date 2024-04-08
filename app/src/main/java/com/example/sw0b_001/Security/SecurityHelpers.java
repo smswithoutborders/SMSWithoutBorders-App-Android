@@ -9,7 +9,7 @@ import androidx.room.Room;
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServersHandler;
+import com.example.sw0b_001.Models.GatewayServers._GatewayServersHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class SecurityHelpers {
         SecurityRSA securityRSA = new SecurityRSA(context);
 
         GatewayServer gatewayServer = getGatewayServers(context).get(0);
-        String keystoreAlias = GatewayServersHandler.buildKeyStoreAlias(gatewayServer.getUrl() );
+        String keystoreAlias = _GatewayServersHandler.buildKeyStoreAlias(gatewayServer.getUrl() );
 
         byte[] sharedKey = securityHandler.getSharedKey();
 

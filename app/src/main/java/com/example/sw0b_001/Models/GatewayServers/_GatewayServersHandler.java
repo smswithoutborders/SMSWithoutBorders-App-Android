@@ -9,13 +9,13 @@ import com.example.sw0b_001.Database.Datastore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GatewayServersHandler {
+public class _GatewayServersHandler {
 
     private Context context;
 
-    public GatewayServersHandler() {}
+    public _GatewayServersHandler() {}
 
-    public GatewayServersHandler(Context context) {
+    public _GatewayServersHandler(Context context) {
         this.context = context;
     }
 

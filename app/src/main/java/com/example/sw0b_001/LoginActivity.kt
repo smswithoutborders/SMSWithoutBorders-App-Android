@@ -60,9 +60,11 @@ class LoginActivity : AppCompatActivity() {
         progressIndicator.visibility = View.VISIBLE
 
         ThreadExecutorPool.executorService.execute(Runnable {
-            when(val responses = BackendCommunications.login(phoneNumber, password, url)) {
+            val networkResponseResults = BackendCommunications.login(phoneNumber, password, url)
+            when(networkResponseResults.result) {
                 is Result.Success -> {
-                    val obj = Json.decodeFromString<BackendCommunications.UID>(responses.get())
+                    val obj = Json
+                            .decodeFromString<BackendCommunications.UID>(networkResponseResults.result.get())
                     BackendCommunications(obj.uid).storeUID(applicationContext, url)
                     startActivity(Intent(this, HomepageActivity::class.java))
                 }
