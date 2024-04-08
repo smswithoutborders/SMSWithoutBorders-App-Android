@@ -2,7 +2,6 @@ package com.example.sw0b_001
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +9,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.sw0b_001.Models.BackendCommunications
 import com.example.sw0b_001.Models.ThreadExecutorPool
-import com.github.kittinunf.fuel.core.HttpException
 import com.github.kittinunf.result.Result
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
@@ -19,7 +17,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.serialization.json.Json
-import java.util.concurrent.TimeUnit
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,10 +60,9 @@ class LoginActivity : AppCompatActivity() {
         progressIndicator.visibility = View.VISIBLE
 
         ThreadExecutorPool.executorService.execute(Runnable {
-            val res = BackendCommunications.login(phoneNumber, password, url)
-            when(res) {
+            when(val responses = BackendCommunications.login(phoneNumber, password, url)) {
                 is Result.Success -> {
-                    val obj = Json.decodeFromString<BackendCommunications.UID>(res.get())
+                    val obj = Json.decodeFromString<BackendCommunications.UID>(responses.get())
                     BackendCommunications(obj.uid).storeUID(applicationContext, url)
                     startActivity(Intent(this, HomepageActivity::class.java))
                 }

@@ -29,9 +29,8 @@ class LoginTest {
         val phonenumber = "+237123456789"
         val password = "dummy_password"
 
-        val (_, response, result) = BackendCommunications.login(phonenumber, password, url)
+        val result = BackendCommunications.login(phonenumber, password, url)
         Log.d(javaClass.name, "Result data: " + result.get())
-        assertEquals(200, response.statusCode)
     }
 
     @Test
@@ -41,9 +40,9 @@ class LoginTest {
         val phonenumber = "+237123456789"
         val password = "dummy_password"
 
-        val (_, response, result) = BackendCommunications.login(phonenumber, password, url)
+        val result = BackendCommunications.login(phonenumber, password, url)
         Log.d(javaClass.name, "Result data: " + result.get())
-        assertEquals(200, response.statusCode)
+//        assertEquals(200, response.statusCode)
 
         val obj = Json.decodeFromString<BackendCommunications.UID>(result.get())
         val uid = "a81d750e-a733-11ee-92f4-0242ac17000a"

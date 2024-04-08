@@ -7,6 +7,7 @@ import androidx.work.ListenableWorker.Result.Failure
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.Headers
 import com.github.kittinunf.fuel.core.HttpException
+import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.fuel.core.ResponseResultOf
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.httpGet
@@ -41,14 +42,18 @@ class BackendCommunications(val uid: String) {
     data class Platforms(val unsaved_platforms: ArrayList<Platform>,
                          val saved_platforms: ArrayList<Platform>)
 
+    data class NetworkResponseResults(val response: Response,
+                                      val result: Result<String, java.lang.Exception>)
     companion object {
         fun login(phoneNumber: String, password: String, url: String): Result<String, Exception> {
             val payload = Json.encodeToString(UserCredentials(phoneNumber, password))
-            return try {
-                val (_, _, result) = Fuel.post(url)
+            try {
+                val (_, response, result) = Fuel.post(url)
                         .jsonBody(payload)
                         .responseString()
                 Result.Success(result.get())
+
+                return (response, result)
             } catch (e: HttpException) {
                 Result.Failure(e)
             } catch(e: Exception) {
