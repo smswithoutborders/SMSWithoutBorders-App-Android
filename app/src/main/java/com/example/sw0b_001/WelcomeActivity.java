@@ -3,7 +3,6 @@ package com.example.sw0b_001;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import java.io.UnsupportedEncodingException;
@@ -14,6 +13,12 @@ public class WelcomeActivity extends AppCompactActivityCustomized {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        findViewById(R.id.welcome_login_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickLogin(v);
+            }
+        });
     }
 
     public void onClickSignupBtn(View view) throws UnsupportedEncodingException {
@@ -29,11 +34,8 @@ public class WelcomeActivity extends AppCompactActivityCustomized {
         startActivity(intent);
     }
 
-    public void onContinueClick(View view) {
-        String smswithoutbordersHandshakeUrl = getString(R.string.smswithoutborders_official_site_login);
-        Uri intentUri = Uri.parse(smswithoutbordersHandshakeUrl);
-        Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
-        startActivity(intent);
+    public void onClickLogin(View view) {
+        startActivity(new Intent(this, LoginActivity.class));
     }
 
     public void linkPrivacyPolicy(View view) {

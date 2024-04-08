@@ -40,7 +40,7 @@
 
         android:layout_marginBottom="164dp"
         android:backgroundTint="#FFFFFF"
-        android:onClick="onContinueClick"
+        android:onClick="onClickLogin"
         android:text="@string/synchronize_type_header_automatic_synchronize_text_continue"
         android:textAlignment="center"
         android:textColor="#061993"

@@ -1,6 +1,7 @@
 package com.example.sw0b_001;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Base64;
@@ -17,6 +18,7 @@ import com.example.sw0b_001.Models.GatewayServers._GatewayServersHandler;
 import com.example.sw0b_001.Models.Platforms.Platform;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
+import com.example.sw0b_001.Models.ThreadExecutorPool;
 import com.example.sw0b_001.Models.User.UserHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Security.SecurityHelpers;
@@ -123,7 +125,7 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
 
             processAndUpdateGatewayServerSeedUrl(getString(R.string.default_seeds_url), gatewayServerId);
             processAndStoreSharedKey(sharedKey);
-            processAndStorePlatforms(platforms);
+            processAndStorePlatforms(getApplicationContext(), platforms);
 
             // Note: This affects only notifications so app can survive without it
             try {
@@ -139,15 +141,16 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
         }
     }
 
-    private void processAndStorePlatforms(JSONArray platforms) throws JSONException, InterruptedException {
-        Thread insertPlatformThread = new Thread(new Runnable() {
+    public static void processAndStorePlatforms(Context context, JSONArray platforms) throws JSONException, InterruptedException {
+        ThreadExecutorPool.executorService.execute(new Runnable() {
             @Override
             public void run() {
-                Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(),
-                        Datastore.class, Datastore.databaseName)
-                        .fallbackToDestructiveMigration()
-                        .build();
-                PlatformDao platformDao = databaseConnector.platformDao();
+//                Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(),
+//                        Datastore.class, Datastore.databaseName)
+//                        .fallbackToDestructiveMigration()
+//                        .build();
+                PlatformDao platformDao = Datastore.getDatastore(context)
+                        .platformDao();
                 platformDao.deleteAll();
 
                 for(int i=0; i< platforms.length(); ++i ) {
@@ -162,21 +165,20 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
 
                         // long logoDownloadId = downloadLogoOnline(JSONPlatform.getString("logo"), JSONPlatform.getString("name"));
 
-                        long logoDownloadId = PlatformsHandler.hardGetLogoByName(getApplicationContext(), platform.getName());
+                        long logoDownloadId = PlatformsHandler
+                                .hardGetLogoByName(context, platform.getName());
                         platform.setLogo(logoDownloadId);
 
                         platformDao.insert(platform);
                     }
                     catch(JSONException e) {
-                        e.printStackTrace();
+                        Log.e(SyncHandshakeActivity.class.getName(),
+                                "Exception storing platforms", e);
                     }
 
                 }
             }
         });
-
-        insertPlatformThread.start();
-        insertPlatformThread.join();
     }
 
 
@@ -184,7 +186,8 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
         SecurityRSA securityRSA = new SecurityRSA(this);
         byte[] sharedKey = SecurityHelpers.getDecryptedSharedKey(this);
 
-        PublicKey publicKeyEncoded = getNewPublicKey(gatewayServerUrlHost);
+        PublicKey publicKeyEncoded = getNewPublicKey(getApplicationContext(),
+                gatewayServerUrlHost);
         byte[] encryptedSharedKey = securityRSA.encrypt( sharedKey, publicKeyEncoded);
 
         SecurityHandler securityHandler = new SecurityHandler(this);
@@ -194,14 +197,13 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
         return publicKeyEncoded;
     }
 
-    private PublicKey getNewPublicKey(String gatewayServerUrlHost) throws GeneralSecurityException, IOException {
-        SecurityRSA securityRSA = new SecurityRSA(this);
+    public static PublicKey getNewPublicKey(Context context, String gatewayServerUrlHost) throws GeneralSecurityException, IOException {
+        SecurityRSA securityRSA = new SecurityRSA(context);
         String keystoreAlias = _GatewayServersHandler.buildKeyStoreAlias(gatewayServerUrlHost );
-        PublicKey publicKeyEncoded = securityRSA.generateKeyPair(keystoreAlias)
+
+        return securityRSA.generateKeyPair(keystoreAlias)
                 .generateKeyPair()
                 .getPublic();
-
-        return publicKeyEncoded;
     }
 
     public void publicKeyExchange(String gatewayServerHandshakeUrl) {
@@ -227,7 +229,7 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
                         // TODO: requires testing if re-encryption of key works
                         PublicKey publicKeyEncoded = (securityHandler.hasSharedKey() && gatewayServerPublicKey != null) ?
                                 updateSharedKeyEncryption(gatewayServerUrlHost) :
-                                getNewPublicKey(gatewayServerUrlHost);
+                                getNewPublicKey(getApplicationContext(), gatewayServerUrlHost);
 
                         GatewayServer gatewayServer = new GatewayServer();
                         gatewayServer.setPublicKey(Base64.encodeToString(gatewayServerPublicKey.getEncoded(), Base64.DEFAULT));
@@ -240,13 +242,17 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
                         Integer gatewayServerUrlPort = new URL(gatewayServerHandshakeUrl).getPort();
                         gatewayServer.setPort(gatewayServerUrlPort);
 
-                        _GatewayServersHandler gatewayServersHandler = new _GatewayServersHandler(getApplicationContext());
+                        _GatewayServersHandler gatewayServersHandler =
+                                new _GatewayServersHandler(getApplicationContext());
                         long gatewayServerId = gatewayServersHandler.add(gatewayServer);
 
-                        String PEMPublicKey = SecurityHelpers.convert_to_pem_format(publicKeyEncoded.getEncoded());
-                        Intent passwordActivityIntent = new Intent(getApplicationContext(), PasswordActivity.class);
+                        String PEMPublicKey = SecurityHelpers
+                                .convert_to_pem_format(publicKeyEncoded.getEncoded());
+                        Intent passwordActivityIntent =
+                                new Intent(getApplicationContext(), PasswordActivity.class);
 
-                        Intent syncHandshakeIntent = new Intent(getApplicationContext(), SyncHandshakeActivity.class);
+                        Intent syncHandshakeIntent =
+                                new Intent(getApplicationContext(), SyncHandshakeActivity.class);
                         syncHandshakeIntent.setPackage(getPackageName());
                         syncHandshakeIntent.putExtra("gateway_server_id", gatewayServerId);
                         syncHandshakeIntent.putExtra("state", "complete_handshake");
@@ -274,8 +280,7 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
         }
     }
 
-    private PublicKey getGatewayServerPublicKey(String gatewayServerUrl) throws IOException, InterruptedException {
-        String primaryKeySite = new String();
+    public static PublicKey getGatewayServerPublicKey(String gatewayServerUrl) throws IOException, InterruptedException {
         /*
         if(BuildConfig.DEBUG)
             primaryKeySite = getString(R.string.official_staging_site);

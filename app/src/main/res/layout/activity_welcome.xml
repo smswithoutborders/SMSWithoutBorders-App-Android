@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/Theme.main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -45,17 +46,15 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/sync_continue_btn"
-        android:layout_width="282dp"
-        android:layout_height="52dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="29dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="64dp"
         android:onClick="onClickSignupBtn"
         android:text="@string/welcome_signup"
-        android:textAlignment="center"
-        android:textColor="@color/white"
         android:textSize="20sp"
-        app:cornerRadius="10dp"
-        app:iconTintMode="add"
         app:layout_constraintBottom_toTopOf="@+id/textView13"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,21 +64,14 @@
 
 
     <com.google.android.material.button.MaterialButton
-        android:layout_width="282dp"
-        android:layout_height="52dp"
-        android:onClick="onContinueClick"
+        android:id="@+id/welcome_login_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:text="@string/welcome_synchronize"
-        android:textAlignment="center"
         android:textSize="20sp"
-        android:textColor="@color/white"
-        app:cornerRadius="10dp"
-        app:iconTintMode="add"
-        app:strokeWidth="1dp"
-        app:strokeColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.519"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13"/>
+        app:layout_constraintEnd_toEndOf="@+id/sync_continue_btn"
+        app:layout_constraintStart_toStartOf="@+id/sync_continue_btn"
+        app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
     <TextView
         android:id="@+id/textView13"

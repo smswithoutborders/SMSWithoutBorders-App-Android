@@ -87,4 +87,5 @@
     <string name="settings_security_and_privacy_account_delete">حذف حساب کاربری</string>
     <string name="settings_security_and_privacy_account_delete_summary">حذف اکانت به معنای حذف تمام حساب های ذخیره شده به صورت آنلاین است. شما همیشه می توانید حساب خود را پس از نیاز دوباره ایجاد کنید.</string>
     <string name="settings_security_and_privacy_account_delete_url">https://smswithoutborders.github.io/fa/docs/tutorials/delete-account/</string>
+    <string name="login_wrong_credentials">شماره یا رمز عبور اشتباه است، لطفا دوباره امتحان کنید...</string>
 </resources>

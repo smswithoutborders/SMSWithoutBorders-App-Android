@@ -4,17 +4,10 @@ import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.sw0b_001.Models.BackendCommunications
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.core.extensions.jsonBody
-import com.github.kittinunf.result.Result
+import com.example.sw0b_001.Models.GatewayServers.GatewayServerHandler
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
-import junit.framework.TestCase.assertTrue
-import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -64,6 +57,23 @@ class LoginTest {
 
     @Test
     fun makeSyncTest() {
+        val uid = "a81d750e-a733-11ee-92f4-0242ac17000a"
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val password = "dummy_password"
+        val url = "https://staging.smswithoutborders.com:15000/v2/sync/users/${uid}/sessions/000/"
 
+        val gatewayServerPublicKey =
+                SyncHandshakeActivity
+                        .getGatewayServerPublicKey(GatewayServerHandler.getBaseUrl(url))
+        val publicKey = SyncHandshakeActivity.getNewPublicKey(context,
+                GatewayServerHandler.getBaseUrl(url))
+
+        val networkResponseResults = GatewayServerHandler.sync(context,
+                password.toByteArray(),
+                gatewayServerPublicKey,
+                url,
+                publicKey)
+        assertEquals(200, networkResponseResults.response?.statusCode)
+        Log.d(javaClass.name, "Response: ${networkResponseResults.result.get()}")
     }
 }

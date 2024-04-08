@@ -22,6 +22,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
+import com.example.sw0b_001.HomepageFragments.AvailablePlatformsFragment;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
@@ -133,6 +134,14 @@ public class HomepageActivity extends AppCompactActivityCustomized {
             e.printStackTrace();
         }
 
+        findViewById(R.id.homepage_compose_new_btn)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onComposePlatformClick(v);
+                    }
+                });
+
         // TODO: for verification
 //        IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
 //        registerReceiver(smsVerificationReceiver, intentFilter);
@@ -238,17 +247,17 @@ public class HomepageActivity extends AppCompactActivityCustomized {
         });
     }
 
-    //    public void onComposePlatformClick(View view) {
+    public void onComposePlatformClick(View view) {
 //        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
 //                        AvailablePlatformsFragment.class, null)
-//                .setReorderingAllowed(true)
-//                .addToBackStack(null)
-//                .setCustomAnimations(android.R.anim.slide_in_left,
-//                        android.R.anim.slide_out_right,
-//                        android.R.anim.fade_in,
-//                        android.R.anim.fade_out)
-//                .commit();
-//    }
+//            .setReorderingAllowed(true)
+//            .addToBackStack(null)
+//            .setCustomAnimations(android.R.anim.slide_in_left,
+//                    android.R.anim.slide_out_right,
+//                    android.R.anim.fade_in,
+//                    android.R.anim.fade_out)
+//            .commit();
+    }
 
     private static final int CREDENTIAL_PICKER_REQUEST = 1;  // Set to an unused request code
     private static final int RESOLVE_HINT = 2;  // Set to an unused request code
