@@ -3,7 +3,6 @@ package com.example.sw0b_001.Models;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +12,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
-import com.example.sw0b_001.Models.Platforms.Platform;
+import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.Security.SecurityHandler;
@@ -34,7 +32,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.zip.Inflater;
 
 public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecyclerAdapter.ViewHolder> {
     private final AsyncListDiffer<EncryptedContent> mDiffer = new AsyncListDiffer(this, DIFF_CALLBACK);
@@ -70,11 +67,11 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
 
         holder.encryptedTextSnippet.setText(displayString);
 
-        Platform platform = PlatformsHandler.getPlatform(holder.itemView.getContext(),
+        Platforms platforms = PlatformsHandler.getPlatform(holder.itemView.getContext(),
                 encryptedContent.getPlatformName());
 
         holder.platformLogo.setImageResource(
-                (int) PlatformsHandler.hardGetLogoByName(context, platform.getName()));
+                (int) PlatformsHandler.hardGetLogoByName(context, platforms.getName()));
 
         Date date = new Date(encryptedContent.getDate());
         if(DateUtils.isToday(encryptedContent.getDate())) {
@@ -101,9 +98,9 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent platformIntent = PlatformsHandler.getIntent(context, platform.getName(), platform.getType());
+                Intent platformIntent = PlatformsHandler.getIntent(context, platforms.getName(), platforms.getType());
                 platformIntent.putExtra("encrypted_content_id", encryptedContent.getId());
-                platformIntent.putExtra("platform_id", platform.getId());
+                platformIntent.putExtra("platform_id", platforms.getId());
                 try {
                     checkHasDecryptionLockScreen(platformIntent);
                 } catch (InterruptedException | GeneralSecurityException | IOException e) {

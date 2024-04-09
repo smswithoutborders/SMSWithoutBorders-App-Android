@@ -178,7 +178,7 @@ if __name__ == "__main__":
     parser.add_argument("--status", type=str, required=True, help="The app release status")
     parser.add_argument("--github_url", type=str, required=True, help="The github repo URL")
     parser.add_argument("--log_level", type=str, default='INFO', required=False, help="The level of the log")
-    parser.add_argument("--platform", type=str, default="all", required=False, help="Platform to be released on: \
+    parser.add_argument("--platforms", type=str, default="all", required=False, help="Platform to be released on: \
             playstore, github")
 
     args = parser.parse_args()
@@ -194,18 +194,18 @@ if __name__ == "__main__":
 
     logging.basicConfig(level=args.log_level)
 
-    if args.platform == "all":
+    if args.platforms == "all":
         thread_playstore.start()
         thread_playstore.join()
 
         thread_github.start()
         thread_github.join()
 
-    elif args.platform == "playstore":
+    elif args.platforms == "playstore":
         thread_playstore.start()
         thread_playstore.join()
 
-    elif args.platform == "github":
+    elif args.platforms == "github":
         thread_github.start()
         thread_github.join()
 

@@ -1,6 +1,7 @@
 package com.example.sw0b_001;
 
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,7 +23,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.HomepageFragments.AvailablePlatformsFragment;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
@@ -131,7 +131,7 @@ public class HomepageActivity extends AppCompactActivityCustomized {
             securityHandler = new SecurityHandler(getApplicationContext());
             configureRecyclerHandlers();
         } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
+            Log.e(getLocalClassName(), "Exception - ", e);
         }
 
         findViewById(R.id.homepage_compose_new_btn)
@@ -248,15 +248,20 @@ public class HomepageActivity extends AppCompactActivityCustomized {
     }
 
     public void onComposePlatformClick(View view) {
-//        fragmentManager.beginTransaction().replace(R.id.homepage_fragment_container_view,
-//                        AvailablePlatformsFragment.class, null)
-//            .setReorderingAllowed(true)
-//            .addToBackStack(null)
-//            .setCustomAnimations(android.R.anim.slide_in_left,
-//                    android.R.anim.slide_out_right,
-//                    android.R.anim.fade_in,
-//                    android.R.anim.fade_out)
-//            .commit();
+        showComposeNewPlatformLayout(R.layout.fragment_modal_sheet_compose_platforms);
+    }
+
+    public void showComposeNewPlatformLayout(int layout) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        HomepageComposeNewFragment homepageComposeNewFragment =
+                new HomepageComposeNewFragment(layout);
+        fragmentTransaction.add(homepageComposeNewFragment,
+                HomepageComposeNewFragment.TAG);
+        fragmentTransaction.show(homepageComposeNewFragment);
+
+        fragmentTransaction.commitNow();
     }
 
     private static final int CREDENTIAL_PICKER_REQUEST = 1;  // Set to an unused request code

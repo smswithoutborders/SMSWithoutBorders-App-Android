@@ -12,7 +12,7 @@ import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.BackendCommunications
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer
 import com.example.sw0b_001.Models.GatewayServers.GatewayServerHandler
-import com.example.sw0b_001.Models.Platforms.Platform
+import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.github.kittinunf.fuel.core.Headers
@@ -24,7 +24,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.serialization.json.Json
-import java.security.PublicKey
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,15 +89,15 @@ class LoginActivity : AppCompatActivity() {
                 .platformDao().deleteAll()
 
         platforms.saved_platforms.forEach {
-            val platform = Platform()
-            platform.name = it.name
-            platform.description = ""
-            platform.type = it.type
-            platform.letter = it.letter
-            platform.logo = PlatformsHandler
+            val platforms = Platforms()
+            platforms.name = it.name
+            platforms.description = ""
+            platforms.type = it.type
+            platforms.letter = it.letter
+            platforms.logo = PlatformsHandler
                     .hardGetLogoByName(applicationContext, it.name)
             Datastore.getDatastore(applicationContext)
-                    .platformDao().insert(platform)
+                    .platformDao().insert(platforms)
         }
     }
 

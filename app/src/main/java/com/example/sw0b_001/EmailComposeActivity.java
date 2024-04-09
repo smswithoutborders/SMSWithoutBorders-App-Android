@@ -17,7 +17,7 @@ import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
-import com.example.sw0b_001.Models.Platforms.Platform;
+import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.PublisherHandler;
 import com.example.sw0b_001.Models.SMSHandler;
@@ -153,8 +153,8 @@ public class EmailComposeActivity extends AppCompactActivityCustomized {
                 try {
 
                     long platformId = getIntent().getLongExtra("platform_id", -1);
-                    Platform platform = PlatformsHandler.getPlatform(getApplicationContext(), platformId);
-                    String formattedContent = processEmailForEncryption(platform.getLetter(), to, cc, bcc, subject, body);
+                    Platforms platforms = PlatformsHandler.getPlatform(getApplicationContext(), platformId);
+                    String formattedContent = processEmailForEncryption(platforms.getLetter(), to, cc, bcc, subject, body);
                     String encryptedContentBase64 = PublisherHandler.formatForPublishing(getApplicationContext(), formattedContent);
                     String gatewayClientMSISDN = GatewayClientsHandler.getDefaultGatewayClientMSISDN(getApplicationContext());
 
@@ -165,7 +165,7 @@ public class EmailComposeActivity extends AppCompactActivityCustomized {
                         startActivity(defaultSMSAppIntent);
                         setResult(Activity.RESULT_OK, new Intent());
 
-                        EncryptedContentHandler.store(getApplicationContext(), encryptedContentBase64, gatewayClientMSISDN, platform.getName());
+                        EncryptedContentHandler.store(getApplicationContext(), encryptedContentBase64, gatewayClientMSISDN, platforms.getName());
                         finish();
                     }
 

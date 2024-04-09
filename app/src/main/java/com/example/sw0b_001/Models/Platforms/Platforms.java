@@ -1,12 +1,17 @@
 package com.example.sw0b_001.Models.Platforms;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+
 //@DatabaseView("SELECT platform.name, platform.description, platform.provider, platform.image, platform.id FROM platform")
 @Entity(indices = {@Index(value={"name"}, unique = true)})
-public class Platform {
+public class Platforms {
     @PrimaryKey(autoGenerate = true)
     private long id;
 
@@ -20,8 +25,8 @@ public class Platform {
 
     private String type;
 
-    public Platform() { }
-    public Platform(long id) {
+    public Platforms() { }
+    public Platforms(long id) {
         this.id = id;
     }
 
@@ -72,4 +77,31 @@ public class Platform {
     public String getType() {
         return this.type;
     }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(obj instanceof Platforms) {
+            Platforms platforms = (Platforms) obj;
+            return platforms.id == this.id &&
+                    Objects.equals(platforms.description, this.description) &&
+                    Objects.equals(platforms.name, this.name) &&
+                    Objects.equals(platforms.type, this.type) &&
+                    Objects.equals(platforms.letter, this.letter) &&
+                    platforms.logo == this.logo;
+        }
+        return false;
+    }
+
+    public static final DiffUtil.ItemCallback<Platforms> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<Platforms>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull Platforms oldItem, @NonNull Platforms newItem) {
+                    return oldItem.id == newItem.id;
+                }
+
+                @Override
+                public boolean areContentsTheSame(@NonNull Platforms oldItem, @NonNull Platforms newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
 }

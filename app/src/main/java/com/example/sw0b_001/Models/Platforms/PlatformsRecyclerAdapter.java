@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sw0b_001.HomepageFragments.AvailablePlatformsFragment;
 import com.example.sw0b_001.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,57 +21,32 @@ import java.util.List;
 
 public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecyclerAdapter.ViewHolder> {
 
-    public Context context;
-    public List<Platform> platforms;
-    public int platformRenderLayout;
+    public final AsyncListDiffer<Platforms> mDiffer =
+            new AsyncListDiffer(this, Platforms.DIFF_CALLBACK);
 
-    public PlatformsRecyclerAdapter(Context context, List<Platform> platforms, int layout){
-        this.context = context;
-        this.platforms = platforms;
-        this.platformRenderLayout = layout;
-    }
-
-    public void update(List<Platform> platforms) {
-        this.platforms = platforms;
-        this.notifyDataSetChanged();
-    }
+    public PlatformsRecyclerAdapter(){ }
 
     @NonNull
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(this.context);
-        View view = inflater.inflate(this.platformRenderLayout, parent, false);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.layout_cardlist_platforms, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder viewHolder, int position) {
-        Platform platform = this.platforms.get(position);
-        String platformNameFormatted = Character.toUpperCase(platform.getName().charAt(0)) + platform.getName().substring(1);
-        viewHolder.name.setText(platformNameFormatted);
-
-//        if(platform.getLogo() != -1)
-//            viewHolder.image.setImageResource((int) platform.getLogo());
-        viewHolder.image.setImageResource((int) PlatformsHandler.hardGetLogoByName(context,
-                platform.getName()));
-
-        viewHolder.layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = PlatformsHandler.getIntent(context.getApplicationContext(), platform.getName(), platform.getType());
-                intent.putExtra("platform_id", platform.getId());
-                context.startActivity(intent);
-            }
-        });
+        Platforms platforms = mDiffer.getCurrentList().get(position);
+        viewHolder.name.setText(platforms.getName());
     }
 
     @Override
     public int getItemCount() {
-        return this.platforms.size();
+        return mDiffer.getCurrentList().size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView name;
         ImageView image;

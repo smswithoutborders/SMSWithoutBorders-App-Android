@@ -54,8 +54,8 @@ public class PlatformsHandler {
         return logo;
     }
 
-    private static Platform fetchPlatform(Context context, long platformID) throws Throwable {
-        final Platform[] platforms = new Platform[1];
+    private static Platforms fetchPlatform(Context context, long platformID) throws Throwable {
+        final Platforms[] platforms = new Platforms[1];
         Thread fetchPlatformThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -79,8 +79,8 @@ public class PlatformsHandler {
         return platforms[0];
     }
 
-    private static Platform fetchPlatform(Context context, String platformName) throws Throwable {
-        final Platform[] platforms = new Platform[1];
+    private static Platforms fetchPlatform(Context context, String platformName) throws Throwable {
+        final Platforms[] platforms = new Platforms[1];
         Thread fetchPlatformThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -104,30 +104,30 @@ public class PlatformsHandler {
         return platforms[0];
     }
 
-    public static Platform getPlatform(Context context, long platformId) {
-        Platform platform = new Platform();
+    public static Platforms getPlatform(Context context, long platformId) {
+        Platforms platforms = new Platforms();
         try {
-            platform = fetchPlatform(context, platformId);
+            platforms = fetchPlatform(context, platformId);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
 
-        return platform;
+        return platforms;
     }
 
-    public static Platform getPlatform(Context context, String platformName) {
-        Platform platform = new Platform();
+    public static Platforms getPlatform(Context context, String platformName) {
+        Platforms platforms = new Platforms();
         try {
-            platform = fetchPlatform(context, platformName);
+            platforms = fetchPlatform(context, platformName);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
 
-        return platform;
+        return platforms;
     }
 
-    public static List<Platform> getAllPlatforms(Context context) {
-        final List<Platform>[] platforms = new List[]{new ArrayList<>()};
+    public static List<Platforms> getAllPlatforms(Context context) {
+        final List<Platforms>[] platforms = new List[]{new ArrayList<>()};
 
         Thread fetchPlatformsThread = new Thread(new Runnable() {
             @Override

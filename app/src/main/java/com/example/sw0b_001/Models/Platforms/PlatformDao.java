@@ -1,34 +1,36 @@
 package com.example.sw0b_001.Models.Platforms;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
 public interface PlatformDao {
-    @Query("SELECT * FROM Platform")
-    List<Platform> getAll();
+    @Query("SELECT * FROM Platforms")
+    List<Platforms> getAll();
 
-    @Query("SELECT * FROM Platform WHERE id=:platform_id")
-    Platform get(long platform_id);
+    @Query("SELECT * FROM Platforms WHERE id=:platform_id")
+    Platforms get(long platform_id);
 
-    @Query("SELECT * FROM Platform WHERE name=:platformName")
-    Platform get(String platformName);
+    @Query("SELECT * FROM Platforms WHERE name=:platformName")
+    Platforms get(String platformName);
 
     @Insert
-    void insertAll(Platform... platforms);
+    void insertAll(Platforms... platforms);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insert(Platform platform);
+    long insert(Platforms platforms);
 
     @Delete
-    void delete(Platform platform);
+    void delete(Platforms platforms);
 
-    @Query("DELETE FROM Platform")
+    @Query("DELETE FROM Platforms")
     void deleteAll();
 
 }

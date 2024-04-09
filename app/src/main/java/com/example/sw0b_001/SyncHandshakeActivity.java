@@ -8,14 +8,12 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 
-import androidx.room.Room;
-
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers._GatewayServersHandler;
-import com.example.sw0b_001.Models.Platforms.Platform;
+import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.ThreadExecutorPool;
@@ -157,19 +155,19 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
                     try {
                         JSONObject JSONPlatform = platforms.getJSONObject(i);
 
-                        Platform platform = new Platform();
-                        platform.setName(JSONPlatform.getString("name"));
-                        platform.setDescription(JSONPlatform.getString("description"));
-                        platform.setType(JSONPlatform.getString("type"));
-                        platform.setLetter(JSONPlatform.getString("letter"));
+                        Platforms platforms = new Platforms();
+                        platforms.setName(JSONPlatform.getString("name"));
+                        platforms.setDescription(JSONPlatform.getString("description"));
+                        platforms.setType(JSONPlatform.getString("type"));
+                        platforms.setLetter(JSONPlatform.getString("letter"));
 
                         // long logoDownloadId = downloadLogoOnline(JSONPlatform.getString("logo"), JSONPlatform.getString("name"));
 
                         long logoDownloadId = PlatformsHandler
-                                .hardGetLogoByName(context, platform.getName());
-                        platform.setLogo(logoDownloadId);
+                                .hardGetLogoByName(context, platforms.getName());
+                        platforms.setLogo(logoDownloadId);
 
-                        platformDao.insert(platform);
+                        platformDao.insert(platforms);
                     }
                     catch(JSONException e) {
                         Log.e(SyncHandshakeActivity.class.getName(),

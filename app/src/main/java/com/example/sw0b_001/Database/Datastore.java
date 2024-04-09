@@ -8,8 +8,10 @@ import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.DatabaseConfiguration;
 import androidx.room.InvalidationTracker;
+import androidx.room.RenameTable;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.AutoMigrationSpec;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
@@ -20,23 +22,25 @@ import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
 import com.example.sw0b_001.Models.Notifications.Notifications;
 import com.example.sw0b_001.Models.Notifications.NotificationsDAO;
-import com.example.sw0b_001.Models.Platforms.Platform;
+import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 
 import org.jetbrains.annotations.NotNull;
 
 @Database(entities = {
         GatewayServer.class,
-        Platform.class,
+        Platforms.class,
         GatewayClient.class,
         EncryptedContent.class,
         Notifications.class},
-        version = 9, autoMigrations = {
-        @AutoMigration(
-                from = 8,
-                to = 9
-        ) })
+        version = 10,
+        autoMigrations = { @AutoMigration( from = 8, to = 9, spec = Datastore.DatastoreMigrations.class),
+                @AutoMigration( from = 9, to = 10, spec= Datastore.DatastoreMigrations.class)
+})
 public abstract class Datastore extends RoomDatabase {
+    @RenameTable(fromTableName = "Platform", toTableName = "Platforms")
+    static class DatastoreMigrations implements AutoMigrationSpec { }
+
     public static String databaseName = "SMSWithoutBorders-Android-App-DB";
     private static Datastore datastore;
 
@@ -75,5 +79,7 @@ public abstract class Datastore extends RoomDatabase {
     public void clearAllTables() {
 
     }
+
+
 
 }
