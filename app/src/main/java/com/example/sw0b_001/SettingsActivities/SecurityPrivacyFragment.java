@@ -22,7 +22,6 @@ public class SecurityPrivacyFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-
         if((SecurityHandler.checkHasLockScreenAlways(getContext()) ||
                 SecurityHandler.checkHasLockDecryption(getContext())) &&
                 SecurityHandler.phoneCredentialsPossible(getContext())) {
@@ -44,9 +43,7 @@ public class SecurityPrivacyFragment extends PreferenceFragmentCompat {
                 };
 
                 securityHandler.authenticateWithLockScreen(successRunnable, failedRunnable);
-            } catch (GeneralSecurityException | InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
+            } catch (GeneralSecurityException | InterruptedException | IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
@@ -70,9 +67,7 @@ public class SecurityPrivacyFragment extends PreferenceFragmentCompat {
                     startActivity(new Intent(getContext(), SplashActivity.class));
                     getActivity().finish();
                     return true;
-                } catch (GeneralSecurityException e) {
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
+                } catch (GeneralSecurityException | IOException e) {
                     throw new RuntimeException(e);
                 }
             }

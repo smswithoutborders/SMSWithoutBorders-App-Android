@@ -10,12 +10,9 @@ import androidx.core.os.LocaleListCompat
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.example.sw0b_001.Models.LanguageHandler
 import com.example.sw0b_001.R
 import com.example.sw0b_001.SettingsActivities.GatewayClientsSettingsActivity
 import com.example.sw0b_001.SettingsActivities.SecurityPrivacyFragment
-import com.example.sw0b_001.SettingsActivities.StoreAccessSettingsActivity
-import com.example.sw0b_001.SplashActivity
 import java.util.Locale
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -23,12 +20,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.settings_preferences, rootKey)
 
         val securityPrivacyPreference = findPreference<Preference>("security_settings")
-        val storeAccessPreference = findPreference<Preference>("refresh_platforms_settings")
         val gatewayClientsPreference = findPreference<Preference>("gateway_server_settings")
 
         securityPrivacyPreference!!.fragment = SecurityPrivacyFragment::class.java.getCanonicalName()
-        val languagePreference = findPreference<ListPreference>("language_options")
 
+        val languagePreference = findPreference<ListPreference>("language_options")
         languagePreference!!.onPreferenceChangeListener =
                 Preference.OnPreferenceChangeListener { preference, newValue ->
                     val languageLocale: String = newValue.toString();
@@ -42,12 +38,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     }
                     true;
                 }
-
-        storeAccessPreference!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val storeAccessIntent = Intent(context, StoreAccessSettingsActivity::class.java)
-            startActivity(storeAccessIntent)
-            true
-        }
 
         gatewayClientsPreference!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val gatewayClientIntent = Intent(context, GatewayClientsSettingsActivity::class.java)
