@@ -14,7 +14,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:key="accessibility_settings"
         app:title="@string/settings_accessibility_category">
         <ListPreference
             app:icon="@drawable/ic_round_language_24"

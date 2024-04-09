@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/main_navigation" >
+        app:menu="@menu/homepage_main_menu" >
         <TextView
             android:id="@+id/homepage_recents_text"
             android:layout_width="wrap_content"

@@ -23,24 +23,28 @@
         android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyApp"
+        android:theme="@style/Theme.main"
         android:usesCleartextTraffic="false"
         android:versionCode="48"
         android:versionName="2.5.8">
         <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:parentActivityName=".HomepageActivity" />
+        <activity
             android:name=".LoginActivity"
-            android:exported="false" >
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".OnboardingActivity"
             android:exported="true"
-            android:label="@string/title_activity_onboarding"
-            android:theme="@style/Theme.main">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+            android:label="@string/title_activity_onboarding">
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
 
         <service
@@ -55,12 +59,8 @@
         <activity
             android:name=".HomepageActivity"
             android:exported="false"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.main">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:launchMode="singleTask"/>
+
         <activity
             android:name=".MessagesActivity"
             android:exported="false">
@@ -89,8 +89,7 @@
             android:exported="false" />
         <activity
             android:name=".WelcomeActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".SyncInitiateActivity"
             android:exported="true"
@@ -165,8 +164,7 @@
             android:name=".QRScannerActivity"
             android:exported="false"
             android:label=""
-            android:parentActivityName=".PasswordActivity"
-            android:theme="@style/Theme.main">
+            android:parentActivityName=".PasswordActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".PasswordActivity" />

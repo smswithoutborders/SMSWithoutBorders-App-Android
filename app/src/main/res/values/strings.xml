@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SMSWOB</string>
+    <string name="app_name" translatable="false">Swob</string>
 
     <string name="privacy_policy">
         https://smswithoutborders.com/privacy-policy
@@ -284,6 +284,6 @@
         https://smswithoutborders.com:9000
     </string>
 
-    <string name="homepage_compose_modal_no_platforms" >No Platforms saved</string>
+    <string name="homepage_compose_modal_no_platforms">No Platforms saved</string>
 
 </resources>
