@@ -13,6 +13,7 @@ import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter
 import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.textview.MaterialTextView
 
 class HomepageComposeNewFragment(private val bottomSheetViewLayout: Int) : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,8 +51,16 @@ class HomepageComposeNewFragment(private val bottomSheetViewLayout: Int) : Botto
         platformsRecyclerView.adapter = platformsRecyclerAdapter
 
         val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java];
-        context?.let { platformsViewModel.get(it).observe(viewLifecycleOwner, Observer {
-            platformsRecyclerAdapter.mDiffer.submitList(it)
+        context?.let { it ->
+            platformsViewModel.get(it).observe(viewLifecycleOwner, Observer {
+                platformsRecyclerAdapter.mDiffer.submitList(it)
+                if(it.isNullOrEmpty()) {
+                    view.findViewById<MaterialTextView>(R.id.homepage_no_platforms_saved)
+                            .visibility = View.VISIBLE
+                } else {
+                    view.findViewById<MaterialTextView>(R.id.homepage_no_platforms_saved)
+                            .visibility = View.GONE
+                }
         }) }
     }
 

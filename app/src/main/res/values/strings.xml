@@ -284,4 +284,6 @@
         https://smswithoutborders.com:9000
     </string>
 
+    <string name="homepage_compose_modal_no_platforms" >No Platforms saved</string>
+
 </resources>
