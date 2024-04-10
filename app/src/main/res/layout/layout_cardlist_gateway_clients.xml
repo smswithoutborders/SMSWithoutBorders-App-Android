@@ -55,12 +55,9 @@
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/gateway_client_radio_btn"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_width="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:checked="true"
-                android:minWidth="48dp"
-                android:minHeight="48dp"
                 app:layout_constraintBottom_toBottomOf="@+id/gateway_client_country"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/gateway_client_MSISDN" />

@@ -63,7 +63,8 @@
 
         <activity
             android:name=".Settings.GatewayClientListingActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".SettingsActivity" />
 
         <activity
             android:name=".MessagesActivity"

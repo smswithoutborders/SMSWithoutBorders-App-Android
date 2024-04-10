@@ -7,6 +7,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -36,8 +37,14 @@ public interface GatewayClientsDao {
     @Query("UPDATE GatewayClient SET `default` = :setDefault WHERE id=:id")
     void updateDefault(boolean setDefault, long id);
 
+    @Update
+    void update(GatewayClient gatewayClient);
+
     @Query("UPDATE GatewayClient SET `default`=0")
     void resetAllDefaults();
+
+    @Query("SELECT * FROM GatewayClient WHERE id = :id")
+    GatewayClient fetch(long id);
 
     @Transaction
     default void refresh(List<GatewayClient> gatewayClients) {

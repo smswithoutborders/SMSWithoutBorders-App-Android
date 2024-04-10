@@ -58,16 +58,6 @@ public class GatewayClientsHandler {
         return operatorId.equals(gatewayClientOperatorId);
     }
 
-//    public static void remoteFetchAndStoreGatewayClients(Context context) throws InterruptedException {
-//        // TODO: add support for remote fetching gateway clients
-//        List<GatewayClient> gatewayClients = getAllGatewayClients(context);
-//
-//        if(gatewayClients.size() < 1)
-//            gatewayClients = getDefaultGatewayClients(context);
-//
-//        gatewayClients = setDefaults(context, gatewayClients);
-//        storeGatewayClients(context, gatewayClients);
-//    }
 
     public static void storeGatewayClients(Context context, List<GatewayClient> gatewayClients) {
        for(GatewayClient gatewayClient : gatewayClients) {
