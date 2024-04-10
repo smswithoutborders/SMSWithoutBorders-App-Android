@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
 import java.util.List;
 
@@ -30,11 +31,17 @@ public interface GatewayClientsDao {
     void delete(GatewayClient GatewayClient);
 
     @Query("DELETE FROM GatewayClient WHERE type IS NOT 'custom'")
-    void deleteAll();
+    void clear();
 
     @Query("UPDATE GatewayClient SET `default` = :setDefault WHERE id=:id")
     void updateDefault(boolean setDefault, long id);
 
     @Query("UPDATE GatewayClient SET `default`=0")
     void resetAllDefaults();
+
+    @Transaction
+    default void refresh(List<GatewayClient> gatewayClients) {
+        clear();
+        insertAll(gatewayClients);
+    }
 }
