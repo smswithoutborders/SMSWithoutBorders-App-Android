@@ -1,5 +1,6 @@
 package com.example.sw0b_001.Models.GatewayClients;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -10,14 +11,17 @@ import java.util.List;
 
 @Dao
 public interface GatewayClientsDao {
+//    @Query("SELECT * FROM GatewayClient")
+//    List<GatewayClient> getAll();
+
     @Query("SELECT * FROM GatewayClient")
-    List<GatewayClient> getAll();
+    LiveData<List<GatewayClient>> getAll();
 
     @Query("SELECT * FROM GatewayClient WHERE operator_id=:operator_id")
     List<GatewayClient> findForOperaetorId(String operator_id);
 
-    @Insert
-    void insertAll(GatewayClient... gatewayClients);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(List<GatewayClient> gatewayClients);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insert(GatewayClient GatewayClient);

@@ -11,8 +11,8 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.example.sw0b_001.R
-import com.example.sw0b_001.SettingsActivities.GatewayClientsSettingsActivity
-import com.example.sw0b_001.SettingsActivities.SecurityPrivacyFragment
+import com.example.sw0b_001.Settings.GatewayClientListingActivity
+import com.example.sw0b_001.Settings.SecurityPrivacyFragment
 import java.util.Locale
 
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -40,7 +40,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 }
 
         gatewayClientsPreference!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val gatewayClientIntent = Intent(context, GatewayClientsSettingsActivity::class.java)
+            val gatewayClientIntent = Intent(context, GatewayClientListingActivity::class.java)
             startActivity(gatewayClientIntent)
             true
         }

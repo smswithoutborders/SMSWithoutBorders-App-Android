@@ -192,7 +192,8 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
                     Platforms platforms = PlatformsHandler.getPlatform(getApplicationContext(), platformId);
                     String formattedContent = processEmailForEncryption(platforms.getLetter(), to, message);
                     String encryptedContentBase64 = PublisherHandler.formatForPublishing(getApplicationContext(), formattedContent);
-                    String gatewayClientMSISDN = GatewayClientsHandler.getDefaultGatewayClientMSISDN(getApplicationContext());
+//                    String gatewayClientMSISDN = GatewayClientsHandler.getDefaultGatewayClientMSISDN(getApplicationContext());
+                    String gatewayClientMSISDN = "";
 
                     Intent defaultSMSAppIntent = SMSHandler.transferToDefaultSMSApp(
                             getApplicationContext(), gatewayClientMSISDN, encryptedContentBase64);

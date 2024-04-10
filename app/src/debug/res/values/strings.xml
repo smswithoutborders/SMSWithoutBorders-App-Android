@@ -4,6 +4,9 @@
         https://staging.smswithoutborders.com/privacy-policy
     </string>
 
+    <string name="gateway_client_seeding_url" translatable="false">
+        https://mocki.io/v1/3579c78f-592c-4da6-93b7-3067ba53d574</string>
+
     <string name="smswithoutborders_official_site_login" translatable="false">https://staging.smswithoutborders.com/login</string>
 
     <string name="smswithoutborders_official_site_signup" translatable="false">

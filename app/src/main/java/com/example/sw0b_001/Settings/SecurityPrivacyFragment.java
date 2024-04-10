@@ -1,15 +1,12 @@
-package com.example.sw0b_001.SettingsActivities;
+package com.example.sw0b_001.Settings;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreferenceCompat;
 
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.Security.SecurityHandler;

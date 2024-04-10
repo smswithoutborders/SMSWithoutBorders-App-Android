@@ -42,7 +42,6 @@ import java.util.concurrent.TimeoutException
  * - what if username gets spoofed (security keys won't match tho)
  */
 class HomepageActivity : AppCompactActivityCustomized() {
-    var recentsViewModel: RecentsViewModel? = null
     var securityHandler: SecurityHandler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,12 +92,12 @@ class HomepageActivity : AppCompactActivityCustomized() {
         val recentRecyclerView = findViewById<RecyclerView>(R.id.recents_recycler_view)
         recentRecyclerView.layoutManager = linearLayoutManager
         recentRecyclerView.adapter = recentRecyclerAdapter
-        recentsViewModel = ViewModelProvider(this).get(RecentsViewModel::class.java)
+        val recentsViewModel = ViewModelProvider(this)[RecentsViewModel::class.java]
 
         val encryptedContentDAO = Datastore.getDatastore(applicationContext)
                 .encryptedContentDAO()
 
-        recentsViewModel!!.getMessages(encryptedContentDAO).observe(this) {
+        recentsViewModel.getMessages(encryptedContentDAO).observe(this) {
             val noRecentMessagesText = findViewById<TextView>(R.id.no_recent_messages)
             recentRecyclerAdapter.submitList(it)
 
@@ -129,7 +128,7 @@ class HomepageActivity : AppCompactActivityCustomized() {
     val encryptionDigest: String
         get() = if (SecurityHandler.defaultEncryptionDigest == MGF1ParameterSpec.SHA256) "sha256" else "sha1"
 
-    @Throws(InterruptedException::class, GeneralSecurityException::class, IOException::class, JSONException::class)
+
     private fun checkAccountSynchronization() {
         // TODO: should become a WorkManager if fails
         val securityRSA = SecurityRSA(applicationContext)
@@ -195,17 +194,7 @@ class HomepageActivity : AppCompactActivityCustomized() {
     override fun onResume() {
         super.onResume()
         ThreadExecutorPool.executorService.execute {
-            try {
-                checkAccountSynchronization()
-            } catch (e: InterruptedException) {
-                Log.e(getLocalClassName(), "Exception", e)
-            } catch (e: JSONException) {
-                Log.e(getLocalClassName(), "Exception", e)
-            } catch (e: IOException) {
-                Log.e(getLocalClassName(), "Exception", e)
-            } catch (e: GeneralSecurityException) {
-                Log.e(getLocalClassName(), "Exception", e)
-            }
+            checkAccountSynchronization()
         }
     }
 

@@ -114,13 +114,7 @@ dependencies {
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1-Beta'//
 
      implementation "com.github.kittinunf.fuel:fuel-android:$fuelVersion" //for Android
-//    implementation "com.github.kittinunf.fuel:fuel-livedata:$fuelVersion" //for LiveData support
-//    implementation "com.github.kittinunf.fuel:fuel-rxjava:$fuelVersion" //for RxJava support
     implementation "com.github.kittinunf.fuel:fuel-coroutines:$fuelVersion"
-//    //for Kotlin Coroutines support
-//    implementation "com.github.kittinunf.fuel:fuel-gson:$fuelVersion" //for Gson support
-//    implementation "com.github.kittinunf.fuel:fuel-jackson:$fuelVersion" //for Jackson support
-//    implementation "com.github.kittinunf.fuel:fuel-moshi:$fuelVersion" //for Moshi support
-//    implementation "com.github.kittinunf.fuel:fuel-forge:$fuelVersion" //for Forge support
-//    implementation "com.github.kittinunf.fuel:fuel-reactor:$fuelVersion" //for Reactor support}
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
+
 }

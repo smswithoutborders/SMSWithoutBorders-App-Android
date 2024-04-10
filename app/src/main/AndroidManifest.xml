@@ -62,6 +62,10 @@
             android:launchMode="singleTask"/>
 
         <activity
+            android:name=".Settings.GatewayClientListingActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".MessagesActivity"
             android:exported="false">
             <meta-data
@@ -128,15 +132,15 @@
             android:name=".HomepageFragments.AvailablePlatformsFragment"
             android:exported="false" />
         <activity
-            android:name=".SettingsActivities.GatewayClientsSettingsActivity"
+            android:name=".Settings.GatewayClientsSettingsActivity"
             android:exported="false"
             android:parentActivityName=".HomepageActivity" />
         <activity
             android:name=".AddNewGatewayActivity"
             android:exported="false"
-            android:parentActivityName=".SettingsActivities.GatewayClientsSettingsActivity" />
+            android:parentActivityName=".Settings.GatewayClientsSettingsActivity" />
         <activity
-            android:name=".SettingsActivities.StoreAccessSettingsActivity"
+            android:name=".Settings.StoreAccessSettingsActivity"
             android:exported="false"
             android:parentActivityName=".HomepageActivity" />
         <activity
