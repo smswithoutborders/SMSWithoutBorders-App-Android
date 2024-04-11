@@ -113,10 +113,17 @@ class EmailComposeActivity : AppCompactActivityCustomized() {
                 return false
             }
 
-            val platformId = intent.getLongExtra("platform_id", -1)
+            val platformId = intent.getLongExtra(INTENT_PLATFORM_ID, -1)
             val platforms = PlatformsHandler.getPlatform(applicationContext, platformId)
 
-            val formattedContent = processEmailForEncryption(platforms.letter, to, cc, bcc, subject, body)
+            val formattedContent = processEmailForEncryption(
+                    platforms.letter,
+                    to,
+                    cc,
+                    bcc,
+                    subject,
+                    body)
+
             val encryptedContentBase64 = PublisherHandler.formatForPublishing(applicationContext, formattedContent)
             val gatewayClientMSISDN = GatewayClientsCommunications(applicationContext)
                     .getDefaultGatewayClient()
@@ -143,5 +150,9 @@ class EmailComposeActivity : AppCompactActivityCustomized() {
                                           subject: String,
                                           body: String): String {
         return "$platformLetter:$to:$cc:$bcc:$subject:$body"
+    }
+
+    companion object {
+        const val INTENT_PLATFORM_ID = "INTENT_PLATFORM_ID"
     }
 }

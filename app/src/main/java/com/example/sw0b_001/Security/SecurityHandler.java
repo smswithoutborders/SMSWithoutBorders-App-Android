@@ -30,6 +30,7 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.spec.MGF1ParameterSpec;
@@ -277,6 +278,13 @@ public class SecurityHandler {
                         }
                     });
         }
+    }
+
+    public static String PRIMARY_KEYSTORE_ALIAS = "PRIMARY_KEYSTORE_ALIAS";
+    public static PublicKey getNewPublicKey(Context context) throws GeneralSecurityException, IOException {
+        SecurityRSA securityRSA = new SecurityRSA(context);
+        return securityRSA.generateKeyPair(PRIMARY_KEYSTORE_ALIAS)
+                .generateKeyPair().getPublic();
     }
 
     public void authenticateWithLockScreen(Runnable successRunnable, Runnable failedRunnable) throws InterruptedException {

@@ -1,5 +1,7 @@
 package com.example.sw0b_001.Security;
 
+import static com.example.sw0b_001.Security.SecurityHandler.PRIMARY_KEYSTORE_ALIAS;
+
 import android.content.Context;
 import android.util.Base64;
 
@@ -8,9 +10,13 @@ import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServerHandler;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
 import com.example.sw0b_001.Models.GatewayServers._GatewayServersHandler;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,13 +44,11 @@ public class SecurityHelpers {
         return gatewayServers[0];
     }
 
-    public static byte[] getDecryptedSharedKey(Context context) throws Throwable {
 
+    public static byte[] getDecryptedSharedKey(Context context) throws Throwable {
         SecurityHandler securityHandler = new SecurityHandler(context);
         SecurityRSA securityRSA = new SecurityRSA(context);
-
-        GatewayServer gatewayServer = getGatewayServers(context).get(0);
-        String keystoreAlias = _GatewayServersHandler.buildKeyStoreAlias(gatewayServer.getUrl() );
+        String keystoreAlias = PRIMARY_KEYSTORE_ALIAS;
 
         byte[] sharedKey = securityHandler.getSharedKey();
 

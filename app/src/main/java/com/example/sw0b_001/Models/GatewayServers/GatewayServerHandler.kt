@@ -12,9 +12,10 @@ import com.github.kittinunf.result.Result
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.io.IOException
 import java.net.URL
+import java.security.GeneralSecurityException
 import java.security.PublicKey
-import java.util.Base64
 
 class GatewayServerHandler {
 
@@ -25,6 +26,7 @@ class GatewayServerHandler {
 
     @Serializable
     data class SyncPayload(val shared_key: String, val msisdn_hash: String)
+
     companion object {
 
         fun constructUrl(baseUrl: String, uid: String): String {

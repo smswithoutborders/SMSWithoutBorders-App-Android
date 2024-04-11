@@ -3,7 +3,9 @@ package com.example.sw0b_001
 import android.content.Intent
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -49,19 +51,20 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun syncGatewayServer(url: String, password: String, uid: String) {
+    private fun syncGatewayServer(url: String, password: String, uid: String): Boolean {
         val baseUrl = GatewayServerHandler.getBaseUrl(url)
         val gatewayServerPublicKey =
                 SyncHandshakeActivity
                         .getGatewayServerPublicKey(baseUrl)
-        val publicKey = SyncHandshakeActivity.getNewPublicKey(applicationContext,
-                baseUrl)
+        val publicKey = GatewayServerHandler.getNewPublicKey(applicationContext)
 
         val networkResponseResults = GatewayServerHandler.sync(applicationContext,
                 password.toByteArray(),
                 gatewayServerPublicKey,
                 GatewayServerHandler.constructUrl(baseUrl, uid),
                 publicKey)
+
+        var completed = false
 
         when(networkResponseResults.result) {
             is Result.Success -> {
@@ -74,11 +77,13 @@ class LoginActivity : AppCompatActivity() {
                 gatewayServer.protocol = "https"
                 Datastore.getDatastore(applicationContext).gatewayServersDAO()
                         .insert(gatewayServer)
+                completed = true
             }
             is Result.Failure -> {
 
             }
         }
+        return completed;
     }
 
     private fun storePlatforms(user: BackendCommunications, url: String, headers: Headers) {
@@ -127,12 +132,16 @@ class LoginActivity : AppCompatActivity() {
                                     networkResponseResults.result.get())
                     val uid = obj.uid
                     BackendCommunications(obj.uid).storeUID(applicationContext, url)
-                    syncGatewayServer(url, password, uid)
-                    storePlatforms(BackendCommunications(uid),
-                            getString(R.string.default_backend_url),
-                            networkResponseResults.response!!.headers)
-
-                    startActivity(Intent(this, HomepageActivity::class.java))
+                    if(syncGatewayServer(url, password, uid)) {
+                        storePlatforms(BackendCommunications(uid),
+                                getString(R.string.default_backend_url),
+                                networkResponseResults.response!!.headers)
+                        startActivity(Intent(this, HomepageActivity::class.java))
+                    } else {
+                        Toast.makeText(applicationContext,
+                                "Some error occurred at network level", Toast.LENGTH_LONG)
+                                .show()
+                    }
                 }
                 is Result.Failure -> {
                     val errorTextView = findViewById<MaterialTextView>(R.id.login_error_text)

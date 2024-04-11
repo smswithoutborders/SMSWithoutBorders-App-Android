@@ -1,6 +1,5 @@
 package com.example.sw0b_001;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +11,7 @@ import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServerHandler;
 import com.example.sw0b_001.Models.GatewayServers._GatewayServersHandler;
 import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
@@ -179,13 +179,11 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
         });
     }
 
-
-    private PublicKey updateSharedKeyEncryption(String gatewayServerUrlHost) throws Throwable {
+    private PublicKey updateSharedKeyEncryption() throws Throwable {
         SecurityRSA securityRSA = new SecurityRSA(this);
         byte[] sharedKey = SecurityHelpers.getDecryptedSharedKey(this);
 
-        PublicKey publicKeyEncoded = getNewPublicKey(getApplicationContext(),
-                gatewayServerUrlHost);
+        PublicKey publicKeyEncoded = SecurityHandler.getNewPublicKey(getApplicationContext());
         byte[] encryptedSharedKey = securityRSA.encrypt( sharedKey, publicKeyEncoded);
 
         SecurityHandler securityHandler = new SecurityHandler(this);
@@ -193,15 +191,6 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
         securityHandler.storeSharedKey(encryptedSharedKeyB64);
 
         return publicKeyEncoded;
-    }
-
-    public static PublicKey getNewPublicKey(Context context, String gatewayServerUrlHost) throws GeneralSecurityException, IOException {
-        SecurityRSA securityRSA = new SecurityRSA(context);
-        String keystoreAlias = _GatewayServersHandler.buildKeyStoreAlias(gatewayServerUrlHost );
-
-        return securityRSA.generateKeyPair(keystoreAlias)
-                .generateKeyPair()
-                .getPublic();
     }
 
     public void publicKeyExchange(String gatewayServerHandshakeUrl) {
@@ -224,13 +213,14 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
                         userHandler.commitUser();
 
                         PublicKey gatewayServerPublicKey = getGatewayServerPublicKey(gatewayServerHost);
-                        // TODO: requires testing if re-encryption of key works
-                        PublicKey publicKeyEncoded = (securityHandler.hasSharedKey() && gatewayServerPublicKey != null) ?
-                                updateSharedKeyEncryption(gatewayServerUrlHost) :
-                                getNewPublicKey(getApplicationContext(), gatewayServerUrlHost);
+                        PublicKey publicKeyEncoded =
+                                (securityHandler.hasSharedKey() && gatewayServerPublicKey != null) ?
+                                updateSharedKeyEncryption() :
+                                        SecurityHandler.getNewPublicKey(getApplicationContext());
 
                         GatewayServer gatewayServer = new GatewayServer();
-                        gatewayServer.setPublicKey(Base64.encodeToString(gatewayServerPublicKey.getEncoded(), Base64.DEFAULT));
+                        gatewayServer.setPublicKey(Base64.encodeToString(
+                                gatewayServerPublicKey.getEncoded(), Base64.DEFAULT));
 
                         gatewayServer.setUrl(gatewayServerUrlHost);
 
@@ -279,23 +269,10 @@ public class SyncHandshakeActivity extends AppCompactActivityCustomized {
     }
 
     public static PublicKey getGatewayServerPublicKey(String gatewayServerUrl) throws IOException, InterruptedException {
-        /*
-        if(BuildConfig.DEBUG)
-            primaryKeySite = getString(R.string.official_staging_site);
-        else
-            primaryKeySite = getString(R.string.official_site);
-
-         */
         URL url = new URL(gatewayServerUrl);
         HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
         Certificate[] certificate = urlConnection.getServerCertificates();
-//                        for(Certificate certificate: certificates[0]) {
-//                            PublicKey publicKey = certificate.getPublicKey();
-//                            Log.d(getLocalClassName(), "Cert det: " +
-//                                    Base64.encodeToString(publicKey.getEncoded(), Base64.NO_PADDING) +
-//                                    certificate.getType() );
-//                        }
         return certificate[0].getPublicKey();
     }
 }

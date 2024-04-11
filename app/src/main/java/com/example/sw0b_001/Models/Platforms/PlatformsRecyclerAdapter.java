@@ -70,8 +70,9 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
                 public void onClick(View v) {
                     Log.d(PlatformsRecyclerAdapter.class.getName(), "Yes clicked");
                     if(platforms.getType().equals("email")) {
-                        v.getContext().startActivity(new Intent(v.getContext(),
-                                EmailComposeActivity.class));
+                        Intent intent = new Intent(v.getContext(), EmailComposeActivity.class);
+                        intent.putExtra(EmailComposeActivity.INTENT_PLATFORM_ID, platforms.getId());
+                        v.getContext().startActivity(intent);
                     }
                 }
             });
