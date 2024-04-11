@@ -15,11 +15,11 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textview.MaterialTextView
 
-class HomepageComposeNewFragment(private val bottomSheetViewLayout: Int) : BottomSheetDialogFragment() {
+class HomepageComposeNewFragment(private val bottomSheetViewLayout: Int =
+        R.layout.fragment_modal_sheet_compose_platforms) : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -35,7 +35,7 @@ class HomepageComposeNewFragment(private val bottomSheetViewLayout: Int) : Botto
 
         val inflatedView = viewStub.inflate()
         val bottomSheet = inflatedView.findViewById<View>(R.id.homepage_compose_new_platform_modal)
-        var bottomSheetBehavior: BottomSheetBehavior<View> = BottomSheetBehavior.from(bottomSheet)
+        val bottomSheetBehavior: BottomSheetBehavior<View> = BottomSheetBehavior.from(bottomSheet)
         configureRecyclerView(view)
 
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -50,7 +50,7 @@ class HomepageComposeNewFragment(private val bottomSheetViewLayout: Int) : Botto
         val platformsRecyclerAdapter = PlatformsRecyclerAdapter()
         platformsRecyclerView.adapter = platformsRecyclerAdapter
 
-        val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java];
+        val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java]
         context?.let { it ->
             platformsViewModel.get(it).observe(viewLifecycleOwner, Observer {
                 platformsRecyclerAdapter.mDiffer.submitList(it)

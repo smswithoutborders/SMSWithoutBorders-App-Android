@@ -38,7 +38,7 @@ class EmailComposeActivity : AppCompactActivityCustomized() {
         binding = ActivityEmailComposeBinding.inflate(layoutInflater)
         val view: View = binding!!.getRoot()
         setContentView(view)
-        val composeToolbar = findViewById<MaterialToolbar>(R.id.tweet_toolbar)
+        val composeToolbar = findViewById<MaterialToolbar>(R.id.email_compose_toolbar)
         setSupportActionBar(composeToolbar)
 
         // Enable the Up button
@@ -95,7 +95,7 @@ class EmailComposeActivity : AppCompactActivityCustomized() {
         val ccTextInputEditText = findViewById<TextInputEditText>(R.id.email_cc)
         val bccTextInputEditText = findViewById<TextInputEditText>(R.id.email_bcc)
         val subjectTextInputEditText = findViewById<TextInputEditText>(R.id.email_subject)
-        val bodyTextInputEditText = findViewById<TextInputEditText>(R.id.email_compose_body_input)
+        val bodyTextInputEditText = findViewById<EditText>(R.id.email_compose_body_input)
 
         if (item.itemId == R.id.action_send) {
             val to = toEditText.text.toString()

@@ -203,8 +203,7 @@ class HomepageActivity : AppCompactActivityCustomized() {
     }
 
     fun showComposeNewPlatformLayout(layout: Int) {
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
         val homepageComposeNewFragment = HomepageComposeNewFragment(layout)
         fragmentTransaction.add(homepageComposeNewFragment,
                 HomepageComposeNewFragment.TAG)
