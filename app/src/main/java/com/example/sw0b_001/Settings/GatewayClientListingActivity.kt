@@ -1,6 +1,8 @@
 package com.example.sw0b_001.Settings
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,6 +27,7 @@ import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.R
 import com.example.sw0b_001.Security.SecurityHandler
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textview.MaterialTextView
@@ -42,27 +45,15 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val listView = findViewById<ListView>(R.id.gateway_clients_recycler_view)
-
-        listView.onItemClickListener =
-                AdapterView.OnItemClickListener { parent, view, position, id ->
-                    view.isActivated = !view.isActivated
-                    ThreadExecutorPool.executorService.execute {
-                        val gatewayClient = Datastore.getDatastore(applicationContext)
-                                .gatewayClientsDao().fetch(id)
-                        GatewayClientsCommunications.updateDefaultGatewayClient(
-                                applicationContext, gatewayClient.msisdn)
-                        listViewAdapter.notifyDataSetChanged()
-                    }
-                }
-
         val gatewayClientsViewModel =
                 ViewModelProvider(this)[GatewayClientViewModel::class.java]
 
         val linearProgressIndicator = findViewById<LinearProgressIndicator>(R.id.refresh_loader)
         val refreshLayout = findViewById<SwipeRefreshLayout>(R.id.gateway_client_swipe_refresh)
 
+        val gatewayClient = GatewayClientsCommunications(applicationContext)
         gatewayClientsViewModel.get(applicationContext).observe(this, Observer {
-            listViewAdapter = GatewayClientListingAdapter(applicationContext, it)
+            listViewAdapter = GatewayClientListingAdapter(gatewayClient, it)
             listView.adapter = listViewAdapter
 
             if(it.isNullOrEmpty())
@@ -88,13 +79,19 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
                         }
                     }
                 }
+
+        val sharedPreferencesChangeListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
+            listViewAdapter.notifyDataSetChanged()
+//            Toast.makeText(applicationContext, "Default shared preferences changed",
+//                    Toast.LENGTH_SHORT).show()
+        }
+
+        gatewayClient.sharedPreferences
+                .registerOnSharedPreferenceChangeListener(sharedPreferencesChangeListener)
     }
 
-    class GatewayClientListingAdapter(context: Context,
+    class GatewayClientListingAdapter(val gatewayClientsCommunications: GatewayClientsCommunications,
                                       var gatewayClientsList: List<GatewayClient>) : BaseAdapter() {
-
-        private val defaultGatewayClientMsisdn = GatewayClientsCommunications
-                .getDefaultGatewayClient(context)
 
         override fun getCount(): Int {
             return gatewayClientsList.size
@@ -109,8 +106,7 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
         }
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            Log.d(javaClass.name, "Default gateway client: ${defaultGatewayClientMsisdn}")
-
+            val defaultGatewayClientMsisdn = gatewayClientsCommunications.getDefaultGatewayClient()
             var view = convertView
             if(view == null) {
                 val inflater: LayoutInflater = LayoutInflater.from(parent?.context);
@@ -122,17 +118,22 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
             view?.findViewById<MaterialTextView>(R.id.gateway_client_MSISDN)?.text =
                     gatewayClient.msisdn
 
-            view?.setOnClickListener(gatewayClientOnClickListener())
+            view?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
 
             val radioButton = view?.findViewById<SwitchMaterial>(R.id.gateway_client_radio_btn)
-            radioButton?.isActivated = defaultGatewayClientMsisdn == gatewayClient.msisdn
+            radioButton?.isChecked = defaultGatewayClientMsisdn == gatewayClient.msisdn
+
+            view?.findViewById<MaterialCardView>(R.id.gateway_client_listing_card)
+                    ?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
 
             return view!!
         }
 
-        private fun gatewayClientOnClickListener(): OnClickListener {
+        private fun gatewayClientOnClickListener(gatewayClient: GatewayClient):
+                OnClickListener {
             return OnClickListener {
-
+                gatewayClientsCommunications
+                        .updateDefaultGatewayClient(gatewayClient.msisdn)
             }
         }
     }
