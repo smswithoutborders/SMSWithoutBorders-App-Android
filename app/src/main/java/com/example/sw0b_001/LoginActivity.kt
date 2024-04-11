@@ -17,6 +17,7 @@ import com.example.sw0b_001.Models.GatewayServers.GatewayServerHandler
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler
 import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.example.sw0b_001.Security.SecurityHandler
 import com.github.kittinunf.fuel.core.Headers
 import com.github.kittinunf.result.Result
 import com.google.android.material.button.MaterialButton
@@ -56,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
         val gatewayServerPublicKey =
                 SyncHandshakeActivity
                         .getGatewayServerPublicKey(baseUrl)
-        val publicKey = GatewayServerHandler.getNewPublicKey(applicationContext)
+        val publicKey = SecurityHandler.getNewPublicKey(applicationContext)
 
         val networkResponseResults = GatewayServerHandler.sync(applicationContext,
                 password.toByteArray(),
@@ -94,15 +95,15 @@ class LoginActivity : AppCompatActivity() {
                 .platformDao().deleteAll()
 
         platforms.saved_platforms.forEach {
-            val platforms = Platforms()
-            platforms.name = it.name
-            platforms.description = ""
-            platforms.type = it.type
-            platforms.letter = it.letter
-            platforms.logo = PlatformsHandler
+            val platform = Platforms()
+            platform.name = it.name
+            platform.description = ""
+            platform.type = it.type
+            platform.letter = it.letter
+            platform.logo = PlatformsHandler
                     .hardGetLogoByName(applicationContext, it.name)
             Datastore.getDatastore(applicationContext)
-                    .platformDao().insert(platforms)
+                    .platformDao().insert(platform)
         }
     }
 
