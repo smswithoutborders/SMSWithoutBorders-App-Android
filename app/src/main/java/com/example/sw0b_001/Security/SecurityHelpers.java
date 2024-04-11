@@ -1,8 +1,8 @@
 package com.example.sw0b_001.Security;
 
-import static com.example.sw0b_001.Security.SecurityHandler.PRIMARY_KEYSTORE_ALIAS;
-
 import android.content.Context;
+import android.security.keystore.KeyInfo;
+import android.security.keystore.KeyProperties;
 import android.util.Base64;
 
 import androidx.annotation.NonNull;
@@ -16,44 +16,29 @@ import com.example.sw0b_001.Models.GatewayServers._GatewayServersHandler;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.security.UnrecoverableEntryException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SecurityHelpers {
-
-    private static List<GatewayServer> getGatewayServers(Context context) throws Throwable {
-        Datastore databaseConnection = Room.databaseBuilder(context,
-                Datastore.class, Datastore.databaseName).build();
-        final List<GatewayServer>[] gatewayServers = new List[]{new ArrayList<>()};
-        Thread fetchGatewayClientThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                GatewayServersDAO gatewayServerDao = databaseConnection.gatewayServersDAO();
-                gatewayServers[0] = gatewayServerDao.getAll();
-            }
-        });
-
-        try {
-            fetchGatewayClientThread.start();
-            fetchGatewayClientThread.join();
-        } catch (InterruptedException e) {
-            throw e.fillInStackTrace();
-        }
-
-        return gatewayServers[0];
+    public static PublicKey getRSAPublicKeyFromB64(String publicKeyBase64) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        byte[] publicBytes = Base64.decode(publicKeyBase64, Base64.DEFAULT);
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicBytes);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        return keyFactory.generatePublic(keySpec);
     }
 
-
-    public static byte[] getDecryptedSharedKey(Context context) throws Throwable {
-        SecurityHandler securityHandler = new SecurityHandler(context);
-        SecurityRSA securityRSA = new SecurityRSA(context);
-        String keystoreAlias = PRIMARY_KEYSTORE_ALIAS;
-
-        byte[] sharedKey = securityHandler.getSharedKey();
-
-        return securityRSA.decrypt(sharedKey, keystoreAlias);
-    }
 
     @NonNull
     public static String convert_to_pem_format(byte[] key) {
@@ -62,5 +47,22 @@ public class SecurityHelpers {
         keyString += "-----END PUBLIC KEY-----";
 
         return keyString;
+    }
+
+    public static boolean canSign(PrivateKey privateKey, String keyStoreAlias) throws UnrecoverableEntryException, KeyStoreException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
+        KeyFactory keyFactory = KeyFactory.getInstance(privateKey.getAlgorithm(), "AndroidKeyStore");
+        KeyInfo keyInfo = keyFactory.getKeySpec(privateKey, KeyInfo.class);
+
+        return keyInfo.getPurposes() == (KeyProperties.PURPOSE_SIGN
+                | KeyProperties.PURPOSE_ENCRYPT
+                | KeyProperties.PURPOSE_DECRYPT);
+    }
+
+    public static byte[] sign(PrivateKey privateKey, byte[] message) throws
+            NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        Signature s = Signature.getInstance("SHA512withRSA/PSS");
+        s.initSign(privateKey);
+        s.update(message);
+        return s.sign();
     }
 }

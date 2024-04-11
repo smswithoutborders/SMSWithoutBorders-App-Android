@@ -1,4 +1,4 @@
-package com.example.sw0b_001.HomepageFragments
+package com.example.sw0b_001.Settings
 
 import android.app.LocaleManager
 import android.content.Intent
@@ -11,8 +11,6 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.example.sw0b_001.R
-import com.example.sw0b_001.Settings.GatewayClientListingActivity
-import com.example.sw0b_001.Settings.SecurityPrivacyFragment
 import java.util.Locale
 
 class SettingsFragment : PreferenceFragmentCompat() {

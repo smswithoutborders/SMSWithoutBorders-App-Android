@@ -1,177 +1,69 @@
-package com.example.sw0b_001.Security;
+package com.example.sw0b_001.Security
 
-import static android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG;
-import static android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
+import java.security.InvalidAlgorithmParameterException
+import java.security.InvalidKeyException
+import java.security.KeyPairGenerator
+import java.security.NoSuchAlgorithmException
+import java.security.NoSuchProviderException
+import java.security.PrivateKey
+import java.security.PublicKey
+import java.security.spec.MGF1ParameterSpec
+import javax.crypto.BadPaddingException
+import javax.crypto.Cipher
+import javax.crypto.IllegalBlockSizeException
+import javax.crypto.NoSuchPaddingException
+import javax.crypto.spec.OAEPParameterSpec
+import javax.crypto.spec.PSource
 
-import android.content.Context;
-import android.content.Intent;
-import android.hardware.biometrics.BiometricManager;
-import android.os.Build;
-import android.os.CancellationSignal;
-import android.provider.Settings;
-import android.security.keystore.KeyGenParameterSpec;
-import android.security.keystore.KeyInfo;
-import android.security.keystore.KeyProperties;
-import android.util.Base64;
-import android.util.Log;
-import android.widget.Toast;
+class SecurityRSA {
+    fun encrypt(input: ByteArray, publicKey: PublicKey): ByteArray {
+        val cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING)
 
-import androidx.annotation.NonNull;
-import androidx.biometric.BiometricPrompt;
-import androidx.core.content.ContextCompat;
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey, encryptionDigestParam)
 
-import com.example.sw0b_001.BuildConfig;
-import com.example.sw0b_001.Models.PublisherHandler;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.KeyFactory;
-import java.security.KeyPairGenerator;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.Signature;
-import java.security.SignatureException;
-import java.security.UnrecoverableEntryException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.MGF1ParameterSpec;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.PSSParameterSpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.concurrent.Executor;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.OAEPParameterSpec;
-
-public class SecurityRSA extends SecurityHandler {
-    CancellationSignal cancellationSignal = new CancellationSignal();
-
-    private Executor executor;
-    private android.hardware.biometrics.BiometricPrompt biometricPrompt;
-
-    public SecurityRSA(Context context) throws GeneralSecurityException, IOException {
-        super(context);
-
+        return cipher.doFinal(input)
     }
 
-    public KeyPairGenerator generateKeyPair(String keystoreAlias) throws InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchProviderException, KeyStoreException {
-        KeyPairGenerator keygen = KeyPairGenerator.getInstance(
-                KeyProperties.KEY_ALGORITHM_RSA, DEFAULT_KEYSTORE_PROVIDER);
+    fun decrypt(privateKey: PrivateKey, encryptedInput: ByteArray): ByteArray {
+        val cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING)
 
-        keygen.initialize(
-                new KeyGenParameterSpec.Builder(
-                        keystoreAlias,
-                        KeyProperties.PURPOSE_DECRYPT
-                                | KeyProperties.PURPOSE_ENCRYPT
-                                | KeyProperties.PURPOSE_SIGN)
-                        .setKeySize(2048)
-                        .setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PSS)
-                        .setDigests(KeyProperties.DIGEST_SHA1, KeyProperties.DIGEST_SHA256, KeyProperties.DIGEST_SHA512)
-                        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
-                        .build());
-        return keygen;
+        cipher.init(Cipher.DECRYPT_MODE, privateKey, decryptionDigestParam)
+
+        return cipher.doFinal(encryptedInput)
     }
 
-    public static PublicKey getPublicKeyFromBase64String(String publicKeyBase64) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        byte[] publicBytes = Base64.decode(publicKeyBase64, Base64.DEFAULT);
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicBytes);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        PublicKey pubKey = keyFactory.generatePublic(keySpec);
-        return pubKey;
-    }
+    companion object {
+        const val DEFAULT_KEYSTORE_PROVIDER = "AndroidKeyStore"
 
-//    public byte[] encrypt(byte[] input, String publicKeyBase64) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
-//        PublicKey publicKey = getPublicKeyFromBase64String(publicKeyBase64);
-//        Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-//        cipher.init(Cipher.ENCRYPT_MODE, publicKey, encryptionDigestParam);
-//        return cipher.doFinal(input);
-//    }
-//
-    public byte[] encrypt(byte[] input, PublicKey publicKey) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException {
-        Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-        cipher.init(Cipher.ENCRYPT_MODE, publicKey, encryptionDigestParam);
-        return cipher.doFinal(input);
-    }
+        const val DEFAULT_KEYPAIR_ALGORITHM_PADDING = "RSA/ECB/" + KeyProperties.ENCRYPTION_PADDING_RSA_OAEP
 
-//    public byte[] encrypt(byte[] input, PublicKey publicKey, OAEPParameterSpec oaepParameterSpec) throws NoSuchPaddingException, NoSuchAlgorithmException, UnrecoverableEntryException, CertificateException, KeyStoreException, IOException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException, InvalidKeySpecException {
-//        Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
-//        cipher.init(Cipher.ENCRYPT_MODE, publicKey, oaepParameterSpec);
-//        return cipher.doFinal(input);
-//    }
+        val defaultEncryptionDigest = MGF1ParameterSpec.SHA256
 
-    // Requirements to use this: input has to be Base64 encoded
-    public byte[] decrypt(byte[] encryptedInput, String keyStoreAlias) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
-        byte[] decryptedBytes = null;
-        try {
-            KeyStore keyStore = getKeyStore();
-            KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(
-                    keyStoreAlias, null);
+        val defaultDecryptionDigest = MGF1ParameterSpec.SHA1
 
-            PrivateKey privateKey = privateKeyEntry.getPrivateKey();
+        val decryptionDigestParam = OAEPParameterSpec("SHA-256", "MGF1", defaultDecryptionDigest,
+                PSource.PSpecified.DEFAULT)
 
-            Cipher cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING);
+        var encryptionDigestParam = OAEPParameterSpec("SHA-256", "MGF1", defaultEncryptionDigest,
+                PSource.PSpecified.DEFAULT)
 
-            cipher.init(Cipher.DECRYPT_MODE, privateKey, decryptionDigestParam);
-
-            decryptedBytes = cipher.doFinal(encryptedInput);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-        } catch (UnrecoverableKeyException e) {
-            e.printStackTrace();
-        } catch (UnrecoverableEntryException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (CertificateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidAlgorithmParameterException e) {
-            e.printStackTrace();
+        fun generateKeyPair(keystoreAlias: String, keySize: Int = 2048): KeyPairGenerator {
+            val keygen = KeyPairGenerator.getInstance(
+                    KeyProperties.KEY_ALGORITHM_RSA, DEFAULT_KEYSTORE_PROVIDER)
+            keygen.initialize(
+                    KeyGenParameterSpec.Builder( keystoreAlias,
+                            KeyProperties.PURPOSE_DECRYPT
+                                    or KeyProperties.PURPOSE_ENCRYPT
+                                    or KeyProperties.PURPOSE_SIGN)
+                            .setKeySize(keySize)
+                            .setSignaturePaddings(KeyProperties.SIGNATURE_PADDING_RSA_PSS)
+                            .setDigests(KeyProperties.DIGEST_SHA1, KeyProperties.DIGEST_SHA256,
+                                    KeyProperties.DIGEST_SHA512)
+                            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
+                            .build())
+            return keygen
         }
-        return decryptedBytes;
-    }
-
-    public boolean canSign(String keyStoreAlias) throws UnrecoverableEntryException, KeyStoreException, NoSuchAlgorithmException, NoSuchProviderException, InvalidKeySpecException {
-        KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(
-                keyStoreAlias, null);
-
-        KeyFactory keyFactory = KeyFactory.getInstance(
-                privateKeyEntry.getPrivateKey().getAlgorithm(), DEFAULT_KEYSTORE_PROVIDER);
-        KeyInfo keyInfo = keyFactory.getKeySpec(
-                privateKeyEntry.getPrivateKey(), KeyInfo.class);
-
-        // Check if the private key has the "SIGN_DATA" purpose
-//        return keyInfo.isInsideSecureHardware()
-//                && keyInfo.getPurposes() == (KeyProperties.PURPOSE_SIGN
-//                | KeyProperties.PURPOSE_ENCRYPT
-//                | KeyProperties.PURPOSE_DECRYPT);
-
-        return keyInfo.getPurposes() == (KeyProperties.PURPOSE_SIGN
-                | KeyProperties.PURPOSE_ENCRYPT
-                | KeyProperties.PURPOSE_DECRYPT);
-
-    }
-
-    public byte[] sign(byte[] message, String keyStoreAlias) throws UnrecoverableEntryException, KeyStoreException, NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStore.getEntry(
-                keyStoreAlias, null);
-
-        Signature s = Signature.getInstance("SHA512withRSA/PSS");
-        s.initSign(privateKeyEntry.getPrivateKey());
-        s.update(message);
-        return s.sign();
     }
 }

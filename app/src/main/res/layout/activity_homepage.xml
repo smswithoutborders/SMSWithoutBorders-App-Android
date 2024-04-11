@@ -17,7 +17,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/homepage_main_menu" >
         <TextView
-            android:id="@+id/homepage_recents_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

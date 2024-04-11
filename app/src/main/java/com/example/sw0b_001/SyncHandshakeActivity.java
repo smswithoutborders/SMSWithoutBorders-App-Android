@@ -17,7 +17,6 @@ import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
 import com.example.sw0b_001.Models.ThreadExecutorPool;
-import com.example.sw0b_001.Models.User.UserHandler;
 import com.example.sw0b_001.Security.SecurityHandler;
 import com.example.sw0b_001.Security.SecurityHelpers;
 import com.example.sw0b_001.Security.SecurityRSA;
