@@ -6,11 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/tweet_toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         android:visibility="visible"
@@ -18,44 +17,46 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/email_compose_toolbar"
-        app:title="Email" />
+        app:title="@string/email_compose_title" />
 
     <LinearLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/email_body"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tweet_toolbar">
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:hint="@string/email_compose_to">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email_to"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email_compose_to"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
+            android:hint="@string/email_compose_cc"
             android:layout_height="match_parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email_cc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email_compose_cc"
                 android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:hint="@string/email_compose_bcc"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -63,11 +64,11 @@
                 android:id="@+id/email_bcc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email_compose_bcc"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:hint="@string/email_compose_subject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
@@ -77,7 +78,6 @@
                 android:id="@+id/email_subject"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/email_compose_subject"
                 android:inputType="textEmailSubject"
                 app:endIconMode="clear_text" />
 
@@ -86,20 +86,25 @@
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/email_body"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email_compose_body"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:autoLink="all"
-        android:background="@null"
-        android:gravity="start|top"
-        android:hint="@string/email_compose_body"
-        android:inputType="textMultiLine"
-        android:padding="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:boxStrokeWidth="0dp"
+        app:helperText="@string/email_compose_body"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/email_compose_body_input"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/email_compose_body" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

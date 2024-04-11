@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 10,
-    "identityHash": "5152b35052f303eb8110f7eb59f6559d",
+    "identityHash": "388857596c0b039f51110a413701490f",
     "entities": [
       {
         "tableName": "GatewayServer",
@@ -251,58 +251,12 @@
         },
         "indices": [],
         "foreignKeys": []
-      },
-      {
-        "tableName": "Notifications",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`notifications_id` INTEGER NOT NULL, `notifications_date` INTEGER NOT NULL, `notifications_message` TEXT, `notifications_type` TEXT DEFAULT 'app_notification', `notifications_seen` INTEGER NOT NULL DEFAULT false, PRIMARY KEY(`notifications_id`))",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "notifications_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "date",
-            "columnName": "notifications_date",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "message",
-            "columnName": "notifications_message",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "type",
-            "columnName": "notifications_type",
-            "affinity": "TEXT",
-            "notNull": false,
-            "defaultValue": "'app_notification'"
-          },
-          {
-            "fieldPath": "seen",
-            "columnName": "notifications_seen",
-            "affinity": "INTEGER",
-            "notNull": true,
-            "defaultValue": "false"
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": false,
-          "columnNames": [
-            "notifications_id"
-          ]
-        },
-        "indices": [],
-        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5152b35052f303eb8110f7eb59f6559d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '388857596c0b039f51110a413701490f')"
     ]
   }
 }

@@ -1,214 +1,147 @@
-package com.example.sw0b_001;
+package com.example.sw0b_001
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
+import android.content.Intent
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.EditText
+import androidx.appcompat.widget.Toolbar
+import androidx.room.Room.databaseBuilder
+import com.example.sw0b_001.Database.Datastore
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler
+import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
+import com.example.sw0b_001.Models.Platforms.PlatformsHandler
+import com.example.sw0b_001.Models.PublisherHandler
+import com.example.sw0b_001.Models.SMSHandler
+import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.example.sw0b_001.databinding.ActivityEmailComposeBinding
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.textfield.TextInputEditText
+import java.io.IOException
+import java.security.InvalidAlgorithmParameterException
+import java.security.InvalidKeyException
+import java.security.KeyStoreException
+import java.security.NoSuchAlgorithmException
+import java.security.UnrecoverableEntryException
+import java.security.UnrecoverableKeyException
+import java.security.cert.CertificateException
+import java.util.Arrays
+import javax.crypto.BadPaddingException
+import javax.crypto.IllegalBlockSizeException
+import javax.crypto.NoSuchPaddingException
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.widget.Toolbar;
-import androidx.room.Room;
+class EmailComposeActivity : AppCompactActivityCustomized() {
+    private var binding: ActivityEmailComposeBinding? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityEmailComposeBinding.inflate(layoutInflater)
+        val view: View = binding!!.getRoot()
+        setContentView(view)
+        val composeToolbar = findViewById<MaterialToolbar>(R.id.tweet_toolbar)
+        setSupportActionBar(composeToolbar)
 
-import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
-import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
-import com.example.sw0b_001.Models.Platforms.Platforms;
-import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
-import com.example.sw0b_001.Models.PublisherHandler;
-import com.example.sw0b_001.Models.SMSHandler;
-import com.example.sw0b_001.databinding.ActivityEmailComposeBinding;
-
-import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableEntryException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
-public class EmailComposeActivity extends AppCompactActivityCustomized {
-
-    private ActivityEmailComposeBinding binding;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityEmailComposeBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
-
-        Toolbar composeToolbar = (Toolbar) findViewById(R.id.tweet_toolbar);
-        setSupportActionBar(composeToolbar);
-        // Get a support ActionBar corresponding to this toolbar
-        ActionBar ab = getSupportActionBar();
         // Enable the Up button
-        ab.setDisplayHomeAsUpEnabled(true);
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        Intent intent = getIntent();
-        if(intent.hasExtra("encrypted_content_id")) {
-            populateEncryptedContent();
+        if (intent.hasExtra("encrypted_content_id")) {
+            populateEncryptedContent()
         }
     }
 
-    private void populateEncryptedContent() {
-        Intent intent = getIntent();
+    private fun populateEncryptedContent() {
+        val encryptedContentId = intent.getLongExtra("encrypted_content_id", -1)
 
-        long encryptedContentId = intent.getLongExtra("encrypted_content_id", -1);
-        Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
-                Datastore.databaseName).build();
-
-        final String[] decryptedEmailContent = {""};
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                EncryptedContentDAO encryptedContentDAO = databaseConnector.encryptedContentDAO();
-                EncryptedContent encryptedContent = encryptedContentDAO.get(encryptedContentId);
-
-                try {
-                    final String decryptedEmailContent = PublisherHandler.decryptPublishedContent(
-                            getApplicationContext(), encryptedContent.getEncryptedContent());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            populateFields(decryptedEmailContent);
-                        }
-                    });
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
+        ThreadExecutorPool.executorService.execute {
+            val encryptedContentDAO = Datastore.getDatastore(applicationContext)
+                    .encryptedContentDAO()
+            val encryptedContent = encryptedContentDAO[encryptedContentId]
+            val decryptedEmailContent = PublisherHandler.decryptPublishedContent(
+                    applicationContext, encryptedContent.encryptedContent)
+            runOnUiThread { populateFields(decryptedEmailContent) }
+        }
     }
 
-    private void populateFields(String decryptedEmailContent) {
+    private fun populateFields(decryptedEmailContent: String) {
         // Parse the input
-        String[] decryptedEmailContentComponents = decryptedEmailContent.split(":");
-        String to = decryptedEmailContentComponents[1];
-        String cc = decryptedEmailContentComponents[2];
-        String bcc = decryptedEmailContentComponents[3];
-        String subject = decryptedEmailContentComponents[4];
+        val decryptedEmailContentComponents = decryptedEmailContent.split(":".toRegex(), 4)
 
-        List bodyList = Arrays.asList(decryptedEmailContentComponents).subList(5, decryptedEmailContentComponents.length);
-        String body = String.join(":", bodyList);
+        val to = decryptedEmailContentComponents[1]
+        val cc = decryptedEmailContentComponents[2]
+        val bcc = decryptedEmailContentComponents[3]
+        val subject = decryptedEmailContentComponents[4]
+        val body: String = decryptedEmailContentComponents[5]
 
+        val toEditText = findViewById<EditText>(R.id.email_to)
+        val ccEditText = findViewById<EditText>(R.id.email_cc)
+        val bccEditText = findViewById<EditText>(R.id.email_bcc)
+        val subjectEditText = findViewById<EditText>(R.id.email_subject)
+        val bodyEditText = findViewById<EditText>(R.id.email_compose_body_input)
 
-        EditText toEditText = findViewById(R.id.email_to);
-        EditText ccEditText = findViewById(R.id.email_cc);
-        EditText bccEditText = findViewById(R.id.email_bcc);
-        EditText subjectEditText = findViewById(R.id.email_subject);
-        EditText bodyEditText = findViewById(R.id.email_body);
-
-        toEditText.setText(to);
-        ccEditText.setText(cc);
-        bccEditText.setText(bcc);
-        subjectEditText.setText(subject);
-        bodyEditText.setText(body);
+        toEditText.setText(to)
+        ccEditText.setText(cc)
+        bccEditText.setText(bcc)
+        subjectEditText.setText(subject)
+        bodyEditText.setText(body)
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.email_compose_toolbar, menu);
-        return super.onCreateOptionsMenu(menu);
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.email_compose_toolbar, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val toEditText = findViewById<TextInputEditText>(R.id.email_to)
+        val ccTextInputEditText = findViewById<TextInputEditText>(R.id.email_cc)
+        val bccTextInputEditText = findViewById<TextInputEditText>(R.id.email_bcc)
+        val subjectTextInputEditText = findViewById<TextInputEditText>(R.id.email_subject)
+        val bodyTextInputEditText = findViewById<TextInputEditText>(R.id.email_compose_body_input)
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        EditText toEditText = findViewById(R.id.email_to);
-        EditText ccEditText = findViewById(R.id.email_cc);
-        EditText bccEditText = findViewById(R.id.email_bcc);
-        EditText subjectEditText = findViewById(R.id.email_subject);
-        EditText bodyEditText = findViewById(R.id.email_body);
+        if (item.itemId == R.id.action_send) {
+            val to = toEditText.text.toString()
+            val cc = ccTextInputEditText.text.toString()
+            val bcc = bccTextInputEditText.text.toString()
+            val subject = subjectTextInputEditText.text.toString()
+            val body = bodyTextInputEditText.text.toString()
 
-        switch (item.getItemId()) {
-            case R.id.action_send:
-                String to = toEditText.getText().toString();
-                String cc = ccEditText.getText().toString();
-                String bcc = bccEditText.getText().toString();
-                String body = bodyEditText.getText().toString();
-                String subject = subjectEditText.getText().toString();
+            if (to.isEmpty()) {
+                toEditText.error = getString(R.string.message_compose_empty_recipient)
+                return false
+            }
+            if (body.isEmpty()) {
+                bodyTextInputEditText.error = getString(R.string.message_compose_empty_body)
+                return false
+            }
 
-                if(to.isEmpty()) {
-                    toEditText.setError(getString(R.string.message_compose_empty_recipient));
-                    return false;
-                }
-                if(body.isEmpty()) {
-                    bodyEditText.setError(getString(R.string.message_compose_empty_body));
-                    return false;
-                }
+            val platformId = intent.getLongExtra("platform_id", -1)
+            val platforms = PlatformsHandler.getPlatform(applicationContext, platformId)
 
-                try {
+            val formattedContent = processEmailForEncryption(platforms.letter, to, cc, bcc, subject, body)
+            val encryptedContentBase64 = PublisherHandler.formatForPublishing(applicationContext, formattedContent)
+            val gatewayClientMSISDN = GatewayClientsCommunications(applicationContext)
+                    .getDefaultGatewayClient()
 
-                    long platformId = getIntent().getLongExtra("platform_id", -1);
-                    Platforms platforms = PlatformsHandler.getPlatform(getApplicationContext(), platformId);
-                    String formattedContent = processEmailForEncryption(platforms.getLetter(), to, cc, bcc, subject, body);
-                    String encryptedContentBase64 = PublisherHandler.formatForPublishing(getApplicationContext(), formattedContent);
-//                    String gatewayClientMSISDN = GatewayClientsHandler.getDefaultGatewayClientMSISDN(getApplicationContext());
-                    String gatewayClientMSISDN = "";
+            val defaultSMSAppIntent = SMSHandler.transferToDefaultSMSApp( applicationContext,
+                    gatewayClientMSISDN, encryptedContentBase64)
 
-
-                    Intent defaultSMSAppIntent = SMSHandler.transferToDefaultSMSApp(
-                            getApplicationContext(), gatewayClientMSISDN, encryptedContentBase64);
-                    if(defaultSMSAppIntent.resolveActivity(getPackageManager()) != null) {
-                        startActivity(defaultSMSAppIntent);
-                        setResult(Activity.RESULT_OK, new Intent());
-
-                        EncryptedContentHandler.store(getApplicationContext(), encryptedContentBase64, gatewayClientMSISDN, platforms.getName());
-                        finish();
-                    }
-
-                    return true;
-
-                } catch (BadPaddingException e) {
-                    e.printStackTrace();
-                } catch (InvalidAlgorithmParameterException e) {
-                    e.printStackTrace();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (IllegalBlockSizeException e) {
-                    e.printStackTrace();
-                } catch (UnrecoverableKeyException e) {
-                    e.printStackTrace();
-                } catch (KeyStoreException e) {
-                    e.printStackTrace();
-                } catch (NoSuchPaddingException e) {
-                    e.printStackTrace();
-                } catch (InvalidKeyException e) {
-                    e.printStackTrace();
-                } catch (CertificateException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (UnrecoverableEntryException e) {
-                    e.printStackTrace();
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
-                }
-                return false;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
+            if (defaultSMSAppIntent.resolveActivity(packageManager) != null) {
+                startActivity(defaultSMSAppIntent)
+                setResult(RESULT_OK, Intent())
+                EncryptedContentHandler.store(applicationContext, encryptedContentBase64, gatewayClientMSISDN, platforms.name)
+                finish()
+            }
+            return true
         }
+
+        return false;
     }
 
-    private String processEmailForEncryption(String platformLetter, String to, String cc, String bcc, String subject, String body) throws Throwable {
-        String emailContent = platformLetter + ":" + to + ":" + cc + ":" + bcc + ":" + subject + ":" + body;
-        return emailContent;
+    private fun processEmailForEncryption(platformLetter: String,
+                                          to: String,
+                                          cc: String,
+                                          bcc: String,
+                                          subject: String,
+                                          body: String): String {
+        return "$platformLetter:$to:$cc:$bcc:$subject:$body"
     }
 }

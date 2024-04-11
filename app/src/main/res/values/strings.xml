@@ -285,5 +285,6 @@
     </string>
 
     <string name="homepage_compose_modal_no_platforms">No Platforms saved</string>
+    <string name="email_compose_title">Compose email</string>
 
 </resources>
