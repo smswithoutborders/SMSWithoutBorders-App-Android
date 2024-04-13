@@ -1,8 +1,7 @@
 package com.example.sw0b_001.Models
 
 import android.content.Context
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
+import android.content.SharedPreferences
 import androidx.work.ListenableWorker.Result.Failure
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.Headers
@@ -70,21 +69,23 @@ class BackendCommunications(val uid: String) {
 
     private val userDetailsFilename = "user_details_pref"
     fun storeUID(context: Context, url: String) {
-        val masterKey = MasterKey.Builder(context)
-                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-                .build()
-
-        val sharedPreferences = EncryptedSharedPreferences.create(
-                context,
-                userDetailsFilename,
-                masterKey,
-                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-
-        // use the shared preferences and editor as you normally would
+//        val masterKey = MasterKey.Builder(context)
+//                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+//                .build()
+//
+//        val sharedPreferences = EncryptedSharedPreferences.create(
+//                context,
+//                userDetailsFilename,
+//                masterKey,
+//                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+//                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+//        )
 
         // use the shared preferences and editor as you normally would
+
+        // use the shared preferences and editor as you normally would
+        val sharedPreferences = context.getSharedPreferences(userDetailsFilename,
+                Context.MODE_PRIVATE)
         sharedPreferences.edit()
                 .putString("uid", uid)
                 .putString("uid_url", url)

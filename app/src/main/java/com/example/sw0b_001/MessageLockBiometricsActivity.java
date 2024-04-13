@@ -1,15 +1,11 @@
 package com.example.sw0b_001;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-
-import com.example.sw0b_001.Security.SecurityHandler;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -23,9 +19,6 @@ public class MessageLockBiometricsActivity extends AppCompactActivityCustomized 
     }
 
     private void navigateAway() throws GeneralSecurityException, IOException {
-        SecurityHandler securityHandler = new SecurityHandler(getApplicationContext());
-        securityHandler.setSeenBiometricScreenDecryption(true);
-
         startActivity(new Intent(this, HomepageActivity.class));
         finish();
     }

@@ -1,16 +1,11 @@
 package com.example.sw0b_001.Settings
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.Toast
@@ -18,14 +13,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.sw0b_001.AppCompactActivityCustomized
-import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientViewModel
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
-import com.example.sw0b_001.Models.RecentsViewModel
-import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.R
-import com.example.sw0b_001.Security.SecurityHandler
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.LinearProgressIndicator

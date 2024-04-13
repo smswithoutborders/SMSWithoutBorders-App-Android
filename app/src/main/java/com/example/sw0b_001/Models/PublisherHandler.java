@@ -12,44 +12,12 @@ public class PublisherHandler {
 
     // TODO: clean up methods using this method
     public static String decryptPublishedContent(Context context, String encryptedContent) throws Throwable {
-        // Transform from Base64
-
-        byte[] decodedEncryptedContent = Base64.decode(encryptedContent, Base64.DEFAULT);
-
-        SecurityAES securityAES = new SecurityAES(context);
-        try {
-            byte[] sharedKey = SecurityHelpers.getDecryptedSharedKey(context);
-            byte[] encodedContent = new byte[decodedEncryptedContent.length - 16];
-
-            System.arraycopy(decodedEncryptedContent, 16, encodedContent, 0, encodedContent.length);
-            byte[] decodedContent = Base64.decode(encodedContent, Base64.DEFAULT);
-            byte[] originalContent = new byte[16 + decodedContent.length];
-
-            // copy iv
-            System.arraycopy(decodedEncryptedContent, 0, originalContent, 0, 16);
-            // copy content
-            System.arraycopy(decodedContent, 0, originalContent, 16, decodedContent.length);
-
-            byte[] decryptedEmailContent = securityAES.decrypt(originalContent, sharedKey);
-
-            return new String(decryptedEmailContent, StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            throw new Throwable(e);
-        }
+        return "";
     }
 
 
     public static byte[] encryptContentForPublishing(Context context, String emailContent) throws Throwable {
-        SecurityAES securityAES = new SecurityAES(context);
-        try {
-            byte[] sharedKey = SecurityHelpers.getDecryptedSharedKey(context);
-            return securityAES.encrypt(emailContent.getBytes(StandardCharsets.UTF_8),
-                    sharedKey);
-
-        }
-        catch(Exception e ) {
-            throw new Throwable(e);
-        }
+        return null;
     }
 
     public static String formatForPublishing(Context context, String formattedContent) throws Throwable {

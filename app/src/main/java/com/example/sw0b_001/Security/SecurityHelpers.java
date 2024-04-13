@@ -10,7 +10,6 @@ import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServerHandler;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
 import com.example.sw0b_001.Models.GatewayServers._GatewayServersHandler;
 

@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.sw0b_001.Models.BackendCommunications
-import com.example.sw0b_001.Models.GatewayServers.GatewayServerHandler
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import kotlinx.serialization.json.Json

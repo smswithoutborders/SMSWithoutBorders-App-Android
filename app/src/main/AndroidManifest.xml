@@ -78,23 +78,20 @@
             android:exported="false"
             android:label="@string/message_compose_header"
             android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment" />
+
         <activity
-            android:name=".SplashActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:exported="true"
-            android:launchMode="singleTask">
+            android:name=".SyncHandshakeActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".WelcomeActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SyncHandshakeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".WelcomeActivity"
-            android:exported="false"></activity>
         <activity
             android:name=".SyncInitiateActivity"
             android:exported="true"
