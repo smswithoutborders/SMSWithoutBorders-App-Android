@@ -1,13 +1,11 @@
-package com.example.sw0b_001.Models;
-
-import android.content.Context;
+package com.example.sw0b_001.Data;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
+import com.example.sw0b_001.Data.EncryptedContent.EncryptedContent;
+import com.example.sw0b_001.Data.EncryptedContent.EncryptedContentDAO;
 
 import java.util.List;
 

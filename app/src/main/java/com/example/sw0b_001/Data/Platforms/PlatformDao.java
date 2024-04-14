@@ -1,4 +1,4 @@
-package com.example.sw0b_001.Models.Platforms;
+package com.example.sw0b_001.Data.Platforms;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -7,13 +7,12 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Dao
 public interface PlatformDao {
     @Query("SELECT * FROM Platforms")
-    List<Platforms> getAll();
+    LiveData<List<Platforms>> getAll();
 
     @Query("SELECT * FROM Platforms WHERE id=:platform_id")
     Platforms get(long platform_id);

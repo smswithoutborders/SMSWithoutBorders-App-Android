@@ -1,4 +1,4 @@
-package com.example.sw0b_001.Models.Platforms;
+package com.example.sw0b_001.Data.Platforms;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +10,6 @@ import com.example.sw0b_001.EmailComposeActivity;
 import com.example.sw0b_001.MessageComposeActivity;
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.TextComposeActivity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlatformsHandler {
     static public Intent getIntent(Context context, String platform_name, String type) {
@@ -126,27 +123,4 @@ public class PlatformsHandler {
         return platforms;
     }
 
-    public static List<Platforms> getAllPlatforms(Context context) {
-        final List<Platforms>[] platforms = new List[]{new ArrayList<>()};
-
-        Thread fetchPlatformsThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Datastore platformDb = Room.databaseBuilder(context,
-                        Datastore.class, Datastore.databaseName)
-                        .fallbackToDestructiveMigration()
-                        .build();
-                PlatformDao platformsDao = platformDb.platformDao();
-                platforms[0] = platformsDao.getAll();
-            }
-        });
-        fetchPlatformsThread.start();
-        try {
-            fetchPlatformsThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return platforms[0];
-    }
 }

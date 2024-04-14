@@ -6,30 +6,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
-import androidx.appcompat.widget.Toolbar
-import androidx.room.Room.databaseBuilder
 import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler
-import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
-import com.example.sw0b_001.Models.Platforms.PlatformsHandler
-import com.example.sw0b_001.Models.PublisherHandler
-import com.example.sw0b_001.Models.SMSHandler
-import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.example.sw0b_001.Data.EncryptedContent.EncryptedContentHandler
+import com.example.sw0b_001.Data.GatewayClients.GatewayClientsCommunications
+import com.example.sw0b_001.Data.Platforms.PlatformsHandler
+import com.example.sw0b_001.Data.PublisherHandler
+import com.example.sw0b_001.Data.SMSHandler
+import com.example.sw0b_001.Data.ThreadExecutorPool
 import com.example.sw0b_001.databinding.ActivityEmailComposeBinding
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
-import java.io.IOException
-import java.security.InvalidAlgorithmParameterException
-import java.security.InvalidKeyException
-import java.security.KeyStoreException
-import java.security.NoSuchAlgorithmException
-import java.security.UnrecoverableEntryException
-import java.security.UnrecoverableKeyException
-import java.security.cert.CertificateException
-import java.util.Arrays
-import javax.crypto.BadPaddingException
-import javax.crypto.IllegalBlockSizeException
-import javax.crypto.NoSuchPaddingException
 
 class EmailComposeActivity : AppCompactActivityCustomized() {
     private var binding: ActivityEmailComposeBinding? = null

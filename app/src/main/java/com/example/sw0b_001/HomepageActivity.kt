@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.Models.RecentsRecyclerAdapter
-import com.example.sw0b_001.Models.RecentsViewModel
+import com.example.sw0b_001.Data.RecentsRecyclerAdapter
+import com.example.sw0b_001.Data.RecentsViewModel
 import com.google.android.material.appbar.MaterialToolbar
 
 /**

@@ -1,16 +1,13 @@
-package com.example.sw0b_001.Models.GatewayClients
+package com.example.sw0b_001.Data.GatewayClients
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.example.sw0b_001.Data.ThreadExecutorPool
 import com.example.sw0b_001.R
-import com.github.kittinunf.fuel.core.FuelError
-import com.github.kittinunf.fuel.core.HttpException
 import com.github.kittinunf.result.Result
 import kotlinx.serialization.json.Json
 

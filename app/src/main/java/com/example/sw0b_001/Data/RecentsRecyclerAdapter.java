@@ -1,4 +1,4 @@
-package com.example.sw0b_001.Models;
+package com.example.sw0b_001.Data;
 
 import android.content.Intent;
 import android.text.format.DateUtils;
@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
-import com.example.sw0b_001.Models.Platforms.Platforms;
-import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
+import com.example.sw0b_001.Data.EncryptedContent.EncryptedContent;
+import com.example.sw0b_001.Data.Platforms.Platforms;
+import com.example.sw0b_001.Data.Platforms.PlatformsHandler;
 import com.example.sw0b_001.R;
 
 import org.jetbrains.annotations.NotNull;

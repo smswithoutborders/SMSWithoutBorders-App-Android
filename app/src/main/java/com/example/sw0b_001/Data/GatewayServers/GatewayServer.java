@@ -1,4 +1,4 @@
-package com.example.sw0b_001.Models.GatewayServers;
+package com.example.sw0b_001.Data.GatewayServers;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;

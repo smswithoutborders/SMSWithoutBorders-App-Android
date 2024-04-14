@@ -1,20 +1,11 @@
 package com.example.sw0b_001.Security;
 
-import android.content.Context;
 import android.security.keystore.KeyInfo;
 import android.security.keystore.KeyProperties;
 import android.util.Base64;
 
 import androidx.annotation.NonNull;
-import androidx.room.Room;
 
-import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
-import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
-import com.example.sw0b_001.Models.GatewayServers._GatewayServersHandler;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyStoreException;
@@ -27,8 +18,6 @@ import java.security.SignatureException;
 import java.security.UnrecoverableEntryException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SecurityHelpers {
     public static PublicKey getRSAPublicKeyFromB64(String publicKeyBase64) throws NoSuchAlgorithmException, InvalidKeySpecException {

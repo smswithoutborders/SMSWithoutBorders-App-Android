@@ -1,8 +1,6 @@
-package com.example.sw0b_001.Models.Platforms;
+package com.example.sw0b_001.Data.Platforms;
 
-import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,8 +16,6 @@ import com.example.sw0b_001.R;
 import com.google.android.material.card.MaterialCardView;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecyclerAdapter.ViewHolder> {
 
@@ -68,7 +63,6 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(PlatformsRecyclerAdapter.class.getName(), "Yes clicked");
                     if(platforms.getType().equals("email")) {
                         Intent intent = new Intent(v.getContext(), EmailComposeActivity.class);
                         intent.putExtra(EmailComposeActivity.INTENT_PLATFORM_ID, platforms.getId());

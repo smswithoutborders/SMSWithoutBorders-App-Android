@@ -31,9 +31,11 @@
             android:name=".SettingsActivity"
             android:exported="false"
             android:parentActivityName=".HomepageActivity" />
+
         <activity
             android:name=".LoginActivity"
-            android:exported="false"></activity>
+            android:exported="false"/>
+
         <activity
             android:name=".OnboardingActivity"
             android:exported="true"
@@ -77,11 +79,7 @@
             android:name=".MessageComposeActivity"
             android:exported="false"
             android:label="@string/message_compose_header"
-            android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment" />
-
-        <activity
-            android:name=".SyncHandshakeActivity"
-            android:exported="false" />
+            android:parentActivityName=".HomepageActivity" />
 
         <activity
             android:name=".WelcomeActivity"
@@ -92,88 +90,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SyncInitiateActivity"
-            android:exported="true"
-            android:label=""
-            android:parentActivityName=".WelcomeActivity">
-            <intent-filter android:label="pending_name">
-                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="developers.smswithoutborders.com"
-                    android:pathPrefix="/v2/sync/users/"
-                    android:scheme="apps" />
-                <data
-                    android:host="staging.smswithoutborders.com"
-                    android:pathPrefix="/v2/sync/users/"
-                    android:scheme="apps" />
-                <data
-                    android:host="staging.smswithoutborders.com"
-                    android:pathPrefix="/v2/sync/users/"
-                    android:scheme="app" />
-                <data
-                    android:host="staging.smswithoutborders.com"
-                    android:pathPrefix="/sign-up/"
-                    android:scheme="intent" />
-                <data
-                    android:host="smswithoutborders.com"
-                    android:pathPrefix="/sign-up/"
-                    android:scheme="intent" />
-                <!-- note that the leading "/" is required for pathPrefix -->
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".HomepageFragments.AvailablePlatformsFragment"
-            android:exported="false" />
-        <activity
-            android:name=".Settings.GatewayClientsSettingsActivity"
-            android:exported="false"
-            android:parentActivityName=".HomepageActivity" />
-        <activity
-            android:name=".AddNewGatewayActivity"
-            android:exported="false"
-            android:parentActivityName=".Settings.GatewayClientsSettingsActivity" />
-        <activity
-            android:name=".Settings.StoreAccessSettingsActivity"
-            android:exported="false"
-            android:parentActivityName=".HomepageActivity" />
-        <activity
-            android:name=".EmailComposeActivity"
-            android:exported="false"
-            android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".TextComposeActivity"
             android:exported="false"
             android:label=""
-            android:parentActivityName=".HomepageFragments.AvailablePlatformsFragment">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
+            android:parentActivityName=".HomepageActivity"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".QRScannerActivity"
-            android:exported="false"
-            android:label=""
-            android:parentActivityName=".PasswordActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".PasswordActivity" />
-        </activity>
-        <activity
-            android:name=".PasswordActivity"
-            android:exported="false" />
         <activity
             android:name=".MessageLockBiometricsActivity"
             android:exported="false" />

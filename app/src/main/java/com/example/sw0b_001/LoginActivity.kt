@@ -8,10 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.Models.BackendCommunications
-import com.example.sw0b_001.Models.Platforms.Platforms
-import com.example.sw0b_001.Models.Platforms.PlatformsHandler
-import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.example.sw0b_001.Data.BackendCommunications
+import com.example.sw0b_001.Data.Platforms.Platforms
+import com.example.sw0b_001.Data.Platforms.PlatformsHandler
+import com.example.sw0b_001.Data.ThreadExecutorPool
 import com.github.kittinunf.fuel.core.Headers
 import com.github.kittinunf.result.Result
 import com.google.android.material.button.MaterialButton

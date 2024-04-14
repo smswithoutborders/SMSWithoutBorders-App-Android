@@ -1,4 +1,4 @@
-package com.example.sw0b_001.Models.GatewayClients;
+package com.example.sw0b_001.Data.GatewayClients;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

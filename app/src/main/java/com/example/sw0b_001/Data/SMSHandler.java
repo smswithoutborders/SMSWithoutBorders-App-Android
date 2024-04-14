@@ -1,4 +1,4 @@
-package com.example.sw0b_001.Models;
+package com.example.sw0b_001.Data;
 
 import android.content.Context;
 import android.content.Intent;

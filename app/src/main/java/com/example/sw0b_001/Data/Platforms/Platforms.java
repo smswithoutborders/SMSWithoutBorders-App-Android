@@ -1,4 +1,4 @@
-package com.example.sw0b_001.Models.Platforms;
+package com.example.sw0b_001.Data.Platforms;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

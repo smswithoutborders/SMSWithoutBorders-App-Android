@@ -1,17 +1,9 @@
-package com.example.sw0b_001.Models;
+package com.example.sw0b_001.Data;
 
-import android.app.LocaleManager;
-import android.content.Context;
-import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.os.LocaleList;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
 import androidx.core.os.LocaleListCompat;
-
-import java.util.Locale;
 
 public class LanguageHandler {
 

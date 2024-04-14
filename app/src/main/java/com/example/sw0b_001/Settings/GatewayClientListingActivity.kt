@@ -13,9 +13,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.sw0b_001.AppCompactActivityCustomized
-import com.example.sw0b_001.Models.GatewayClients.GatewayClient
-import com.example.sw0b_001.Models.GatewayClients.GatewayClientViewModel
-import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
+import com.example.sw0b_001.Data.GatewayClients.GatewayClient
+import com.example.sw0b_001.Data.GatewayClients.GatewayClientViewModel
+import com.example.sw0b_001.Data.GatewayClients.GatewayClientsCommunications
 import com.example.sw0b_001.R
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView

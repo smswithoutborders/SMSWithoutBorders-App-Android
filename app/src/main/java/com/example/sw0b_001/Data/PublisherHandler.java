@@ -1,12 +1,7 @@
-package com.example.sw0b_001.Models;
+package com.example.sw0b_001.Data;
 
 import android.content.Context;
 import android.util.Base64;
-
-import com.example.sw0b_001.Security.SecurityAES;
-import com.example.sw0b_001.Security.SecurityHelpers;
-
-import java.nio.charset.StandardCharsets;
 
 public class PublisherHandler {
 

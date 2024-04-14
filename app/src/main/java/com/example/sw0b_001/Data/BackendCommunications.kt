@@ -1,8 +1,6 @@
-package com.example.sw0b_001.Models
+package com.example.sw0b_001.Data
 
 import android.content.Context
-import android.content.SharedPreferences
-import androidx.work.ListenableWorker.Result.Failure
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.Headers
 import com.github.kittinunf.fuel.core.HttpException

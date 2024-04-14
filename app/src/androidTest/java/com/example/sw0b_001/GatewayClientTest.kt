@@ -1,8 +1,7 @@
 package com.example.sw0b_001
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.sw0b_001.Models.BackendCommunications
-import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
+import com.example.sw0b_001.Data.GatewayClients.GatewayClientsCommunications
 import junit.framework.TestCase.assertEquals
 import kotlinx.serialization.json.Json
 import org.junit.Test

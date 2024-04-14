@@ -1,4 +1,4 @@
-package com.example.sw0b_001.Models.EncryptedContent;
+package com.example.sw0b_001.Data.EncryptedContent;
 
 import android.content.Context;
 
