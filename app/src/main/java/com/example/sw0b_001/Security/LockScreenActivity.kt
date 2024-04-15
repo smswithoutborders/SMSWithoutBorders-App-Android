@@ -17,5 +17,14 @@ class LockScreenActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+
+        val lockScreenFragment = LockScreenFragment()
+        fragmentTransaction.add(lockScreenFragment, "lock_screen_frag_tag")
+        fragmentTransaction.show(lockScreenFragment)
+        fragmentTransaction.commitNow()
     }
 }
