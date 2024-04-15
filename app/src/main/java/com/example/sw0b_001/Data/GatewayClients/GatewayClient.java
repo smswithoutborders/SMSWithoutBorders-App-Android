@@ -7,6 +7,8 @@ import androidx.room.PrimaryKey;
 
 @Entity(indices = {@Index(value={"MSISDN"}, unique = true)})
 public class GatewayClient {
+    public static String TYPE_CUSTOM = "custom";
+
     @PrimaryKey(autoGenerate = true)
     public long id;
 
@@ -21,6 +23,8 @@ public class GatewayClient {
 
     @ColumnInfo(name="operator_name")
     String operatorName;
+
+    String alias;
 
     public String getOperatorId() {
         return operatorId;
@@ -38,6 +42,9 @@ public class GatewayClient {
 
     @ColumnInfo(name="last_ping_session")
     double lastPingSession = 0.0;
+
+    @ColumnInfo(defaultValue = "0")
+    long date = System.currentTimeMillis();
 
     public GatewayClient(String type, String MSISDN, String operatorName, String country, boolean isDefault) {
         this.type = type;

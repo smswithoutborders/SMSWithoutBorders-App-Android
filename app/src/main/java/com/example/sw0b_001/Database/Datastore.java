@@ -31,9 +31,10 @@ import org.jetbrains.annotations.NotNull;
         Platforms.class,
         GatewayClient.class,
         EncryptedContent.class},
-        version = 10,
+        version = 11,
         autoMigrations = { @AutoMigration( from = 8, to = 9, spec = Datastore.DatastoreMigrations.class),
-                @AutoMigration( from = 9, to = 10, spec= Datastore.DatastoreMigrations.class)
+                @AutoMigration( from = 9, to = 10, spec= Datastore.DatastoreMigrations.class),
+                @AutoMigration( from = 10, to = 11)
 })
 public abstract class Datastore extends RoomDatabase {
     @RenameTable(fromTableName = "Platform", toTableName = "Platforms")
