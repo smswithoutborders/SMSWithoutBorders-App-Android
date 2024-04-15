@@ -48,8 +48,11 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
         val lockScreenAlwaysOn = findPreference<SwitchPreferenceCompat>("lock_screen_always_on")
         when(Security.isBiometricLockAvailable(requireContext())) {
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE,
-            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE ->
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
                 lockScreenAlwaysOn?.isEnabled = false
+                lockScreenAlwaysOn?.summary =
+                        getString(R.string.settings_security_biometric_user_cannot_add_this_functionality_at_this_time)
+            }
         }
         lockScreenAlwaysOn?.onPreferenceChangeListener = switchSecurityPreferences()
     }
