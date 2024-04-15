@@ -1,6 +1,7 @@
 package com.example.sw0b_001.Security
 
 import android.hardware.biometrics.BiometricPrompt.AuthenticationCallback
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,14 +24,13 @@ class LockScreenFragment(val layout: Int = R.layout.fragment_modal_security_lock
                          val failedRunnable: Runnable?,
                          val errorRunnable: Runnable?) : BottomSheetDialogFragment() {
 
-    lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(layout, container, false)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d(javaClass.name, "Prompt should show")
         val bottomSheet = view.findViewById<View>(R.id.security_lockscreen_modal)
 
         // Get the BottomSheetBehavior instance
@@ -67,8 +67,8 @@ class LockScreenFragment(val layout: Int = R.layout.fragment_modal_security_lock
                 })
 
         val promptInfo: BiometricPrompt.PromptInfo = BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Biometric login for my app")
-                .setSubtitle("Log in using your biometric credential")
+                .setTitle(getString(R.string.lock_screen_relay_sms_is_locked))
+                .setSubtitle(getString(R.string.lock_screen_unlock_with_your_phone_s_locking_system))
                 .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
                 .build()
 
