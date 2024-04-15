@@ -61,7 +61,7 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
     }
 
     private fun switchSecurityPreferences(): OnPreferenceChangeListener {
-        return OnPreferenceChangeListener {preference, newValue ->
+        return OnPreferenceChangeListener {_, newValue ->
             if(newValue as Boolean) {
                 when (Security.isBiometricLockAvailable(requireContext())) {
                     BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
@@ -79,12 +79,6 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
                 return@OnPreferenceChangeListener true
             } else {
                 val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-                val runnable = Runnable {
-//                    val sharedPreferences = PreferenceManager
-//                            .getDefaultSharedPreferences(requireContext())
-//                    sharedPreferences.edit().putBoolean(lockScreenAlwaysOnSettingsKey, true)
-//                            .apply()
-                }
                 val lockScreenFragment = LockScreenFragment(
                         successRunnable = {
                             val sharedPreferences = PreferenceManager
@@ -94,8 +88,8 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
                             findPreference<SwitchPreferenceCompat>("lock_screen_always_on")
                                     ?.isChecked = false
                         },
-                        failedRunnable = runnable,
-                        errorRunnable = runnable)
+                        failedRunnable = null,
+                        errorRunnable = null)
                 fragmentTransaction?.add(lockScreenFragment, "lock_screen_frag_tag")
                 fragmentTransaction?.show(lockScreenFragment)
                 fragmentTransaction?.commitNow()
