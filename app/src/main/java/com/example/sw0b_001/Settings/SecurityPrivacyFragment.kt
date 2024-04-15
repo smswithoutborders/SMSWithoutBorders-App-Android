@@ -20,10 +20,12 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.Preference.OnPreferenceChangeListener
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreference
 import androidx.preference.SwitchPreferenceCompat
 import com.example.sw0b_001.Modules.Security
 import com.example.sw0b_001.R
+import com.example.sw0b_001.Security.LockScreenFragment
 import java.util.Locale
 
 class SecurityPrivacyFragment : PreferenceFragmentCompat() {
@@ -42,10 +44,11 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
                 }
             }
 
+    private val lockScreenAlwaysOnSettingsKey = "lock_screen_always_on"
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.security_privacy_preferences, rootKey)
 
-        val lockScreenAlwaysOn = findPreference<SwitchPreferenceCompat>("lock_screen_always_on")
+        val lockScreenAlwaysOn = findPreference<SwitchPreferenceCompat>(lockScreenAlwaysOnSettingsKey)
         when(Security.isBiometricLockAvailable(requireContext())) {
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE,
             BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> {
@@ -58,7 +61,7 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
     }
 
     private fun switchSecurityPreferences(): OnPreferenceChangeListener {
-        return OnPreferenceChangeListener {_, newValue ->
+        return OnPreferenceChangeListener {preference, newValue ->
             if(newValue as Boolean) {
                 when (Security.isBiometricLockAvailable(requireContext())) {
                     BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
@@ -73,8 +76,31 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
                         registerActivityResult.launch(enrollIntent)
                     }
                 }
+                return@OnPreferenceChangeListener true
+            } else {
+                val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+                val runnable = Runnable {
+//                    val sharedPreferences = PreferenceManager
+//                            .getDefaultSharedPreferences(requireContext())
+//                    sharedPreferences.edit().putBoolean(lockScreenAlwaysOnSettingsKey, true)
+//                            .apply()
+                }
+                val lockScreenFragment = LockScreenFragment(
+                        successRunnable = {
+                            val sharedPreferences = PreferenceManager
+                                    .getDefaultSharedPreferences(requireContext())
+                            sharedPreferences.edit().putBoolean(lockScreenAlwaysOnSettingsKey, false)
+                                    .apply()
+                            findPreference<SwitchPreferenceCompat>("lock_screen_always_on")
+                                    ?.isChecked = false
+                        },
+                        failedRunnable = runnable,
+                        errorRunnable = runnable)
+                fragmentTransaction?.add(lockScreenFragment, "lock_screen_frag_tag")
+                fragmentTransaction?.show(lockScreenFragment)
+                fragmentTransaction?.commitNow()
             }
-            true
+            false
         }
     }
 }
