@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -27,7 +28,9 @@
         android:usesCleartextTraffic="false"
         android:versionCode="48"
         android:versionName="2.5.8">
-
+        <activity
+            android:name=".Security.LockScreenActivity"
+            android:exported="false" />
         <activity
             android:name=".SettingsActivity"
             android:exported="true"
@@ -105,6 +108,15 @@
         <activity
             android:name=".AppLockBiometricActivity"
             android:exported="false" />
-    </application>
 
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data  android:name="com.example.sw0b_001.Security.LockScreenInitializer"
+                android:value="androidx.startup" />
+        </provider>
+
+    </application>
 </manifest>
