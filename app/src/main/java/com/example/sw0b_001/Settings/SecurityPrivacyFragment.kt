@@ -41,21 +41,23 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
                             .show()
                 }
             }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.security_privacy_preferences, rootKey)
 
-        findPreference<SwitchPreferenceCompat>("lock_screen_always_on")
-                ?.onPreferenceChangeListener = switchSecurityPreferences()
+        val lockScreenAlwaysOn = findPreference<SwitchPreferenceCompat>("lock_screen_always_on")
+        when(Security.isBiometricLockAvailable(requireContext())) {
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE,
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE ->
+                lockScreenAlwaysOn?.isEnabled = false
+        }
+        lockScreenAlwaysOn?.onPreferenceChangeListener = switchSecurityPreferences()
     }
 
     private fun switchSecurityPreferences(): OnPreferenceChangeListener {
         return OnPreferenceChangeListener {_, newValue ->
             if(newValue as Boolean) {
                 when (Security.isBiometricLockAvailable(requireContext())) {
-//                    BiometricManager.BIOMETRIC_SUCCESS ->
-                    // TODO: this should be used to disable this functionality
-//                            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> return false
-//                            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE ->
                     BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
                         val enrollIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                             Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {

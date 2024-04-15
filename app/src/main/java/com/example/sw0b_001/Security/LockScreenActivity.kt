@@ -19,6 +19,7 @@ class LockScreenActivity : AppCompatActivity() {
         }
 
 
+        // TODO: only if the authentication has been set to true
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
