@@ -286,5 +286,6 @@
 
     <string name="homepage_compose_modal_no_platforms">No Platforms saved</string>
     <string name="email_compose_title">Compose email</string>
+    <string name="security_settings_failed_to_switch_security">Failed to switch security on...</string>
 
 </resources>

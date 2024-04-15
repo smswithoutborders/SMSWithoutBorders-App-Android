@@ -90,6 +90,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference:1.2.1'
+    implementation "androidx.preference:preference-ktx:1.2.0"
     implementation 'androidx.databinding:baseLibrary:3.2.0-alpha11'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0'
     implementation 'androidx.activity:activity:1.8.2'
@@ -133,5 +134,6 @@ dependencies {
     implementation "com.github.kittinunf.fuel:fuel-coroutines:$fuelVersion"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
 
+    implementation "androidx.startup:startup-runtime:1.1.1"
 }
 

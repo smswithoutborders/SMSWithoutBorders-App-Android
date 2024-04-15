@@ -27,15 +27,20 @@
         android:usesCleartextTraffic="false"
         android:versionCode="48"
         android:versionName="2.5.8">
+
         <activity
             android:name=".SettingsActivity"
-            android:exported="false"
-            android:parentActivityName=".HomepageActivity" />
+            android:exported="true"
+            android:parentActivityName=".HomepageActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".LoginActivity"
-            android:exported="false"/>
-
+            android:exported="false" />
         <activity
             android:name=".OnboardingActivity"
             android:exported="true"
@@ -61,13 +66,11 @@
         <activity
             android:name=".HomepageActivity"
             android:exported="false"
-            android:launchMode="singleTask"/>
-
+            android:launchMode="singleTask" />
         <activity
             android:name=".Settings.GatewayClientListingActivity"
             android:exported="false"
             android:parentActivityName=".SettingsActivity" />
-
         <activity
             android:name=".MessagesActivity"
             android:exported="false">
@@ -80,23 +83,22 @@
             android:exported="false"
             android:label="@string/message_compose_header"
             android:parentActivityName=".HomepageActivity" />
-
         <activity
             android:name=".WelcomeActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
-
         <activity
             android:name=".TextComposeActivity"
             android:exported="false"
             android:label=""
-            android:parentActivityName=".HomepageActivity"/>
-
+            android:parentActivityName=".HomepageActivity" />
         <activity
             android:name=".MessageLockBiometricsActivity"
             android:exported="false" />
