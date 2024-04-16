@@ -7,7 +7,12 @@ import android.view.ViewGroup
 import com.example.sw0b_001.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class OnboardingSkippedAllFragment : BottomSheetDialogFragment() {
+class OnboardingSkippedAllFragment : OnboardingComponent() {
+
+    init {
+        nextButtonText = "Finish"
+        previousButtonText = "Previous"
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }

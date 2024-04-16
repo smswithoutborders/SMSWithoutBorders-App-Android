@@ -7,7 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.sw0b_001.R
 
-class OnboardingWelcomeFragment : Fragment() {
+class OnboardingWelcomeFragment : OnboardingComponent() {
+    init {
+        nextButtonText = "Skip Tour"
+        previousButtonText = ""
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }

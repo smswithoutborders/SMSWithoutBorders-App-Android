@@ -8,18 +8,18 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.MutableLiveData
+import com.example.sw0b_001.Onboarding.OnboardingComponent
+import com.example.sw0b_001.Onboarding.OnboardingSkippedAllFragment
 import com.example.sw0b_001.Onboarding.OnboardingVaultFragment
-import com.example.sw0b_001.Onboarding.OnboardingVaultStoreFragment
 import com.example.sw0b_001.Onboarding.OnboardingWelcomeFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
 
 class OnboardingActivity : AppCompatActivity() {
     private var fragmentIterator: MutableLiveData<Int> = MutableLiveData<Int>()
-    private val fragmentList: Array<Fragment> =
+    private val fragmentList: Array<OnboardingComponent> =
             arrayOf(OnboardingWelcomeFragment(),
-                    OnboardingVaultFragment(),
-                    OnboardingVaultStoreFragment())
+                    OnboardingVaultFragment(), OnboardingSkippedAllFragment())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
@@ -58,25 +58,29 @@ class OnboardingActivity : AppCompatActivity() {
                 materialTextView
             }
             dots[it].setTextColor(resources.getColor(R.color.default_blue, theme))
-            when {
-                it >= fragmentList.size - 1 -> {
-                    nextButton.text = "Finish"
-                }
-                else -> {
-                    nextButton.text = "Next"
-                }
-            }
-            when(it) {
-                0 -> {
-                    prevButton.visibility = View.GONE
-                    skipAllBtn.visibility = View.GONE
-                }
-                else -> {
-                    prevButton.visibility = View.VISIBLE
-                    skipAllBtn.visibility = View.VISIBLE
-                    prevButton.text = "Previous"
-                }
-            }
+
+            nextButton.text = fragmentList[it].nextButtonText
+            prevButton.text = fragmentList[it].previousButtonText
+
+//            when {
+//                it >= fragmentList.size - 1 -> {
+//                    nextButton.text = "Finish"
+//                }
+//                else -> {
+//                    nextButton.text = "Next"
+//                }
+//            }
+//            when(it) {
+//                0 -> {
+//                    prevButton.visibility = View.GONE
+//                    skipAllBtn.visibility = View.GONE
+//                }
+//                else -> {
+//                    prevButton.visibility = View.VISIBLE
+//                    skipAllBtn.visibility = View.VISIBLE
+//                    prevButton.text = "Previous"
+//                }
+//            }
         }
 
         fragmentIterator.value = 0
