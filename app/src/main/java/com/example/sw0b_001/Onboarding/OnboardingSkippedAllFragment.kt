@@ -5,28 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.sw0b_001.R
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class OnboardingLoginSignupVaultModalFragment : BottomSheetDialogFragment() {
-
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+class OnboardingSkippedAllFragment : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_onboarding_login_signup_vault_modal_sheet, container,
-                false)
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_onboarding_skip_all, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val bottomSheet = view.findViewById<View>(R.id.onboarding_login_signup_constraint)
-
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-        bottomSheetBehavior.isDraggable = true
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 }
