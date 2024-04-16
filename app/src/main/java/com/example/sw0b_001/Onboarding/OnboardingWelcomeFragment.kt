@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.sw0b_001.R
 
-class WelcomeFragment : Fragment() {
+class OnboardingWelcomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }

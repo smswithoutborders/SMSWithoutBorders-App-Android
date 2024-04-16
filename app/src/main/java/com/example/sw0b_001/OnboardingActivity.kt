@@ -10,25 +10,27 @@ import androidx.fragment.app.commit
 import androidx.lifecycle.MutableLiveData
 import com.example.sw0b_001.Onboarding.OnboardingVaultFragment
 import com.example.sw0b_001.Onboarding.OnboardingVaultStoreFragment
-import com.example.sw0b_001.Onboarding.WelcomeFragment
+import com.example.sw0b_001.Onboarding.OnboardingWelcomeFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
 
 class OnboardingActivity : AppCompatActivity() {
     private var fragmentIterator: MutableLiveData<Int> = MutableLiveData<Int>()
-    private val fragmentList: Array<Fragment> = arrayOf(WelcomeFragment(), OnboardingVaultFragment(),
-            OnboardingVaultStoreFragment())
+    private val fragmentList: Array<Fragment> =
+            arrayOf(OnboardingWelcomeFragment(),
+                    OnboardingVaultFragment(),
+                    OnboardingVaultStoreFragment())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
 
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
-                val welcomeFragment = WelcomeFragment()
+                val onboardingWelcomeFragment = OnboardingWelcomeFragment()
 
-                add(R.id.onboarding_fragment_container, welcomeFragment)
+                add(R.id.onboarding_fragment_container, onboardingWelcomeFragment)
                 setReorderingAllowed(true)
-                addToBackStack(WelcomeFragment.javaClass.name)
+                addToBackStack(OnboardingWelcomeFragment.javaClass.name)
             }
         }
         configureButtonClicks()
