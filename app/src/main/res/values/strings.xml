@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Swob</string>
+    <string name="app_name" translatable="false">RelaySMS</string>
 
     <string name="privacy_policy">
         https://smswithoutborders.com/privacy-policy

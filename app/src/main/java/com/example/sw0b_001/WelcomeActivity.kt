@@ -5,12 +5,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import com.google.android.material.button.MaterialButton
-import java.io.UnsupportedEncodingException
 
 class WelcomeActivity : AppCompactActivityCustomized() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_welcome)
+        setContentView(R.layout.activity_login_signup)
         findViewById<View>(R.id.welcome_login_btn).setOnClickListener { v -> onClickLogin(v) }
 
         findViewById<MaterialButton>(R.id.welcome_signup_btn)

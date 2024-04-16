@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.sw0b_001.R
 
-class WelcomeFragment : Fragment() {
+class OnboardingVaultStoreFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -15,10 +15,6 @@ class WelcomeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_onboarding_welcome, container, false)
-    }
-
-    companion object {
-        val TAG = "WELCOME_FRAGMENT_TAG"
+        return inflater.inflate(R.layout.fragment_onboarding_vault_store, container, false)
     }
 }

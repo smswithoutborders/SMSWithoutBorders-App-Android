@@ -6,22 +6,18 @@ import android.text.Html
 import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.add
 import androidx.fragment.app.commit
-import androidx.fragment.app.commitNow
-import androidx.fragment.app.replace
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.sw0b_001.Onboarding.ConnectivityStatusFragment
-import com.example.sw0b_001.Onboarding.OfflineExampleFragment
+import com.example.sw0b_001.Onboarding.OnboardingVaultFragment
+import com.example.sw0b_001.Onboarding.OnboardingVaultStoreFragment
 import com.example.sw0b_001.Onboarding.WelcomeFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
 
 class OnboardingActivity : AppCompatActivity() {
     private var fragmentIterator: MutableLiveData<Int> = MutableLiveData<Int>()
-    private val fragmentList: Array<Fragment> = arrayOf(WelcomeFragment(), ConnectivityStatusFragment(),
-            OfflineExampleFragment())
+    private val fragmentList: Array<Fragment> = arrayOf(WelcomeFragment(), OnboardingVaultFragment(),
+            OnboardingVaultStoreFragment())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
