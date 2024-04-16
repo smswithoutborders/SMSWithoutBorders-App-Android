@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.sw0b_001.Data.GatewayClients.GatewayClientAddModalFragment
 import com.example.sw0b_001.R
 import com.google.android.material.button.MaterialButton
 
@@ -25,12 +24,13 @@ class OnboardingVaultFragment : Fragment() {
 
         val tryExampleButton = view
                 .findViewById<MaterialButton>(R.id.onboarding_welcome_vaults_description_try_example_btn)
+
         tryExampleButton.setOnClickListener {
-            val loginSignupVaultModalFragment = LoginSignupVaultModalFragment()
+            val onboardingLoginSignupVaultModalFragment = OnboardingLoginSignupVaultModalFragment()
 
             val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-            fragmentTransaction?.add(loginSignupVaultModalFragment, "login_signup_vault_tag")
-            fragmentTransaction?.show(loginSignupVaultModalFragment)
+            fragmentTransaction?.add(onboardingLoginSignupVaultModalFragment, "login_signup_vault_tag")
+            fragmentTransaction?.show(onboardingLoginSignupVaultModalFragment)
             fragmentTransaction?.commitNow()
         }
     }

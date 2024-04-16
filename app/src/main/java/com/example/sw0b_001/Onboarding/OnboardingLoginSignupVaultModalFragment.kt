@@ -8,7 +8,7 @@ import com.example.sw0b_001.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class LoginSignupVaultModalFragment : BottomSheetDialogFragment() {
+class OnboardingLoginSignupVaultModalFragment : BottomSheetDialogFragment() {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     override fun onCreate(savedInstanceState: Bundle?) {
