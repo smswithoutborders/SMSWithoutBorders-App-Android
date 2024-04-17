@@ -36,7 +36,7 @@
             android:exported="true"
             android:parentActivityName=".HomepageActivity"/>
         <activity
-            android:name=".LoginActivity"
+            android:name=".LoginModalFragment"
             android:exported="false" />
         <activity
             android:name=".OnboardingActivity"

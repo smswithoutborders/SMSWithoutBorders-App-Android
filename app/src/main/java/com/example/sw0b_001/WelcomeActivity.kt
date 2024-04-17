@@ -23,7 +23,7 @@ class WelcomeActivity : AppCompactActivityCustomized() {
     }
 
     fun onClickLogin(view: View?) {
-        startActivity(Intent(this, LoginActivity::class.java))
+        startActivity(Intent(this, LoginModalFragment::class.java))
     }
 
     fun linkPrivacyPolicy(view: View?) {

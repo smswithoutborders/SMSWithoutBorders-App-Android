@@ -96,6 +96,7 @@ class OnboardingActivity : AppCompatActivity() {
                 setReorderingAllowed(true)
                 addToBackStack(fragment.javaClass.name)
 
+                nextButton.setOnClickListener(null)
                 nextButton.text = fragment.nextButtonText
                 prevButton.text = fragment.previousButtonText
                 skipAllBtn.text = fragment.skipButtonText

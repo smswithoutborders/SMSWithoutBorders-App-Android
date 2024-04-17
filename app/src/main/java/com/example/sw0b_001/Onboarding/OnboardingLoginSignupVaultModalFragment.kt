@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.sw0b_001.LoginModalFragment
 import com.example.sw0b_001.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.button.MaterialButton
 
 class OnboardingLoginSignupVaultModalFragment : BottomSheetDialogFragment() {
 
@@ -28,5 +30,16 @@ class OnboardingLoginSignupVaultModalFragment : BottomSheetDialogFragment() {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.isDraggable = true
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+        view.findViewById<MaterialButton>(R.id.onboarding_login_signup_login_btn)
+                .setOnClickListener {
+                    dismiss()
+                    val loginModalFragment = LoginModalFragment()
+
+                    val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+                    fragmentTransaction?.add(loginModalFragment, "login_signup_vault_tag")
+                    fragmentTransaction?.show(loginModalFragment)
+                    fragmentTransaction?.commitNow()
+                }
     }
 }
