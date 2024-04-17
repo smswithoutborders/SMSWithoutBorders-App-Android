@@ -1,6 +1,7 @@
 package com.example.sw0b_001.Data
 
 import android.content.Context
+import com.example.sw0b_001.Modules.Network
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.Headers
 import com.github.kittinunf.fuel.core.HttpException
@@ -14,7 +15,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 
-class BackendCommunications(val uid: String) {
+class Vault_V2(val uid: String) {
 
     @Serializable
     data class UserCredentials(val phone_number: String,
@@ -39,21 +40,24 @@ class BackendCommunications(val uid: String) {
     data class Platforms(val unsaved_platforms: ArrayList<Platform>,
                          val saved_platforms: ArrayList<Platform>)
 
-    data class NetworkResponseResults(val response: Response?,
-                                      val result: Result<String, java.lang.Exception>)
     companion object {
-        fun login(phoneNumber: String, password: String, url: String): NetworkResponseResults {
+        fun login(phoneNumber: String, password: String, url: String): Network.NetworkResponseResults {
             val payload = Json.encodeToString(UserCredentials(phoneNumber, password))
-            return try {
-                val (_, response, result) = Fuel.post(url)
-                        .jsonBody(payload)
-                        .responseString()
-                NetworkResponseResults(response, Result.Success(result.get()))
-            } catch (e: HttpException) {
-                NetworkResponseResults(null, Result.Failure(e))
-            } catch(e: Exception) {
-                NetworkResponseResults(null, Result.error(e))
-            }
+            val (_, response, result) = Fuel.post(url)
+                    .jsonBody(payload)
+                    .responseString()
+            Network.NetworkResponseResults(response, Result.Success(result.get()))
+            TODO("Fix to not return null in Error and Failure body")
+//            return try {
+//                val (_, response, result) = Fuel.post(url)
+//                        .jsonBody(payload)
+//                        .responseString()
+//                Network.NetworkResponseResults(response, Result.Success(result.get()))
+//            } catch (e: HttpException) {
+//                Network.NetworkResponseResults(null, Result.Failure(e))
+//            } catch(e: Exception) {
+//                Network.NetworkResponseResults(null, Result.error(e))
+//            }
         }
     }
 
