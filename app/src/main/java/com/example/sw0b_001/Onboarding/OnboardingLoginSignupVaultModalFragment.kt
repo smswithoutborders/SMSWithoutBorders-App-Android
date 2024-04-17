@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.sw0b_001.LoginModalFragment
 import com.example.sw0b_001.R
+import com.example.sw0b_001.SignupModalFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
@@ -37,8 +38,19 @@ class OnboardingLoginSignupVaultModalFragment : BottomSheetDialogFragment() {
                     val loginModalFragment = LoginModalFragment()
 
                     val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-                    fragmentTransaction?.add(loginModalFragment, "login_signup_vault_tag")
+                    fragmentTransaction?.add(loginModalFragment, "login_signup_login_vault_tag")
                     fragmentTransaction?.show(loginModalFragment)
+                    fragmentTransaction?.commitNow()
+                }
+
+        view.findViewById<MaterialButton>(R.id.onboarding_login_signup_signup_btn)
+                .setOnClickListener {
+                    dismiss()
+                    val signupModalFragment = SignupModalFragment()
+
+                    val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+                    fragmentTransaction?.add(signupModalFragment, "login_signup_signup_vault_tag")
+                    fragmentTransaction?.show(signupModalFragment)
                     fragmentTransaction?.commitNow()
                 }
     }
