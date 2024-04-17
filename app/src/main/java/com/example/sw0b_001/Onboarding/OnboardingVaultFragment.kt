@@ -11,8 +11,10 @@ import com.google.android.material.button.MaterialButton
 class OnboardingVaultFragment : OnboardingComponent() {
 
     init {
-        nextButtonText = "Next"
+        nextButtonText = "Try Example!"
         previousButtonText = "Previous"
+        skipButtonText = "skip"
+        skipOnboardingFragment = OnboardingSkippedAllFragment()
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,10 +29,13 @@ class OnboardingVaultFragment : OnboardingComponent() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val tryExampleButton = view
-                .findViewById<MaterialButton>(R.id.onboarding_welcome_vaults_description_try_example_btn)
+//        val tryExampleButton = view
+//                .findViewById<MaterialButton>(R.id.onboarding_welcome_vaults_description_try_example_btn)
 
-        tryExampleButton.setOnClickListener {
+        val tryExampleButton = activity
+                ?.findViewById<MaterialButton>(R.id.onboard_next_button)
+
+        tryExampleButton?.setOnClickListener {
             val onboardingLoginSignupVaultModalFragment = OnboardingLoginSignupVaultModalFragment()
 
             val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()

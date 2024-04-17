@@ -18,8 +18,7 @@ import com.google.android.material.textview.MaterialTextView
 class OnboardingActivity : AppCompatActivity() {
     private var fragmentIterator: MutableLiveData<Int> = MutableLiveData<Int>()
     private val fragmentList: Array<OnboardingComponent> =
-            arrayOf(OnboardingWelcomeFragment(),
-                    OnboardingVaultFragment(), OnboardingSkippedAllFragment())
+            arrayOf(OnboardingWelcomeFragment(), OnboardingVaultFragment())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
@@ -42,11 +41,6 @@ class OnboardingActivity : AppCompatActivity() {
         val dotIndicatorLayout = findViewById<LinearLayout>(R.id.onboard_dot_indicator_layout)
         val skipAllBtn = findViewById<MaterialTextView>(R.id.onboard_skip_all)
 
-        skipAllBtn.setOnClickListener {
-            TODO("[Localization] Add this to string.xml for translation")
-            TODO("[Implementation] Skip all to get started")
-        }
-
         fragmentIterator.observe(this) {
             dotIndicatorLayout.removeAllViews()
             val dots: Array<MaterialTextView> = Array(fragmentList.size) {
@@ -61,26 +55,7 @@ class OnboardingActivity : AppCompatActivity() {
 
             nextButton.text = fragmentList[it].nextButtonText
             prevButton.text = fragmentList[it].previousButtonText
-
-//            when {
-//                it >= fragmentList.size - 1 -> {
-//                    nextButton.text = "Finish"
-//                }
-//                else -> {
-//                    nextButton.text = "Next"
-//                }
-//            }
-//            when(it) {
-//                0 -> {
-//                    prevButton.visibility = View.GONE
-//                    skipAllBtn.visibility = View.GONE
-//                }
-//                else -> {
-//                    prevButton.visibility = View.VISIBLE
-//                    skipAllBtn.visibility = View.VISIBLE
-//                    prevButton.text = "Previous"
-//                }
-//            }
+            skipAllBtn.text = fragmentList[it].skipButtonText
         }
 
         fragmentIterator.value = 0
@@ -98,9 +73,12 @@ class OnboardingActivity : AppCompatActivity() {
             }
         }
 
+        var previousValueFromSkip: Int = -1
         prevButton.setOnClickListener {
             supportFragmentManager.commit {
-                fragmentIterator.value = fragmentIterator.value!! - 1
+                fragmentIterator.value =
+                        if(previousValueFromSkip != -1)
+                            previousValueFromSkip else fragmentIterator.value!! - 1
                 val fragment: Fragment = fragmentList[fragmentIterator.value!!]
 
                 replace(R.id.onboarding_fragment_container, fragment)
@@ -109,5 +87,19 @@ class OnboardingActivity : AppCompatActivity() {
             }
         }
 
+        skipAllBtn.setOnClickListener {
+            previousValueFromSkip = fragmentIterator.value!!
+            supportFragmentManager.commit {
+                val fragment: OnboardingComponent? =
+                        fragmentList[fragmentIterator.value!!].skipOnboardingFragment
+                replace(R.id.onboarding_fragment_container, fragment!!)
+                setReorderingAllowed(true)
+                addToBackStack(fragment.javaClass.name)
+
+                nextButton.text = fragment.nextButtonText
+                prevButton.text = fragment.previousButtonText
+                skipAllBtn.text = fragment.skipButtonText
+            }
+        }
     }
 }

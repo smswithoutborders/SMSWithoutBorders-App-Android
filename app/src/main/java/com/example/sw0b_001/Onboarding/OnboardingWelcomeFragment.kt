@@ -9,7 +9,7 @@ import com.example.sw0b_001.R
 
 class OnboardingWelcomeFragment : OnboardingComponent() {
     init {
-        nextButtonText = "Skip Tour"
+        nextButtonText = "Next"
         previousButtonText = ""
     }
 

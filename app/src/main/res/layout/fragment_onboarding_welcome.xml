@@ -28,13 +28,13 @@
         app:layout_constraintStart_toStartOf="@+id/onboarding_welcome_welcome"
         app:layout_constraintTop_toBottomOf="@+id/onboarding_welcome_welcome" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/onboarding_welcome_get_started_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:text="Get Started!"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/onboarding_welcome_get_started" />
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/onboarding_welcome_get_started_btn"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="60dp"-->
+<!--        android:text="Get Started!"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/onboarding_welcome_get_started" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>
