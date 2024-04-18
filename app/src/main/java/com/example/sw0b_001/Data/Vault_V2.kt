@@ -1,15 +1,11 @@
 package com.example.sw0b_001.Data
 
 import android.content.Context
+import android.util.Log
 import com.example.sw0b_001.Modules.Network
-import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.Headers
-import com.github.kittinunf.fuel.core.HttpException
-import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.fuel.core.ResponseResultOf
-import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.result.Result
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -18,9 +14,21 @@ import kotlinx.serialization.json.Json
 class Vault_V2(val uid: String) {
 
     @Serializable
-    data class UserCredentials(val phone_number: String,
-                               val password: String,
-                               val captcha_token: String = "")
+    data class LoginRequest(val phone_number: String,
+                            val password: String,
+                            val captcha_token: String = "")
+
+    @Serializable
+    data class SignupRequest(val phone_number: String,
+                             val name: String,
+                             val country_code: String,
+                             val password: String,
+                             val captcha_token: String = "")
+    @Serializable
+    data class OTPRequest(val phone_number: String)
+
+    @Serializable
+    data class OTPSubmit(val code: String)
 
     @Serializable
     data class UID(val uid: String)
@@ -41,24 +49,55 @@ class Vault_V2(val uid: String) {
                          val saved_platforms: ArrayList<Platform>)
 
     companion object {
-        fun login(phoneNumber: String, password: String, url: String): Network.NetworkResponseResults {
-            val payload = Json.encodeToString(UserCredentials(phoneNumber, password))
-            val (_, response, result) = Fuel.post(url)
-                    .jsonBody(payload)
-                    .responseString()
-            Network.NetworkResponseResults(response, Result.Success(result.get()))
-            TODO("Fix to not return null in Error and Failure body")
-//            return try {
-//                val (_, response, result) = Fuel.post(url)
-//                        .jsonBody(payload)
-//                        .responseString()
-//                Network.NetworkResponseResults(response, Result.Success(result.get()))
-//            } catch (e: HttpException) {
-//                Network.NetworkResponseResults(null, Result.Failure(e))
-//            } catch(e: Exception) {
-//                Network.NetworkResponseResults(null, Result.error(e))
-//            }
+        fun login(phoneNumber: String, password: String, url: String): UID {
+            val payload = Json.encodeToString(LoginRequest(phoneNumber, password))
+            val networkResponseResults = Network.jsonRequestPost(url, payload)
+            when(networkResponseResults.response.statusCode) {
+                in 400..500 -> throw Exception("Invalid Credentials")
+                in 500..600 -> throw Exception("Server error")
+                else -> return Json.decodeFromString<UID>(networkResponseResults.result.get())
+            }
         }
+
+        fun signup(url: String, phone_number: String, name: String, country_code: String,
+                   password: String): Network.NetworkResponseResults {
+            val payload = Json.encodeToString(SignupRequest(phone_number, name, country_code,
+                    password))
+            val networkResponseResults = Network.jsonRequestPost(url, payload)
+            when(networkResponseResults.response.statusCode) {
+                in 400..600 -> throw Exception(String(networkResponseResults.response.data))
+            }
+            return networkResponseResults
+        }
+
+        /**
+         * headers come from signupOTPComplete.
+         *
+         * Note: Make sure dialing code is available in phone_number to avoid a 401.
+         *
+         */
+        fun otpRequest(url: String, headers: Headers, phone_number: String) :
+                Network.NetworkResponseResults{
+            val payload = Json.encodeToString(OTPRequest(phone_number))
+            return Network.jsonRequestPost(url, payload, headers)
+        }
+
+        /**
+         * headers come from OTPRequest
+         */
+        fun otpSubmit(url: String, headers: Headers, code: String) :
+                Network.NetworkResponseResults{
+            val payload = Json.encodeToString(OTPSubmit(code))
+            return Network.jsonRequestPut(url, payload, headers)
+        }
+
+        /**
+         * headers come from OTPSubmit
+         */
+        fun signupOtpComplete(url: String, headers: Headers): Network.NetworkResponseResults {
+            return Network.jsonRequestPut(url, "", headers)
+        }
+
     }
 
     fun getPlatforms(url: String, responseHeaders: Headers) : ResponseResultOf<String>{

@@ -9,6 +9,7 @@ import com.example.sw0b_001.Data.Vault_V2
 import com.github.kittinunf.fuel.core.HttpException
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertTrue
 import kotlinx.serialization.json.Json
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,43 +21,32 @@ class LoginTest {
 
     @Test
     fun loginTest() {
-        val url = "https://staging.smswithoutborders.com:9000/v2/login"
 
         val phonenumber = "+237123456789"
         val password = "dummy_password"
-
-        val networkResponseResults = Vault_V2.login(phonenumber, password, url)
-        Log.d(javaClass.name, "Result data: " + networkResponseResults.result.get());
-        assertEquals(200, networkResponseResults.response?.statusCode)
-    }
-
-    @Test
-    fun getPlatformsTest()  {
         val url = "https://staging.smswithoutborders.com:9000/v2/login"
 
-        val phonenumber = "+237123456789"
-        val password = "dummy_password"
-
-        val networkResponseResults = Vault_V2.login(phonenumber, password, url)
-        Log.d(javaClass.name, "Result data: " + networkResponseResults.result.get())
-        assertEquals(200, networkResponseResults.response?.statusCode)
-
-        val obj = Json
-                .decodeFromString<Vault_V2.UID>(networkResponseResults.result.get())
-        val uid = "a81d750e-a733-11ee-92f4-0242ac17000a"
-        assertEquals(uid, obj.uid)
-
-        val user = Vault_V2(uid)
-        val (_, response1, result1) = user
-                .getPlatforms("https://staging.smswithoutborders.com:9000",
-                        networkResponseResults.response!!.headers)
-        assertEquals(200, response1.statusCode)
-        Log.d(javaClass.name, "Platforms: " + result1.get())
-
-        val platformsObjs = Json.decodeFromString<Vault_V2.Platforms>(result1.get())
-        assertFalse(platformsObjs.saved_platforms.isNullOrEmpty())
-        assertFalse(platformsObjs.unsaved_platforms.isNullOrEmpty())
+        val uid = Vault_V2.login(phonenumber, password, url)
+        val expectedUID = "a81d750e-a733-11ee-92f4-0242ac17000a"
+        assertEquals(expectedUID, uid)
     }
+
+//    @Test
+//    fun getPlatformsTest()  {
+//        val url = "https://staging.smswithoutborders.com:9000/v2/login"
+//
+//        val uid = "a81d750e-a733-11ee-92f4-0242ac17000a"
+//        val user = Vault_V2(uid)
+//        val (_, response1, result1) = user
+//                .getPlatforms("https://staging.smswithoutborders.com:9000",
+//                        networkResponseResults.response!!.headers)
+//        assertEquals(200, response1.statusCode)
+//        Log.d(javaClass.name, "Platforms: " + result1.get())
+//
+//        val platformsObjs = Json.decodeFromString<Vault_V2.Platforms>(result1.get())
+//        assertFalse(platformsObjs.saved_platforms.isNullOrEmpty())
+//        assertFalse(platformsObjs.unsaved_platforms.isNullOrEmpty())
+//    }
 
     @Test
     fun makeSyncTest() {

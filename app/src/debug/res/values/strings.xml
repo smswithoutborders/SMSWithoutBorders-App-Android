@@ -4,14 +4,14 @@
         https://staging.smswithoutborders.com/privacy-policy
     </string>
 
+    <string name="smswithoutborders_official_vault" translatable="false">https://staging.smswithoutborders.com:9000</string>
+    <string name="smswithoutborders_official_site_login" translatable="false">https://staging.smswithoutborders.com:9000/v2/login</string>
+    <string name="smswithoutborders_official_site_signup" translatable="false">https://staging.smswithoutborders.com:9000/v2/signup</string>
+    <string name="smswithoutborders_official_otp_submission" translatable="false">https://staging.smswithoutborders.com:9000/v2/OTP</string>
+
+
     <string name="gateway_client_seeding_url" translatable="false">
         https://mocki.io/v1/3579c78f-592c-4da6-93b7-3067ba53d574</string>
-
-    <string name="smswithoutborders_official_site_login" translatable="false">https://staging.smswithoutborders.com/login</string>
-
-    <string name="smswithoutborders_official_site_signup" translatable="false">
-        https://staging.smswithoutborders.com/sign-up
-    </string>
 
     <string name="smswithoutborders_official_site_signup_intent" translatable="false">
         intent://staging.smswithoutborders.com/sign-up
@@ -37,8 +37,5 @@
         https://staging.smswithoutborders.com:9000/v2/login
     </string>
 
-    <string name="default_backend_url" translatable="false">
-        https://staging.smswithoutborders.com:9000
-    </string>
 
 </resources>

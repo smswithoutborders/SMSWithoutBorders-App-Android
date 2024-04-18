@@ -1,16 +1,12 @@
 package com.example.sw0b_001.Data.GatewayServers
 
-import android.util.Log
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
 import com.example.sw0b_001.Data.Vault_V2
 import com.example.sw0b_001.Modules.Crypto
 import com.example.sw0b_001.Modules.Network
-import com.github.kittinunf.fuel.core.HttpException
-import com.github.kittinunf.result.Result
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlin.io.encoding.Base64
 
 class GatewayServer_V2 {
 
@@ -25,6 +21,11 @@ class GatewayServer_V2 {
 
     companion object {
         private const val MGF1_PARAMETER_SPEC_VALUE = "sha256"
+
+        /**
+         * v2 used the URL(gatewaySeverURL).host = KeystoreAlias value.
+         * Can be used for backward compatibility or migration
+         */
         fun sync(url: String, uid: String, password: String):
                 HandshakeGatewayServerPayload{
 
@@ -49,9 +50,9 @@ class GatewayServer_V2 {
                             publicKey, MGF1_PARAMETER_SPEC_VALUE))
 
             val networkResponseResults: Network.NetworkResponseResults =
-                    Network.jsonRequest(url, payload)
+                    Network.jsonRequestPost(url, payload)
             when(networkResponseResults.response.statusCode) {
-                in 400..500 -> throw Exception("Invalid Creds")
+                in 400..500 -> throw Exception("Invalid Credentials")
                 in 500..600 -> throw Exception("Server error")
                 else -> return Json
                         .decodeFromString<HandshakeGatewayServerPayload>(
