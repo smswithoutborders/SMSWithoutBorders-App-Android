@@ -48,6 +48,15 @@ class Vault_V2(val uid: String) {
     data class Platforms(val unsaved_platforms: ArrayList<Platform>,
                          val saved_platforms: ArrayList<Platform>)
 
+    @Serializable
+    data class OAuthGrantPayload(val url: String,
+                                 val body: String,
+                                 val platform: String,
+                                 val code_verifier: String)
+
+    @Serializable
+    data class OAuthGrantRequest(val phone_number: String)
+
     companion object {
         fun login(phoneNumber: String, password: String, url: String):
                 Network.NetworkResponseResults {
@@ -107,6 +116,17 @@ class Vault_V2(val uid: String) {
                 in 400..600 -> throw Exception(String(networkResponseResults.response.data))
             }
             return Json.decodeFromString<Platforms>(networkResponseResults.result.get())
+        }
+
+        fun getGmailGrant(url: String, headers: Headers, uid: String, phone_number: String) :
+                OAuthGrantPayload{
+            val platformsUrl = "${url}/v2/users/${uid}/platforms/gmail/protocols/oauth2"
+            val payload = Json.encodeToString(OAuthGrantRequest(phone_number))
+            val networkResponseResults = Network.jsonRequestPost(platformsUrl, payload, headers)
+            when(networkResponseResults.response.statusCode) {
+                in 400..600 -> throw Exception(String(networkResponseResults.response.data))
+            }
+            return Json.decodeFromString<OAuthGrantPayload>(networkResponseResults.result.get())
         }
     }
 
