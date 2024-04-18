@@ -49,14 +49,15 @@ class Vault_V2(val uid: String) {
                          val saved_platforms: ArrayList<Platform>)
 
     companion object {
-        fun login(phoneNumber: String, password: String, url: String): UID {
+        fun login(phoneNumber: String, password: String, url: String):
+                Network.NetworkResponseResults {
             val payload = Json.encodeToString(LoginRequest(phoneNumber, password))
             val networkResponseResults = Network.jsonRequestPost(url, payload)
             when(networkResponseResults.response.statusCode) {
                 in 400..500 -> throw Exception("Invalid Credentials")
                 in 500..600 -> throw Exception("Server error")
-                else -> return Json.decodeFromString<UID>(networkResponseResults.result.get())
             }
+            return networkResponseResults
         }
 
         fun signup(url: String, phone_number: String, name: String, country_code: String,
@@ -76,10 +77,11 @@ class Vault_V2(val uid: String) {
          * Note: Make sure dialing code is available in phone_number to avoid a 401.
          *
          */
-        fun otpRequest(url: String, headers: Headers, phone_number: String) :
+        fun otpRequest(url: String, headers: Headers, phone_number: String, uid: String) :
                 Network.NetworkResponseResults{
+            val otpUrl = "$url/v2/users/$uid/OTP"
             val payload = Json.encodeToString(OTPRequest(phone_number))
-            return Network.jsonRequestPost(url, payload, headers)
+            return Network.jsonRequestPost(otpUrl, payload, headers)
         }
 
         /**
@@ -98,14 +100,14 @@ class Vault_V2(val uid: String) {
             return Network.jsonRequestPut(url, "", headers)
         }
 
-    }
-
-    fun getPlatforms(url: String, responseHeaders: Headers) : ResponseResultOf<String>{
-        val platformsUrl = "${url}/v2/users/${uid}/platforms"
-        return platformsUrl
-                .httpGet()
-                .header(Headers.COOKIE to responseHeaders["Set-Cookie"].first())
-                .responseString()
+        fun getPlatforms(url: String, headers: Headers, uid: String) : Platforms{
+            val platformsUrl = "${url}/v2/users/${uid}/platforms"
+            val networkResponseResults = Network.requestGet(platformsUrl, headers)
+            when(networkResponseResults.response.statusCode) {
+                in 400..600 -> throw Exception(String(networkResponseResults.response.data))
+            }
+            return Json.decodeFromString<Platforms>(networkResponseResults.result.get())
+        }
     }
 
     private val userDetailsFilename = "user_details_pref"

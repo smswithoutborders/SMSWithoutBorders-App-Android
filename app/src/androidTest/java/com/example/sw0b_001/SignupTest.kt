@@ -39,11 +39,11 @@ class SignupTest {
         val uid = Json.decodeFromString<Vault_V2.UID>(networkResponseResults.result.get()).uid
         Log.d(javaClass.name, "Users UID: $uid")
 
-        val otpRequestUrl = context.getString(R.string.smswithoutborders_official_vault) +
-                "/v2/users/$uid/OTP"
-        Log.d(javaClass.name, "OTP request Url $otpRequestUrl")
+        val otpRequestUrl = context.getString(R.string.smswithoutborders_official_vault)
         val optNetworkResponseResults = Vault_V2.otpRequest(otpRequestUrl,
-                networkResponseResults.response.headers, countryCode + phonenumber)
+                networkResponseResults.response.headers,
+                countryCode + phonenumber,
+                otpRequestUrl)
         Log.d(javaClass.name, "OTP Request data: " + optNetworkResponseResults.result.get());
         Log.d(javaClass.name, "OTP Cookies: " + optNetworkResponseResults.response.headers
                 .getValue(Headers.COOKIE))
@@ -55,6 +55,10 @@ class SignupTest {
 
     @Test
     fun signupTestOTPComplete() {
+        /**
+         * Not usable at the moment, the cookies must come from above and now way to automate the
+         * SMS flow process.
+         */
         val otpSubmissionUrl = context.getString(R.string.smswithoutborders_official_otp_submission)
         val code = properties["otp_code"].toString()
         val cookie = properties["otp_cookie"].toString()
