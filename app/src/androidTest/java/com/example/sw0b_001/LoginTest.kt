@@ -3,21 +3,15 @@ package com.example.sw0b_001
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
-import com.example.sw0b_001.Data.GatewayServers.GatewayServer_V2
-import com.example.sw0b_001.Data.Vault_V2
+import com.example.sw0b_001.Data.v2.GatewayServer_V2
+import com.example.sw0b_001.Data.v2.Vault_V2
 import com.example.sw0b_001.Modules.Network
-import com.github.kittinunf.fuel.core.HttpException
 import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertFalse
-import junit.framework.TestCase.assertTrue
 import kotlinx.serialization.json.Json
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.security.PublicKey
 import java.util.Properties
-import kotlin.math.log
 
 
 @RunWith(AndroidJUnit4::class)

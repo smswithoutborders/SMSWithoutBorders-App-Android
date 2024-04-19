@@ -1,7 +1,6 @@
-package com.example.sw0b_001.Data.GatewayServers
+package com.example.sw0b_001.Data.v2
 
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
-import com.example.sw0b_001.Data.Vault_V2
 import com.example.sw0b_001.Modules.Crypto
 import com.example.sw0b_001.Modules.Network
 import kotlinx.serialization.Serializable
@@ -27,7 +26,7 @@ class GatewayServer_V2 {
          * Can be used for backward compatibility or migration
          */
         fun sync(url: String, uid: String, password: String):
-                HandshakeGatewayServerPayload{
+                HandshakeGatewayServerPayload {
 
             val pubKey = SecurityRSA.generateKeyPair(uid, 2048).encoded
 

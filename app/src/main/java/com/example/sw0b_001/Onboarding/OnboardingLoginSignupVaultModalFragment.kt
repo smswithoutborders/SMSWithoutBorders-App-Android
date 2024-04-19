@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleObserver
 import com.example.sw0b_001.LoginModalFragment
 import com.example.sw0b_001.R
 import com.example.sw0b_001.SignupModalFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 
@@ -35,8 +37,11 @@ class OnboardingLoginSignupVaultModalFragment : BottomSheetDialogFragment() {
         view.findViewById<MaterialButton>(R.id.onboarding_login_signup_login_btn)
                 .setOnClickListener {
                     dismiss()
-                    val loginModalFragment = LoginModalFragment()
+                    val showPlatformsRunnable = Runnable {
 
+                    }
+
+                    val loginModalFragment = LoginModalFragment(showPlatformsRunnable)
                     val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
                     fragmentTransaction?.add(loginModalFragment, "login_signup_login_vault_tag")
                     fragmentTransaction?.show(loginModalFragment)

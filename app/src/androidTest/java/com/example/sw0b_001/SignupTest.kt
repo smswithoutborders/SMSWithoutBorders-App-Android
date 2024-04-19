@@ -3,7 +3,7 @@ package com.example.sw0b_001
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.sw0b_001.Data.Vault_V2
+import com.example.sw0b_001.Data.v2.Vault_V2
 import com.github.kittinunf.fuel.core.Headers
 import junit.framework.TestCase
 import kotlinx.serialization.json.Json

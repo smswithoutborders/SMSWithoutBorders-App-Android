@@ -1,32 +1,41 @@
 package com.example.sw0b_001
 
+import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.sw0b_001.Data.ThreadExecutorPool
+import com.example.sw0b_001.Data.UserArtifactsHandler
+import com.example.sw0b_001.Data.v2.Vault_V2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.progressindicator.LinearProgressIndicator
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
+import kotlinx.serialization.json.Json
 
-class LoginModalFragment : BottomSheetDialogFragment() {
+class LoginModalFragment(val successRunnable: Runnable) : BottomSheetDialogFragment() {
 
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+    public lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_login_modal, container,
-                false)
+        return inflater.inflate(R.layout.fragment_login_modal, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<MaterialButton>(R.id.login_btn).setOnClickListener {
-//            login(it)
+            login(view)
         }
 
         val customUrlView = view.findViewById<TextInputLayout>(R.id.login_url)
@@ -42,6 +51,46 @@ class LoginModalFragment : BottomSheetDialogFragment() {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.isDraggable = true
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    private fun login(view: View) {
+        val phonenumber = view.findViewById<TextInputEditText>(R.id.login_phonenumber_text_input)
+                .text.toString()
+
+        val password = view.findViewById<TextInputEditText>(R.id.login_password_text_input)
+                .text.toString()
+
+        val url = view.context.getString(R.string.smswithoutborders_official_site_login)
+        ThreadExecutorPool.executorService.execute {
+            activity?.runOnUiThread {
+                view.findViewById<LinearProgressIndicator>(R.id.login_progress_bar)
+                        .visibility = View.VISIBLE
+            }
+
+            try {
+                val networkResponseResults = Vault_V2.login(phonenumber, password, url)
+                val uid = Json.decodeFromString<Vault_V2.UID>(networkResponseResults.result.get()).uid
+
+                UserArtifactsHandler.storeUID(view.context, uid)
+                dismiss()
+
+                successRunnable.run()
+            } catch(e: Exception) {
+                when(e.message) {
+                    Vault_V2.INVALID_CREDENTIALS_EXCEPTION -> {
+                        TODO("Implement inform user invalid credentials")
+                    }
+                    Vault_V2.SERVER_ERROR_EXCEPTION -> {
+                        TODO("Implement inform user server error")
+                    }
+                }
+            } finally {
+                activity?.runOnUiThread {
+                    view.findViewById<LinearProgressIndicator>(R.id.login_progress_bar)
+                            .visibility = View.GONE
+                }
+            }
+        }
     }
 
 //    private fun storePlatforms(user: BackendCommunications, url: String, headers: Headers) {

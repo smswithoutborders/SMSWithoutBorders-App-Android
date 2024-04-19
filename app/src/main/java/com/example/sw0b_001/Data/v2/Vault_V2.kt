@@ -1,11 +1,8 @@
-package com.example.sw0b_001.Data
+package com.example.sw0b_001.Data.v2
 
 import android.content.Context
-import android.util.Log
 import com.example.sw0b_001.Modules.Network
 import com.github.kittinunf.fuel.core.Headers
-import com.github.kittinunf.fuel.core.ResponseResultOf
-import com.github.kittinunf.fuel.httpGet
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -58,13 +55,15 @@ class Vault_V2(val uid: String) {
     data class OAuthGrantRequest(val phone_number: String)
 
     companion object {
+        const val INVALID_CREDENTIALS_EXCEPTION = "INVALID_CREDENTIALS_EXCEPTION"
+        const val SERVER_ERROR_EXCEPTION = "SERVER_ERROR_EXCEPTION"
         fun login(phoneNumber: String, password: String, url: String):
                 Network.NetworkResponseResults {
             val payload = Json.encodeToString(LoginRequest(phoneNumber, password))
             val networkResponseResults = Network.jsonRequestPost(url, payload)
             when(networkResponseResults.response.statusCode) {
-                in 400..500 -> throw Exception("Invalid Credentials")
-                in 500..600 -> throw Exception("Server error")
+                in 400..500 -> throw Exception(INVALID_CREDENTIALS_EXCEPTION)
+                in 500..600 -> throw Exception(SERVER_ERROR_EXCEPTION)
             }
             return networkResponseResults
         }
@@ -109,7 +108,7 @@ class Vault_V2(val uid: String) {
             return Network.jsonRequestPut(url, "", headers)
         }
 
-        fun getPlatforms(url: String, headers: Headers, uid: String) : Platforms{
+        fun getPlatforms(url: String, headers: Headers, uid: String) : Platforms {
             val platformsUrl = "${url}/v2/users/${uid}/platforms"
             val networkResponseResults = Network.requestGet(platformsUrl, headers)
             when(networkResponseResults.response.statusCode) {
@@ -119,7 +118,7 @@ class Vault_V2(val uid: String) {
         }
 
         fun getGmailGrant(url: String, headers: Headers, uid: String, phone_number: String) :
-                OAuthGrantPayload{
+                OAuthGrantPayload {
             val platformsUrl = "${url}/v2/users/${uid}/platforms/gmail/protocols/oauth2"
             val payload = Json.encodeToString(OAuthGrantRequest(phone_number))
             val networkResponseResults = Network.jsonRequestPost(platformsUrl, payload, headers)
