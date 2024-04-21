@@ -3,6 +3,7 @@ package com.example.sw0b_001.Data.Platforms;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
@@ -24,6 +25,17 @@ public class Platforms {
     private String letter;
 
     private String type;
+
+    public boolean isSaved() {
+        return isSaved;
+    }
+
+    public void setSaved(boolean saved) {
+        isSaved = saved;
+    }
+
+    @ColumnInfo(defaultValue = "0")
+    private boolean isSaved = false;
 
     public Platforms() { }
     public Platforms(long id) {

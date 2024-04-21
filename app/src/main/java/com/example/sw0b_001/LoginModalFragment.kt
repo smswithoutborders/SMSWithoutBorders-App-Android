@@ -6,9 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import com.example.sw0b_001.Data.Platforms.Platforms
+import com.example.sw0b_001.Data.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Data.ThreadExecutorPool
 import com.example.sw0b_001.Data.UserArtifactsHandler
 import com.example.sw0b_001.Data.v2.Vault_V2
+import com.github.kittinunf.fuel.core.Headers
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -19,7 +23,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.serialization.json.Json
 
-class LoginModalFragment(val successRunnable: Runnable) : BottomSheetDialogFragment() {
+class LoginModalFragment : BottomSheetDialogFragment() {
 
     public lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
@@ -72,10 +76,18 @@ class LoginModalFragment(val successRunnable: Runnable) : BottomSheetDialogFragm
                 val uid = Json.decodeFromString<Vault_V2.UID>(networkResponseResults.result.get()).uid
 
                 UserArtifactsHandler.storeUID(view.context, uid)
-                dismiss()
 
-                successRunnable.run()
+                val platformsUrl = requireContext()
+                        .getString(R.string.smswithoutborders_official_vault)
+
+                storePlatforms(uid, platformsUrl, networkResponseResults.response.headers)
+
+                showPlatformsModal()
+
+                dismiss()
             } catch(e: Exception) {
+                e.printStackTrace()
+                Log.e(javaClass.name, "Exception login", e)
                 when(e.message) {
                     Vault_V2.INVALID_CREDENTIALS_EXCEPTION -> {
                         TODO("Implement inform user invalid credentials")
@@ -93,25 +105,48 @@ class LoginModalFragment(val successRunnable: Runnable) : BottomSheetDialogFragm
         }
     }
 
-//    private fun storePlatforms(user: BackendCommunications, url: String, headers: Headers) {
-//        val (_, response, result) = user.getPlatforms(url, headers)
-//        val platforms = Json.decodeFromString<BackendCommunications.Platforms>(result.get())
-//
-//        Datastore.getDatastore(applicationContext)
-//                .platformDao().deleteAll()
-//
-//        platforms.saved_platforms.forEach {
-//            val platform = Platforms()
-//            platform.name = it.name
-//            platform.description = ""
-//            platform.type = it.type
-//            platform.letter = it.letter
+    private fun showPlatformsModal() {
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        val platformsModalFragment = PlatformsModalFragment()
+        fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
+        fragmentTransaction?.show(platformsModalFragment)
+        activity?.runOnUiThread { fragmentTransaction?.commitNow() }
+    }
+
+    private fun storePlatforms(uid: String, url: String, headers: Headers) {
+        val platforms = Vault_V2.getPlatforms(url, headers, uid)
+
+        val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java]
+        platformsViewModel.deleteAll(requireContext())
+
+        val listPlatforms = ArrayList<Platforms>()
+        platforms.saved_platforms.forEach {
+            val platform = Platforms()
+            platform.name = it.name
+            platform.description = ""
+            platform.type = it.type
+            platform.letter = it.letter
+            platform.isSaved = true
 //            platform.logo = PlatformsHandler
 //                    .hardGetLogoByName(applicationContext, it.name)
-//            Datastore.getDatastore(applicationContext)
-//                    .platformDao().insert(platform)
-//        }
-//    }
+//            platformsViewModel.store(requireContext(), platform)
+            listPlatforms.add(platform)
+        }
+
+        platforms.unsaved_platforms.forEach {
+            val platform = Platforms()
+            platform.name = it.name
+            platform.description = ""
+            platform.type = it.type
+            platform.letter = it.letter
+//            platform.logo = PlatformsHandler
+//                    .hardGetLogoByName(applicationContext, it.name)
+//            platformsViewModel.store(requireContext(), platform)
+            listPlatforms.add(platform)
+        }
+        platformsViewModel.storeAll(requireContext(), listPlatforms)
+        Log.d(javaClass.name, "Platforms stored")
+    }
 
 //    private fun login(view: View) {
 //        val cardView = findViewById<MaterialCardView>(R.id.login_status_card)

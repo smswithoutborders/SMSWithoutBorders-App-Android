@@ -29,7 +29,7 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.layout_cardlist_platforms, parent, false);
+        View view = inflater.inflate(R.layout.layout_platforms_thumbnail, parent, false);
         return new ViewHolder(view);
     }
 
@@ -46,30 +46,18 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name;
         ImageView image;
 
         MaterialCardView cardView;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            this.cardView = itemView.findViewById(R.id.platform_card_layout);
-            this.name = itemView.findViewById(R.id.platform_name);
-            this.image = itemView.findViewById(R.id.platform_logo);
+            this.cardView = itemView.findViewById(R.id.platforms_thumbnails_card);
+            this.image = itemView.findViewById(R.id.platforms_thumbnails);
         }
 
         public void bind(Platforms platforms) {
-            name.setText(platforms.getName());
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(platforms.getType().equals("email")) {
-                        Intent intent = new Intent(v.getContext(), EmailComposeActivity.class);
-                        intent.putExtra(EmailComposeActivity.INTENT_PLATFORM_ID, platforms.getId());
-                        v.getContext().startActivity(intent);
-                    }
-                }
-            });
+
         }
     }
 }

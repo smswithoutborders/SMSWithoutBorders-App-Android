@@ -1,11 +1,13 @@
 package com.example.sw0b_001.Onboarding
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.LifecycleObserver
 import com.example.sw0b_001.LoginModalFragment
+import com.example.sw0b_001.PlatformsModalFragment
 import com.example.sw0b_001.R
 import com.example.sw0b_001.SignupModalFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -37,15 +39,12 @@ class OnboardingLoginSignupVaultModalFragment : BottomSheetDialogFragment() {
         view.findViewById<MaterialButton>(R.id.onboarding_login_signup_login_btn)
                 .setOnClickListener {
                     dismiss()
-                    val showPlatformsRunnable = Runnable {
 
-                    }
-
-                    val loginModalFragment = LoginModalFragment(showPlatformsRunnable)
                     val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+                    val loginModalFragment = LoginModalFragment()
                     fragmentTransaction?.add(loginModalFragment, "login_signup_login_vault_tag")
                     fragmentTransaction?.show(loginModalFragment)
-                    fragmentTransaction?.commitNow()
+                    fragmentTransaction?.commit()
                 }
 
         view.findViewById<MaterialButton>(R.id.onboarding_login_signup_signup_btn)
@@ -56,7 +55,7 @@ class OnboardingLoginSignupVaultModalFragment : BottomSheetDialogFragment() {
                     val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
                     fragmentTransaction?.add(signupModalFragment, "login_signup_signup_vault_tag")
                     fragmentTransaction?.show(signupModalFragment)
-                    fragmentTransaction?.commitNow()
+                    fragmentTransaction?.commit()
                 }
     }
 }
