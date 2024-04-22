@@ -12,13 +12,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/store_platforms_unsaved_recycler_view"
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:id="@+id/drag_handle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/store_platforms_saved_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Saved Platforms\n\nThese Are platforms stored in your Vault and can be used when you are offline."
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/drag_handle" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/store_platforms_saved_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/store_platforms_saved_description"
+            app:layout_constraintStart_toStartOf="@+id/store_platforms_saved_description"
+            app:layout_constraintTop_toBottomOf="@+id/store_platforms_saved_description" />
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/store_platforms_divider"
@@ -30,17 +50,30 @@
             app:dividerColor="@color/pending_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/store_platforms_unsaved_recycler_view" />
+            app:layout_constraintTop_toBottomOf="@+id/store_platforms_saved_recycler_view" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/store_platforms_saved_recycler_view"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/store_platforms_unsaved_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="Add more platforms your Vault"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/store_platforms_divider" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/store_platforms_unsaved_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/store_platforms_unsaved_description"
+            app:layout_constraintStart_toStartOf="@+id/store_platforms_unsaved_description"
+            app:layout_constraintTop_toBottomOf="@+id/store_platforms_unsaved_description" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

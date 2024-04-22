@@ -19,6 +19,13 @@ class PlatformsViewModel : ViewModel() {
         return liveData
     }
 
+    fun getSaved(context: Context): LiveData<List<Platforms>> {
+        if(liveData.value.isNullOrEmpty()) {
+            liveData = Datastore.getDatastore(context).platformDao().saved
+        }
+        return liveData
+    }
+
     fun getSeparated(context: Context): MutableLiveData<Pair<List<Platforms>, List<Platforms>>> {
         val savedList = ArrayList<Platforms>()
         val unsavedList = ArrayList<Platforms>()
@@ -46,5 +53,13 @@ class PlatformsViewModel : ViewModel() {
 
     public fun deleteAll(context: Context) {
         Datastore.getDatastore(context).platformDao().deleteAll()
+    }
+
+    public fun isEmpty(context: Context) : Boolean {
+        return Datastore.getDatastore(context).platformDao().count() < 1
+    }
+
+    public fun isAnySaved(context: Context) : Boolean {
+        return Datastore.getDatastore(context).platformDao().countSaved() > 0
     }
 }

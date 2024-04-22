@@ -13,6 +13,8 @@ import java.util.Objects;
 //@DatabaseView("SELECT platform.name, platform.description, platform.provider, platform.image, platform.id FROM platform")
 @Entity(indices = {@Index(value={"name"}, unique = true)})
 public class Platforms {
+
+    public static final int TYPE_EMAIL = 1;
     @PrimaryKey(autoGenerate = true)
     private long id;
 

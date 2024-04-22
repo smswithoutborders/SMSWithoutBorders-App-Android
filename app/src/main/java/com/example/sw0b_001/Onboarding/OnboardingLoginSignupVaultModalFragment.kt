@@ -36,11 +36,12 @@ class OnboardingLoginSignupVaultModalFragment : BottomSheetDialogFragment() {
         bottomSheetBehavior.isDraggable = true
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+
         view.findViewById<MaterialButton>(R.id.onboarding_login_signup_login_btn)
                 .setOnClickListener {
                     dismiss()
 
-                    val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
                     val loginModalFragment = LoginModalFragment()
                     fragmentTransaction?.add(loginModalFragment, "login_signup_login_vault_tag")
                     fragmentTransaction?.show(loginModalFragment)
@@ -50,9 +51,8 @@ class OnboardingLoginSignupVaultModalFragment : BottomSheetDialogFragment() {
         view.findViewById<MaterialButton>(R.id.onboarding_login_signup_signup_btn)
                 .setOnClickListener {
                     dismiss()
-                    val signupModalFragment = SignupModalFragment()
 
-                    val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+                    val signupModalFragment = SignupModalFragment()
                     fragmentTransaction?.add(signupModalFragment, "login_signup_signup_vault_tag")
                     fragmentTransaction?.show(signupModalFragment)
                     fragmentTransaction?.commit()

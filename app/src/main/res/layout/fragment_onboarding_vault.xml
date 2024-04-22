@@ -8,12 +8,14 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/onboarding_welcome_vaults_introduction"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="Introducing Vaults"
         android:textSize="40sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,7 +36,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="75dp"
-        android:text="RelaySMS communicates with Vaults to utilize your saved accounts whenever you need"
+        android:text="RelaySMS uses the standardized methods provided by the online platforms both utilizing and securing your information stored in Vaults."
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/onboarding_welcome_vaults_description"

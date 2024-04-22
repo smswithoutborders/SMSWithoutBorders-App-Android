@@ -16,6 +16,9 @@ public interface PlatformDao {
     @Query("SELECT * FROM Platforms")
     LiveData<List<Platforms>> getAll();
 
+    @Query("SELECT * FROM Platforms WHERE isSaved = 1")
+    LiveData<List<Platforms>> getSaved();
+
     @Query("SELECT * FROM Platforms")
     List<Platforms> getAllList();
 
@@ -36,5 +39,11 @@ public interface PlatformDao {
 
     @Query("DELETE FROM Platforms")
     void deleteAll();
+
+    @Query("SELECT COUNT(Platforms.id) as count FROM platforms")
+    int count();
+
+    @Query("SELECT COUNT(Platforms.id) as count FROM platforms WHERE isSaved = 1")
+    int countSaved();
 
 }

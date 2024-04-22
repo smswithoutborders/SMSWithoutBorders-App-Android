@@ -47,7 +47,8 @@ class HomepageComposeNewFragment(private val bottomSheetViewLayout: Int =
                 LinearLayoutManager.VERTICAL, false)
         platformsRecyclerView.layoutManager = linearLayoutManager
 
-        val platformsRecyclerAdapter = PlatformsRecyclerAdapter()
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        val platformsRecyclerAdapter = PlatformsRecyclerAdapter(fragmentTransaction)
         platformsRecyclerView.adapter = platformsRecyclerAdapter
 
         val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java]

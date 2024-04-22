@@ -1,6 +1,7 @@
 package com.example.sw0b_001.Data.Platforms;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,21 +9,32 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw0b_001.EmailComposeActivity;
+import com.example.sw0b_001.EmailComposeModalFragment;
 import com.example.sw0b_001.R;
 import com.google.android.material.card.MaterialCardView;
 
 import org.jetbrains.annotations.NotNull;
 
-public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecyclerAdapter.ViewHolder> {
+public class PlatformsRecyclerAdapter extends
+        RecyclerView.Adapter<PlatformsRecyclerAdapter.ViewHolder> {
 
     public final AsyncListDiffer<Platforms> mDiffer =
             new AsyncListDiffer(this, Platforms.DIFF_CALLBACK);
 
-    public PlatformsRecyclerAdapter(){ }
+    FragmentTransaction fragmentTransaction;
+
+    public MutableLiveData<Integer> onClickListenerLiveData = new MutableLiveData<>();
+    public PlatformsRecyclerAdapter(FragmentTransaction fragmentTransaction){
+        this.fragmentTransaction = fragmentTransaction;
+    }
 
     @NonNull
     @NotNull
@@ -37,6 +49,11 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
     public void onBindViewHolder(@NonNull @NotNull ViewHolder viewHolder, int position) {
         Platforms platforms = mDiffer.getCurrentList().get(position);
         viewHolder.bind(platforms);
+        viewHolder.itemView.setOnClickListener(it -> {
+            Log.d(PlatformsRecyclerAdapter.class.getName(), platforms.getType());
+            if(platforms.getType().equals("email"))
+                onClickListenerLiveData.setValue(Platforms.TYPE_EMAIL);
+        });
     }
 
     @Override
@@ -57,7 +74,6 @@ public class PlatformsRecyclerAdapter extends RecyclerView.Adapter<PlatformsRecy
         }
 
         public void bind(Platforms platforms) {
-
         }
     }
 }

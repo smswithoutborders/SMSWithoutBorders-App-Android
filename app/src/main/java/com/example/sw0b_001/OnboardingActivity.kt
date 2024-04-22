@@ -8,7 +8,11 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
+import com.example.sw0b_001.Data.Platforms.PlatformsViewModel
+import com.example.sw0b_001.Data.ThreadExecutorPool
 import com.example.sw0b_001.Onboarding.OnboardingComponent
+import com.example.sw0b_001.Onboarding.OnboardingPublishExampleFragment
 import com.example.sw0b_001.Onboarding.OnboardingSkippedAllFragment
 import com.example.sw0b_001.Onboarding.OnboardingVaultFragment
 import com.example.sw0b_001.Onboarding.OnboardingWelcomeFragment
@@ -17,8 +21,10 @@ import com.google.android.material.textview.MaterialTextView
 
 class OnboardingActivity : AppCompatActivity() {
     private var fragmentIterator: MutableLiveData<Int> = MutableLiveData<Int>()
-    private val fragmentList: Array<OnboardingComponent> =
-            arrayOf(OnboardingWelcomeFragment(), OnboardingVaultFragment())
+    private val fragmentList: ArrayList<OnboardingComponent> =
+            arrayListOf(OnboardingWelcomeFragment(),
+                    OnboardingVaultFragment(),
+                    OnboardingPublishExampleFragment())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
@@ -31,6 +37,16 @@ class OnboardingActivity : AppCompatActivity() {
                 setReorderingAllowed(true)
                 addToBackStack(OnboardingWelcomeFragment.javaClass.name)
             }
+        }
+        configureOnboardingFragments()
+    }
+
+    private fun configureOnboardingFragments() {
+        // check if platforms is available
+        val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java]
+        ThreadExecutorPool.executorService.execute {
+            if(platformsViewModel.isAnySaved(applicationContext))
+                fragmentList.removeAt(1)
         }
         configureButtonClicks()
     }
