@@ -30,15 +30,23 @@ class OnboardingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_onboarding)
 
         if (savedInstanceState == null) {
-            supportFragmentManager.commit {
-                val onboardingWelcomeFragment = OnboardingWelcomeFragment()
+//            supportFragmentManager.commit {
+//                val onboardingWelcomeFragment = OnboardingWelcomeFragment()
+//
+//                add(R.id.onboarding_fragment_container, onboardingWelcomeFragment)
+//                setReorderingAllowed(true)
+//                addToBackStack(OnboardingWelcomeFragment.javaClass.name)
+//            }
 
-                add(R.id.onboarding_fragment_container, onboardingWelcomeFragment)
+            supportFragmentManager.commit {
+                val ownershipVerificationFragment = OwnershipVerificationFragment()
+
+                add(R.id.onboarding_fragment_container, ownershipVerificationFragment)
                 setReorderingAllowed(true)
                 addToBackStack(OnboardingWelcomeFragment.javaClass.name)
             }
         }
-        configureOnboardingFragments()
+//        configureOnboardingFragments()
     }
 
     private fun configureOnboardingFragments() {

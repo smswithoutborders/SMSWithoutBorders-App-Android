@@ -297,5 +297,6 @@
     <string name="gateway_client_add_custom_example_text">e.g +237123456789 or select contact</string>
     <string name="gateway_client_add_custom_text">Enter phone number</string>
     <string name="gateway_client_add_gateway_client_text">Add Gateway Client</string>
+    <string name="otp_verification_code_template">Your SMSWithoutBorders-Auth verification code is: </string>
 
 </resources>

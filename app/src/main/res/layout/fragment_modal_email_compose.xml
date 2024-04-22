@@ -44,19 +44,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/email_compose_send_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="209dp"
+                android:layout_marginStart="145dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="16dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_round_send_24"
                 app:layout_constraintBottom_toBottomOf="@+id/materialTextView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/materialTextView"
-                app:layout_constraintTop_toTopOf="@+id/materialTextView" />
+                app:layout_constraintTop_toTopOf="@+id/materialTextView"
+                tools:text="Send" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
