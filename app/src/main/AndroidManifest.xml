@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <queries>
         <intent>
@@ -20,7 +21,6 @@
 
     <application
         android:icon="@mipmap/ic_launcher"
-        tools:replace="android:label"
         android:label="@string/app_name"
         android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -28,26 +28,26 @@
         android:theme="@style/Theme.main"
         android:usesCleartextTraffic="false"
         android:versionCode="48"
-        android:versionName="2.5.8">
+        android:versionName="2.5.8"
+        tools:replace="android:label">
         <activity
             android:name=".Security.LockScreenActivity"
             android:exported="false" />
         <activity
             android:name=".SettingsActivity"
             android:exported="true"
-            android:parentActivityName=".HomepageActivity"/>
+            android:parentActivityName=".HomepageActivity" />
         <activity
             android:name=".LoginModalFragment"
             android:exported="false" />
         <activity
             android:name=".OnboardingActivity"
-            android:exported="true" >
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-             <intent-filter>
-             <action android:name="android.intent.action.MAIN" />
-
-             <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <service
@@ -63,12 +63,10 @@
             android:name=".HomepageActivity"
             android:exported="false"
             android:launchMode="singleTask" />
-
         <activity
             android:name=".Settings.GatewayClientListingActivity"
             android:exported="false"
             android:parentActivityName=".SettingsActivity" />
-
         <activity
             android:name=".MessageComposeActivity"
             android:exported="false"
@@ -78,11 +76,12 @@
             android:name=".WelcomeActivity"
             android:exported="true">
 
-<!--             <intent-filter>-->
-<!--                 <action android:name="android.intent.action.MAIN" />-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
-<!--                 <category android:name="android.intent.category.LAUNCHER" />-->
-<!--             </intent-filter>-->
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".TextComposeActivity"
@@ -95,9 +94,25 @@
             android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
             tools:node="merge">
-            <meta-data  android:name="com.example.sw0b_001.Security.LockScreenInitializer"
+            <meta-data
+                android:name="com.example.sw0b_001.Security.LockScreenInitializer"
                 android:value="androidx.startup" />
         </provider>
 
+        <activity
+            android:name=".OpenIDOAuthRedirectActivity"
+            android:exported="true"
+            tools:node="replace">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/oauth_openid_redirect_url_scheme" />
+                <data android:host="@string/oauth_openid_redirect_url_scheme_host" />
+                <data android:path="@string/oauth_openid_redirect_url_scheme_path"/>
+            </intent-filter>
+        </activity>
     </application>
+
 </manifest>

@@ -30,10 +30,18 @@ class OnboardingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_onboarding)
 
         if (savedInstanceState == null) {
-            supportFragmentManager.commit {
-                val onboardingWelcomeFragment = OnboardingWelcomeFragment()
+//            supportFragmentManager.commit {
+//                val onboardingWelcomeFragment = OnboardingWelcomeFragment()
+//
+//                add(R.id.onboarding_fragment_container, onboardingWelcomeFragment)
+//                setReorderingAllowed(true)
+//                addToBackStack(OnboardingWelcomeFragment.javaClass.name)
+//            }
 
-                add(R.id.onboarding_fragment_container, onboardingWelcomeFragment)
+            supportFragmentManager.commit {
+                val vaultStorePlatformFragment = VaultStorePlatformFragment()
+
+                add(R.id.onboarding_fragment_container, vaultStorePlatformFragment)
                 setReorderingAllowed(true)
                 addToBackStack(OnboardingWelcomeFragment.javaClass.name)
             }
@@ -47,7 +55,7 @@ class OnboardingActivity : AppCompatActivity() {
 //                addToBackStack(OnboardingWelcomeFragment.javaClass.name)
 //            }
         }
-        configureOnboardingFragments()
+//        configureOnboardingFragments()
     }
 
     private fun configureOnboardingFragments() {

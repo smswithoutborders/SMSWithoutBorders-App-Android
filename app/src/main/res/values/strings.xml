@@ -298,6 +298,12 @@
     <string name="gateway_client_add_custom_text">Enter phone number</string>
     <string name="gateway_client_add_gateway_client_text">Add Gateway Client</string>
     <string name="otp_verification_code_template">Your SMSWithoutBorders-Auth verification code is: </string>
-    <string name="recaptcha_client_side_key">6LfrOsQpAAAAALsmO5WjVEmybrKB_rl6DwhK8mMw</string>
+
+    <string name="recaptcha_client_side_key" translatable="false">6LfrOsQpAAAAALsmO5WjVEmybrKB_rl6DwhK8mMw</string>
+    <string name="oauth_gmail_client_id" translatable="false">86878463881-3miiph6l8e8almabu5mat1gun3aaumrv.apps.googleusercontent.com</string>
+
+    <string name="oauth_openid_redirect_url_scheme" translatable="false">apps</string>
+    <string name="oauth_openid_redirect_url_scheme_host" translatable="false">oauth.afkanerd.com</string>
+    <string name="oauth_openid_redirect_url_scheme_path" translatable="false">/index.html</string>
 
 </resources>

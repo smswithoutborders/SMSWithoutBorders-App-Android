@@ -41,7 +41,8 @@ android {
         }
         resourceConfigurations += ['en', 'fr', 'fa']
 
-
+        manifestPlaceholders =
+                ['appAuthRedirectScheme': 'com.afkanerd.sw0b']
     }
 
     buildTypes {
@@ -95,6 +96,7 @@ dependencies {
     implementation 'androidx.activity:activity:1.9.0'
     implementation 'com.google.android.gms:play-services-auth:21.1.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.2'
+    implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
 //    implementation 'com.android.support:appcompat-v7:28.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -138,6 +140,6 @@ dependencies {
     implementation "androidx.startup:startup-runtime:1.1.1"
     implementation 'at.favre.lib:armadillo:1.0.0'
     implementation 'com.afkanerd.smswithoutborders:libsignal_doubleratchet:0.0.2'
-    implementation "com.google.android.gms:play-services-safetynet:18.0.1"
+    implementation "net.openid:appauth:0.11.1"
 }
 

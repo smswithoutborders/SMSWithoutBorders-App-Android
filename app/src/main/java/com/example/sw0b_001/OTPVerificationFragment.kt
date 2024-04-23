@@ -1,7 +1,5 @@
 package com.example.sw0b_001
 
-import android.app.Activity.RECEIVER_EXPORTED
-import android.app.Activity.RECEIVER_NOT_EXPORTED
 import android.app.Activity.RESULT_OK
 import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver
@@ -22,7 +20,7 @@ import com.google.android.gms.common.api.Status
 import com.google.android.material.textfield.TextInputEditText
 
 
-class OwnershipVerificationFragment : Fragment() {
+class OTPVerificationFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
