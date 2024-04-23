@@ -30,23 +30,24 @@ class OnboardingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_onboarding)
 
         if (savedInstanceState == null) {
-//            supportFragmentManager.commit {
-//                val onboardingWelcomeFragment = OnboardingWelcomeFragment()
-//
-//                add(R.id.onboarding_fragment_container, onboardingWelcomeFragment)
-//                setReorderingAllowed(true)
-//                addToBackStack(OnboardingWelcomeFragment.javaClass.name)
-//            }
-
             supportFragmentManager.commit {
-                val ownershipVerificationFragment = OwnershipVerificationFragment()
+                val onboardingWelcomeFragment = OnboardingWelcomeFragment()
 
-                add(R.id.onboarding_fragment_container, ownershipVerificationFragment)
+                add(R.id.onboarding_fragment_container, onboardingWelcomeFragment)
                 setReorderingAllowed(true)
                 addToBackStack(OnboardingWelcomeFragment.javaClass.name)
             }
+
+            // OTP Verification code, automatic get
+//            supportFragmentManager.commit {
+//                val ownershipVerificationFragment = OwnershipVerificationFragment()
+//
+//                add(R.id.onboarding_fragment_container, ownershipVerificationFragment)
+//                setReorderingAllowed(true)
+//                addToBackStack(OnboardingWelcomeFragment.javaClass.name)
+//            }
         }
-//        configureOnboardingFragments()
+        configureOnboardingFragments()
     }
 
     private fun configureOnboardingFragments() {
@@ -65,6 +66,9 @@ class OnboardingActivity : AppCompatActivity() {
         val dotIndicatorLayout = findViewById<LinearLayout>(R.id.onboard_dot_indicator_layout)
         val skipAllBtn = findViewById<MaterialTextView>(R.id.onboard_skip_all)
 
+        fragmentIterator.value = 0
+        var previousValueFromSkip: Int = -1
+
         fragmentIterator.observe(this) {
             dotIndicatorLayout.removeAllViews()
             val dots: Array<MaterialTextView> = Array(fragmentList.size) {
@@ -82,7 +86,6 @@ class OnboardingActivity : AppCompatActivity() {
             skipAllBtn.text = fragmentList[it].skipButtonText
         }
 
-        fragmentIterator.value = 0
 
         nextButton.setOnClickListener {
             supportFragmentManager.commit {
@@ -97,7 +100,6 @@ class OnboardingActivity : AppCompatActivity() {
             }
         }
 
-        var previousValueFromSkip: Int = -1
         prevButton.setOnClickListener {
             supportFragmentManager.commit {
                 fragmentIterator.value =

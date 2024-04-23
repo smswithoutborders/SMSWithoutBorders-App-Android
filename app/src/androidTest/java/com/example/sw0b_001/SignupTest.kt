@@ -26,7 +26,6 @@ class SignupTest {
 
     @Test
     fun signupTest() {
-
         val phonenumber = properties["phonenumber"].toString()
         val password = properties["password"].toString()
         val name = "dummy_user"
