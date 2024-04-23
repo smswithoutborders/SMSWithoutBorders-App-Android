@@ -39,8 +39,11 @@ class OAuthGrantTest {
                 networkResponseResults.result.get()).uid)
 
         val phonenumber = "+237123456789"
+//        val oAuthGrantPayload = Vault_V2
+//                .getGmailGrant(url, networkResponseResults.response.headers, uid, phonenumber)
+
         val oAuthGrantPayload = Vault_V2
-                .getGmailGrant(url, networkResponseResults.response.headers, uid, phonenumber)
+                .getXGrant(url, networkResponseResults.response.headers, uid, phonenumber)
         println("${oAuthGrantPayload.url} - ${oAuthGrantPayload.platform}")
     }
 }

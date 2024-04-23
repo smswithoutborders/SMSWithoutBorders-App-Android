@@ -117,6 +117,17 @@ class Vault_V2(val uid: String) {
             return Json.decodeFromString<Platforms>(networkResponseResults.result.get())
         }
 
+        fun getXGrant(url: String, headers: Headers, uid: String, phone_number: String) :
+                OAuthGrantPayload {
+            val platformsUrl = "${url}/v2/users/${uid}/platforms/twitter/protocols/oauth2"
+            val payload = Json.encodeToString(OAuthGrantRequest(phone_number))
+            val networkResponseResults = Network.jsonRequestPost(platformsUrl, payload, headers)
+            when(networkResponseResults.response.statusCode) {
+                in 400..600 -> throw Exception(String(networkResponseResults.response.data))
+            }
+            return Json.decodeFromString<OAuthGrantPayload>(networkResponseResults.result.get())
+        }
+
         fun getGmailGrant(url: String, headers: Headers, uid: String, phone_number: String) :
                 OAuthGrantPayload {
             val platformsUrl = "${url}/v2/users/${uid}/platforms/gmail/protocols/oauth2"
