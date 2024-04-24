@@ -2,9 +2,24 @@ package com.example.sw0b_001.Modules
 
 import android.content.Intent
 import android.util.Log
+import java.net.URL
 
 class Helpers {
     companion object {
+
+        fun extractParameters(data: String) : Map<String, String> {
+            val query = URL(data.replace("apps://", "https://")).query
+            val parameters = query.split("&")
+            val mappedParameters = emptyMap<String, String>().toMutableMap()
+            parameters.forEach {
+                val entries = it.split("=")
+                mappedParameters[entries[0]] = entries[1]
+            }
+            return mappedParameters
+        }
+        fun getPath(data: String): String {
+            return URL(data.replace("apps://", "https://")).path
+        }
 
         fun logIntentDetails(intent: Intent?) {
             if (intent == null) {

@@ -306,6 +306,8 @@
 
     <string name="oauth_openid_redirect_url_scheme" translatable="false">apps</string>
     <string name="oauth_openid_redirect_url_scheme_host" translatable="false">oauth.afkanerd.com</string>
-    <string name="oauth_openid_redirect_url_scheme_path" translatable="false">/index.html</string>
+
+    <string name="oauth_openid_redirect_url_scheme_path_gmail" translatable="false">/gmail.html</string>
+    <string name="oauth_openid_redirect_url_scheme_path_x" translatable="false">/x.html</string>
 
 </resources>

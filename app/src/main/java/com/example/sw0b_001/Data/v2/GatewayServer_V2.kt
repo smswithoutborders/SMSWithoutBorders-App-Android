@@ -32,7 +32,7 @@ class GatewayServer_V2 {
 
             val publicKey = Crypto.convertToPemFormat(pubKey)
 
-            val gatewayServerPublicKey = Crypto.getGatewayServerPublicKey(url)
+            val gatewayServerPublicKey = Crypto.getUrlPublicKey(url)
 
 //            val encryptedPassword = android.util.Base64
 //                    .encodeToString(SecurityRSA.encrypt(gatewayServerPublicKey,

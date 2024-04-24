@@ -54,6 +54,9 @@ class Vault_V2(val uid: String) {
     @Serializable
     data class OAuthGrantRequest(val phone_number: String)
 
+    @Serializable
+    data class OAuthGrantSubmission(val code: String)
+
     companion object {
         const val INVALID_CREDENTIALS_EXCEPTION = "INVALID_CREDENTIALS_EXCEPTION"
         const val SERVER_ERROR_EXCEPTION = "SERVER_ERROR_EXCEPTION"
@@ -115,6 +118,24 @@ class Vault_V2(val uid: String) {
                 in 400..600 -> throw Exception(String(networkResponseResults.response.data))
             }
             return Json.decodeFromString<Platforms>(networkResponseResults.result.get())
+        }
+
+        fun sendGmailCode(url: String, headers: Headers, uid: String, code: String) {
+            val platformsUrl = "${url}/v2/users/${uid}/platforms/gmail/protocols/oauth2"
+            val payload = Json.encodeToString(OAuthGrantSubmission(code))
+            val networkResponseResults = Network.jsonRequestPut(platformsUrl, payload, headers)
+            when(networkResponseResults.response.statusCode) {
+                in 400..600 -> throw Exception(String(networkResponseResults.response.data))
+            }
+        }
+
+        fun sendXCode(url: String, headers: Headers, uid: String, code: String) {
+            val platformsUrl = "${url}/v2/users/${uid}/platforms/twitter/protocols/oauth2"
+            val payload = Json.encodeToString(OAuthGrantSubmission(code))
+            val networkResponseResults = Network.jsonRequestPut(platformsUrl, payload, headers)
+            when(networkResponseResults.response.statusCode) {
+                in 400..600 -> throw Exception(String(networkResponseResults.response.data))
+            }
         }
 
         fun getXGrant(url: String, headers: Headers, uid: String, phone_number: String) :

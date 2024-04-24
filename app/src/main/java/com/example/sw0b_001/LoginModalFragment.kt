@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityAES
+import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
 import com.example.sw0b_001.Data.Platforms.Platforms
 import com.example.sw0b_001.Data.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Data.ThreadExecutorPool
@@ -74,6 +76,8 @@ class LoginModalFragment : BottomSheetDialogFragment() {
             try {
                 val networkResponseResults = Vault_V2.login(phonenumber, password, url)
                 val uid = Json.decodeFromString<Vault_V2.UID>(networkResponseResults.result.get()).uid
+
+                UserArtifactsHandler.storeCredentials(requireContext(), phonenumber, password)
 
                 UserArtifactsHandler.storeUID(view.context, uid)
 

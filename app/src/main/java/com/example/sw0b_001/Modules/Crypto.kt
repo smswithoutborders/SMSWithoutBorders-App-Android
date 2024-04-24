@@ -6,22 +6,16 @@ import com.example.sw0b_001.Security.SecurityRSA.Companion.encryptionDigestParam
 import java.io.BufferedInputStream
 import java.io.InputStream
 import java.net.URL
-import java.security.InvalidAlgorithmParameterException
-import java.security.InvalidKeyException
-import java.security.NoSuchAlgorithmException
 import java.security.PublicKey
 import java.security.cert.Certificate
-import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
-import javax.crypto.IllegalBlockSizeException
-import javax.crypto.NoSuchPaddingException
 import javax.net.ssl.HttpsURLConnection
 
 
 class Crypto {
     companion object {
-        fun getGatewayServerPublicKey(gatewayServerUrl: String): PublicKey {
-            val urlBuild = URL(gatewayServerUrl)
+        fun getUrlPublicKey(urlInput: String): PublicKey {
+            val urlBuild = URL(urlInput)
             val url = URL("${urlBuild.protocol}://${urlBuild.host}")
             val urlConnection = url.openConnection() as HttpsURLConnection
             val tmp: InputStream = BufferedInputStream(urlConnection.inputStream)

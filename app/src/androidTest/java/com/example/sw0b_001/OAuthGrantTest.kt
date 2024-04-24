@@ -39,8 +39,22 @@ class OAuthGrantTest {
                 networkResponseResults.result.get()).uid)
 
         val phonenumber = "+237123456789"
-//        val oAuthGrantPayload = Vault_V2
-//                .getGmailGrant(url, networkResponseResults.response.headers, uid, phonenumber)
+        val oAuthGrantPayload = Vault_V2
+                .getGmailGrant(url, networkResponseResults.response.headers, uid, phonenumber)
+        println("${oAuthGrantPayload.url} - ${oAuthGrantPayload.platform}")
+    }
+
+    @Test
+    fun oAuthXGrantTest() {
+        val url = context.getString(R.string.smswithoutborders_official_vault)
+        val networkResponseResults = login()
+
+        val uid = Json.decodeFromString<Vault_V2.UID>(networkResponseResults.result.get()).uid
+        val expectedUID = "a81d750e-a733-11ee-92f4-0242ac17000a"
+        TestCase.assertEquals(expectedUID, Json.decodeFromString<Vault_V2.UID>(
+                networkResponseResults.result.get()).uid)
+
+        val phonenumber = "+237123456789"
 
         val oAuthGrantPayload = Vault_V2
                 .getXGrant(url, networkResponseResults.response.headers, uid, phonenumber)

@@ -110,7 +110,17 @@
 
                 <data android:scheme="@string/oauth_openid_redirect_url_scheme" />
                 <data android:host="@string/oauth_openid_redirect_url_scheme_host" />
-                <data android:path="@string/oauth_openid_redirect_url_scheme_path"/>
+                <data android:path="@string/oauth_openid_redirect_url_scheme_path_gmail"/>
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/oauth_openid_redirect_url_scheme" />
+                <data android:host="@string/oauth_openid_redirect_url_scheme_host" />
+                <data android:path="@string/oauth_openid_redirect_url_scheme_path_x"/>
             </intent-filter>
         </activity>
     </application>
