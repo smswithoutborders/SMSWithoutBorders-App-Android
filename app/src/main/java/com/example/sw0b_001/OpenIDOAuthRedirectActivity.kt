@@ -7,13 +7,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.sw0b_001.Data.ThreadExecutorPool
 import com.example.sw0b_001.Data.UserArtifactsHandler
 import com.example.sw0b_001.Data.v2.Vault_V2
 import com.example.sw0b_001.Modules.Helpers
+import com.github.kittinunf.fuel.core.Headers
 import kotlinx.serialization.json.Json
 import net.openid.appauth.AuthorizationException
 
 import net.openid.appauth.AuthorizationResponse
+import java.net.URLDecoder
+import java.net.URLEncoder
 
 
 class OpenIDOAuthRedirectActivity : AppCompatActivity() {
@@ -37,33 +41,52 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
         if(intentUrl.isNullOrEmpty())
             finish()
 
-        val platformName = Helpers.getPath(intentUrl!!)
+        val parameters = Helpers.extractParameters(intentUrl!!)
+        parameters.forEach { println("${it.key}: ${it.value}") }
+
+        val platformName = Helpers.getPath(intentUrl).split("/")[2]
+        val state: String = URLDecoder.decode(parameters["state"]!!, "UTF-8")
+        var code: String = URLDecoder.decode(parameters["code"]!!, "UTF-8")
+
+        println("\ncode: $code")
+        println("state: $state")
+        println("state: $state")
+
         try {
-            val credentials = UserArtifactsHandler.fetchCredentials(applicationContext)
-            val url = getString(R.string.smswithoutborders_official_site_login)
-            val networkResponseResults =
-                    Vault_V2.login(credentials.first, credentials.second.toString(), url)
+            ThreadExecutorPool.executorService.execute {
+                val credentials = UserArtifactsHandler.fetchCredentials(applicationContext)
 
-            val uid = Json.decodeFromString<Vault_V2.UID>(networkResponseResults.result.get()).uid
-            // TODO: check if this matches what has been stored
+                val codeVerifier = Vault_V2.fetchOauthRequestVerifier(applicationContext)
 
-            val parameters = Helpers.extractParameters(intentUrl)
-            when(platformName ) {
-                "/gmail.html" -> {
-                    Vault_V2.getGmailGrant(url, networkResponseResults.response.headers, uid,
-                            credentials.first)
-                    Vault_V2.sendGmailCode(url, networkResponseResults.response.headers, uid,
-                            parameters["code"]!!)
-                }
-                "/x.html" -> {
-                    Vault_V2.getXGrant(url, networkResponseResults.response.headers, uid,
-                            credentials.first)
-                    Vault_V2.sendXCode(url, networkResponseResults.response.headers, uid,
-                            parameters["code"]!!)
-                }
-                else -> {
-                    Log.e(javaClass.name, "Unknown platform request: $platformName")
-                    finish()
+                val cookies = Vault_V2.fetchOauthRequestCookies(applicationContext)
+                println("Cookies: $cookies")
+
+                val platformsUrl = getString(R.string.smswithoutborders_official_vault)
+
+                when(platformName ) {
+                    "/gmail.html", "gmail" -> {
+                        var scope: String = URLDecoder.decode(parameters["scope"]!!, "UTF-8")
+                        println("scope: $scope")
+                        Vault_V2.sendGmailCode(applicationContext,
+                                platformsUrl,
+                                Headers().set("Set-Cookie", cookies),
+                                credentials[UserArtifactsHandler.USER_ID_KEY]!!,
+                                code,
+                                codeVerifier,
+                                scope, state)
+                    }
+                    "/x.html", "twitter" -> {
+                        Vault_V2.sendXCode(applicationContext,
+                                platformsUrl,
+                                Headers().set("Set-Cookie", cookies),
+                                credentials[UserArtifactsHandler.USER_ID_KEY]!!,
+                                code,
+                                codeVerifier, state)
+                    }
+                    else -> {
+                        Log.e(javaClass.name, "Unknown platform request: $platformName")
+                        finish()
+                    }
                 }
             }
         } catch(e: Exception) {

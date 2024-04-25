@@ -26,15 +26,16 @@ class SecurityRSA {
         return cipher.doFinal(input)
     }
 
-    fun decrypt(privateKey: PrivateKey, encryptedInput: ByteArray): ByteArray {
-        val cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING)
-
-        cipher.init(Cipher.DECRYPT_MODE, privateKey, decryptionDigestParam)
-
-        return cipher.doFinal(encryptedInput)
-    }
 
     companion object {
+        fun decrypt(privateKey: PrivateKey, encryptedInput: ByteArray): ByteArray {
+            val cipher = Cipher.getInstance(DEFAULT_KEYPAIR_ALGORITHM_PADDING)
+
+            cipher.init(Cipher.DECRYPT_MODE, privateKey, decryptionDigestParam)
+
+            return cipher.doFinal(encryptedInput)
+        }
+
         const val DEFAULT_KEYSTORE_PROVIDER = "AndroidKeyStore"
 
         const val DEFAULT_KEYPAIR_ALGORITHM_PADDING = "RSA/ECB/" + KeyProperties.ENCRYPTION_PADDING_RSA_OAEP

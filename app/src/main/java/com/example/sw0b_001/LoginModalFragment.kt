@@ -77,9 +77,7 @@ class LoginModalFragment : BottomSheetDialogFragment() {
                 val networkResponseResults = Vault_V2.login(phonenumber, password, url)
                 val uid = Json.decodeFromString<Vault_V2.UID>(networkResponseResults.result.get()).uid
 
-                UserArtifactsHandler.storeCredentials(requireContext(), phonenumber, password)
-
-                UserArtifactsHandler.storeUID(view.context, uid)
+                UserArtifactsHandler.storeCredentials(requireContext(), phonenumber, password, uid)
 
                 val platformsUrl = requireContext()
                         .getString(R.string.smswithoutborders_official_vault)

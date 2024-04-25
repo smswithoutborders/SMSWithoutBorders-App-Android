@@ -36,6 +36,7 @@ class OnboardingActivity : AppCompatActivity() {
 //                add(R.id.onboarding_fragment_container, onboardingWelcomeFragment)
 //                setReorderingAllowed(true)
 //                addToBackStack(OnboardingWelcomeFragment.javaClass.name)
+//                configureOnboardingFragments()
 //            }
 
             supportFragmentManager.commit {
@@ -55,7 +56,6 @@ class OnboardingActivity : AppCompatActivity() {
 //                addToBackStack(OnboardingWelcomeFragment.javaClass.name)
 //            }
         }
-//        configureOnboardingFragments()
     }
 
     private fun configureOnboardingFragments() {

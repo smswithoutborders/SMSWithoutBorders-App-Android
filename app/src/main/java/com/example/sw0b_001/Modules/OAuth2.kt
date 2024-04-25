@@ -19,23 +19,32 @@ import net.openid.appauth.ResponseTypeValues
 class OAuth2 {
     companion object {
 
-        public fun requestXAuth(context: Context) {
+        public fun requestXAuth(context: Context,
+                                codeVerifier: String,
+                                codeChallenge: String,
+                                codeChallengeMethod: String,
+                                redirectUrl: String,
+                                scope: String, state: String) {
             // scope=tweet.write+users.read+tweet.read+offline.access
-            val scope = "tweet.write users.read tweet.read offline.access"
+//            val scope = "tweet.write users.read tweet.read offline.access"
             val clientId = context.getString(R.string.oauth_x_client_id)
             val authorizationUri = "https://twitter.com/i/oauth2/authorize"
             val tokenUri = "https://api.twitter.com/2/oauth2/token"
-            val path = context.getString(R.string.oauth_openid_redirect_url_scheme_path_x)
 
-            appAuthRequestManually(context, scope, clientId, authorizationUri, tokenUri, path)
+            appAuthRequestManually(context,
+                    scope,
+                    clientId,
+                    authorizationUri,
+                    tokenUri,
+                    codeChallenge, codeVerifier, codeChallengeMethod, redirectUrl, state)
         }
-        public fun requestGmailAuth(context: Context) {
+        public fun requestGmailAuth(context: Context,
+                                    scope: String,
+                                    redirectUrl: String,
+                                    clientId: String,
+                                    state: String) {
             val serviceUri = "https://accounts.google.com"
-            val scope = "https://www.googleapis.com/auth/gmail.send profile email"
-            val clientId = context.getString(R.string.oauth_gmail_client_id)
-            val path = context.getString(R.string.oauth_openid_redirect_url_scheme_path_gmail)
-
-            appAuthRequestWithDocument(context, serviceUri, scope, clientId, path)
+            appAuthRequestWithDocument(context, serviceUri, scope, clientId, redirectUrl, state)
         }
 
         private fun appAuthRequestManually(context: Context,
@@ -43,16 +52,32 @@ class OAuth2 {
                                            clientId: String,
                                            authorizationUri: String,
                                            tokenUri: String,
-                                           path: String) {
+                                           codeVerifier: String,
+                                           codeChallenge: String,
+                                           codeChallengeMethod: String,
+                                           redirectUrl: String,
+                                           state: String) {
             val serviceConfig = AuthorizationServiceConfiguration(
                     android.net.Uri.parse(authorizationUri),  // authorization endpoint
                     android.net.Uri.parse(tokenUri))
 
-            executeAuthRequest(context, clientId, scope, path, serviceConfig)
+            executeAuthRequest(context,
+                    clientId,
+                    scope,
+                    serviceConfig,
+                    codeVerifier,
+                    codeChallenge,
+                    codeChallengeMethod,
+                    redirectUrl,
+                    state)
         }
 
-        private fun appAuthRequestWithDocument(context: Context, serviceUri: String, scope: String,
-                                   clientId: String, path: String) {
+        private fun appAuthRequestWithDocument(context: Context,
+                                               serviceUri: String,
+                                               scope: String,
+                                               clientId: String,
+                                               redirectUrl: String,
+                                               state: String) {
             AuthorizationServiceConfiguration.fetchFromIssuer(Uri.parse(serviceUri),
                     AuthorizationServiceConfiguration
                             .RetrieveConfigurationCallback { serviceConfiguration, ex ->
@@ -62,8 +87,12 @@ class OAuth2 {
                                     return@RetrieveConfigurationCallback
                                 }
                                 if(serviceConfiguration != null)
-                                    executeAuthRequest(context, clientId, scope, path,
-                                            serviceConfiguration)
+                                    executeAuthRequest(context,
+                                            clientId,
+                                            scope,
+                                            serviceConfiguration,
+                                            "", "", "",
+                                            redirectUrl, state)
 
                             })
         }
@@ -71,23 +100,31 @@ class OAuth2 {
         private fun executeAuthRequest(context: Context,
                                        clientId: String,
                                        scope: String,
-                                       path: String,
-                                       serviceConfiguration: AuthorizationServiceConfiguration) {
-            val redirectUrl = "https://" +
-                    context.getString(
-                            R.string.oauth_openid_redirect_url_scheme_host) + path
+                                       serviceConfiguration: AuthorizationServiceConfiguration,
+                                       codeVerifier: String,
+                                       codeChallenge: String,
+                                       codeChallengeMethod: String, redirectUrl: String, state: String) {
+            Log.d(javaClass.name,
+                    "Auth endpoint: ${serviceConfiguration.authorizationEndpoint}")
 
             val authRequest = AuthorizationRequest.Builder(
                     serviceConfiguration,
                     clientId,
                     ResponseTypeValues.CODE,
                     Uri.parse(redirectUrl)) //redirect url
-                    .setScope(scope) // Gmail send scope
-                    .setPrompt("consent")
-                    .build()
+                    .setScope(scope) // Gmail send scope)
+                    .setState(state)
+//                    .setPrompt("consent")
+
+            if(!codeVerifier.isNullOrEmpty())
+                if(!codeChallenge.isNullOrEmpty() && !codeChallengeMethod.isNullOrEmpty())
+                    authRequest.setCodeVerifier(codeVerifier, codeChallenge, codeChallengeMethod)
+                else authRequest.setCodeVerifier(codeVerifier)
+            else
+                authRequest.setCodeVerifier(null)
 
             val authService = AuthorizationService(context);
-            val authIntent: Intent = authService.getAuthorizationRequestIntent(authRequest);
+            val authIntent: Intent = authService.getAuthorizationRequestIntent(authRequest.build())
             context.startActivity(authIntent);
         }
     }

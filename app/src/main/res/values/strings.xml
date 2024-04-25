@@ -5,12 +5,6 @@
         https://smswithoutborders.com/privacy-policy
     </string>
 
-    <string name="smswithoutborders_official_site_login">
-        https://smswithoutborders.com/login
-    </string>
-
-    <string name="smswithoutborders_official_site_signup">https://smswithoutborders.com/sign-up</string>
-
     <string name="smswithoutborders_official_site_signup_intent" translatable="false">
         intent://smswithoutborders.com/sign-up
     </string>
@@ -307,7 +301,12 @@
     <string name="oauth_openid_redirect_url_scheme" translatable="false">apps</string>
     <string name="oauth_openid_redirect_url_scheme_host" translatable="false">oauth.afkanerd.com</string>
 
-    <string name="oauth_openid_redirect_url_scheme_path_gmail" translatable="false">/gmail.html</string>
-    <string name="oauth_openid_redirect_url_scheme_path_x" translatable="false">/x.html</string>
+    <string name="oauth_openid_redirect_url_scheme_path_gmail" translatable="false">/platforms/gmail/protocols/oauth2/redirect_codes/</string>
+    <string name="oauth_openid_redirect_url_scheme_path_x" translatable="false">/platforms/twitter/protocols/oauth2/redirect_codes/</string>
+
+<!--    <string name="smswithoutborders_official_vault" translatable="false">https://smswithoutborders.com:9000</string>-->
+<!--    <string name="smswithoutborders_official_site_login" translatable="false">https://smswithoutborders.com:9000/v2/login</string>-->
+<!--    <string name="smswithoutborders_official_site_signup" translatable="false">https://smswithoutborders.com:9000/v2/signup</string>-->
+<!--    <string name="smswithoutborders_official_otp_submission" translatable="false">https://smswithoutborders.com:9000/v2/OTP</string>-->
 
 </resources>

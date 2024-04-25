@@ -41,6 +41,7 @@ class Network {
             else
                 Fuel.put(url)
                         .jsonBody(payload)
+                        .header(headers)
                         .header( Headers.COOKIE to headers["Set-Cookie"].first())
                         .responseString()
 
