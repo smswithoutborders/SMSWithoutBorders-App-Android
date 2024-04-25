@@ -14,6 +14,7 @@ import com.example.sw0b_001.Data.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Data.ThreadExecutorPool
 import com.example.sw0b_001.Data.UserArtifactsHandler
 import com.example.sw0b_001.Data.v2.Vault_V2
+import com.example.sw0b_001.Onboarding.OnboardingComponent
 import com.github.kittinunf.fuel.core.Headers
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -84,8 +85,7 @@ class LoginModalFragment : BottomSheetDialogFragment() {
 
                 storePlatforms(uid, platformsUrl, networkResponseResults.response.headers)
 
-                showPlatformsModal()
-
+                onSuccessCallback(view)
                 dismiss()
             } catch(e: Exception) {
                 e.printStackTrace()
@@ -107,12 +107,13 @@ class LoginModalFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun showPlatformsModal() {
-        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-        val platformsModalFragment = PlatformsModalFragment()
-        fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
-        fragmentTransaction?.show(platformsModalFragment)
-        activity?.runOnUiThread { fragmentTransaction?.commitNow() }
+    private fun onSuccessCallback(view: View) {
+        if(UserArtifactsHandler.isCredentials(view.context)) {
+            activity?.runOnUiThread {
+                activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
+                        ?.performClick()
+            }
+        }
     }
 
     private fun storePlatforms(uid: String, url: String, headers: Headers) {
@@ -150,56 +151,4 @@ class LoginModalFragment : BottomSheetDialogFragment() {
         Log.d(javaClass.name, "Platforms stored")
     }
 
-//    private fun login(view: View) {
-//        val cardView = findViewById<MaterialCardView>(R.id.login_status_card)
-//        cardView.visibility = View.GONE
-//
-//        val phoneNumber = findViewById<TextInputEditText>(R.id.login_phonenumber_text_input)
-//                .text.toString()
-//        val password = findViewById<TextInputEditText>(R.id.login_password_text_input)
-//                .text.toString()
-//        val customUrl = findViewById<TextInputEditText>(R.id.login_url_input)
-//
-//        var url = getString(R.string.default_login_url)
-//        if(customUrl != null && customUrl.text != null)
-//            url = customUrl.text.toString()
-//
-//        val progressIndicator = findViewById<LinearProgressIndicator>(R.id.login_progress_bar)
-//        progressIndicator.visibility = View.VISIBLE
-//
-//        ThreadExecutorPool.executorService.execute(Runnable {
-//            val networkResponseResults = BackendCommunications.login(phoneNumber, password, url)
-//            when(networkResponseResults.result) {
-//                is Result.Success -> {
-//                    val obj = Json
-//                            .decodeFromString<BackendCommunications.UID>(
-//                                    networkResponseResults.result.get())
-//                    val uid = obj.uid
-//                    BackendCommunications(obj.uid).storeUID(applicationContext, url)
-//                    storePlatforms(BackendCommunications(uid),
-//                            getString(R.string.default_backend_url),
-//                            networkResponseResults.response!!.headers)
-//                    startActivity(Intent(this, HomepageActivity::class.java))
-//                }
-//                is Result.Failure -> {
-//                    val errorTextView = findViewById<MaterialTextView>(R.id.login_error_text)
-//                    runOnUiThread(Runnable {
-//                        cardView.visibility = View.VISIBLE
-//                        errorTextView.visibility = View.VISIBLE
-//                        errorTextView.text = getString(R.string.login_wrong_credentials)
-//                    })
-//                }
-//                else -> {
-//                    runOnUiThread(Runnable {
-//                        cardView.visibility = View.VISIBLE
-//                        findViewById<MaterialButton>(R.id.login_retry_btn).visibility = View.VISIBLE
-//                    })
-//                }
-//            }
-//            runOnUiThread(Runnable {
-//                progressIndicator.visibility = View.GONE
-//            })
-//        })
-//    }
-//
 }

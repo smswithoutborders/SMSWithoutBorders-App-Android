@@ -133,8 +133,6 @@ class Vault_V2(val uid: String) {
             return Json.decodeFromString<Platforms>(networkResponseResults.result.get())
         }
 
-        //https://accounts.google.com/o/oauth2/v2/auth?redirect_uri=https%3A%2F%2Foauth.afkanerd.com%2Fplatforms%2Fgmail%2Fprotocols%2Foauth2%2Fredirect_codes%2F&client_id=86878463881-3miiph6l8e8almabu5mat1gun3aaumrv.apps.googleusercontent.com&response_type=code&state=Tfx9xGx7bnWIB7GXB03rjDeDGTagqL&nonce=azAG6pu1qxjgzsF6SlfS3w&scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fgmail.send%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email
-        //https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=https%3A%2F%2Foauth.afkanerd.com%2Fplatforms%2Fgmail%2Fprotocols%2Foauth2%2Fredirect_codes%2F&client_id=86878463881-3miiph6l8e8almabu5mat1gun3aaumrv.apps.googleusercontent.com&response_type=code&state=Tfx9xGx7bnWIB7GXB03rjDeDGTagqL&nonce=azAG6pu1qxjgzsF6SlfS3w&scope=openid%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fgmail.send%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&service=lso&o2v=2&ddm=0&flowName=GeneralOAuthFlow
         fun sendGmailCode(context: Context,
                           url: String,
                           headers: Headers,
@@ -142,7 +140,7 @@ class Vault_V2(val uid: String) {
                           code: String,
                           code_verifier: String,
                           scope: String,
-                          state: String) {
+                          state: String) : Network.NetworkResponseResults {
             val platformsUrl = "${url}/v2/users/${uid}/platforms/gmail/protocols/oauth2"
             headers["Origin"] = "https://" +
                     context.getString(R.string.oauth_openid_redirect_url_scheme_host)
@@ -155,6 +153,7 @@ class Vault_V2(val uid: String) {
             when(networkResponseResults.response.statusCode) {
                 in 400..600 -> throw Exception(String(networkResponseResults.response.data))
             }
+            return networkResponseResults
         }
 
         fun sendXCode(context: Context,
@@ -163,8 +162,9 @@ class Vault_V2(val uid: String) {
                       uid: String,
                       code: String,
                       code_verifier: String,
-                      state: String) {
+                      state: String) : Network.NetworkResponseResults {
             val platformsUrl = "${url}/v2/users/${uid}/platforms/twitter/protocols/oauth2"
+
             headers["Origin"] = "https://" +
                     context.getString(R.string.oauth_openid_redirect_url_scheme_host)
 
@@ -173,6 +173,7 @@ class Vault_V2(val uid: String) {
             when(networkResponseResults.response.statusCode) {
                 in 400..600 -> throw Exception(String(networkResponseResults.response.data))
             }
+            return networkResponseResults
         }
 
         fun getXGrant(url: String, headers: Headers, uid: String, phone_number: String) :

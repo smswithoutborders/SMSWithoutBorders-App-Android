@@ -7,4 +7,9 @@ open class OnboardingComponent : Fragment() {
     var previousButtonText: String = ""
     var skipButtonText: String = ""
     var skipOnboardingFragment: OnboardingComponent? = null
+
+    public interface ManageComponentsListing {
+        fun removeComponent(index: Int)
+        fun removeComponent(component: OnboardingComponent)
+    }
 }

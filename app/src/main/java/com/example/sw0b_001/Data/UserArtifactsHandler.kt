@@ -17,6 +17,16 @@ class UserArtifactsHandler {
         const val PHONE_NUMBER = "PHONE_NUMBER"
         const val PASSWORD = "PASSWORD"
 
+        fun isCredentials(context: Context): Boolean {
+            val sharedPreferences = Armadillo.create( context, PREF_USER_ARTIFACTS_FILE)
+                    .encryptionFingerprint(context)
+                    .build()
+
+            return sharedPreferences.contains(PHONE_NUMBER) &&
+                    sharedPreferences.contains(PASSWORD) &&
+                    sharedPreferences.contains(USER_ID_KEY)
+        }
+
         fun fetchCredentials(context: Context) : Map<String, String> {
             val sharedPreferences = Armadillo.create( context, PREF_USER_ARTIFACTS_FILE)
                     .encryptionFingerprint(context)

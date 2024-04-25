@@ -53,6 +53,8 @@ public class PlatformsRecyclerAdapter extends
             Log.d(PlatformsRecyclerAdapter.class.getName(), platforms.getType());
             if(platforms.getType().equals("email"))
                 onClickListenerLiveData.setValue(Platforms.TYPE_EMAIL);
+            else if(platforms.getType().equals("text"))
+                onClickListenerLiveData.setValue(Platforms.TYPE_TEXT);
         });
     }
 

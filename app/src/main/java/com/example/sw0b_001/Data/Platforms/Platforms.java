@@ -15,6 +15,8 @@ import java.util.Objects;
 public class Platforms {
 
     public static final int TYPE_EMAIL = 1;
+    public static final int TYPE_TEXT = 2;
+
     @PrimaryKey(autoGenerate = true)
     private long id;
 

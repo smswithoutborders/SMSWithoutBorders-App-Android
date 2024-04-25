@@ -11,7 +11,7 @@ import com.google.android.material.button.MaterialButton
 
 class OnboardingPublishExampleFragment : OnboardingComponent() {
     init {
-        nextButtonText = "Try Example!"
+        nextButtonText = "Next"
         previousButtonText = "Previous"
         skipButtonText = "skip"
         skipOnboardingFragment = OnboardingSkippedAllFragment()
@@ -31,8 +31,8 @@ class OnboardingPublishExampleFragment : OnboardingComponent() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val tryExampleButton = activity
-                ?.findViewById<MaterialButton>(R.id.onboard_next_button)
+        val tryExampleButton = view.findViewById<MaterialButton>(
+                R.id.onboarding_welcome_vaults_instructions_try_example_btn)
 
         tryExampleButton?.setOnClickListener {
             showPlatformsModal()
@@ -41,7 +41,7 @@ class OnboardingPublishExampleFragment : OnboardingComponent() {
 
     private fun showPlatformsModal() {
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-        val platformsModalFragment = PlatformsModalFragment(PlatformsModalFragment.SHOW_TYPE_SAVED)
+        val platformsModalFragment = PlatformsModalFragment()
         fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
         fragmentTransaction?.show(platformsModalFragment)
         activity?.runOnUiThread { fragmentTransaction?.commitNow() }

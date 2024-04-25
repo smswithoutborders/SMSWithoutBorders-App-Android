@@ -67,21 +67,27 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
                     "/gmail.html", "gmail" -> {
                         var scope: String = URLDecoder.decode(parameters["scope"]!!, "UTF-8")
                         println("scope: $scope")
-                        Vault_V2.sendGmailCode(applicationContext,
+                        val networkResponseResults = Vault_V2.sendGmailCode(applicationContext,
                                 platformsUrl,
                                 Headers().set("Set-Cookie", cookies),
                                 credentials[UserArtifactsHandler.USER_ID_KEY]!!,
                                 code,
                                 codeVerifier,
                                 scope, state)
+                        when(networkResponseResults.response.statusCode) {
+                            200 -> { println("All good, gmail stored!") }
+                        }
                     }
                     "/x.html", "twitter" -> {
-                        Vault_V2.sendXCode(applicationContext,
+                        val networkResponseResults = Vault_V2.sendXCode(applicationContext,
                                 platformsUrl,
                                 Headers().set("Set-Cookie", cookies),
                                 credentials[UserArtifactsHandler.USER_ID_KEY]!!,
                                 code,
                                 codeVerifier, state)
+                        when(networkResponseResults.response.statusCode) {
+                            200 -> { println("All good, X stored!") }
+                        }
                     }
                     else -> {
                         Log.e(javaClass.name, "Unknown platform request: $platformName")
