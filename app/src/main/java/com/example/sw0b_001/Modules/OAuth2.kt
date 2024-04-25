@@ -36,7 +36,7 @@ class OAuth2 {
                     clientId,
                     authorizationUri,
                     tokenUri,
-                    codeChallenge, codeVerifier, codeChallengeMethod, redirectUrl, state)
+                    codeVerifier, codeChallenge, codeChallengeMethod, redirectUrl, state)
         }
         public fun requestGmailAuth(context: Context,
                                     scope: String,
@@ -97,6 +97,7 @@ class OAuth2 {
                             })
         }
 
+        //https://twitter.com/i/oauth2/authorize?redirect_uri=https%3A%2F%2Foauth.afkanerd.com%2Fplatforms%2Ftwitter%2Fprotocols%2Foauth2%2Fredirect_codes%2F&client_id=WGptX1N5dkJiS1lVUFZUSC1wYkk6MTpjaQ&response_type=code&state=9nKkCduwu4gr0B3VNcCdgdE8GkGg3R&nonce=lnb8q1I036k65o_Klf_mhg&scope=tweet.write%20users.read%20tweet.read%20offline.access&code_challenge=rO5DnAe7weQ6GcTa5JtD6Y194yZwVzbwX8HtCtI9OVEnMdJ65guQ&code_challenge_method=S256
         private fun executeAuthRequest(context: Context,
                                        clientId: String,
                                        scope: String,
@@ -116,10 +117,14 @@ class OAuth2 {
                     .setState(state)
 //                    .setPrompt("consent")
 
-            if(!codeVerifier.isNullOrEmpty())
-                if(!codeChallenge.isNullOrEmpty() && !codeChallengeMethod.isNullOrEmpty())
+            if(!codeVerifier.isNullOrEmpty()) {
+                println("Code verifier: $codeVerifier")
+                if (!codeChallenge.isNullOrEmpty() && !codeChallengeMethod.isNullOrEmpty()) {
+                    println("Code challenge: $codeChallenge")
+                    println("Code challenge method: $codeChallengeMethod")
                     authRequest.setCodeVerifier(codeVerifier, codeChallenge, codeChallengeMethod)
-                else authRequest.setCodeVerifier(codeVerifier)
+                } else authRequest.setCodeVerifier(codeVerifier)
+            }
             else
                 authRequest.setCodeVerifier(null)
 

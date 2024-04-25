@@ -64,11 +64,10 @@ class Vault_V2(val uid: String) {
     @Serializable
     data class OAuthGrantSubmissionGmail(val code: String,
                                          val scope: String,
-//                                         val code_verifier: String,
                                          val state: String)
 
     @Serializable
-    data class OAuthGrantSubmissionX(val code: String, val code_verifier: String, val state: String)
+    data class OAuthGrantSubmissionX(val code: String, val code_verifier: String)
 
     companion object {
         const val INVALID_CREDENTIALS_EXCEPTION = "INVALID_CREDENTIALS_EXCEPTION"
@@ -169,7 +168,7 @@ class Vault_V2(val uid: String) {
             headers["Origin"] = "https://" +
                     context.getString(R.string.oauth_openid_redirect_url_scheme_host)
 
-            val payload = Json.encodeToString(OAuthGrantSubmissionX(code, code_verifier, state))
+            val payload = Json.encodeToString(OAuthGrantSubmissionX(code, code_verifier))
             val networkResponseResults = Network.jsonRequestPut(platformsUrl, payload, headers)
             when(networkResponseResults.response.statusCode) {
                 in 400..600 -> throw Exception(String(networkResponseResults.response.data))
