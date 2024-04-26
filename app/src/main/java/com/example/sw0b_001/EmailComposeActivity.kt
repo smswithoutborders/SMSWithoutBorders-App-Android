@@ -9,7 +9,7 @@ import android.widget.EditText
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Data.EncryptedContent.EncryptedContentHandler
 import com.example.sw0b_001.Data.GatewayClients.GatewayClientsCommunications
-import com.example.sw0b_001.Data.Platforms.PlatformsHandler
+import com.example.sw0b_001.Data.Platforms._PlatformsHandler
 import com.example.sw0b_001.Data.PublisherHandler
 import com.example.sw0b_001.Data.SMSHandler
 import com.example.sw0b_001.Data.ThreadExecutorPool
@@ -100,7 +100,7 @@ class EmailComposeActivity : AppCompactActivityCustomized() {
             }
 
             val platformId = intent.getLongExtra(INTENT_PLATFORM_ID, -1)
-            val platforms = PlatformsHandler.getPlatform(applicationContext, platformId)
+            val platforms = _PlatformsHandler.getPlatform(applicationContext, platformId)
 
             val formattedContent = processEmailForEncryption(
                     platforms.letter,

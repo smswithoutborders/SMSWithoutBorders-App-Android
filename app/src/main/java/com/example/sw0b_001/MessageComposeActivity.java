@@ -22,7 +22,7 @@ import com.example.sw0b_001.Data.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Data.EncryptedContent.EncryptedContentDAO;
 import com.example.sw0b_001.Data.EncryptedContent.EncryptedContentHandler;
 import com.example.sw0b_001.Data.Platforms.Platforms;
-import com.example.sw0b_001.Data.Platforms.PlatformsHandler;
+import com.example.sw0b_001.Data.Platforms._PlatformsHandler;
 import com.example.sw0b_001.Data.PublisherHandler;
 import com.example.sw0b_001.Data.SMSHandler;
 import com.example.sw0b_001.databinding.ActivityMessageComposeBinding;
@@ -188,7 +188,7 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
                 try {
                     long platformId = getIntent().getLongExtra("platform_id", -1);
 
-                    Platforms platforms = PlatformsHandler.getPlatform(getApplicationContext(), platformId);
+                    Platforms platforms = _PlatformsHandler.getPlatform(getApplicationContext(), platformId);
                     String formattedContent = processEmailForEncryption(platforms.getLetter(), to, message);
                     String encryptedContentBase64 = PublisherHandler.formatForPublishing(getApplicationContext(), formattedContent);
 //                    String gatewayClientMSISDN = GatewayClientsHandler.getDefaultGatewayClientMSISDN(getApplicationContext());

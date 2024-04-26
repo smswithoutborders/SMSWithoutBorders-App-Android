@@ -11,7 +11,12 @@ import com.example.sw0b_001.MessageComposeActivity;
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.TextComposeActivity;
 
-public class PlatformsHandler {
+public class _PlatformsHandler {
+
+    static public void storePlatforms() {
+
+    }
+
     static public Intent getIntent(Context context, String platform_name, String type) {
         Intent intent = null;
         switch(type) {

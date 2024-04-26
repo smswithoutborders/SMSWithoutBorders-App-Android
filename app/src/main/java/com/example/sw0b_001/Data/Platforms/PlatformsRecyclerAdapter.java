@@ -1,23 +1,17 @@
 package com.example.sw0b_001.Data.Platforms;
 
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sw0b_001.EmailComposeActivity;
-import com.example.sw0b_001.EmailComposeModalFragment;
 import com.example.sw0b_001.R;
 import com.google.android.material.card.MaterialCardView;
 
@@ -70,7 +64,7 @@ public class PlatformsRecyclerAdapter extends
 
         public void bind(Platforms platforms, MutableLiveData<Integer> onClickListenerLiveData) {
             image.setImageDrawable(itemView.getContext()
-                    .getDrawable(PlatformsHandler.hardGetLogoByName(itemView.getContext(),
+                    .getDrawable(_PlatformsHandler.hardGetLogoByName(itemView.getContext(),
                     platforms.getName())));
 
             cardView.setOnClickListener(it -> {

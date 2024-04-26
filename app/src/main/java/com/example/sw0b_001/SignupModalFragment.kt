@@ -48,12 +48,18 @@ class SignupModalFragment : BottomSheetDialogFragment() {
         configureRecaptcha(view)
     }
 
-    private fun replaceFragment(headers: Headers) {
+    private fun replaceFragment(vaultHeaders: Headers,
+                                headers: Headers,
+                                phonenumber: String,
+                                uid: String,
+                                password: String) {
         activity?.runOnUiThread {
             val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-            val otpVerificationFragment = OTPVerificationFragment()
-            otpVerificationFragment.arguments?.putString("Set-Cookie",
-                    headers.getValue("Set-Cookie").toString())
+            val otpVerificationFragment = OTPVerificationFragment(
+                    vaultHeaders,
+                    headers,
+                    phonenumber,
+                    uid, password)
 
             fragmentTransaction?.replace(R.id.onboarding_fragment_container,
                     otpVerificationFragment)
@@ -113,7 +119,11 @@ class SignupModalFragment : BottomSheetDialogFragment() {
 
             // TODO: do something in case the request fails to go out
 
-            replaceFragment(optNetworkResponseResults.response.headers)
+            replaceFragment(networkResponseResults.response.headers,
+                    optNetworkResponseResults.response.headers,
+                    completePhoneNumber,
+                    uid,
+                    password)
             dismiss()
         } catch(e: Exception) {
             e.printStackTrace()

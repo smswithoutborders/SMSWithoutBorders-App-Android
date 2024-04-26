@@ -14,15 +14,27 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.sw0b_001.Data.Platforms.PlatformsHandler
+import com.example.sw0b_001.Data.Platforms.PlatformsViewModel
+import com.example.sw0b_001.Data.UserArtifactsHandler
 import com.example.sw0b_001.Data.v2.Vault_V2
+import com.example.sw0b_001.Modules.Network
 import com.github.kittinunf.fuel.core.Headers
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textview.MaterialTextView
 
-class OTPVerificationFragment : Fragment() {
+class OTPVerificationFragment(val vaultHeaders: Headers,
+                              var headers: Headers,
+                              val phoneNumber: String,
+                              val uid: String,
+                              val password: String) : Fragment() {
 
     private val SMS_CONSENT_REQUEST = 2  // Set to an unused request code
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,30 +105,89 @@ class OTPVerificationFragment : Fragment() {
             it.isEnabled = false
             submitOTPCode(it, codeTextView.text.toString())
         }
+
+        view.findViewById<MaterialTextView>(R.id.ownership_resend_code_by_sms_btn)
+                .setOnClickListener {
+                    val linearProgressIndicator = view
+                            .findViewById<LinearProgressIndicator>(R.id.ownership_progress_bar)
+                    linearProgressIndicator.visibility = View.VISIBLE
+                    val optNetworkResponseResults = resendCode(it)
+                    when(optNetworkResponseResults.response.statusCode) {
+                        in 400..600 -> throw Exception(String(optNetworkResponseResults.response.data))
+                    }
+                    headers = optNetworkResponseResults.response.headers
+                    linearProgressIndicator.visibility = View.GONE
+                }
+    }
+
+    private fun resendCode(view: View) : Network.NetworkResponseResults{
+        println("Re-sending code: $phoneNumber")
+        val otpRequestUrl = view.context.getString(R.string.smswithoutborders_official_vault)
+        return Vault_V2.otpRequest(otpRequestUrl,
+                vaultHeaders, phoneNumber, uid)
+
     }
 
     private fun submitOTPCode(view: View, code: String) {
+        val linearProgressIndicator = view
+                .findViewById<LinearProgressIndicator>(R.id.ownership_progress_bar)
+        linearProgressIndicator.visibility = View.VISIBLE
+
         val otpSubmissionUrl = view.context
                 .getString(R.string.smswithoutborders_official_otp_submission)
-        val headers = Headers()
-        headers["Set-Cookie"] = arguments?.getString("Set-Cookie", "").toString()
+
         val networkResponseResultsOTP = Vault_V2.otpSubmit(otpSubmissionUrl, headers, code)
 
-        val url = context?.getString(R.string.smswithoutborders_official_site_signup)
-        val completeNetworkResponseResults =
-                Vault_V2.signupOtpComplete(url!!, networkResponseResultsOTP.response.headers)
-
-        when(completeNetworkResponseResults.response.statusCode) {
+        when(networkResponseResultsOTP.response.statusCode) {
             200 -> {
-                println("All good, account created!")
-                TODO("Take some action now")
-            } else -> {
+                println("All good, code submitted!")
+                val url = context?.getString(R.string.smswithoutborders_official_site_signup)
+                val completeNetworkResponseResults =
+                        Vault_V2.signupOtpComplete(url!!, networkResponseResultsOTP.response.headers)
+
+                when(completeNetworkResponseResults.response.statusCode) {
+                    200 -> {
+                        UserArtifactsHandler.storeCredentials(requireContext(), phoneNumber,
+                                password, uid)
+
+                        val platformsUrl = requireContext()
+                                .getString(R.string.smswithoutborders_official_vault)
+
+                        val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java]
+                        PlatformsHandler.storePlatforms(requireContext(),
+                                platformsViewModel,
+                                uid,
+                                platformsUrl,
+                                completeNetworkResponseResults.response.headers)
+
+                        linearProgressIndicator.visibility = View.GONE
+                        onSuccessCallback(view)
+                    } else -> {
+                        view.isEnabled = true
+                        Log.e(javaClass.name, "Signup completion error: " +
+                                "${String(completeNetworkResponseResults.response.data)}")
+                        linearProgressIndicator.visibility = View.GONE
+                    }
+                }
+            }
+            else -> {
                 view.isEnabled = true
                 Log.e(javaClass.name, "OTP submission error: " +
-                        "${String(completeNetworkResponseResults.response.data)}")
+                        "${String(networkResponseResultsOTP.response.data)}")
+                linearProgressIndicator.visibility = View.GONE
             }
         }
     }
+
+    private fun onSuccessCallback(view: View) {
+        if(UserArtifactsHandler.isCredentials(view.context)) {
+            activity?.runOnUiThread {
+                activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
+                        ?.performClick()
+            }
+        }
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -129,7 +200,7 @@ class OTPVerificationFragment : Fragment() {
                     val code = message?.split(smsTemplate.toRegex())
                     if(code != null && code?.size!! > 1)
                         view?.findViewById<TextInputEditText>(R.id.ownership_verification_input)
-                                ?.setText(code[1])
+                                ?.setText(code[1].replace(" ".toRegex(), ""))
                 }
             }
         }

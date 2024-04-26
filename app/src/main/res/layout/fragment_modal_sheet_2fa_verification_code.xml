@@ -14,6 +14,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/ownership_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ownership_verification_toolbar"
+        tools:visibility="visible" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/ownership_verification_description"
         android:layout_width="match_parent"
@@ -25,7 +37,7 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ownership_verification_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/ownership_progress_bar" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/ownership_verification_layout"
@@ -58,10 +70,11 @@
         app:layout_constraintTop_toBottomOf="@+id/ownership_verification_layout" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/ownership_resend_code_by_sms_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Resend code by SMS"
+        android:text="@string/ownership_resend_code_by_sms"
         android:textColor="@color/default_blue"
         app:layout_constraintEnd_toEndOf="@+id/ownership_verification_btn"
         app:layout_constraintStart_toStartOf="@+id/ownership_verification_btn"

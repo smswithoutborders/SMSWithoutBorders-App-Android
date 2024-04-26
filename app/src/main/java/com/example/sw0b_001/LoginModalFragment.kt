@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityAES
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
 import com.example.sw0b_001.Data.Platforms.Platforms
+import com.example.sw0b_001.Data.Platforms.PlatformsHandler
 import com.example.sw0b_001.Data.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Data.ThreadExecutorPool
 import com.example.sw0b_001.Data.UserArtifactsHandler
@@ -83,7 +84,13 @@ class LoginModalFragment : BottomSheetDialogFragment() {
                 val platformsUrl = requireContext()
                         .getString(R.string.smswithoutborders_official_vault)
 
-                storePlatforms(uid, platformsUrl, networkResponseResults.response.headers)
+
+                val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java]
+                PlatformsHandler.storePlatforms(requireContext(),
+                        platformsViewModel,
+                        uid,
+                        platformsUrl,
+                        networkResponseResults.response.headers)
 
                 onSuccessCallback(view)
                 dismiss()
@@ -116,39 +123,5 @@ class LoginModalFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun storePlatforms(uid: String, url: String, headers: Headers) {
-        val platforms = Vault_V2.getPlatforms(url, headers, uid)
-
-        val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java]
-        platformsViewModel.deleteAll(requireContext())
-
-        val listPlatforms = ArrayList<Platforms>()
-        platforms.saved_platforms.forEach {
-            val platform = Platforms()
-            platform.name = it.name
-            platform.description = ""
-            platform.type = it.type
-            platform.letter = it.letter
-            platform.isSaved = true
-//            platform.logo = PlatformsHandler
-//                    .hardGetLogoByName(applicationContext, it.name)
-//            platformsViewModel.store(requireContext(), platform)
-            listPlatforms.add(platform)
-        }
-
-        platforms.unsaved_platforms.forEach {
-            val platform = Platforms()
-            platform.name = it.name
-            platform.description = ""
-            platform.type = it.type
-            platform.letter = it.letter
-//            platform.logo = PlatformsHandler
-//                    .hardGetLogoByName(applicationContext, it.name)
-//            platformsViewModel.store(requireContext(), platform)
-            listPlatforms.add(platform)
-        }
-        platformsViewModel.storeAll(requireContext(), listPlatforms)
-        Log.d(javaClass.name, "Platforms stored")
-    }
 
 }

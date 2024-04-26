@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw0b_001.Data.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Data.Platforms.Platforms;
-import com.example.sw0b_001.Data.Platforms.PlatformsHandler;
+import com.example.sw0b_001.Data.Platforms._PlatformsHandler;
 import com.example.sw0b_001.R;
 
 import org.jetbrains.annotations.NotNull;
@@ -57,11 +57,11 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
 
         holder.encryptedTextSnippet.setText(displayString);
 
-        Platforms platforms = PlatformsHandler.getPlatform(holder.itemView.getContext(),
+        Platforms platforms = _PlatformsHandler.getPlatform(holder.itemView.getContext(),
                 encryptedContent.getPlatformName());
 
         holder.platformLogo.setImageResource(
-                (int) PlatformsHandler.hardGetLogoByName(holder.itemView.getContext(), platforms.getName()));
+                (int) _PlatformsHandler.hardGetLogoByName(holder.itemView.getContext(), platforms.getName()));
 
         Date date = new Date(encryptedContent.getDate());
         if(DateUtils.isToday(encryptedContent.getDate())) {
@@ -88,7 +88,7 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent platformIntent = PlatformsHandler.getIntent(view.getContext(),
+                Intent platformIntent = _PlatformsHandler.getIntent(view.getContext(),
                         platforms.getName(), platforms.getType());
                 platformIntent.putExtra("encrypted_content_id", encryptedContent.getId());
                 platformIntent.putExtra("platform_id", platforms.getId());

@@ -53,6 +53,7 @@ class OnboardingLoginSignupVaultModalFragment : BottomSheetDialogFragment() {
                     dismiss()
 
                     val signupModalFragment = SignupModalFragment()
+
                     fragmentTransaction?.add(signupModalFragment, "login_signup_signup_vault_tag")
                     fragmentTransaction?.show(signupModalFragment)
                     fragmentTransaction?.commit()
