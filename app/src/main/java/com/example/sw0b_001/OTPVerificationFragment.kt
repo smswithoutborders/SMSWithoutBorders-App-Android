@@ -14,13 +14,17 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
+import com.example.sw0b_001.Data.v2.Vault_V2
+import com.github.kittinunf.fuel.core.Headers
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
-
 class OTPVerificationFragment : Fragment() {
+
+    private val SMS_CONSENT_REQUEST = 2  // Set to an unused request code
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,7 +34,6 @@ class OTPVerificationFragment : Fragment() {
         configureVerificationListener()
     }
 
-    private val SMS_CONSENT_REQUEST = 2  // Set to an unused request code
 
     private val smsVerificationReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -81,6 +84,38 @@ class OTPVerificationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.findViewById<MaterialButton>(R.id.ownership_verification_btn).setOnClickListener {
+            val codeTextView = view.findViewById<TextInputEditText>(R.id.ownership_verification_input)
+            if(codeTextView.text.isNullOrEmpty()) {
+                codeTextView.error = getString(R.string.owernship_otp_please_enter_a_valid_code)
+                return@setOnClickListener
+            }
+            it.isEnabled = false
+            submitOTPCode(it, codeTextView.text.toString())
+        }
+    }
+
+    private fun submitOTPCode(view: View, code: String) {
+        val otpSubmissionUrl = view.context
+                .getString(R.string.smswithoutborders_official_otp_submission)
+        val headers = Headers()
+        headers["Set-Cookie"] = arguments?.getString("Set-Cookie", "").toString()
+        val networkResponseResultsOTP = Vault_V2.otpSubmit(otpSubmissionUrl, headers, code)
+
+        val url = context?.getString(R.string.smswithoutborders_official_site_signup)
+        val completeNetworkResponseResults =
+                Vault_V2.signupOtpComplete(url!!, networkResponseResultsOTP.response.headers)
+
+        when(completeNetworkResponseResults.response.statusCode) {
+            200 -> {
+                println("All good, account created!")
+                TODO("Take some action now")
+            } else -> {
+                view.isEnabled = true
+                Log.e(javaClass.name, "OTP submission error: " +
+                        "${String(completeNetworkResponseResults.response.data)}")
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

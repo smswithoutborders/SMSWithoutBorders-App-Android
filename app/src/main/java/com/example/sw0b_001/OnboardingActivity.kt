@@ -7,6 +7,7 @@ import android.text.Html
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.fragment.app.commitNow
 import androidx.lifecycle.MutableLiveData
 import com.example.sw0b_001.Onboarding.OnboardingComponent
 import com.example.sw0b_001.Onboarding.OnboardingPublishExampleFragment

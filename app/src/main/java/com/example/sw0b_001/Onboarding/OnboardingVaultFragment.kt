@@ -44,6 +44,7 @@ class OnboardingVaultFragment : OnboardingComponent() {
 
 
         if(UserArtifactsHandler.isCredentials(view.context)) {
+            println("Yes should press the next button")
             activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
                     ?.performClick()
             if(activity is OnboardingComponent.ManageComponentsListing)

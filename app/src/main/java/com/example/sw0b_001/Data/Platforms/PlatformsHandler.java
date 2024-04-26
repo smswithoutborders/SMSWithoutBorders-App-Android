@@ -37,8 +37,8 @@ public class PlatformsHandler {
         return intent;
     }
 
-    public static long hardGetLogoByName(Context context, String name) {
-        long logo = -1;
+    public static int hardGetLogoByName(Context context, String name) {
+        int logo = -1;
         if(name.equals("gmail"))
             logo = R.drawable.gmail;
 

@@ -48,14 +48,7 @@ public class PlatformsRecyclerAdapter extends
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder viewHolder, int position) {
         Platforms platforms = mDiffer.getCurrentList().get(position);
-        viewHolder.bind(platforms);
-        viewHolder.itemView.setOnClickListener(it -> {
-            Log.d(PlatformsRecyclerAdapter.class.getName(), platforms.getType());
-            if(platforms.getType().equals("email"))
-                onClickListenerLiveData.setValue(Platforms.TYPE_EMAIL);
-            else if(platforms.getType().equals("text"))
-                onClickListenerLiveData.setValue(Platforms.TYPE_TEXT);
-        });
+        viewHolder.bind(platforms, onClickListenerLiveData);
     }
 
     @Override
@@ -75,7 +68,18 @@ public class PlatformsRecyclerAdapter extends
             this.image = itemView.findViewById(R.id.platforms_thumbnails);
         }
 
-        public void bind(Platforms platforms) {
+        public void bind(Platforms platforms, MutableLiveData<Integer> onClickListenerLiveData) {
+            image.setImageDrawable(itemView.getContext()
+                    .getDrawable(PlatformsHandler.hardGetLogoByName(itemView.getContext(),
+                    platforms.getName())));
+
+            cardView.setOnClickListener(it -> {
+                Log.d(PlatformsRecyclerAdapter.class.getName(), platforms.getType());
+                if(platforms.getType().equals("email"))
+                    onClickListenerLiveData.setValue(Platforms.TYPE_EMAIL);
+                else if(platforms.getType().equals("text"))
+                    onClickListenerLiveData.setValue(Platforms.TYPE_TEXT);
+            });
         }
     }
 }

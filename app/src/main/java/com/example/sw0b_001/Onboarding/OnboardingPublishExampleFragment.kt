@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.sw0b_001.Data.UserArtifactsHandler
 import com.example.sw0b_001.PlatformsModalFragment
 import com.example.sw0b_001.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -36,6 +37,13 @@ class OnboardingPublishExampleFragment : OnboardingComponent() {
 
         tryExampleButton?.setOnClickListener {
             showPlatformsModal()
+        }
+
+        if(!UserArtifactsHandler.isCredentials(view.context)) {
+            activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
+                    ?.performClick()
+            if(activity is OnboardingComponent.ManageComponentsListing)
+                (activity as ManageComponentsListing).removeComponent(this)
         }
     }
 

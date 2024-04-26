@@ -46,7 +46,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/materialButton"
+        android:id="@+id/ownership_verification_btn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -63,9 +63,9 @@
         android:layout_marginTop="16dp"
         android:text="Resend code by SMS"
         android:textColor="@color/default_blue"
-        app:layout_constraintEnd_toEndOf="@+id/materialButton"
-        app:layout_constraintStart_toStartOf="@+id/materialButton"
-        app:layout_constraintTop_toBottomOf="@+id/materialButton" />
+        app:layout_constraintEnd_toEndOf="@+id/ownership_verification_btn"
+        app:layout_constraintStart_toStartOf="@+id/ownership_verification_btn"
+        app:layout_constraintTop_toBottomOf="@+id/ownership_verification_btn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

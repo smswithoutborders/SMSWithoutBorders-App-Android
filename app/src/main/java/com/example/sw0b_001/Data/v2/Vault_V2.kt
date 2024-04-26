@@ -27,7 +27,7 @@ class Vault_V2(val uid: String) {
                              val name: String,
                              val country_code: String,
                              val password: String,
-                             val captcha_token: String = "")
+                             val captcha_token: String)
     @Serializable
     data class OTPRequest(val phone_number: String)
 
@@ -85,9 +85,9 @@ class Vault_V2(val uid: String) {
         }
 
         fun signup(url: String, phone_number: String, name: String, country_code: String,
-                   password: String): Network.NetworkResponseResults {
+                   password: String, captcha_token: String): Network.NetworkResponseResults {
             val payload = Json.encodeToString(SignupRequest(phone_number, name, country_code,
-                    password))
+                    password, captcha_token))
             val networkResponseResults = Network.jsonRequestPost(url, payload)
             when(networkResponseResults.response.statusCode) {
                 in 400..600 -> throw Exception(String(networkResponseResults.response.data))
