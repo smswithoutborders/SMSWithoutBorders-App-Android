@@ -65,4 +65,9 @@ class LoginTest {
         Log.d(javaClass.name, "Payload: ${responsePayload.msisdn_hash}, " +
                 responsePayload.shared_key)
     }
+
+    @Test
+    private fun testLoginFlow() {
+
+    }
 }

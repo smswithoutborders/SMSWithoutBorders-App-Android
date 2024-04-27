@@ -15,6 +15,7 @@ class UserArtifactsHandler {
         const val USER_ID_KEY = "USER_ID_KEY"
         const val PHONE_NUMBER = "PHONE_NUMBER"
         const val PASSWORD = "PASSWORD"
+        const val SHARED_KEY = "SHARED_KEY"
 
         fun isCredentials(context: Context): Boolean {
             val sharedPreferences = Armadillo.create( context, PREF_USER_ARTIFACTS_FILE)
@@ -23,7 +24,8 @@ class UserArtifactsHandler {
 
             return sharedPreferences.contains(PHONE_NUMBER) &&
                     sharedPreferences.contains(PASSWORD) &&
-                    sharedPreferences.contains(USER_ID_KEY)
+                    sharedPreferences.contains(USER_ID_KEY) &&
+                    sharedPreferences.contains(SHARED_KEY)
         }
 
         fun fetchCredentials(context: Context) : Map<String, String> {
@@ -40,6 +42,9 @@ class UserArtifactsHandler {
             val uid = sharedPreferences.getString(USER_ID_KEY, "")
             if(uid == "") throw Exception("No uid for fetching")
 
+            val sharedKey = sharedPreferences.getString(SHARED_KEY, "")
+            if(sharedKey == "") throw Exception("No shared key for fetching")
+
             val decodedPasswordCipher = Base64.decode(encodedPasswordCipher, Base64.DEFAULT)
 
             val keyPair = KeystoreHelpers.getKeyPairFromKeystore(phoneNumber)
@@ -50,8 +55,9 @@ class UserArtifactsHandler {
 
             val map = emptyMap<String, String>().toMutableMap()
             map[PHONE_NUMBER] = phoneNumber!!
-            map[PASSWORD] = password!!
+            map[PASSWORD] = password
             map[USER_ID_KEY] = uid!!
+            map[SHARED_KEY] = sharedKey!!
             return map.toMap()
         }
 
@@ -69,6 +75,16 @@ class UserArtifactsHandler {
                     .putString(PHONE_NUMBER, phoneNumber)
                     .putString(PASSWORD, encodedPasswordCipher)
                     .putString(USER_ID_KEY, uid)
+                    .apply()
+        }
+
+        fun storeSharedKey(context: Context, sharedKey: String) {
+            val sharedPreferences = Armadillo.create( context, PREF_USER_ARTIFACTS_FILE)
+                    .encryptionFingerprint(context)
+                    .build()
+
+            sharedPreferences.edit()
+                    .putString(SHARED_KEY, sharedKey)
                     .apply()
         }
     }

@@ -20,76 +20,85 @@ class OnboardingVaultStorePlatformFragment : OnboardingComponent(R.layout.fragme
     }
 
     var fetchPlatforms = false
+    var showPlatforms = true
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<MaterialButton>(R.id.onboarding_welcome_vaults_store_description_try_example_btn)
                 .setOnClickListener {
-                    showPlatformsModal(view)
+                    if(fetchPlatforms)
+                        loginAndFetchPlatforms(view)
+                    else
+                        showPlatformsModal(view)
                 }
 
         ThreadExecutorPool.executorService.execute {
-            if(Datastore.getDatastore(view.context).platformDao().countSaved() > 0) {
-                activity?.runOnUiThread {
-                    activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
-                            ?.performClick()
-                    if(activity is OnboardingComponent.ManageComponentsListing)
-                        (activity as OnboardingComponent.ManageComponentsListing).removeComponent(this)
-                }
-            } else {
-                fetchPlatforms = true
+            checkCanNext(view)
+        }
+    }
+
+    private fun checkCanNext(view: View) {
+        if(Datastore.getDatastore(view.context).platformDao().countSaved() > 0) {
+            activity?.runOnUiThread {
+                activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
+                        ?.performClick()
+                if(activity is OnboardingComponent.ManageComponentsListing)
+                    (activity as OnboardingComponent.ManageComponentsListing)
+                            .removeComponent(this)
             }
+        } else {
+            fetchPlatforms = true
         }
     }
 
     private fun loginAndFetchPlatforms(view: View) {
-        val loadingFragment = LoadingFragment(Runnable {
-            val credentials = UserArtifactsHandler.fetchCredentials(view.context)
-            val phoneNumber = credentials[UserArtifactsHandler.PHONE_NUMBER]!!
-            val password = credentials[UserArtifactsHandler.PASSWORD]!!
-            val  uid = credentials[UserArtifactsHandler.USER_ID_KEY]!!
-            ThreadExecutorPool.executorService.execute {
-                try {
-                    println("uid: $uid, password: $password")
-                    Vault_V2.loginSyncPlatformsFlow(requireContext(), phoneNumber, password,
-                            "", uid)
-                } catch(e: Exception) {
-                    e.printStackTrace()
-                    when(e.message) {
-                        Vault_V2.INVALID_CREDENTIALS_EXCEPTION -> {
-                            TODO("Invalidate and delete all creds")
-                        }
-                        Vault_V2.SERVER_ERROR_EXCEPTION -> {
-                        }
-                        else -> {
-                        }
-                    }
-                } finally {
-//                    activity?.runOnUiThread {
-//                        loadingFragment.dismissNow()
-//                    }
-                }
-            }
-        })
+        val loadingFragment = LoadingFragment()
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
         fragmentTransaction?.add(loadingFragment, "loading_fragment_tag")
         fragmentTransaction?.show(loadingFragment)
-        fragmentTransaction?.commitNow()
+        fragmentTransaction?.commit()
 
+        val credentials = UserArtifactsHandler.fetchCredentials(view.context)
+        val phoneNumber = credentials[UserArtifactsHandler.PHONE_NUMBER]!!
+        val password = credentials[UserArtifactsHandler.PASSWORD]!!
+        val  uid = credentials[UserArtifactsHandler.USER_ID_KEY]!!
+        ThreadExecutorPool.executorService.execute {
+            try {
+                println("uid: $uid, password: $password")
+                Vault_V2.loginSyncPlatformsFlow(requireContext(), phoneNumber, password,
+                        "", uid)
 
+                fetchPlatforms = false
+                checkCanNext(view)
+                if(fetchPlatforms)
+                    showPlatformsModal(view)
+                loadingFragment.dismiss()
+            } catch(e: Exception) {
+                e.printStackTrace()
+                when(e.message) {
+                    Vault_V2.INVALID_CREDENTIALS_EXCEPTION -> {
+                        TODO("Invalidate and delete all creds")
+                    }
+                    Vault_V2.SERVER_ERROR_EXCEPTION -> {
+                    }
+                    else -> {
+                    }
+                }
+            }
+        }
     }
 
 
     private fun showPlatformsModal(view: View) {
-        if(fetchPlatforms)
-            loginAndFetchPlatforms(view)
-
-        else {
+        if(Datastore.getDatastore(view.context).platformDao().count() > 0) {
             val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
             val platformsModalFragment = PlatformsModalFragment(PlatformsModalFragment.SHOW_TYPE_UNSAVED)
             fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
             fragmentTransaction?.show(platformsModalFragment)
-            activity?.runOnUiThread { fragmentTransaction?.commitNow() }
+            activity?.runOnUiThread { fragmentTransaction?.commit() }
+        }
+        else {
+            loginAndFetchPlatforms(view)
         }
     }
 }

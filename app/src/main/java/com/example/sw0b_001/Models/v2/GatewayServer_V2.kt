@@ -1,8 +1,10 @@
 package com.example.sw0b_001.Models.v2
 
+import android.content.Context
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
 import com.example.sw0b_001.Modules.Crypto
 import com.example.sw0b_001.Modules.Network
+import com.example.sw0b_001.R
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -25,8 +27,10 @@ class GatewayServer_V2 {
          * v2 used the URL(gatewaySeverURL).host = KeystoreAlias value.
          * Can be used for backward compatibility or migration
          */
-        fun sync(url: String, uid: String, password: String):
+        fun sync(context: Context, uid: String, password: String):
                 HandshakeGatewayServerPayload {
+            val url = "${context.getString(R.string.smswithoutborders_official_gateway_server)}" +
+                    "/v2/sync/users/${uid}/sessions/000/"
 
             val pubKey = SecurityRSA.generateKeyPair(uid, 2048).encoded
 

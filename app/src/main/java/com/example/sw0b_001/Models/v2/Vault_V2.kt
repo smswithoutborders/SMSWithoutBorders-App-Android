@@ -260,15 +260,19 @@ class Vault_V2(val uid: String) {
                                    captcha_token: String,
                                    _uid: String? = null):
                 Network.NetworkResponseResults {
-            val url = context.getString(R.string.smswithoutborders_official_site_login)
             val networkResponseResults = if(_uid.isNullOrEmpty()) {
+                val url = context.getString(R.string.smswithoutborders_official_site_login)
                 login(phoneNumber, password, url, captcha_token)
             } else {
+                val url = context.getString(R.string.smswithoutborders_official_vault)
                 loginViaUID(url, _uid, password)
             }
-            val uid = Json.decodeFromString<UID>(networkResponseResults.result.get()).uid
+            val uid = if(_uid.isNullOrEmpty())
+                Json.decodeFromString<UID>(networkResponseResults.result.get()).uid
+            else _uid
 
-            val responsePayload = GatewayServer_V2.sync(url, uid, password)
+            val responsePayload = GatewayServer_V2.sync(context, uid, password)
+            UserArtifactsHandler.storeSharedKey(context, responsePayload.shared_key)
 
             if(_uid.isNullOrEmpty())
                 UserArtifactsHandler.storeCredentials(context, phoneNumber, password, uid)

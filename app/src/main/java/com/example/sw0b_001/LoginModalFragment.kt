@@ -125,7 +125,7 @@ class LoginModalFragment : BottomSheetDialogFragment() {
         val url = view.context.getString(R.string.smswithoutborders_official_site_login)
         ThreadExecutorPool.executorService.execute {
             try {
-                Vault_V2.loginSyncPlatformsFlow(requireContext(), phonenumber, password, url, code)
+                Vault_V2.loginSyncPlatformsFlow(requireContext(), phonenumber, password, code)
                 onSuccessCallback(view)
                 dismiss()
             } catch(e: Exception) {

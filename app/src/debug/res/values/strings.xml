@@ -8,6 +8,7 @@
     <string name="smswithoutborders_official_site_login" translatable="false">https://staging.smswithoutborders.com:9000/v2/login</string>
     <string name="smswithoutborders_official_site_signup" translatable="false">https://staging.smswithoutborders.com:9000/v2/signup</string>
     <string name="smswithoutborders_official_otp_submission" translatable="false">https://staging.smswithoutborders.com:9000/v2/OTP</string>
+    <string name="smswithoutborders_official_gateway_server" translatable="false">https://staging.smswithoutborders.com:15000</string>
 
 
     <string name="gateway_client_seeding_url" translatable="false">

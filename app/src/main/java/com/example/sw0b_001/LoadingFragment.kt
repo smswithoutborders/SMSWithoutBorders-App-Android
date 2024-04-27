@@ -7,7 +7,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
-class LoadingFragment(val runnable: Runnable) : BottomSheetDialogFragment(R.layout.fragment_modal_sheet_load_platforms){
+class LoadingFragment : BottomSheetDialogFragment(R.layout.fragment_modal_sheet_load_platforms){
 
 
     lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
@@ -23,7 +23,5 @@ class LoadingFragment(val runnable: Runnable) : BottomSheetDialogFragment(R.layo
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.isDraggable = true
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-
-        runnable.run()
     }
 }
