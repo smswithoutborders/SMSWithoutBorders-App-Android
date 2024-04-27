@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Onboarding.OnboardingVaultStoreFragment">
+    tools:context=".Onboarding.OnboardingVaultStoreProcessingFragment">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/onboarding_welcome_vaults_introduction"

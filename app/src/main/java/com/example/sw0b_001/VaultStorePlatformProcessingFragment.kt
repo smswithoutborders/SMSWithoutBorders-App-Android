@@ -1,39 +1,23 @@
 package com.example.sw0b_001
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import com.example.sw0b_001.Data.Platforms.Platforms
 import com.example.sw0b_001.Data.ThreadExecutorPool
 import com.example.sw0b_001.Data.UserArtifactsHandler
 import com.example.sw0b_001.Data.v2.Vault_V2
-import com.example.sw0b_001.HomepageComposeNewFragment.Companion.TAG
 import com.example.sw0b_001.Modules.Helpers
 import com.example.sw0b_001.Modules.Network
 import com.example.sw0b_001.Modules.OAuth2
-import com.github.kittinunf.fuel.core.Headers
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
-import kotlinx.serialization.json.Json
-import net.openid.appauth.AuthorizationException
-import net.openid.appauth.AuthorizationRequest
-import net.openid.appauth.AuthorizationResponse
-import net.openid.appauth.AuthorizationService
-import net.openid.appauth.AuthorizationServiceConfiguration
-import net.openid.appauth.AuthorizationServiceConfiguration.RetrieveConfigurationCallback
-import net.openid.appauth.ResponseTypeValues
 import java.net.URLDecoder
 
 
-class VaultStorePlatformFragment(val platformName: String,
-                                 val networkResponseResults: Network.NetworkResponseResults)
-    : Fragment(){
+class VaultStorePlatformProcessingFragment(val platformName: String,
+                                           val networkResponseResults: Network.NetworkResponseResults)
+    : Fragment(R.layout.fragment_onboarding_vault_store_processing){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,10 +122,6 @@ class VaultStorePlatformFragment(val platformName: String,
             }
             else -> { throw Exception("Unknown platform: $platformName")}
         }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_onboarding_vault_store, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

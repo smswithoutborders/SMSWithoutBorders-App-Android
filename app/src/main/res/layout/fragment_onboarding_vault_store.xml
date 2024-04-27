@@ -1,18 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Onboarding.OnboardingVaultStoreFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/store_platform_vault_circular_progress_bar"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/onboarding_welcome_vaults_store_introduction"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Keep platforms in your Vault"
+        android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/onboarding_welcome_vaults_store_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="100dp"
+        android:text="Having platforms in your Vault allows you to use them without an internet connection - still requires SMS messaging"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/onboarding_welcome_vaults_store_introduction" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/onboarding_welcome_vaults_store_description_try_example_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="Try Example!"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/onboarding_welcome_vaults_store_description" />
 </androidx.constraintlayout.widget.ConstraintLayout>

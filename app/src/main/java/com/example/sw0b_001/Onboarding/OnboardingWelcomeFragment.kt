@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.example.sw0b_001.R
 import com.google.android.material.button.MaterialButton
 
-class OnboardingWelcomeFragment : OnboardingComponent() {
+class OnboardingWelcomeFragment : OnboardingComponent(R.layout.fragment_onboarding_welcome) {
     init {
         nextButtonText = "Next"
         previousButtonText = ""
@@ -16,12 +16,6 @@ class OnboardingWelcomeFragment : OnboardingComponent() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_onboarding_welcome, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

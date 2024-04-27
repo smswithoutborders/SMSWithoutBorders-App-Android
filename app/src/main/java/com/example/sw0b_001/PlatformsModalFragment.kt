@@ -1,7 +1,6 @@
 package com.example.sw0b_001
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -118,10 +117,10 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
 
         when(platformType) {
             Platforms.TYPE_EMAIL -> {
-                fragment = VaultStorePlatformFragment("gmail", networkResponseResults!!)
+                fragment = VaultStorePlatformProcessingFragment("gmail", networkResponseResults!!)
             }
             Platforms.TYPE_TEXT -> {
-                fragment = VaultStorePlatformFragment("twitter", networkResponseResults!!)
+                fragment = VaultStorePlatformProcessingFragment("twitter", networkResponseResults!!)
             }
         }
         fragmentTransaction?.add(fragment, "email_compose_platform_type")

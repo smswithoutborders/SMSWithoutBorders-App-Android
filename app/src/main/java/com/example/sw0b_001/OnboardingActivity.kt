@@ -7,12 +7,12 @@ import android.text.Html
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.fragment.app.commitNow
 import androidx.lifecycle.MutableLiveData
 import com.example.sw0b_001.Onboarding.OnboardingComponent
 import com.example.sw0b_001.Onboarding.OnboardingPublishExampleFragment
 import com.example.sw0b_001.Onboarding.OnboardingSkippedAllFragment
 import com.example.sw0b_001.Onboarding.OnboardingVaultFragment
+import com.example.sw0b_001.Onboarding.OnboardingVaultStorePlatformFragment
 import com.example.sw0b_001.Onboarding.OnboardingWelcomeFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
@@ -22,6 +22,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
     val fragmentList: ArrayList<OnboardingComponent> =
             arrayListOf(OnboardingWelcomeFragment(),
                     OnboardingVaultFragment(),
+                    OnboardingVaultStorePlatformFragment(),
                     OnboardingPublishExampleFragment(),
                     OnboardingSkippedAllFragment())
     override fun onCreate(savedInstanceState: Bundle?) {

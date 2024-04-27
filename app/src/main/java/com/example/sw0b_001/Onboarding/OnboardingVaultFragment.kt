@@ -6,12 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.sw0b_001.Data.Platforms.PlatformsHandler
+import com.example.sw0b_001.Data.Platforms._PlatformsHandler
 import com.example.sw0b_001.Data.UserArtifactsHandler
+import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.OnboardingActivity
 import com.example.sw0b_001.R
 import com.google.android.material.button.MaterialButton
 
-class OnboardingVaultFragment : OnboardingComponent() {
+class OnboardingVaultFragment : OnboardingComponent(R.layout.fragment_onboarding_vault) {
 
     init {
         nextButtonText = ""
@@ -21,12 +24,6 @@ class OnboardingVaultFragment : OnboardingComponent() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_onboarding_vault, container, false)
     }
 
     override fun onAttach(context: Context) {
@@ -44,7 +41,6 @@ class OnboardingVaultFragment : OnboardingComponent() {
 
 
         if(UserArtifactsHandler.isCredentials(view.context)) {
-            println("Yes should press the next button")
             activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
                     ?.performClick()
             if(activity is OnboardingComponent.ManageComponentsListing)
