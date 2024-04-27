@@ -25,7 +25,8 @@ public class PlatformsRecyclerAdapter extends
 
     FragmentTransaction fragmentTransaction;
 
-    public MutableLiveData<Integer> onClickListenerLiveData = new MutableLiveData<>();
+    public MutableLiveData<Integer> savedOnClickListenerLiveData = new MutableLiveData<>();
+    public MutableLiveData<Integer> unSavedOnClickListenerLiveData = new MutableLiveData<>();
     public PlatformsRecyclerAdapter(FragmentTransaction fragmentTransaction){
         this.fragmentTransaction = fragmentTransaction;
     }
@@ -42,7 +43,7 @@ public class PlatformsRecyclerAdapter extends
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder viewHolder, int position) {
         Platforms platforms = mDiffer.getCurrentList().get(position);
-        viewHolder.bind(platforms, onClickListenerLiveData);
+        viewHolder.bind(platforms, savedOnClickListenerLiveData, unSavedOnClickListenerLiveData);
     }
 
     @Override
@@ -62,17 +63,23 @@ public class PlatformsRecyclerAdapter extends
             this.image = itemView.findViewById(R.id.platforms_thumbnails);
         }
 
-        public void bind(Platforms platforms, MutableLiveData<Integer> onClickListenerLiveData) {
+        public void bind(Platforms platforms,
+                         MutableLiveData<Integer> onClickListenerLiveData,
+                         MutableLiveData<Integer> unSavedOnClickListenerLiveData) {
             image.setImageDrawable(itemView.getContext()
                     .getDrawable(_PlatformsHandler.hardGetLogoByName(itemView.getContext(),
                     platforms.getName())));
 
             cardView.setOnClickListener(it -> {
                 Log.d(PlatformsRecyclerAdapter.class.getName(), platforms.getType());
-                if(platforms.getType().equals("email"))
-                    onClickListenerLiveData.setValue(Platforms.TYPE_EMAIL);
-                else if(platforms.getType().equals("text"))
-                    onClickListenerLiveData.setValue(Platforms.TYPE_TEXT);
+                int type = -1;
+                if(platforms.getType().equals("email")) { type = Platforms.TYPE_EMAIL; }
+                else if(platforms.getType().equals("text")) { type = Platforms.TYPE_TEXT; }
+
+                if (platforms.isSaved())
+                    onClickListenerLiveData.setValue(type);
+                else
+                    unSavedOnClickListenerLiveData.setValue(type);
             });
         }
     }

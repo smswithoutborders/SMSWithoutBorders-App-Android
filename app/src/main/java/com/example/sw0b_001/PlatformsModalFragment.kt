@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -13,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Data.Platforms.Platforms
 import com.example.sw0b_001.Data.Platforms.PlatformsRecyclerAdapter
 import com.example.sw0b_001.Data.Platforms.PlatformsViewModel
+import com.example.sw0b_001.Modules.Network
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL) : BottomSheetDialogFragment() {
+class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
+                             val networkResponseResults: Network.NetworkResponseResults? = null) : BottomSheetDialogFragment() {
 
     companion object {
         public const val SHOW_TYPE_SAVED = 0
@@ -76,10 +79,9 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL) : BottomSheetDia
         savedPlatformsRecyclerView.adapter = savedPlatformsAdapter
         unsavedPlatformsRecyclerView.adapter = unSavedPlatformsAdapter
 
-        savedPlatformsAdapter.onClickListenerLiveData.observe(this, Observer {
-            Log.d(javaClass.name, "Yes saved platform clicked")
+        savedPlatformsAdapter.savedOnClickListenerLiveData.observe(this, Observer {
             if(it != null) {
-                savedPlatformsAdapter.onClickListenerLiveData = MutableLiveData();
+                savedPlatformsAdapter.savedOnClickListenerLiveData = MutableLiveData();
                 when(it) {
                     Platforms.TYPE_EMAIL -> {
                         val emailComposeModalFragment = EmailComposeModalFragment()
@@ -92,6 +94,15 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL) : BottomSheetDia
             }
         })
 
+        unSavedPlatformsAdapter.unSavedOnClickListenerLiveData.observe(this, Observer {
+            if(it != null) {
+                savedPlatformsAdapter.savedOnClickListenerLiveData = MutableLiveData();
+                if(networkResponseResults != null)
+                    storePlatform(it)
+                dismiss()
+            }
+        })
+
         val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java]
         context?.let { it ->
             platformsViewModel.getSeparated(it).observe(this, Observer {
@@ -99,5 +110,22 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL) : BottomSheetDia
                 unSavedPlatformsAdapter.mDiffer.submitList(it.second)
             })
         }
+    }
+
+    private fun storePlatform(platformType: Int) {
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        var fragment = Fragment()
+
+        when(platformType) {
+            Platforms.TYPE_EMAIL -> {
+                fragment = VaultStorePlatformFragment("gmail", networkResponseResults!!)
+            }
+            Platforms.TYPE_TEXT -> {
+                fragment = VaultStorePlatformFragment("twitter", networkResponseResults!!)
+            }
+        }
+        fragmentTransaction?.add(fragment, "email_compose_platform_type")
+        fragmentTransaction?.show(fragment)
+        activity?.runOnUiThread { fragmentTransaction?.commitNow() }
     }
 }

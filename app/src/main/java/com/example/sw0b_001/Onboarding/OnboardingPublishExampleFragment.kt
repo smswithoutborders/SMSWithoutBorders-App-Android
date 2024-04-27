@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.sw0b_001.Data.UserArtifactsHandler
+import com.example.sw0b_001.Modules.Network
 import com.example.sw0b_001.PlatformsModalFragment
 import com.example.sw0b_001.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -49,7 +50,7 @@ class OnboardingPublishExampleFragment : OnboardingComponent() {
 
     private fun showPlatformsModal() {
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-        val platformsModalFragment = PlatformsModalFragment()
+        val platformsModalFragment = PlatformsModalFragment(PlatformsModalFragment.SHOW_TYPE_SAVED)
         fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
         fragmentTransaction?.show(platformsModalFragment)
         activity?.runOnUiThread { fragmentTransaction?.commitNow() }

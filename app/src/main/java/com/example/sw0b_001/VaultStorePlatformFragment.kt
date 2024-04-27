@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import com.example.sw0b_001.Data.Platforms.Platforms
 import com.example.sw0b_001.Data.ThreadExecutorPool
 import com.example.sw0b_001.Data.UserArtifactsHandler
 import com.example.sw0b_001.Data.v2.Vault_V2
@@ -16,7 +17,9 @@ import com.example.sw0b_001.HomepageComposeNewFragment.Companion.TAG
 import com.example.sw0b_001.Modules.Helpers
 import com.example.sw0b_001.Modules.Network
 import com.example.sw0b_001.Modules.OAuth2
+import com.github.kittinunf.fuel.core.Headers
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import kotlinx.serialization.json.Json
 import net.openid.appauth.AuthorizationException
 import net.openid.appauth.AuthorizationRequest
@@ -28,25 +31,26 @@ import net.openid.appauth.ResponseTypeValues
 import java.net.URLDecoder
 
 
-class VaultStorePlatformFragment : Fragment(){
+class VaultStorePlatformFragment(val platformName: String,
+                                 val networkResponseResults: Network.NetworkResponseResults)
+    : Fragment(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    fun storeToken(platform: String) {
+    fun storeToken() {
         val url = getString(R.string.smswithoutborders_official_site_login)
 
-        val phonenumber = "+237123456789"
-        val password = "dummy_password"
         ThreadExecutorPool.executorService.execute {
-            val networkResponseResults =
-                    Vault_V2.login(phonenumber, password, url, "")
-            val uid = Json.decodeFromString<Vault_V2.UID>(networkResponseResults.result.get()).uid
+            val credentials = UserArtifactsHandler.fetchCredentials(requireContext())
+            val uid = credentials[UserArtifactsHandler.USER_ID_KEY]!!
+            val phonenumber = credentials[UserArtifactsHandler.USER_ID_KEY]!!
+            val password = credentials[UserArtifactsHandler.USER_ID_KEY]!!
+
             UserArtifactsHandler.storeCredentials(requireContext(), phonenumber, password, uid)
 
-            val pairNetworkResponseResultsOauth = getGrant(platform, uid, phonenumber,
-                    networkResponseResults)
+            val pairNetworkResponseResultsOauth = getGrant(uid, phonenumber, networkResponseResults)
 
             Vault_V2.storeOauthRequestCookies(requireContext(),
                     pairNetworkResponseResultsOauth.first.response.headers)
@@ -72,9 +76,8 @@ class VaultStorePlatformFragment : Fragment(){
             println("state: $state")
 
             activity?.runOnUiThread {
-
-                when(platform) {
-                    "x" -> {
+                when(platformName) {
+                    "x", "twitter" -> {
                         try {
                             val codeChallenge: String = URLDecoder.decode(parameters["code_challenge"]!!,
                                     "UTF-8")
@@ -114,10 +117,10 @@ class VaultStorePlatformFragment : Fragment(){
                 }
             }
         }
-
     }
 
-    fun getGrant(platform: String, uid: String, phonenumber: String,
+    fun getGrant(uid: String,
+                 phonenumber: String,
                  networkResponseResults: Network.NetworkResponseResults) :
             Pair<Network.NetworkResponseResults, Vault_V2.OAuthGrantPayload> {
         val platformsUrl = getString(R.string.smswithoutborders_official_vault)
@@ -126,28 +129,26 @@ class VaultStorePlatformFragment : Fragment(){
         headers["Origin"] = "https://" +
                 context?.getString(R.string.oauth_openid_redirect_url_scheme_host)
 
-        return when(platform) {
-            "x" -> {
+        return when(platformName) {
+            "x", "twitter" -> {
                 Vault_V2.getXGrant(platformsUrl, headers, uid, phonenumber)
             }
             "gmail" -> {
                 Vault_V2.getGmailGrant(platformsUrl, headers, uid, phonenumber)
             }
-            else -> { throw Exception("Unknown platform: $platform")}
+            else -> { throw Exception("Unknown platform: $platformName")}
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_onboarding_vault_store, container,
-                false)
+        return inflater.inflate(R.layout.fragment_onboarding_vault_store, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<MaterialButton>(R.id.vault_store_btn_gmail)
-                .setOnClickListener { storeToken("gmail") }
 
-        view.findViewById<MaterialButton>(R.id.vault_store_btn_x)
-                .setOnClickListener { storeToken("x") }
+        view.findViewById<CircularProgressIndicator>(R.id.store_platform_vault_circular_progress_bar)
+                .isIndeterminate = true
+        storeToken()
     }
 }
