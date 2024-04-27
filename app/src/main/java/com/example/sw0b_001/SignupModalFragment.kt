@@ -5,10 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.sw0b_001.Data.ThreadExecutorPool
-import com.example.sw0b_001.Data.v2.Vault_V2
+import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.HomepageComposeNewFragment.Companion.TAG
-import com.example.sw0b_001.Onboarding.OnboardingComponent
 import com.github.kittinunf.fuel.core.Headers
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
@@ -22,7 +21,6 @@ import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.textfield.TextInputEditText
 import com.hbb20.CountryCodePicker
 import kotlinx.serialization.json.Json
-import kotlin.math.sign
 
 class SignupModalFragment : BottomSheetDialogFragment() {
 

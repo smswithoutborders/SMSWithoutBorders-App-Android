@@ -1,29 +1,23 @@
 package com.example.sw0b_001
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityAES
-import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
-import com.example.sw0b_001.Data.Platforms.Platforms
-import com.example.sw0b_001.Data.Platforms.PlatformsHandler
-import com.example.sw0b_001.Data.Platforms.PlatformsViewModel
-import com.example.sw0b_001.Data.ThreadExecutorPool
-import com.example.sw0b_001.Data.UserArtifactsHandler
-import com.example.sw0b_001.Data.v2.Vault_V2
-import com.example.sw0b_001.Onboarding.OnboardingComponent
-import com.github.kittinunf.fuel.core.Headers
+import com.example.sw0b_001.Models.Platforms.PlatformsHandler
+import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
+import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.example.sw0b_001.Models.UserArtifactsHandler
+import com.example.sw0b_001.Models.v2.GatewayServer_V2
+import com.example.sw0b_001.Models.v2.Vault_V2
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.safetynet.SafetyNet
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
@@ -131,21 +125,7 @@ class LoginModalFragment : BottomSheetDialogFragment() {
         val url = view.context.getString(R.string.smswithoutborders_official_site_login)
         ThreadExecutorPool.executorService.execute {
             try {
-                val networkResponseResults = Vault_V2.login(phonenumber, password, url, code)
-                val uid = Json.decodeFromString<Vault_V2.UID>(networkResponseResults.result.get()).uid
-
-                UserArtifactsHandler.storeCredentials(requireContext(), phonenumber, password, uid)
-
-                val platformsUrl = requireContext()
-                        .getString(R.string.smswithoutborders_official_vault)
-
-                val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java]
-                PlatformsHandler.storePlatforms(requireContext(),
-                        platformsViewModel,
-                        uid,
-                        platformsUrl,
-                        networkResponseResults.response.headers)
-
+                Vault_V2.loginSyncPlatformsFlow(requireContext(), phonenumber, password, url, code)
                 onSuccessCallback(view)
                 dismiss()
             } catch(e: Exception) {
@@ -158,6 +138,12 @@ class LoginModalFragment : BottomSheetDialogFragment() {
                         }
                     }
                     Vault_V2.SERVER_ERROR_EXCEPTION -> {
+                        activity?.runOnUiThread {
+                            loginStatusCard.visibility = View.VISIBLE
+                            loginStatusText.text = getString(R.string.login_server_something_went_wrong_please_try_again)
+                        }
+                    }
+                    else -> {
                         activity?.runOnUiThread {
                             loginStatusCard.visibility = View.VISIBLE
                             loginStatusText.text = getString(R.string.login_server_something_went_wrong_please_try_again)

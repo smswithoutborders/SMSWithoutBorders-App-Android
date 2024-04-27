@@ -2,15 +2,8 @@ package com.example.sw0b_001.Onboarding
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import com.example.sw0b_001.Data.Platforms.PlatformsHandler
-import com.example.sw0b_001.Data.Platforms._PlatformsHandler
-import com.example.sw0b_001.Data.UserArtifactsHandler
-import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.OnboardingActivity
+import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.R
 import com.google.android.material.button.MaterialButton
 

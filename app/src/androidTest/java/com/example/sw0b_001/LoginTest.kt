@@ -3,8 +3,8 @@ package com.example.sw0b_001
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.sw0b_001.Data.v2.GatewayServer_V2
-import com.example.sw0b_001.Data.v2.Vault_V2
+import com.example.sw0b_001.Models.v2.GatewayServer_V2
+import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Network
 import junit.framework.TestCase.assertEquals
 import kotlinx.serialization.json.Json

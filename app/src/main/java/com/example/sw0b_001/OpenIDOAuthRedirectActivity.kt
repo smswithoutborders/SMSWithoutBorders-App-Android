@@ -1,23 +1,18 @@
 package com.example.sw0b_001
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.sw0b_001.Data.ThreadExecutorPool
-import com.example.sw0b_001.Data.UserArtifactsHandler
-import com.example.sw0b_001.Data.v2.Vault_V2
+import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.example.sw0b_001.Models.UserArtifactsHandler
+import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Helpers
 import com.github.kittinunf.fuel.core.Headers
-import kotlinx.serialization.json.Json
-import net.openid.appauth.AuthorizationException
 
-import net.openid.appauth.AuthorizationResponse
 import java.net.URLDecoder
-import java.net.URLEncoder
 
 
 class OpenIDOAuthRedirectActivity : AppCompatActivity() {

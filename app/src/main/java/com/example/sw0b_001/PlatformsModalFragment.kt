@@ -10,15 +10,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sw0b_001.Data.Platforms.Platforms
-import com.example.sw0b_001.Data.Platforms.PlatformsRecyclerAdapter
-import com.example.sw0b_001.Data.Platforms.PlatformsViewModel
+import com.example.sw0b_001.Models.Platforms.Platforms
+import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter
+import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Modules.Network
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
-                             val networkResponseResults: Network.NetworkResponseResults? = null) : BottomSheetDialogFragment() {
+                             val networkResponseResults: Network.NetworkResponseResults? = null)
+    : BottomSheetDialogFragment(R.layout.fragment_modal_sheet_store_platforms) {
 
     companion object {
         public const val SHOW_TYPE_SAVED = 0
@@ -31,11 +32,6 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_modal_sheet_store_platforms, container,
-                false)
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

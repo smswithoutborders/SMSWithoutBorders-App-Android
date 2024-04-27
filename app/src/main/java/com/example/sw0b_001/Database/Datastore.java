@@ -15,14 +15,14 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.AutoMigrationSpec;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
-import com.example.sw0b_001.Data.EncryptedContent.EncryptedContent;
-import com.example.sw0b_001.Data.EncryptedContent.EncryptedContentDAO;
-import com.example.sw0b_001.Data.GatewayClients.GatewayClient;
-import com.example.sw0b_001.Data.GatewayClients.GatewayClientsDao;
-import com.example.sw0b_001.Data.GatewayServers.GatewayServer;
-import com.example.sw0b_001.Data.GatewayServers.GatewayServersDAO;
-import com.example.sw0b_001.Data.Platforms.Platforms;
-import com.example.sw0b_001.Data.Platforms.PlatformDao;
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
+import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
+import com.example.sw0b_001.Models.GatewayClients.GatewayClientsDao;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
+import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
+import com.example.sw0b_001.Models.Platforms.Platforms;
+import com.example.sw0b_001.Models.Platforms.PlatformDao;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -13,13 +13,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Data.EncryptedContent.EncryptedContent;
-import com.example.sw0b_001.Data.EncryptedContent.EncryptedContentDAO;
-import com.example.sw0b_001.Data.EncryptedContent.EncryptedContentHandler;
-import com.example.sw0b_001.Data.Platforms.Platforms;
-import com.example.sw0b_001.Data.Platforms._PlatformsHandler;
-import com.example.sw0b_001.Data.PublisherHandler;
-import com.example.sw0b_001.Data.SMSHandler;
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
+import com.example.sw0b_001.Models.Platforms.Platforms;
+import com.example.sw0b_001.Models.Platforms._PlatformsHandler;
+import com.example.sw0b_001.Models.PublisherHandler;
+import com.example.sw0b_001.Models.SMSHandler;
 import com.example.sw0b_001.databinding.ActivityTweetComposeBinding;
 
 import java.io.IOException;

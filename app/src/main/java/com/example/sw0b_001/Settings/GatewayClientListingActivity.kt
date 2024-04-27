@@ -2,7 +2,6 @@ package com.example.sw0b_001.Settings
 
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
-import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -13,16 +12,14 @@ import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.sw0b_001.AppCompactActivityCustomized
-import com.example.sw0b_001.Data.GatewayClients.GatewayClient
-import com.example.sw0b_001.Data.GatewayClients.GatewayClientAddModalFragment
-import com.example.sw0b_001.Data.GatewayClients.GatewayClientViewModel
-import com.example.sw0b_001.Data.GatewayClients.GatewayClientsCommunications
+import com.example.sw0b_001.Models.GatewayClients.GatewayClient
+import com.example.sw0b_001.Models.GatewayClients.GatewayClientAddModalFragment
+import com.example.sw0b_001.Models.GatewayClients.GatewayClientViewModel
+import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
 import com.example.sw0b_001.R
-import com.example.sw0b_001.Security.LockScreenFragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.LinearProgressIndicator

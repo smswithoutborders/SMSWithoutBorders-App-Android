@@ -14,18 +14,14 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.sw0b_001.Data.Platforms.PlatformsHandler
-import com.example.sw0b_001.Data.Platforms.PlatformsViewModel
-import com.example.sw0b_001.Data.ThreadExecutorPool
-import com.example.sw0b_001.Data.UserArtifactsHandler
-import com.example.sw0b_001.Data.v2.Vault_V2
+import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.example.sw0b_001.Models.UserArtifactsHandler
+import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Network
 import com.github.kittinunf.fuel.core.Headers
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.textfield.TextInputEditText
@@ -91,7 +87,7 @@ class OTPVerificationFragment(val vaultHeaders: Headers,
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_modal_sheet_2fa_verification_code, container,
+        return inflater.inflate(R.layout.fragment_otp_verification_code, container,
                 false)
     }
 
@@ -177,17 +173,21 @@ class OTPVerificationFragment(val vaultHeaders: Headers,
     }
 
     private fun loginAndFetchPlatforms(password: String, uid: String) {
-        val platformsUrl = requireContext()
-                .getString(R.string.smswithoutborders_official_vault)
-
-        val networkResponseResults = Vault_V2.loginViaUID(platformsUrl, uid, password)
-
-        val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java]
-        PlatformsHandler.storePlatforms(requireContext(),
-                platformsViewModel,
-                uid,
-                platformsUrl,
-                networkResponseResults.response.headers)
+        try {
+            Vault_V2.loginSyncPlatformsFlow(requireContext(), phoneNumber, password,
+                    "", uid)
+        } catch(e: Exception) {
+            e.printStackTrace()
+            when(e.message) {
+                Vault_V2.INVALID_CREDENTIALS_EXCEPTION -> {
+                    TODO("Invalidate and delete all creds")
+                }
+                Vault_V2.SERVER_ERROR_EXCEPTION -> {
+                }
+                else -> {
+                }
+            }
+        }
     }
 
     private fun onSuccessCallback(view: View) {

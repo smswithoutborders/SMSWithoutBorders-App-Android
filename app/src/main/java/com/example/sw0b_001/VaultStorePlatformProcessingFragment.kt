@@ -1,13 +1,11 @@
 package com.example.sw0b_001
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.sw0b_001.Data.ThreadExecutorPool
-import com.example.sw0b_001.Data.UserArtifactsHandler
-import com.example.sw0b_001.Data.v2.Vault_V2
+import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.example.sw0b_001.Models.UserArtifactsHandler
+import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Helpers
 import com.example.sw0b_001.Modules.Network
 import com.example.sw0b_001.Modules.OAuth2
@@ -17,7 +15,7 @@ import java.net.URLDecoder
 
 class VaultStorePlatformProcessingFragment(val platformName: String,
                                            val networkResponseResults: Network.NetworkResponseResults)
-    : Fragment(R.layout.fragment_onboarding_vault_store_processing){
+    : Fragment(R.layout.fragment_onboarding_network_loading){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,7 +125,7 @@ class VaultStorePlatformProcessingFragment(val platformName: String,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById<CircularProgressIndicator>(R.id.store_platform_vault_circular_progress_bar)
+        view.findViewById<CircularProgressIndicator>(R.id.network_loading_progress_indicator)
                 .isIndeterminate = true
         storeToken()
     }
