@@ -89,7 +89,6 @@ class Vault_V2(val uid: String) {
 
         fun login(phoneNumber: String, password: String, url: String, captcha_token: String):
                 Network.NetworkResponseResults {
-            println("$phoneNumber, $password, $captcha_token")
             val payload = Json.encodeToString(LoginRequest(phoneNumber, password, captcha_token))
             val networkResponseResults = Network.jsonRequestPost(url, payload)
             when(networkResponseResults.response.statusCode) {
@@ -129,8 +128,6 @@ class Vault_V2(val uid: String) {
         fun otpSubmit(url: String, headers: Headers, code: String) :
                 Network.NetworkResponseResults{
             val payload = Json.encodeToString(OTPSubmit(code))
-            println("/OTP payload: $payload")
-            println("/Headers: $headers")
             return Network.jsonRequestPut(url, payload, headers)
         }
 

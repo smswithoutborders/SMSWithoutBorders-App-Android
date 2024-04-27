@@ -64,7 +64,6 @@ class OnboardingVaultStorePlatformFragment : OnboardingComponent(R.layout.fragme
         val  uid = credentials[UserArtifactsHandler.USER_ID_KEY]!!
         ThreadExecutorPool.executorService.execute {
             try {
-                println("uid: $uid, password: $password")
                 Vault_V2.loginSyncPlatformsFlow(requireContext(), phoneNumber, password,
                         "", uid)
 
