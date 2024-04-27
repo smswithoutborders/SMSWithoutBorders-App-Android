@@ -310,6 +310,8 @@
     <string name="signup_your_passwords_do_not_match">Your passwords do not match!</string>
     <string name="owernship_otp_please_enter_a_valid_code">Please enter a valid code</string>
     <string name="ownership_resend_code_by_sms">Resend code by SMS</string>
+    <string name="login_server_something_went_wrong_please_try_again">Something went wrong, please try again</string>
+    <string name="login_password_empty_please_provide_a_password">Please provide a password</string>
 
     <!--    <string name="smswithoutborders_official_vault" translatable="false">https://smswithoutborders.com:9000</string>-->
 <!--    <string name="smswithoutborders_official_site_login" translatable="false">https://smswithoutborders.com:9000/v2/login</string>-->

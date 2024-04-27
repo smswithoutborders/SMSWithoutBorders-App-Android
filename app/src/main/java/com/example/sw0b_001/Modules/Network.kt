@@ -34,6 +34,7 @@ class Network {
 
         fun jsonRequestPut(url: String, payload: String, headers: Headers? = null) :
                 NetworkResponseResults {
+            println("url: $url")
             val (_, response, result) = if(headers.isNullOrEmpty())
                 Fuel.put(url)
                         .jsonBody(payload)
@@ -47,7 +48,7 @@ class Network {
 
             return when(result) {
                 is Result.Failure -> {
-//                    Log.w(javaClass.name, "Response text - ${String(response.data)}")
+                    Log.w(javaClass.name, "Response text - ${String(response.data)}")
                     NetworkResponseResults(response, Result.Failure(result.error))
                 }
 

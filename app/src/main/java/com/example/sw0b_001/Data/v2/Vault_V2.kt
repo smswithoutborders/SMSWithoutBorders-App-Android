@@ -20,7 +20,10 @@ class Vault_V2(val uid: String) {
     @Serializable
     data class LoginRequest(val phone_number: String,
                             val password: String,
-                            val captcha_token: String = "")
+                            val captcha_token: String)
+
+    @Serializable
+    data class LoginRequestViaUID(val password: String)
 
     @Serializable
     data class SignupRequest(val phone_number: String,
@@ -72,10 +75,23 @@ class Vault_V2(val uid: String) {
     companion object {
         const val INVALID_CREDENTIALS_EXCEPTION = "INVALID_CREDENTIALS_EXCEPTION"
         const val SERVER_ERROR_EXCEPTION = "SERVER_ERROR_EXCEPTION"
-        fun login(phoneNumber: String, password: String, url: String):
+
+        fun loginViaUID(_url: String, uid: String, password: String):
                 Network.NetworkResponseResults {
-            Log.d(javaClass.name, "phonenumber: $phoneNumber, password: $password")
-            val payload = Json.encodeToString(LoginRequest(phoneNumber, password))
+            val url = "$_url/v2/users/$uid/verify"
+            val payload = Json.encodeToString(LoginRequestViaUID(password))
+            val networkResponseResults = Network.jsonRequestPost(url, payload)
+            when(networkResponseResults.response.statusCode) {
+                in 400..500 -> throw Exception(INVALID_CREDENTIALS_EXCEPTION)
+                in 500..600 -> throw Exception(SERVER_ERROR_EXCEPTION)
+            }
+            return networkResponseResults
+        }
+
+        fun login(phoneNumber: String, password: String, url: String, captcha_token: String):
+                Network.NetworkResponseResults {
+            println("$phoneNumber, $password, $captcha_token")
+            val payload = Json.encodeToString(LoginRequest(phoneNumber, password, captcha_token))
             val networkResponseResults = Network.jsonRequestPost(url, payload)
             when(networkResponseResults.response.statusCode) {
                 in 400..500 -> throw Exception(INVALID_CREDENTIALS_EXCEPTION)
@@ -114,6 +130,8 @@ class Vault_V2(val uid: String) {
         fun otpSubmit(url: String, headers: Headers, code: String) :
                 Network.NetworkResponseResults{
             val payload = Json.encodeToString(OTPSubmit(code))
+            println("/OTP payload: $payload")
+            println("/Headers: $headers")
             return Network.jsonRequestPut(url, payload, headers)
         }
 

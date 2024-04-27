@@ -24,7 +24,7 @@ class OAuthGrantTest {
         val password = "dummy_password"
         val url = "https://staging.smswithoutborders.com:9000/v2/login"
 
-        val networkResponseResults = Vault_V2.login(phonenumber, password, url)
+        val networkResponseResults = Vault_V2.login(phonenumber, password, url, "")
         return networkResponseResults
     }
 
@@ -41,7 +41,7 @@ class OAuthGrantTest {
         val phonenumber = "+237123456789"
         val oAuthGrantPayload = Vault_V2
                 .getGmailGrant(url, networkResponseResults.response.headers, uid, phonenumber)
-        println("${oAuthGrantPayload.url} - ${oAuthGrantPayload.platform}")
+//        println("${oAuthGrantPayload.url} - ${oAuthGrantPayload.platform}")
     }
 
     @Test
@@ -58,6 +58,6 @@ class OAuthGrantTest {
 
         val oAuthGrantPayload = Vault_V2
                 .getXGrant(url, networkResponseResults.response.headers, uid, phonenumber)
-        println("${oAuthGrantPayload.url} - ${oAuthGrantPayload.platform}")
+//        println("${oAuthGrantPayload.url} - ${oAuthGrantPayload.platform}")
     }
 }

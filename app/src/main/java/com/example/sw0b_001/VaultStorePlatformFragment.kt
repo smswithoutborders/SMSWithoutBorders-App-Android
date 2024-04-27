@@ -41,7 +41,7 @@ class VaultStorePlatformFragment : Fragment(){
         val password = "dummy_password"
         ThreadExecutorPool.executorService.execute {
             val networkResponseResults =
-                    Vault_V2.login(phonenumber, password, url)
+                    Vault_V2.login(phonenumber, password, url, "")
             val uid = Json.decodeFromString<Vault_V2.UID>(networkResponseResults.result.get()).uid
             UserArtifactsHandler.storeCredentials(requireContext(), phonenumber, password, uid)
 

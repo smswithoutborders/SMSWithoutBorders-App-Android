@@ -35,7 +35,7 @@ class LoginTest {
         val password = "dummy_password"
         val url = "https://staging.smswithoutborders.com:9000/v2/login"
 
-        val networkResponseResults = Vault_V2.login(phonenumber, password, url)
+        val networkResponseResults = Vault_V2.login(phonenumber, password, url, "")
         val expectedUID = "a81d750e-a733-11ee-92f4-0242ac17000a"
         assertEquals(expectedUID, Json.decodeFromString<Vault_V2.UID>(
                 networkResponseResults.result.get()).uid)

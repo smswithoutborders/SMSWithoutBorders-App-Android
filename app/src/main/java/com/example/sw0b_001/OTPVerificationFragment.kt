@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.sw0b_001.Data.Platforms.PlatformsHandler
 import com.example.sw0b_001.Data.Platforms.PlatformsViewModel
+import com.example.sw0b_001.Data.ThreadExecutorPool
 import com.example.sw0b_001.Data.UserArtifactsHandler
 import com.example.sw0b_001.Data.v2.Vault_V2
 import com.example.sw0b_001.Modules.Network
@@ -103,7 +104,7 @@ class OTPVerificationFragment(val vaultHeaders: Headers,
                 return@setOnClickListener
             }
             it.isEnabled = false
-            submitOTPCode(it, codeTextView.text.toString())
+            submitOTPCode(view, it, codeTextView.text.toString())
         }
 
         view.findViewById<MaterialTextView>(R.id.ownership_resend_code_by_sms_btn)
@@ -128,7 +129,7 @@ class OTPVerificationFragment(val vaultHeaders: Headers,
 
     }
 
-    private fun submitOTPCode(view: View, code: String) {
+    private fun submitOTPCode(view: View, submitBtnView: View, code: String) {
         val linearProgressIndicator = view
                 .findViewById<LinearProgressIndicator>(R.id.ownership_progress_bar)
         linearProgressIndicator.visibility = View.VISIBLE
@@ -136,47 +137,57 @@ class OTPVerificationFragment(val vaultHeaders: Headers,
         val otpSubmissionUrl = view.context
                 .getString(R.string.smswithoutborders_official_otp_submission)
 
-        val networkResponseResultsOTP = Vault_V2.otpSubmit(otpSubmissionUrl, headers, code)
+        ThreadExecutorPool.executorService.execute {
+            val networkResponseResultsOTP = Vault_V2.otpSubmit(otpSubmissionUrl, headers, code)
 
-        when(networkResponseResultsOTP.response.statusCode) {
-            200 -> {
-                println("All good, code submitted!")
-                val url = context?.getString(R.string.smswithoutborders_official_site_signup)
-                val completeNetworkResponseResults =
-                        Vault_V2.signupOtpComplete(url!!, networkResponseResultsOTP.response.headers)
+            when(networkResponseResultsOTP.response.statusCode) {
+                in 200..300 -> {
+                    println("All good, code submitted!")
+                    val url = context?.getString(R.string.smswithoutborders_official_site_signup)
+                    val completeNetworkResponseResults =
+                            Vault_V2.signupOtpComplete(url!!, networkResponseResultsOTP.response.headers)
 
-                when(completeNetworkResponseResults.response.statusCode) {
-                    200 -> {
-                        UserArtifactsHandler.storeCredentials(requireContext(), phoneNumber,
-                                password, uid)
+                    when(completeNetworkResponseResults.response.statusCode) {
+                        200 -> {
+                            UserArtifactsHandler.storeCredentials(requireContext(), phoneNumber,
+                                    password, uid)
 
-                        val platformsUrl = requireContext()
-                                .getString(R.string.smswithoutborders_official_vault)
+                            loginAndFetchPlatforms(password, uid)
 
-                        val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java]
-                        PlatformsHandler.storePlatforms(requireContext(),
-                                platformsViewModel,
-                                uid,
-                                platformsUrl,
-                                completeNetworkResponseResults.response.headers)
-
-                        linearProgressIndicator.visibility = View.GONE
-                        onSuccessCallback(view)
-                    } else -> {
-                        view.isEnabled = true
-                        Log.e(javaClass.name, "Signup completion error: " +
-                                "${String(completeNetworkResponseResults.response.data)}")
-                        linearProgressIndicator.visibility = View.GONE
+                            linearProgressIndicator.visibility = View.GONE
+                            onSuccessCallback(view)
+                        } else -> {
+                            view.isEnabled = true
+                            Log.e(javaClass.name, "Signup completion error: " +
+                                    "${String(completeNetworkResponseResults.response.data)}")
+                            linearProgressIndicator.visibility = View.GONE
+                        }
                     }
                 }
+                else -> {
+                    submitBtnView.isEnabled = true
+                    Log.e(javaClass.name, "status code: ${networkResponseResultsOTP.response.statusCode}")
+                    Log.e(javaClass.name, "OTP submission error: " +
+                            "${String(networkResponseResultsOTP.response.data)}")
+                    linearProgressIndicator.visibility = View.GONE
+                }
             }
-            else -> {
-                view.isEnabled = true
-                Log.e(javaClass.name, "OTP submission error: " +
-                        "${String(networkResponseResultsOTP.response.data)}")
-                linearProgressIndicator.visibility = View.GONE
-            }
+
         }
+    }
+
+    private fun loginAndFetchPlatforms(password: String, uid: String) {
+        val platformsUrl = requireContext()
+                .getString(R.string.smswithoutborders_official_vault)
+
+        val networkResponseResults = Vault_V2.loginViaUID(platformsUrl, uid, password)
+
+        val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java]
+        PlatformsHandler.storePlatforms(requireContext(),
+                platformsViewModel,
+                uid,
+                platformsUrl,
+                networkResponseResults.response.headers)
     }
 
     private fun onSuccessCallback(view: View) {
