@@ -26,6 +26,9 @@ public interface PlatformDao {
     @Query("SELECT * FROM Platforms WHERE name=:platformName")
     Platforms get(String platformName);
 
+    @Query("SELECT * FROM Platforms WHERE type = :type LIMIT 1")
+    Platforms getType(String type);
+
     @Insert
     void insertAll(List<Platforms> platforms);
 

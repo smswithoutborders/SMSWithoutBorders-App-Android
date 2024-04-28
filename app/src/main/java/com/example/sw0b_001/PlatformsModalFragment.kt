@@ -1,18 +1,19 @@
 package com.example.sw0b_001
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sw0b_001.Database.Datastore
+import com.example.sw0b_001.Models.PlatformComposers.EmailComposeModalFragment
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter
 import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
+import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Modules.Network
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -79,10 +80,15 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
                 savedPlatformsAdapter.savedOnClickListenerLiveData = MutableLiveData();
                 when(it) {
                     Platforms.TYPE_EMAIL -> {
-                        val emailComposeModalFragment = EmailComposeModalFragment()
-                        fragmentTransaction?.add(emailComposeModalFragment, "compose_fragment_email")
-                        fragmentTransaction?.show(emailComposeModalFragment)
-                        activity?.runOnUiThread { fragmentTransaction?.commitNow() }
+                        // TODO: remove as sloopy, very sloopy
+                        ThreadExecutorPool.executorService.execute {
+                            val platform = Datastore.getDatastore(view.context)
+                                    .platformDao().getType("email");
+                            val emailComposeModalFragment = EmailComposeModalFragment(platform)
+                            fragmentTransaction?.add(emailComposeModalFragment, "compose_fragment_email")
+                            fragmentTransaction?.show(emailComposeModalFragment)
+                            activity?.runOnUiThread { fragmentTransaction?.commitNow() }
+                        }
                     }
                 }
                 dismiss()

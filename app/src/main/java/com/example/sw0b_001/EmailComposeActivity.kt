@@ -76,68 +76,6 @@ class EmailComposeActivity : AppCompactActivityCustomized() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val toEditText = findViewById<TextInputEditText>(R.id.email_to)
-        val ccTextInputEditText = findViewById<TextInputEditText>(R.id.email_cc)
-        val bccTextInputEditText = findViewById<TextInputEditText>(R.id.email_bcc)
-        val subjectTextInputEditText = findViewById<TextInputEditText>(R.id.email_subject)
-        val bodyTextInputEditText = findViewById<EditText>(R.id.email_compose_body_input)
-
-        if (item.itemId == R.id.action_send) {
-            val to = toEditText.text.toString()
-            val cc = ccTextInputEditText.text.toString()
-            val bcc = bccTextInputEditText.text.toString()
-            val subject = subjectTextInputEditText.text.toString()
-            val body = bodyTextInputEditText.text.toString()
-
-            if (to.isEmpty()) {
-                toEditText.error = getString(R.string.message_compose_empty_recipient)
-                return false
-            }
-            if (body.isEmpty()) {
-                bodyTextInputEditText.error = getString(R.string.message_compose_empty_body)
-                return false
-            }
-
-            val platformId = intent.getLongExtra(INTENT_PLATFORM_ID, -1)
-            val platforms = _PlatformsHandler.getPlatform(applicationContext, platformId)
-
-            val formattedContent = processEmailForEncryption(
-                    platforms.letter,
-                    to,
-                    cc,
-                    bcc,
-                    subject,
-                    body)
-
-            val encryptedContentBase64 = PublisherHandler.formatForPublishing(applicationContext, formattedContent)
-            val gatewayClientMSISDN = GatewayClientsCommunications(applicationContext)
-                    .getDefaultGatewayClient()
-
-            val defaultSMSAppIntent = SMSHandler.transferToDefaultSMSApp( applicationContext,
-                    gatewayClientMSISDN, encryptedContentBase64)
-
-            if (defaultSMSAppIntent.resolveActivity(packageManager) != null) {
-                startActivity(defaultSMSAppIntent)
-                setResult(RESULT_OK, Intent())
-                EncryptedContentHandler.store(applicationContext, encryptedContentBase64, gatewayClientMSISDN, platforms.name)
-                finish()
-            }
-            return true
-        }
-
-        return false;
-    }
-
-    private fun processEmailForEncryption(platformLetter: String,
-                                          to: String,
-                                          cc: String,
-                                          bcc: String,
-                                          subject: String,
-                                          body: String): String {
-        return "$platformLetter:$to:$cc:$bcc:$subject:$body"
-    }
-
     companion object {
         const val INTENT_PLATFORM_ID = "INTENT_PLATFORM_ID"
     }

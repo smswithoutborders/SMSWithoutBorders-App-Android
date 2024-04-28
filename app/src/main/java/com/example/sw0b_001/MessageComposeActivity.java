@@ -92,8 +92,9 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
                 EncryptedContent encryptedContent = encryptedContentDAO.get(encryptedContentId);
 
                 try {
-                    final String decryptedEmailContent = PublisherHandler.decryptPublishedContent(
-                            getApplicationContext(), encryptedContent.getEncryptedContent());
+                    final String decryptedEmailContent = PublisherHandler.INSTANCE
+                            .decryptPublishedContent( getApplicationContext(),
+                                    encryptedContent.getEncryptedContent());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -190,12 +191,13 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
 
                     Platforms platforms = _PlatformsHandler.getPlatform(getApplicationContext(), platformId);
                     String formattedContent = processEmailForEncryption(platforms.getLetter(), to, message);
-                    String encryptedContentBase64 = PublisherHandler.formatForPublishing(getApplicationContext(), formattedContent);
+                    String encryptedContentBase64 = PublisherHandler.INSTANCE
+                            .formatForPublishing(getApplicationContext(), formattedContent);
 //                    String gatewayClientMSISDN = GatewayClientsHandler.getDefaultGatewayClientMSISDN(getApplicationContext());
                     String gatewayClientMSISDN = "";
 
-                    Intent defaultSMSAppIntent = SMSHandler.transferToDefaultSMSApp(
-                            getApplicationContext(), gatewayClientMSISDN, encryptedContentBase64);
+                    Intent defaultSMSAppIntent = SMSHandler.Companion
+                            .transferToDefaultSMSApp(gatewayClientMSISDN, encryptedContentBase64);
                     if(defaultSMSAppIntent.resolveActivity(getPackageManager()) != null) {
 //                        startActivityForResult(defaultSMSAppIntent, RESULT_OK);
                         startActivity(defaultSMSAppIntent);
@@ -207,30 +209,8 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
 
                     return true;
 
-                } catch (BadPaddingException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                } catch (InvalidAlgorithmParameterException e) {
-                    e.printStackTrace();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (IllegalBlockSizeException e) {
-                    e.printStackTrace();
-                } catch (UnrecoverableKeyException e) {
-                    e.printStackTrace();
-                } catch (KeyStoreException e) {
-                    e.printStackTrace();
-                } catch (NoSuchPaddingException e) {
-                    e.printStackTrace();
-                } catch (InvalidKeyException e) {
-                    e.printStackTrace();
-                } catch (CertificateException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (UnrecoverableEntryException e) {
-                    e.printStackTrace();
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
                 }
                 return false;
 
