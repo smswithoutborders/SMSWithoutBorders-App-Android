@@ -3,6 +3,8 @@ package com.example.sw0b_001.Models.PlatformComposers
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
@@ -15,6 +17,7 @@ import com.example.sw0b_001.Models.Platforms._PlatformsHandler
 import com.example.sw0b_001.Models.PublisherHandler
 import com.example.sw0b_001.Models.SMSHandler
 import com.example.sw0b_001.R
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
@@ -31,16 +34,23 @@ class EmailComposeModalFragment(val platform: Platforms)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val toolbar = view.findViewById<MaterialToolbar>(R.id.email_compose_toolbar)
+        toolbar.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.email_compose_menu_action_send -> {
+                    processSend(view)
+                    return@setOnMenuItemClickListener true
+                }
+            }
+            false
+        }
+
         val bottomSheet = view.findViewById<View>(R.id.email_compose_constraint)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.isDraggable = true
 
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
-        view.findViewById<MaterialButton>(R.id.email_compose_send_btn)
-                .setOnClickListener {
-                    processSend(view)
-                }
     }
 
     private fun processSend(view: View) {

@@ -160,7 +160,7 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
 
 
         switch (item.getItemId()) {
-            case R.id.action_send:
+            case R.id.email_compose_menu_action_send:
                 String to = new String();
 
                 if(groupEditText.getText().toString().isEmpty()) {
