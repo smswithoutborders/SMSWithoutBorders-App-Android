@@ -15,8 +15,10 @@ import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter
 import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Modules.Network
+import com.example.sw0b_001.Onboarding.OnboardingComponent
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.button.MaterialButton
 
 class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
                              val networkResponseResults: Network.NetworkResponseResults? = null)

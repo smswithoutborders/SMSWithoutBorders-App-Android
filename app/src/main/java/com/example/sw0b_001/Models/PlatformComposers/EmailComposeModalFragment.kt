@@ -23,7 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
-class EmailComposeModalFragment(val platform: Platforms)
+class EmailComposeModalFragment(val platform: Platforms, val onSuccessRunnable: Runnable? = null)
     : BottomSheetDialogFragment(R.layout.fragment_modal_email_compose) {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
@@ -89,9 +89,11 @@ class EmailComposeModalFragment(val platform: Platforms)
 
         val pm = sentIntent.resolveActivity(view.context.packageManager)
         if(pm != null) {
-            val shareIntent = Intent.createChooser(sentIntent, null)
+            dismiss()
+            val shareIntent = Intent.createChooser(sentIntent,
+                    view.context.getString(R.string.choose_sms_app))
             startActivity(shareIntent)
-//            startActivity(sentIntent)
+            onSuccessRunnable?.run()
         }
         else
             throw Exception("No package found to handle request")

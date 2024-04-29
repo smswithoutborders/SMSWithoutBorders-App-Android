@@ -2,8 +2,8 @@ package com.example.sw0b_001.Models.v2
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.ViewModelProvider
 import at.favre.lib.armadillo.Armadillo
+import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Modules.Network
@@ -268,11 +268,13 @@ class Vault_V2(val uid: String) {
                 Json.decodeFromString<UID>(networkResponseResults.result.get()).uid
             else _uid
 
+            if(_uid.isNullOrEmpty())
+                UserArtifactsHandler.storeCredentials(context, phoneNumber, password, uid)
+
             val responsePayload = GatewayServer_V2.sync(context, uid, password)
             UserArtifactsHandler.storeSharedKey(context, responsePayload.shared_key)
 
-            if(_uid.isNullOrEmpty())
-                UserArtifactsHandler.storeCredentials(context, phoneNumber, password, uid)
+            GatewayClientsCommunications.populateDefaultGatewayClientsSetDefaults(context)
 
             val platformsUrl = context.getString(R.string.smswithoutborders_official_vault)
 

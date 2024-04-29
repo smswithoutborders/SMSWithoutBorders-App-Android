@@ -11,9 +11,7 @@
     <string name="smswithoutborders_official_gateway_server" translatable="false">https://staging.smswithoutborders.com:15000</string>
 
 
-    <string name="gateway_client_seeding_url" translatable="false">
-        https://mocki.io/v1/3579c78f-592c-4da6-93b7-3067ba53d574</string>
-
+    <string name="gateway_client_seeding_url" translatable="false">https://mocki.io/v1/a7da7414-6b2d-4d0b-9de9-708f5368e525</string>
     <string name="smswithoutborders_official_site_signup_intent" translatable="false">
         intent://staging.smswithoutborders.com/sign-up
     </string>
