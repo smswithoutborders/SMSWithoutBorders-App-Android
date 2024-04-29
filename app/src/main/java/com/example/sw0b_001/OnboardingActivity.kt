@@ -23,7 +23,7 @@ import com.google.android.material.textview.MaterialTextView
 
 class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageComponentsListing {
     private var fragmentIterator: MutableLiveData<Int> = MutableLiveData<Int>()
-    var fragmentList: ArrayList<OnboardingComponent> = ArrayList<OnboardingComponent>()
+    private var fragmentList: ArrayList<OnboardingComponent> = ArrayList<OnboardingComponent>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
@@ -42,9 +42,9 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
     }
 
     private fun configureScreens() {
-        val onboardingVaultStorePlatformFragment =
-                OnboardingVaultStorePlatformFragment(applicationContext)
-        fragmentList = arrayListOf(OnboardingWelcomeFragment(applicationContext))
+        val onboardingWelcomeFragment = OnboardingWelcomeFragment()
+        onboardingWelcomeFragment.nextButtonText = getString(R.string.onboarding_next)
+        fragmentList = arrayListOf(onboardingWelcomeFragment)
 
         if(!UserArtifactsHandler.isCredentials(applicationContext)) {
             fragmentList.add(OnboardingVaultFragment(applicationContext))

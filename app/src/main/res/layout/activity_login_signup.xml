@@ -6,20 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:onClick="linkPrivacyPolicy"
-        android:textColor="@color/link_color"
-        android:text="@string/homepage_read_our_privacy_policy"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imageView11"
