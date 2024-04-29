@@ -17,9 +17,25 @@ import com.google.android.material.radiobutton.MaterialRadioButton
 
 class OnboardingWelcomeFragment :
         OnboardingComponent(R.layout.fragment_onboarding_welcome) {
+
+    private lateinit var languageValues: Array<String>
+    private lateinit var languageOptions: Array<String>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<MaterialButton>(R.id.onboarding_welcome_get_started_language_btn)
+        languageValues = view.context.resources.getStringArray(R.array.language_values)
+        languageOptions = view.context.resources.getStringArray(R.array.language_options)
+
+        val changeLanguageBtn = view.findViewById<MaterialButton>(R.id
+                .onboarding_welcome_get_started_language_btn)
+        var index = 0
+        languageValues.forEachIndexed { _index, s ->
+            if(SettingsFragment.getCurrentLocale(view.context) == s) {
+                index = _index
+            }
+
+        }
+        changeLanguageBtn.text = languageOptions[index]
+        changeLanguageBtn
                 .setOnClickListener {
                     populateLanguagePopup(view)
                 }
@@ -27,15 +43,11 @@ class OnboardingWelcomeFragment :
 
     private fun populateLanguagePopup(view: View) {
         val builder = AlertDialog.Builder(view.context)
-//        builder.setTitle(getString(R.string.messages_thread_delete_confirmation_title))
-//        builder.setMessage(getString(R.string.messages_thread_delete_confirmation_text))
-
         val layout = layoutInflater.inflate(R.layout.welcome_language_layout, null)
         builder.setView(layout)
         val radioGroup = layout.findViewById<RadioGroup>(R.id.custom_language_select_popup_layout)
 
-        val values = view.context.resources.getStringArray(R.array.language_values)
-        view.context.resources.getStringArray(R.array.language_options).forEachIndexed { index, s ->
+        languageOptions.forEachIndexed { index, s ->
             val option = MaterialRadioButton(view.context)
             option.layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -44,11 +56,11 @@ class OnboardingWelcomeFragment :
             option.gravity = Gravity.START
             option.text = s
             option.id = index
-            if(values[index] == SettingsFragment.getCurrentLocale(view.context))
+            if(languageValues[index] == SettingsFragment.getCurrentLocale(view.context))
                 option.isChecked = true
 
             option.setOnClickListener {
-                SettingsFragment.changeLanguageLocale(it.context, values[index])
+                SettingsFragment.changeLanguageLocale(it.context, languageValues[index])
             }
             radioGroup.addView(option)
         }
