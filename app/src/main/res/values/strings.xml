@@ -318,4 +318,10 @@
 <!--    <string name="smswithoutborders_official_site_signup" translatable="false">https://smswithoutborders.com:9000/v2/signup</string>-->
 <!--    <string name="smswithoutborders_official_otp_submission" translatable="false">https://smswithoutborders.com:9000/v2/OTP</string>-->
 
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_finish">Finish</string>
+    <string name="onboarding_previous">Previous</string>
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_let_s_get_you_started">Let\'s get you started.</string>
+
 </resources>

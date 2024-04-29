@@ -22,7 +22,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.hbb20.CountryCodePicker
 import kotlinx.serialization.json.Json
 
-class SignupModalFragment : BottomSheetDialogFragment() {
+class SignupModalFragment(private val onSuccessRunnable: Runnable?) : BottomSheetDialogFragment() {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +57,9 @@ class SignupModalFragment : BottomSheetDialogFragment() {
                     vaultHeaders,
                     headers,
                     phonenumber,
-                    uid, password)
+                    uid,
+                    password,
+                    onSuccessRunnable)
 
             fragmentTransaction?.replace(R.id.onboarding_fragment_container,
                     otpVerificationFragment)
@@ -191,10 +193,6 @@ class SignupModalFragment : BottomSheetDialogFragment() {
                                         }
                                 })
                 }
-
-    }
-
-    private fun beginOTP() {
 
     }
 }

@@ -15,7 +15,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCa
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 
-class OnboardingLoginSignupVaultModalFragment : BottomSheetDialogFragment() {
+class OnboardingLoginSignupVaultModalFragment(private val onSuccessRunnable: Runnable?,
+                                              private val onSignupSuccessRunnable: Runnable) :
+        BottomSheetDialogFragment() {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +44,7 @@ class OnboardingLoginSignupVaultModalFragment : BottomSheetDialogFragment() {
                 .setOnClickListener {
                     dismiss()
 
-                    val loginModalFragment = LoginModalFragment()
+                    val loginModalFragment = LoginModalFragment(onSuccessRunnable)
                     fragmentTransaction?.add(loginModalFragment, "login_signup_login_vault_tag")
                     fragmentTransaction?.show(loginModalFragment)
                     fragmentTransaction?.commit()
@@ -52,7 +54,7 @@ class OnboardingLoginSignupVaultModalFragment : BottomSheetDialogFragment() {
                 .setOnClickListener {
                     dismiss()
 
-                    val signupModalFragment = SignupModalFragment()
+                    val signupModalFragment = SignupModalFragment(onSignupSuccessRunnable)
 
                     fragmentTransaction?.add(signupModalFragment, "login_signup_signup_vault_tag")
                     fragmentTransaction?.show(signupModalFragment)

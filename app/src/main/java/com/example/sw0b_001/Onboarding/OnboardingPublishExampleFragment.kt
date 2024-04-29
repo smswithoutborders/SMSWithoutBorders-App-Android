@@ -1,5 +1,6 @@
 package com.example.sw0b_001.Onboarding
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import com.example.sw0b_001.Models.UserArtifactsHandler
@@ -7,13 +8,13 @@ import com.example.sw0b_001.PlatformsModalFragment
 import com.example.sw0b_001.R
 import com.google.android.material.button.MaterialButton
 
-class OnboardingPublishExampleFragment :
+class OnboardingPublishExampleFragment(context: Context) :
         OnboardingComponent(R.layout.fragment_onboarding_publish_example) {
     init {
-        nextButtonText = "Next"
-        previousButtonText = "Previous"
-        skipButtonText = "skip"
-        skipOnboardingFragment = OnboardingSkippedAllFragment()
+        nextButtonText = context.getString(R.string.onboarding_next)
+        previousButtonText = context.getString(R.string.onboarding_previous)
+        skipButtonText = context.getString(R.string.onboarding_skip)
+        skipOnboardingFragment = OnboardingFinishedFragment(context)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,13 +29,6 @@ class OnboardingPublishExampleFragment :
 
         tryExampleButton?.setOnClickListener {
             showPlatformsModal()
-        }
-
-        if(!UserArtifactsHandler.isCredentials(view.context)) {
-            activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
-                    ?.performClick()
-            if(activity is OnboardingComponent.ManageComponentsListing)
-                (activity as ManageComponentsListing).removeComponent(this)
         }
     }
 

@@ -27,7 +27,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.serialization.json.Json
 
-class LoginModalFragment : BottomSheetDialogFragment() {
+class LoginModalFragment(val onSuccessRunnable: Runnable?) : BottomSheetDialogFragment() {
 
     lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     lateinit var phonenumberTextView: TextInputEditText
@@ -126,7 +126,7 @@ class LoginModalFragment : BottomSheetDialogFragment() {
         ThreadExecutorPool.executorService.execute {
             try {
                 Vault_V2.loginSyncPlatformsFlow(requireContext(), phonenumber, password, code)
-                onSuccessCallback(view)
+                onSuccessRunnable?.run()
                 dismiss()
             } catch(e: Exception) {
                 Log.e(javaClass.name, "Exception login", e)
@@ -158,15 +158,5 @@ class LoginModalFragment : BottomSheetDialogFragment() {
         }
 
     }
-
-    private fun onSuccessCallback(view: View) {
-        if(UserArtifactsHandler.isCredentials(view.context)) {
-            activity?.runOnUiThread {
-                activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
-                        ?.performClick()
-            }
-        }
-    }
-
 
 }

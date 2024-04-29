@@ -1,5 +1,6 @@
 package com.example.sw0b_001.Onboarding
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,42 +14,22 @@ import com.example.sw0b_001.R
 import com.google.android.material.button.MaterialButton
 import kotlin.math.log
 
-class OnboardingVaultStorePlatformFragment : OnboardingComponent(R.layout.fragment_onboarding_vault_store){
+class OnboardingVaultStorePlatformFragment(context: Context) : OnboardingComponent(R.layout.fragment_onboarding_vault_store){
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    init {
+        nextButtonText = context.getString(R.string.onboarding_next)
+        previousButtonText = context.getString(R.string.onboarding_previous)
+        skipButtonText = context.getString(R.string.onboarding_skip)
+        skipOnboardingFragment = OnboardingFinishedFragment(context)
     }
 
-    var fetchPlatforms = false
-    var showPlatforms = true
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<MaterialButton>(R.id.onboarding_welcome_vaults_store_description_try_example_btn)
                 .setOnClickListener {
-                    if(fetchPlatforms)
-                        loginAndFetchPlatforms(view)
-                    else
-                        showPlatformsModal(view)
+                    loginAndFetchPlatforms(view)
                 }
-
-        ThreadExecutorPool.executorService.execute {
-            checkCanNext(view)
-        }
-    }
-
-    private fun checkCanNext(view: View) {
-        if(Datastore.getDatastore(view.context).platformDao().countSaved() > 0) {
-            activity?.runOnUiThread {
-                activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
-                        ?.performClick()
-                if(activity is OnboardingComponent.ManageComponentsListing)
-                    (activity as OnboardingComponent.ManageComponentsListing)
-                            .removeComponent(this)
-            }
-        } else {
-            fetchPlatforms = true
-        }
     }
 
     private fun loginAndFetchPlatforms(view: View) {
@@ -67,10 +48,7 @@ class OnboardingVaultStorePlatformFragment : OnboardingComponent(R.layout.fragme
                 Vault_V2.loginSyncPlatformsFlow(requireContext(), phoneNumber, password,
                         "", uid)
 
-                fetchPlatforms = false
-                checkCanNext(view)
-                if(fetchPlatforms)
-                    showPlatformsModal(view)
+                showPlatformsModal(view)
                 loadingFragment.dismiss()
             } catch(e: Exception) {
                 e.printStackTrace()

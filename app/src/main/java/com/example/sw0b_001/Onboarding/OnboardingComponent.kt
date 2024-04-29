@@ -11,5 +11,6 @@ open class OnboardingComponent(val layout: Int) : Fragment(layout) {
     public interface ManageComponentsListing {
         fun removeComponent(index: Int)
         fun removeComponent(component: OnboardingComponent)
+        fun addComponent(component: OnboardingComponent)
     }
 }

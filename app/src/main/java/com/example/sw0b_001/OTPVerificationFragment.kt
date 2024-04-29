@@ -31,7 +31,8 @@ class OTPVerificationFragment(val vaultHeaders: Headers,
                               var headers: Headers,
                               val phoneNumber: String,
                               val uid: String,
-                              val password: String) : Fragment() {
+                              val password: String,
+                              val onSuccessRunnable: Runnable?) : Fragment() {
 
     private val SMS_CONSENT_REQUEST = 2  // Set to an unused request code
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -151,7 +152,7 @@ class OTPVerificationFragment(val vaultHeaders: Headers,
                             loginAndFetchPlatforms(password, uid)
 
                             linearProgressIndicator.visibility = View.GONE
-                            onSuccessCallback(view)
+                            onSuccessRunnable?.run()
                         } else -> {
                             view.isEnabled = true
                             Log.e(javaClass.name, "Signup completion error: " +
@@ -189,16 +190,6 @@ class OTPVerificationFragment(val vaultHeaders: Headers,
             }
         }
     }
-
-    private fun onSuccessCallback(view: View) {
-        if(UserArtifactsHandler.isCredentials(view.context)) {
-            activity?.runOnUiThread {
-                activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
-                        ?.performClick()
-            }
-        }
-    }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
