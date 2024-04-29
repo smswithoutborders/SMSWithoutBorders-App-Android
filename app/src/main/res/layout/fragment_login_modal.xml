@@ -22,7 +22,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Log into Vault"
+            android:text="@string/onboarding_log_into_vault"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -95,7 +95,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
-            android:hint="Telephone number"
+            android:hint="@string/login_telephone_number"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_status_card">
@@ -112,7 +112,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Password"
+            android:hint="@string/login_password"
             app:layout_constraintEnd_toEndOf="@+id/login_phonenumber_text"
             app:layout_constraintStart_toStartOf="@+id/login_phonenumber_text"
             app:layout_constraintTop_toBottomOf="@+id/login_phonenumber_text"
@@ -132,7 +132,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="@+id/login_password_text"
             app:layout_constraintTop_toBottomOf="@+id/login_password_text"
-            android:text="Advanced Options" />
+            android:text="" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_url"
@@ -141,7 +141,7 @@
             android:layout_marginTop="16dp"
             android:visibility="gone"
             tools:visibility="visible"
-            android:hint="Custom URL"
+            android:hint=""
             app:layout_constraintTop_toBottomOf="@+id/login_advanced_toggle"
             app:layout_constraintEnd_toEndOf="@+id/login_password_text"
             app:layout_constraintStart_toStartOf="@+id/login_password_text" >

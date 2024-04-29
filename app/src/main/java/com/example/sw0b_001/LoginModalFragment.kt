@@ -27,20 +27,13 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.serialization.json.Json
 
-class LoginModalFragment(val onSuccessRunnable: Runnable?) : BottomSheetDialogFragment() {
+class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
+        BottomSheetDialogFragment(R.layout.fragment_login_modal) {
 
     lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     lateinit var phonenumberTextView: TextInputEditText
     lateinit var passwordTextView: TextInputEditText
     lateinit var loginProgressIndicator: LinearProgressIndicator
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_login_modal, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
