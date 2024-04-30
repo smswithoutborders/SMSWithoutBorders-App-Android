@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.LoadingFragment
+import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Network
@@ -46,14 +47,27 @@ class OnboardingVaultStorePlatformFragment(context: Context) :
         val phoneNumber = credentials[UserArtifactsHandler.PHONE_NUMBER]!!
         val password = credentials[UserArtifactsHandler.PASSWORD]!!
         val  uid = credentials[UserArtifactsHandler.USER_ID_KEY]!!
+
         ThreadExecutorPool.executorService.execute {
             try {
                 val networkResponseResults =
                         Vault_V2.loginSyncPlatformsFlow(requireContext(), phoneNumber, password,
                         "", uid)
 
-                showPlatformsModal(networkResponseResults)
                 loadingFragment.dismiss()
+                if(Datastore.getDatastore(requireContext()).platformDao().countSaved() > 1) {
+                    if(activity is OnboardingComponent.ManageComponentsListing) {
+                        ((activity) as OnboardingComponent.ManageComponentsListing)
+                                .addComponent(OnboardingPublishExampleFragment(view.context))
+                        activity?.runOnUiThread {
+                            activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
+                                    ?.performClick()
+                        }
+                    }
+                } else {
+                    showPlatformsModal(networkResponseResults)
+                }
+
             } catch(e: Exception) {
                 e.printStackTrace()
                 when(e.message) {
@@ -81,21 +95,11 @@ class OnboardingVaultStorePlatformFragment(context: Context) :
                 }
             }
         }
+
     }
 
 
     private fun showPlatformsModal(networkResponseResults: Network.NetworkResponseResults) {
-//        if(Datastore.getDatastore(view.context).platformDao().count() > 0) {
-//            val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-//            val platformsModalFragment = PlatformsModalFragment(PlatformsModalFragment.SHOW_TYPE_UNSAVED)
-//            fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
-//            fragmentTransaction?.show(platformsModalFragment)
-//            activity?.runOnUiThread { fragmentTransaction?.commit() }
-//        }
-//        else {
-//            loginAndFetchPlatforms(view)
-//        }
-
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
         val platformsModalFragment = PlatformsModalFragment(
                 PlatformsModalFragment.SHOW_TYPE_UNSAVED, networkResponseResults)

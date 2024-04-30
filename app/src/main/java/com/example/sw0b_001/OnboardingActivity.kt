@@ -56,6 +56,8 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
             val thread = Thread(Runnable {
                 if(viewModel.getSavedCount(applicationContext) < 1) {
                     fragmentList.add(OnboardingVaultStorePlatformFragment(applicationContext))
+                } else {
+                    fragmentList.add(OnboardingPublishExampleFragment(applicationContext))
                 }
             })
             thread.start()

@@ -23,6 +23,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreference
 import androidx.preference.SwitchPreferenceCompat
+import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Modules.Security
 import com.example.sw0b_001.R
 import com.example.sw0b_001.Security.LockScreenFragment
@@ -58,6 +59,21 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
             }
         }
         lockScreenAlwaysOn?.onPreferenceChangeListener = switchSecurityPreferences()
+
+        val logout = findPreference<Preference>("logout")
+        if(!UserArtifactsHandler.isCredentials(requireContext())) {
+            logout?.isEnabled = false
+            logout?.summary = getString(R.string
+                    .logout_you_have_no_accounts_logged_into_vaults_at_this_time)
+        }
+        logout?.setOnPreferenceClickListener {
+            UserArtifactsHandler.clearCredentials(requireContext())
+            Toast.makeText(requireContext(),
+                    getString(R.string.logout_all_credentials_have_been_cleared_from_app),
+                    Toast.LENGTH_LONG).show()
+            activity?.recreate()
+            true
+        }
     }
 
     private fun switchSecurityPreferences(): OnPreferenceChangeListener {

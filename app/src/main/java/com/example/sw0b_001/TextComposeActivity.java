@@ -139,8 +139,9 @@ public class TextComposeActivity extends AppCompactActivityCustomized {
 //            String gatewayClientMSISDN = GatewayClientsHandler.getDefaultGatewayClientMSISDN(getApplicationContext());
             String gatewayClientMSISDN = "";
 
-
-            Intent defaultSMSAppIntent = SMSHandler.Companion.transferToDefaultSMSApp(gatewayClientMSISDN, encryptedContentBase64);
+            Intent defaultSMSAppIntent = SMSHandler.Companion
+                    .transferToDefaultSMSApp(getApplicationContext(),
+                            gatewayClientMSISDN, encryptedContentBase64);
             if(defaultSMSAppIntent.resolveActivity(getPackageManager()) != null) {
                 startActivity(defaultSMSAppIntent);
                 setResult(Activity.RESULT_OK, new Intent());

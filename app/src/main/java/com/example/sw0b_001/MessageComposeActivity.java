@@ -197,7 +197,8 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
                     String gatewayClientMSISDN = "";
 
                     Intent defaultSMSAppIntent = SMSHandler.Companion
-                            .transferToDefaultSMSApp(gatewayClientMSISDN, encryptedContentBase64);
+                            .transferToDefaultSMSApp(getApplicationContext(), gatewayClientMSISDN,
+                                    encryptedContentBase64);
                     if(defaultSMSAppIntent.resolveActivity(getPackageManager()) != null) {
 //                        startActivityForResult(defaultSMSAppIntent, RESULT_OK);
                         startActivity(defaultSMSAppIntent);

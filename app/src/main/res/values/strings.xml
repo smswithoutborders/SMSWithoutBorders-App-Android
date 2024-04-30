@@ -339,5 +339,7 @@
     <string name="login_password">Password</string>
     <string name="networ_error_reaching_server_please_try_again">Error reaching server, please try again</string>
     <string name="network_invalid_credentials_try_again">Invalid credentials, try again</string>
+    <string name="logout_all_credentials_have_been_cleared_from_app">All credentials have been cleared from app</string>
+    <string name="logout_you_have_no_accounts_logged_into_vaults_at_this_time">You have no accounts logged into Vaults at this time</string>
 
 </resources>
