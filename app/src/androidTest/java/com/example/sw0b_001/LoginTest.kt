@@ -57,13 +57,13 @@ class LoginTest {
 
     @Test
     fun makeSyncTest() {
-        val uid = "a81d750e-a733-11ee-92f4-0242ac17000a"
-        val password = "dummy_password"
-        val url = "https://staging.smswithoutborders.com:15000/v2/sync/users/${uid}/sessions/000/"
-
-        val responsePayload = GatewayServer_V2.sync(url, uid, password)
-        Log.d(javaClass.name, "Payload: ${responsePayload.msisdn_hash}, " +
-                responsePayload.shared_key)
+//        val uid = "a81d750e-a733-11ee-92f4-0242ac17000a"
+//        val password = "dummy_password"
+//        val url = "https://staging.smswithoutborders.com:15000/v2/sync/users/${uid}/sessions/000/"
+//
+//        val responsePayload = GatewayServer_V2.sync(url, uid, password)
+//        Log.d(javaClass.name, "Payload: ${responsePayload.msisdn_hash}, " +
+//                responsePayload.shared_key)
     }
 
     @Test

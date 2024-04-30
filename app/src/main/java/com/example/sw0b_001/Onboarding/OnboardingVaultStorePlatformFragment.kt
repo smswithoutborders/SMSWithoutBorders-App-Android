@@ -70,6 +70,8 @@ class OnboardingVaultStorePlatformFragment(context: Context) :
 
             } catch(e: Exception) {
                 e.printStackTrace()
+                loadingFragment.dismiss()
+
                 when(e.message) {
                     Vault_V2.INVALID_CREDENTIALS_EXCEPTION -> {
                         activity?.runOnUiThread {

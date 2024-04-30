@@ -59,8 +59,8 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         bottomSheetBehavior.isDraggable = true
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
-        countryCodePickerView = view.findViewById(R.id.login_phonenumber_text_input)
-        phonenumberTextView = view.findViewById(R.id.login_phonenumber_layout)
+        countryCodePickerView = view.findViewById(R.id.login_country_code_picker)
+        phonenumberTextView = view.findViewById(R.id.login_phonenumber_text_input)
         passwordTextView = view.findViewById(R.id.login_password_text_input)
         loginProgressIndicator = view.findViewById(R.id.login_progress_bar)
     }
@@ -94,35 +94,46 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         loginStatusCard.visibility = View.GONE
         loginStatusText.text = null
 
-        SafetyNet.getClient(requireContext())
-                .verifyWithRecaptcha(getString(R.string.recaptcha_client_side_key))
-                .addOnSuccessListener(ThreadExecutorPool.executorService, OnSuccessListener {
-                    login(view, phoneNumber, password, it.tokenResult!!)
-                })
-                .addOnFailureListener(ThreadExecutorPool.executorService,
-                        OnFailureListener {e -> if(e is ApiException) {
-                            // An error occurred when communicating with the
-                            // reCAPTCHA service. Refer to the status code to
-                            // handle the error appropriately.
-                            Log.e(javaClass.name, "Error: " +
-                                    "${ CommonStatusCodes .getStatusCodeString(e.statusCode)}")
-                            activity?.runOnUiThread {
-                                Toast.makeText(requireContext(),
-                                        CommonStatusCodes.getStatusCodeString(e.statusCode),
-                                        Toast.LENGTH_SHORT).show()
+        if(BuildConfig.DEBUG && BuildConfig.IS_RECAPTCHA)
+            SafetyNet.getClient(requireContext())
+                    .verifyWithRecaptcha(getString(R.string.recaptcha_client_side_key))
+                    .addOnSuccessListener(ThreadExecutorPool.executorService, OnSuccessListener {
+                        login(view, phoneNumber, password, it.tokenResult!!)
+                    })
+                    .addOnFailureListener(ThreadExecutorPool.executorService,
+                            OnFailureListener {e -> if(e is ApiException) {
+                                // An error occurred when communicating with the
+                                // reCAPTCHA service. Refer to the status code to
+                                // handle the error appropriately.
+                                Log.e(javaClass.name, "Error: " +
+                                        "${ CommonStatusCodes .getStatusCodeString(e.statusCode)}")
+                                activity?.runOnUiThread {
+                                    Toast.makeText(requireContext(),
+                                            CommonStatusCodes.getStatusCodeString(e.statusCode),
+                                            Toast.LENGTH_SHORT).show()
+                                }
+                            } else {
+                                // A different, unknown type of error occurred.
+                                Log.e(HomepageComposeNewFragment.TAG, "Unknown Error: ${e.message}")
+                                activity?.runOnUiThread {
+                                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                                }
                             }
-                        } else {
-                            // A different, unknown type of error occurred.
-                            Log.e(HomepageComposeNewFragment.TAG, "Unknown Error: ${e.message}")
-                            activity?.runOnUiThread {
-                                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                            e.printStackTrace()
-                            activity?.runOnUiThread {
-                                loginProgressIndicator.visibility = View.GONE
-                            }
-                })
+                                e.printStackTrace()
+                                activity?.runOnUiThread {
+                                    loginProgressIndicator.visibility = View.GONE
+                                }
+                    })
+        else {
+            try {
+                login(view, phoneNumber, password, "")
+            } catch (e: Exception) {
+                Log.e(HomepageComposeNewFragment.TAG, "Unknown Error: ${e.message}")
+                activity?.runOnUiThread {
+                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun login(view: View, phonenumber: String, password: String, code: String) {
@@ -132,10 +143,11 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         val url = view.context.getString(R.string.smswithoutborders_official_site_login)
         ThreadExecutorPool.executorService.execute {
             try {
-                Vault_V2.loginSyncPlatformsFlow(requireContext(), phonenumber, password, code)
+                Vault_V2.loginSyncPlatformsFlow(requireContext(), phonenumber, password, code, fragment = this)
                 onSuccessRunnable?.run()
                 dismiss()
             } catch(e: Exception) {
+                e.printStackTrace()
                 Log.e(javaClass.name, "Exception login", e)
                 when(e.message) {
                     Vault_V2.INVALID_CREDENTIALS_EXCEPTION -> {

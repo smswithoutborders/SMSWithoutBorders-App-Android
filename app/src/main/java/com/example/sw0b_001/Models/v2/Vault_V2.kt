@@ -2,6 +2,8 @@ package com.example.sw0b_001.Models.v2
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import at.favre.lib.armadillo.Armadillo
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler
@@ -256,7 +258,7 @@ class Vault_V2(val uid: String) {
                                    phoneNumber: String,
                                    password: String,
                                    captcha_token: String,
-                                   _uid: String? = null):
+                                   _uid: String? = null, fragment: Fragment? = null):
                 Network.NetworkResponseResults {
             val networkResponseResults = if(_uid.isNullOrEmpty()) {
                 val url = context.getString(R.string.smswithoutborders_official_site_login)
@@ -264,6 +266,13 @@ class Vault_V2(val uid: String) {
             } else {
                 val url = context.getString(R.string.smswithoutborders_official_vault)
                 loginViaUID(url, _uid, password)
+            }
+
+            fragment?.let {
+                it.activity?.runOnUiThread {
+                    Toast.makeText(context, context.getString(R.string.login_successful),
+                            Toast.LENGTH_SHORT).show()
+                }
             }
             val uid = if(_uid.isNullOrEmpty())
                 Json.decodeFromString<UID>(networkResponseResults.result.get()).uid
@@ -273,6 +282,13 @@ class Vault_V2(val uid: String) {
                 UserArtifactsHandler.storeCredentials(context, phoneNumber, password, uid)
 
             val responsePayload = GatewayServer_V2.sync(context, uid, password)
+
+            fragment?.let {
+                it.activity?.runOnUiThread {
+                    Toast.makeText(context, context.getString(R.string.synced_successfully),
+                            Toast.LENGTH_SHORT).show()
+                }
+            }
             UserArtifactsHandler.storeSharedKey(context, responsePayload.shared_key)
 
             GatewayClientsCommunications.populateDefaultGatewayClientsSetDefaults(context)
@@ -283,6 +299,14 @@ class Vault_V2(val uid: String) {
                     uid,
                     platformsUrl,
                     networkResponseResults.response.headers)
+
+            fragment?.let {
+                it.activity?.runOnUiThread {
+                    Toast.makeText(context,
+                            context.getString(R.string.login_platforms_stored_successfully),
+                            Toast.LENGTH_SHORT).show()
+                }
+            }
 
             return networkResponseResults
         }

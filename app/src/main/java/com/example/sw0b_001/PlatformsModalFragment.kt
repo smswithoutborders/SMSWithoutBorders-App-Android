@@ -2,6 +2,7 @@ package com.example.sw0b_001
 
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -57,9 +58,12 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
         val savedPlatformsRecyclerView =
                 view.findViewById<RecyclerView>(R.id.store_platforms_saved_recycler_view)
 
+        val savedLinearLayout = view.findViewById<LinearLayout>(R.id.store_platform_saved_layout)
+        val unsavedLinearLayout = view.findViewById<LinearLayout>(R.id.store_platform_unsaved_layout)
+
         when(showType) {
-            SHOW_TYPE_SAVED -> unsavedPlatformsRecyclerView.visibility = View.GONE
-            SHOW_TYPE_UNSAVED -> savedPlatformsRecyclerView.visibility = View.GONE
+            SHOW_TYPE_SAVED -> unsavedLinearLayout.visibility = View.GONE
+            SHOW_TYPE_UNSAVED -> savedLinearLayout.visibility = View.GONE
         }
 
         val savedLinearLayoutManager = LinearLayoutManager(context,
@@ -114,6 +118,12 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
             viewModel.getSeparated(it).observe(this, Observer {
                 savedPlatformsAdapter.mDiffer.submitList(it.first)
                 unSavedPlatformsAdapter.mDiffer.submitList(it.second)
+                if(it.first.isNullOrEmpty())
+                    view.findViewById<View>(R.id.store_platforms_saved_empty)
+                            .visibility = View.VISIBLE
+                else
+                    view.findViewById<View>(R.id.store_platforms_saved_empty)
+                            .visibility = View.GONE
             })
         }
     }

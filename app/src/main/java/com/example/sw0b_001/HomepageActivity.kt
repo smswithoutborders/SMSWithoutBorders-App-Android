@@ -15,11 +15,6 @@ import com.example.sw0b_001.Models.RecentsRecyclerAdapter
 import com.example.sw0b_001.Models.RecentsViewModel
 import com.google.android.material.appbar.MaterialToolbar
 
-/**
- * TODO: Security checks
- * - Checks if username is present - if valid username, continue with user in the app
- * - what if username gets spoofed (security keys won't match tho)
- */
 class HomepageActivity : AppCompactActivityCustomized() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +28,6 @@ class HomepageActivity : AppCompactActivityCustomized() {
 
         findViewById<View>(R.id.homepage_compose_new_btn)
                 .setOnClickListener { v -> onComposePlatformClick(v) }
-
-        // TODO: for verification
-        //        IntentFilter intentFilter = new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION);
-        //        registerReceiver(smsVerificationReceiver, intentFilter);
     }
 
     private fun configureRecyclerHandlers() {
@@ -74,7 +65,6 @@ class HomepageActivity : AppCompactActivityCustomized() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.homepage_settings_menu -> {
-                Log.d(localClassName, "Settings has been clicked")
                 startActivity(Intent(this, SettingsActivity::class.java))
                 return true
             }
@@ -84,15 +74,24 @@ class HomepageActivity : AppCompactActivityCustomized() {
 
 
     fun onComposePlatformClick(view: View?) {
-        showComposeNewPlatformLayout(R.layout.fragment_modal_sheet_compose_platforms)
+//        showComposeNewPlatformLayout(R.layout.fragment_modal_sheet_compose_platforms)
+        showPlatformsModal()
     }
 
-    fun showComposeNewPlatformLayout(layout: Int) {
+//    fun showComposeNewPlatformLayout(layout: Int) {
+//        val fragmentTransaction = supportFragmentManager.beginTransaction()
+//        val homepageComposeNewFragment = HomepageComposeNewFragment(layout)
+//        fragmentTransaction.add(homepageComposeNewFragment,
+//                HomepageComposeNewFragment.TAG)
+//        fragmentTransaction.show(homepageComposeNewFragment)
+//        fragmentTransaction.commitNow()
+//    }
+
+    private fun showPlatformsModal() {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        val homepageComposeNewFragment = HomepageComposeNewFragment(layout)
-        fragmentTransaction.add(homepageComposeNewFragment,
-                HomepageComposeNewFragment.TAG)
-        fragmentTransaction.show(homepageComposeNewFragment)
+        val platformsModalFragment = PlatformsModalFragment(PlatformsModalFragment.SHOW_TYPE_SAVED)
+        fragmentTransaction.add(platformsModalFragment, "store_platforms_tag")
+        fragmentTransaction.show(platformsModalFragment)
         fragmentTransaction.commitNow()
     }
 

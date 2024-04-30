@@ -345,5 +345,11 @@
     <string name="signup_i_have_read_the_privacy_policy_start">I have read the </string>
     <string name="signup_i_have_read_the_privacy_policy_end">Privacy policy</string>
     <string name="signup_you_have_to_read_the_privacy_policy_to_proceed">You have to read the privacy policy to proceed!</string>
+    <string name="login_successful">Login successful...</string>
+    <string name="synced_successfully">Synced successfully...</string>
+    <string name="login_platforms_stored_successfully">Platforms stored successfully</string>
+    <string name="platforms_these_are_platforms_stored_in_your_vault_and_can_be_used_when_you_are_offline">These are platforms stored in your Vault and can be used when you are offline.</string>
+    <string name="platforms_saved_platforms">Saved Platforms</string>
+    <string name="platform_your_vault_is_empty">Your Vault is empty</string>
 
 </resources>

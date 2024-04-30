@@ -49,6 +49,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("Boolean", "IS_RECAPTCHA", "true")
+        }
+        debug {
+            buildConfigField("Boolean", "IS_RECAPTCHA", "false")
+//            buildConfigField "boolean", "IS_RECAPTCHA" false
         }
     }
     compileOptions {
