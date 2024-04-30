@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.sw0b_001.Models.Platforms.PlatformsHandler
 import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
@@ -101,10 +102,19 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
                             // handle the error appropriately.
                             Log.e(javaClass.name, "Error: " +
                                     "${ CommonStatusCodes .getStatusCodeString(e.statusCode)}")
+                            activity?.runOnUiThread {
+                                Toast.makeText(requireContext(),
+                                        CommonStatusCodes.getStatusCodeString(e.statusCode),
+                                        Toast.LENGTH_SHORT).show()
+                            }
                         } else {
                             // A different, unknown type of error occurred.
                             Log.e(HomepageComposeNewFragment.TAG, "Unknown Error: ${e.message}")
+                            activity?.runOnUiThread {
+                                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                            }
                         }
+                            e.printStackTrace()
                             activity?.runOnUiThread {
                                 loginProgressIndicator.visibility = View.GONE
                             }

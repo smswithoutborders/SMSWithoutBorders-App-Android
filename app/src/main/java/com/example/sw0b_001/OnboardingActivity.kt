@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.text.Html
 import android.view.View
 import android.widget.LinearLayout
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.sw0b_001.Database.Datastore
+import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Onboarding.OnboardingComponent
@@ -46,8 +49,17 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
         onboardingWelcomeFragment.nextButtonText = getString(R.string.onboarding_next)
         fragmentList = arrayListOf(onboardingWelcomeFragment)
 
+        val viewModel: PlatformsViewModel by viewModels()
         if(!UserArtifactsHandler.isCredentials(applicationContext)) {
             fragmentList.add(OnboardingVaultFragment(applicationContext))
+        } else {
+            val thread = Thread(Runnable {
+                if(viewModel.getSavedCount(applicationContext) < 1) {
+                    fragmentList.add(OnboardingVaultStorePlatformFragment(applicationContext))
+                }
+            })
+            thread.start()
+            thread.join()
         }
         fragmentList.add(OnboardingFinishedFragment(applicationContext))
     }

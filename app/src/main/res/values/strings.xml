@@ -337,5 +337,7 @@
     <string name="onboarding_log_into_vault">Log into Vault</string>
     <string name="login_telephone_number">Telephone number</string>
     <string name="login_password">Password</string>
+    <string name="networ_error_reaching_server_please_try_again">Error reaching server, please try again</string>
+    <string name="network_invalid_credentials_try_again">Invalid credentials, try again</string>
 
 </resources>

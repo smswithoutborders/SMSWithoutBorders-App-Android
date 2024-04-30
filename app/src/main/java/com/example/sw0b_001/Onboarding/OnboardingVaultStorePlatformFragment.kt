@@ -4,17 +4,20 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.LoadingFragment
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.v2.Vault_V2
+import com.example.sw0b_001.Modules.Network
 import com.example.sw0b_001.PlatformsModalFragment
 import com.example.sw0b_001.R
 import com.google.android.material.button.MaterialButton
 import kotlin.math.log
 
-class OnboardingVaultStorePlatformFragment(context: Context) : OnboardingComponent(R.layout.fragment_onboarding_vault_store){
+class OnboardingVaultStorePlatformFragment(context: Context) :
+        OnboardingComponent(R.layout.fragment_onboarding_vault_store){
 
     init {
         nextButtonText = context.getString(R.string.onboarding_next)
@@ -45,20 +48,35 @@ class OnboardingVaultStorePlatformFragment(context: Context) : OnboardingCompone
         val  uid = credentials[UserArtifactsHandler.USER_ID_KEY]!!
         ThreadExecutorPool.executorService.execute {
             try {
-                Vault_V2.loginSyncPlatformsFlow(requireContext(), phoneNumber, password,
+                val networkResponseResults =
+                        Vault_V2.loginSyncPlatformsFlow(requireContext(), phoneNumber, password,
                         "", uid)
 
-                showPlatformsModal(view)
+                showPlatformsModal(networkResponseResults)
                 loadingFragment.dismiss()
             } catch(e: Exception) {
                 e.printStackTrace()
                 when(e.message) {
                     Vault_V2.INVALID_CREDENTIALS_EXCEPTION -> {
-                        TODO("Invalidate and delete all creds")
+                        activity?.runOnUiThread {
+                            Toast.makeText(requireContext(),
+                                    getString(R.string.network_invalid_credentials_try_again),
+                                    Toast.LENGTH_SHORT).show()
+                        }
                     }
                     Vault_V2.SERVER_ERROR_EXCEPTION -> {
+                        activity?.runOnUiThread {
+                            Toast.makeText(requireContext(),
+                                    getString(R.string.networ_error_reaching_server_please_try_again),
+                                    Toast.LENGTH_SHORT).show()
+                        }
                     }
                     else -> {
+                        activity?.runOnUiThread {
+                            Toast.makeText(requireContext(),
+                                    getString(R.string.networ_error_reaching_server_please_try_again),
+                                    Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }
@@ -66,16 +84,23 @@ class OnboardingVaultStorePlatformFragment(context: Context) : OnboardingCompone
     }
 
 
-    private fun showPlatformsModal(view: View) {
-        if(Datastore.getDatastore(view.context).platformDao().count() > 0) {
-            val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-            val platformsModalFragment = PlatformsModalFragment(PlatformsModalFragment.SHOW_TYPE_UNSAVED)
-            fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
-            fragmentTransaction?.show(platformsModalFragment)
-            activity?.runOnUiThread { fragmentTransaction?.commit() }
-        }
-        else {
-            loginAndFetchPlatforms(view)
-        }
+    private fun showPlatformsModal(networkResponseResults: Network.NetworkResponseResults) {
+//        if(Datastore.getDatastore(view.context).platformDao().count() > 0) {
+//            val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+//            val platformsModalFragment = PlatformsModalFragment(PlatformsModalFragment.SHOW_TYPE_UNSAVED)
+//            fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
+//            fragmentTransaction?.show(platformsModalFragment)
+//            activity?.runOnUiThread { fragmentTransaction?.commit() }
+//        }
+//        else {
+//            loginAndFetchPlatforms(view)
+//        }
+
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        val platformsModalFragment = PlatformsModalFragment(
+                PlatformsModalFragment.SHOW_TYPE_UNSAVED, networkResponseResults)
+        fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
+        fragmentTransaction?.show(platformsModalFragment)
+        activity?.runOnUiThread { fragmentTransaction?.commit() }
     }
 }

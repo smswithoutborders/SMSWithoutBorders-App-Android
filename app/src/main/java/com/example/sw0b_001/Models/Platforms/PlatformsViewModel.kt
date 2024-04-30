@@ -26,6 +26,10 @@ class PlatformsViewModel : ViewModel() {
         return liveData
     }
 
+    fun getSavedCount(context: Context) : Int {
+        return Datastore.getDatastore(context).platformDao().countSaved()
+    }
+
     fun getSeparated(context: Context): MutableLiveData<Pair<List<Platforms>, List<Platforms>>> {
         val savedList = ArrayList<Platforms>()
         val unsavedList = ArrayList<Platforms>()

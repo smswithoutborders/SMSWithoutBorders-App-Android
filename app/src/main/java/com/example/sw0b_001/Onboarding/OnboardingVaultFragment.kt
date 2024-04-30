@@ -38,7 +38,7 @@ class OnboardingVaultFragment(context: Context) : OnboardingComponent(R.layout.f
         val loginSuccessRunnable = Runnable {
             if(activity is OnboardingComponent.ManageComponentsListing) {
                 ((activity) as OnboardingComponent.ManageComponentsListing)
-                        .addComponent(OnboardingPublishExampleFragment(view.context))
+                        .addComponent(OnboardingVaultStorePlatformFragment(view.context))
                 activity?.runOnUiThread {
                     activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
                             ?.performClick()

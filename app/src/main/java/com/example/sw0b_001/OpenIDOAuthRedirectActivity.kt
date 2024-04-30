@@ -20,12 +20,6 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_open_idoauth_redirect)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
         Helpers.logIntentDetails(intent)
 
         /**
@@ -71,6 +65,9 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
                                 scope, state)
                         when(networkResponseResults.response.statusCode) {
                             200 -> { println("All good, gmail stored!") }
+                            in 400..500-> {
+                                Log.e(javaClass.name, String(networkResponseResults.response.data))
+                            }
                         }
                     }
                     "/x.html", "twitter" -> {
@@ -82,6 +79,9 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
                                 codeVerifier, state)
                         when(networkResponseResults.response.statusCode) {
                             200 -> { println("All good, X stored!") }
+                            in 400..500-> {
+                                Log.e(javaClass.name, String(networkResponseResults.response.data))
+                            }
                         }
                     }
                     else -> {

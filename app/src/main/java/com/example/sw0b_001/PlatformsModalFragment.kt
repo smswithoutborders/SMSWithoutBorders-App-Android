@@ -2,7 +2,9 @@ package com.example.sw0b_001
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -99,16 +101,17 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
 
         unSavedPlatformsAdapter.unSavedOnClickListenerLiveData.observe(this, Observer {
             if(it != null) {
-                savedPlatformsAdapter.savedOnClickListenerLiveData = MutableLiveData();
-                if(networkResponseResults != null)
+                unSavedPlatformsAdapter.unSavedOnClickListenerLiveData = MutableLiveData();
+                if(networkResponseResults != null) {
                     storePlatform(it)
-                dismiss()
+                    dismiss()
+                }
             }
         })
 
-        val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java]
+        val viewModel: PlatformsViewModel by viewModels()
         context?.let { it ->
-            platformsViewModel.getSeparated(it).observe(this, Observer {
+            viewModel.getSeparated(it).observe(this, Observer {
                 savedPlatformsAdapter.mDiffer.submitList(it.first)
                 unSavedPlatformsAdapter.mDiffer.submitList(it.second)
             })

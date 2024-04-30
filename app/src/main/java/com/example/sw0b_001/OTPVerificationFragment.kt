@@ -120,6 +120,8 @@ class OTPVerificationFragment(val vaultHeaders: Headers,
 
     private fun resendCode(view: View) : Network.NetworkResponseResults{
         println("Re-sending code: $phoneNumber")
+        view.findViewById<MaterialButton>(R.id.ownership_verification_btn)
+                .isEnabled = true
         val otpRequestUrl = view.context.getString(R.string.smswithoutborders_official_vault)
         return Vault_V2.otpRequest(otpRequestUrl,
                 vaultHeaders, phoneNumber, uid)

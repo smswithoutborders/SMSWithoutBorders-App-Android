@@ -1,7 +1,9 @@
 package com.example.sw0b_001
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.UserArtifactsHandler
@@ -21,95 +23,90 @@ class VaultStorePlatformProcessingFragment(val platformName: String,
         super.onCreate(savedInstanceState)
     }
 
-    fun storeToken() {
-        val url = getString(R.string.smswithoutborders_official_site_login)
+    private fun storeToken() {
+        val credentials = UserArtifactsHandler.fetchCredentials(requireContext())
+        val uid = credentials[UserArtifactsHandler.USER_ID_KEY]!!
+        val phonenumber = credentials[UserArtifactsHandler.PHONE_NUMBER]!!
+        val password = credentials[UserArtifactsHandler.PASSWORD]!!
+        val url = getString(R.string.smswithoutborders_official_vault)
 
         ThreadExecutorPool.executorService.execute {
-            val credentials = UserArtifactsHandler.fetchCredentials(requireContext())
-            val uid = credentials[UserArtifactsHandler.USER_ID_KEY]!!
-            val phonenumber = credentials[UserArtifactsHandler.USER_ID_KEY]!!
-            val password = credentials[UserArtifactsHandler.USER_ID_KEY]!!
+            val networkResponseResults = Vault_V2.loginViaUID(url, uid, password)
 
-            UserArtifactsHandler.storeCredentials(requireContext(), phonenumber, password, uid)
+            try{
+                getGrant(uid, phonenumber, networkResponseResults).let {
 
-            val pairNetworkResponseResultsOauth = getGrant(uid, phonenumber, networkResponseResults)
+                Vault_V2.storeOauthRequestCookies(requireContext(), it.first.response.headers)
+                Vault_V2.storeOauthRequestCodeVerifier(requireContext(), it.second.code_verifier)
 
-            Vault_V2.storeOauthRequestCookies(requireContext(),
-                    pairNetworkResponseResultsOauth.first.response.headers)
+                val parameters = Helpers.extractParameters(it.second.url)
+                parameters.forEach { value -> println("${value.key}: ${value.value}")}
 
-            Vault_V2.storeOauthRequestCodeVerifier(requireContext(),
-                    pairNetworkResponseResultsOauth.second.code_verifier)
+                val codeVerifier = it.second.code_verifier
+                val redirectUrl: String = URLDecoder.decode(parameters["redirect_uri"]!!, "UTF-8")
+                var scope: String = URLDecoder.decode(parameters["scope"]!!, "UTF-8")
+                val responseType: String = URLDecoder.decode(parameters["response_type"]!!, "UTF-8")
+                val state: String = URLDecoder.decode(parameters["state"]!!, "UTF-8")
 
-            println(pairNetworkResponseResultsOauth.second.url)
-
-            val parameters = Helpers.extractParameters(pairNetworkResponseResultsOauth.second.url)
-
-            parameters.forEach { println("${it.key}: ${it.value}")}
-
-            val codeVerifier = pairNetworkResponseResultsOauth.second.code_verifier
-            val redirectUrl: String = URLDecoder.decode(parameters["redirect_uri"]!!, "UTF-8")
-            var scope: String = URLDecoder.decode(parameters["scope"]!!, "UTF-8")
-            val responseType: String = URLDecoder.decode(parameters["response_type"]!!, "UTF-8")
-            val state: String = URLDecoder.decode(parameters["state"]!!, "UTF-8")
-
-            println("\ncode verifier: $codeVerifier")
-            println("redirect url: $redirectUrl")
-            println("response type: $responseType")
-            println("state: $state")
-
-            activity?.runOnUiThread {
-                when(platformName) {
-                    "x", "twitter" -> {
-                        try {
-                            val codeChallenge: String = URLDecoder.decode(parameters["code_challenge"]!!,
-                                    "UTF-8")
-                            val codeChallengeMethod: String = URLDecoder.decode(
-                                    parameters["code_challenge_method"]!!, "UTF-8")
-
-                            println("code challenge: $codeChallenge")
-                            println("code challenge method: $codeChallengeMethod")
-                            println("scope: $scope")
-                            OAuth2.requestXAuth(requireContext(),
-                                    codeVerifier,
-                                    codeChallenge,
-                                    codeChallengeMethod,
-                                    redirectUrl,
-                                    scope,
-                                    state)
-                        } catch(e: Exception) {
-                            e.printStackTrace()
+                activity?.runOnUiThread {
+                    when(platformName) {
+                        "x", "twitter" -> {
+                            try {
+                                val codeChallenge: String = URLDecoder.decode(parameters["code_challenge"]!!,
+                                        "UTF-8")
+                                val codeChallengeMethod: String = URLDecoder.decode(
+                                        parameters["code_challenge_method"]!!, "UTF-8")
+                                OAuth2.requestXAuth(requireContext(),
+                                        codeVerifier,
+                                        codeChallenge,
+                                        codeChallengeMethod,
+                                        redirectUrl,
+                                        scope,
+                                        state)
+                            } catch(e: Exception) {
+                                e.printStackTrace()
+                            }
+                        }
+                        "gmail" -> {
+                            try {
+                                val clientId: String = URLDecoder.decode(
+                                        parameters["client_id"]!!, "UTF-8")
+                                val accessType: String = URLDecoder.decode(
+                                        parameters["access_type"]!!, "UTF-8")
+                                println("scope: $scope")
+                                OAuth2.requestGmailAuth(requireContext(),
+                                        scope,
+                                        redirectUrl,
+                                        clientId,
+                                        state)
+                            } catch(e: Exception) {
+                                e.printStackTrace()
+                            }
                         }
                     }
-                    "gmail" -> {
-                        try {
-                            val clientId: String = URLDecoder.decode(
-                                    parameters["client_id"]!!, "UTF-8")
-                            val accessType: String = URLDecoder.decode(
-                                    parameters["access_type"]!!, "UTF-8")
-                            println("scope: $scope")
-                            OAuth2.requestGmailAuth(requireContext(),
-                                    scope,
-                                    redirectUrl,
-                                    clientId,
-                                    state)
-                        } catch(e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
+                }
+
+            }
+            } catch (e: Exception) {
+                Log.e(javaClass.name, "Exception", e)
+                activity?.runOnUiThread {
+                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
-    fun getGrant(uid: String,
-                 phonenumber: String,
-                 networkResponseResults: Network.NetworkResponseResults) :
+    private fun getGrant(uid: String,
+                         phonenumber: String,
+                         networkResponseResults: Network.NetworkResponseResults) :
             Pair<Network.NetworkResponseResults, Vault_V2.OAuthGrantPayload> {
         val platformsUrl = getString(R.string.smswithoutborders_official_vault)
 
         val headers = networkResponseResults.response.headers
+        headers.forEach { println("${it.key}: ${it.value}") }
         headers["Origin"] = "https://" +
                 context?.getString(R.string.oauth_openid_redirect_url_scheme_host)
+        headers.remove("Content-Type")
 
         return when(platformName) {
             "x", "twitter" -> {

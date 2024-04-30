@@ -207,6 +207,7 @@ class Vault_V2(val uid: String) {
                 Pair<Network.NetworkResponseResults, OAuthGrantPayload> {
             val platformsUrl = "${url}/v2/users/${uid}/platforms/gmail/protocols/oauth2"
             val payload = Json.encodeToString(OAuthGrantRequest(phone_number))
+            println("payload: $payload")
             val networkResponseResults = Network.jsonRequestPost(platformsUrl, payload, headers)
             when(networkResponseResults.response.statusCode) {
                 in 400..600 -> throw Exception(String(networkResponseResults.response.data))
