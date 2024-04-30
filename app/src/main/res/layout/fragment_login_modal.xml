@@ -88,24 +88,52 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/login_phonenumber_text"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/login_phonenumber_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:hint="@string/login_telephone_number"
+            android:layout_marginEnd="8dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_status_card">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/login_phonenumber_text_input"
-                android:layout_width="match_parent"
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/login_country_code_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:ccp_autoDetectCountry="true"
+                app:ccp_clickable="true"
+                app:ccp_countryAutoDetectionPref="SIM_ONLY"
+                app:ccp_defaultLanguage="ENGLISH"
+                app:ccp_defaultNameCode="CM"
+                app:layout_constraintBottom_toBottomOf="@+id/signup_phonenumber_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/login_phonenumber_text" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/login_phonenumber_text"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:inputType="phone" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginStart="8dp"
+                android:hint="@string/login_telephone_number_hint"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/login_country_code_picker"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/login_phonenumber_text_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_password_text"
@@ -113,9 +141,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="@string/login_password"
-            app:layout_constraintEnd_toEndOf="@+id/login_phonenumber_text"
-            app:layout_constraintStart_toStartOf="@+id/login_phonenumber_text"
-            app:layout_constraintTop_toBottomOf="@+id/login_phonenumber_text"
+            app:layout_constraintEnd_toEndOf="@+id/login_phonenumber_layout"
+            app:layout_constraintStart_toStartOf="@+id/login_phonenumber_layout"
+            app:layout_constraintTop_toBottomOf="@+id/login_phonenumber_layout"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -132,7 +160,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="@+id/login_password_text"
             app:layout_constraintTop_toBottomOf="@+id/login_password_text"
-            android:text="" />
+            tools:text="Advanced options" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_url"

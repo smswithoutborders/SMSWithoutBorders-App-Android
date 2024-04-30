@@ -26,15 +26,17 @@ import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
+import com.hbb20.CountryCodePicker
 import kotlinx.serialization.json.Json
 
 class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         BottomSheetDialogFragment(R.layout.fragment_login_modal) {
 
-    lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
-    lateinit var phonenumberTextView: TextInputEditText
-    lateinit var passwordTextView: TextInputEditText
-    lateinit var loginProgressIndicator: LinearProgressIndicator
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+    private lateinit var phonenumberTextView: TextInputEditText
+    private lateinit var passwordTextView: TextInputEditText
+    private lateinit var loginProgressIndicator: LinearProgressIndicator
+    private lateinit var countryCodePickerView: CountryCodePicker
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,7 +59,8 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         bottomSheetBehavior.isDraggable = true
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
-        phonenumberTextView = view.findViewById(R.id.login_phonenumber_text_input)
+        countryCodePickerView = view.findViewById(R.id.login_phonenumber_text_input)
+        phonenumberTextView = view.findViewById(R.id.login_phonenumber_layout)
         passwordTextView = view.findViewById(R.id.login_password_text_input)
         loginProgressIndicator = view.findViewById(R.id.login_progress_bar)
     }
@@ -81,7 +84,8 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
             return
         loginProgressIndicator.visibility = View.VISIBLE
 
-        val phoneNumber = phonenumberTextView.text.toString()
+        val countryCode = "+" + countryCodePickerView.selectedCountryCode
+        val phoneNumber = countryCode + phonenumberTextView.text.toString()
         val password = passwordTextView.text.toString()
 
         val loginStatusCard = view.findViewById<MaterialCardView>(R.id.login_status_card)

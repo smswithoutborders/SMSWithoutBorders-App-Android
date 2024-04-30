@@ -341,5 +341,9 @@
     <string name="network_invalid_credentials_try_again">Invalid credentials, try again</string>
     <string name="logout_all_credentials_have_been_cleared_from_app">All credentials have been cleared from app</string>
     <string name="logout_you_have_no_accounts_logged_into_vaults_at_this_time">You have no accounts logged into Vaults at this time</string>
+    <string name="login_telephone_number_hint">Telephone number</string>
+    <string name="signup_i_have_read_the_privacy_policy_start">I have read the </string>
+    <string name="signup_i_have_read_the_privacy_policy_end">Privacy policy</string>
+    <string name="signup_you_have_to_read_the_privacy_policy_to_proceed">You have to read the privacy policy to proceed!</string>
 
 </resources>

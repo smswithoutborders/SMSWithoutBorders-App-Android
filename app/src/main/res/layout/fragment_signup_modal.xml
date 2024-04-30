@@ -168,14 +168,25 @@
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/signup_read_privacy_policy_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            tools:text="@string/signup_i_have_read_the_privacy_policy_start"
+            app:layout_constraintStart_toStartOf="@+id/signup_password_text_retry"
+            app:layout_constraintTop_toBottomOf="@+id/signup_password_text_retry" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/signup_advanced_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="@+id/signup_password_text_retry"
-            app:layout_constraintTop_toBottomOf="@+id/signup_password_text_retry"
-            android:text="Advanced Options" />
+            android:visibility="gone"
+            tools:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/signup_read_privacy_policy_checkbox"
+            app:layout_constraintTop_toBottomOf="@+id/signup_read_privacy_policy_checkbox"
+            tools:text="Advanced Options" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/signup_url"
