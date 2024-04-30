@@ -1,19 +1,19 @@
 package com.example.sw0b_001.Onboarding
 
 import android.app.ActionBar.LayoutParams
-import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.text.Layout
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import com.example.sw0b_001.R
 import com.example.sw0b_001.Settings.SettingsFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.radiobutton.MaterialRadioButton
+
 
 class OnboardingWelcomeFragment :
         OnboardingComponent(R.layout.fragment_onboarding_welcome) {
@@ -35,15 +35,21 @@ class OnboardingWelcomeFragment :
 
         }
         changeLanguageBtn.text = languageOptions[index]
-        changeLanguageBtn
-                .setOnClickListener {
-                    populateLanguagePopup(view)
-                }
+        changeLanguageBtn.setOnClickListener { populateLanguagePopup(view) }
+        view.findViewById<View>(R.id.onboarding_welcome_privacy_policy)
+                .setOnClickListener { linkPrivacyPolicy(it) }
+    }
+
+    private fun linkPrivacyPolicy(view: View?) {
+        // TODO: check for production
+        val intentUri = Uri.parse(resources.getString(R.string.privacy_policy))
+        val intent = Intent(Intent.ACTION_VIEW, intentUri)
+        startActivity(intent)
     }
 
     private fun populateLanguagePopup(view: View) {
         val builder = AlertDialog.Builder(view.context)
-        val layout = layoutInflater.inflate(R.layout.welcome_language_layout, null)
+        val layout = layoutInflater.inflate(R.layout.layout_welcome_language, null)
         builder.setView(layout)
         val radioGroup = layout.findViewById<RadioGroup>(R.id.custom_language_select_popup_layout)
 
