@@ -8,7 +8,4 @@ import android.view.ViewGroup
 import com.example.sw0b_001.R
 
 class OnboardingVaultStoreProcessingFragment : Fragment(R.layout.fragment_onboarding_network_loading) {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
 }

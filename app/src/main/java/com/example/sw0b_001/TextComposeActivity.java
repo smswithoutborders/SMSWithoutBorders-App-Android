@@ -71,29 +71,6 @@ public class TextComposeActivity extends AppCompactActivityCustomized {
         Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
                 Datastore.databaseName).build();
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                EncryptedContentDAO encryptedContentDAO = databaseConnector.encryptedContentDAO();
-                EncryptedContent encryptedContent = encryptedContentDAO.get(encryptedContentId);
-
-                try {
-                    final String decryptedEmailContent = PublisherHandler.INSTANCE
-                            .decryptPublishedContent(getApplicationContext(),
-                                    encryptedContent.getEncryptedContent());
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            populateFields(decryptedEmailContent);
-                        }
-                    });
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
     }
 
     private void populateFields(String decryptedEmailContent) {

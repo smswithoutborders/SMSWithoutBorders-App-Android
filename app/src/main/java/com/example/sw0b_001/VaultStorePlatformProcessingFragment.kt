@@ -15,6 +15,7 @@ import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Helpers
 import com.example.sw0b_001.Modules.Network
 import com.example.sw0b_001.Modules.OAuth2
+import com.example.sw0b_001.Onboarding.OnboardingComponent
 import com.example.sw0b_001.Security.SecurityHelpers
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -45,12 +46,21 @@ class VaultStorePlatformProcessingFragment(val platformName: String,
                     parameters.forEach { value -> println("${value.key}: ${value.value}")}
 
                     val codeVerifier = it.second.code_verifier
-                    val redirectUrl: String = URLDecoder.decode(parameters["redirect_uri"]!!, "UTF-8")
+                    val redirectUrl: String = URLDecoder.decode(parameters["redirect_uri"]!!,
+                            "UTF-8")
                     var scope: String = URLDecoder.decode(parameters["scope"]!!, "UTF-8")
-                    val responseType: String = URLDecoder.decode(parameters["response_type"]!!, "UTF-8")
-    //                val state: String = URLDecoder.decode(parameters["state"]!!, "UTF-8")
+                    val responseType: String = URLDecoder.decode(parameters["response_type"]!!,
+                            "UTF-8")
 
-                    val className = activity?.localClassName?.encodeToByteArray()
+                    val className = if(activity is OnboardingComponent.ManageComponentsListing) {
+                        (activity?.localClassName +":"+
+                                (activity as OnboardingComponent.ManageComponentsListing)
+                                        .getFragmentIndex()).encodeToByteArray()
+                    } else {
+                        activity?.localClassName?.encodeToByteArray()
+                    }
+
+//                    val className = activity?.localClassName?.encodeToByteArray()
                     val secretKeyStr = UserArtifactsHandler.getSharedKeyDecrypted(requireContext())
                     val encryptedState = SecurityAES.encryptAESGCM(className,
                             SecurityHelpers.generateSecretKey(secretKeyStr, "AES"))

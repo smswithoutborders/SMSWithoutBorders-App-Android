@@ -1,18 +1,10 @@
 package com.example.sw0b_001.Models.PlatformComposers
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
-import com.example.sw0b_001.AppCompactActivityCustomized
-import com.example.sw0b_001.EmailComposeActivity
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.Platforms._PlatformsHandler
@@ -22,7 +14,6 @@ import com.example.sw0b_001.R
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
 class EmailComposeModalFragment(val platform: Platforms, val onSuccessRunnable: Runnable? = null)

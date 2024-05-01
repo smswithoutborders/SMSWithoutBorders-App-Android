@@ -42,19 +42,28 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
         parameters.forEach { println("${it.key}: ${it.value}") }
 
         val state: String = URLDecoder.decode(parameters["state"]!!, "UTF-8")
+        var fragmentIndex = -1
         if(BuildConfig.DEBUG && parameters.containsKey("debug")) {
-            startActivityFromState(state)
+            startActivityFromState(state, fragmentIndex)
             return
         }
-        val uid = UserArtifactsHandler
-                .fetchCredentials(applicationContext)[UserArtifactsHandler.USER_ID_KEY]
+
         val decodedState = Base64.decode(state, Base64.DEFAULT)
 
         val credentials = UserArtifactsHandler.fetchCredentials(applicationContext)
 
         val secretKeyStr = UserArtifactsHandler.getSharedKeyDecrypted(applicationContext)
-        val decryptedState = String(SecurityAES.decryptAESGCM(decodedState,
+        var decryptedState = String(SecurityAES.decryptAESGCM(decodedState,
                 SecurityHelpers.generateSecretKey(secretKeyStr, "AES")))
+
+        if(decryptedState.contains(":")) {
+            val splitVal = decryptedState.split(":", limit = 1)
+            if(splitVal.size > 1)
+                splitVal.apply {
+                    decryptedState = this[0]
+                    fragmentIndex = this[1].toInt()
+                }
+        }
 
         val platformName = Helpers.getPath(intentUrl).split("/")[2]
         val code: String = URLDecoder.decode(parameters["code"]!!, "UTF-8")
@@ -80,7 +89,7 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
                                 scope,
                                 "")
                         when(networkResponseResults.response.statusCode) {
-                            200 -> { startActivityFromState(decryptedState) }
+                            200 -> { startActivityFromState(decryptedState, fragmentIndex) }
                             in 400..500-> {
                                 Log.e(javaClass.name, String(networkResponseResults.response.data))
                             }
@@ -95,7 +104,7 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
                                 codeVerifier,
                                 "")
                         when(networkResponseResults.response.statusCode) {
-                            200 -> { startActivityFromState(decryptedState) }
+                            200 -> { startActivityFromState(decryptedState, fragmentIndex) }
                             in 400..500-> {
                                 Log.e(javaClass.name, String(networkResponseResults.response.data))
                             }
@@ -112,9 +121,10 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
         }
     }
 
-    private fun startActivityFromState(state: String) {
+    private fun startActivityFromState(state: String, fragmentIndex: Int) {
         val intent = Intent()
         intent.setClassName(applicationContext, state)
+        intent.putExtra("fragment_index", fragmentIndex)
         startActivity(intent)
     }
 

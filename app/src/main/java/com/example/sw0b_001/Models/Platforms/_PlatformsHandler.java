@@ -6,41 +6,11 @@ import android.content.Intent;
 import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.EmailComposeActivity;
 import com.example.sw0b_001.MessageComposeActivity;
 import com.example.sw0b_001.R;
 import com.example.sw0b_001.TextComposeActivity;
 
 public class _PlatformsHandler {
-
-    static public void storePlatforms() {
-
-    }
-
-    static public Intent getIntent(Context context, String platform_name, String type) {
-        Intent intent = null;
-        switch(type) {
-            case "email": {
-                intent = new Intent(context, EmailComposeActivity.class);
-                break;
-            }
-
-            case "text": {
-                intent = new Intent(context, TextComposeActivity.class);
-                break;
-            }
-
-            case "messaging": {
-                intent = new Intent(context, MessageComposeActivity.class);
-                break;
-            }
-            // TODO: put a default here
-        }
-        if(intent != null ) {
-            intent.putExtra("platform_name", platform_name);
-        }
-        return intent;
-    }
 
     public static int hardGetLogoByName(Context context, String name) {
         int logo = -1;

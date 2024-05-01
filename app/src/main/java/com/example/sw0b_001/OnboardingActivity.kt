@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.text.Html
 import android.view.View
 import android.widget.LinearLayout
@@ -51,14 +52,14 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
 
         configureScreens()
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.commit {
-                val fragment = fragmentList[0]
+//        val fragmentIndex = savedInstanceState?.getInt("fragment_index", 0)
+        val fragmentIndex = intent.getIntExtra("fragment_index", 0)
+        supportFragmentManager.commit {
+            val fragment = fragmentList[fragmentIndex]
 
-                add(R.id.onboarding_fragment_container, fragment)
-                setReorderingAllowed(true)
-                iterateButtonText(fragment)
-            }
+            add(R.id.onboarding_fragment_container, fragment)
+            setReorderingAllowed(true)
+            iterateButtonText(fragment)
         }
         configureButtonClicks()
     }
@@ -162,5 +163,9 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
         val lastFragment = fragmentList.removeLast()
         fragmentList.add(component)
         fragmentList.add(lastFragment)
+    }
+
+    override fun getFragmentIndex(): Int {
+        return fragmentIterator.value!!
     }
 }

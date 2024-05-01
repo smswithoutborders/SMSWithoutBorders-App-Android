@@ -28,6 +28,7 @@ object UserArtifactsHandler {
                 .remove(SHARED_KEY)
                 .apply()
     }
+
     fun isCredentials(context: Context): Boolean {
         val sharedPreferences = Armadillo.create( context, PREF_USER_ARTIFACTS_FILE)
                 .encryptionFingerprint(context)

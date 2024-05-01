@@ -14,6 +14,7 @@ open class OnboardingComponent(val layout: Int) : Fragment(layout) {
         fun removeComponent(component: OnboardingComponent)
         fun addComponent(component: OnboardingComponent)
 
+        fun getFragmentIndex(): Int
     }
     open fun getButtonText(context: Context) {}
 }

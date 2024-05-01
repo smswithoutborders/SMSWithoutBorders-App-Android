@@ -7,16 +7,18 @@ import com.example.sw0b_001.Security.SecurityAES
 import com.example.sw0b_001.Security.SecurityRSA
 
 object PublisherHandler {
-    fun decryptPublishedContent(context: Context, encryptedContent: String): String {
-        return ""
-    }
-
-    fun encryptContentForPublishing(context: Context, emailContent: String): ByteArray {
+    private fun encryptContentForPublishing(context: Context, emailContent: String): ByteArray {
         val credentials = UserArtifactsHandler.fetchCredentials(context)
         val keypair = KeystoreHelpers
                 .getKeyPairFromKeystore(credentials[UserArtifactsHandler.USER_ID_KEY])
-        val sharedKeyDecrypted = SecurityRSA.decrypt(keypair.private,
-                Base64.decode(credentials[UserArtifactsHandler.SHARED_KEY], Base64.DEFAULT))
+
+//        val sharedKeyDecrypted = SecurityRSA.decrypt(keypair.private,
+//                Base64.decode(credentials[UserArtifactsHandler.SHARED_KEY], Base64.DEFAULT))
+
+//        val sharedKeyDecrypted = com.afkanerd.smswithoutborders.libsignal_doubleratchet
+//                .SecurityRSA.decrypt(keypair.private,
+//                        Base64.decode(credentials[UserArtifactsHandler.SHARED_KEY], Base64.DEFAULT))
+        val sharedKeyDecrypted = UserArtifactsHandler.getSharedKeyDecrypted(context)
 
         return SecurityAES.encrypt(emailContent.encodeToByteArray(), sharedKeyDecrypted)
     }
@@ -25,7 +27,7 @@ object PublisherHandler {
         return try {
             val encryptedContent = encryptContentForPublishing(context, formattedContent)
             val iv = ByteArray(16)
-            val content = ByteArray(encryptedContent!!.size - 16)
+            val content = ByteArray(encryptedContent.size - 16)
 
             System.arraycopy(encryptedContent, 0, iv, 0, iv.size)
             System.arraycopy(encryptedContent, 16, content, 0, content.size)

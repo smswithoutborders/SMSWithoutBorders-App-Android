@@ -84,16 +84,6 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
             DateFormat dateFormat = new SimpleDateFormat("MMM dd");
             holder.date.setText(dateFormat.format(encryptedContent.getDate()));
         }
-
-        holder.layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent platformIntent = _PlatformsHandler.getIntent(view.getContext(),
-                        platforms.getName(), platforms.getType());
-                platformIntent.putExtra("encrypted_content_id", encryptedContent.getId());
-                platformIntent.putExtra("platform_id", platforms.getId());
-            }
-        });
     }
 
     @Override
