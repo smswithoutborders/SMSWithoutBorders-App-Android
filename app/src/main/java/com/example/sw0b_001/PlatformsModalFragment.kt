@@ -3,6 +3,7 @@ package com.example.sw0b_001
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,11 +18,14 @@ import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter
 import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.example.sw0b_001.Models.UserArtifactsHandler
+import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Network
 import com.example.sw0b_001.Onboarding.OnboardingComponent
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.progressindicator.LinearProgressIndicator
 
 class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
                              val networkResponseResults: Network.NetworkResponseResults? = null)
@@ -31,6 +35,7 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
         public const val SHOW_TYPE_SAVED = 0
         public const val SHOW_TYPE_UNSAVED = 1
         public const val SHOW_TYPE_ALL = 2
+        public const val SHOW_TYPE_SAVED_REVOKE = 3
     }
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
@@ -62,7 +67,7 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
         val unsavedLinearLayout = view.findViewById<LinearLayout>(R.id.store_platform_unsaved_layout)
 
         when(showType) {
-            SHOW_TYPE_SAVED -> unsavedLinearLayout.visibility = View.GONE
+            SHOW_TYPE_SAVED, SHOW_TYPE_SAVED_REVOKE -> unsavedLinearLayout.visibility = View.GONE
             SHOW_TYPE_UNSAVED -> savedLinearLayout.visibility = View.GONE
         }
 
@@ -83,23 +88,54 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
         savedPlatformsRecyclerView.adapter = savedPlatformsAdapter
         unsavedPlatformsRecyclerView.adapter = unSavedPlatformsAdapter
 
+        val progress = view.findViewById<LinearProgressIndicator>(R.id.store_platforms_loader)
         savedPlatformsAdapter.savedOnClickListenerLiveData.observe(this, Observer {
             if(it != null) {
+                progress.visibility = View.VISIBLE
                 savedPlatformsAdapter.savedOnClickListenerLiveData = MutableLiveData();
-                when(it) {
-                    Platforms.TYPE_EMAIL -> {
-                        // TODO: remove as sloopy, very sloopy
-                        ThreadExecutorPool.executorService.execute {
-                            val platform = Datastore.getDatastore(view.context)
-                                    .platformDao().getType("email");
-                            val emailComposeModalFragment = EmailComposeModalFragment(platform)
+                when(it.type) {
+                    "email", "text" -> {
+                        if(showType == SHOW_TYPE_SAVED_REVOKE) {
+                            savedLinearLayout.visibility = View.INVISIBLE
+                            val credentials = UserArtifactsHandler.fetchCredentials(requireContext())
+                            ThreadExecutorPool.executorService.execute {
+                                val networkResponseResults = Vault_V2.revoke(requireContext(),
+                                        credentials[UserArtifactsHandler.USER_ID_KEY]!!,
+                                        credentials[UserArtifactsHandler.PASSWORD]!!,
+                                        it.name,
+                                        "oauth2")
+                                when(networkResponseResults.response.statusCode) {
+                                    200 -> {
+                                        Datastore.getDatastore(requireContext()).platformDao()
+                                                .delete(it)
+                                        activity?.runOnUiThread {
+                                            Toast.makeText(requireContext(), it.name +
+                                                    getString(R.string.platforms_revoked_successfully),
+                                                    Toast.LENGTH_SHORT).show()
+                                            progress.visibility = View.GONE
+                                        }
+                                    } else -> {
+                                        activity?.runOnUiThread {
+                                            Toast.makeText(requireContext(),
+                                                    String(networkResponseResults.response.data),
+                                                    Toast.LENGTH_SHORT)
+                                                    .show()
+                                            progress.visibility = View.GONE
+                                        }
+                                    }
+                                }
+                                dismiss()
+                            }
+                        } else {
+                            val emailComposeModalFragment = EmailComposeModalFragment(it)
                             fragmentTransaction?.add(emailComposeModalFragment, "compose_fragment_email")
                             fragmentTransaction?.show(emailComposeModalFragment)
                             activity?.runOnUiThread { fragmentTransaction?.commitNow() }
+                            dismiss()
                         }
                     }
                 }
-                dismiss()
+
             }
         })
 
@@ -128,22 +164,11 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
         }
     }
 
-    private fun storePlatform(platformType: Int) {
+    private fun storePlatform(platforms: Platforms) {
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
         var fragment = Fragment()
 
-        var platform = ""
-        when(platformType) {
-            Platforms.TYPE_EMAIL -> {
-                platform = "gmail"
-            }
-            Platforms.TYPE_TEXT -> {
-                platform = "twitter"
-            }
-        }
-        fragment = VaultStorePlatformProcessingFragment(platform, networkResponseResults!!)
-//        fragmentTransaction?.add(fragment, "email_compose_platform_type")
-//        fragmentTransaction?.show(fragment)
+        fragment = VaultStorePlatformProcessingFragment(platforms.name, networkResponseResults!!)
         activity?.runOnUiThread {
             fragmentTransaction?.replace(R.id.onboarding_fragment_container, fragment)
             fragmentTransaction?.commitNow()

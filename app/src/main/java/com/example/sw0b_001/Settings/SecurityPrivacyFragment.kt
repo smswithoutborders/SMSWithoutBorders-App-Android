@@ -25,29 +25,22 @@ import androidx.preference.SwitchPreference
 import androidx.preference.SwitchPreferenceCompat
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Modules.Security
+import com.example.sw0b_001.PlatformsModalFragment
 import com.example.sw0b_001.R
 import com.example.sw0b_001.Security.LockScreenFragment
 import java.util.Locale
 
 class SecurityPrivacyFragment : PreferenceFragmentCompat() {
 
-    private val registerActivityResult =
-            registerForActivityResult(
-                    ActivityResultContracts.StartActivityForResult()) {
-                if(it.resultCode == Activity.RESULT_OK) {
-                    findPreference<SwitchPreferenceCompat>("lock_screen_always_on")
-                            ?.isChecked = true
-                } else {
-                    Toast.makeText(requireContext(),
-                            getString(R.string.security_settings_failed_to_switch_security),
-                            Toast.LENGTH_SHORT)
-                            .show()
-                }
-            }
-
     private val lockScreenAlwaysOnSettingsKey = "lock_screen_always_on"
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.security_privacy_preferences, rootKey)
+
+        val revokeVaults = findPreference<Preference>("revoke")
+        revokeVaults?.setOnPreferenceClickListener {
+            showPlatformsModal()
+            true
+        }
 
         val lockScreenAlwaysOn = findPreference<SwitchPreferenceCompat>(lockScreenAlwaysOnSettingsKey)
         when(Security.isBiometricLockAvailable(requireContext())) {
@@ -112,5 +105,28 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
             }
             false
         }
+    }
+
+    private val registerActivityResult =
+            registerForActivityResult(
+                    ActivityResultContracts.StartActivityForResult()) {
+                if(it.resultCode == Activity.RESULT_OK) {
+                    findPreference<SwitchPreferenceCompat>("lock_screen_always_on")
+                            ?.isChecked = true
+                } else {
+                    Toast.makeText(requireContext(),
+                            getString(R.string.security_settings_failed_to_switch_security),
+                            Toast.LENGTH_SHORT)
+                            .show()
+                }
+            }
+
+    private fun showPlatformsModal() {
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        val platformsModalFragment =
+                PlatformsModalFragment(PlatformsModalFragment.SHOW_TYPE_SAVED_REVOKE)
+        fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
+        fragmentTransaction?.show(platformsModalFragment)
+        fragmentTransaction?.commitNow()
     }
 }

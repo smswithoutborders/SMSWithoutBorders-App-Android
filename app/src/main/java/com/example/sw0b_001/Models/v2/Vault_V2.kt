@@ -310,6 +310,24 @@ class Vault_V2(val uid: String) {
 
             return networkResponseResults
         }
+
+        fun revoke(context: Context, uid: String, password: String, platform: String,
+                   protocol: String) : Network.NetworkResponseResults{
+            val url = context.getString(R.string.smswithoutborders_official_vault)
+            val networkResponseResults = loginViaUID(url, uid, password)
+
+            val headers = networkResponseResults.response.headers
+            headers.remove("Content-Type")
+
+            val platformsUrl = context.getString(R.string.smswithoutborders_official_vault) +
+                    "/v2/users/$uid/platforms/$platform/protocols/$protocol"
+            val networkResponseResults1 = Network.jsonRequestDelete(platformsUrl,
+                    Json.encodeToString(LoginRequestViaUID(password)), headers)
+            when(networkResponseResults.response.statusCode) {
+                in 400..600 -> throw Exception(String(networkResponseResults.response.data))
+            }
+            return networkResponseResults1
+        }
     }
 
 }

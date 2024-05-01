@@ -21,14 +21,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/store_platform_saved_layout"
-            android:orientation="vertical"
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/store_platforms_loader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:indeterminate="true"
+            tools:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/drag_handle">
+            app:layout_constraintTop_toBottomOf="@+id/drag_handle"/>
+
+        <LinearLayout
+            android:id="@+id/store_platform_saved_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/store_platforms_loader">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/store_platforms_saved_title"
@@ -46,13 +58,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="@string/platforms_these_are_platforms_stored_in_your_vault_and_can_be_used_when_you_are_offline"/>
+                android:text="@string/platforms_these_are_platforms_stored_in_your_vault_and_can_be_used_when_you_are_offline" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/store_platforms_saved_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/store_platforms_saved_empty"
@@ -60,11 +72,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:text="@string/platform_your_vault_is_empty"
                 android:textAlignment="center"
                 android:textSize="18sp"
                 android:visibility="gone"
-                tools:visibility="visible"
-                android:text="@string/platform_your_vault_is_empty"/>
+                tools:visibility="visible" />
 
         </LinearLayout>
 

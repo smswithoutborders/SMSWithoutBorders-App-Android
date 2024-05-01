@@ -190,7 +190,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_url"
-            tools:text="Login" />
+            android:text="@string/login_login" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

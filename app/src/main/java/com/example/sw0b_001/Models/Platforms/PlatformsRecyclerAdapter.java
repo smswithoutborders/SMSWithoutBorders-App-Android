@@ -25,8 +25,8 @@ public class PlatformsRecyclerAdapter extends
 
     FragmentTransaction fragmentTransaction;
 
-    public MutableLiveData<Integer> savedOnClickListenerLiveData = new MutableLiveData<>();
-    public MutableLiveData<Integer> unSavedOnClickListenerLiveData = new MutableLiveData<>();
+    public MutableLiveData<Platforms> savedOnClickListenerLiveData = new MutableLiveData<>();
+    public MutableLiveData<Platforms> unSavedOnClickListenerLiveData = new MutableLiveData<>();
     public PlatformsRecyclerAdapter(FragmentTransaction fragmentTransaction){
         this.fragmentTransaction = fragmentTransaction;
     }
@@ -64,22 +64,17 @@ public class PlatformsRecyclerAdapter extends
         }
 
         public void bind(Platforms platforms,
-                         MutableLiveData<Integer> onClickListenerLiveData,
-                         MutableLiveData<Integer> unSavedOnClickListenerLiveData) {
+                         MutableLiveData<Platforms> onClickListenerLiveData,
+                         MutableLiveData<Platforms> unSavedOnClickListenerLiveData) {
             image.setImageDrawable(itemView.getContext()
                     .getDrawable(_PlatformsHandler.hardGetLogoByName(itemView.getContext(),
                     platforms.getName())));
 
             cardView.setOnClickListener(it -> {
-                Log.d(PlatformsRecyclerAdapter.class.getName(), platforms.getType());
-                int type = -1;
-                if(platforms.getType().equals("email")) { type = Platforms.TYPE_EMAIL; }
-                else if(platforms.getType().equals("text")) { type = Platforms.TYPE_TEXT; }
-
                 if (platforms.isSaved())
-                    onClickListenerLiveData.setValue(type);
+                    onClickListenerLiveData.setValue(platforms);
                 else
-                    unSavedOnClickListenerLiveData.setValue(type);
+                    unSavedOnClickListenerLiveData.setValue(platforms);
             });
         }
     }

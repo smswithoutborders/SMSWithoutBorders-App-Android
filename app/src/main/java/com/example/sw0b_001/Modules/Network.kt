@@ -32,6 +32,31 @@ class Network {
             }
         }
 
+        fun jsonRequestDelete(url: String, payload: String, headers: Headers? = null) :
+                NetworkResponseResults {
+            println("url: $url")
+            val (_, response, result) = if(headers.isNullOrEmpty())
+                Fuel.delete(url)
+                        .jsonBody(payload)
+                        .responseString()
+            else
+                Fuel.delete(url)
+                        .jsonBody(payload)
+                        .header(headers)
+                        .header( Headers.COOKIE to headers["Set-Cookie"].first())
+                        .responseString()
+
+            return when(result) {
+                is Result.Failure -> {
+                    Log.w(javaClass.name, "Response text - ${String(response.data)}")
+                    NetworkResponseResults(response, Result.Failure(result.error))
+                }
+
+                is Result.Success -> {
+                    NetworkResponseResults(response, Result.Success(result.get()))
+                }
+            }
+        }
         fun jsonRequestPut(url: String, payload: String, headers: Headers? = null) :
                 NetworkResponseResults {
             println("url: $url")
