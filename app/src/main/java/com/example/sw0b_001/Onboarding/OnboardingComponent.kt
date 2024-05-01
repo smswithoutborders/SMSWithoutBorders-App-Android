@@ -1,5 +1,6 @@
 package com.example.sw0b_001.Onboarding
 
+import android.content.Context
 import androidx.fragment.app.Fragment
 
 open class OnboardingComponent(val layout: Int) : Fragment(layout) {
@@ -12,5 +13,7 @@ open class OnboardingComponent(val layout: Int) : Fragment(layout) {
         fun removeComponent(index: Int)
         fun removeComponent(component: OnboardingComponent)
         fun addComponent(component: OnboardingComponent)
+
     }
+    open fun getButtonText(context: Context) {}
 }

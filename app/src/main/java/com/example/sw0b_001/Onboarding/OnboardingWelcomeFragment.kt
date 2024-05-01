@@ -1,6 +1,7 @@
 package com.example.sw0b_001.Onboarding
 
 import android.app.ActionBar.LayoutParams
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -20,6 +21,11 @@ class OnboardingWelcomeFragment :
 
     private lateinit var languageValues: Array<String>
     private lateinit var languageOptions: Array<String>
+
+    override fun getButtonText(context: Context) {
+        nextButtonText = context.getString(R.string.onboarding_next)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         languageValues = view.context.resources.getStringArray(R.array.language_values)

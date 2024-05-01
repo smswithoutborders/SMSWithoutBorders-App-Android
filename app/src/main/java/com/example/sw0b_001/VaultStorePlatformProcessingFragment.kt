@@ -1,27 +1,29 @@
 package com.example.sw0b_001
 
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
+import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityAES
+import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Helpers
 import com.example.sw0b_001.Modules.Network
 import com.example.sw0b_001.Modules.OAuth2
+import com.example.sw0b_001.Security.SecurityHelpers
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import java.net.URLDecoder
 
 
 class VaultStorePlatformProcessingFragment(val platformName: String,
                                            val networkResponseResults: Network.NetworkResponseResults)
     : Fragment(R.layout.fragment_onboarding_network_loading){
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     private fun storeToken() {
         val credentials = UserArtifactsHandler.fetchCredentials(requireContext())
@@ -36,55 +38,62 @@ class VaultStorePlatformProcessingFragment(val platformName: String,
             try{
                 getGrant(uid, phonenumber, networkResponseResults).let {
 
-                Vault_V2.storeOauthRequestCookies(requireContext(), it.first.response.headers)
-                Vault_V2.storeOauthRequestCodeVerifier(requireContext(), it.second.code_verifier)
+                    Vault_V2.storeOauthRequestCookies(requireContext(), it.first.response.headers)
+                    Vault_V2.storeOauthRequestCodeVerifier(requireContext(), it.second.code_verifier)
 
-                val parameters = Helpers.extractParameters(it.second.url)
-                parameters.forEach { value -> println("${value.key}: ${value.value}")}
+                    val parameters = Helpers.extractParameters(it.second.url)
+                    parameters.forEach { value -> println("${value.key}: ${value.value}")}
 
-                val codeVerifier = it.second.code_verifier
-                val redirectUrl: String = URLDecoder.decode(parameters["redirect_uri"]!!, "UTF-8")
-                var scope: String = URLDecoder.decode(parameters["scope"]!!, "UTF-8")
-                val responseType: String = URLDecoder.decode(parameters["response_type"]!!, "UTF-8")
-                val state: String = URLDecoder.decode(parameters["state"]!!, "UTF-8")
+                    val codeVerifier = it.second.code_verifier
+                    val redirectUrl: String = URLDecoder.decode(parameters["redirect_uri"]!!, "UTF-8")
+                    var scope: String = URLDecoder.decode(parameters["scope"]!!, "UTF-8")
+                    val responseType: String = URLDecoder.decode(parameters["response_type"]!!, "UTF-8")
+    //                val state: String = URLDecoder.decode(parameters["state"]!!, "UTF-8")
 
-                activity?.runOnUiThread {
-                    when(platformName) {
-                        "x", "twitter" -> {
-                            try {
-                                val codeChallenge: String = URLDecoder.decode(parameters["code_challenge"]!!,
-                                        "UTF-8")
-                                val codeChallengeMethod: String = URLDecoder.decode(
-                                        parameters["code_challenge_method"]!!, "UTF-8")
-                                OAuth2.requestXAuth(requireContext(),
-                                        codeVerifier,
-                                        codeChallenge,
-                                        codeChallengeMethod,
-                                        redirectUrl,
-                                        scope,
-                                        state)
-                            } catch(e: Exception) {
-                                e.printStackTrace()
+                    val className = activity?.localClassName?.encodeToByteArray()
+                    val secretKeyStr = UserArtifactsHandler.getSharedKeyDecrypted(requireContext())
+                    val encryptedState = SecurityAES.encryptAESGCM(className,
+                            SecurityHelpers.generateSecretKey(secretKeyStr, "AES"))
+                    val state = Base64.encodeToString(encryptedState, Base64.DEFAULT)
+
+                    activity?.runOnUiThread {
+                        when(platformName) {
+                            "x", "twitter" -> {
+                                try {
+                                    val codeChallenge: String =
+                                            URLDecoder.decode(parameters["code_challenge"]!!,
+                                            "UTF-8")
+                                    val codeChallengeMethod: String = URLDecoder.decode(
+                                            parameters["code_challenge_method"]!!, "UTF-8")
+                                    OAuth2.requestXAuth(requireContext(),
+                                            codeVerifier,
+                                            codeChallenge,
+                                            codeChallengeMethod,
+                                            redirectUrl,
+                                            scope,
+                                            state)
+                                } catch(e: Exception) {
+                                    e.printStackTrace()
+                                }
                             }
-                        }
-                        "gmail" -> {
-                            try {
-                                val clientId: String = URLDecoder.decode(
-                                        parameters["client_id"]!!, "UTF-8")
-                                val accessType: String = URLDecoder.decode(
-                                        parameters["access_type"]!!, "UTF-8")
-                                println("scope: $scope")
-                                OAuth2.requestGmailAuth(requireContext(),
-                                        scope,
-                                        redirectUrl,
-                                        clientId,
-                                        state)
-                            } catch(e: Exception) {
-                                e.printStackTrace()
+                            "gmail" -> {
+                                try {
+                                    val clientId: String = URLDecoder.decode(
+                                            parameters["client_id"]!!, "UTF-8")
+                                    val accessType: String = URLDecoder.decode(
+                                            parameters["access_type"]!!, "UTF-8")
+                                    println("scope: $scope")
+                                    OAuth2.requestGmailAuth(requireContext(),
+                                            scope,
+                                            redirectUrl,
+                                            clientId,
+                                            state)
+                                } catch(e: Exception) {
+                                    e.printStackTrace()
+                                }
                             }
                         }
                     }
-                }
 
             }
             } catch (e: Exception) {

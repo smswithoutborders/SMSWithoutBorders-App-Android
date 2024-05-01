@@ -8,25 +8,17 @@ import com.example.sw0b_001.OnboardingActivity
 import com.example.sw0b_001.R
 import com.google.android.material.button.MaterialButton
 
-class OnboardingVaultFragment(context: Context) : OnboardingComponent(R.layout.fragment_onboarding_vault) {
-
-    init {
+class OnboardingVaultFragment : OnboardingComponent(R.layout.fragment_onboarding_vault) {
+    override fun getButtonText(context: Context) {
+        super.onAttach(context)
         nextButtonText = context.getString(R.string.onboarding_next)
         previousButtonText = context.getString(R.string.onboarding_previous)
         skipButtonText = context.getString(R.string.onboarding_skip)
-        skipOnboardingFragment = OnboardingFinishedFragment(context)
-    }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+        skipOnboardingFragment = OnboardingFinishedFragment()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         val tryExampleButton = view.findViewById<MaterialButton>(
                 R.id.onboarding_welcome_vaults_description_try_example_btn)
@@ -38,7 +30,7 @@ class OnboardingVaultFragment(context: Context) : OnboardingComponent(R.layout.f
         val loginSuccessRunnable = Runnable {
             if(activity is OnboardingComponent.ManageComponentsListing) {
                 ((activity) as OnboardingComponent.ManageComponentsListing)
-                        .addComponent(OnboardingVaultStorePlatformFragment(view.context))
+                        .addComponent(OnboardingVaultStorePlatformFragment())
                 activity?.runOnUiThread {
                     activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
                             ?.performClick()

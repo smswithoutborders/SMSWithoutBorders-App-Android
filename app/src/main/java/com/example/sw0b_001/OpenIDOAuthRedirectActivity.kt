@@ -1,15 +1,21 @@
 package com.example.sw0b_001
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
+import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityAES
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Helpers
+import com.example.sw0b_001.Security.SecurityHelpers
+import com.example.sw0b_001.Security.SecurityRSA
 import com.github.kittinunf.fuel.core.Headers
 
 import java.net.URLDecoder
@@ -27,44 +33,54 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
          */
 
         val intentUrl = intent.dataString
-        if(intentUrl.isNullOrEmpty())
+        if(intentUrl.isNullOrEmpty()) {
+            Log.e(javaClass.name, "Intent has no URL")
             finish()
+        }
 
         val parameters = Helpers.extractParameters(intentUrl!!)
         parameters.forEach { println("${it.key}: ${it.value}") }
 
-        val platformName = Helpers.getPath(intentUrl).split("/")[2]
         val state: String = URLDecoder.decode(parameters["state"]!!, "UTF-8")
-        var code: String = URLDecoder.decode(parameters["code"]!!, "UTF-8")
+        if(BuildConfig.DEBUG && parameters.containsKey("debug")) {
+            startActivityFromState(state)
+            return
+        }
+        val uid = UserArtifactsHandler
+                .fetchCredentials(applicationContext)[UserArtifactsHandler.USER_ID_KEY]
+        val decodedState = Base64.decode(state, Base64.DEFAULT)
 
-        println("\ncode: $code")
-        println("state: $state")
-        println("state: $state")
+        val credentials = UserArtifactsHandler.fetchCredentials(applicationContext)
+
+        val secretKeyStr = UserArtifactsHandler.getSharedKeyDecrypted(applicationContext)
+        val decryptedState = String(SecurityAES.decryptAESGCM(decodedState,
+                SecurityHelpers.generateSecretKey(secretKeyStr, "AES")))
+
+        val platformName = Helpers.getPath(intentUrl).split("/")[2]
+        val code: String = URLDecoder.decode(parameters["code"]!!, "UTF-8")
 
         try {
             ThreadExecutorPool.executorService.execute {
-                val credentials = UserArtifactsHandler.fetchCredentials(applicationContext)
 
                 val codeVerifier = Vault_V2.fetchOauthRequestVerifier(applicationContext)
 
                 val cookies = Vault_V2.fetchOauthRequestCookies(applicationContext)
-                println("Cookies: $cookies")
 
                 val platformsUrl = getString(R.string.smswithoutborders_official_vault)
 
                 when(platformName ) {
                     "/gmail.html", "gmail" -> {
                         var scope: String = URLDecoder.decode(parameters["scope"]!!, "UTF-8")
-                        println("scope: $scope")
                         val networkResponseResults = Vault_V2.sendGmailCode(applicationContext,
                                 platformsUrl,
                                 Headers().set("Set-Cookie", cookies),
                                 credentials[UserArtifactsHandler.USER_ID_KEY]!!,
                                 code,
                                 codeVerifier,
-                                scope, state)
+                                scope,
+                                "")
                         when(networkResponseResults.response.statusCode) {
-                            200 -> { println("All good, gmail stored!") }
+                            200 -> { startActivityFromState(decryptedState) }
                             in 400..500-> {
                                 Log.e(javaClass.name, String(networkResponseResults.response.data))
                             }
@@ -76,9 +92,10 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
                                 Headers().set("Set-Cookie", cookies),
                                 credentials[UserArtifactsHandler.USER_ID_KEY]!!,
                                 code,
-                                codeVerifier, state)
+                                codeVerifier,
+                                "")
                         when(networkResponseResults.response.statusCode) {
-                            200 -> { println("All good, X stored!") }
+                            200 -> { startActivityFromState(decryptedState) }
                             in 400..500-> {
                                 Log.e(javaClass.name, String(networkResponseResults.response.data))
                             }
@@ -95,5 +112,10 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
         }
     }
 
+    private fun startActivityFromState(state: String) {
+        val intent = Intent()
+        intent.setClassName(applicationContext, state)
+        startActivity(intent)
+    }
 
 }

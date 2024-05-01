@@ -1,5 +1,6 @@
 package com.example.sw0b_001
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,8 +10,11 @@ import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.fragment.app.commitNow
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
+import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Models.ThreadExecutorPool
@@ -23,93 +27,76 @@ import com.example.sw0b_001.Onboarding.OnboardingVaultStorePlatformFragment
 import com.example.sw0b_001.Onboarding.OnboardingWelcomeFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
+import kotlin.io.encoding.Base64
 
 class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageComponentsListing {
     private var fragmentIterator: MutableLiveData<Int> = MutableLiveData<Int>()
     private var fragmentList: ArrayList<OnboardingComponent> = ArrayList<OnboardingComponent>()
+
+    private lateinit var nextButton : MaterialButton
+    private lateinit var prevButton : MaterialButton
+    private lateinit var dotIndicatorLayout :LinearLayout
+    private lateinit var skipAllBtn : MaterialTextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
 
+        nextButton = findViewById(R.id.onboard_next_button);
+        prevButton = findViewById(R.id.onboard_back_button);
+        dotIndicatorLayout = findViewById(R.id.onboard_dot_indicator_layout)
+        skipAllBtn = findViewById(R.id.onboard_skip_all)
+
+        val onboardingWelcomeFragment = OnboardingWelcomeFragment()
+        fragmentList = arrayListOf(onboardingWelcomeFragment)
+
         configureScreens()
-        configureButtonClicks()
 
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
-                val startFragment = fragmentList[0]
+                val fragment = fragmentList[0]
 
-                add(R.id.onboarding_fragment_container, startFragment)
+                add(R.id.onboarding_fragment_container, fragment)
                 setReorderingAllowed(true)
+                iterateButtonText(fragment)
             }
         }
+        configureButtonClicks()
     }
 
     private fun configureScreens() {
-        val onboardingWelcomeFragment = OnboardingWelcomeFragment()
-        onboardingWelcomeFragment.nextButtonText = getString(R.string.onboarding_next)
-        fragmentList = arrayListOf(onboardingWelcomeFragment)
-
         val viewModel: PlatformsViewModel by viewModels()
         if(!UserArtifactsHandler.isCredentials(applicationContext)) {
-            fragmentList.add(OnboardingVaultFragment(applicationContext))
+            fragmentList.add(OnboardingVaultFragment())
         } else {
             val thread = Thread(Runnable {
                 if(viewModel.getSavedCount(applicationContext) < 1) {
-                    fragmentList.add(OnboardingVaultStorePlatformFragment(applicationContext))
+                    fragmentList.add(OnboardingVaultStorePlatformFragment())
                 } else {
-                    fragmentList.add(OnboardingPublishExampleFragment(applicationContext))
+                    fragmentList.add(OnboardingPublishExampleFragment())
                 }
             })
             thread.start()
             thread.join()
         }
-        fragmentList.add(OnboardingFinishedFragment(applicationContext))
+        fragmentList.add(OnboardingFinishedFragment())
     }
 
     private fun configureButtonClicks() {
-        val nextButton = findViewById<MaterialButton>(R.id.onboard_next_button);
-        val prevButton = findViewById<MaterialButton>(R.id.onboard_back_button);
-        val dotIndicatorLayout = findViewById<LinearLayout>(R.id.onboard_dot_indicator_layout)
-        val skipAllBtn = findViewById<MaterialTextView>(R.id.onboard_skip_all)
 
         fragmentIterator.value = 0
         var previousValueFromSkip: Int = -1
-
-        fragmentIterator.observe(this) {
-//            dotIndicatorLayout.removeAllViews()
-//            val dots: Array<MaterialTextView> = Array(fragmentList.size) {
-//                val materialTextView = MaterialTextView(applicationContext)
-//                materialTextView.text = Html.fromHtml("&#8226", Html.FROM_HTML_MODE_LEGACY)
-//                materialTextView.textSize = 35F
-//                materialTextView.setTextColor(resources.getColor(R.color.pending_gray, theme))
-//                dotIndicatorLayout.addView(materialTextView)
-//                materialTextView
-//            }
-//            dots[it].setTextColor(resources.getColor(R.color.default_blue, theme))
-
-            nextButton.text = fragmentList[it].nextButtonText
-            prevButton.text = fragmentList[it].previousButtonText
-            skipAllBtn.text = fragmentList[it].skipButtonText
-
-            if(nextButton.text.isNullOrEmpty())
-                nextButton.visibility = View.INVISIBLE
-            else nextButton.visibility = View.VISIBLE
-
-            if(prevButton.text.isNullOrEmpty())
-                prevButton.visibility = View.INVISIBLE
-            else prevButton.visibility = View.VISIBLE
-        }
-
 
         nextButton.setOnClickListener {
             supportFragmentManager.commit {
                 if(fragmentIterator.value!! + 1 < fragmentList.size) {
                     fragmentIterator.value = fragmentIterator.value!! + 1
-                    val fragment: Fragment = fragmentList[fragmentIterator.value!!]
+                    val fragment: OnboardingComponent = fragmentList[fragmentIterator.value!!]
 
                     replace(R.id.onboarding_fragment_container, fragment)
                     setReorderingAllowed(false)
                     addToBackStack(fragment.javaClass.name)
+
+                    iterateButtonText(fragment)
                 } else {
                     val intent = Intent(applicationContext, HomepageActivity::class.java)
                     intent.apply {
@@ -126,11 +113,12 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                 fragmentIterator.value = if(previousValueFromSkip != -1) previousValueFromSkip
                 else fragmentIterator.value!! - 1
 
-                val fragment: Fragment = fragmentList[fragmentIterator.value!!]
+                val fragment: OnboardingComponent = fragmentList[fragmentIterator.value!!]
 
                 replace(R.id.onboarding_fragment_container, fragment)
                 setReorderingAllowed(true)
-//                addToBackStack(fragment.javaClass.name)
+
+                iterateButtonText(fragment)
             }
         }
 
@@ -141,13 +129,24 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                         fragmentList[fragmentIterator.value!!].skipOnboardingFragment
                 replace(R.id.onboarding_fragment_container, fragment!!)
                 setReorderingAllowed(true)
-//                addToBackStack(fragment.javaClass.name)
-
-                nextButton.text = fragment.nextButtonText
-                prevButton.text = fragment.previousButtonText
-                skipAllBtn.text = fragment.skipButtonText
+                iterateButtonText(fragment)
             }
         }
+    }
+
+    private fun iterateButtonText(fragment: OnboardingComponent) {
+        fragment.getButtonText(applicationContext)
+        nextButton.text = fragment.nextButtonText
+        prevButton.text = fragment.previousButtonText
+        skipAllBtn.text = fragment.skipButtonText
+
+        if(nextButton.text.isNullOrEmpty())
+            nextButton.visibility = View.INVISIBLE
+        else nextButton.visibility = View.VISIBLE
+
+        if(prevButton.text.isNullOrEmpty())
+            prevButton.visibility = View.INVISIBLE
+        else prevButton.visibility = View.VISIBLE
     }
 
     override fun removeComponent(index: Int) {

@@ -8,13 +8,13 @@ import com.example.sw0b_001.PlatformsModalFragment
 import com.example.sw0b_001.R
 import com.google.android.material.button.MaterialButton
 
-class OnboardingPublishExampleFragment(context: Context) :
+class OnboardingPublishExampleFragment :
         OnboardingComponent(R.layout.fragment_onboarding_publish_example) {
-    init {
+    override fun getButtonText(context: Context) {
         nextButtonText = context.getString(R.string.onboarding_next)
         previousButtonText = context.getString(R.string.onboarding_previous)
         skipButtonText = context.getString(R.string.onboarding_skip)
-        skipOnboardingFragment = OnboardingFinishedFragment(context)
+        skipOnboardingFragment = OnboardingFinishedFragment()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

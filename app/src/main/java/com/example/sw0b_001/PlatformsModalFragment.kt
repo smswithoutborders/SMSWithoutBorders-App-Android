@@ -132,16 +132,21 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
         var fragment = Fragment()
 
+        var platform = ""
         when(platformType) {
             Platforms.TYPE_EMAIL -> {
-                fragment = VaultStorePlatformProcessingFragment("gmail", networkResponseResults!!)
+                platform = "gmail"
             }
             Platforms.TYPE_TEXT -> {
-                fragment = VaultStorePlatformProcessingFragment("twitter", networkResponseResults!!)
+                platform = "twitter"
             }
         }
-        fragmentTransaction?.add(fragment, "email_compose_platform_type")
-        fragmentTransaction?.show(fragment)
-        activity?.runOnUiThread { fragmentTransaction?.commitNow() }
+        fragment = VaultStorePlatformProcessingFragment(platform, networkResponseResults!!)
+//        fragmentTransaction?.add(fragment, "email_compose_platform_type")
+//        fragmentTransaction?.show(fragment)
+        activity?.runOnUiThread {
+            fragmentTransaction?.replace(R.id.onboarding_fragment_container, fragment)
+            fragmentTransaction?.commitNow()
+        }
     }
 }

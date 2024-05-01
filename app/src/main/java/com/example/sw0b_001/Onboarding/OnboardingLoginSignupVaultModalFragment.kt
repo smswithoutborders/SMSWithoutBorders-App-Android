@@ -17,19 +17,9 @@ import com.google.android.material.button.MaterialButton
 
 class OnboardingLoginSignupVaultModalFragment(private val onSuccessRunnable: Runnable?,
                                               private val onSignupSuccessRunnable: Runnable) :
-        BottomSheetDialogFragment() {
+        BottomSheetDialogFragment(R.layout.fragment_onboarding_login_signup_vault_modal_sheet) {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_onboarding_login_signup_vault_modal_sheet, container,
-                false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val bottomSheet = view.findViewById<View>(R.id.onboarding_login_signup_constraint)
