@@ -360,5 +360,6 @@
     <string name="platforms_no_platform_to_store">No platform to store</string>
     <string name="platforms_re_synced_gateway_server">Re-synced Gateway server</string>
     <string name="open_id_sync_updated">Sync updated!</string>
+    <string name="open_id_platforms_updated">Platforms updated</string>
 
 </resources>

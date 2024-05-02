@@ -7,11 +7,13 @@ import android.util.Base64
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityAES
+import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.v2.GatewayServer_V2
@@ -92,7 +94,8 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
                                 "")
                         when(networkResponseResults.response.statusCode) {
                             200 -> {
-                                syncAndStore(applicationContext)
+                                syncAndStore()
+                                updatePlatforms()
                                 startActivityFromState(decryptedState, fragmentIndex)
                             }
                             in 400..500-> {
@@ -110,7 +113,8 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
                                 "")
                         when(networkResponseResults.response.statusCode) {
                             200 -> {
-                                syncAndStore(applicationContext)
+                                syncAndStore()
+                                updatePlatforms()
                                 startActivityFromState(decryptedState, fragmentIndex)
                             }
                             in 400..500-> {
@@ -138,14 +142,32 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun syncAndStore(context: Context) {
-        val credentials = UserArtifactsHandler.fetchCredentials(context)
-        val payload = GatewayServer_V2.sync(context,
+    private fun updatePlatforms() {
+        val credentials = UserArtifactsHandler.fetchCredentials(applicationContext)
+        val networkResponseResults = Vault_V2.loginSyncPlatformsFlow(applicationContext,
+                credentials[UserArtifactsHandler.PHONE_NUMBER]!!,
+                credentials[UserArtifactsHandler.PASSWORD]!!, "",
+                credentials[UserArtifactsHandler.USER_ID_KEY])
+
+        when(networkResponseResults.response.statusCode) {
+            200 -> {
+                runOnUiThread {
+                    Toast.makeText(applicationContext, getString(R.string.open_id_platforms_updated),
+                            Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun syncAndStore() {
+        val credentials = UserArtifactsHandler.fetchCredentials(applicationContext)
+        val payload = GatewayServer_V2.sync(applicationContext,
                 credentials[UserArtifactsHandler.USER_ID_KEY]!!,
                 credentials[UserArtifactsHandler.PASSWORD]!!)
-        UserArtifactsHandler.storeSharedKey(context, payload.shared_key)
+        UserArtifactsHandler.storeSharedKey(applicationContext, payload.shared_key)
         runOnUiThread {
-            Toast.makeText(context, getString(R.string.open_id_sync_updated), Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext,
+                    getString(R.string.open_id_sync_updated), Toast.LENGTH_SHORT).show()
         }
     }
 
