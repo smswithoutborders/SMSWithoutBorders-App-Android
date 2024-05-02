@@ -23,7 +23,9 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreference
 import androidx.preference.SwitchPreferenceCompat
+import com.example.sw0b_001.LoginModalFragment
 import com.example.sw0b_001.Models.UserArtifactsHandler
+import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Security
 import com.example.sw0b_001.PlatformsModalFragment
 import com.example.sw0b_001.R
@@ -54,11 +56,6 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
         lockScreenAlwaysOn?.onPreferenceChangeListener = switchSecurityPreferences()
 
         val logout = findPreference<Preference>("logout")
-        if(!UserArtifactsHandler.isCredentials(requireContext())) {
-            logout?.isEnabled = false
-            logout?.summary = getString(R.string
-                    .logout_you_have_no_accounts_logged_into_vaults_at_this_time)
-        }
         logout?.setOnPreferenceClickListener {
             UserArtifactsHandler.clearCredentials(requireContext())
             Toast.makeText(requireContext(),
@@ -66,6 +63,21 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
                     Toast.LENGTH_LONG).show()
             activity?.recreate()
             true
+        }
+
+        val delete = findPreference<Preference>("delete")
+        delete?.setOnPreferenceClickListener {
+            showLoginModal()
+            true
+        }
+        if(!UserArtifactsHandler.isCredentials(requireContext())) {
+            logout?.isEnabled = false
+            logout?.summary = getString(R.string
+                    .logout_you_have_no_accounts_logged_into_vaults_at_this_time)
+
+            delete?.isEnabled = false
+            delete?.summary = getString(R.string
+                    .security_settings_you_have_no_accounts_to_delete_in_vault_at_this_time)
         }
     }
 
@@ -120,6 +132,39 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
                             .show()
                 }
             }
+    private fun showLoginModal() {
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        val loginModalFragment = LoginModalFragment(Runnable {
+            val credentials = UserArtifactsHandler.fetchCredentials(requireContext())
+            val networkResponseResults = Vault_V2.delete(requireContext(),
+                    credentials[UserArtifactsHandler.USER_ID_KEY]!!,
+                    credentials[UserArtifactsHandler.PASSWORD]!!)
+            when(networkResponseResults.response.statusCode) {
+                200 -> {
+                    UserArtifactsHandler.clearCredentials(requireContext())
+                    activity?.let {
+                        it.runOnUiThread {
+                            it.recreate()
+                            Toast.makeText(requireContext(),
+                                    getString(R.string.security_settings_vault_account_deleted),
+                                    Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else -> {
+                    activity?.let {
+                        it.runOnUiThread {
+                            Toast.makeText(requireContext(),
+                                    getString(R.string.networ_error_reaching_server_please_try_again),
+                                    Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+        })
+        fragmentTransaction?.add(loginModalFragment, "login_signup_login_vault_tag")
+        fragmentTransaction?.show(loginModalFragment)
+        fragmentTransaction?.commit()
+    }
 
     private fun showPlatformsModal() {
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()

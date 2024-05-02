@@ -364,5 +364,7 @@
     <string name="homepage_save_platforms">Save platforms</string>
     <string name="homepage_add_account">Add Account</string>
     <string name="homepage_vault_account_added">Vault account added</string>
+    <string name="security_settings_you_have_no_accounts_to_delete_in_vault_at_this_time">You have no accounts to delete in Vault at this time</string>
+    <string name="security_settings_vault_account_deleted">Vault account deleted</string>
 
 </resources>
