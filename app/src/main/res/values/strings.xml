@@ -361,5 +361,8 @@
     <string name="platforms_re_synced_gateway_server">Re-synced Gateway server</string>
     <string name="open_id_sync_updated">Sync updated!</string>
     <string name="open_id_platforms_updated">Platforms updated</string>
+    <string name="homepage_save_platforms">Save platforms</string>
+    <string name="homepage_add_account">Add Account</string>
+    <string name="homepage_vault_account_added">Vault account added</string>
 
 </resources>

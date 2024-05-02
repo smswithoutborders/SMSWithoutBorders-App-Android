@@ -42,6 +42,13 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
 
+        if(OnboardingComponent.getOnboarded(applicationContext)) {
+            val intent = Intent(this, HomepageActivity::class.java).apply {
+                setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            }
+            startActivity(intent)
+            finish()
+        }
         nextButton = findViewById(R.id.onboard_next_button);
         prevButton = findViewById(R.id.onboard_back_button);
         dotIndicatorLayout = findViewById(R.id.onboard_dot_indicator_layout)
@@ -131,6 +138,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                 replace(R.id.onboarding_fragment_container, fragment!!)
                 setReorderingAllowed(true)
                 iterateButtonText(fragment)
+                fragmentIterator.value = fragmentList.size -1
             }
         }
     }

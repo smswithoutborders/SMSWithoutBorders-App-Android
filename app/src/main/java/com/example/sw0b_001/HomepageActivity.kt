@@ -7,13 +7,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.RecentsRecyclerAdapter
 import com.example.sw0b_001.Models.RecentsViewModel
+import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.button.MaterialButton
 
 class HomepageActivity : AppCompactActivityCustomized() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +35,37 @@ class HomepageActivity : AppCompactActivityCustomized() {
         findViewById<View>(R.id.homepage_add_new_btn)
                 .setOnClickListener { v -> onComposePlatformClick(PlatformsModalFragment
                         .SHOW_TYPE_UNSAVED) }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        configureButtonViews()
+    }
+
+    private fun configureButtonViews() {
+        if(UserArtifactsHandler.isCredentials(applicationContext)) {
+            findViewById<MaterialButton>(R.id.homepage_login_new_btn).visibility = View.GONE
+        } else {
+            findViewById<MaterialButton>(R.id.homepage_login_new_btn).apply {
+                visibility = View.VISIBLE
+                setOnClickListener {
+                    val fragmentTransaction = supportFragmentManager.beginTransaction()
+                    val loginModalFragment = LoginModalFragment(Runnable {
+                        runOnUiThread {
+                            recreate()
+                            Toast.makeText(applicationContext,
+                                    context.getString(R.string.homepage_vault_account_added),
+                                    Toast.LENGTH_SHORT).show()
+                        }
+                    })
+                    fragmentTransaction.add(loginModalFragment, "login_signup_login_vault_tag")
+                    fragmentTransaction.show(loginModalFragment)
+                    fragmentTransaction.commit()
+                }
+            }
+            findViewById<MaterialButton>(R.id.homepage_add_new_btn).visibility = View.GONE
+            findViewById<MaterialButton>(R.id.homepage_compose_new_btn).visibility = View.GONE
+        }
     }
 
     private fun configureRecyclerHandlers() {
