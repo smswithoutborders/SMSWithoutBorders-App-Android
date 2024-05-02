@@ -86,6 +86,7 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
 
         val countryCode = "+" + countryCodePickerView.selectedCountryCode
         val phoneNumber = countryCode + phonenumberTextView.text.toString()
+                .replace(" ", "")
         val password = passwordTextView.text.toString()
 
         val loginStatusCard = view.findViewById<MaterialCardView>(R.id.login_status_card)

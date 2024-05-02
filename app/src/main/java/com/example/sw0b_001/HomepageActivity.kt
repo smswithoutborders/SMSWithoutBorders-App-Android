@@ -49,23 +49,28 @@ class HomepageActivity : AppCompactActivityCustomized() {
             findViewById<MaterialButton>(R.id.homepage_login_new_btn).apply {
                 visibility = View.VISIBLE
                 setOnClickListener {
-                    val fragmentTransaction = supportFragmentManager.beginTransaction()
-                    val loginModalFragment = LoginModalFragment(Runnable {
-                        runOnUiThread {
-                            recreate()
-                            Toast.makeText(applicationContext,
-                                    context.getString(R.string.homepage_vault_account_added),
-                                    Toast.LENGTH_SHORT).show()
-                        }
-                    })
-                    fragmentTransaction.add(loginModalFragment, "login_signup_login_vault_tag")
-                    fragmentTransaction.show(loginModalFragment)
-                    fragmentTransaction.commit()
+                    loginSignupModal()
                 }
             }
             findViewById<MaterialButton>(R.id.homepage_add_new_btn).visibility = View.GONE
             findViewById<MaterialButton>(R.id.homepage_compose_new_btn).visibility = View.GONE
         }
+    }
+
+    private fun loginSignupModal() {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        val runnable = Runnable {
+            runOnUiThread {
+                recreate()
+                Toast.makeText(applicationContext, getString(R.string.homepage_vault_account_added),
+                        Toast.LENGTH_SHORT).show()
+            }
+        }
+        val loginSignupModalFragment = LoginSignupVaultModalFragment(runnable, runnable)
+        fragmentTransaction.add(loginSignupModalFragment, "login_signup_login_vault_tag")
+        fragmentTransaction.show(loginSignupModalFragment)
+        fragmentTransaction.commit()
+
     }
 
     private fun configureRecyclerHandlers() {

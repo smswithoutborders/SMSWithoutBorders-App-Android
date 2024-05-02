@@ -1,22 +1,16 @@
-package com.example.sw0b_001.Onboarding
+package com.example.sw0b_001
 
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.lifecycle.LifecycleObserver
 import com.example.sw0b_001.LoginModalFragment
-import com.example.sw0b_001.PlatformsModalFragment
 import com.example.sw0b_001.R
 import com.example.sw0b_001.SignupModalFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 
-class OnboardingLoginSignupVaultModalFragment(private val onSuccessRunnable: Runnable?,
-                                              private val onSignupSuccessRunnable: Runnable) :
+class LoginSignupVaultModalFragment(private val onSuccessRunnable: Runnable?,
+                                    private val onSignupSuccessRunnable: Runnable) :
         BottomSheetDialogFragment(R.layout.fragment_onboarding_login_signup_vault_modal_sheet) {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>

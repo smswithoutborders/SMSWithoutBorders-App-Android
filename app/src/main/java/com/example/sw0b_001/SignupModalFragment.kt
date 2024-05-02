@@ -84,18 +84,13 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
                                 uid: String,
                                 password: String) {
         activity?.runOnUiThread {
-            val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-            val otpVerificationFragment = OTPVerificationFragment(
-                    vaultHeaders,
-                    headers,
-                    phonenumber,
-                    uid,
-                    password,
-                    onSuccessRunnable)
-
-            fragmentTransaction?.replace(R.id.onboarding_fragment_container,
-                    otpVerificationFragment)
-            fragmentTransaction?.commitNow()
+            val intent = Intent(requireContext(), OTPVerificationActivity::class.java)
+            intent.putExtra("phone_number", phonenumber)
+            intent.putExtra("password", password)
+            intent.putExtra("uid", uid)
+            intent.putExtra("opt_request_cookie", headers["Set-Cookie"].first())
+            intent.putExtra("signup_request_cookie", vaultHeaders["Set-Cookie"].first())
+            requireContext().startActivity(intent)
         }
     }
 
@@ -206,7 +201,9 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
                                             }
 
                                             val phonenumber = view.findViewById<TextInputEditText>(R
-                                                    .id.signup_phonenumber_text_input).text.toString()
+                                                    .id.signup_phonenumber_text_input).text
+                                                    .toString()
+                                                    .replace(" ", "")
                                             val password = view.findViewById<TextInputEditText>(R
                                                     .id.signup_password_text_input).text.toString()
 

@@ -3,8 +3,7 @@ package com.example.sw0b_001.Onboarding
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import com.example.sw0b_001.Models.UserArtifactsHandler
-import com.example.sw0b_001.OnboardingActivity
+import com.example.sw0b_001.LoginSignupVaultModalFragment
 import com.example.sw0b_001.R
 import com.google.android.material.button.MaterialButton
 
@@ -38,12 +37,12 @@ class OnboardingVaultFragment : OnboardingComponent(R.layout.fragment_onboarding
             }
         }
 
-        val onboardingLoginSignupVaultModalFragment =
-                OnboardingLoginSignupVaultModalFragment(loginSuccessRunnable, loginSuccessRunnable)
+        val loginSignupVaultModalFragment =
+                LoginSignupVaultModalFragment(loginSuccessRunnable, loginSuccessRunnable)
 
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-        fragmentTransaction?.add(onboardingLoginSignupVaultModalFragment, "login_signup_vault_tag")
-        fragmentTransaction?.show(onboardingLoginSignupVaultModalFragment)
+        fragmentTransaction?.add(loginSignupVaultModalFragment, "login_signup_vault_tag")
+        fragmentTransaction?.show(loginSignupVaultModalFragment)
         fragmentTransaction?.commitNow()
     }
 }
