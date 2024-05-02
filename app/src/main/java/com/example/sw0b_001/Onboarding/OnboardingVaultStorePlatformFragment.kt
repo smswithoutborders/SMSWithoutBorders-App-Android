@@ -43,19 +43,10 @@ class OnboardingVaultStorePlatformFragment:
         fragmentTransaction?.show(loadingFragment)
         fragmentTransaction?.commit()
 
-        val credentials = UserArtifactsHandler.fetchCredentials(view.context)
-        val phoneNumber = credentials[UserArtifactsHandler.PHONE_NUMBER]!!
-        val password = credentials[UserArtifactsHandler.PASSWORD]!!
-        val  uid = credentials[UserArtifactsHandler.USER_ID_KEY]!!
-
         ThreadExecutorPool.executorService.execute {
             try {
-                val networkResponseResults =
-                        Vault_V2.loginSyncPlatformsFlow(requireContext(), phoneNumber, password,
-                        "", uid)
-
                 loadingFragment.dismiss()
-                if(Datastore.getDatastore(requireContext()).platformDao().countSaved() > 1) {
+                if(Datastore.getDatastore(requireContext()).platformDao().countSaved() > 0) {
                     if(activity is OnboardingComponent.ManageComponentsListing) {
                         ((activity) as OnboardingComponent.ManageComponentsListing)
                                 .addComponent(OnboardingPublishExampleFragment())
@@ -65,7 +56,7 @@ class OnboardingVaultStorePlatformFragment:
                         }
                     }
                 } else {
-                    showPlatformsModal(networkResponseResults)
+                    showPlatformsModal()
                 }
 
             } catch(e: Exception) {
@@ -101,10 +92,9 @@ class OnboardingVaultStorePlatformFragment:
     }
 
 
-    private fun showPlatformsModal(networkResponseResults: Network.NetworkResponseResults) {
+    private fun showPlatformsModal() {
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-        val platformsModalFragment = PlatformsModalFragment(
-                PlatformsModalFragment.SHOW_TYPE_UNSAVED, networkResponseResults)
+        val platformsModalFragment = PlatformsModalFragment(PlatformsModalFragment.SHOW_TYPE_UNSAVED)
         fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
         fragmentTransaction?.show(platformsModalFragment)
         activity?.runOnUiThread { fragmentTransaction?.commit() }

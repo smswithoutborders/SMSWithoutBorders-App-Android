@@ -6,6 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Database.Datastore
+import com.example.sw0b_001.Models.UserArtifactsHandler
+import com.example.sw0b_001.Models.v2.Vault_V2
+import com.example.sw0b_001.Modules.Network
 
 class PlatformsViewModel : ViewModel() {
 
@@ -22,6 +25,46 @@ class PlatformsViewModel : ViewModel() {
     fun getSaved(context: Context): LiveData<List<Platforms>> {
         if(liveData.value.isNullOrEmpty()) {
             liveData = Datastore.getDatastore(context).platformDao().saved
+        }
+        return liveData
+    }
+
+    public var networkResponseResults: Network.NetworkResponseResults? = null
+    fun getUnsaved(context: Context, uid: String, password: String, onCompleteRunnable: Runnable): LiveData<List<Platforms>> {
+        if(liveData.value.isNullOrEmpty()) {
+            ThreadExecutorPool.executorService.execute {
+                try {
+                    networkResponseResults = Vault_V2.loginViaUID(context, uid, password)
+                    val platforms = Vault_V2.getPlatforms(context,
+                            networkResponseResults?.response?.headers!!, uid)
+                    this.networkResponseResults = platforms.first
+
+                    val listPlatforms = ArrayList<Platforms>()
+                    platforms.second.unsaved_platforms.forEach {
+                        val platform = Platforms()
+                        platform.name = it.name
+                        platform.description = ""
+                        platform.type = it.type
+                        platform.letter = it.letter
+                        listPlatforms.add(platform)
+                    }
+                    platforms.second.saved_platforms.forEach {
+                        val platform = Platforms()
+                        platform.name = it.name
+                        platform.description = ""
+                        platform.type = it.type
+                        platform.letter = it.letter
+                        platform.isSaved = true
+                        listPlatforms.add(platform)
+                    }
+                    Datastore.getDatastore(context).platformDao().insertAll(listPlatforms)
+                } catch(e: Exception) {
+                    e.printStackTrace()
+                } finally {
+                    onCompleteRunnable.run()
+                }
+            }
+            liveData = Datastore.getDatastore(context).platformDao().unSaved
         }
         return liveData
     }

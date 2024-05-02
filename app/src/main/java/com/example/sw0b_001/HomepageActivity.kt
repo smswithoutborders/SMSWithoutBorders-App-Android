@@ -27,7 +27,11 @@ class HomepageActivity : AppCompactActivityCustomized() {
         configureRecyclerHandlers()
 
         findViewById<View>(R.id.homepage_compose_new_btn)
-                .setOnClickListener { v -> onComposePlatformClick(v) }
+                .setOnClickListener { v -> onComposePlatformClick() }
+
+        findViewById<View>(R.id.homepage_add_new_btn)
+                .setOnClickListener { v -> onComposePlatformClick(PlatformsModalFragment
+                        .SHOW_TYPE_UNSAVED) }
     }
 
     private fun configureRecyclerHandlers() {
@@ -73,23 +77,13 @@ class HomepageActivity : AppCompactActivityCustomized() {
     }
 
 
-    fun onComposePlatformClick(view: View?) {
-//        showComposeNewPlatformLayout(R.layout.fragment_modal_sheet_compose_platforms)
-        showPlatformsModal()
+    fun onComposePlatformClick(showType: Int = PlatformsModalFragment.SHOW_TYPE_SAVED) {
+        showPlatformsModal(showType)
     }
 
-//    fun showComposeNewPlatformLayout(layout: Int) {
-//        val fragmentTransaction = supportFragmentManager.beginTransaction()
-//        val homepageComposeNewFragment = HomepageComposeNewFragment(layout)
-//        fragmentTransaction.add(homepageComposeNewFragment,
-//                HomepageComposeNewFragment.TAG)
-//        fragmentTransaction.show(homepageComposeNewFragment)
-//        fragmentTransaction.commitNow()
-//    }
-
-    private fun showPlatformsModal() {
+    private fun showPlatformsModal(showType: Int) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        val platformsModalFragment = PlatformsModalFragment(PlatformsModalFragment.SHOW_TYPE_SAVED)
+        val platformsModalFragment = PlatformsModalFragment(showType)
         fragmentTransaction.add(platformsModalFragment, "store_platforms_tag")
         fragmentTransaction.show(platformsModalFragment)
         fragmentTransaction.commitNow()

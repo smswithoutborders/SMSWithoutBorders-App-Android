@@ -61,12 +61,24 @@
         android:id="@+id/homepage_compose_new_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:icon="@drawable/round_edit_24"
+        app:layout_constraintBottom_toTopOf="@+id/homepage_add_new_btn"
+        app:layout_constraintEnd_toEndOf="@id/main_constrain"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="@id/main_constrain" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/homepage_add_new_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
+        android:text="Save platforms"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/main_constrain"
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="@id/main_constrain"
-        app:icon="@drawable/round_edit_24"
+        app:icon="@drawable/baseline_download_for_offline_24"
         tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

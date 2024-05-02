@@ -17,6 +17,9 @@ public interface PlatformDao {
     @Query("SELECT * FROM Platforms WHERE isSaved = 1")
     LiveData<List<Platforms>> getSaved();
 
+    @Query("SELECT * FROM Platforms WHERE isSaved = 0")
+    LiveData<List<Platforms>> getUnSaved();
+
     @Query("SELECT * FROM Platforms")
     List<Platforms> getAllList();
 
@@ -29,7 +32,7 @@ public interface PlatformDao {
     @Query("SELECT * FROM Platforms WHERE type = :type LIMIT 1")
     Platforms getType(String type);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Platforms> platforms);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -350,10 +350,13 @@
     <string name="login_platforms_stored_successfully">Platforms stored successfully</string>
     <string name="platforms_these_are_platforms_stored_in_your_vault_and_can_be_used_when_you_are_offline">These are platforms stored in your Vault and can be used when you are offline.</string>
     <string name="platforms_saved_platforms">Saved Platforms</string>
+    <string name="platforms_unsaved_platforms">Add Platforms to use offline</string>
     <string name="platform_your_vault_is_empty">Your Vault is empty</string>
     <string name="settings_privacy_vault_preference">Vault</string>
     <string name="settings_privacy_preferences_choose_which_platforms_you_want_to_remove_from_the_vault">Choose which platforms you want to remove from the Vault</string>
     <string name="login_login">Login</string>
     <string name="platforms_revoked_successfully">" revoked successfully"</string>
+    <string name="store_select_platforms_you_will_like_to_utilize_without_an_internet_connection_this_would_still_require_you_to_have_sms_messages_activated">Select platforms you will like to utilize without an internet connection. This would still require you to have SMS messages activated</string>
+    <string name="platforms_no_platform_to_store">No platform to store</string>
 
 </resources>

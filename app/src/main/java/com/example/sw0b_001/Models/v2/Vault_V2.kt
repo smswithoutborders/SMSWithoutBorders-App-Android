@@ -77,9 +77,10 @@ class Vault_V2(val uid: String) {
         const val INVALID_CREDENTIALS_EXCEPTION = "INVALID_CREDENTIALS_EXCEPTION"
         const val SERVER_ERROR_EXCEPTION = "SERVER_ERROR_EXCEPTION"
 
-        fun loginViaUID(_url: String, uid: String, password: String):
+        fun loginViaUID(context: Context, uid: String, password: String):
                 Network.NetworkResponseResults {
-            val url = "$_url/v2/users/$uid/verify"
+            val url = "${context.getString(R.string.smswithoutborders_official_vault)}" +
+                    "/v2/users/$uid/verify"
             val payload = Json.encodeToString(LoginRequestViaUID(password))
             val networkResponseResults = Network.jsonRequestPost(url, payload)
             when(networkResponseResults.response.statusCode) {
@@ -140,13 +141,16 @@ class Vault_V2(val uid: String) {
             return Network.jsonRequestPut(url, "", headers)
         }
 
-        fun getPlatforms(url: String, headers: Headers, uid: String) : Platforms {
+        fun getPlatforms(context: Context, headers: Headers, uid: String):
+                Pair<Network.NetworkResponseResults, Platforms> {
+            val url = context.getString(R.string.smswithoutborders_official_vault)
             val platformsUrl = "${url}/v2/users/${uid}/platforms"
             val networkResponseResults = Network.requestGet(platformsUrl, headers)
             when(networkResponseResults.response.statusCode) {
                 in 400..600 -> throw Exception(String(networkResponseResults.response.data))
             }
-            return Json.decodeFromString<Platforms>(networkResponseResults.result.get())
+            return Pair(networkResponseResults,
+                    Json.decodeFromString<Platforms>(networkResponseResults.result.get()))
         }
 
         fun sendGmailCode(context: Context,
@@ -265,7 +269,7 @@ class Vault_V2(val uid: String) {
                 login(phoneNumber, password, url, captcha_token)
             } else {
                 val url = context.getString(R.string.smswithoutborders_official_vault)
-                loginViaUID(url, _uid, password)
+                loginViaUID(context, _uid, password)
             }
 
             fragment?.let {
@@ -314,7 +318,7 @@ class Vault_V2(val uid: String) {
         fun revoke(context: Context, uid: String, password: String, platform: String,
                    protocol: String) : Network.NetworkResponseResults{
             val url = context.getString(R.string.smswithoutborders_official_vault)
-            val networkResponseResults = loginViaUID(url, uid, password)
+            val networkResponseResults = loginViaUID(context, uid, password)
 
             val headers = networkResponseResults.response.headers
             headers.remove("Content-Type")

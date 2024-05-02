@@ -17,13 +17,13 @@ import com.example.sw0b_001.Modules.Network
 import com.example.sw0b_001.Modules.OAuth2
 import com.example.sw0b_001.Onboarding.OnboardingComponent
 import com.example.sw0b_001.Security.SecurityHelpers
+import com.github.kittinunf.fuel.core.Headers
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import java.net.URLDecoder
 
 
-class VaultStorePlatformProcessingFragment(val platformName: String,
-                                           val networkResponseResults: Network.NetworkResponseResults)
+class VaultStorePlatformProcessingFragment(val platformName: String)
     : Fragment(R.layout.fragment_onboarding_network_loading){
 
     private fun storeToken() {
@@ -34,7 +34,7 @@ class VaultStorePlatformProcessingFragment(val platformName: String,
         val url = getString(R.string.smswithoutborders_official_vault)
 
         ThreadExecutorPool.executorService.execute {
-            val networkResponseResults = Vault_V2.loginViaUID(url, uid, password)
+            val networkResponseResults = Vault_V2.loginViaUID(requireContext(), uid, password)
 
             try{
                 getGrant(uid, phonenumber, networkResponseResults).let {

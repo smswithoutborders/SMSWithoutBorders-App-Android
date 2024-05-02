@@ -7,6 +7,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Onboarding.OnboardingVaultStoreProcessingFragment">
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/open_id_auth_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/network_loading_progress_indicator"
         android:layout_width="wrap_content"

@@ -1,11 +1,13 @@
 package com.example.sw0b_001
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -27,8 +29,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
-class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
-                             val networkResponseResults: Network.NetworkResponseResults? = null)
+class PlatformsModalFragment(private val showType: Int = SHOW_TYPE_ALL)
     : BottomSheetDialogFragment(R.layout.fragment_modal_sheet_store_platforms) {
 
     companion object {
@@ -39,10 +40,22 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
     }
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
+    private lateinit var savedPlatformsAdapter: PlatformsRecyclerAdapter
+    private lateinit var unSavedPlatformsAdapter: PlatformsRecyclerAdapter
+
+    private lateinit var progress: LinearProgressIndicator
+
+    private lateinit var savedLinearLayout: LinearLayout
+    private lateinit var unsavedLinearLayout: LinearLayout
+
+    private lateinit var unsavedPlatformsRecyclerView: RecyclerView
+    private lateinit var savedPlatformsRecyclerView: RecyclerView
+
+    private lateinit var savedLinearLayoutManager: LinearLayoutManager
+    private lateinit var unsavedLinearLayoutManager: LinearLayoutManager
+
+    private lateinit var networkResponseResults: Network.NetworkResponseResults
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -51,44 +64,90 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
         bottomSheetBehavior.isDraggable = true
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
-        configureRecyclerView(view)
-    }
-
-    lateinit var savedPlatformsAdapter: PlatformsRecyclerAdapter
-    lateinit var unSavedPlatformsAdapter: PlatformsRecyclerAdapter
-    private fun configureRecyclerView(view: View) {
-        val unsavedPlatformsRecyclerView =
-                view.findViewById<RecyclerView>(R.id.store_platforms_unsaved_recycler_view)
-
-        val savedPlatformsRecyclerView =
-                view.findViewById<RecyclerView>(R.id.store_platforms_saved_recycler_view)
-
-        val savedLinearLayout = view.findViewById<LinearLayout>(R.id.store_platform_saved_layout)
-        val unsavedLinearLayout = view.findViewById<LinearLayout>(R.id.store_platform_unsaved_layout)
-
-        when(showType) {
-            SHOW_TYPE_SAVED, SHOW_TYPE_SAVED_REVOKE -> unsavedLinearLayout.visibility = View.GONE
-            SHOW_TYPE_UNSAVED -> savedLinearLayout.visibility = View.GONE
-        }
-
-        val savedLinearLayoutManager = LinearLayoutManager(context,
+        progress = view.findViewById(R.id.store_platforms_loader)
+        unsavedPlatformsRecyclerView = view.findViewById(R.id.store_platforms_unsaved_recycler_view)
+        savedPlatformsRecyclerView = view.findViewById(R.id.store_platforms_saved_recycler_view)
+        savedLinearLayoutManager = LinearLayoutManager(context,
                 LinearLayoutManager.HORIZONTAL, false)
-
-        val unsavedLinearLayoutManager = LinearLayoutManager(context,
+        unsavedLinearLayoutManager = LinearLayoutManager(context,
                 LinearLayoutManager.HORIZONTAL, false)
-
         unsavedPlatformsRecyclerView.layoutManager = unsavedLinearLayoutManager
         savedPlatformsRecyclerView.layoutManager = savedLinearLayoutManager
 
-        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        savedLinearLayout = view.findViewById(R.id.store_platform_saved_layout)
+        unsavedLinearLayout = view.findViewById(R.id.store_platform_unsaved_layout)
 
+        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+        configureView()
+        configureRecyclerView(view, fragmentTransaction)
+        configureClickListeners(view, fragmentTransaction)
+    }
+
+    private fun configureView() {
+        when(showType) {
+            SHOW_TYPE_SAVED, SHOW_TYPE_SAVED_REVOKE -> {
+                unsavedLinearLayout.visibility = View.GONE
+            }
+            SHOW_TYPE_UNSAVED -> {
+                savedLinearLayout.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun configureRecyclerView(view: View, fragmentTransaction: FragmentTransaction?) {
         savedPlatformsAdapter = PlatformsRecyclerAdapter(fragmentTransaction)
         unSavedPlatformsAdapter = PlatformsRecyclerAdapter(fragmentTransaction)
 
         savedPlatformsRecyclerView.adapter = savedPlatformsAdapter
         unsavedPlatformsRecyclerView.adapter = unSavedPlatformsAdapter
 
-        val progress = view.findViewById<LinearProgressIndicator>(R.id.store_platforms_loader)
+        val viewModel: PlatformsViewModel by viewModels()
+        when(showType) {
+            SHOW_TYPE_SAVED, SHOW_TYPE_SAVED_REVOKE -> {
+                context?.let { it ->
+                    viewModel.getSaved(it).observe(this, Observer {
+                        savedPlatformsAdapter.mDiffer.submitList(it)
+                        if(it.isNullOrEmpty())
+                            view.findViewById<View>(R.id.store_platforms_saved_empty)
+                                    .visibility = View.VISIBLE
+                        else
+                            view.findViewById<View>(R.id.store_platforms_saved_empty)
+                                    .visibility = View.GONE
+                    })
+                }
+            } else -> {
+                context?.let { it ->
+                    val runnable = Runnable {
+                        activity?.runOnUiThread {
+                            progress.visibility = View.GONE
+                            unsavedLinearLayout.visibility = View.VISIBLE
+                        }
+                    }
+
+                    unsavedLinearLayout.visibility = View.GONE
+                    val credentials = UserArtifactsHandler.fetchCredentials(view.context)
+                    progress.visibility = View.VISIBLE
+                    viewModel.getUnsaved(it,
+                            credentials[UserArtifactsHandler.USER_ID_KEY]!!,
+                            credentials[UserArtifactsHandler.PASSWORD]!!, runnable)
+                            .observe(this, Observer { it1 ->
+                                viewModel.networkResponseResults?.let {
+                                    this.networkResponseResults = it
+                                }
+
+                        unSavedPlatformsAdapter.mDiffer.submitList(it1)
+                        if(it1.isNullOrEmpty())
+                            view.findViewById<View>(R.id.store_platforms_unsaved_empty)
+                                    .visibility = View.VISIBLE
+                        else view.findViewById<View>(R.id.store_platforms_unsaved_empty)
+                                .visibility = View.GONE
+                    })
+                }
+            }
+        }
+    }
+
+    private fun configureClickListeners(view: View, fragmentTransaction: FragmentTransaction?) {
         savedPlatformsAdapter.savedOnClickListenerLiveData.observe(this, Observer {
             if(it != null) {
                 progress.visibility = View.VISIBLE
@@ -97,7 +156,7 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
                     "email", "text" -> {
                         if(showType == SHOW_TYPE_SAVED_REVOKE) {
                             savedLinearLayout.visibility = View.INVISIBLE
-                            val credentials = UserArtifactsHandler.fetchCredentials(requireContext())
+                            val credentials = UserArtifactsHandler.fetchCredentials(view.context)
                             ThreadExecutorPool.executorService.execute {
                                 val networkResponseResults = Vault_V2.revoke(requireContext(),
                                         credentials[UserArtifactsHandler.USER_ID_KEY]!!,
@@ -109,20 +168,20 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
                                         Datastore.getDatastore(requireContext()).platformDao()
                                                 .delete(it)
                                         activity?.runOnUiThread {
-                                            Toast.makeText(requireContext(), it.name +
+                                            Toast.makeText(view.context, it.name +
                                                     getString(R.string.platforms_revoked_successfully),
                                                     Toast.LENGTH_SHORT).show()
                                             progress.visibility = View.GONE
                                         }
                                     } else -> {
-                                        activity?.runOnUiThread {
-                                            Toast.makeText(requireContext(),
-                                                    String(networkResponseResults.response.data),
-                                                    Toast.LENGTH_SHORT)
-                                                    .show()
-                                            progress.visibility = View.GONE
-                                        }
+                                    activity?.runOnUiThread {
+                                        Toast.makeText(requireContext(),
+                                                String(networkResponseResults.response.data),
+                                                Toast.LENGTH_SHORT)
+                                                .show()
+                                        progress.visibility = View.GONE
                                     }
+                                }
                                 }
                                 dismiss()
                             }
@@ -142,36 +201,18 @@ class PlatformsModalFragment(val showType: Int = SHOW_TYPE_ALL,
         unSavedPlatformsAdapter.unSavedOnClickListenerLiveData.observe(this, Observer {
             if(it != null) {
                 unSavedPlatformsAdapter.unSavedOnClickListenerLiveData = MutableLiveData();
-                if(networkResponseResults != null) {
-                    storePlatform(it)
-                    dismiss()
-                }
+                storePlatform(it)
+                dismiss()
             }
         })
 
-        val viewModel: PlatformsViewModel by viewModels()
-        context?.let { it ->
-            viewModel.getSeparated(it).observe(this, Observer {
-                savedPlatformsAdapter.mDiffer.submitList(it.first)
-                unSavedPlatformsAdapter.mDiffer.submitList(it.second)
-                if(it.first.isNullOrEmpty())
-                    view.findViewById<View>(R.id.store_platforms_saved_empty)
-                            .visibility = View.VISIBLE
-                else
-                    view.findViewById<View>(R.id.store_platforms_saved_empty)
-                            .visibility = View.GONE
-            })
-        }
+
     }
 
-    private fun storePlatform(platforms: Platforms) {
-        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-        var fragment = Fragment()
 
-        fragment = VaultStorePlatformProcessingFragment(platforms.name, networkResponseResults!!)
-        activity?.runOnUiThread {
-            fragmentTransaction?.replace(R.id.onboarding_fragment_container, fragment)
-            fragmentTransaction?.commitNow()
-        }
+    private fun storePlatform(platforms: Platforms) {
+        val intent = Intent(requireContext(), VaultStoreActivity::class.java)
+        intent.putExtra("platform_name", platforms.name)
+        requireContext().startActivity(intent)
     }
 }

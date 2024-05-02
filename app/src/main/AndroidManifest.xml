@@ -41,6 +41,9 @@
             android:name=".LoginModalFragment"
             android:exported="false" />
         <activity
+            android:name=".VaultStoreActivity"
+            android:exported="false" />
+        <activity
             android:name=".OnboardingActivity"
             android:exported="true">
             <intent-filter>

@@ -9,11 +9,11 @@ import com.github.kittinunf.fuel.core.Headers
 class PlatformsHandler {
     companion object {
         fun storePlatforms(context: Context, uid: String, url: String, headers: Headers) {
-            val platforms = Vault_V2.getPlatforms(url, headers, uid)
+            val platforms = Vault_V2.getPlatforms(context, headers, uid)
 
             Datastore.getDatastore(context).platformDao().deleteAll()
             val listPlatforms = ArrayList<Platforms>()
-            platforms.saved_platforms.forEach {
+            platforms.second.saved_platforms.forEach {
                 val platform = Platforms()
                 platform.name = it.name
                 platform.description = ""
@@ -26,7 +26,7 @@ class PlatformsHandler {
                 listPlatforms.add(platform)
             }
 
-            platforms.unsaved_platforms.forEach {
+            platforms.second.unsaved_platforms.forEach {
                 val platform = Platforms()
                 platform.name = it.name
                 platform.description = ""
