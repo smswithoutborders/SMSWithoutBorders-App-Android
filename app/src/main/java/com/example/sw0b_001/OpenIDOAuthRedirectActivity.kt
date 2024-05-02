@@ -1,9 +1,11 @@
 package com.example.sw0b_001
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -12,6 +14,7 @@ import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityAES
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.UserArtifactsHandler
+import com.example.sw0b_001.Models.v2.GatewayServer_V2
 import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Helpers
 import com.example.sw0b_001.Security.SecurityHelpers
@@ -48,9 +51,8 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
             return
         }
 
-        val decodedState = Base64.decode(state, Base64.DEFAULT)
-
         val credentials = UserArtifactsHandler.fetchCredentials(applicationContext)
+        val decodedState = Base64.decode(state, Base64.DEFAULT)
 
         val secretKeyStr = UserArtifactsHandler.getSharedKeyDecrypted(applicationContext)
         var decryptedState = String(SecurityAES.decryptAESGCM(decodedState,
@@ -89,7 +91,10 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
                                 scope,
                                 "")
                         when(networkResponseResults.response.statusCode) {
-                            200 -> { startActivityFromState(decryptedState, fragmentIndex) }
+                            200 -> {
+                                syncAndStore(applicationContext)
+                                startActivityFromState(decryptedState, fragmentIndex)
+                            }
                             in 400..500-> {
                                 Log.e(javaClass.name, String(networkResponseResults.response.data))
                             }
@@ -104,7 +109,10 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
                                 codeVerifier,
                                 "")
                         when(networkResponseResults.response.statusCode) {
-                            200 -> { startActivityFromState(decryptedState, fragmentIndex) }
+                            200 -> {
+                                syncAndStore(applicationContext)
+                                startActivityFromState(decryptedState, fragmentIndex)
+                            }
                             in 400..500-> {
                                 Log.e(javaClass.name, String(networkResponseResults.response.data))
                             }
@@ -123,9 +131,22 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
 
     private fun startActivityFromState(state: String, fragmentIndex: Int) {
         val intent = Intent()
+        println("State to go to: $state")
         intent.setClassName(applicationContext, state)
         intent.putExtra("fragment_index", fragmentIndex)
         startActivity(intent)
+        finish()
+    }
+
+    private fun syncAndStore(context: Context) {
+        val credentials = UserArtifactsHandler.fetchCredentials(context)
+        val payload = GatewayServer_V2.sync(context,
+                credentials[UserArtifactsHandler.USER_ID_KEY]!!,
+                credentials[UserArtifactsHandler.PASSWORD]!!)
+        UserArtifactsHandler.storeSharedKey(context, payload.shared_key)
+        runOnUiThread {
+            Toast.makeText(context, getString(R.string.open_id_sync_updated), Toast.LENGTH_SHORT).show()
+        }
     }
 
 }

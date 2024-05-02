@@ -21,6 +21,7 @@ import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter
 import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.UserArtifactsHandler
+import com.example.sw0b_001.Models.v2.GatewayServer_V2
 import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Network
 import com.example.sw0b_001.Onboarding.OnboardingComponent
@@ -112,7 +113,7 @@ class PlatformsModalFragment(private val showType: Int = SHOW_TYPE_ALL)
                                     .visibility = View.VISIBLE
                         else
                             view.findViewById<View>(R.id.store_platforms_saved_empty)
-                                    .visibility = View.GONE
+                                    .visibility = View.INVISIBLE
                     })
                 }
             } else -> {
@@ -124,9 +125,11 @@ class PlatformsModalFragment(private val showType: Int = SHOW_TYPE_ALL)
                         }
                     }
 
-                    unsavedLinearLayout.visibility = View.GONE
-                    val credentials = UserArtifactsHandler.fetchCredentials(view.context)
+                    unsavedLinearLayout.visibility = View.INVISIBLE
                     progress.visibility = View.VISIBLE
+
+                    val credentials = UserArtifactsHandler.fetchCredentials(view.context)
+
                     viewModel.getUnsaved(it,
                             credentials[UserArtifactsHandler.USER_ID_KEY]!!,
                             credentials[UserArtifactsHandler.PASSWORD]!!, runnable)
@@ -140,7 +143,7 @@ class PlatformsModalFragment(private val showType: Int = SHOW_TYPE_ALL)
                             view.findViewById<View>(R.id.store_platforms_unsaved_empty)
                                     .visibility = View.VISIBLE
                         else view.findViewById<View>(R.id.store_platforms_unsaved_empty)
-                                .visibility = View.GONE
+                                .visibility = View.INVISIBLE
                     })
                 }
             }
@@ -165,6 +168,20 @@ class PlatformsModalFragment(private val showType: Int = SHOW_TYPE_ALL)
                                         "oauth2")
                                 when(networkResponseResults.response.statusCode) {
                                     200 -> {
+                                        val credentials = UserArtifactsHandler
+                                                .fetchCredentials(view.context)
+                                        val responsePayload =
+                                                GatewayServer_V2.sync(view.context,
+                                                        credentials[UserArtifactsHandler.USER_ID_KEY]!!,
+                                                        credentials[UserArtifactsHandler.PASSWORD]!!)
+                                        UserArtifactsHandler.storeSharedKey(view.context,
+                                                responsePayload.shared_key)
+                                        activity?.runOnUiThread {
+                                            Toast.makeText(view.context,
+                                                    getString(R.string.platforms_re_synced_gateway_server),
+                                                    Toast.LENGTH_SHORT)
+                                                    .show()
+                                        }
                                         Datastore.getDatastore(requireContext()).platformDao()
                                                 .delete(it)
                                         activity?.runOnUiThread {

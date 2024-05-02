@@ -358,5 +358,7 @@
     <string name="platforms_revoked_successfully">" revoked successfully"</string>
     <string name="store_select_platforms_you_will_like_to_utilize_without_an_internet_connection_this_would_still_require_you_to_have_sms_messages_activated">Select platforms you will like to utilize without an internet connection. This would still require you to have SMS messages activated</string>
     <string name="platforms_no_platform_to_store">No platform to store</string>
+    <string name="platforms_re_synced_gateway_server">Re-synced Gateway server</string>
+    <string name="open_id_sync_updated">Sync updated!</string>
 
 </resources>

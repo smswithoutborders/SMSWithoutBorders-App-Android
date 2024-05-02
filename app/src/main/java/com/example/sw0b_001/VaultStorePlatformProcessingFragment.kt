@@ -109,7 +109,7 @@ class VaultStorePlatformProcessingFragment(val platformName: String)
             } catch (e: Exception) {
                 Log.e(javaClass.name, "Exception", e)
                 activity?.runOnUiThread {
-                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), e.localizedMessage, Toast.LENGTH_SHORT).show()
                 }
             }
         }
