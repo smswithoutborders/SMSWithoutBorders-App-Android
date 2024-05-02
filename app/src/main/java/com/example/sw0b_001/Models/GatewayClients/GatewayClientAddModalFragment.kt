@@ -12,18 +12,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
-class GatewayClientAddModalFragment : BottomSheetDialogFragment() {
+class GatewayClientAddModalFragment :
+        BottomSheetDialogFragment(R.layout.fragment_gateway_client_add_modal) {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_gateway_client_add_modal, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val bottomSheet = view.findViewById<View>(R.id.gateway_client_add_modal)

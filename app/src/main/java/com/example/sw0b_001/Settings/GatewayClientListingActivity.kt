@@ -43,21 +43,21 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
 
         val linearProgressIndicator = findViewById<LinearProgressIndicator>(R.id.refresh_loader)
         val refreshLayout = findViewById<SwipeRefreshLayout>(R.id.gateway_client_swipe_refresh)
+
         refreshLayout.isRefreshing = true
+        linearProgressIndicator.visibility = View.VISIBLE
 
         val gatewayClient = GatewayClientsCommunications(applicationContext)
         gatewayClientsViewModel = ViewModelProvider(this)[GatewayClientViewModel::class.java]
 
-        gatewayClientsViewModel.get(applicationContext).observe(this, Observer {
+        gatewayClientsViewModel.get(applicationContext) {
+            runOnUiThread {
+                linearProgressIndicator.visibility = View.GONE
+                refreshLayout.isRefreshing = false
+            }
+        }.observe(this, Observer {
             listViewAdapter = GatewayClientListingAdapter(gatewayClient, it)
             listView.adapter = listViewAdapter
-
-            if(it.isNullOrEmpty())
-                linearProgressIndicator.visibility = View.VISIBLE
-            else
-                linearProgressIndicator.visibility = View.GONE
-
-            refreshLayout.isRefreshing = false
         })
 
         findViewById<SwipeRefreshLayout>(R.id.gateway_client_swipe_refresh)
@@ -79,10 +79,7 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
         linearProgressIndicator.visibility = View.VISIBLE
 
         gatewayClientsViewModel.loadRemote(applicationContext,
-                {
-                    refreshLayout.isRefreshing = false
-                }
-        ) {
+                { refreshLayout.isRefreshing = false } ) {
             runOnUiThread {
                 refreshLayout.isRefreshing = false
                 Toast.makeText(applicationContext, "Failed to refresh...",

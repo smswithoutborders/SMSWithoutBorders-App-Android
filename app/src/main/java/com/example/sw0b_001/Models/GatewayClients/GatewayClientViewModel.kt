@@ -13,9 +13,9 @@ import kotlinx.serialization.json.Json
 
 class GatewayClientViewModel : ViewModel() {
     private var liveData: LiveData<List<GatewayClient>> = MutableLiveData()
-    fun get(context: Context): LiveData<List<GatewayClient>> {
+    fun get(context: Context, successRunnable: Runnable?): LiveData<List<GatewayClient>> {
         if(liveData.value.isNullOrEmpty()) {
-            loadRemote(context, null, null)
+            loadRemote(context, successRunnable, null)
             liveData = Datastore.getDatastore(context).gatewayClientsDao().all
         }
         return liveData

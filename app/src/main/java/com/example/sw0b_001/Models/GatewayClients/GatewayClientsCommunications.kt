@@ -56,7 +56,7 @@ class GatewayClientsCommunications(context: Context) {
 
             val gatewayClient3 = GatewayClient()
             gatewayClient3.setCountry("Nigeria")
-            gatewayClient3.msisdn = context.getString(R.string.default_gateway_MSISDN_2)
+            gatewayClient3.msisdn = context.getString(R.string.default_gateway_MSISDN_3)
             gatewayClient3.setOperatorName("MTN Nigeria")
             gatewayClient3.setOperatorId("62130")
             gatewayClient3.setType("custom")

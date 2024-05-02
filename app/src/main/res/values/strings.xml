@@ -206,10 +206,8 @@
 
 
     <string name="default_gateway_MSISDN_0" translatable="false">+237679466332</string>
-
-    <string name="default_gateway_MSISDN_2" translatable="false">
-        +237690826242
-    </string>
+    <string name="default_gateway_MSISDN_2" translatable="false">+237690826242</string>
+    <string name="default_gateway_MSISDN_3" translatable="false">+2348131498393</string>
 
     <string name="default_operator_id" translatable="false">62402 </string>
 
