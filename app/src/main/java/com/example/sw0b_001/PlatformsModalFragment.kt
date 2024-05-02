@@ -230,6 +230,7 @@ class PlatformsModalFragment(private val showType: Int = SHOW_TYPE_ALL)
     private fun storePlatform(platforms: Platforms) {
         val intent = Intent(requireContext(), VaultStoreActivity::class.java)
         intent.putExtra("platform_name", platforms.name)
+        intent.putExtra("callback_activity", activity?.localClassName)
         requireContext().startActivity(intent)
     }
 }

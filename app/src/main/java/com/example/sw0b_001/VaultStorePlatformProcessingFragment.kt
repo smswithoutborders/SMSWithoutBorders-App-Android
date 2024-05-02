@@ -23,7 +23,7 @@ import com.google.android.material.progressindicator.LinearProgressIndicator
 import java.net.URLDecoder
 
 
-class VaultStorePlatformProcessingFragment(val platformName: String)
+class VaultStorePlatformProcessingFragment(val platformName: String, val callbackActivity: String)
     : Fragment(R.layout.fragment_onboarding_network_loading){
 
     private fun storeToken() {
@@ -48,21 +48,22 @@ class VaultStorePlatformProcessingFragment(val platformName: String)
                     val codeVerifier = it.second.code_verifier
                     val redirectUrl: String = URLDecoder.decode(parameters["redirect_uri"]!!,
                             "UTF-8")
-                    var scope: String = URLDecoder.decode(parameters["scope"]!!, "UTF-8")
+                    val scope: String = URLDecoder.decode(parameters["scope"]!!, "UTF-8")
                     val responseType: String = URLDecoder.decode(parameters["response_type"]!!,
                             "UTF-8")
 
-                    val className = if(activity is OnboardingComponent.ManageComponentsListing) {
-                        (activity?.localClassName +":"+
-                                (activity as OnboardingComponent.ManageComponentsListing)
-                                        .getFragmentIndex()).encodeToByteArray()
-                    } else {
-                        activity?.localClassName?.encodeToByteArray()
-                    }
+//                    val className = if(activity is OnboardingComponent.ManageComponentsListing) {
+//                        (activity?.localClassName +":"+
+//                                (activity as OnboardingComponent.ManageComponentsListing)
+//                                        .getFragmentIndex()).encodeToByteArray()
+//                    } else {
+//                        activity?.localClassName?.encodeToByteArray()
+//                    }
 
 //                    val className = activity?.localClassName?.encodeToByteArray()
                     val secretKeyStr = UserArtifactsHandler.getSharedKeyDecrypted(requireContext())
-                    val encryptedState = SecurityAES.encryptAESGCM(className,
+                    val encryptedState = SecurityAES.encryptAESGCM(callbackActivity
+                            .encodeToByteArray(),
                             SecurityHelpers.generateSecretKey(secretKeyStr, "AES"))
                     val state = Base64.encodeToString(encryptedState, Base64.DEFAULT)
 

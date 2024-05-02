@@ -9,10 +9,12 @@ class VaultStoreActivity : AppCompactActivityCustomized() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_open_idoauth_redirect)
 
-        if(intent.hasExtra("platform_name")) {
+        if(intent.hasExtra("platform_name") && intent.hasExtra("callback_activity")) {
             supportFragmentManager.commit {
                 val platformName = intent.getStringExtra("platform_name")
-                val fragment = VaultStorePlatformProcessingFragment(platformName!!)
+                val callbackActivity = intent.getStringExtra("callback_activity")
+                val fragment = VaultStorePlatformProcessingFragment(platformName!!,
+                        callbackActivity!!)
 
                 add(R.id.open_id_auth_container, fragment)
                 setReorderingAllowed(true)
