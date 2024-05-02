@@ -67,16 +67,17 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
 
         findViewById<MaterialTextView>(R.id.ownership_resend_code_by_sms_btn)
                 .setOnClickListener {
-                    val linearProgressIndicator =
-                            findViewById<LinearProgressIndicator>(R.id.ownership_progress_bar)
-                    linearProgressIndicator.visibility = View.VISIBLE
-                    val optNetworkResponseResults = resendCode(it)
-                    when(optNetworkResponseResults.response.statusCode) {
-                        in 400..600 -> throw Exception(String(optNetworkResponseResults.response.data))
-                    }
-//                    headers = optNetworkResponseResults.response.headers
-                    otpRequestHeader = optNetworkResponseResults.response.headers
-                    linearProgressIndicator.visibility = View.GONE
+//                    val linearProgressIndicator =
+//                            findViewById<LinearProgressIndicator>(R.id.ownership_progress_bar)
+//                    linearProgressIndicator.visibility = View.VISIBLE
+//                    val optNetworkResponseResults = resendCode(it)
+//                    when(optNetworkResponseResults.response.statusCode) {
+//                        in 400..600 -> throw Exception(String(optNetworkResponseResults.response.data))
+//                    }
+////                    headers = optNetworkResponseResults.response.headers
+//                    otpRequestHeader = optNetworkResponseResults.response.headers
+//                    linearProgressIndicator.visibility = View.GONE
+                    finish()
                 }
     }
 
@@ -123,13 +124,13 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
         }
     }
 
-    private fun resendCode(view: View) : Network.NetworkResponseResults{
-        view.findViewById<MaterialButton>(R.id.ownership_verification_btn)
-                .isEnabled = true
-        val otpRequestUrl = view.context.getString(R.string.smswithoutborders_official_vault)
-
-        return Vault_V2.otpRequest(otpRequestUrl, signupRequestHeader, phoneNumber, uid)
-    }
+//    private fun resendCode(view: View) : Network.NetworkResponseResults{
+//        view.findViewById<MaterialButton>(R.id.ownership_verification_btn)
+//                .isEnabled = true
+//        val otpRequestUrl = view.context.getString(R.string.smswithoutborders_official_vault)
+//
+//        return Vault_V2.otpRequest(otpRequestUrl, signupRequestHeader, phoneNumber, uid)
+//    }
 
     private fun submitOTPCode(submitBtnView: View, code: String) {
         val linearProgressIndicator = findViewById<LinearProgressIndicator>(R.id.ownership_progress_bar)
@@ -170,7 +171,8 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
                     }
                 }
                 else -> {
-                    Log.e(javaClass.name, "status code: ${networkResponseResultsOTP.response.statusCode}")
+                    Log.e(javaClass.name, "status code: " +
+                            "${networkResponseResultsOTP.response.statusCode}")
                     Log.e(javaClass.name, "OTP submission error: " +
                             String(networkResponseResultsOTP.response.data))
                     linearProgressIndicator.visibility = View.GONE
