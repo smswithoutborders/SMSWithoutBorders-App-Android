@@ -39,8 +39,7 @@ class LoginSignupVaultModalFragment(private val onSuccessRunnable: Runnable?,
                     dismiss()
 
                     val signupModalFragment = SignupModalFragment(onSignupSuccessRunnable)
-
-                    fragmentTransaction?.add(signupModalFragment, "login_signup_signup_vault_tag")
+                    fragmentTransaction?.add(signupModalFragment, "signup_tag")
                     fragmentTransaction?.show(signupModalFragment)
                     fragmentTransaction?.commit()
                 }

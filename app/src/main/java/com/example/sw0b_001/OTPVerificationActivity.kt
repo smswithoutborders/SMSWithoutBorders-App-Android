@@ -1,5 +1,6 @@
 package com.example.sw0b_001
 
+import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver
@@ -167,6 +168,7 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
                     }
                     runOnUiThread {
                         linearProgressIndicator.visibility = View.GONE
+                        setResult(Activity.RESULT_OK)
                         finish()
                     }
                 }
@@ -211,7 +213,7 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
                     val smsTemplate = getString(R.string.otp_verification_code_template);
 
                     val code = message?.split(smsTemplate.toRegex())
-                    if(code != null && code?.size!! > 1)
+                    if(code != null && code.size!! > 1)
                         findViewById<TextInputEditText>(R.id.ownership_verification_input)
                                 ?.setText(code[1].replace(" ".toRegex(), ""))
                 }

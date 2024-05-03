@@ -1,5 +1,6 @@
 package com.example.sw0b_001
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,6 +12,8 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.registerForActivityResult
 import com.example.sw0b_001.HomepageComposeNewFragment.Companion.TAG
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.v2.Vault_V2
@@ -91,7 +94,17 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
             intent.putExtra("uid", uid)
             intent.putExtra("opt_request_cookie", headers["Set-Cookie"].first())
             intent.putExtra("signup_request_cookie", vaultHeaders["Set-Cookie"].first())
-            requireContext().startActivity(intent)
+            val activityLauncher =
+                    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                        when(it.resultCode) {
+                            Activity.RESULT_OK -> {
+                                onSuccessRunnable?.run()
+                            } else -> {
+
+                            }
+                        }
+            }
+            activityLauncher.launch(intent)
         }
     }
 

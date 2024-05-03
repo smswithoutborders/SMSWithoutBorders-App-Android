@@ -62,12 +62,11 @@
         android:id="@+id/homepage_compose_new_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
         app:icon="@drawable/round_edit_24"
         app:layout_constraintBottom_toTopOf="@+id/homepage_add_new_btn"
-        app:layout_constraintEnd_toEndOf="@id/main_constrain"
-        app:layout_constraintHorizontal_bias="0.95"
-        app:layout_constraintStart_toStartOf="@id/main_constrain" />
+        app:layout_constraintEnd_toEndOf="@id/main_constrain" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/homepage_add_new_btn"
@@ -86,15 +85,14 @@
         android:id="@+id/homepage_login_new_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
         android:text="@string/homepage_add_account"
         android:visibility="gone"
-        tools:visibility="visible"
+        app:icon="@drawable/baseline_switch_account_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/main_constrain"
-        app:layout_constraintHorizontal_bias="0.95"
-        app:layout_constraintStart_toStartOf="@id/main_constrain"
-        app:icon="@drawable/baseline_switch_account_24"
-        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
