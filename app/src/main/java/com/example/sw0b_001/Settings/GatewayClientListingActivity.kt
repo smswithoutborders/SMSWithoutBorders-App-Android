@@ -15,10 +15,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.sw0b_001.AppCompactActivityCustomized
+import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientAddModalFragment
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientViewModel
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
+import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.R
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
@@ -28,7 +30,7 @@ import com.google.android.material.textview.MaterialTextView
 
 class GatewayClientListingActivity : AppCompactActivityCustomized() {
 
-    lateinit var listViewAdapter: GatewayClientListingAdapter
+    private lateinit var listViewAdapter: GatewayClientListingAdapter
 
     private lateinit var gatewayClientsViewModel: GatewayClientViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,12 +65,15 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
         findViewById<SwipeRefreshLayout>(R.id.gateway_client_swipe_refresh)
                 .setOnRefreshListener { refresh() }
 
-        val sharedPreferencesChangeListener = OnSharedPreferenceChangeListener { sharedPreferences, key ->
-            listViewAdapter.notifyDataSetChanged()
-        }
 
         gatewayClient.sharedPreferences
                 .registerOnSharedPreferenceChangeListener(sharedPreferencesChangeListener)
+    }
+
+    private val sharedPreferencesChangeListener = OnSharedPreferenceChangeListener { _, _ ->
+        println("Yes things have changed")
+        if(::listViewAdapter.isInitialized)
+            listViewAdapter.notifyDataSetChanged()
     }
 
     private fun refresh() {
@@ -143,6 +148,8 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
 
             val radioButton = view?.findViewById<SwitchMaterial>(R.id.gateway_client_radio_btn)
             radioButton?.isChecked = defaultGatewayClientMsisdn == gatewayClient.msisdn
+            radioButton?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
+
 
             view?.findViewById<MaterialCardView>(R.id.gateway_client_listing_card)
                     ?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
@@ -153,8 +160,11 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
         private fun gatewayClientOnClickListener(gatewayClient: GatewayClient):
                 OnClickListener {
             return OnClickListener {
-                gatewayClientsCommunications
-                        .updateDefaultGatewayClient(gatewayClient.msisdn)
+                gatewayClientsCommunications.updateDefaultGatewayClient(gatewayClient.msisdn)
+//                ThreadExecutorPool.executorService.execute {
+//                    gatewayClient.type = "custom"
+//                    Datastore.getDatastore(it.context).gatewayClientsDao().update(gatewayClient)
+//                }
             }
         }
     }

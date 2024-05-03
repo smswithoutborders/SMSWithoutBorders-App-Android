@@ -26,7 +26,7 @@ class GatewayClientsCommunications(context: Context) {
     fun updateDefaultGatewayClient(msisdn: String) {
         sharedPreferences.edit()
                 .putString(defaultKey, msisdn)
-                .commit()
+                .apply()
     }
 
     fun getDefaultGatewayClient(): String? {
