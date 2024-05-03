@@ -19,7 +19,6 @@ object PublisherHandler {
 //                .SecurityRSA.decrypt(keypair.private,
 //                        Base64.decode(credentials[UserArtifactsHandler.SHARED_KEY], Base64.DEFAULT))
         val sharedKeyDecrypted = UserArtifactsHandler.getSharedKeyDecrypted(context)
-
         return SecurityAES.encrypt(emailContent.encodeToByteArray(), sharedKeyDecrypted)
     }
 

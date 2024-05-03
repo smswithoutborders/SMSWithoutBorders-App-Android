@@ -87,6 +87,7 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
                 { refreshLayout.isRefreshing = false } ) {
             runOnUiThread {
                 refreshLayout.isRefreshing = false
+                linearProgressIndicator.visibility = View.GONE
                 Toast.makeText(applicationContext, "Failed to refresh...",
                         Toast.LENGTH_SHORT).show()
             }
@@ -116,8 +117,8 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
         return super.onOptionsItemSelected(item)
     }
 
-    class GatewayClientListingAdapter(val gatewayClientsCommunications: GatewayClientsCommunications,
-                                      var gatewayClientsList: List<GatewayClient>) : BaseAdapter() {
+    class GatewayClientListingAdapter(private val gatewayClientsCommunications: GatewayClientsCommunications,
+                                      private var gatewayClientsList: List<GatewayClient>) : BaseAdapter() {
 
         override fun getCount(): Int {
             return gatewayClientsList.size
@@ -161,10 +162,10 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
                 OnClickListener {
             return OnClickListener {
                 gatewayClientsCommunications.updateDefaultGatewayClient(gatewayClient.msisdn)
-//                ThreadExecutorPool.executorService.execute {
-//                    gatewayClient.type = "custom"
-//                    Datastore.getDatastore(it.context).gatewayClientsDao().update(gatewayClient)
-//                }
+                ThreadExecutorPool.executorService.execute {
+                    gatewayClient.type = "custom"
+                    Datastore.getDatastore(it.context).gatewayClientsDao().update(gatewayClient)
+                }
             }
         }
     }

@@ -26,6 +26,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textview.MaterialTextView
 import com.hbb20.CountryCodePicker
 import kotlinx.serialization.json.Json
 
@@ -94,6 +95,13 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
         }
     }
 
+    private fun nullifyInputs(view: View) {
+        view.findViewById<TextInputEditText>(R.id.signup_phonenumber_text_input).error = null
+        view.findViewById<TextInputEditText>(R.id.signup_password_text_input).error = null
+        view.findViewById<TextInputEditText>(R.id.signup_password_text_retry_input).error = null
+        view.findViewById<MaterialCheckBox>(R.id.signup_read_privacy_policy_checkbox).error = null
+        view.findViewById<View>(R.id.signup_status_card).visibility = View.GONE
+    }
     private fun verifyInput(view: View): Boolean {
         val phoneNumberView = view.findViewById<TextInputEditText>(R
                 .id.signup_phonenumber_text_input)
@@ -137,6 +145,19 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
         try {
             val networkResponseResults = Vault_V2.signup(url, phonenumber, "", countryCode,
                     password, captcha_token)
+            when(networkResponseResults.response.statusCode) {
+                400 -> {
+                    Log.e(javaClass.name, String(networkResponseResults.response.data))
+                    activity?.runOnUiThread {
+                        view.findViewById<MaterialButton>(R.id.signup_btn)
+                                .isEnabled = true
+                        view.findViewById<View>(R.id.signup_status_card)
+                                .visibility = View.VISIBLE
+                        view.findViewById<MaterialTextView>(R.id.login_error_text)
+                                .text = String(networkResponseResults.response.data)
+                    }
+                }
+            }
             val uid = Json.decodeFromString<Vault_V2.UID>(networkResponseResults.result.get()).uid
 
             val otpRequestUrl = view.context.getString(R.string.smswithoutborders_official_vault)
@@ -146,8 +167,10 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
             val optNetworkResponseResults = Vault_V2.otpRequest(otpRequestUrl,
                     networkResponseResults.response.headers, completePhoneNumber, uid)
 
-            when(networkResponseResults.response.statusCode) {
-                in 400..600 -> throw Exception(String(networkResponseResults.response.data))
+            when(optNetworkResponseResults.response.statusCode) {
+                in 400..600 -> {
+                    throw Exception(String(optNetworkResponseResults.response.data))
+                }
             }
 
             // TODO: do something in case the request fails to go out
@@ -170,7 +193,7 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
     private fun configureRecaptcha(view: View) {
         view.findViewById<MaterialButton>(R.id.signup_btn)
                 .setOnClickListener {
-
+                    nullifyInputs(view)
                     if(!verifyInput(view))
                         return@setOnClickListener
 

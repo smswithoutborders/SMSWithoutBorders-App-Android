@@ -106,9 +106,9 @@ class Vault_V2(val uid: String) {
             val payload = Json.encodeToString(SignupRequest(phone_number, name, country_code,
                     password, captcha_token))
             val networkResponseResults = Network.jsonRequestPost(url, payload)
-            when(networkResponseResults.response.statusCode) {
-                in 400..600 -> throw Exception(String(networkResponseResults.response.data))
-            }
+//            when(networkResponseResults.response.statusCode) {
+//                in 400..600 -> throw Exception(String(networkResponseResults.response.data))
+//            }
             return networkResponseResults
         }
 

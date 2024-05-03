@@ -51,8 +51,10 @@ class GatewayClientsCommunications(context: Context) {
             gatewayClient2.setOperatorName("Orange Cameroon")
             gatewayClient2.setOperatorId("62402")
             gatewayClient2.setType("custom")
-            GatewayClientsCommunications(context)
-                    .updateDefaultGatewayClient(gatewayClient2.msisdn)
+            if(GatewayClientsCommunications(context)
+                    .getDefaultGatewayClient().isNullOrEmpty())
+                GatewayClientsCommunications(context)
+                        .updateDefaultGatewayClient(gatewayClient2.msisdn)
 
             val gatewayClient3 = GatewayClient()
             gatewayClient3.setCountry("Nigeria")
@@ -67,7 +69,7 @@ class GatewayClientsCommunications(context: Context) {
 
             Datastore.getDatastore(context).gatewayClientsDao().refresh(gatewayClientList)
         }
-        fun fetchRemote(context: Context): ArrayList<GatewayClientJsonPayload> {
+        private fun fetchRemote(context: Context): ArrayList<GatewayClientJsonPayload> {
             val url = context.getString(R.string.gateway_client_seeding_url)
             val networkResponseResults = Network.requestGet(url)
             when(networkResponseResults.response.statusCode) {

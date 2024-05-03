@@ -191,14 +191,14 @@ class PlatformsModalFragment(private val showType: Int = SHOW_TYPE_ALL)
                                             progress.visibility = View.GONE
                                         }
                                     } else -> {
-                                    activity?.runOnUiThread {
-                                        Toast.makeText(requireContext(),
-                                                String(networkResponseResults.response.data),
-                                                Toast.LENGTH_SHORT)
-                                                .show()
-                                        progress.visibility = View.GONE
+                                        activity?.runOnUiThread {
+                                            Toast.makeText(requireContext(),
+                                                    String(networkResponseResults.response.data),
+                                                    Toast.LENGTH_SHORT)
+                                                    .show()
+                                            progress.visibility = View.GONE
+                                        }
                                     }
-                                }
                                 }
                                 dismiss()
                             }
