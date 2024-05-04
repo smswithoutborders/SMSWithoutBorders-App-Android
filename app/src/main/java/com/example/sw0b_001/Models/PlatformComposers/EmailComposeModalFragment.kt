@@ -29,13 +29,6 @@ class EmailComposeModalFragment(val platform: Platforms)
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
-    private val activityLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                when(it.resultCode) {
-                    Activity.RESULT_OK -> {}
-                    else -> { }
-                }
-            }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -84,32 +77,8 @@ class EmailComposeModalFragment(val platform: Platforms)
         val platforms = _PlatformsHandler.getPlatform(view.context, platform.id)
         val formattedContent = processEmailForEncryption(platforms.letter, to, cc, bcc, subject, body)
 
-        val encryptedContentBase64 = PublisherHandler
-                .formatForPublishing(view.context, formattedContent)
-        val gatewayClientMSISDN = GatewayClientsCommunications(view.context)
-                .getDefaultGatewayClient()
-
-        try {
-            val sentIntent = SMSHandler.transferToDefaultSMSApp(requireContext(),
-                    gatewayClientMSISDN!!, encryptedContentBase64).apply {
-                        setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-            activityLauncher.launch(sentIntent)
-            val encryptedContent = EncryptedContent()
-            encryptedContent.encryptedContent = formattedContent
-            encryptedContent.date = System.currentTimeMillis()
-            encryptedContent.type = platforms.type
-            encryptedContent.platformId = platforms.id
-            encryptedContent.platformName = platforms.name
-
-            ThreadExecutorPool.executorService.execute {
-                Datastore.getDatastore(requireContext()).encryptedContentDAO()
-                        .insert(encryptedContent)
-                dismiss()
-            }
-        } catch(e: Exception) {
-            Log.e(javaClass.name, "Exception finding package", e)
-            Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+        ComposeHandlers.compose(requireContext(), formattedContent, platforms) {
+            dismiss()
         }
     }
 

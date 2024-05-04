@@ -1,14 +1,11 @@
 package com.example.sw0b_001.Models.Platforms;
 
 import android.content.Context;
-import android.content.Intent;
 
 import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.MessageComposeActivity;
 import com.example.sw0b_001.R;
-import com.example.sw0b_001.TextComposeActivity;
 
 public class _PlatformsHandler {
 

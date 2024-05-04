@@ -75,7 +75,7 @@
 
     <string name="synchronize_type_header_manual_synchronize_text_continue">Scan QR</string>
 
-    <string name="tweet_compose_tweet">Tweet </string>
+    <string name="tweet_compose_tweet">Post</string>
 
     <string name="tweet_compose_prompt">What\'s happening?</string>
 
@@ -367,5 +367,6 @@
     <string name="otp_code_submitted_otp_verified">Code submitted OTP verified</string>
     <string name="signup_something_went_wrong_please_check_this_account_does_not_already_exist">Something went wrong, please check this account does not already exist</string>
     <string name="helper_yesterday">yesterday</string>
+    <string name="text_compose_you_need_some_content_for_posting">You need some content for posting</string>
 
 </resources>
