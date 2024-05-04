@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.PlatformComposers.EmailComposeModalFragment
+import com.example.sw0b_001.Models.PlatformComposers.TextComposeModalFragment
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter
 import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
@@ -202,10 +203,20 @@ class PlatformsModalFragment(private val showType: Int = SHOW_TYPE_ALL)
                                 }
                                 dismiss()
                             }
-                        } else {
+                        }
+                        else if(it.type == "email"){
                             val emailComposeModalFragment = EmailComposeModalFragment(it)
-                            fragmentTransaction?.add(emailComposeModalFragment, "compose_fragment_email")
+                            fragmentTransaction?.add(emailComposeModalFragment,
+                                    "email_compose_fragment")
                             fragmentTransaction?.show(emailComposeModalFragment)
+                            activity?.runOnUiThread { fragmentTransaction?.commitNow() }
+                            dismiss()
+                        }
+                        else if(it.type == "text") {
+                            val textComposeModalFragment = TextComposeModalFragment(it)
+                            fragmentTransaction?.add(textComposeModalFragment,
+                                    "text_compose_fragment")
+                            fragmentTransaction?.show(textComposeModalFragment)
                             activity?.runOnUiThread { fragmentTransaction?.commitNow() }
                             dismiss()
                         }

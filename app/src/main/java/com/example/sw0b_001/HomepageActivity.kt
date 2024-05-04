@@ -10,8 +10,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.Models.RecentsRecyclerAdapter
+import com.example.sw0b_001.Models.EncryptedContent.MessagesRecyclerAdapter
 import com.example.sw0b_001.Models.EncryptedContent.MessagesViewModel
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.google.android.material.appbar.MaterialToolbar
@@ -76,7 +75,7 @@ class HomepageActivity : AppCompactActivityCustomized() {
     }
 
     private fun configureRecyclerHandlers() {
-        val recentRecyclerAdapter = RecentsRecyclerAdapter()
+        val recentRecyclerAdapter = MessagesRecyclerAdapter()
         val linearLayoutManager = LinearLayoutManager(applicationContext)
 
         linearLayoutManager.stackFromEnd = true
@@ -87,7 +86,6 @@ class HomepageActivity : AppCompactActivityCustomized() {
         messagesRecyclerView.adapter = recentRecyclerAdapter
 
         val viewModel: MessagesViewModel by viewModels()
-        val encryptedContentDAO = Datastore.getDatastore(applicationContext).encryptedContentDAO()
 
         val noRecentMessagesText = findViewById<TextView>(R.id.no_recent_messages)
         viewModel.getMessages(applicationContext).observe(this) {

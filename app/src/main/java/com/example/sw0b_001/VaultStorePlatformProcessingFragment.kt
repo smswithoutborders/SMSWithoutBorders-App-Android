@@ -69,7 +69,7 @@ class VaultStorePlatformProcessingFragment(val platformName: String, val callbac
 
                     activity?.runOnUiThread {
                         when(platformName) {
-                            "x", "twitter" -> {
+                            "x", "twitter.xml" -> {
                                 try {
                                     val codeChallenge: String =
                                             URLDecoder.decode(parameters["code_challenge"]!!,
@@ -129,7 +129,7 @@ class VaultStorePlatformProcessingFragment(val platformName: String, val callbac
         headers.remove("Content-Type")
 
         return when(platformName) {
-            "x", "twitter" -> {
+            "x", "twitter.xml" -> {
                 Vault_V2.getXGrant(platformsUrl, headers, uid, phonenumber)
             }
             "gmail" -> {
