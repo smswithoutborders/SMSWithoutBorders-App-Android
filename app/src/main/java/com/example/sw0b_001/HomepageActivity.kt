@@ -8,10 +8,13 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Modals.LoginSignupVaultModalFragment
 import com.example.sw0b_001.Modals.PlatformsModalFragment
+import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.Messages.MessagesRecyclerAdapter
 import com.example.sw0b_001.Models.Messages.MessagesViewModel
 import com.example.sw0b_001.Models.UserArtifactsHandler
@@ -95,6 +98,12 @@ class HomepageActivity : AppCompactActivityCustomized() {
             else
                 noRecentMessagesText.visibility = View.GONE
         }
+
+        recentRecyclerAdapter.messageOnClickListener.observe(this, Observer {
+            if(it != null) {
+                recentRecyclerAdapter.messageOnClickListener = MutableLiveData()
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

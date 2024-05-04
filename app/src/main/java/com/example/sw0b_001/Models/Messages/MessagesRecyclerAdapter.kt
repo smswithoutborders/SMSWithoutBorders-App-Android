@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Modals.PlatformComposers.ComposeHandlers
@@ -18,6 +20,7 @@ class MessagesRecyclerAdapter : RecyclerView.Adapter<MessagesRecyclerAdapter.Vie
     val mDiffer: AsyncListDiffer<EncryptedContent> = AsyncListDiffer(this,
             EncryptedContent.DIFF_CALLBACK)
 
+    var messageOnClickListener: MutableLiveData<EncryptedContent> = MutableLiveData<EncryptedContent>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.layout_cardlist_recents, parent, false)
@@ -26,7 +29,7 @@ class MessagesRecyclerAdapter : RecyclerView.Adapter<MessagesRecyclerAdapter.Vie
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val encryptedContent = mDiffer.currentList[position]
-        holder.bind(encryptedContent)
+        holder.bind(encryptedContent, messageOnClickListener)
     }
 
     override fun getItemCount(): Int {
@@ -40,16 +43,16 @@ class MessagesRecyclerAdapter : RecyclerView.Adapter<MessagesRecyclerAdapter.Vie
         private val subject = itemView.findViewById<MaterialTextView>(R.id.homepage_subject)
         private val recipient = itemView.findViewById<MaterialTextView>(R.id.homepage_recipient)
         private val platformLogo = itemView.findViewById<ImageView>(R.id.recents_platform_logo)
-        fun bind(encryptedContent: EncryptedContent) {
+        fun bind(messages: EncryptedContent,
+                 messageOnClickListener: MutableLiveData<EncryptedContent>) {
             val platforms = _PlatformsHandler.getPlatform(itemView.context,
-                    encryptedContent.getPlatformName())
+                    messages.getPlatformName())
 
-            val decomposed = ComposeHandlers
-                    .decompose(encryptedContent.getEncryptedContent(), platforms)
+            val decomposed = ComposeHandlers.decompose(messages.getEncryptedContent(), platforms)
 
             body.text = decomposed.body
 
-            val dateStr = formatDate(itemView.context, encryptedContent.getDate())
+            val dateStr = formatDate(itemView.context, messages.getDate())
             date.text = dateStr
 
             try {
@@ -69,6 +72,10 @@ class MessagesRecyclerAdapter : RecyclerView.Adapter<MessagesRecyclerAdapter.Vie
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+
+            card.setOnClickListener {
+                messageOnClickListener.value = messages
             }
         }
     }
