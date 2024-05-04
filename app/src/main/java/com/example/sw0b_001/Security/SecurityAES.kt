@@ -7,12 +7,18 @@ import javax.crypto.spec.SecretKeySpec
 class SecurityAES {
     companion object {
         private const val defaultAlgorithm = "AES/CBC/PKCS5Padding"
-        fun encrypt(input: ByteArray?, sharedKey: ByteArray?): ByteArray {
-            val secretKeySpec = SecretKeySpec(sharedKey, "AES")
-            val cipher = Cipher.getInstance(defaultAlgorithm)
-            cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec)
+        fun encrypt(input: ByteArray, sharedKey: ByteArray): ByteArray {
+            return try {
+                val secretKeySpec = SecretKeySpec(sharedKey, "AES")
+                val cipher = Cipher.getInstance(defaultAlgorithm)
 
-            return cipher.doFinal(input)
+                cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec)
+                val cipherText = cipher.doFinal(input)
+                return cipher.iv + cipherText
+
+            } catch (e: Exception) {
+                throw e;
+            }
         }
 
         fun decrypt(input: ByteArray, sharedKey: ByteArray?): ByteArray {

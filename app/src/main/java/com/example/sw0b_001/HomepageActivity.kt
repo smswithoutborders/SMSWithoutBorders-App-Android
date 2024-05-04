@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sw0b_001.Modals.LoginSignupVaultModalFragment
+import com.example.sw0b_001.Modals.PlatformsModalFragment
 import com.example.sw0b_001.Models.EncryptedContent.MessagesRecyclerAdapter
 import com.example.sw0b_001.Models.EncryptedContent.MessagesViewModel
 import com.example.sw0b_001.Models.UserArtifactsHandler
@@ -76,10 +78,8 @@ class HomepageActivity : AppCompactActivityCustomized() {
 
     private fun configureRecyclerHandlers() {
         val recentRecyclerAdapter = MessagesRecyclerAdapter()
-        val linearLayoutManager = LinearLayoutManager(applicationContext)
-
-        linearLayoutManager.stackFromEnd = true
-        linearLayoutManager.reverseLayout = true
+        val linearLayoutManager = LinearLayoutManager(applicationContext,
+                LinearLayoutManager.VERTICAL, false);
 
         val messagesRecyclerView = findViewById<RecyclerView>(R.id.recents_recycler_view)
         messagesRecyclerView.layoutManager = linearLayoutManager

@@ -2,9 +2,11 @@ package com.example.sw0b_001.Models
 
 import android.content.Context
 import android.util.Base64
+import android.util.Log
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
 import com.example.sw0b_001.Security.SecurityAES
 import com.example.sw0b_001.Security.SecurityRSA
+import java.nio.charset.Charset
 
 object PublisherHandler {
     private fun encryptContentForPublishing(context: Context, emailContent: String): ByteArray {
@@ -19,7 +21,8 @@ object PublisherHandler {
 //                .SecurityRSA.decrypt(keypair.private,
 //                        Base64.decode(credentials[UserArtifactsHandler.SHARED_KEY], Base64.DEFAULT))
         val sharedKeyDecrypted = UserArtifactsHandler.getSharedKeyDecrypted(context)
-        return SecurityAES.encrypt(emailContent.encodeToByteArray(), sharedKeyDecrypted)
+        Log.d(javaClass.name, "Decrypted sharedkey: ${String(sharedKeyDecrypted)}")
+        return SecurityAES.encrypt(emailContent.toByteArray(Charset.defaultCharset()), sharedKeyDecrypted)
     }
 
     fun formatForPublishing(context: Context, formattedContent: String): String {
@@ -32,6 +35,8 @@ object PublisherHandler {
             System.arraycopy(encryptedContent, 16, content, 0, content.size)
 
             val encodedContent = Base64.encode(content, Base64.DEFAULT)
+            Log.d(javaClass.name, "Encrypted content: ${Base64.encodeToString(content, 
+                    Base64.DEFAULT)}")
             val finalContent = ByteArray(16 + encodedContent.size)
 
             System.arraycopy(iv, 0, finalContent, 0, iv.size)

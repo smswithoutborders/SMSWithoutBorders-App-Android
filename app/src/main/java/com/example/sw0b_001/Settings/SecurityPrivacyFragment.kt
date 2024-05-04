@@ -1,36 +1,27 @@
 package com.example.sw0b_001.Settings
 
 import android.app.Activity
-import android.app.LocaleManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.LocaleList
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
-import androidx.core.hardware.fingerprint.FingerprintManagerCompat
-import androidx.core.os.LocaleListCompat
-import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.Preference.OnPreferenceChangeListener
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
-import androidx.preference.SwitchPreference
 import androidx.preference.SwitchPreferenceCompat
-import com.example.sw0b_001.LoginModalFragment
+import com.example.sw0b_001.Modals.LoginModalFragment
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Security
-import com.example.sw0b_001.PlatformsModalFragment
+import com.example.sw0b_001.Modals.PlatformsModalFragment
 import com.example.sw0b_001.R
 import com.example.sw0b_001.Security.LockScreenFragment
-import java.util.Locale
 
 class SecurityPrivacyFragment : PreferenceFragmentCompat() {
 

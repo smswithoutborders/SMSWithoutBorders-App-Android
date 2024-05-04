@@ -1,10 +1,8 @@
-package com.example.sw0b_001
+package com.example.sw0b_001.Modals
 
 import android.os.Bundle
 import android.view.View
-import com.example.sw0b_001.LoginModalFragment
 import com.example.sw0b_001.R
-import com.example.sw0b_001.SignupModalFragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton

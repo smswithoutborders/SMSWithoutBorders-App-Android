@@ -20,6 +20,7 @@ object ComposeHandlers {
                 onSuccessRunnable: Runnable) {
         val encryptedContentBase64 = PublisherHandler
                 .formatForPublishing(context, formattedContent)
+        Log.d(javaClass.name, "Final content: ${encryptedContentBase64}")
         val gatewayClientMSISDN = GatewayClientsCommunications(context)
                 .getDefaultGatewayClient()
 

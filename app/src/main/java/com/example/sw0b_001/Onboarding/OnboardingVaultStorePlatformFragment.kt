@@ -2,20 +2,15 @@ package com.example.sw0b_001.Onboarding
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.LoadingFragment
-import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
-import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.v2.Vault_V2
-import com.example.sw0b_001.Modules.Network
-import com.example.sw0b_001.PlatformsModalFragment
+import com.example.sw0b_001.Modals.PlatformsModalFragment
 import com.example.sw0b_001.R
 import com.google.android.material.button.MaterialButton
-import kotlin.math.log
 
 class OnboardingVaultStorePlatformFragment:
         OnboardingComponent(R.layout.fragment_onboarding_vault_store){

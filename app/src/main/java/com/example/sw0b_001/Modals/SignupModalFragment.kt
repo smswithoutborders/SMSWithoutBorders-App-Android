@@ -1,4 +1,4 @@
-package com.example.sw0b_001
+package com.example.sw0b_001.Modals
 
 import android.app.Activity
 import android.content.Intent
@@ -12,13 +12,12 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.View
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCaller
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.registerForActivityResult
 import com.example.sw0b_001.HomepageComposeNewFragment.Companion.TAG
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.v2.Vault_V2
+import com.example.sw0b_001.OTPVerificationActivity
+import com.example.sw0b_001.R
 import com.github.kittinunf.fuel.core.Headers
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
@@ -117,22 +116,19 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
         view.findViewById<View>(R.id.signup_status_card).visibility = View.GONE
     }
     private fun verifyInput(view: View): Boolean {
-        val phoneNumberView = view.findViewById<TextInputEditText>(R
-                .id.signup_phonenumber_text_input)
+        val phoneNumberView = view.findViewById<TextInputEditText>(R.id.signup_phonenumber_text_input)
         if(phoneNumberView.text.isNullOrEmpty()) {
             phoneNumberView.error = getString(R.string.signup_phonenumber_empty_error)
             return false
         }
 
-        val passwordView = view.findViewById<TextInputEditText>(R
-                .id.signup_password_text_input)
+        val passwordView = view.findViewById<TextInputEditText>(R.id.signup_password_text_input)
         if(passwordView.text.isNullOrEmpty()) {
             passwordView.error = getString(R.string.signup_please_provide_a_strong_password)
             return false
         }
 
-        val passwordRetryView = view.findViewById<TextInputEditText>(R
-                .id.signup_password_text_retry_input)
+        val passwordRetryView = view.findViewById<TextInputEditText>(R.id.signup_password_text_retry_input)
         if(passwordRetryView.text.isNullOrEmpty()) {
             passwordRetryView.error = getString(R.string.signup_please_re_enter_your_password)
             return false
@@ -182,8 +178,7 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
                         view.findViewById<View>(R.id.signup_progress_bar)
                                 .visibility = View.GONE
                         view.findViewById<MaterialTextView>(R.id.login_error_text)
-                                .text = getString(R.string
-                                        .signup_something_went_wrong_please_check_this_account_does_not_already_exist)
+                                .text = getString(R.string.signup_something_went_wrong_please_check_this_account_does_not_already_exist)
                     }
                 }
             }
@@ -226,12 +221,10 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
                     if(!verifyInput(view))
                         return@setOnClickListener
 
-                    val signupProgressBar = view.findViewById<LinearProgressIndicator>(R
-                            .id.signup_progress_bar)
+                    val signupProgressBar = view.findViewById<LinearProgressIndicator>(R.id.signup_progress_bar)
                     signupProgressBar.visibility = View.VISIBLE
 
-                    val signupCountryCodePicker = view.findViewById<CountryCodePicker>(R
-                            .id.signup_country_code_picker)
+                    val signupCountryCodePicker = view.findViewById<CountryCodePicker>(R.id.signup_country_code_picker)
                     val countryCode = "+" + signupCountryCodePicker.selectedCountryCode
                     SafetyNet.getClient(requireContext())
                             .verifyWithRecaptcha(getString(R.string.recaptcha_client_side_key))
@@ -252,12 +245,10 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
                                                         .isEnabled = false
                                             }
 
-                                            val phonenumber = view.findViewById<TextInputEditText>(R
-                                                    .id.signup_phonenumber_text_input).text
+                                            val phonenumber = view.findViewById<TextInputEditText>(R.id.signup_phonenumber_text_input).text
                                                     .toString()
                                                     .replace(" ", "")
-                                            val password = view.findViewById<TextInputEditText>(R
-                                                    .id.signup_password_text_input).text.toString()
+                                            val password = view.findViewById<TextInputEditText>(R.id.signup_password_text_input).text.toString()
 
                                             signup(view, phonenumber, countryCode, password,
                                                     userResponseToken!!)

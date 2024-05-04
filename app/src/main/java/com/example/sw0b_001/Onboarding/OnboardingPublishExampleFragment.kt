@@ -3,8 +3,7 @@ package com.example.sw0b_001.Onboarding
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import com.example.sw0b_001.Models.UserArtifactsHandler
-import com.example.sw0b_001.PlatformsModalFragment
+import com.example.sw0b_001.Modals.PlatformsModalFragment
 import com.example.sw0b_001.R
 import com.google.android.material.button.MaterialButton
 

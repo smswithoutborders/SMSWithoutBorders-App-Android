@@ -103,7 +103,7 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
                             }
                         }
                     }
-                    "/x.html", "twitter.xml" -> {
+                    "/x.html", "twitter" -> {
                         val networkResponseResults = Vault_V2.sendXCode(applicationContext,
                                 platformsUrl,
                                 Headers().set("Set-Cookie", cookies),

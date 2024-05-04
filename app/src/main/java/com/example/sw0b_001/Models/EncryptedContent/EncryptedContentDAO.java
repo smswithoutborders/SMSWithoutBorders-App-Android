@@ -13,7 +13,7 @@ public interface EncryptedContentDAO {
     @Insert
     long insert(EncryptedContent encryptedContent);
 
-    @Query("SELECT * FROM EncryptedContent")
+    @Query("SELECT * FROM EncryptedContent ORDER BY date DESC")
     LiveData<List<EncryptedContent>> getAll();
 
     @Query("DELETE FROM EncryptedContent")

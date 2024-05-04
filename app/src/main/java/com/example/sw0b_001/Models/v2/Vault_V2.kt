@@ -183,7 +183,7 @@ class Vault_V2(val uid: String) {
                       code: String,
                       code_verifier: String,
                       state: String) : Network.NetworkResponseResults {
-            val platformsUrl = "${url}/v2/users/${uid}/platforms/twitter.xml/protocols/oauth2"
+            val platformsUrl = "${url}/v2/users/${uid}/platforms/twitter/protocols/oauth2"
 
             headers["Origin"] = "https://" +
                     context.getString(R.string.oauth_openid_redirect_url_scheme_host)
@@ -198,7 +198,7 @@ class Vault_V2(val uid: String) {
 
         fun getXGrant(url: String, headers: Headers, uid: String, phone_number: String) :
                 Pair<Network.NetworkResponseResults, OAuthGrantPayload> {
-            val platformsUrl = "${url}/v2/users/${uid}/platforms/twitter.xml/protocols/oauth2"
+            val platformsUrl = "${url}/v2/users/${uid}/platforms/twitter/protocols/oauth2"
             Log.d(javaClass.name, "uid: $uid, url: $platformsUrl")
             val payload = Json.encodeToString(OAuthGrantRequest(phone_number))
             val networkResponseResults = Network.jsonRequestPost(platformsUrl, payload, headers)
@@ -293,6 +293,7 @@ class Vault_V2(val uid: String) {
                             Toast.LENGTH_SHORT).show()
                 }
             }
+            Log.d(javaClass.name, "Sharedkey encoded: ${responsePayload.shared_key}")
             UserArtifactsHandler.storeSharedKey(context, responsePayload.shared_key)
 
             GatewayClientsCommunications.populateDefaultGatewayClientsSetDefaults(context)

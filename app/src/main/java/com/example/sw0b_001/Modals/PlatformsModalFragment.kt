@@ -1,17 +1,14 @@
-package com.example.sw0b_001
+package com.example.sw0b_001.Modals
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Database.Datastore
@@ -25,10 +22,10 @@ import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.v2.GatewayServer_V2
 import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Network
-import com.example.sw0b_001.Onboarding.OnboardingComponent
+import com.example.sw0b_001.R
+import com.example.sw0b_001.VaultStoreActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
 class PlatformsModalFragment(private val showType: Int = SHOW_TYPE_ALL)
@@ -169,14 +166,14 @@ class PlatformsModalFragment(private val showType: Int = SHOW_TYPE_ALL)
                                         "oauth2")
                                 when(networkResponseResults.response.statusCode) {
                                     200 -> {
-//                                        val credentials = UserArtifactsHandler
-//                                                .fetchCredentials(view.context)
-//                                        val responsePayload =
-//                                                GatewayServer_V2.sync(view.context,
-//                                                        credentials[UserArtifactsHandler.USER_ID_KEY]!!,
-//                                                        credentials[UserArtifactsHandler.PASSWORD]!!)
-//                                        UserArtifactsHandler.storeSharedKey(view.context,
-//                                                responsePayload.shared_key)
+                                        val credentials = UserArtifactsHandler
+                                                .fetchCredentials(view.context)
+                                        val responsePayload =
+                                                GatewayServer_V2.sync(view.context,
+                                                        credentials[UserArtifactsHandler.USER_ID_KEY]!!,
+                                                        credentials[UserArtifactsHandler.PASSWORD]!!)
+                                        UserArtifactsHandler.storeSharedKey(view.context,
+                                                responsePayload.shared_key)
                                         activity?.runOnUiThread {
                                             Toast.makeText(view.context,
                                                     getString(R.string.platforms_re_synced_gateway_server),

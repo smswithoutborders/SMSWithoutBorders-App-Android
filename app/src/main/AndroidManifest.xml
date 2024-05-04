@@ -38,7 +38,7 @@
             android:exported="true"
             android:parentActivityName=".HomepageActivity" />
         <activity
-            android:name=".LoginModalFragment"
+            android:name=".Modals.LoginModalFragment"
             android:exported="false" />
         <activity
             android:name=".OTPVerificationActivity"

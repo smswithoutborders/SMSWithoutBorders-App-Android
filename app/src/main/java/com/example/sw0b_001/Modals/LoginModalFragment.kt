@@ -1,18 +1,14 @@
-package com.example.sw0b_001
+package com.example.sw0b_001.Modals
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
-import com.example.sw0b_001.Models.Platforms.PlatformsHandler
-import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
+import com.example.sw0b_001.BuildConfig
+import com.example.sw0b_001.HomepageComposeNewFragment
 import com.example.sw0b_001.Models.ThreadExecutorPool
-import com.example.sw0b_001.Models.UserArtifactsHandler
-import com.example.sw0b_001.Models.v2.GatewayServer_V2
 import com.example.sw0b_001.Models.v2.Vault_V2
+import com.example.sw0b_001.R
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.safetynet.SafetyNet
@@ -27,7 +23,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import com.hbb20.CountryCodePicker
-import kotlinx.serialization.json.Json
 
 class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         BottomSheetDialogFragment(R.layout.fragment_login_modal) {
