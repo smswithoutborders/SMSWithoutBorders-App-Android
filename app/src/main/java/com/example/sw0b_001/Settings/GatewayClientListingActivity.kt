@@ -71,7 +71,6 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
     }
 
     private val sharedPreferencesChangeListener = OnSharedPreferenceChangeListener { _, _ ->
-        println("Yes things have changed")
         if(::listViewAdapter.isInitialized)
             listViewAdapter.notifyDataSetChanged()
     }

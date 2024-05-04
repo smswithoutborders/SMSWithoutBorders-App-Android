@@ -63,13 +63,17 @@ public class MessagesRecyclerAdapter extends RecyclerView.Adapter<MessagesRecycl
             Platforms platforms = _PlatformsHandler.getPlatform(itemView.getContext(),
                     encryptedContent.getPlatformName());
 
-            platformLogo.setImageResource(_PlatformsHandler.hardGetLogoByName(platforms.getName()));
+            try {
+                platformLogo.setImageResource(_PlatformsHandler.hardGetLogoByName(platforms.getName()));
 
-            String dateStr = Helpers.INSTANCE.formatDate(itemView.getContext(),
-                    encryptedContent.getDate());
+                String dateStr = Helpers.INSTANCE.formatDate(itemView.getContext(),
+                        encryptedContent.getDate());
 
-            date.setText(dateStr);
-            subject.setText("Sample Subject");
+                date.setText(dateStr);
+                subject.setText("Sample Subject");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -52,7 +52,7 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
             Toast.makeText(requireContext(),
                     getString(R.string.logout_all_credentials_have_been_cleared_from_app),
                     Toast.LENGTH_LONG).show()
-            activity?.recreate()
+            activity?.finish()
             true
         }
 
