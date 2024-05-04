@@ -17,7 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
 import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Models.Platforms._PlatformsHandler;
+import com.example.sw0b_001.Modules.Helpers;
 import com.example.sw0b_001.R;
+import com.google.android.material.card.MaterialCardView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,60 +32,22 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecyclerAdapter.ViewHolder> {
-    public final AsyncListDiffer<EncryptedContent> mDiffer = new AsyncListDiffer(this, DIFF_CALLBACK);
-
-    View view;
-
-    public RecentsRecyclerAdapter() throws GeneralSecurityException, IOException {
-    }
+    public final AsyncListDiffer<EncryptedContent> mDiffer = new AsyncListDiffer(this,
+            EncryptedContent.DIFF_CALLBACK);
 
     @NonNull
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        view = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_cardlist_recents, parent, false);
-        return new RecentsRecyclerAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
         EncryptedContent encryptedContent = mDiffer.getCurrentList().get(position);
-
-        int trimLength = 90;
-        String displayString = encryptedContent.getEncryptedContent().length() > trimLength ?
-                encryptedContent.getEncryptedContent().substring(0, trimLength) + "..." :
-                encryptedContent.getEncryptedContent();
-
-        holder.encryptedTextSnippet.setText(displayString);
-
-        Platforms platforms = _PlatformsHandler.getPlatform(holder.itemView.getContext(),
-                encryptedContent.getPlatformName());
-
-        holder.platformLogo.setImageResource(
-                (int) _PlatformsHandler.hardGetLogoByName(holder.itemView.getContext(), platforms.getName()));
-
-        Date date = new Date(encryptedContent.getDate());
-        if(DateUtils.isToday(encryptedContent.getDate())) {
-            DateFormat format = new SimpleDateFormat("HH:mm a");
-            holder.date.setText(format.format(date));
-        }
-        else {
-            DateFormat format = new SimpleDateFormat("MMMM dd");
-
-            Calendar calendar = new GregorianCalendar();
-            calendar.setTime(date);
-
-            holder.date.setText(format.format(calendar.getTime()));
-        }
-
-        if (DateUtils.isToday(encryptedContent.getDate())) {
-            holder.date.setText("Today");
-        }
-        else {
-            DateFormat dateFormat = new SimpleDateFormat("MMM dd");
-            holder.date.setText(dateFormat.format(encryptedContent.getDate()));
-        }
+        holder.bind(encryptedContent);
     }
 
     @Override
@@ -91,31 +55,35 @@ public class RecentsRecyclerAdapter extends RecyclerView.Adapter<RecentsRecycler
         return this.mDiffer.getCurrentList().size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView encryptedTextSnippet;
-        TextView date;
+        TextView date, subject;
         ImageView platformLogo;
-        ConstraintLayout layout;
+        MaterialCardView card;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            this.layout = itemView.findViewById(R.id.recents_card_layout);
-            this.date = itemView.findViewById(R.id.recent_date);
-            this.encryptedTextSnippet = itemView.findViewById(R.id.encryptedTextSnippet);
-            this.platformLogo = itemView.findViewById(R.id.recents_platform_logo);
+            card = itemView.findViewById(R.id.recents_card_layout);
+            date = itemView.findViewById(R.id.recent_date);
+            encryptedTextSnippet = itemView.findViewById(R.id.encryptedTextSnippet);
+            subject = itemView.findViewById(R.id.homepage_subject);
+            platformLogo = itemView.findViewById(R.id.recents_platform_logo);
+        }
+
+        public void bind(EncryptedContent encryptedContent) {
+            encryptedTextSnippet.setText(encryptedContent.getEncryptedContent());
+
+            Platforms platforms = _PlatformsHandler.getPlatform(itemView.getContext(),
+                    encryptedContent.getPlatformName());
+
+            platformLogo.setImageResource(_PlatformsHandler.hardGetLogoByName(platforms.getName()));
+
+            String dateStr = Helpers.INSTANCE.formatDate(itemView.getContext(),
+                    encryptedContent.getDate());
+
+            date.setText(dateStr);
+            subject.setText("Sample Subject");
         }
     }
 
-    public static final DiffUtil.ItemCallback<EncryptedContent> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<EncryptedContent>() {
-                @Override
-                public boolean areItemsTheSame(@NonNull EncryptedContent oldItem, @NonNull EncryptedContent newItem) {
-                    return oldItem.getId() == newItem.getId();
-                }
-
-                @Override
-                public boolean areContentsTheSame(@NonNull EncryptedContent oldItem, @NonNull EncryptedContent newItem) {
-                    return oldItem.equals(newItem);
-                }
-            };
 }

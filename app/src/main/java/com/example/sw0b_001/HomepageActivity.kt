@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,6 +46,8 @@ class HomepageActivity : AppCompactActivityCustomized() {
     private fun configureButtonViews() {
         if(UserArtifactsHandler.isCredentials(applicationContext)) {
             findViewById<MaterialButton>(R.id.homepage_login_new_btn).visibility = View.GONE
+            findViewById<MaterialButton>(R.id.homepage_add_new_btn).visibility = View.VISIBLE
+            findViewById<MaterialButton>(R.id.homepage_compose_new_btn).visibility = View.VISIBLE
         } else {
             findViewById<MaterialButton>(R.id.homepage_login_new_btn).apply {
                 visibility = View.VISIBLE
@@ -62,6 +65,7 @@ class HomepageActivity : AppCompactActivityCustomized() {
         val runnable = Runnable {
             runOnUiThread {
                 recreate()
+                configureButtonViews()
                 Toast.makeText(applicationContext, getString(R.string.homepage_vault_account_added),
                         Toast.LENGTH_SHORT).show()
             }
@@ -80,18 +84,16 @@ class HomepageActivity : AppCompactActivityCustomized() {
         linearLayoutManager.stackFromEnd = true
         linearLayoutManager.reverseLayout = true
 
-        val recentRecyclerView = findViewById<RecyclerView>(R.id.recents_recycler_view)
-        recentRecyclerView.layoutManager = linearLayoutManager
-        recentRecyclerView.adapter = recentRecyclerAdapter
-        val recentsViewModel = ViewModelProvider(this)[RecentsViewModel::class.java]
+        val messagesRecyclerView = findViewById<RecyclerView>(R.id.recents_recycler_view)
+        messagesRecyclerView.layoutManager = linearLayoutManager
+        messagesRecyclerView.adapter = recentRecyclerAdapter
 
-        val encryptedContentDAO = Datastore.getDatastore(applicationContext)
-                .encryptedContentDAO()
+        val viewModel: RecentsViewModel by viewModels()
+        val encryptedContentDAO = Datastore.getDatastore(applicationContext).encryptedContentDAO()
 
-        recentsViewModel.getMessages(encryptedContentDAO).observe(this) {
-            val noRecentMessagesText = findViewById<TextView>(R.id.no_recent_messages)
+        val noRecentMessagesText = findViewById<TextView>(R.id.no_recent_messages)
+        viewModel.getMessages(encryptedContentDAO).observe(this) {
             recentRecyclerAdapter.mDiffer.submitList(it)
-
             if (it.isNullOrEmpty())
                 noRecentMessagesText.visibility = View.VISIBLE
             else

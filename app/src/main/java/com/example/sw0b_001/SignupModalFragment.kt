@@ -12,6 +12,8 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.View
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCaller
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.registerForActivityResult
 import com.example.sw0b_001.HomepageComposeNewFragment.Companion.TAG
@@ -38,6 +40,19 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
         BottomSheetDialogFragment(R.layout.fragment_signup_modal) {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+
+
+    private val activityLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                when(it.resultCode) {
+                    Activity.RESULT_OK -> onSuccessRunnable?.run()
+                    else -> { }
+                }
+            }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -94,16 +109,6 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
             intent.putExtra("uid", uid)
             intent.putExtra("opt_request_cookie", headers["Set-Cookie"].first())
             intent.putExtra("signup_request_cookie", vaultHeaders["Set-Cookie"].first())
-            val activityLauncher =
-                    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                        when(it.resultCode) {
-                            Activity.RESULT_OK -> {
-                                onSuccessRunnable?.run()
-                            } else -> {
-
-                            }
-                        }
-            }
             activityLauncher.launch(intent)
         }
     }
@@ -166,8 +171,23 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
                                 .isEnabled = true
                         view.findViewById<View>(R.id.signup_status_card)
                                 .visibility = View.VISIBLE
+                        view.findViewById<View>(R.id.signup_progress_bar)
+                                .visibility = View.GONE
                         view.findViewById<MaterialTextView>(R.id.login_error_text)
                                 .text = String(networkResponseResults.response.data)
+                    }
+                }
+                409 -> {
+                    activity?.runOnUiThread {
+                        view.findViewById<MaterialButton>(R.id.signup_btn)
+                                .isEnabled = true
+                        view.findViewById<View>(R.id.signup_status_card)
+                                .visibility = View.VISIBLE
+                        view.findViewById<View>(R.id.signup_progress_bar)
+                                .visibility = View.GONE
+                        view.findViewById<MaterialTextView>(R.id.login_error_text)
+                                .text = getString(R.string
+                                        .signup_something_went_wrong_please_check_this_account_does_not_already_exist)
                     }
                 }
             }

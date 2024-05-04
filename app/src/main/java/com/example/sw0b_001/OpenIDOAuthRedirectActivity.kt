@@ -94,7 +94,7 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
                                 "")
                         when(networkResponseResults.response.statusCode) {
                             200 -> {
-                                syncAndStore()
+//                                syncAndStore()
                                 updatePlatforms()
                                 startActivityFromState(decryptedState, fragmentIndex)
                             }
@@ -113,7 +113,7 @@ class OpenIDOAuthRedirectActivity : AppCompatActivity() {
                                 "")
                         when(networkResponseResults.response.statusCode) {
                             200 -> {
-                                syncAndStore()
+//                                syncAndStore()
                                 updatePlatforms()
                                 startActivityFromState(decryptedState, fragmentIndex)
                             }

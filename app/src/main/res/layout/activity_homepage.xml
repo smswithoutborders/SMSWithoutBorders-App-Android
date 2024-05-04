@@ -16,13 +16,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/homepage_main_menu" >
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@string/homepage_recent"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-            android:textStyle="bold"
+            style="@style/TextAppearance.Material3.HeadlineLarge"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,12 +44,12 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/no_recent_messages"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical|center"
         android:text="@string/homepage_no_recent_messages"
-        android:textSize="24sp"
         android:visibility="invisible"
+        style="@style/TextAppearance.Material3.DisplaySmall"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

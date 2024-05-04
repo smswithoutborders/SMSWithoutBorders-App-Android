@@ -1,6 +1,8 @@
 package com.example.sw0b_001.Models.EncryptedContent;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -15,6 +17,13 @@ public class EncryptedContent {
 
     @PrimaryKey(autoGenerate = true)
     long id;
+
+    String platformName;
+
+    String type;
+
+    long date;
+
 
     public String getGatewayClientMSISDN() {
         return gatewayClientMSISDN;
@@ -74,12 +83,6 @@ public class EncryptedContent {
         this.date = date;
     }
 
-    String platformName;
-
-    String type;
-
-    long date;
-
     public EncryptedContent() {
     }
 
@@ -97,4 +100,17 @@ public class EncryptedContent {
         }
         return false;
     }
+
+    public static final DiffUtil.ItemCallback<EncryptedContent> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<EncryptedContent>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull EncryptedContent oldItem, @NonNull EncryptedContent newItem) {
+                    return oldItem.getId() == newItem.getId();
+                }
+
+                @Override
+                public boolean areContentsTheSame(@NonNull EncryptedContent oldItem, @NonNull EncryptedContent newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
 }

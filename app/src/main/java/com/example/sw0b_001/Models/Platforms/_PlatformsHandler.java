@@ -12,16 +12,19 @@ import com.example.sw0b_001.TextComposeActivity;
 
 public class _PlatformsHandler {
 
-    public static int hardGetLogoByName(Context context, String name) {
+    public static int hardGetLogoByName(String name) {
         int logo = -1;
-        if(name.equals("gmail"))
-            logo = R.drawable.gmail;
-
-        else if(name.equals("twitter"))
-            logo = R.drawable.twitter;
-
-        else if(name.equals("telegram"))
-            logo = R.drawable.telegram;
+        switch (name) {
+            case "gmail":
+                logo = R.drawable.gmail;
+                break;
+            case "twitter":
+                logo = R.drawable.twitter;
+                break;
+            case "telegram":
+                logo = R.drawable.telegram;
+                break;
+        }
 
         return logo;
     }

@@ -365,5 +365,7 @@
     <string name="security_settings_you_have_no_accounts_to_delete_in_vault_at_this_time">You have no accounts to delete in Vault at this time</string>
     <string name="security_settings_vault_account_deleted">Vault account deleted</string>
     <string name="otp_code_submitted_otp_verified">Code submitted OTP verified</string>
+    <string name="signup_something_went_wrong_please_check_this_account_does_not_already_exist">Something went wrong, please check this account does not already exist</string>
+    <string name="helper_yesterday">yesterday</string>
 
 </resources>

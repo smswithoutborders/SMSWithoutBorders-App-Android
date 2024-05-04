@@ -67,8 +67,7 @@ public class PlatformsRecyclerAdapter extends
                          MutableLiveData<Platforms> onClickListenerLiveData,
                          MutableLiveData<Platforms> unSavedOnClickListenerLiveData) {
             image.setImageDrawable(itemView.getContext()
-                    .getDrawable(_PlatformsHandler.hardGetLogoByName(itemView.getContext(),
-                    platforms.getName())));
+                    .getDrawable(_PlatformsHandler.hardGetLogoByName(platforms.getName())));
 
             cardView.setOnClickListener(it -> {
                 if (platforms.isSaved())

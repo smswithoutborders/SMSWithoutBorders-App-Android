@@ -168,14 +168,14 @@ class PlatformsModalFragment(private val showType: Int = SHOW_TYPE_ALL)
                                         "oauth2")
                                 when(networkResponseResults.response.statusCode) {
                                     200 -> {
-                                        val credentials = UserArtifactsHandler
-                                                .fetchCredentials(view.context)
-                                        val responsePayload =
-                                                GatewayServer_V2.sync(view.context,
-                                                        credentials[UserArtifactsHandler.USER_ID_KEY]!!,
-                                                        credentials[UserArtifactsHandler.PASSWORD]!!)
-                                        UserArtifactsHandler.storeSharedKey(view.context,
-                                                responsePayload.shared_key)
+//                                        val credentials = UserArtifactsHandler
+//                                                .fetchCredentials(view.context)
+//                                        val responsePayload =
+//                                                GatewayServer_V2.sync(view.context,
+//                                                        credentials[UserArtifactsHandler.USER_ID_KEY]!!,
+//                                                        credentials[UserArtifactsHandler.PASSWORD]!!)
+//                                        UserArtifactsHandler.storeSharedKey(view.context,
+//                                                responsePayload.shared_key)
                                         activity?.runOnUiThread {
                                             Toast.makeText(view.context,
                                                     getString(R.string.platforms_re_synced_gateway_server),

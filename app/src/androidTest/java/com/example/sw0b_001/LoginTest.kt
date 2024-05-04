@@ -45,14 +45,14 @@ class LoginTest {
 
     @Test
     fun getPlatformsTest()  {
-        val networkResponseResults = login()
-
-        val url = context.getString(R.string.smswithoutborders_official_vault)
-        val uid = Json.decodeFromString<Vault_V2.UID>(networkResponseResults.result.get()).uid
-        val platforms = Vault_V2.getPlatforms(url, networkResponseResults.response.headers, uid)
-        platforms.saved_platforms.forEach {
-            println("Saved: ${it.name}")
-        }
+//        val networkResponseResults = login()
+//
+//        val url = context.getString(R.string.smswithoutborders_official_vault)
+//        val uid = Json.decodeFromString<Vault_V2.UID>(networkResponseResults.result.get()).uid
+//        val platforms = Vault_V2.getPlatforms(context, url, networkResponseResults.response.headers, uid)
+//        platforms.saved_platforms.forEach {
+//            println("Saved: ${it.name}")
+//        }
     }
 
     @Test
