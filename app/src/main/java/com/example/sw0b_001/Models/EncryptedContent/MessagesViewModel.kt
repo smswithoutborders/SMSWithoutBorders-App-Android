@@ -1,30 +1,29 @@
-package com.example.sw0b_001.Models;
+package com.example.sw0b_001.Models.EncryptedContent
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import com.example.sw0b_001.Database.Datastore
 
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
+class MessagesViewModel : ViewModel() {
 
-import java.util.List;
+    private lateinit var messagesList: LiveData<List<EncryptedContent>>
 
-public class RecentsViewModel extends ViewModel {
-    private LiveData<List<EncryptedContent>> messagesList;
-
-    public LiveData<List<EncryptedContent>> getMessages(EncryptedContentDAO encryptedContentDAO){
-        if(messagesList == null) {
-            messagesList = new MutableLiveData<>();
-            loadEncryptedContents(encryptedContentDAO);
+    private lateinit var datastore: Datastore
+    fun getMessages(context: Context): LiveData<List<EncryptedContent>> {
+        if (!::messagesList.isInitialized) {
+            datastore = Datastore.getDatastore(context)
+            messagesList = loadEncryptedContents()
         }
-        return messagesList;
+        return messagesList
     }
 
-    public void informChanges(EncryptedContentDAO encryptedContentDAO) {
-        loadEncryptedContents(encryptedContentDAO);
+    private fun loadEncryptedContents() :
+            LiveData<List<EncryptedContent>>{
+        return datastore.encryptedContentDAO().all
     }
 
-    private void loadEncryptedContents(EncryptedContentDAO encryptedContentDAO) {
-        messagesList = encryptedContentDAO.getAll();
+    fun insert(encryptedContent: EncryptedContent) : Long {
+        return datastore.encryptedContentDAO().insert(encryptedContent)
     }
 }

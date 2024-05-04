@@ -2,19 +2,17 @@ package com.example.sw0b_001
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.RecentsRecyclerAdapter
-import com.example.sw0b_001.Models.RecentsViewModel
+import com.example.sw0b_001.Models.EncryptedContent.MessagesViewModel
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
@@ -88,11 +86,11 @@ class HomepageActivity : AppCompactActivityCustomized() {
         messagesRecyclerView.layoutManager = linearLayoutManager
         messagesRecyclerView.adapter = recentRecyclerAdapter
 
-        val viewModel: RecentsViewModel by viewModels()
+        val viewModel: MessagesViewModel by viewModels()
         val encryptedContentDAO = Datastore.getDatastore(applicationContext).encryptedContentDAO()
 
         val noRecentMessagesText = findViewById<TextView>(R.id.no_recent_messages)
-        viewModel.getMessages(encryptedContentDAO).observe(this) {
+        viewModel.getMessages(applicationContext).observe(this) {
             recentRecyclerAdapter.mDiffer.submitList(it)
             if (it.isNullOrEmpty())
                 noRecentMessagesText.visibility = View.VISIBLE

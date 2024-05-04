@@ -15,7 +15,7 @@ class SMSHandler {
             val intent = Intent().apply {
                 type = "text/plain"
                 action = Intent.ACTION_SENDTO
-                setData(Uri.parse("smsto:" + gatewayClientMSISDN))
+                setData(Uri.parse("smsto:$gatewayClientMSISDN"))
                 putExtra("sms_body", encryptedContent)
             }
             val possibleActivitiesList: List<ResolveInfo> = context.packageManager

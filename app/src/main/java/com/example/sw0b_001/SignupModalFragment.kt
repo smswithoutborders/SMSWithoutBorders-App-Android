@@ -49,10 +49,6 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
                     else -> { }
                 }
             }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

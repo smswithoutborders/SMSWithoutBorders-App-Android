@@ -1,29 +1,41 @@
 package com.example.sw0b_001.Models.PlatformComposers
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.viewModels
+import com.example.sw0b_001.Database.Datastore
+import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent
+import com.example.sw0b_001.Models.EncryptedContent.MessagesViewModel
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.Platforms._PlatformsHandler
 import com.example.sw0b_001.Models.PublisherHandler
 import com.example.sw0b_001.Models.SMSHandler
+import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.R
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 
-class EmailComposeModalFragment(val platform: Platforms, val onSuccessRunnable: Runnable? = null)
+class EmailComposeModalFragment(val platform: Platforms)
     : BottomSheetDialogFragment(R.layout.fragment_modal_email_compose) {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
+    private val activityLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                when(it.resultCode) {
+                    Activity.RESULT_OK -> {}
+                    else -> { }
+                }
+            }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -79,8 +91,22 @@ class EmailComposeModalFragment(val platform: Platforms, val onSuccessRunnable: 
 
         try {
             val sentIntent = SMSHandler.transferToDefaultSMSApp(requireContext(),
-                    gatewayClientMSISDN!!, encryptedContentBase64)
-            startActivity(sentIntent)
+                    gatewayClientMSISDN!!, encryptedContentBase64).apply {
+                        setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            activityLauncher.launch(sentIntent)
+            val encryptedContent = EncryptedContent()
+            encryptedContent.encryptedContent = formattedContent
+            encryptedContent.date = System.currentTimeMillis()
+            encryptedContent.type = platforms.type
+            encryptedContent.platformId = platforms.id
+            encryptedContent.platformName = platforms.name
+
+            ThreadExecutorPool.executorService.execute {
+                Datastore.getDatastore(requireContext()).encryptedContentDAO()
+                        .insert(encryptedContent)
+                dismiss()
+            }
         } catch(e: Exception) {
             Log.e(javaClass.name, "Exception finding package", e)
             Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
