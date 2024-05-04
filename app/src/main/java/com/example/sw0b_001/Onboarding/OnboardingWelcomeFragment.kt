@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.transition.TransitionInflater
 import com.example.sw0b_001.R
 import com.example.sw0b_001.Settings.SettingsFragment
 import com.google.android.material.button.MaterialButton
@@ -22,6 +23,11 @@ class OnboardingWelcomeFragment :
     private lateinit var languageValues: Array<String>
     private lateinit var languageOptions: Array<String>
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val inflater = TransitionInflater.from(requireContext())
+        exitTransition = inflater.inflateTransition(R.transition.fade)
+    }
     override fun getButtonText(context: Context) {
         nextButtonText = context.getString(R.string.onboarding_next)
     }

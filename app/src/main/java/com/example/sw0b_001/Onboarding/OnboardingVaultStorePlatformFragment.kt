@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.transition.TransitionInflater
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.LoadingFragment
@@ -15,6 +16,11 @@ import com.google.android.material.button.MaterialButton
 class OnboardingVaultStorePlatformFragment:
         OnboardingComponent(R.layout.fragment_onboarding_vault_store){
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.slide_right)
+    }
     override fun getButtonText(context: Context) {
         nextButtonText = context.getString(R.string.onboarding_next)
         previousButtonText = context.getString(R.string.onboarding_previous)

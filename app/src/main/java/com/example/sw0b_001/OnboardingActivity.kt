@@ -42,13 +42,15 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
 
-        if(OnboardingComponent.getOnboarded(applicationContext)) {
-            val intent = Intent(this, HomepageActivity::class.java).apply {
-                setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+        if(!BuildConfig.DEBUG && !BuildConfig.IS_ONBOARDING)
+            if(OnboardingComponent.getOnboarded(applicationContext)) {
+                val intent = Intent(this, HomepageActivity::class.java).apply {
+                    setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                }
+                startActivity(intent)
+                finish()
             }
-            startActivity(intent)
-            finish()
-        }
         nextButton = findViewById(R.id.onboard_next_button);
         prevButton = findViewById(R.id.onboard_back_button);
         dotIndicatorLayout = findViewById(R.id.onboard_dot_indicator_layout)
@@ -63,9 +65,13 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
         val fragmentIndex = intent.getIntExtra("fragment_index", 0)
         supportFragmentManager.commit {
             val fragment = fragmentList[fragmentIndex]
-
             add(R.id.onboarding_fragment_container, fragment)
             setReorderingAllowed(true)
+            setCustomAnimations(R.anim.slide_in,
+                    R.anim.fade_out,
+                    R.anim.fade_in,
+                    R.anim.slide_out)
+
             iterateButtonText(fragment)
         }
         configureButtonClicks()
@@ -103,6 +109,10 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                     replace(R.id.onboarding_fragment_container, fragment)
                     setReorderingAllowed(false)
                     addToBackStack(fragment.javaClass.name)
+                    setCustomAnimations(R.anim.slide_in,
+                            R.anim.fade_out,
+                            R.anim.fade_in,
+                            R.anim.slide_out)
 
                     iterateButtonText(fragment)
                 } else {
@@ -126,6 +136,11 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                 replace(R.id.onboarding_fragment_container, fragment)
                 setReorderingAllowed(true)
 
+                setCustomAnimations(R.anim.slide_in,
+                        R.anim.fade_out,
+                        R.anim.fade_in,
+                        R.anim.slide_out)
+
                 iterateButtonText(fragment)
             }
         }
@@ -137,6 +152,11 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                         fragmentList[fragmentIterator.value!!].skipOnboardingFragment
                 replace(R.id.onboarding_fragment_container, fragment!!)
                 setReorderingAllowed(true)
+
+                setCustomAnimations(R.anim.slide_in,
+                        R.anim.fade_out,
+                        R.anim.fade_in,
+                        R.anim.slide_out)
                 iterateButtonText(fragment)
                 fragmentIterator.value = fragmentList.size -1
             }
