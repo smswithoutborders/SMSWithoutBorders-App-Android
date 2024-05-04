@@ -1,4 +1,4 @@
-package com.example.sw0b_001.Models.EncryptedContent;
+package com.example.sw0b_001.Models.Messages;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

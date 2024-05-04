@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Modals.LoginSignupVaultModalFragment
 import com.example.sw0b_001.Modals.PlatformsModalFragment
-import com.example.sw0b_001.Models.EncryptedContent.MessagesRecyclerAdapter
-import com.example.sw0b_001.Models.EncryptedContent.MessagesViewModel
+import com.example.sw0b_001.Models.Messages.MessagesRecyclerAdapter
+import com.example.sw0b_001.Models.Messages.MessagesViewModel
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton

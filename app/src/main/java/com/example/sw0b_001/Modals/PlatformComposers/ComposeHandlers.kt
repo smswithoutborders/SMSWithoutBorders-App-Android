@@ -1,13 +1,11 @@
-package com.example.sw0b_001.Models.PlatformComposers
+package com.example.sw0b_001.Modals.PlatformComposers
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent
+import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.PublisherHandler
@@ -46,6 +44,26 @@ object ComposeHandlers {
         } catch(e: Exception) {
             Log.e(javaClass.name, "Exception finding package", e)
             Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    data class DecomposedMessages(val body: String,
+                                  val subject: String = "",
+                                  val recipient: String = "")
+    fun decompose(content: String, platforms: Platforms) : DecomposedMessages {
+        val split = content.split(":")
+        return when(platforms.type) {
+            Platforms.TYPE_EMAIL -> {
+                DecomposedMessages(body = split[5], subject = split[4], recipient = split[1])
+            }
+
+            Platforms.TYPE_TEXT -> {
+                DecomposedMessages(body = split[1])
+            }
+
+            else -> {
+                DecomposedMessages(content)
+            }
         }
     }
 }

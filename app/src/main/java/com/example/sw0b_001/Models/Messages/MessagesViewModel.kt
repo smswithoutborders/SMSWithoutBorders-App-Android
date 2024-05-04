@@ -1,4 +1,4 @@
-package com.example.sw0b_001.Models.EncryptedContent
+package com.example.sw0b_001.Models.Messages
 
 import android.content.Context
 import androidx.lifecycle.LiveData

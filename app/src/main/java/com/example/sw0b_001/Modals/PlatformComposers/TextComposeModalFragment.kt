@@ -1,4 +1,4 @@
-package com.example.sw0b_001.Models.PlatformComposers
+package com.example.sw0b_001.Modals.PlatformComposers
 
 import android.os.Bundle
 import android.os.SystemClock

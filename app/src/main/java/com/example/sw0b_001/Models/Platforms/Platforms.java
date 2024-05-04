@@ -13,9 +13,9 @@ import java.util.Objects;
 //@DatabaseView("SELECT platform.name, platform.description, platform.provider, platform.image, platform.id FROM platform")
 @Entity(indices = {@Index(value={"name"}, unique = true)})
 public class Platforms {
-
-    public static final int TYPE_EMAIL = 1;
-    public static final int TYPE_TEXT = 2;
+    public static final String TYPE_EMAIL = "email";
+    public static final String TYPE_TEXT = "text";
+    public static final String TYPE_MESSAGING = "messaging";
 
     @PrimaryKey(autoGenerate = true)
     private long id;

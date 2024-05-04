@@ -12,8 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.Models.PlatformComposers.EmailComposeModalFragment
-import com.example.sw0b_001.Models.PlatformComposers.TextComposeModalFragment
+import com.example.sw0b_001.Modals.PlatformComposers.EmailComposeModalFragment
+import com.example.sw0b_001.Modals.PlatformComposers.TextComposeModalFragment
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter
 import com.example.sw0b_001.Models.Platforms.PlatformsViewModel

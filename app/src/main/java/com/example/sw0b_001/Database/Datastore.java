@@ -15,8 +15,8 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.AutoMigrationSpec;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
+import com.example.sw0b_001.Models.Messages.EncryptedContent;
+import com.example.sw0b_001.Models.Messages.EncryptedContentDAO;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsDao;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;

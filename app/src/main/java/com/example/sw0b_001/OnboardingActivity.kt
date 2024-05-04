@@ -43,7 +43,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
         setContentView(R.layout.activity_onboarding)
 
 
-        if(!BuildConfig.DEBUG && !BuildConfig.IS_ONBOARDING)
+        if(!BuildConfig.IS_ONBOARDING)
             if(OnboardingComponent.getOnboarded(applicationContext)) {
                 val intent = Intent(this, HomepageActivity::class.java).apply {
                     setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)

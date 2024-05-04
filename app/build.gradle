@@ -54,7 +54,7 @@ android {
         }
         debug {
             buildConfigField("Boolean", "IS_RECAPTCHA", "false")
-            buildConfigField("Boolean", "IS_ONBOARDING", "true")
+            buildConfigField("Boolean", "IS_ONBOARDING", "false")
 //            buildConfigField "boolean", "IS_RECAPTCHA" false
         }
     }

@@ -8,10 +8,13 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/recents_card_layout"
+        style="@style/Widget.Material3.CardView.Elevated"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        style="@style/Widget.Material3.CardView.Elevated"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,29 +53,44 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@+id/recent_date"
                 app:layout_constraintStart_toEndOf="@id/recents_platform_logo"
                 app:layout_constraintTop_toTopOf="@id/recents_platform_logo"
-                tools:text="Sample Subject" />
+                tools:text="Sample Subject"
+                tools:visibility="visible" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/homepage_recipient"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/pending_gray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/recents_platform_logo"
+                app:layout_constraintTop_toBottomOf="@+id/homepage_subject"
+                tools:text="developers@smswithoutborders.com" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/encryptedTextSnippet"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="16dp"
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/homepage_subject"
-                app:layout_constraintTop_toBottomOf="@+id/homepage_subject"
+                app:layout_constraintStart_toEndOf="@+id/recents_platform_logo"
+                app:layout_constraintTop_toBottomOf="@+id/homepage_recipient"
                 tools:text="Hello world, here is a sample text that was sent. But emails should be different from messages and their contents." />
 
             <com.google.android.material.textview.MaterialTextView

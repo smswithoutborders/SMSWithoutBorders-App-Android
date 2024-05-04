@@ -18,9 +18,6 @@ class OnboardingFinishedFragment : OnboardingComponent(R.layout.fragment_onboard
         super.onCreate(savedInstanceState)
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.slide_right)
-        if(BuildConfig.DEBUG && !BuildConfig.IS_ONBOARDING)
-            activity?.finish()
-        else
-            saveStateDone(requireContext())
+        saveStateDone(requireContext())
     }
 }

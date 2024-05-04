@@ -1,23 +1,10 @@
-package com.example.sw0b_001.Models.PlatformComposers
+package com.example.sw0b_001.Modals.PlatformComposers
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.EditText
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.viewModels
-import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent
-import com.example.sw0b_001.Models.EncryptedContent.MessagesViewModel
-import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.Platforms._PlatformsHandler
-import com.example.sw0b_001.Models.PublisherHandler
-import com.example.sw0b_001.Models.SMSHandler
-import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.R
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
