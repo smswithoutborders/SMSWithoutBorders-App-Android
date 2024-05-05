@@ -13,9 +13,10 @@ class GatewayClientsCommunications(context: Context) {
     @Serializable
     data class GatewayClientJsonPayload(val msisdn: String,
                                         val country: String,
-                                        val operator_name: String,
+                                        val operator: String,
                                         val operator_code: String,
-                                        val protocol: ArrayList<String>)
+                                        val protocols: ArrayList<String>,
+                                        val last_published_date: String)
 
     private val filename = "gateway_client_prefs"
     private val defaultKey = "DEFAULT_KEY"
@@ -76,7 +77,8 @@ class GatewayClientsCommunications(context: Context) {
                 in 400..500 -> throw Exception("Failed to fetch Gateway clients")
                 in 500..600 -> throw Exception("Error fetching Gateway clients")
                 else -> {
-                    return Json.decodeFromString<
+                    val json = Json {ignoreUnknownKeys = true}
+                    return json.decodeFromString<
                             ArrayList<
                                     GatewayClientJsonPayload>>(networkResponseResults.result.get())
                 }
@@ -86,16 +88,20 @@ class GatewayClientsCommunications(context: Context) {
         fun fetchAndPopulateWithDefault(context: Context) {
             populateDefaultGatewayClientsSetDefaults(context)
             val gatewayClientList = ArrayList<GatewayClient>()
-            val gatewayClients : ArrayList<GatewayClientJsonPayload> = fetchRemote(context)
-            gatewayClients.forEach {
-                val gatewayClient = GatewayClient()
-                gatewayClient.setCountry(it.country)
-                gatewayClient.msisdn = it.msisdn
-                gatewayClient.setOperatorName(it.operator_name)
-                gatewayClient.setOperatorId(it.operator_code)
-                gatewayClientList.add(gatewayClient)
+            try {
+                val gatewayClients : ArrayList<GatewayClientJsonPayload> = fetchRemote(context)
+                gatewayClients.forEach {
+                    val gatewayClient = GatewayClient()
+                    gatewayClient.setCountry(it.country)
+                    gatewayClient.msisdn = it.msisdn
+                    gatewayClient.setOperatorName(it.operator)
+                    gatewayClient.setOperatorId(it.operator_code)
+                    gatewayClientList.add(gatewayClient)
+                }
+                Datastore.getDatastore(context).gatewayClientsDao().insertAll(gatewayClientList)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-            Datastore.getDatastore(context).gatewayClientsDao().insertAll(gatewayClientList)
         }
     }
 }

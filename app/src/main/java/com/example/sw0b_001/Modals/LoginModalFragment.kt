@@ -40,13 +40,13 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
             loginRecaptchaEnabled(view)
         }
 
-        val customUrlView = view.findViewById<TextInputLayout>(R.id.login_url)
-        view.findViewById<MaterialTextView>(R.id.login_advanced_toggle).setOnClickListener {
-            if(customUrlView.visibility == View.VISIBLE)
-                customUrlView.visibility = View.INVISIBLE
-            else
-                customUrlView.visibility = View.VISIBLE
-        }
+//        val customUrlView = view.findViewById<TextInputLayout>(R.id.login_url)
+//        view.findViewById<MaterialTextView>(R.id.login_advanced_toggle).setOnClickListener {
+//            if(customUrlView.visibility == View.VISIBLE)
+//                customUrlView.visibility = View.INVISIBLE
+//            else
+//                customUrlView.visibility = View.VISIBLE
+//        }
 
         val bottomSheet = view.findViewById<View>(R.id.login_constraint)
 
@@ -90,7 +90,7 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         loginStatusCard.visibility = View.GONE
         loginStatusText.text = null
 
-        if(BuildConfig.DEBUG && BuildConfig.IS_RECAPTCHA)
+        if(BuildConfig.IS_RECAPTCHA)
             SafetyNet.getClient(requireContext())
                     .verifyWithRecaptcha(getString(R.string.recaptcha_client_side_key))
                     .addOnSuccessListener(ThreadExecutorPool.executorService, OnSuccessListener {

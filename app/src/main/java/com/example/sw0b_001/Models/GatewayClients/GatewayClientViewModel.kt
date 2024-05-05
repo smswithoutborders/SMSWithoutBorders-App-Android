@@ -15,7 +15,7 @@ class GatewayClientViewModel : ViewModel() {
     private var liveData: LiveData<List<GatewayClient>> = MutableLiveData()
     fun get(context: Context, successRunnable: Runnable?): LiveData<List<GatewayClient>> {
         if(liveData.value.isNullOrEmpty()) {
-            loadRemote(context, successRunnable, null)
+            loadRemote(context, successRunnable, successRunnable)
             liveData = Datastore.getDatastore(context).gatewayClientsDao().all
         }
         return liveData

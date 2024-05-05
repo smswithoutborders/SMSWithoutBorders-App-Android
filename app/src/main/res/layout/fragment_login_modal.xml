@@ -156,32 +156,32 @@
                 android:inputType="textPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/login_advanced_toggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="@+id/login_password_text"
-            app:layout_constraintTop_toBottomOf="@+id/login_password_text"
-            tools:text="Advanced options" />
+<!--        <com.google.android.material.textview.MaterialTextView-->
+<!--            android:id="@+id/login_advanced_toggle"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/login_password_text"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/login_password_text"-->
+<!--            tools:text="Advanced options" />-->
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/login_url"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:visibility="gone"
-            tools:visibility="visible"
-            android:hint=""
-            app:layout_constraintTop_toBottomOf="@+id/login_advanced_toggle"
-            app:layout_constraintEnd_toEndOf="@+id/login_password_text"
-            app:layout_constraintStart_toStartOf="@+id/login_password_text" >
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textWebEditText"
-                android:text="@string/default_login_url"/>
-        </com.google.android.material.textfield.TextInputLayout>
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            android:id="@+id/login_url"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:visibility="gone"-->
+<!--            tools:visibility="visible"-->
+<!--            android:hint=""-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/login_advanced_toggle"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/login_password_text"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/login_password_text" >-->
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:inputType="textWebEditText"-->
+<!--                android:text="@string/default_login_url"/>-->
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/login_btn"
@@ -192,7 +192,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_url"
+            app:layout_constraintTop_toBottomOf="@+id/login_password_text"
             android:text="@string/login_login" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
