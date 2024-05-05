@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SMSWithoutBorders</string>
     <string name="homepage_recent">Récent</string>
-    <string name="privacy_policy">https://smswithoutborders.com/privacy-policy/?lng=fr</string>
+    <string name="smswithoutborders_official_privacy_policy">https://smswithoutborders.com/privacy-policy/?lng=fr</string>
     <string name="smswithoutborders_official_site_login">https://smswithoutborders.com/login/?lng=fr</string>
     <string name="smswithoutborders_official_site_signup">"         https://smswithoutborders.com/sign-up/?lng=fr"</string>
     <string name="email_compose_to">À</string>

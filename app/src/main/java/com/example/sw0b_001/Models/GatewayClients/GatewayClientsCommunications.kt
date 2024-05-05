@@ -70,7 +70,7 @@ class GatewayClientsCommunications(context: Context) {
             Datastore.getDatastore(context).gatewayClientsDao().refresh(gatewayClientList)
         }
         private fun fetchRemote(context: Context): ArrayList<GatewayClientJsonPayload> {
-            val url = context.getString(R.string.gateway_client_seeding_url)
+            val url = context.getString(R.string.smswithoutboarders_official_gateway_client_seeding_url)
             val networkResponseResults = Network.requestGet(url)
             when(networkResponseResults.response.statusCode) {
                 in 400..500 -> throw Exception("Failed to fetch Gateway clients")

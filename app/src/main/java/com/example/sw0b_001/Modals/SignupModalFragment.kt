@@ -63,7 +63,7 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
 
     private fun linkPrivacyPolicy(view: View?) {
         // TODO: check for production
-        val intentUri = Uri.parse(resources.getString(R.string.privacy_policy))
+        val intentUri = Uri.parse(resources.getString(R.string.smswithoutborders_official_privacy_policy))
         val intent = Intent(Intent.ACTION_VIEW, intentUri)
         startActivity(intent)
     }

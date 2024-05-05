@@ -2,14 +2,6 @@
     <string name="app_name" translatable="false">SWOB</string>
     <string name="app_name_full" translatable="false">SMSWithoutBorders</string>
 
-    <string name="privacy_policy">
-        https://smswithoutborders.com/privacy-policy
-    </string>
-
-    <string name="smswithoutborders_official_site_signup_intent" translatable="false">
-        intent://smswithoutborders.com/sign-up
-    </string>
-
     <string name="email_compose_to">
         To
     </string>
@@ -198,9 +190,7 @@
 
 
     <string name="gateway_clients_settings_header">Available Gateway Clients</string>
-    <string name="password_failed">
-        Failed to authenticate! Please try again...
-    </string>
+    <string name="password_failed">Failed to authenticate! Please try again…</string>
 
     <string name="password_empty">Password cannot be empty!</string>
 
@@ -281,16 +271,16 @@
 
     <string name="homepage_compose_modal_no_platforms">No Platforms saved</string>
     <string name="email_compose_title">Compose email</string>
-    <string name="security_settings_failed_to_switch_security">Failed to switch security on...</string>
+    <string name="security_settings_failed_to_switch_security">Failed to switch security on…</string>
     <string name="settings_security_biometric_user_cannot_add_this_functionality_at_this_time">User cannot add this functionality at this time.</string>
     <string name="gateway_client_add_label">Add</string>
     <string name="gateway_client_refresh_label">Refresh</string>
-    <string name="lock_screen_relay_sms_is_locked">RelaySMS is locked</string>
+    <string name="lock_screen_relay_sms_is_locked">SWOB App is locked</string>
     <string name="lock_screen_unlock_with_your_phone_s_locking_system">Unlock with your phone\'s locking system</string>
     <string name="gateway_client_add_custom_example_text">e.g +237123456789 or select contact</string>
     <string name="gateway_client_add_custom_text">Enter phone number</string>
     <string name="gateway_client_add_gateway_client_text">Add Gateway Client</string>
-    <string name="otp_verification_code_template">Your SMSWithoutBorders-Auth verification code is: </string>
+    <string name="otp_verification_code_template" translatable="false">Your SMSWithoutBorders-Auth verification code is: </string>
 
     <string name="recaptcha_client_side_key" translatable="false">6LfrOsQpAAAAALsmO5WjVEmybrKB_rl6DwhK8mMw</string>
 
@@ -310,12 +300,6 @@
     <string name="ownership_resend_code_by_sms">Resend code by SMS</string>
     <string name="login_server_something_went_wrong_please_try_again">Something went wrong, please try again</string>
     <string name="login_password_empty_please_provide_a_password">Please provide a password</string>
-
-    <!--    <string name="smswithoutborders_official_vault" translatable="false">https://smswithoutborders.com:9000</string>-->
-<!--    <string name="smswithoutborders_official_site_login" translatable="false">https://smswithoutborders.com:9000/v2/login</string>-->
-<!--    <string name="smswithoutborders_official_site_signup" translatable="false">https://smswithoutborders.com:9000/v2/signup</string>-->
-<!--    <string name="smswithoutborders_official_otp_submission" translatable="false">https://smswithoutborders.com:9000/v2/OTP</string>-->
-
     <string name="onboarding_next">Next</string>
     <string name="onboarding_finish">Finish</string>
     <string name="onboarding_previous">Previous</string>
@@ -325,13 +309,13 @@
     <string name="onboarding_tour_complete_description">Tour complete! You can add your Vault accounts at anytime from within the app</string>
     <string name="onboarding_introducing_vaults">Introducing Vaults</string>
     <string name="onboarding_vaults_description_1">Vaults keep access to your online accounts safe while you are offline</string>
-    <string name="onboarding_vault_description_2">RelaySMS uses the standardized methods provided by the online platforms both utilizing and securing your information stored in Vaults.</string>
+    <string name="onboarding_vault_description_2">SMSWithoutBorders uses the standardized methods provided by the online platforms both utilizing and securing your information stored in Vaults.</string>
     <string name="onboarding_try_example">Try Example!</string>
     <string name="onboarding_keep_platforms_in_your_vault">Keep platforms in your Vault</string>
     <string name="onboarding_platforms_in_vault_description">Having platforms in your Vault allows you to use them without an internet connection - still requires SMS messaging</string>
     <string name="onboarding_try_vault_description_title">Let\'s try using accounts in your Vault</string>
-    <string name="onboarding_vault_publish_description_1">RelaySMS shares the outgoing messages with your default SMS app</string>
-    <string name="onboarding_vault_publish_description_2">RelaySMS encrypts the messages shared with your default SMS app</string>
+    <string name="onboarding_vault_publish_description_1">SMSWithoutBorders shares the outgoing messages with your default SMS app</string>
+    <string name="onboarding_vault_publish_description_2">SMSWithoutBorders encrypts the messages shared with your default SMS app</string>
     <string name="onboarding_log_into_vault">Log into Vault</string>
     <string name="login_telephone_number">Telephone number</string>
     <string name="login_password">Password</string>
@@ -343,8 +327,8 @@
     <string name="signup_i_have_read_the_privacy_policy_start">I have read the </string>
     <string name="signup_i_have_read_the_privacy_policy_end">Privacy policy</string>
     <string name="signup_you_have_to_read_the_privacy_policy_to_proceed">You have to read the privacy policy to proceed!</string>
-    <string name="login_successful">Login successful...</string>
-    <string name="synced_successfully">Synced successfully...</string>
+    <string name="login_successful">Login successful…</string>
+    <string name="synced_successfully">Synced successfully…</string>
     <string name="login_platforms_stored_successfully">Platforms stored successfully</string>
     <string name="platforms_these_are_platforms_stored_in_your_vault_and_can_be_used_when_you_are_offline">These are platforms stored in your Vault and can be used when you are offline.</string>
     <string name="platforms_saved_platforms">Saved Platforms</string>
@@ -368,5 +352,15 @@
     <string name="signup_something_went_wrong_please_check_this_account_does_not_already_exist">Something went wrong, please check this account does not already exist</string>
     <string name="helper_yesterday">yesterday</string>
     <string name="text_compose_you_need_some_content_for_posting">You need some content for posting</string>
+
+
+    <string name="smswithoutborders_official_privacy_policy">https://smswithoutborders.com/privacy-policy</string>
+    <string name="smswithoutborders_official_vault" translatable="false">https://smswithoutborders.com:9000</string>
+    <string name="smswithoutborders_official_site_login">https://smswithoutborders.com:9000/v2/login</string>
+    <string name="smswithoutborders_official_site_signup">https://smswithoutborders.com:9000/v2/signup</string>
+    <string name="smswithoutborders_official_otp_submission" translatable="false">https://smswithoutborders.com:9000/v2/OTP</string>
+    <string name="smswithoutborders_official_gateway_server" translatable="false">https://smswithoutborders.com:15000</string>
+    <string name="smswithoutboarders_official_gateway_client_seeding_url" translatable="false">https://smswithoutboders.com:15000/v3/clients</string>
+    <string name="smswithoutborders_official_site_signup_intent" translatable="false">intent://smswithoutborders.com/sign-up</string>
 
 </resources>
