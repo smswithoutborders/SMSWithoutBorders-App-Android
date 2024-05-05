@@ -10,23 +10,16 @@
             app:summary="@string/settings_security_and_privacy_enable_lockscreen_open_summary"
             app:title="@string/settings_security_and_privacy_enable_lockscreen_open" />
 
-        <SwitchPreferenceCompat
-            app:iconSpaceReserved="false"
-            app:key="lock_screen_for_encryption"
-            app:summary="@string/settings_security_and_privacy_enable_lockscreen_read_encrypted_summary"
-            app:title="@string/settings_security_and_privacy_enable_lockscreen_read_encrypted" />
-
     </PreferenceCategory>
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:key="secure_pin"
-        app:title="@string/settings_pin_preference_category">
+        app:title="@string/settings_privacy_vault_preference">
         <Preference
             app:iconSpaceReserved="false"
-            app:key="pin_code_for_encryption"
-            app:summary="@string/settings_security_and_privacy_enable_pin_summary"
-            app:title="@string/settings_security_and_privacy_enable_pin" />
+            app:key="revoke"
+            app:summary="@string/settings_privacy_preferences_choose_which_platforms_you_want_to_remove_from_the_vault"
+            app:title="Revoke Platforms" />
     </PreferenceCategory>
 
     <PreferenceCategory

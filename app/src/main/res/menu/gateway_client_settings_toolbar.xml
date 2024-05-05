@@ -3,10 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/add_gateway"
+        android:id="@+id/gateway_client_menu_refresh"
+        android:icon="@drawable/round_refresh_24"
+        android:title="@string/gateway_client_refresh_label"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/gateway_client_menu_add_contact"
         android:icon="@drawable/ic_baseline_add_24"
-        android:iconTint="@color/white"
-        android:title="add"
-        app:showAsAction="always"
-        tools:targetApi="o" />
+        android:title="@string/gateway_client_add_label"
+        app:showAsAction="never" />
+
 </menu>

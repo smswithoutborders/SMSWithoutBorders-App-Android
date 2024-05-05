@@ -1,37 +1,6 @@
 <resources>
 
     <style name="Theme.main" parent="Theme.MyApp">
-<!--        <item name="android:textColorPrimary">@color/primary_color_text</item>-->
-<!--        <item name="android:colorPrimary">@color/primary_color_text</item>-->
-<!--        <item name="android:textColor">@color/primary_color_text</item>-->
-<!--        <item name="android:colorAccent">@color/primary_color_text</item>-->
-
         <item name="android:windowLightStatusBar">false</item>
-    </style>
-
-    <style name="Theme.editBox" parent="Theme.main">
-        <item name="android:backgroundTint">@color/light_blue_A400</item>
-        <item name="android:textColorHint">@color/text_box</item>
-        <item name="android:textColor">@color/ic_launcher_background</item>
-    </style>
-
-    <style name="Theme.welcome_header" parent="Theme.main">
-        <item name="android:textColor">@color/logo_secondary</item>
-    </style>
-
-    <style name="Theme.button" parent="Theme.main">
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="Theme.button_secondary" parent="Theme.button">
-        <item name="android:backgroundTint">@color/logo_primary</item>
-    </style>
-
-    <style name="Theme.button_primary" parent="Theme.button">
-        <item name="android:backgroundTint">@color/logo_secondary</item>
-    </style>
-
-    <style name="Theme.password" parent="">
-        <item name="android:strokeColor">@color/pending_gray</item>
     </style>
 </resources>

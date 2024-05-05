@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/Theme.main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/ownership_verification_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/ownership_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ownership_verification_toolbar"
+        tools:visibility="visible" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/ownership_verification_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="16dp"
+        android:text="Enter the verification code we sent you"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ownership_progress_bar" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ownership_verification_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:hint="Enter verification code"
+        app:helperText="The code can be automatically detected in some cases"
+        app:layout_constraintEnd_toEndOf="@+id/ownership_verification_description"
+        app:layout_constraintStart_toStartOf="@+id/ownership_verification_description"
+        app:layout_constraintTop_toBottomOf="@+id/ownership_verification_description">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ownership_verification_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/ownership_verification_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:text="Submit"
+        app:layout_constraintEnd_toEndOf="@+id/ownership_verification_layout"
+        app:layout_constraintStart_toStartOf="@+id/ownership_verification_layout"
+        app:layout_constraintTop_toBottomOf="@+id/ownership_verification_layout" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/ownership_resend_code_by_sms_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/ownership_resend_code_by_sms"
+        android:textColor="@color/default_blue"
+        app:layout_constraintEnd_toEndOf="@+id/ownership_verification_btn"
+        app:layout_constraintStart_toStartOf="@+id/ownership_verification_btn"
+        app:layout_constraintTop_toBottomOf="@+id/ownership_verification_btn" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

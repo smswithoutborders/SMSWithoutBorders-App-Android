@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -19,31 +18,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.room.Room;
 
 import com.example.sw0b_001.Database.Datastore;
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentHandler;
-import com.example.sw0b_001.Models.GatewayClients.GatewayClientsHandler;
-import com.example.sw0b_001.Models.Platforms.Platform;
-import com.example.sw0b_001.Models.Platforms.PlatformsHandler;
+import com.example.sw0b_001.Models.Messages.EncryptedContentHandler;
+import com.example.sw0b_001.Models.Platforms.Platforms;
+import com.example.sw0b_001.Models.Platforms._PlatformsHandler;
 import com.example.sw0b_001.Models.PublisherHandler;
 import com.example.sw0b_001.Models.SMSHandler;
 import com.example.sw0b_001.databinding.ActivityMessageComposeBinding;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.io.IOException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableEntryException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 public class MessageComposeActivity extends AppCompactActivityCustomized {
 
@@ -84,31 +68,9 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
         Intent intent = getIntent();
         long encryptedContentId = intent.getLongExtra("encrypted_content_id", -1);
         Datastore databaseConnector = Room.databaseBuilder(getApplicationContext(), Datastore.class,
-                Datastore.DatabaseName).build();
+                Datastore.databaseName).build();
 
 //        final String[] decryptedEmailContent = {""};
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                EncryptedContentDAO encryptedContentDAO = databaseConnector.encryptedContentDAO();
-                EncryptedContent encryptedContent = encryptedContentDAO.get(encryptedContentId);
-
-                try {
-                    final String decryptedEmailContent = PublisherHandler.decryptPublishedContent(
-                            getApplicationContext(), encryptedContent.getEncryptedContent());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            populateFields(decryptedEmailContent);
-                        }
-                    });
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-        thread.start();
     }
 
     private void populateFields(String decryptedEmailContent) {
@@ -161,7 +123,7 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
 
 
         switch (item.getItemId()) {
-            case R.id.action_send:
+            case R.id.email_compose_menu_action_send:
                 String to = new String();
 
                 if(groupEditText.getText().toString().isEmpty()) {
@@ -190,48 +152,29 @@ public class MessageComposeActivity extends AppCompactActivityCustomized {
                 try {
                     long platformId = getIntent().getLongExtra("platform_id", -1);
 
-                    Platform platform = PlatformsHandler.getPlatform(getApplicationContext(), platformId);
-                    String formattedContent = processEmailForEncryption(platform.getLetter(), to, message);
-                    String encryptedContentBase64 = PublisherHandler.formatForPublishing(getApplicationContext(), formattedContent);
-                    String gatewayClientMSISDN = GatewayClientsHandler.getDefaultGatewayClientMSISDN(getApplicationContext());
+                    Platforms platforms = _PlatformsHandler.getPlatform(getApplicationContext(), platformId);
+                    String formattedContent = processEmailForEncryption(platforms.getLetter(), to, message);
+                    String encryptedContentBase64 = PublisherHandler.INSTANCE
+                            .formatForPublishing(getApplicationContext(), formattedContent);
+//                    String gatewayClientMSISDN = GatewayClientsHandler.getDefaultGatewayClientMSISDN(getApplicationContext());
+                    String gatewayClientMSISDN = "";
 
-                    Intent defaultSMSAppIntent = SMSHandler.transferToDefaultSMSApp(
-                            getApplicationContext(), gatewayClientMSISDN, encryptedContentBase64);
+                    Intent defaultSMSAppIntent = SMSHandler.Companion
+                            .transferToDefaultSMSApp(getApplicationContext(), gatewayClientMSISDN,
+                                    encryptedContentBase64);
                     if(defaultSMSAppIntent.resolveActivity(getPackageManager()) != null) {
 //                        startActivityForResult(defaultSMSAppIntent, RESULT_OK);
                         startActivity(defaultSMSAppIntent);
 
-                        EncryptedContentHandler.store(getApplicationContext(), encryptedContentBase64, gatewayClientMSISDN, platform.getName());
+                        EncryptedContentHandler.store(getApplicationContext(), encryptedContentBase64, gatewayClientMSISDN, platforms.getName());
 //                        setResult(Activity.RESULT_OK, new Intent());
                         finish();
                     }
 
                     return true;
 
-                } catch (BadPaddingException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                } catch (InvalidAlgorithmParameterException e) {
-                    e.printStackTrace();
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                } catch (IllegalBlockSizeException e) {
-                    e.printStackTrace();
-                } catch (UnrecoverableKeyException e) {
-                    e.printStackTrace();
-                } catch (KeyStoreException e) {
-                    e.printStackTrace();
-                } catch (NoSuchPaddingException e) {
-                    e.printStackTrace();
-                } catch (InvalidKeyException e) {
-                    e.printStackTrace();
-                } catch (CertificateException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (UnrecoverableEntryException e) {
-                    e.printStackTrace();
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
                 }
                 return false;
 

@@ -1,22 +1,7 @@
 <resources>
 
     <style name="Theme.main" parent="Theme.MyApp">
-        <item name="android:windowLightStatusBar">true</item>
-<!--        <item name="android:textColorPrimary">@color/primary_color_text</item>-->
-<!--        <item name="android:colorPrimary">@color/primary_color_text</item>-->
-<!--        <item name="android:textColor">@color/primary_color_text</item>-->
-<!--        <item name="android:colorAccent">@color/primary_color_text</item>-->
+<!--        <item name="colorPrimary">@color/logo_primary</item>-->
+<!--        <item name="colorSecondary">@color/logo_secondary</item>-->
     </style>
-
-    <style name="Theme.editBox" parent="Theme.main">
-        <item name="android:backgroundTint">@color/logo_secondary</item>
-        <item name="android:textColorHint">@color/text_box</item>
-        <item name="android:textColor">@color/primary_color_text</item>
-        <item name="android:tint">@color/white</item>
-    </style>
-
-    <style name="Theme.welcome_header" parent="Theme.main">
-        <item name="android:textColor">@color/logo_primary</item>
-    </style>
-
 </resources>

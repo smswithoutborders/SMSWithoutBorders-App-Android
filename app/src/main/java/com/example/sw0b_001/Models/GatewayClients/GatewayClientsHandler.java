@@ -4,19 +4,9 @@ import android.content.Context;
 import android.telephony.TelephonyManager;
 
 import androidx.room.Room;
-import androidx.work.DelegatingWorkerFactory;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.sw0b_001.Database.Datastore;
 import com.example.sw0b_001.R;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +20,7 @@ public class GatewayClientsHandler {
             @Override
             public void run() {
                 Datastore databaseConnector = Room.databaseBuilder(context, Datastore.class,
-                        Datastore.DatabaseName).build();
+                        Datastore.databaseName).build();
                 GatewayClientsDao gatewayClientsDao = databaseConnector.gatewayClientsDao();
                 gatewayClientsInsertId[0] = gatewayClientsDao.insert(gatewayClient);
             }
@@ -46,7 +36,7 @@ public class GatewayClientsHandler {
             @Override
             public void run() {
                 Datastore databaseConnector = Room.databaseBuilder(context, Datastore.class,
-                        Datastore.DatabaseName).build();
+                        Datastore.databaseName).build();
                 GatewayClientsDao gatewayClientsDao = databaseConnector.gatewayClientsDao();
                 gatewayClientsDao.resetAllDefaults();
                 gatewayClientsDao.updateDefault(gatewayClient.isDefault(), gatewayClient.getId());
@@ -68,16 +58,6 @@ public class GatewayClientsHandler {
         return operatorId.equals(gatewayClientOperatorId);
     }
 
-    public static void remoteFetchAndStoreGatewayClients(Context context) throws InterruptedException {
-        // TODO: add support for remote fetching gateway clients
-        List<GatewayClient> gatewayClients = getAllGatewayClients(context);
-
-        if(gatewayClients.size() < 1)
-            gatewayClients = getDefaultGatewayClients(context);
-
-        gatewayClients = setDefaults(context, gatewayClients);
-        storeGatewayClients(context, gatewayClients);
-    }
 
     public static void storeGatewayClients(Context context, List<GatewayClient> gatewayClients) {
        for(GatewayClient gatewayClient : gatewayClients) {
@@ -117,29 +97,29 @@ public class GatewayClientsHandler {
         return gatewayClients;
     }
 
-    public static List<GatewayClient> getAllGatewayClients(Context context) throws InterruptedException {
-        final List<GatewayClient>[] gatewayClients = new List[]{new ArrayList<>()};
-        Thread fetchGatewayClientThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Datastore databaseConnection = Room.databaseBuilder(context,
-                                Datastore.class, Datastore.DatabaseName)
-                        .fallbackToDestructiveMigration()
-                        .build();
-
-                GatewayClientsDao gatewayClientsDao = databaseConnection.gatewayClientsDao();
-                gatewayClients[0] = gatewayClientsDao.getAll();
-            }
-        });
-        fetchGatewayClientThread.start();
-        try {
-            fetchGatewayClientThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return gatewayClients[0];
-    }
+//    public static List<GatewayClient> getAllGatewayClients(Context context) throws InterruptedException {
+//        final List<GatewayClient>[] gatewayClients = new List[]{new ArrayList<>()};
+//        Thread fetchGatewayClientThread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Datastore databaseConnection = Room.databaseBuilder(context,
+//                                Datastore.class, Datastore.databaseName)
+//                        .fallbackToDestructiveMigration()
+//                        .build();
+//
+//                GatewayClientsDao gatewayClientsDao = databaseConnection.gatewayClientsDao();
+//                gatewayClients[0] = gatewayClientsDao.getAll();
+//            }
+//        });
+//        fetchGatewayClientThread.start();
+//        try {
+//            fetchGatewayClientThread.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return gatewayClients[0];
+//    }
 
     private static List<GatewayClient> getDefaultGatewayClients(Context context) throws InterruptedException {
         List<GatewayClient> gatewayClientList = new ArrayList<>();
@@ -161,30 +141,30 @@ public class GatewayClientsHandler {
         return gatewayClientList;
     }
 
-    public static GatewayClient getGatewayClientMSISDN(Context context) throws Throwable {
+//    public static GatewayClient getGatewayClientMSISDN(Context context) throws Throwable {
+//
+//        GatewayClient defaultGatewayClient = new GatewayClient();
+//
+//        List<GatewayClient> gatewayClients = GatewayClientsHandler.getAllGatewayClients(context);
+//        for(GatewayClient gatewayClient : gatewayClients) {
+//            if(gatewayClient.isDefault()) {
+//                defaultGatewayClient = gatewayClient;
+//                break;
+//            }
+//        }
+//
+//        return defaultGatewayClient;
+//    }
 
-        GatewayClient defaultGatewayClient = new GatewayClient();
-
-        List<GatewayClient> gatewayClients = GatewayClientsHandler.getAllGatewayClients(context);
-        for(GatewayClient gatewayClient : gatewayClients) {
-            if(gatewayClient.isDefault()) {
-                defaultGatewayClient = gatewayClient;
-                break;
-            }
-        }
-
-        return defaultGatewayClient;
-    }
-
-    public static String getDefaultGatewayClientMSISDN(Context context) throws Throwable {
-        GatewayClient gatewayClient = getGatewayClientMSISDN(context);
-
-        if(gatewayClient.getMSISDN() == null || gatewayClient.getMSISDN().isEmpty()) {
-            // TODO should have fallback GatewayClients that can be used in the code
-            String defaultSeedFallbackGatewayClientMSISDN = context.getString(R.string.default_gateway_MSISDN_0);
-            gatewayClient.setMSISDN(defaultSeedFallbackGatewayClientMSISDN);
-        }
-
-        return gatewayClient.getMSISDN();
-    }
+//    public static String getDefaultGatewayClientMSISDN(Context context) throws Throwable {
+//        GatewayClient gatewayClient = getGatewayClientMSISDN(context);
+//
+//        if(gatewayClient.getMSISDN() == null || gatewayClient.getMSISDN().isEmpty()) {
+//            // TODO should have fallback GatewayClients that can be used in the code
+//            String defaultSeedFallbackGatewayClientMSISDN = context.getString(R.string.default_gateway_MSISDN_0);
+//            gatewayClient.setMSISDN(defaultSeedFallbackGatewayClientMSISDN);
+//        }
+//
+//        return gatewayClient.getMSISDN();
+//    }
 }

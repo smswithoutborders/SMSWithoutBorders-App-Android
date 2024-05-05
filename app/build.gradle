@@ -1,38 +1,61 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+//    id 'org.jetbrains.kotlin.jvm' version '1.9.23'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.9.23'
 }
 
+def versionsPropertiesFile = rootProject.file("version.properties")
+def versionProperties = new Properties()
+versionProperties.load(new FileInputStream(versionsPropertiesFile))
+
+def releasePropertiesFile = rootProject.file("release.properties")
+def releaseProperties = new Properties()
+releaseProperties.load(new FileInputStream(releasePropertiesFile))
+
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     buildFeatures {
         viewBinding true
     }
 
+    def _versionName = versionProperties['versionName']
+    def tagVersion = Integer.parseInt(versionProperties['tagVersion'])
+
+    println(tagVersion)
+
     defaultConfig {
         applicationId "com.afkanerd.sw0b"
-        minSdkVersion 23
-        targetSdkVersion 33
-        versionCode 50
-        versionName "2.5.10"
+        minSdkVersion 24
+        targetSdkVersion 34
+        versionCode tagVersion
+        versionName _versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-//        vectorDrawables.useSupportLibrary = true
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += ["room.schemaLocation":
                                       "$projectDir/schemas".toString()]
             }
         }
+        resourceConfigurations += ['en', 'fr', 'fa']
 
-        resConfigs "en", "fr", "fa"
-
+        manifestPlaceholders =
+                ['appAuthRedirectScheme': 'com.afkanerd.sw0b']
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("Boolean", "IS_RECAPTCHA", "false")
+            buildConfigField("Boolean", "IS_ONBOARDING", "false")
+        }
+        debug {
+            buildConfigField("Boolean", "IS_RECAPTCHA", "false")
+            buildConfigField("Boolean", "IS_ONBOARDING", "true")
+//            buildConfigField "boolean", "IS_RECAPTCHA" false
         }
     }
     compileOptions {
@@ -45,46 +68,83 @@ android {
     lint {
         checkReleaseBuilds false
     }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     namespace 'com.example.sw0b_001'
 }
 
+repositories {
+    maven {
+        url = uri("https://maven.pkg.github.com/smswithoutborders/lib_signal_double_ratchet_java")
+        credentials {
+            username = releaseProperties['github_username']
+            password = releaseProperties['github_token']
+        }
+    }
+}
+
+
 dependencies {
 
-    // implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.51'
-    implementation 'androidx.appcompat:appcompat:1.7.0-alpha01'
-    implementation 'com.google.android.material:material:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0-alpha03'
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.annotation:annotation:1.5.0'
+    implementation 'androidx.annotation:annotation:1.7.1'
     implementation group: 'androidx.lifecycle', name: 'lifecycle-extensions', version: '2.2.0'
 //    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.preference:preference:1.2.0'
+    implementation 'androidx.preference:preference:1.2.1'
+    implementation "androidx.preference:preference-ktx:1.2.1"
     implementation 'androidx.databinding:baseLibrary:3.2.0-alpha11'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0'
+    implementation 'androidx.activity:activity:1.9.0'
+    implementation 'com.google.android.gms:play-services-auth:21.1.0'
+    implementation 'com.google.android.gms:play-services-auth-api-phone:18.0.2'
+    implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
 //    implementation 'com.android.support:appcompat-v7:28.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // Java language implementation
-    implementation "androidx.fragment:fragment:1.5.5"
+    implementation "androidx.fragment:fragment:1.6.2"
 
 //    implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
-    implementation "androidx.room:room-runtime:2.4.3"
-    implementation 'com.google.android.material:material:<version>'
-    annotationProcessor "androidx.room:room-compiler:2.4.3"
+    implementation "androidx.room:room-runtime:2.6.1"
+    annotationProcessor "androidx.room:room-compiler:2.6.1"
 
 
     // (Java only)
-    implementation "androidx.work:work-runtime:2.7.1"
+    implementation "androidx.work:work-runtime:2.9.0"
     implementation 'com.budiyev.android:code-scanner:2.1.0'
 
-    implementation 'androidx.security:security-crypto:1.1.0-alpha04'
+//    implementation 'androidx.security:security-crypto:1.1.0-alpha06'
 
     implementation "androidx.biometric:biometric:1.1.0"
 
-    implementation 'com.rabbitmq:amqp-client:5.10.0'
+    implementation 'com.github.tizisdeepan:dots:1.0.1'
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
+
+    def fuelVersion = "2.2.1"
+    implementation "com.github.kittinunf.fuel:fuel:$fuelVersion" //for JVM
+    testImplementation "com.github.kittinunf.fuel:fuel:$fuelVersion" //for JVM
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1-Beta'//
+
+     implementation "com.github.kittinunf.fuel:fuel-android:$fuelVersion" //for Android
+    implementation "com.github.kittinunf.fuel:fuel-coroutines:$fuelVersion"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
+
+    implementation "androidx.startup:startup-runtime:1.1.1"
+    implementation 'at.favre.lib:armadillo:1.0.0'
+    implementation 'com.afkanerd.smswithoutborders:libsignal_doubleratchet:0.0.3'
+    implementation "net.openid:appauth:0.11.1"
+    implementation 'com.hbb20:ccp:2.7.0'
 }
+

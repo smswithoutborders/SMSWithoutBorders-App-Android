@@ -1,49 +1,65 @@
 package com.example.sw0b_001.Database;
 
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.DatabaseConfiguration;
+import androidx.room.DeleteTable;
 import androidx.room.InvalidationTracker;
+import androidx.room.RenameTable;
+import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.migration.Migration;
-import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.room.migration.AutoMigrationSpec;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContent;
-import com.example.sw0b_001.Models.EncryptedContent.EncryptedContentDAO;
+import com.example.sw0b_001.Models.Messages.EncryptedContent;
+import com.example.sw0b_001.Models.Messages.EncryptedContentDAO;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsDao;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
-import com.example.sw0b_001.Models.Notifications.Notifications;
-import com.example.sw0b_001.Models.Notifications.NotificationsDAO;
-import com.example.sw0b_001.Models.Notifications.NotificationsHandler;
-import com.example.sw0b_001.Models.Platforms.Platform;
+import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 
 import org.jetbrains.annotations.NotNull;
 
 @Database(entities = {
         GatewayServer.class,
-        Platform.class,
+        Platforms.class,
         GatewayClient.class,
-        EncryptedContent.class,
-        Notifications.class},
-        version = 9, autoMigrations = {
-        @AutoMigration(
-                from = 8,
-                to = 9
-        ) })
+        EncryptedContent.class},
+        version = 12,
+        autoMigrations = { @AutoMigration( from = 8, to = 9, spec = Datastore.DatastoreMigrations.class),
+                @AutoMigration( from = 9, to = 10, spec= Datastore.DatastoreMigrations.class),
+                @AutoMigration( from = 10, to = 11),
+                @AutoMigration( from = 11, to = 12)
+})
 public abstract class Datastore extends RoomDatabase {
-    public static String DatabaseName = "SMSWithoutBorders-Android-App-DB";
+    @RenameTable(fromTableName = "Platform", toTableName = "Platforms")
+    @DeleteTable(tableName = "Notifications")
+    static class DatastoreMigrations implements AutoMigrationSpec { }
+
+    public static String databaseName = "SMSWithoutBorders-Android-App-DB";
+    private static Datastore datastore;
+
+    public static Datastore getDatastore(Context context) {
+        if(datastore == null || !datastore.isOpen()) {
+            datastore = Room.databaseBuilder(context, Datastore.class, databaseName)
+                    .enableMultiInstanceInvalidation()
+                    .build();
+        }
+
+        return datastore;
+    }
+
 
     public abstract PlatformDao platformDao();
     public abstract GatewayClientsDao gatewayClientsDao();
     public abstract GatewayServersDAO gatewayServersDAO();
     public abstract EncryptedContentDAO encryptedContentDAO();
-    public abstract NotificationsDAO notificationsDAO();
 
     @NonNull
     @NotNull
@@ -63,5 +79,7 @@ public abstract class Datastore extends RoomDatabase {
     public void clearAllTables() {
 
     }
+
+
 
 }
