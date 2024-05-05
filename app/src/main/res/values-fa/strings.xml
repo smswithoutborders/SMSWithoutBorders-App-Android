@@ -19,8 +19,8 @@
     <string name="welcome_welcome">خوش آمدی</string>
     <string name="welcome_login_prompt">از قبل حساب کاربری دارید؟</string>
     <string name="main_navigation_settings">تنظیمات</string>
-    <string name="message_compose_header">پیام...</string>
-    <string name="password_failed">احراز هویت ناموفق بود! لطفا دوباره تلاش کنید...</string>
+    <string name="message_compose_header">پیام…</string>
+    <string name="password_failed">احراز هویت ناموفق بود! لطفا دوباره تلاش کنید…</string>
     <string name="password_empty">رمز عبور نمی تواند خالی باشد!</string>
     <string name="settings_language">زبان</string>
     <string name="gateway_client_settings_add_custom_gateway_add_btn">اضافه کردن</string>
@@ -86,7 +86,7 @@
     <string name="settings_security_and_privacy_account_delete">حذف حساب کاربری</string>
     <string name="settings_security_and_privacy_account_delete_summary">حذف اکانت به معنای حذف تمام حساب های ذخیره شده به صورت آنلاین است. شما همیشه می توانید حساب خود را پس از نیاز دوباره ایجاد کنید.</string>
     <string name="settings_security_and_privacy_account_delete_url">https://smswithoutborders.github.io/fa/docs/tutorials/delete-account/</string>
-    <string name="login_wrong_credentials">شماره یا رمز عبور اشتباه است، لطفا دوباره امتحان کنید...</string>
+    <string name="login_wrong_credentials">شماره یا رمز عبور اشتباه است، لطفا دوباره امتحان کنید…</string>
     <string name="homepage_compose_modal_no_platforms">هیچ پلتفرمی ذخیره نشد</string>
     <string name="gateway_client_save_btn_text">ذخیره</string>
     <string name="email_compose_title">ایمیل بنویسید</string>
@@ -140,7 +140,6 @@
     <string name="platforms_unsaved_platforms">پلتفرم ها را برای استفاده آفلاین اضافه کنید</string>
     <string name="platform_your_vault_is_empty">خزانه شما خالی است</string>
     <string name="settings_privacy_vault_preference">سردابه</string>
-    <string name="settings_privacy_vault_preference">سردابه</string>
     <string name="settings_privacy_preferences_choose_which_platforms_you_want_to_remove_from_the_vault">پلتفرم هایی را که می خواهید از خزانه حذف کنید انتخاب کنید</string>
     <string name="login_login">وارد شدن</string>
     <string name="platforms_revoked_successfully">با موفقیت لغو شد</string>
@@ -161,4 +160,6 @@
     <string name="signup_phonenumber_empty_error">لطفا یک شماره تلفن ارائه دهید</string>
     <string name="gateway_client_alias_description">نامی برای کمک به یادآوری کلاینت دروازه پیامک</string>
     <string name="onboarding_vault_description_2">اس ام اس بدون مرز از روش های استاندارد ارائه شده توسط پلتفرم های آنلاین استفاده می کند و از اطلاعات ذخیره شده شما در خزانه ها و ایمن سازی آنها استفاده می کند.</string>
+    <string name="log_into_your_vault_account_or_create_one_if_you_do_not_have_yet">به حساب خزانه خود وارد شوید یا اگر هنوز ندارید یکی ایجاد کنید</string>
+    <string name="login_signup_create_new">ایجاد جدید</string>
 </resources>

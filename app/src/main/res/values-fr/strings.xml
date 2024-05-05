@@ -42,10 +42,10 @@
     <string name="settings_store_access_text">Accès en magasin à votre compte</string>
     <string name="gateway_clients_settings_header">Clients Gateway disponibles</string>
     <string name="settings_gateway_clients_text">Passerelles de routage SMS</string>
-    <string name="password_failed">Échec de l\'authentification ! Veuillez réessayer...</string>
+    <string name="password_failed">Échec de l\'authentification ! Veuillez réessayer…</string>
     <string name="password_empty">Le mot de passe ne peut pas être vide !</string>
     <string name="settings_language">Langue</string>
-    <string name="message_compose_header">Message...</string>
+    <string name="message_compose_header">Message…</string>
     <string name="message_compose_groups_option">Nom de l\'utilisateur du Telegram (facultatif)</string>
     <string name="message_compose_groups_name">Nom de l\'utilisateur du Telegram</string>
     <string name="gateway_client_settings_add_custom_gateway_add_btn">Ajouter</string>
@@ -86,22 +86,20 @@
     <string name="settings_security_and_privacy_account_delete">Supprimer le compte</string>
     <string name="settings_security_and_privacy_account_delete_summary">Supprimer votre compte signifie supprimer tous vos comptes enregistrés en ligne. Vous pouvez toujours recréer votre compte une fois nécessaire.</string>
     <string name="settings_security_and_privacy_account_delete_url">https://smswithoutborders.github.io/fr/docs/tutorials/delete-account/</string>
-    <string name="login_wrong_credentials">Numéro ou mot de passe erroné, veuillez réessayer...</string>
+    <string name="login_wrong_credentials">Numéro ou mot de passe erroné, veuillez réessayer…</string>
     <string name="homepage_compose_modal_no_platforms">Aucune plateforme enregistrée</string>
     <string name="gateway_client_save_btn_text">enregistrer</string>
     <string name="email_compose_title">Composer un courriel</string>
-    <string name="security_settings_failed_to_switch_security">Échec de l\'activation de la sécurité...</string>
+    <string name="security_settings_failed_to_switch_security">Échec de l\'activation de la sécurité…</string>
     <string name="settings_security_biometric_user_cannot_add_this_functionality_at_this_time">L\'utilisateur ne peut pas ajouter cette fonctionnalité pour le moment.</string>
     <string name="gateway_client_add_label">Ajouter</string>
     <string name="gateway_client_refresh_label">Rafraîchir</string>
     <string name="lock_screen_relay_sms_is_locked">L\'application est verrouillée</string>
     <string name="lock_screen_unlock_with_your_phone_s_locking_system">"Déverrouiller avec le système de verrouillage de votre téléphone "</string>
-    <string name="lock_screen_unlock_with_your_phone_s_locking_system">"Déverrouiller avec le système de verrouillage de votre téléphone "</string>
     <string name="gateway_client_add_custom_example_text">par exemple +237123456789 ou sélectionner un contact</string>
     <string name="gateway_client_add_custom_text">Saisir le numéro de téléphone</string>
     <string name="gateway_client_add_gateway_client_text">Ajouter un client sms Gateway</string>
     <string name="signup_please_provide_a_strong_password">Veuillez fournir un mot de passe fort</string>
-    <string name="signup_please_re_enter_your_password">Veuillez saisir à nouveau votre mot de passe</string>
     <string name="signup_please_re_enter_your_password">Veuillez saisir à nouveau votre mot de passe</string>
     <string name="signup_your_passwords_do_not_match">Vos mots de passe ne correspondent pas !</string>
     <string name="owernship_otp_please_enter_a_valid_code">Veuillez saisir un code valide</string>
@@ -117,8 +115,6 @@
     <string name="onboarding_tour_complete_description">Visite terminée ! Vous pouvez ajouter vos comptes de coffre-fort à tout moment depuis l\'application.</string>
     <string name="onboarding_introducing_vaults">Présentation des chambres fortes</string>
     <string name="onboarding_vaults_description_1">Les chambres fortes sécurisent l\'accès à vos comptes en ligne lorsque vous n\'êtes pas en ligne.</string>
-    <string name="onboarding_vaults_description_1">Les chambres fortes sécurisent l\'accès à vos comptes en ligne lorsque vous n\'êtes pas en ligne.</string>
-    <string name="onboarding_try_example">Essayez l\'exemple !</string>
     <string name="onboarding_try_example">Essayez l\'exemple !</string>
     <string name="onboarding_keep_platforms_in_your_vault">Conservez les plateformes dans votre chambre forte</string>
     <string name="onboarding_platforms_in_vault_description">Garder des plateformes dans votre coffre-fort vous permet de les utiliser sans connexion internet - nécessite toujours l\'envoi d\'un message SMS</string>
@@ -136,8 +132,8 @@
     <string name="signup_i_have_read_the_privacy_policy_start">"J'ai lu le "</string>
     <string name="signup_i_have_read_the_privacy_policy_end">Politique de confidentialité</string>
     <string name="signup_you_have_to_read_the_privacy_policy_to_proceed">Vous devez lire la politique de confidentialité pour continuer !</string>
-    <string name="login_successful">Connexion réussie...</string>
-    <string name="synced_successfully">Synchronisation réussie...</string>
+    <string name="login_successful">Connexion réussie…</string>
+    <string name="synced_successfully">Synchronisation réussie…</string>
     <string name="login_platforms_stored_successfully">Plateformes enregistrées avec succès</string>
     <string name="platforms_these_are_platforms_stored_in_your_vault_and_can_be_used_when_you_are_offline">Ces plateformes sont stockées dans votre coffre-fort et peuvent être utilisées lorsque vous n\'êtes pas en ligne.</string>
     <string name="platforms_saved_platforms">Plates-formes sauvegardées</string>
@@ -164,4 +160,6 @@
     <string name="signup_phonenumber_empty_error">Veuillez fournir un numéro de téléphone</string>
     <string name="gateway_client_alias_description">Nom pour aider à se souvenir du client Gateway</string>
     <string name="onboarding_vault_description_2">SMSWithoutBorders utilise les méthodes standardisées fournies par les plateformes en ligne pour utiliser et sécuriser vos informations stockées dans les chambres fortes.</string>
+    <string name="log_into_your_vault_account_or_create_one_if_you_do_not_have_yet">Log in to your Vault account or create one if you don\'t already have one</string>
+    <string name="login_signup_create_new">Créer un nouveau</string>
 </resources>
