@@ -4,12 +4,14 @@ import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerCallback
 import android.accounts.AccountManagerFuture
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import com.example.sw0b_001.HomepageComposeNewFragment
+import com.example.sw0b_001.OpenIDOAuthRedirectActivity
 import com.example.sw0b_001.R
 import net.openid.appauth.AuthorizationRequest
 import net.openid.appauth.AuthorizationService
@@ -30,7 +32,6 @@ class OAuth2 {
             val clientId = context.getString(R.string.oauth_x_client_id)
             val authorizationUri = "https://twitter.com/i/oauth2/authorize"
             val tokenUri = "https://api.twitter.com/2/oauth2/token"
-
             appAuthRequestManually(context,
                     scope,
                     clientId,
@@ -44,7 +45,14 @@ class OAuth2 {
                                     clientId: String,
                                     state: String) {
             val serviceUri = "https://accounts.google.com"
-            appAuthRequestWithDocument(context, serviceUri, scope, clientId, redirectUrl, state)
+//            appAuthRequestWithDocument(context, serviceUri, scope, clientId, redirectUrl, state)
+
+            appAuthRequestManually(context,
+                    scope,
+                    clientId,
+                    "https://accounts.google.com/o/oauth2/v2/auth?access_type=offline",
+                    "https://oauth2.googleapis.com/token",
+                    "", "", "", redirectUrl, state)
         }
 
         private fun appAuthRequestManually(context: Context,
@@ -107,6 +115,8 @@ class OAuth2 {
                                        codeChallengeMethod: String, redirectUrl: String, state: String) {
             Log.d(javaClass.name,
                     "Auth endpoint: ${serviceConfiguration.authorizationEndpoint}")
+            Log.d(javaClass.name,
+                    "Token endpoint: ${serviceConfiguration.tokenEndpoint}")
 
             val authRequest = AuthorizationRequest.Builder(
                     serviceConfiguration,
@@ -115,7 +125,8 @@ class OAuth2 {
                     Uri.parse(redirectUrl)) //redirect url
                     .setScope(scope) // Gmail send scope)
                     .setState(state)
-//                    .setPrompt("consent")
+                    .setPromptValues(AuthorizationRequest.Prompt.CONSENT,
+                            AuthorizationRequest.Prompt.SELECT_ACCOUNT)
 
             if(!codeVerifier.isNullOrEmpty()) {
                 println("Code verifier: $codeVerifier")
@@ -129,8 +140,12 @@ class OAuth2 {
                 authRequest.setCodeVerifier(null)
 
             val authService = AuthorizationService(context);
-            val authIntent: Intent = authService.getAuthorizationRequestIntent(authRequest.build())
-            context.startActivity(authIntent);
+//            val authIntent: Intent = authService.getAuthorizationRequestIntent(authRequest.build())
+//            context.startActivity(authIntent);
+            authService.performAuthorizationRequest(authRequest.build(),
+                    PendingIntent.getActivity(context, 0,
+                            Intent(context, OpenIDOAuthRedirectActivity::class.java),
+                            PendingIntent.FLAG_IMMUTABLE))
         }
     }
 }
