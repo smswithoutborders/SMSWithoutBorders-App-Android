@@ -32,9 +32,17 @@ device_id = generate_device_id(...)
 - Proof of number ownership is required to avoid spoofing as another user. OTP via SMS when creating account can be used here.
 
 **Payload structure**
-```
-# Add length of ciphertext
-payload = base64.encode(concat_bytes(encrypted_content_bytes, device_id))
+```python
+import struct
 
-# device_id = payload[-64:]
+# Encoding
+...
+ctLen = len(encrypted_content_bytes)
+payload = base64.encode(concat_bytes(struct.pack("<i", ctLen), encrypted_content_bytes, device_id))
+
+# Decoding
+...
+ctLen = int.from_bytes(payload[0:4])
+cipher_text = payload[ctLen:-64]
+device_id = payload[-64:]
 ```
