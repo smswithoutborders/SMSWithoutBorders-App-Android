@@ -33,6 +33,7 @@ device_id = generate_device_id(...)
 
 **Payload structure**
 ```
+# Add length of ciphertext
 payload = base64.encode(concat_bytes(encrypted_content_bytes, device_id))
 
 # device_id = payload[-64:]
