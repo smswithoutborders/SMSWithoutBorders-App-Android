@@ -29,8 +29,6 @@ device_id = generate_device_id(...)
 
 **Implementation considerations**
 
-- DeviceID should be generated and stored at each log in.
-
 - Proof of number ownership is required to avoid spoofing as another user. OTP via SMS when creating account can be used here.
 
 **Payload structure**
