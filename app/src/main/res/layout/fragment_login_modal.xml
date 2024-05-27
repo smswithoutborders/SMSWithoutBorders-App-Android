@@ -105,7 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 app:ccp_contentColor="@color/md_theme_primary"
-                app:ccpDialog_backgroundColor="@color/md_theme_primary"
+                app:ccpDialog_backgroundColor="@color/md_theme_background"
                 app:ccpDialog_textColor="@color/md_theme_primary"
                 app:ccp_autoDetectCountry="true"
                 app:ccp_clickable="true"
