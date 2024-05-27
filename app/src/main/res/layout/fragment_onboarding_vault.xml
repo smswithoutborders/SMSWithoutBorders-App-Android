@@ -49,7 +49,6 @@
         android:layout_marginEnd="16dp"
         android:text="@string/onboarding_vault_description_2"
         android:textSize="20sp"
-        android:textColor="@color/secondary_text_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/onboarding_welcome_vaults_description"
         app:layout_constraintTop_toBottomOf="@+id/onboarding_welcome_vaults_description_try_example_btn" />

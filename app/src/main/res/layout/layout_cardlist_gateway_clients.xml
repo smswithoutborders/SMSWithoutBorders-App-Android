@@ -48,7 +48,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="16dp"
                 tools:text="Cameroon"
-                android:textColor="@color/pending_gray"
+                android:textColor="@color/md_theme_secondary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/gateway_client_MSISDN" />

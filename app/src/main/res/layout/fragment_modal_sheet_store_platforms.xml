@@ -89,7 +89,6 @@
             android:layout_marginEnd="32dp"
             android:visibility="gone"
             tools:visibility="visible"
-            app:dividerColor="@color/pending_gray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/store_platform_saved_layout" />

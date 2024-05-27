@@ -48,7 +48,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
-        android:textColor="@color/link_color"
+        android:textColor="@color/browser_actions_text_color"
         android:text="@string/homepage_read_our_privacy_policy"
         android:textAlignment="center"
         android:textAllCaps="false"
