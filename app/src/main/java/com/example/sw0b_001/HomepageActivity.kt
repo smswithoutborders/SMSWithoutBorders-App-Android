@@ -108,12 +108,14 @@ class HomepageActivity : AppCompactActivityCustomized() {
                     Platforms.TYPE_TEXT -> {
                         startActivity(Intent(this, TextViewActivity::class.java).apply {
                             putExtra("platform_name", it.platformName)
+                            putExtra("platform_id", it.id)
                             putExtra("message_id", it.id)
                         })
                     }
                     Platforms.TYPE_EMAIL -> {
                         startActivity(Intent(this, EmailViewActivity::class.java).apply {
                             putExtra("platform_name", it.platformName)
+                            putExtra("platform_id", it.id)
                             putExtra("message_id", it.id)
                         })
                     }

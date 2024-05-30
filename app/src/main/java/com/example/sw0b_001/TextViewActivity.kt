@@ -1,7 +1,12 @@
 package com.example.sw0b_001
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import com.example.sw0b_001.Database.Datastore
+import com.example.sw0b_001.Modals.PlatformComposers.EmailComposeModalFragment
+import com.example.sw0b_001.Modals.PlatformComposers.TextComposeModalFragment
+import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
@@ -42,5 +47,30 @@ class TextViewActivity : AppCompactActivityCustomized() {
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.compose_view_edit_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.compose_view_edit_menu_edit -> {
+                showPlatformsModal(Platforms().apply {
+                    id = intent.getLongExtra("platform_id", -1)
+                })
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun showPlatformsModal(platforms: Platforms) {
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        val textComposeModalFragment = TextComposeModalFragment(platforms)
+        fragmentTransaction.add(textComposeModalFragment, "text_compose_tag")
+        fragmentTransaction.show(textComposeModalFragment)
+        fragmentTransaction.commitNow()
     }
 }
