@@ -1,5 +1,6 @@
 package com.example.sw0b_001.Models.Messages
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,6 +76,7 @@ class MessagesRecyclerAdapter : RecyclerView.Adapter<MessagesRecyclerAdapter.Vie
             }
 
             card.setOnClickListener {
+                println("Clicked...")
                 messageOnClickListener.value = messages
             }
         }

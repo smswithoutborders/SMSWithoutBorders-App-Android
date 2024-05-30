@@ -101,8 +101,9 @@ class HomepageActivity : AppCompactActivityCustomized() {
         }
 
         recentRecyclerAdapter.messageOnClickListener.observe(this, Observer {
+            println("checking state: ${it == null}")
             if(it != null) {
-                recentRecyclerAdapter.messageOnClickListener = MutableLiveData()
+                recentRecyclerAdapter.messageOnClickListener.value = null
                 when(it.type) {
                     Platforms.TYPE_TEXT -> {
                         startActivity(Intent(this, TextViewActivity::class.java).apply {
