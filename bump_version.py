@@ -1,11 +1,11 @@
-#!/usr/bin/python3
+#!python3
 import os
 import sys
 import requests
 
 def get_latest_tag():
     """Get the latest tag from the repository."""
-    url = "https://api.github.com/repos/deku-messaging/Deku-SMS-Android/tags"
+    url = "https://github.com/smswithoutborders/SMSWithoutBorders-App-Android"
     response = requests.get(url)
     response.raise_for_status()
 
