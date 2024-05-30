@@ -7,6 +7,7 @@ import android.view.MenuItem
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Modals.PlatformComposers.EmailComposeModalFragment
 import com.example.sw0b_001.Modals.PlatformsModalFragment
+import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.google.android.material.appbar.MaterialToolbar
@@ -27,9 +28,11 @@ class EmailViewActivity : AppCompactActivityCustomized() {
         configureView()
     }
 
+
+    private lateinit var message: EncryptedContent
     private fun configureView() {
         ThreadExecutorPool.executorService.execute {
-            val message = Datastore.getDatastore(applicationContext).encryptedContentDAO()
+            message = Datastore.getDatastore(applicationContext).encryptedContentDAO()
                 .get(intent.getLongExtra("message_id", -1))
             println(message.encryptedContent)
             runOnUiThread {
@@ -57,9 +60,13 @@ class EmailViewActivity : AppCompactActivityCustomized() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.compose_view_edit_menu_edit -> {
-                showPlatformsModal(Platforms().apply {
-                    id = intent.getLongExtra("platform_id", -1)
-                })
+                ThreadExecutorPool.executorService.execute {
+                    val platforms = Datastore.getDatastore(applicationContext).platformDao()
+                        .get(intent.getLongExtra("platform_id", -1))
+                    runOnUiThread {
+                        showPlatformsModal(platforms)
+                    }
+                }
                 return true
             }
         }
@@ -68,7 +75,9 @@ class EmailViewActivity : AppCompactActivityCustomized() {
 
     private fun showPlatformsModal(platforms: Platforms) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        val emailComposeModalFragment = EmailComposeModalFragment(platforms)
+        val emailComposeModalFragment = EmailComposeModalFragment(platforms, message) {
+            finish()
+        }
         fragmentTransaction.add(emailComposeModalFragment, "email_compose_tag")
         fragmentTransaction.show(emailComposeModalFragment)
         fragmentTransaction.commitNow()

@@ -6,6 +6,7 @@ import android.view.MenuItem
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Modals.PlatformComposers.EmailComposeModalFragment
 import com.example.sw0b_001.Modals.PlatformComposers.TextComposeModalFragment
+import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.google.android.material.appbar.MaterialToolbar
@@ -27,20 +28,14 @@ class TextViewActivity : AppCompactActivityCustomized() {
         configureView()
     }
 
+    private lateinit var message: EncryptedContent
     private fun configureView() {
         ThreadExecutorPool.executorService.execute {
-            val message = Datastore.getDatastore(applicationContext).encryptedContentDAO()
+            message = Datastore.getDatastore(applicationContext).encryptedContentDAO()
                 .get(intent.getLongExtra("message_id", -1))
             println(message.encryptedContent)
             runOnUiThread {
                 message.encryptedContent.split(":").let {
-//                    findViewById<MaterialTextView>(R.id.layout_identity_header_title).apply {
-//                        text = "<${it[1]}>"
-//                    }
-//                    findViewById<MaterialTextView>(R.id.layout_identity_header_subject).apply {
-//                        text = "${getString(R.string.email_compose_cc)}: ${it[2]}\n" +
-//                                "${getString(R.string.email_compose_bcc)}: ${it[3]}"
-//                    }
                     findViewById<MaterialTextView>(R.id.layout_text_body).apply {
                         text = it.subList(1, it.size).joinToString()
                     }
@@ -57,9 +52,13 @@ class TextViewActivity : AppCompactActivityCustomized() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.compose_view_edit_menu_edit -> {
-                showPlatformsModal(Platforms().apply {
-                    id = intent.getLongExtra("platform_id", -1)
-                })
+                ThreadExecutorPool.executorService.execute {
+                    val platforms = Datastore.getDatastore(applicationContext).platformDao()
+                        .get(intent.getLongExtra("platform_id", -1))
+                    runOnUiThread {
+                        showPlatformsModal(platforms)
+                    }
+                }
                 return true
             }
         }
@@ -68,7 +67,9 @@ class TextViewActivity : AppCompactActivityCustomized() {
 
     private fun showPlatformsModal(platforms: Platforms) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        val textComposeModalFragment = TextComposeModalFragment(platforms)
+        val textComposeModalFragment = TextComposeModalFragment(platforms, message) {
+            finish()
+        }
         fragmentTransaction.add(textComposeModalFragment, "text_compose_tag")
         fragmentTransaction.show(textComposeModalFragment)
         fragmentTransaction.commitNow()

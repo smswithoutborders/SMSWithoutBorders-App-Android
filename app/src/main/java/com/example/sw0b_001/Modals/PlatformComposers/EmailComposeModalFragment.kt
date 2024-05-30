@@ -3,6 +3,7 @@ package com.example.sw0b_001.Modals.PlatformComposers
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.Platforms._PlatformsHandler
 import com.example.sw0b_001.R
@@ -11,7 +12,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 
-class EmailComposeModalFragment(val platform: Platforms, val onSuccessCallback: Runnable? = null)
+class EmailComposeModalFragment(val platforms: Platforms, val message: EncryptedContent? = null,
+                                private val onSuccessCallback: Runnable? = null)
     : BottomSheetDialogFragment(R.layout.fragment_modal_email_compose) {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
@@ -35,6 +37,26 @@ class EmailComposeModalFragment(val platform: Platforms, val onSuccessCallback: 
         bottomSheetBehavior.isDraggable = true
 
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+        message?.let {
+            it.encryptedContent.split(":").let {
+                view.findViewById<TextInputEditText>(R.id.email_to).apply {
+                    setText(it[1])
+                }
+                view.findViewById<TextInputEditText>(R.id.email_cc).apply {
+                    setText(it[2])
+                }
+                view.findViewById<TextInputEditText>(R.id.email_bcc).apply {
+                    setText(it[3])
+                }
+                view.findViewById<TextInputEditText>(R.id.email_subject).apply {
+                    setText(it[4])
+                }
+                view.findViewById<EditText>(R.id.email_compose_body_input).apply {
+                    setText(it.subList(5, it.size).joinToString())
+                }
+            }
+        }
 
     }
 
@@ -61,11 +83,12 @@ class EmailComposeModalFragment(val platform: Platforms, val onSuccessCallback: 
         val subject = subjectTextInputEditText.text.toString()
         val body = bodyTextInputEditText.text.toString()
 
-        val platforms = _PlatformsHandler.getPlatform(view.context, platform.id)
+        val platforms = _PlatformsHandler.getPlatform(view.context, platforms.id)
         val formattedContent = processEmailForEncryption(platforms.letter, to, cc, bcc, subject, body)
 
         ComposeHandlers.compose(requireContext(), formattedContent, platforms) {
             dismiss()
+            onSuccessCallback?.let { it.run() }
         }
     }
 
