@@ -17,6 +17,7 @@ import com.example.sw0b_001.Modals.PlatformsModalFragment
 import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.Messages.MessagesRecyclerAdapter
 import com.example.sw0b_001.Models.Messages.MessagesViewModel
+import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
@@ -102,6 +103,20 @@ class HomepageActivity : AppCompactActivityCustomized() {
         recentRecyclerAdapter.messageOnClickListener.observe(this, Observer {
             if(it != null) {
                 recentRecyclerAdapter.messageOnClickListener = MutableLiveData()
+                when(it.type) {
+                    Platforms.TYPE_TEXT -> {
+                        startActivity(Intent(this, TextViewActivity::class.java).apply {
+                            putExtra("platform_name", it.platformName)
+                            putExtra("message_id", it.id)
+                        })
+                    }
+                    Platforms.TYPE_EMAIL -> {
+                        startActivity(Intent(this, EmailViewActivity::class.java).apply {
+                            putExtra("platform_name", it.platformName)
+                            putExtra("message_id", it.id)
+                        })
+                    }
+                }
             }
         })
     }
