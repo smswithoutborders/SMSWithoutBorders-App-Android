@@ -11,7 +11,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 
-class TextComposeModalFragment(val platforms: Platforms)
+class TextComposeModalFragment(val platforms: Platforms, val onSuccessCallback: Runnable? = null)
     : BottomSheetDialogFragment(R.layout.fragment_modal_text_compose) {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>

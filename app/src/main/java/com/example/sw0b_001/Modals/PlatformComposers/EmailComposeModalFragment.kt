@@ -11,7 +11,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 
-class EmailComposeModalFragment(val platform: Platforms)
+class EmailComposeModalFragment(val platform: Platforms, val onSuccessCallback: Runnable? = null)
     : BottomSheetDialogFragment(R.layout.fragment_modal_email_compose) {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
