@@ -25,13 +25,18 @@ class EmailViewActivity : AppCompactActivityCustomized() {
         ThreadExecutorPool.executorService.execute {
             val message = Datastore.getDatastore(applicationContext).encryptedContentDAO()
                 .get(intent.getLongExtra("message_id", -1))
+            println(message.encryptedContent)
             runOnUiThread {
-                message.encryptedContent.split(":".toRegex(), 5).let {
+                message.encryptedContent.split(":").let {
                     findViewById<MaterialTextView>(R.id.layout_identity_header_title).apply {
-                        text = it[0]
+                        text = "<${it[1]}>"
+                    }
+                    findViewById<MaterialTextView>(R.id.layout_identity_header_subject).apply {
+                        text = "${getString(R.string.email_compose_cc)}: ${it[2]}\n" +
+                                "${getString(R.string.email_compose_bcc)}: ${it[3]}"
                     }
                     findViewById<MaterialTextView>(R.id.layout_email_body).apply {
-                        text = it[4].removePrefix(":")
+                        text = it.subList(5, it.size).joinToString()
                     }
                 }
             }

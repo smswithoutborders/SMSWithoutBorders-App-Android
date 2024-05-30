@@ -76,7 +76,6 @@ class MessagesRecyclerAdapter : RecyclerView.Adapter<MessagesRecyclerAdapter.Vie
             }
 
             card.setOnClickListener {
-                println("Clicked...")
                 messageOnClickListener.value = messages
             }
         }

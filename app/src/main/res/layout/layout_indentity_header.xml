@@ -25,12 +25,14 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/circleImageView"
         app:layout_constraintTop_toTopOf="@+id/circleImageView"
         tools:text="janedoe@smswithoutborders.com" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/layout_identity_header_subject"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

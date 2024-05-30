@@ -41,7 +41,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:lineSpacingMultiplier="1.5"
-        android:textSize="16sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/layout_email_header_include"
         app:layout_constraintStart_toStartOf="@+id/layout_email_header_include"
