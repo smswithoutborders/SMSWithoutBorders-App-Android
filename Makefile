@@ -136,6 +136,7 @@ docker-build-aab: check-diffoscope
 
 
 bump_version: 
+	echo "${tagVersion}"
 	@python3 bump_version.py $(branch_name)
 	@git add .
 	@git commit -m "release: making release"
@@ -198,7 +199,6 @@ clean:
 # release-cd: clean requirements.txt bump_version info docker-build-aab clean
 release-cd: requirements.txt bump_version info docker-build-aab
 	@echo "+ Target branch for relase: ${branch} ${tagVersion}"
-	exit 1
 	@git tag -f ${tagVersion}
 	@git push origin ${branch_name}
 	@git push --tag
