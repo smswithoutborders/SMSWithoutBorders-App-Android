@@ -36,7 +36,6 @@ KEYSTORE_PASSWD = ks.passwd
 DOCKERFILE_FILENAME = Dockerfile
 TRACK_FILENAME = track.py
 
-# github_url=https://api.github.com/repos/deku-messaging/Deku-SMS-Android/releases
 github_url=https://api.github.com/repos/smswithoutborders/SMSWithoutBorders-App-Android/releases
 
 docker_apk_image=swob_app_apk_image
@@ -215,7 +214,7 @@ release-cd: requirements.txt bump_version info docker-build-aab
 			--track ${track} \
 			--app_bundle_file apk-outputs/${aab_output} \
 			--app_apk_file apk-outputs/${apk_output} \
-			--status $(status) \
+			--status "completed" \
 			--platforms "all" \
 			--github_url "${github_url}" \
 	)

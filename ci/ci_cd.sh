@@ -8,4 +8,5 @@ cd SMSWithoutBorders-App-Android && \
 	mkdir -p app/keys/ && \
 	cp -v ../../app/keys/app-release-key.jks app/keys/ && \
 	cp -v ../../ks.passwd . && \
+	make clean && \
 	make release-cd status="draft" && cd .. 
