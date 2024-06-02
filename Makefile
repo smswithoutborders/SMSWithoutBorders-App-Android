@@ -198,7 +198,8 @@ clean:
 
 # release-cd: clean requirements.txt bump_version info docker-build-aab clean
 release-cd: requirements.txt bump_version info docker-build-aab
-	@echo "+ Target branch for relase: ${branch}"
+	@echo "+ Target branch for relase: ${branch} ${tagVersion}"
+	exit 1
 	@git tag -f ${tagVersion}
 	@git push origin ${branch_name}
 	@git push --tag
