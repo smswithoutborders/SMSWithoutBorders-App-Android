@@ -2,6 +2,7 @@
 
 pass=$$(cat ks.passwd)
 branch_name=$$(git symbolic-ref HEAD)
+status=$(status)
 
 branch=$$(git symbolic-ref HEAD | cut -d "/" -f 3)
 # track = 'internal', 'alpha', 'beta', 'production'
@@ -136,7 +137,7 @@ docker-build-aab: check-diffoscope
 
 
 bump_version: 
-	echo "${tagVersion}"
+	echo "status=${status}, tagVersion=${tagVersion}"
 	@python3 bump_version.py $(branch_name)
 	@git add .
 	@git commit -m "release: making release"
