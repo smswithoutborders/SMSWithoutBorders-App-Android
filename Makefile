@@ -2,6 +2,7 @@
 
 pass=$$(cat ks.passwd)
 branch_name=$$(git symbolic-ref HEAD)
+status=$(status)
 
 branch=$$(git symbolic-ref HEAD | cut -d "/" -f 3)
 # track = 'internal', 'alpha', 'beta', 'production'
@@ -10,9 +11,8 @@ track=$$(python3 track.py $(branch))
 releaseVersion=$$(sed -n '1p' version.properties | cut -d "=" -f 2)
 stagingVersion=$$(sed -n '2p' version.properties | cut -d "=" -f 2)
 nightlyVersion=$$(sed -n '3p' version.properties | cut -d "=" -f 2)
-tagVersion=$$(sed -n '4p' version.properties | cut -d "=" -f 2)
-
-label=${releaseVersion}.${stagingVersion}.${nightlyVersion}
+label=$$(sed -n '4p' version.properties | cut -d "=" -f 2)
+tagVersion=$$(sed -n '5p' version.properties | cut -d "=" -f 2)
 
 aab_output=${label}.aab
 apk_output=${label}.apk
@@ -137,6 +137,7 @@ docker-build-aab: check-diffoscope
 
 
 bump_version: 
+	echo "status=${status}, tagVersion=${tagVersion}"
 	@python3 bump_version.py $(branch_name)
 	@git add .
 	@git commit -m "release: making release"
@@ -198,7 +199,7 @@ clean:
 
 # release-cd: clean requirements.txt bump_version info docker-build-aab clean
 release-cd: requirements.txt bump_version info docker-build-aab
-	@echo "+ Target branch for relase: ${branch}"
+	@echo "+ Target branch for relase: ${branch} ${tagVersion}"
 	@git tag -f ${tagVersion}
 	@git push origin ${branch_name}
 	@git push --tag

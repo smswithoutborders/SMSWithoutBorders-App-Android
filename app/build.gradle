@@ -9,9 +9,6 @@ def versionsPropertiesFile = rootProject.file("version.properties")
 def versionProperties = new Properties()
 versionProperties.load(new FileInputStream(versionsPropertiesFile))
 
-def releasePropertiesFile = rootProject.file("release.properties")
-def releaseProperties = new Properties()
-releaseProperties.load(new FileInputStream(releasePropertiesFile))
 
 android {
     compileSdkVersion 34
@@ -76,6 +73,9 @@ android {
 }
 
 repositories {
+	def releasePropertiesFile = rootProject.file("release.properties")
+	def releaseProperties = new Properties()
+	releaseProperties.load(new FileInputStream(releasePropertiesFile))
     maven {
         url = uri("https://maven.pkg.github.com/smswithoutborders/lib_signal_double_ratchet_java")
         credentials {
