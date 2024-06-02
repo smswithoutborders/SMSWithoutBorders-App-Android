@@ -5,19 +5,23 @@ import android.os.SystemClock
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
+import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
 
-class TextComposeModalFragment(val platforms: Platforms)
+class TextComposeModalFragment(val platforms: Platforms, val message: EncryptedContent? = null,
+                               private val onSuccessCallback: Runnable? = null)
     : BottomSheetDialogFragment(R.layout.fragment_modal_text_compose) {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        println("Platforms letter: ${platforms.letter}")
         view.findViewById<MaterialButton>(R.id.text_compose_btn)
                 .setOnClickListener {
                     processPost(view)
@@ -36,6 +40,14 @@ class TextComposeModalFragment(val platforms: Platforms)
         bottomSheetBehavior.isDraggable = true
 
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+
+        message?.let {
+            it.encryptedContent.split(":").let {
+                view.findViewById<EditText>(R.id.tweet_compose_text).apply {
+                    setText(it.subList(1, it.size).joinToString())
+                }
+            }
+        }
     }
 
     private fun processPost(view: View) {
@@ -50,6 +62,7 @@ class TextComposeModalFragment(val platforms: Platforms)
                 processTextForEncryption(platforms.letter, textComposeTextEdit.text.toString())
         ComposeHandlers.compose(view.context, formattedString, platforms) {
             dismiss()
+            onSuccessCallback?.let { it.run() }
         }
 
     }

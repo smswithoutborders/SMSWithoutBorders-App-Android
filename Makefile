@@ -1,6 +1,7 @@
-pass=$$(cat $(jks_pass))
+# args=status(draft,)
+
+pass=$$(cat ks.passwd)
 branch_name=$$(git symbolic-ref HEAD)
-status=$(status)
 
 branch=$$(git symbolic-ref HEAD | cut -d "/" -f 3)
 # track = 'internal', 'alpha', 'beta', 'production'
@@ -118,20 +119,20 @@ commit-check: _commit-check clean
 
 check-diffoscope: ks.passwd
 	@echo "Building apk output: ${APP_1}"
-	@docker build -t ${docker_apk_image} --target apk-builder .
-	@docker run --name ${CONTAINER_NAME} -e PASS=$(pass) ${docker_apk_image} && \
+	DOCKER_BUILDKIT=1 docker build -t ${docker_apk_image} --target apk-builder .
+	docker run --name ${CONTAINER_NAME} -e PASS=$(pass) ${docker_apk_image} && \
 		docker cp ${CONTAINER_NAME}:/android/app/build/outputs/apk/release/app-release.apk apk-outputs/${APP_1}
 	@sleep 3
 	@echo "Building apk output: ${APP_2}"
-	@docker run --name ${CONTAINER_NAME_1} -e PASS=$(pass) ${docker_apk_image} && \
+	docker run --name ${CONTAINER_NAME_1} -e PASS=$(pass) ${docker_apk_image} && \
 		docker cp ${CONTAINER_NAME_1}:/android/app/build/outputs/apk/release/app-release.apk apk-outputs/${APP_2}
 	@diffoscope apk-outputs/${APP_1} apk-outputs/${APP_2}
 	@echo $? | exit
 
 docker-build-aab: check-diffoscope
-	@sleep 5
-	@docker build -t ${docker_app_image} --target bundle-builder .
-	@docker run --name ${CONTAINER_NAME_BUNDLE} -e PASS=$(pass) -e MIN_SDK=$(minSdk) ${docker_app_image} && \
+	# @sleep 5
+	DOCKER_BUILDKIT=1 docker build -t ${docker_app_image} --target bundle-builder .
+	docker run --name ${CONTAINER_NAME_BUNDLE} -e PASS=$(pass) -e MIN_SDK=$(minSdk) ${docker_app_image} && \
 		docker cp ${CONTAINER_NAME_BUNDLE}:/android/app/build/outputs/bundle/release/app-bundle.aab apk-outputs/${aab_output}
 
 
@@ -143,11 +144,11 @@ bump_version:
 build-apk:
 	@echo "+ Building apk output: ${apk_output} - ${branch_name}"
 	@./gradlew clean assembleRelease
-	@apksigner sign --ks app/keys/app-release-key.jks \
+	apksigner sign --ks app/keys/app-release-key.jks \
 		--ks-pass pass:$(pass) \
 		--in app/build/outputs/apk/release/app-release-unsigned.apk \
 		--out apk-outputs/${apk_output}
-	@shasum apk-outputs/${apk_output}
+	shasum apk-outputs/${apk_output}
 
 build-aab:
 	@echo "+ Building aab output: ${aab_output} - ${branch_name}"
@@ -195,7 +196,8 @@ clean:
 	@echo "y" | docker builder prune -a
 	@echo "y" | docker image prune -a
 
-release-cd: clean requirements.txt bump_version info docker-build-aab clean
+# release-cd: clean requirements.txt bump_version info docker-build-aab clean
+release-cd: requirements.txt bump_version info docker-build-aab
 	@echo "+ Target branch for relase: ${branch}"
 	@git tag -f ${tagVersion}
 	@git push origin ${branch_name}

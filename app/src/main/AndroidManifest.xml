@@ -30,6 +30,17 @@
         android:versionCode="48"
         android:versionName="2.5.8"
         tools:replace="android:label">
+
+        <activity
+            android:name=".EmailViewActivity"
+            android:exported="false"
+            android:parentActivityName=".HomepageActivity" />
+
+        <activity
+            android:name=".TextViewActivity"
+            android:exported="false"
+            android:parentActivityName=".HomepageActivity" />
+
         <activity
             android:name=".Security.LockScreenActivity"
             android:exported="false" />

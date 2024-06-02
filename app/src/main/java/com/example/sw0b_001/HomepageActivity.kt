@@ -17,6 +17,7 @@ import com.example.sw0b_001.Modals.PlatformsModalFragment
 import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.Messages.MessagesRecyclerAdapter
 import com.example.sw0b_001.Models.Messages.MessagesViewModel
+import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
@@ -29,6 +30,8 @@ class HomepageActivity : AppCompactActivityCustomized() {
         val myToolbar = findViewById<MaterialToolbar>(R.id.homepage_recents_toolbar)
         setSupportActionBar(myToolbar)
         supportActionBar!!.title = null
+
+        messagesRecyclerView = findViewById<RecyclerView>(R.id.recents_recycler_view)
 
         configureRecyclerHandlers()
 
@@ -79,12 +82,12 @@ class HomepageActivity : AppCompactActivityCustomized() {
 
     }
 
+    private lateinit var messagesRecyclerView : RecyclerView
     private fun configureRecyclerHandlers() {
         val recentRecyclerAdapter = MessagesRecyclerAdapter()
         val linearLayoutManager = LinearLayoutManager(applicationContext,
                 LinearLayoutManager.VERTICAL, false);
 
-        val messagesRecyclerView = findViewById<RecyclerView>(R.id.recents_recycler_view)
         messagesRecyclerView.layoutManager = linearLayoutManager
         messagesRecyclerView.adapter = recentRecyclerAdapter
 
@@ -92,7 +95,9 @@ class HomepageActivity : AppCompactActivityCustomized() {
 
         val noRecentMessagesText = findViewById<TextView>(R.id.no_recent_messages)
         viewModel.getMessages(applicationContext).observe(this) {
-            recentRecyclerAdapter.mDiffer.submitList(it)
+            recentRecyclerAdapter.mDiffer.submitList(it) {
+                messagesRecyclerView.smoothScrollToPosition(0)
+            }
             if (it.isNullOrEmpty())
                 noRecentMessagesText.visibility = View.VISIBLE
             else
@@ -101,7 +106,21 @@ class HomepageActivity : AppCompactActivityCustomized() {
 
         recentRecyclerAdapter.messageOnClickListener.observe(this, Observer {
             if(it != null) {
-                recentRecyclerAdapter.messageOnClickListener = MutableLiveData()
+                recentRecyclerAdapter.messageOnClickListener.value = null
+                when(it.first.type) {
+                    Platforms.TYPE_TEXT -> {
+                        startActivity(Intent(this, TextViewActivity::class.java).apply {
+                            putExtra("platform_id", it.second.id)
+                            putExtra("message_id", it.first.id)
+                        })
+                    }
+                    Platforms.TYPE_EMAIL -> {
+                        startActivity(Intent(this, EmailViewActivity::class.java).apply {
+                            putExtra("platform_id", it.second.id)
+                            putExtra("message_id", it.first.id)
+                        })
+                    }
+                }
             }
         })
     }

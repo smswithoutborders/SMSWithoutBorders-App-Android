@@ -50,7 +50,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
             android:text="skip all"
-            android:textColor="@color/link_color"
+            android:textColor="@color/browser_actions_text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/onboard_next_button"

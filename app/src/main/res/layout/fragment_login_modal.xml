@@ -51,7 +51,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:visibility="gone"
-            app:cardBackgroundColor="#CDA092"
+            app:cardBackgroundColor="@color/md_theme_error"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_progress_bar"
@@ -71,6 +71,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:textSize="16sp"
+                    android:textColor="@color/md_theme_onError"
                     tools:text="Wrong number or password, please try again..." />
 
                 <!--                <com.google.android.material.button.MaterialButton-->
@@ -104,9 +105,9 @@
                 android:id="@+id/login_country_code_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                app:ccp_contentColor="@color/primary_color_text"
-                app:ccpDialog_backgroundColor="@color/primary_background_color"
-                app:ccpDialog_textColor="@color/primary_color_text"
+                app:ccp_contentColor="@color/md_theme_primary"
+                app:ccpDialog_backgroundColor="@color/md_theme_background"
+                app:ccpDialog_textColor="@color/md_theme_primary"
                 app:ccp_autoDetectCountry="true"
                 app:ccp_clickable="true"
                 app:ccp_countryAutoDetectionPref="SIM_ONLY"

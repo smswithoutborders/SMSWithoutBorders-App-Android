@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true"
-        app:indicatorColor="@color/logo_blue1"
+        app:indicatorColor="@color/main_icon_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gateway_client_toolbar" />
@@ -39,7 +39,6 @@
         android:layout_marginTop="16dp"
         android:text="@string/gateway_clients_settings_operator_id"
         android:textAlignment="center"
-        android:textColor="@color/pending_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

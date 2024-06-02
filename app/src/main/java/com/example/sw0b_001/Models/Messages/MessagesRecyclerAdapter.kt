@@ -1,5 +1,6 @@
 package com.example.sw0b_001.Models.Messages
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +21,8 @@ class MessagesRecyclerAdapter : RecyclerView.Adapter<MessagesRecyclerAdapter.Vie
     val mDiffer: AsyncListDiffer<EncryptedContent> = AsyncListDiffer(this,
             EncryptedContent.DIFF_CALLBACK)
 
-    var messageOnClickListener: MutableLiveData<EncryptedContent> = MutableLiveData<EncryptedContent>()
+    var messageOnClickListener: MutableLiveData<Pair<EncryptedContent, Platforms>> =
+        MutableLiveData<Pair<EncryptedContent, Platforms>>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.layout_cardlist_recents, parent, false)
@@ -44,7 +46,7 @@ class MessagesRecyclerAdapter : RecyclerView.Adapter<MessagesRecyclerAdapter.Vie
         private val recipient = itemView.findViewById<MaterialTextView>(R.id.homepage_recipient)
         private val platformLogo = itemView.findViewById<ImageView>(R.id.recents_platform_logo)
         fun bind(messages: EncryptedContent,
-                 messageOnClickListener: MutableLiveData<EncryptedContent>) {
+                 messageOnClickListener: MutableLiveData<Pair<EncryptedContent, Platforms>>) {
             val platforms = _PlatformsHandler.getPlatform(itemView.context,
                     messages.getPlatformName())
 
@@ -75,7 +77,7 @@ class MessagesRecyclerAdapter : RecyclerView.Adapter<MessagesRecyclerAdapter.Vie
             }
 
             card.setOnClickListener {
-                messageOnClickListener.value = messages
+                messageOnClickListener.value = Pair(messages, platforms)
             }
         }
     }
