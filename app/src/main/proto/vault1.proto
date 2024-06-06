@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package vault.v1;
+
+// Request message for creating an entity.
+message CreateEntityRequest {
+    // The ISO 3166-1 alpha-2 country code of the entity.
+    string country_code = 1;
+    // The phone number of the entity.
+    string phone_number = 2;
+    // The password of the entity.
+    string password = 3;
+    // The client's public key for publishing.
+    string client_publish_pub_key = 4;
+    // The client's public key for device identification.
+    string client_device_id_pub_key = 5;
+    // The ownership proof response from the client.
+    string ownership_proof_response = 6;
+}
+
+// Response message for creating an entity.
+message CreateEntityResponse {
+    // Indicates if ownership proof is required.
+    bool requires_ownership_proof = 1;
+    // A long-lived token for the authenticated entity.
+    string long_lived_token = 2;
+    // The server's public key for publishing.
+    string server_publish_pub_key = 3;
+    // The server's public key for device identification.
+    string server_device_id_pub_key = 4;
+    // A response message.
+    string message = 5;
+    // The next available time to request another proof of ownership.
+    int32 next_attempt_timestamp = 6;
+}
+
+// Request message for authenticating an entity.
+message AuthenticateEntityRequest {
+    // The phone number of the entity.
+    string phone_number = 1;
+    // The password of the entity.
+    string password = 2;
+    // The client's public key for publishing.
+    string client_publish_pub_key = 3;
+    // The client's public key for device identification.
+    string client_device_id_pub_key = 4;
+    // The ownership proof response from the client.
+    string ownership_proof_response = 5;
+}
+
+// Response message for authenticating an entity.
+message AuthenticateEntityResponse {
+    // Indicates if ownership proof is required.
+    bool requires_ownership_proof = 1;
+    // A long-lived token for the authenticated entity.
+    string long_lived_token = 2;
+    // The server's public key for publishing.
+    string server_publish_pub_key = 3;
+    // The server's public key for device identification.
+    string server_device_id_pub_key = 4;
+    // A response message.
+    string message = 5;
+    // The next available time to request another proof of ownership.
+    int32 next_attempt_timestamp = 6;
+}
+
+// Service for managing entities.
+service Entity {
+    // Creates an entity.
+    rpc CreateEntity (CreateEntityRequest) returns (CreateEntityResponse);
+    // Authenticates an entity.
+    rpc AuthenticateEntity (AuthenticateEntityRequest) returns (AuthenticateEntityResponse);
+}
