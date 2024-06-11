@@ -365,5 +365,6 @@
     <string name="log_into_your_vault_account_or_create_one_if_you_do_not_have_yet">Log into your Vault account or create one if you do not have yet</string>
     <string name="login_signup_create_new">Create new</string>
     <string name="compose_edit">Edit</string>
+    <string name="compose_delete">Delete</string>
 
 </resources>

@@ -1,48 +1,36 @@
 # SMSWithoutBorders - Android
 
-## Implementations
+### Publishing Payload
+```python3
+pl = b'g'
+encrypted_content=b'...'
+device_id=b'...'
 
-### DeviceID
+payload = len(encrypted_content) + pl + encrypted_content + device_id
+return base64.encode(payload)
 
-**Requirements**
+#unpacking in Python
+import struct
+import base64
 
-- _secret_key_:- Derived from a DH handshake with Vault. Not used for any form of encryption for messaging sending.
-- _phone_number_:- Phone number used in creating Vault account.
-- _public_key_:- The Public key used in the DH handshake above.
-
-```python
-import hmac
-import hashlib
-
-def generate_device_id(secret_key, phone_number, public_key) -> bytes:
-    # Combine the phone number and public key
-    combined_input = phone_number + public_key
-
-    # Create an HMAC object using the secret key and SHA-256 hash function
-    hmac_object = hmac.new(secret_key.encode(), combined_input.encode(), hashlib.sha256)
-
-    # Generate the device ID as a hexadecimal string
-    return hmac_object
-
-device_id = generate_device_id(...)
+payload = base64.decode(incoming_payload)
+len_enc_content = struct.unpack("<i", payload[0])
+pl = payload[1]
+encrypted_content = payload[2:len_enc_content]
+device_id = payload[2+len_enc_content:]
 ```
 
-**Implementation considerations**
+### Platform specific publications (encrypted content)
+```python3
+""" Email (Gmail etc)
+"""
+# to:cc:bcc:subject:body
 
-- Proof of number ownership is required to avoid spoofing as another user. OTP via SMS when creating account can be used here.
+""" Messages (Telegram etc)
+"""
+# to:body
 
-**Payload structure**
-```python
-import struct
-
-# Encoding
-...
-ctLen = len(encrypted_content_bytes)
-payload = base64.encode(concat_bytes(struct.pack("<i", ctLen), encrypted_content_bytes, device_id))
-
-# Decoding
-...
-ctLen = int.from_bytes(payload[0:4])
-cipher_text = payload[ctLen:-64]
-device_id = payload[-64:]
+""" Text (X; Twitter etc)
+"""
+# body
 ```

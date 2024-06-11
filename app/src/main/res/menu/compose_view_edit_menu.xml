@@ -8,4 +8,10 @@
         android:icon="@drawable/round_edit_24"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/compose_view_edit_menu_delete"
+        android:title="@string/compose_delete"
+        android:icon="@drawable/round_delete_24"
+        app:showAsAction="ifRoom" />
+
 </menu>

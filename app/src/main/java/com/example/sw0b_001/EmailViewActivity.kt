@@ -69,6 +69,16 @@ class EmailViewActivity : AppCompactActivityCustomized() {
                 }
                 return true
             }
+            R.id.compose_view_edit_menu_delete -> {
+                ThreadExecutorPool.executorService.execute {
+                    Datastore.getDatastore(applicationContext).encryptedContentDAO()
+                        .delete(intent.getLongExtra("message_id", -1))
+                    runOnUiThread {
+                        finish()
+                    }
+                }
+                return true
+            }
         }
         return false
     }

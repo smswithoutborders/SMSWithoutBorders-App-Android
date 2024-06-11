@@ -272,6 +272,10 @@ class Vault_V2(val uid: String) {
                 loginViaUID(context, _uid, password)
             }
 
+            if(networkResponseResults.response.statusCode != 200) {
+                throw Exception(String(networkResponseResults.response.data))
+            }
+
             fragment?.let {
                 it.activity?.runOnUiThread {
                     Toast.makeText(context, context.getString(R.string.login_successful),
