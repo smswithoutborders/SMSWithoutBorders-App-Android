@@ -1,6 +1,6 @@
 # SMSWithoutBorders - Android
 
-## Publishing Payload
+### Publishing Payload
 ```python3
 pl = b'g'
 encrypted_content=b'...'
@@ -18,4 +18,19 @@ len_enc_content = struct.unpack("<i", payload[0])
 pl = payload[1]
 encrypted_content = payload[2:len_enc_content]
 device_id = payload[2+len_enc_content:]
+```
+
+### Platform specific publications (encrypted content)
+```python3
+""" Email (Gmail etc)
+"""
+# to:cc:bcc:subject:body
+
+""" Messages (Telegram etc)
+"""
+# to:body
+
+""" Text (X; Twitter etc)
+"""
+# body
 ```
