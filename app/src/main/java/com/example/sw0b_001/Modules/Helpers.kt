@@ -6,6 +6,7 @@ import android.text.format.DateUtils
 import android.util.Log
 import com.example.sw0b_001.R
 import java.net.URL
+import java.security.SecureRandom
 import java.util.Calendar
 
 object Helpers {
@@ -88,5 +89,12 @@ object Helpers {
         } else {
             Log.v("Intent", "Extras: null")
         }
+    }
+
+    fun generateRandomBytes(size: Int): ByteArray {
+        val random = SecureRandom()
+        val bytes = ByteArray(size)
+        random.nextBytes(bytes)
+        return bytes
     }
 }
