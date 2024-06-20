@@ -192,5 +192,7 @@ dependencies {
 
 //     Add protobuf-java dependency
     implementation "com.google.protobuf:protobuf-java:3.25.1"
+
+    implementation "com.macasaet.fernet:fernet-java8:1.4.2"
 }
 

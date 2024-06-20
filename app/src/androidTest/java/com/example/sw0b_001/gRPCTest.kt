@@ -1,5 +1,6 @@
 package com.example.sw0b_001
 
+import android.util.Base64
 import com.example.sw0b_001.Modules.Helpers
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
@@ -36,7 +37,8 @@ class gRPCTest {
     lateinit var channel: ManagedChannel
     lateinit var entityStub: EntityBlockingStub
 
-    val globalPhoneNumber = "+237123456790"
+    private val globalPhoneNumber = "+23712345673"
+    private val globalPassword = "dMd2Kmo9"
 
     @Before
     fun init() {
@@ -50,6 +52,9 @@ class gRPCTest {
 
     @Test
     fun vaultTestCreateEntity() {
+        /**
+         * TODO: Get wait time in here, to be used for
+         */
         val createEntityRequest1 = Vault.CreateEntityRequest.newBuilder().apply {
             setPhoneNumber(globalPhoneNumber)
         }.build()
@@ -81,13 +86,15 @@ class gRPCTest {
          *
          * Public and private keys should go as bytes
          */
-        vaultTestCreateEntity()
+//        vaultTestCreateEntity()
         val createEntityRequest2 = Vault.CreateEntityRequest.newBuilder().apply {
             setCountryCode("CM")
             setPhoneNumber(globalPhoneNumber)
-            setPassword("dMd2Kmo9")
-            setClientPublishPubKey(String(Helpers.generateRandomBytes(32)))
-            setClientDeviceIdPubKey(String(Helpers.generateRandomBytes(32)))
+            setPassword(globalPassword)
+            setClientPublishPubKey(Base64.encodeToString(Helpers.generateRandomBytes(32),
+                Base64.DEFAULT))
+            setClientDeviceIdPubKey(Base64.encodeToString(Helpers.generateRandomBytes(32),
+                Base64.DEFAULT))
             setOwnershipProofResponse("123456")
         }.build()
 
@@ -109,8 +116,8 @@ class gRPCTest {
 
     private fun vaultAuthenticateEntity(): AuthenticateEntityResponse {
         val authenticateEntity = Vault.AuthenticateEntityRequest.newBuilder().apply {
-            setPhoneNumber(phoneNumber)
-            setPassword(password)
+            setPhoneNumber(globalPhoneNumber)
+            setPassword(globalPassword)
         }.build()
 
         val createResponse = entityStub.authenticateEntity(authenticateEntity)
@@ -120,28 +127,31 @@ class gRPCTest {
 
     @Test
     fun vaultTestAuthenticateEntity() {
-        vaultTestCreateEntity()
-        vaultTestCreateEntity2()
+//        vaultTestCreateEntity()
+//        vaultTestCreateEntity2()
 
         val createResponse = vaultAuthenticateEntity()
-        assert(createResponse.requiresOwnershipProof)
+        vaultTestAuthenticationEntity2()
     }
 
-
-    @Test
-    fun vaultTestStoreEntityToken() {
+    private fun vaultTestAuthenticationEntity2(): AuthenticateEntityResponse {
         /**
-         * Pending feedback
-         * https://github.com/smswithoutborders/SMSwithoutborders-BE/issues/107
+         * TODO: grpc
+         * Need to be able to delete contacts
+         *
+         * Public and private keys should go as bytes
          */
-        vaultTestCreateEntity()
-        vaultTestCreateEntity2()
-
-        val createResponse = vaultAuthenticateEntity()
-
-        val storeEntity = Vault.StoreEntityTokenRequest.newBuilder().apply {
-            setLongLivedTokenBytes(createResponse.longLivedTokenBytes)
+//        vaultTestCreateEntity()
+        val createEntityRequest2 = Vault.AuthenticateEntityRequest.newBuilder().apply {
+            setPhoneNumber(globalPhoneNumber)
+            setClientPublishPubKey(Base64.encodeToString(Helpers.generateRandomBytes(32),
+                Base64.DEFAULT))
+            setClientDeviceIdPubKey(Base64.encodeToString(Helpers.generateRandomBytes(32),
+                Base64.DEFAULT))
+            setOwnershipProofResponse("123456")
         }.build()
+
+        return entityStub.authenticateEntity(createEntityRequest2)
     }
 
     @Test
@@ -150,13 +160,18 @@ class gRPCTest {
          * Pending feedback
          * https://github.com/smswithoutborders/SMSwithoutborders-BE/issues/107
          */
-        vaultTestCreateEntity()
-        vaultTestCreateEntity2()
+//        vaultTestCreateEntity()
+//        vaultTestCreateEntity2()
 
-        val createResponse = vaultAuthenticateEntity()
+        vaultAuthenticateEntity()
+        val createResponse = vaultTestAuthenticationEntity2()
+        println(createResponse.message)
 
+        /** TODO: decrypt the llt with Fernet in Crypto before use
+         *
+         */
         val listEntity = Vault.ListEntityStoredTokenRequest.newBuilder().apply {
-            setLongLivedTokenBytes(createResponse.longLivedTokenBytes)
+            setLongLivedToken(createResponse.longLivedToken)
         }.build()
 
         val listResponse = entityStub.listEntityStoredTokens(listEntity)
