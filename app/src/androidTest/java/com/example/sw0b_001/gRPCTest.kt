@@ -1,7 +1,11 @@
 package com.example.sw0b_001
 
 import android.util.Base64
+import com.example.sw0b_001.Modules.Crypto
 import com.example.sw0b_001.Modules.Helpers
+import com.example.sw0b_001.Modules.Security
+import com.example.sw0b_001.Security.SecurityAES
+import com.example.sw0b_001.Security.SecurityCurve25519
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import io.grpc.StatusRuntimeException
@@ -39,6 +43,8 @@ class gRPCTest {
 
     private val globalPhoneNumber = "+23712345673"
     private val globalPassword = "dMd2Kmo9"
+    private val deviceIdPubKey = SecurityCurve25519().generateKey()
+    private val publishPubKey = SecurityCurve25519().generateKey()
 
     @Before
     fun init() {
@@ -91,10 +97,8 @@ class gRPCTest {
             setCountryCode("CM")
             setPhoneNumber(globalPhoneNumber)
             setPassword(globalPassword)
-            setClientPublishPubKey(Base64.encodeToString(Helpers.generateRandomBytes(32),
-                Base64.DEFAULT))
-            setClientDeviceIdPubKey(Base64.encodeToString(Helpers.generateRandomBytes(32),
-                Base64.DEFAULT))
+            setClientPublishPubKey(Base64.encodeToString(publishPubKey.publicKey, Base64.DEFAULT))
+            setClientDeviceIdPubKey(Base64.encodeToString(deviceIdPubKey.publicKey, Base64.DEFAULT))
             setOwnershipProofResponse("123456")
         }.build()
 
@@ -144,10 +148,8 @@ class gRPCTest {
 //        vaultTestCreateEntity()
         val createEntityRequest2 = Vault.AuthenticateEntityRequest.newBuilder().apply {
             setPhoneNumber(globalPhoneNumber)
-            setClientPublishPubKey(Base64.encodeToString(Helpers.generateRandomBytes(32),
-                Base64.DEFAULT))
-            setClientDeviceIdPubKey(Base64.encodeToString(Helpers.generateRandomBytes(32),
-                Base64.DEFAULT))
+            setClientPublishPubKey(Base64.encodeToString(publishPubKey.publicKey, Base64.DEFAULT))
+            setClientDeviceIdPubKey(Base64.encodeToString(deviceIdPubKey.publicKey, Base64.DEFAULT))
             setOwnershipProofResponse("123456")
         }.build()
 
@@ -157,25 +159,25 @@ class gRPCTest {
     @Test
     fun vaultTestListStoredEntityToken() {
         /**
-         * Pending feedback
-         * https://github.com/smswithoutborders/SMSwithoutborders-BE/issues/107
+         * https://github.com/smswithoutborders/SMSwithoutborders-BE/blob/feature/grpc_api/docs/grpc.md#authenticate-an-entity
          */
-//        vaultTestCreateEntity()
-//        vaultTestCreateEntity2()
 
         vaultAuthenticateEntity()
         val createResponse = vaultTestAuthenticationEntity2()
-        println(createResponse.message)
 
-        /** TODO: decrypt the llt with Fernet in Crypto before use
-         *
-         */
+        val sharedKey = SecurityCurve25519().calculateSharedSecret(
+            Base64.decode(createResponse.serverDeviceIdPubKey, Base64.DEFAULT), deviceIdPubKey)
+
+        val llt = Crypto.decryptFernet(sharedKey,
+            String(Base64.decode(createResponse.longLivedToken, Base64.DEFAULT), Charsets.UTF_8))
         val listEntity = Vault.ListEntityStoredTokenRequest.newBuilder().apply {
-            setLongLivedToken(createResponse.longLivedToken)
+            setLongLivedToken(llt)
         }.build()
 
         val listResponse = entityStub.listEntityStoredTokens(listEntity)
         val listStoredTokens: List<Vault.Token> = listResponse.storedTokensList
+
+        println(listStoredTokens)
 
         /**
         listStoredTokens.forEach {

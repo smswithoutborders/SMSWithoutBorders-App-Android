@@ -162,4 +162,6 @@
     <string name="onboarding_vault_description_2">SMSWithoutBorders utilise les méthodes standardisées fournies par les plateformes en ligne pour utiliser et sécuriser vos informations stockées dans les chambres fortes.</string>
     <string name="log_into_your_vault_account_or_create_one_if_you_do_not_have_yet">Log in to your Vault account or create one if you don\'t already have one</string>
     <string name="login_signup_create_new">Créer un nouveau</string>
+    <string name="compose_edit">Modifier</string>
+    <string name="compose_delete">Supprimer</string>
 </resources>

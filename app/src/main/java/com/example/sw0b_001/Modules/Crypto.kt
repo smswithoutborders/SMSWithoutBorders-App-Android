@@ -13,6 +13,7 @@ import java.net.URL
 import java.security.PublicKey
 import java.security.SecureRandom
 import java.security.cert.Certificate
+import java.time.Instant
 import javax.crypto.Cipher
 import javax.net.ssl.HttpsURLConnection
 
@@ -41,10 +42,10 @@ object Crypto {
         return cipher.doFinal(data)
     }
 
-    fun decryptFernet(key: String, data: ByteArray): String {
+    fun decryptFernet(key: ByteArray, data: String): String {
         val fKey = Key(key)
-        val token = Token.generate(fKey, data)
-        return token.validateAndDecrypt(fKey,
-            StringValidator::class.java.getDeclaredConstructor().newInstance())
+        val token = Token.fromString(data)
+        val validator = object : StringValidator { }
+        return token.validateAndDecrypt(fKey, validator)
     }
 }

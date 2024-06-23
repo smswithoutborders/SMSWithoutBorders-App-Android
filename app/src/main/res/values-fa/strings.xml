@@ -162,4 +162,6 @@
     <string name="onboarding_vault_description_2">اس ام اس بدون مرز از روش های استاندارد ارائه شده توسط پلتفرم های آنلاین استفاده می کند و از اطلاعات ذخیره شده شما در خزانه ها و ایمن سازی آنها استفاده می کند.</string>
     <string name="log_into_your_vault_account_or_create_one_if_you_do_not_have_yet">به حساب خزانه خود وارد شوید یا اگر هنوز ندارید یکی ایجاد کنید</string>
     <string name="login_signup_create_new">ایجاد جدید</string>
+    <string name="compose_edit">ویرایش کنید</string>
+    <string name="compose_delete">حذف</string>
 </resources>

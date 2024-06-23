@@ -48,9 +48,7 @@
             android:name=".SettingsActivity"
             android:exported="true"
             android:parentActivityName=".HomepageActivity" />
-        <activity
-            android:name=".Modals.LoginModalFragment"
-            android:exported="false" />
+
         <activity
             android:name=".OTPVerificationActivity"
             android:exported="false" />
@@ -88,12 +86,6 @@
             android:name=".MessageComposeActivity"
             android:exported="false"
             android:label="@string/message_compose_header"
-            android:parentActivityName=".HomepageActivity" />
-
-        <activity
-            android:name=".TextComposeActivity"
-            android:exported="false"
-            android:label=""
             android:parentActivityName=".HomepageActivity" />
 
         <provider
