@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package publisher.v1;
+
+// Request message for getting the OAuth2 authorization URL
+message GetOAuth2AuthorizationUrlRequest {
+  // The platform for which the authorization URL is requested
+  string platform = 1;
+  // Optional state parameter to prevent CSRF attacks
+  string state = 2;
+  // Optional code verifier for PKCE
+  string code_verifier = 3;
+  // Flag to indicate if the code verifier should be auto-generated
+  bool autogenerate_code_verifier = 4;
+}
+
+// Response message for the OAuth2 GetAuthorizationUrl RPC
+message GetOAuth2AuthorizationUrlResponse {
+  // The authorization URL
+  string authorization_url = 1;
+  // The state parameter for preventing CSRF attacks
+  string state = 2;
+  // The code verifier used for PKCE
+  string code_verifier = 3;
+  // A response message
+  string message = 4;
+}
+
+// Request message for exchanging the OAuth2 authorization code for a token
+message ExchangeOAuth2CodeAndStoreRequest {
+  // The long-lived token of the authenticated entity.
+  string long_lived_token = 1;
+  // The platform for which the token exchange is being performed
+  string platform = 2;
+  // The authorization code received from the authorization server
+  string authorization_code = 3;
+  // Optional code verifier used for PKCE
+  string code_verifier = 4;
+}
+
+// Response message for the ExchangeOAuth2Code RPC
+message ExchangeOAuth2CodeAndStoreResponse {
+  // Indicates if the token exchange and storage was successful
+  bool success = 1;
+  // A response message
+  string message = 2;
+}
+
+// Request message for publishing content
+message PublishContentRequest {
+  // The content to be published
+  string content = 1;
+  // Metadata about the content
+  map<string, string> metadata = 2;
+}
+
+// Response message for the PublishContent RPC
+message PublishContentResponse {
+  // Indicates if the publishing was successful
+  bool success = 1;
+  // A response message
+  string message = 2;
+  // A response from the publisher
+  string publisher_response = 3;
+}
+
+// Service definition for Publisher
+service Publisher {
+  // RPC for getting the OAuth2 authorization URL
+  rpc GetOAuth2AuthorizationUrl(GetOAuth2AuthorizationUrlRequest) returns (GetOAuth2AuthorizationUrlResponse);
+  // RPC for exchanging OAuth2 authorization code for a token
+  rpc ExchangeOAuth2CodeAndStore(ExchangeOAuth2CodeAndStoreRequest) returns (ExchangeOAuth2CodeAndStoreResponse);
+  // RPC for publishing content
+  rpc PublishContent(PublishContentRequest) returns (PublishContentResponse);
+}

@@ -2,23 +2,22 @@ package com.example.sw0b_001
 
 import android.util.Base64
 import com.example.sw0b_001.Modules.Crypto
-import com.example.sw0b_001.Modules.Helpers
-import com.example.sw0b_001.Modules.Security
-import com.example.sw0b_001.Security.SecurityAES
 import com.example.sw0b_001.Security.SecurityCurve25519
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import io.grpc.StatusRuntimeException
-import okio.ByteString
+import io.grpc.stub.StreamObserver
 import org.junit.Before
 import org.junit.Test
+import publisher.v1.PublisherGrpc
+import publisher.v1.PublisherGrpc.PublisherBlockingStub
+import publisher.v1.PublisherGrpc.PublisherStub
+import publisher.v1.PublisherOuterClass
+import publisher.v1.PublisherOuterClass.GetOAuth2AuthorizationUrlResponse
 import vault.v1.EntityGrpc
 import vault.v1.EntityGrpc.EntityBlockingStub
-import vault.v1.EntityGrpc.EntityFutureStub
-import vault.v1.EntityGrpc.EntityStub
 import vault.v1.Vault
 import vault.v1.Vault.AuthenticateEntityResponse
-import java.net.Inet6Address
 
 /**
  * Flow from https://github.com/smswithoutborders/SMSwithoutborders-BE/blob/feature/grpc_api/docs/grpc.md
@@ -37,9 +36,16 @@ import java.net.Inet6Address
  * 5. List stored entities
  * https://github.com/smswithoutborders/SMSwithoutborders-BE/blob/feature/grpc_api/docs/grpc.md#list-an-entitys-stored-tokens
  */
+
+/**
+ * Docs: https://grpc.github.io/grpc/core/md_doc_statuscodes.html
+ */
 class gRPCTest {
-    lateinit var channel: ManagedChannel
-    lateinit var entityStub: EntityBlockingStub
+
+    private lateinit var channel: ManagedChannel
+
+    private lateinit var entityStub: EntityBlockingStub
+    private lateinit var publisherStub: PublisherBlockingStub
 
     private val globalPhoneNumber = "+23712345673"
     private val globalPassword = "dMd2Kmo9"
@@ -54,6 +60,7 @@ class gRPCTest {
             .build()
 
         entityStub = EntityGrpc.newBlockingStub(channel)
+        publisherStub = PublisherGrpc.newBlockingStub(channel)
     }
 
     @Test
@@ -138,7 +145,7 @@ class gRPCTest {
         vaultTestAuthenticationEntity2()
     }
 
-    private fun vaultTestAuthenticationEntity2(): AuthenticateEntityResponse {
+    private fun vaultTestAuthenticationEntity2(): String {
         /**
          * TODO: grpc
          * Need to be able to delete contacts
@@ -153,7 +160,13 @@ class gRPCTest {
             setOwnershipProofResponse("123456")
         }.build()
 
-        return entityStub.authenticateEntity(createEntityRequest2)
+        val createResponse = entityStub.authenticateEntity(createEntityRequest2)
+
+        val sharedKey = SecurityCurve25519().calculateSharedSecret(
+            Base64.decode(createResponse.serverDeviceIdPubKey, Base64.DEFAULT), deviceIdPubKey)
+
+        return Crypto.decryptFernet(sharedKey,
+            String(Base64.decode(createResponse.longLivedToken, Base64.DEFAULT), Charsets.UTF_8))
     }
 
     @Test
@@ -163,13 +176,8 @@ class gRPCTest {
          */
 
         vaultAuthenticateEntity()
-        val createResponse = vaultTestAuthenticationEntity2()
+        val llt = vaultTestAuthenticationEntity2()
 
-        val sharedKey = SecurityCurve25519().calculateSharedSecret(
-            Base64.decode(createResponse.serverDeviceIdPubKey, Base64.DEFAULT), deviceIdPubKey)
-
-        val llt = Crypto.decryptFernet(sharedKey,
-            String(Base64.decode(createResponse.longLivedToken, Base64.DEFAULT), Charsets.UTF_8))
         val listEntity = Vault.ListEntityStoredTokenRequest.newBuilder().apply {
             setLongLivedToken(llt)
         }.build()
@@ -185,5 +193,25 @@ class gRPCTest {
             it.platform
         }
         **/
+    }
+
+    @Test
+    fun publisherTestStoring() {
+        vaultAuthenticateEntity()
+        val llt = vaultTestAuthenticationEntity2()
+
+        val publisherOAuthRequestRequest = PublisherOuterClass.GetOAuth2AuthorizationUrlRequest
+            .newBuilder().apply {
+                setPlatform("gmail")
+                setState("")
+                setCodeVerifier("")
+                setAutogenerateCodeVerifier(true)
+            }.build()
+
+        val getResponse = publisherStub.getOAuth2AuthorizationUrl(publisherOAuthRequestRequest)
+        println(getResponse.authorizationUrl)
+        println(getResponse.state)
+        println(getResponse.codeVerifier)
+        println(getResponse.message)
     }
 }
