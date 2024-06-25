@@ -3,18 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        app:key="refresh_token"
-        app:title="@string/settings_custom_platforms_category">
-        <Preference
-            app:icon="@drawable/ic_baseline_apps_24"
-            app:key="refresh_platforms_settings"
-            app:summary="@string/settings_store_access_text_summary"
-            app:title="@string/settings_store_access_text" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        app:key="accessibility_settings"
         app:title="@string/settings_accessibility_category">
         <ListPreference
             app:icon="@drawable/ic_round_language_24"
