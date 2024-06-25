@@ -2,6 +2,7 @@ package com.example.sw0b_001
 
 import android.util.Base64
 import com.example.sw0b_001.Modules.Crypto
+import com.example.sw0b_001.Modules.Helpers
 import com.example.sw0b_001.Security.SecurityCurve25519
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
@@ -43,6 +44,7 @@ import vault.v1.Vault.AuthenticateEntityResponse
 class gRPCTest {
 
     private lateinit var channel: ManagedChannel
+    private lateinit var publisherChannel: ManagedChannel
 
     private lateinit var entityStub: EntityBlockingStub
     private lateinit var publisherStub: PublisherBlockingStub
@@ -59,8 +61,13 @@ class gRPCTest {
             .useTransportSecurity()
             .build()
 
+        publisherChannel = ManagedChannelBuilder
+            .forAddress("staging.smswithoutborders.com", 9060)
+            .useTransportSecurity()
+            .build()
+
         entityStub = EntityGrpc.newBlockingStub(channel)
-        publisherStub = PublisherGrpc.newBlockingStub(channel)
+        publisherStub = PublisherGrpc.newBlockingStub(publisherChannel)
     }
 
     @Test
@@ -213,5 +220,15 @@ class gRPCTest {
         println(getResponse.state)
         println(getResponse.codeVerifier)
         println(getResponse.message)
+
+//        val publisherAuthorizationCodeExchange =
+//            PublisherOuterClass.ExchangeOAuth2CodeAndStoreRequest.newBuilder().apply {
+//                setLongLivedToken(llt)
+//                setPlatform("gmail")
+//                setAuthorizationCode(Base64.encodeToString(Helpers.generateRandomBytes(32),
+//                    Base64.URL_SAFE))
+//            }.build()
+//
+//        val response = publisherStub.exchangeOAuth2CodeAndStore(publisherAuthorizationCodeExchange)
     }
 }
