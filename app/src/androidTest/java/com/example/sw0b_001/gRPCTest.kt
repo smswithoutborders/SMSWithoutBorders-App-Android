@@ -8,6 +8,7 @@ import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import io.grpc.StatusRuntimeException
 import io.grpc.stub.StreamObserver
+import junit.framework.TestCase.assertFalse
 import org.junit.Before
 import org.junit.Test
 import publisher.v1.PublisherGrpc
@@ -49,7 +50,7 @@ class gRPCTest {
     private lateinit var entityStub: EntityBlockingStub
     private lateinit var publisherStub: PublisherBlockingStub
 
-    private val globalPhoneNumber = "+23712345673"
+    private val globalPhoneNumber = "+2371234567891"
     private val globalPassword = "dMd2Kmo9"
     private val deviceIdPubKey = SecurityCurve25519().generateKey()
     private val publishPubKey = SecurityCurve25519().generateKey()
@@ -118,7 +119,7 @@ class gRPCTest {
 
         try {
             val createResponse = entityStub.createEntity(createEntityRequest2)
-            assert(createResponse.requiresOwnershipProof)
+            assertFalse(createResponse.requiresOwnershipProof)
             println(createResponse.message)
         } catch(e: Exception) {
             if(e is StatusRuntimeException) {
