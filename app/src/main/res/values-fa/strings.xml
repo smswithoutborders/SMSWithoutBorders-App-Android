@@ -162,4 +162,10 @@
     <string name="onboarding_vault_description_2">اس ام اس بدون مرز از روش های استاندارد ارائه شده توسط پلتفرم های آنلاین استفاده می کند و از اطلاعات ذخیره شده شما در خزانه ها و ایمن سازی آنها استفاده می کند.</string>
     <string name="log_into_your_vault_account_or_create_one_if_you_do_not_have_yet">به حساب خزانه خود وارد شوید یا اگر هنوز ندارید یکی ایجاد کنید</string>
     <string name="login_signup_create_new">ایجاد جدید</string>
+    <string name="compose_edit">ویرایش کنید</string>
+    <string name="compose_delete">حذف</string>
+    <string name="rebranding_text">سلام، ما در حال تغییر نام برنامه SWOB از SMSWOB به RelaySMS به عنوان بخشی از پروژه SMSWithoutBorders هستیم. با استفاده از نام RelaySMS می توانید برنامه را در پلی استور پیدا کنید</string>
+    <string name="read_more">ادامه مطلب</string>
+    <string name="important_notice">اطلاعیه مهم</string>
+    <string name="close">بستن</string>
 </resources>

@@ -53,7 +53,7 @@ android {
         }
         debug {
             buildConfigField("Boolean", "IS_RECAPTCHA", "false")
-            buildConfigField("Boolean", "IS_ONBOARDING", "true")
+            buildConfigField("Boolean", "IS_ONBOARDING", "false")
         }
     }
 
@@ -74,18 +74,18 @@ android {
     namespace 'com.example.sw0b_001'
 }
 
-repositories {
-	def releasePropertiesFile = rootProject.file("release.properties")
-	def releaseProperties = new Properties()
-	releaseProperties.load(new FileInputStream(releasePropertiesFile))
-    maven {
-        url = uri("https://maven.pkg.github.com/smswithoutborders/lib_signal_double_ratchet_java")
-        credentials {
-            username = releaseProperties['github_username']
-            password = releaseProperties['github_token']
-        }
-    }
-}
+//repositories {
+//	def releasePropertiesFile = rootProject.file("release.properties")
+//	def releaseProperties = new Properties()
+//	releaseProperties.load(new FileInputStream(releasePropertiesFile))
+//    maven {
+//        url = uri("https://maven.pkg.github.com/smswithoutborders/lib_signal_double_ratchet_java")
+//        credentials {
+//            username = releaseProperties['github_username']
+//            password = releaseProperties['github_token']
+//        }
+//    }
+//}
 
 
 import org.apache.tools.ant.taskdefs.condition.Os
@@ -128,12 +128,12 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.8.0'
     implementation group: 'androidx.lifecycle', name: 'lifecycle-extensions', version: '2.2.0'
 //    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.preference:preference:1.2.1'
     implementation "androidx.preference:preference-ktx:1.2.1"
     implementation 'androidx.databinding:baseLibrary:3.2.0-alpha11'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.2'
     implementation 'androidx.activity:activity:1.9.0'
     implementation 'com.google.android.gms:play-services-auth:21.2.0'
     implementation 'com.google.android.gms:play-services-auth-api-phone:18.1.0'
@@ -144,7 +144,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     // Java language implementation
-    implementation "androidx.fragment:fragment:1.7.1"
+    implementation "androidx.fragment:fragment:1.8.0"
 
 //    implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.volley:volley:1.2.1'
@@ -177,7 +177,7 @@ dependencies {
 
     implementation "androidx.startup:startup-runtime:1.1.1"
     implementation 'at.favre.lib:armadillo:1.0.0'
-    implementation 'com.afkanerd.smswithoutborders:libsignal_doubleratchet:0.0.3'
+    implementation 'com.afkanerd.oss:smswithoutborders_libsignal:0.0.2'
     implementation "net.openid:appauth:0.11.1"
     implementation 'com.hbb20:ccp:2.7.0'
 
@@ -192,5 +192,9 @@ dependencies {
 
 //     Add protobuf-java dependency
     implementation "com.google.protobuf:protobuf-java:3.25.1"
+
+    implementation "com.macasaet.fernet:fernet-java8:1.4.2"
+
+    implementation 'org.whispersystems:curve25519-android:0.5.0'
 }
 

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Modals.LoginSignupVaultModalFragment
 import com.example.sw0b_001.Modals.PlatformsModalFragment
+import com.example.sw0b_001.Modals.RebrandingModalFragment
 import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.Messages.MessagesRecyclerAdapter
 import com.example.sw0b_001.Models.Messages.MessagesViewModel
@@ -41,6 +42,18 @@ class HomepageActivity : AppCompactActivityCustomized() {
         findViewById<View>(R.id.homepage_add_new_btn)
                 .setOnClickListener { v -> onComposePlatformClick(PlatformsModalFragment
                         .SHOW_TYPE_UNSAVED) }
+
+        showRebrandingModal()
+    }
+
+    private fun showRebrandingModal() {
+        val rebrandingModal = RebrandingModalFragment()
+        if(!rebrandingModal.shownRebranding(applicationContext)) {
+            val fragmentTransaction = supportFragmentManager.beginTransaction()
+            fragmentTransaction.add(rebrandingModal, "rebranding_modal")
+            fragmentTransaction.show(rebrandingModal)
+            fragmentTransaction.commit()
+        }
     }
 
     override fun onResume() {

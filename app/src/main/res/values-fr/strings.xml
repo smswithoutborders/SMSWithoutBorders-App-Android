@@ -162,4 +162,10 @@
     <string name="onboarding_vault_description_2">SMSWithoutBorders utilise les méthodes standardisées fournies par les plateformes en ligne pour utiliser et sécuriser vos informations stockées dans les chambres fortes.</string>
     <string name="log_into_your_vault_account_or_create_one_if_you_do_not_have_yet">Log in to your Vault account or create one if you don\'t already have one</string>
     <string name="login_signup_create_new">Créer un nouveau</string>
+    <string name="compose_edit">Modifier</string>
+    <string name="compose_delete">Supprimer</string>
+    <string name="rebranding_text">Bonjour, dans le cadre du projet SMSWithoutBorders, nous sommes en train de renommer l\'application SWOB de SMSWOB à RelaySMS. Vous pourrez trouver l\'application sur le Playstore sous le nom RelaySMS</string>
+    <string name="read_more">En savoir plus</string>
+    <string name="important_notice">Avis important</string>
+    <string name="close">fermer</string>
 </resources>

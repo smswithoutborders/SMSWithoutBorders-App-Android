@@ -366,5 +366,10 @@
     <string name="login_signup_create_new">Create new</string>
     <string name="compose_edit">Edit</string>
     <string name="compose_delete">Delete</string>
+    <string name="rebranding_text">Hi there, we are rebranding the SWOB app from SMSWOB to RelaySMS as part of the SMSWithoutBorders project. You will be able to find the app on the playstore using the name RelaySMS</string>
+    <string name="read_more">Read more</string>
+    <string name="important_notice">Important Notice</string>
+    <string name="close">close</string>
+    <string name="smswithoutborders_official_rebranding_blogpost" translatable="false">https://blog.smswithoutborders.com/posts/rebranding</string>
 
 </resources>
