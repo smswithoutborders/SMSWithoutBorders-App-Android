@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 rm -rf SMSWithoutBorders-App-Android
 git clone git@github.com:smswithoutborders/SMSWithoutBorders-App-Android.git
@@ -9,4 +9,8 @@ cd SMSWithoutBorders-App-Android && \
 	cp -v ../../app/keys/app-release-key.jks app/keys/ && \
 	cp -v ../../ks.passwd . && \
 	make clean && \
-	make release-cd status="draft" && cd .. 
+	python3 -m venv venv && \
+	( \
+	. venv/bin/activate && \
+	pip install -r requirements.txt && \
+	make release-cd status="draft")
