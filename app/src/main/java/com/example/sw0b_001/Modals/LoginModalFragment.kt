@@ -90,44 +90,12 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         loginStatusCard.visibility = View.GONE
         loginStatusText.text = null
 
-        if(BuildConfig.IS_RECAPTCHA)
-            SafetyNet.getClient(requireContext())
-                    .verifyWithRecaptcha(getString(R.string.recaptcha_client_side_key))
-                    .addOnSuccessListener(ThreadExecutorPool.executorService, OnSuccessListener {
-                        login(view, phoneNumber, password, it.tokenResult!!)
-                    })
-                    .addOnFailureListener(ThreadExecutorPool.executorService,
-                            OnFailureListener {e -> if(e is ApiException) {
-                                // An error occurred when communicating with the
-                                // reCAPTCHA service. Refer to the status code to
-                                // handle the error appropriately.
-                                Log.e(javaClass.name, "Error: " +
-                                        "${ CommonStatusCodes .getStatusCodeString(e.statusCode)}")
-                                activity?.runOnUiThread {
-                                    Toast.makeText(requireContext(),
-                                            CommonStatusCodes.getStatusCodeString(e.statusCode),
-                                            Toast.LENGTH_SHORT).show()
-                                }
-                            } else {
-                                // A different, unknown type of error occurred.
-                                Log.e(HomepageComposeNewFragment.TAG, "Unknown Error: ${e.message}")
-                                activity?.runOnUiThread {
-                                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                                e.printStackTrace()
-                                activity?.runOnUiThread {
-                                    loginProgressIndicator.visibility = View.GONE
-                                }
-                    })
-        else {
-            try {
-                login(view, phoneNumber, password, "")
-            } catch (e: Exception) {
-                Log.e(HomepageComposeNewFragment.TAG, "Unknown Error: ${e.message}")
-                activity?.runOnUiThread {
-                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
-                }
+        try {
+            login(view, phoneNumber, password, "")
+        } catch (e: Exception) {
+            Log.e(HomepageComposeNewFragment.TAG, "Unknown Error: ${e.message}")
+            activity?.runOnUiThread {
+                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
             }
         }
     }

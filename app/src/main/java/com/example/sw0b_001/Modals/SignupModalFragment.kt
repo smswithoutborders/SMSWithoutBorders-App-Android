@@ -149,12 +149,11 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
     }
 
 
-    private fun signup(view: View, phonenumber: String, countryCode: String, password: String,
-                       captcha_token: String) {
+    private fun signup(view: View, phonenumber: String, countryCode: String, password: String ) {
         val url = getString(R.string.smswithoutborders_official_site_signup)
         try {
             val networkResponseResults = Vault_V2.signup(url, phonenumber, "", countryCode,
-                    password, captcha_token)
+                    password, "")
             when(networkResponseResults.response.statusCode) {
                 400 -> {
                     Log.e(javaClass.name, String(networkResponseResults.response.data))
@@ -226,50 +225,12 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
 
                     val signupCountryCodePicker = view.findViewById<CountryCodePicker>(R.id.signup_country_code_picker)
                     val countryCode = "+" + signupCountryCodePicker.selectedCountryCode
-                    SafetyNet.getClient(requireContext())
-                            .verifyWithRecaptcha(getString(R.string.recaptcha_client_side_key))
-                            .addOnSuccessListener(ThreadExecutorPool.executorService,
-                                    OnSuccessListener { response ->
-                                        // Indicates communication with reCAPTCHA service was
-                                        // successful.
-                                        val userResponseToken = response.tokenResult
-                                        if (response.tokenResult?.isNotEmpty() == true) {
-                                            // Validate the user response token using the
-                                            // reCAPTCHA siteverify API.
-                                            Log.d(javaClass.name, "Recaptcha code: " +
-                                                    "$userResponseToken")
+                    val phonenumber = view.findViewById<TextInputEditText>(R.id.signup_phonenumber_text_input).text
+                        .toString()
+                        .replace(" ", "")
+                    val password = view.findViewById<TextInputEditText>(R.id.signup_password_text_input).text.toString()
 
-
-                                            activity?.runOnUiThread {
-                                                view.findViewById<MaterialButton>(R.id.signup_btn)
-                                                        .isEnabled = false
-                                            }
-
-                                            val phonenumber = view.findViewById<TextInputEditText>(R.id.signup_phonenumber_text_input).text
-                                                    .toString()
-                                                    .replace(" ", "")
-                                            val password = view.findViewById<TextInputEditText>(R.id.signup_password_text_input).text.toString()
-
-                                            signup(view, phonenumber, countryCode, password,
-                                                    userResponseToken!!)
-                                        }
-                                    })
-                            .addOnFailureListener(ThreadExecutorPool.executorService,
-                                    OnFailureListener { e -> if (e is ApiException) {
-                                        // An error occurred when communicating with the
-                                        // reCAPTCHA service. Refer to the status code to
-                                        // handle the error appropriately.
-                                        Log.d(TAG,
-                                                "Error: ${CommonStatusCodes
-                                                        .getStatusCodeString(e.statusCode)}")
-                                    } else {
-                                        // A different, unknown type of error occurred.
-                                        Log.d(TAG, "Error: ${e.message}")
-                                    }
-                                        activity?.runOnUiThread {
-                                            signupProgressBar.visibility = View.GONE
-                                        }
-                                })
+                    signup(view, phonenumber, countryCode, password)
                 }
 
     }
