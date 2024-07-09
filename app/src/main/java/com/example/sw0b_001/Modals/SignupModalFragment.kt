@@ -230,7 +230,9 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
                         .replace(" ", "")
                     val password = view.findViewById<TextInputEditText>(R.id.signup_password_text_input).text.toString()
 
-                    signup(view, phonenumber, countryCode, password)
+                    ThreadExecutorPool.executorService.execute {
+                        signup(view, phonenumber, countryCode, password)
+                    }
                 }
 
     }
