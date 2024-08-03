@@ -83,7 +83,12 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
         linearProgressIndicator.visibility = View.VISIBLE
 
         gatewayClientsViewModel.loadRemote(applicationContext,
-                { refreshLayout.isRefreshing = false } ) {
+            {
+                runOnUiThread {
+                    refreshLayout.isRefreshing = false
+                    linearProgressIndicator.visibility = View.GONE
+                }
+            }) {
             runOnUiThread {
                 refreshLayout.isRefreshing = false
                 linearProgressIndicator.visibility = View.GONE
