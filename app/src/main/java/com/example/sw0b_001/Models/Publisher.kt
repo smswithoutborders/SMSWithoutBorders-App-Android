@@ -11,7 +11,6 @@ class Publisher {
 
     private lateinit var publisherStub: PublisherBlockingStub
 
-    private val deviceIdPubKey = SecurityCurve25519().generateKey()
     private val publishPubKey = SecurityCurve25519().generateKey()
 
     fun init() {
