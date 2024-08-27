@@ -379,5 +379,11 @@
     <string name="already_have_an_account">Already have an account? Log in</string>
     <string name="already_got_sms_code">Already got SMS code</string>
     <string name="log_in">Log in</string>
+    <string name="forgot_password_recovery">Forgot password?</string>
+    <string name="if_you_forgot_your_password_nenter_your_phone_number_and_new_passwords">If you forgot your password\nEnter your phone number and new passwords</string>
+    <string name="recovery_continue">Continue</string>
+    <string name="re_enter_new_password">Re-enter new password</string>
+    <string name="new_password">New password</string>
+    <string name="telephone_number">Telephone number</string>
 
 </resources>
