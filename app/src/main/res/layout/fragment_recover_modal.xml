@@ -86,30 +86,13 @@
             app:layout_constraintTop_toBottomOf="@+id/signup_progress_bar"
             tools:visibility="visible">
 
-            <LinearLayout
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/login_error_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/login_error_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:textSize="16sp"
-                    tools:text="Wrong number or password, please try again..." />
-
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:visibility="gone"
-                    tools:text="Retry"
-                    tools:visibility="visible" />
-            </LinearLayout>
+                android:padding="16dp"
+                android:textSize="16sp"
+                tools:text="Wrong number or password, please try again..." />
 
         </com.google.android.material.card.MaterialCardView>
 
