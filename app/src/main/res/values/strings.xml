@@ -316,7 +316,7 @@
     <string name="onboarding_try_vault_description_title">Let\'s try using accounts in your Vault</string>
     <string name="onboarding_vault_publish_description_1">SMSWithoutBorders shares the outgoing messages with your default SMS app</string>
     <string name="onboarding_vault_publish_description_2">SMSWithoutBorders encrypts the messages shared with your default SMS app</string>
-    <string name="onboarding_log_into_vault">Log into Vault</string>
+    <string name="onboarding_log_into_vault">Login</string>
     <string name="login_telephone_number">Telephone number</string>
     <string name="login_password">Password</string>
     <string name="networ_error_reaching_server_please_try_again">Error reaching server, please try again</string>

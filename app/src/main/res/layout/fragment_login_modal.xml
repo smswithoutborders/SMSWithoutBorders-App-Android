@@ -15,6 +15,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/login_logo"
+            android:layout_width="127dp"
+            android:layout_height="136dp"
+            android:src="@drawable/logo"
+            app:layout_constraintBottom_toTopOf="@+id/login_text_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/login_text_description"
             android:layout_width="wrap_content"
@@ -23,23 +33,35 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:text="@string/onboarding_log_into_vault"
-            android:textSize="20sp"
+            android:textSize="30sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/login_logo" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/login_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Welcome back\nSign in to continue with existing account"
+            android:textAlignment="center"
+            android:textColor="@color/md_theme_outline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_text_description" />
 
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/login_progress_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:indeterminate="true"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_text_description"
+            app:layout_constraintTop_toBottomOf="@+id/login_description"
             tools:visibility="visible" />
 
         <com.google.android.material.card.MaterialCardView
@@ -138,63 +160,47 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <TextView
+            android:id="@+id/login_forgot_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Forgot password?"
+            android:textColor="#007AFF"
+            app:layout_constraintEnd_toEndOf="@+id/login_phonenumber_layout"
+            app:layout_constraintTop_toBottomOf="@+id/login_phonenumber_layout" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_password_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:hint="@string/login_password"
             app:layout_constraintEnd_toEndOf="@+id/login_phonenumber_layout"
             app:layout_constraintStart_toStartOf="@+id/login_phonenumber_layout"
-            app:layout_constraintTop_toBottomOf="@+id/login_phonenumber_layout"
+            app:layout_constraintTop_toBottomOf="@+id/login_forgot_password"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_password_text_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
-
-<!--        <com.google.android.material.textview.MaterialTextView-->
-<!--            android:id="@+id/login_advanced_toggle"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/login_password_text"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/login_password_text"-->
-<!--            tools:text="Advanced options" />-->
-
-<!--        <com.google.android.material.textfield.TextInputLayout-->
-<!--            android:id="@+id/login_url"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:visibility="gone"-->
-<!--            tools:visibility="visible"-->
-<!--            android:hint=""-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/login_advanced_toggle"-->
-<!--            app:layout_constraintEnd_toEndOf="@+id/login_password_text"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/login_password_text" >-->
-<!--            <com.google.android.material.textfield.TextInputEditText-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:inputType="textWebEditText"-->
-<!--                android:text="@string/default_login_url"/>-->
-<!--        </com.google.android.material.textfield.TextInputLayout>-->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/login_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
+            android:text="@string/login_login"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_password_text"
-            android:text="@string/login_login" />
+            app:layout_constraintTop_toBottomOf="@+id/login_password_text" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
