@@ -371,5 +371,13 @@
     <string name="important_notice">Important Notice</string>
     <string name="close">close</string>
     <string name="smswithoutborders_official_rebranding_blogpost" translatable="false">https://blog.smswithoutborders.com/posts/rebranding</string>
+    <string name="welcome_back_nsign_in_to_continue_with_existing_account">Welcome back\nSign in to continue with existing account</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="create_new_vault_account">Create account</string>
+    <string name="signup">Signup</string>
+    <string name="if_you_do_not_have_an_account_nplease_create_one_to_save_your_platforms">If you do not have an account\nPlease create one to save your platforms</string>
+    <string name="already_have_an_account">Already have an account? Log in</string>
+    <string name="already_got_sms_code">Already got SMS code</string>
+    <string name="log_in">Log in</string>
 
 </resources>

@@ -20,7 +20,6 @@
             android:layout_width="127dp"
             android:layout_height="136dp"
             android:src="@drawable/logo"
-            app:layout_constraintBottom_toTopOf="@+id/login_text_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Welcome back\nSign in to continue with existing account"
+            android:text="@string/welcome_back_nsign_in_to_continue_with_existing_account"
             android:textAlignment="center"
             android:textColor="@color/md_theme_outline"
             app:layout_constraintEnd_toEndOf="parent"
@@ -95,18 +94,6 @@
                     android:textSize="16sp"
                     android:textColor="@color/md_theme_onError"
                     tools:text="Wrong number or password, please try again..." />
-
-                <!--                <com.google.android.material.button.MaterialButton-->
-                <!--                    android:id="@+id/login_retry_btn"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginStart="8dp"-->
-                <!--                    android:layout_marginTop="8dp"-->
-                <!--                    android:layout_marginEnd="8dp"-->
-                <!--                    android:layout_marginBottom="8dp"-->
-                <!--                    android:visibility="gone"-->
-                <!--                    tools:text="Retry"-->
-                <!--                    tools:visibility="visible" />-->
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
@@ -165,7 +152,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Forgot password?"
+            android:text="@string/forgot_password"
             android:textColor="#007AFF"
             app:layout_constraintEnd_toEndOf="@+id/login_phonenumber_layout"
             app:layout_constraintTop_toBottomOf="@+id/login_phonenumber_layout" />
