@@ -78,23 +78,14 @@
             app:layout_constraintTop_toBottomOf="@+id/login_progress_bar"
             tools:visibility="visible">
 
-            <LinearLayout
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/login_error_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/login_error_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/md_theme_onError"
-                    tools:text="Wrong number or password, please try again..." />
-            </LinearLayout>
+                android:padding="16dp"
+                android:textSize="16sp"
+                android:textColor="@color/md_theme_onError"
+                tools:text="Wrong number or password, please try again..." />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -103,7 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -114,11 +105,11 @@
                 android:id="@+id/login_country_code_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                app:ccp_contentColor="@color/md_theme_primary"
                 app:ccpDialog_backgroundColor="@color/md_theme_background"
                 app:ccpDialog_textColor="@color/md_theme_primary"
                 app:ccp_autoDetectCountry="true"
                 app:ccp_clickable="true"
+                app:ccp_contentColor="@color/md_theme_primary"
                 app:ccp_countryAutoDetectionPref="SIM_ONLY"
                 app:ccp_defaultLanguage="ENGLISH"
                 app:ccp_defaultNameCode="CM"
@@ -166,6 +157,7 @@
             app:layout_constraintEnd_toEndOf="@+id/login_phonenumber_layout"
             app:layout_constraintStart_toStartOf="@+id/login_phonenumber_layout"
             app:layout_constraintTop_toBottomOf="@+id/login_forgot_password"
+            app:layout_constraintBottom_toTopOf="@+id/login_btn"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -184,10 +176,25 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
             android:text="@string/login_login"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/signup_already_have_account"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_password_text" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/signup_already_have_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="#0000"
+            android:padding="16dp"
+            android:text="@string/already_have_an_account"
+            android:textAlignment="center"
+            android:textColor="#539FF1"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/login_btn"
+            app:layout_constraintStart_toStartOf="@+id/login_btn" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
