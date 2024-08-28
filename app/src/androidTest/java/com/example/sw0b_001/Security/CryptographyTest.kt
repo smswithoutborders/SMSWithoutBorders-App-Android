@@ -13,13 +13,13 @@ class CryptographyTest {
 
     @Test
     fun x25519Test() {
-        val x = SecurityCurve25519().generateKey()
-        println("PK: ${Base64.encodeToString(x.publicKey, Base64.DEFAULT)}")
+        val x = SecurityCurve25519()
+        val xpk = x.generateKey()
+        println("PK: ${Base64.encodeToString(xpk, Base64.DEFAULT)}")
 
         val peer = Base64.decode("EWQUXcsp47l6XFUcQZ2rPkeKmuCFipeCzf9w7IBBzlU=", Base64.DEFAULT)
 
-        println("SK: ${Base64.encodeToString(SecurityCurve25519().calculateSharedSecret(peer, x), 
-            Base64.DEFAULT)}")
+        println("SK: ${Base64.encodeToString(x.calculateSharedSecret(peer), Base64.DEFAULT)}")
     }
 
 }

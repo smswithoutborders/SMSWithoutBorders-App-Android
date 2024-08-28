@@ -1,11 +1,13 @@
 package com.example.sw0b_001.Modals
 
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.sw0b_001.HomepageComposeNewFragment
 import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.example.sw0b_001.Models.Vault
 import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.R
 import com.google.android.gms.common.api.ApiException
@@ -22,6 +24,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import com.hbb20.CountryCodePicker
+import io.grpc.StatusRuntimeException
 
 class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         BottomSheetDialogFragment(R.layout.fragment_login_modal) {
@@ -87,19 +90,27 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
     }
 
     private fun disableComponents(view: View) {
+        isCancelable = false
+
         view.findViewById<MaterialButton>(R.id.login_btn).isEnabled = false
         phonenumberTextView.isEnabled = false
         passwordTextView.isEnabled = false
         countryCodePickerView.isEnabled = false
         forgotPasswordBtn.isEnabled = false
+
+        view.findViewById<MaterialButton>(R.id.login_already_have_account).isEnabled = false
     }
 
     private fun enableComponents(view: View) {
+        isCancelable = true
+
         view.findViewById<MaterialButton>(R.id.login_btn).isEnabled = true
         phonenumberTextView.isEnabled = true
         passwordTextView.isEnabled = true
         countryCodePickerView.isEnabled = true
         forgotPasswordBtn.isEnabled = true
+
+        view.findViewById<MaterialButton>(R.id.login_already_have_account).isEnabled = true
     }
 
     private fun loginRecaptchaEnabled(view: View) {
@@ -108,7 +119,6 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         loginProgressIndicator.visibility = View.VISIBLE
         disableComponents(view)
 
-        val countryCode = countryCodePickerView.selectedCountryNameCode
         val dialingCode = countryCodePickerView.selectedCountryCodeWithPlus
         val phoneNumber = dialingCode + phonenumberTextView.text.toString()
                 .replace(" ", "")
@@ -121,7 +131,7 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         loginStatusText.text = null
 
         try {
-            login(view, countryCode, phoneNumber, password, "")
+            login(view, phoneNumber, password, "")
         } catch (e: Exception) {
             Log.e(HomepageComposeNewFragment.TAG, "Unknown Error: ${e.message}")
             activity?.runOnUiThread {
@@ -131,51 +141,36 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
     }
 
     private fun login(view: View,
-                      countryCode: String,
                       phonenumber: String,
                       password: String,
                       code: String) {
+
         val loginStatusCard = view.findViewById<MaterialCardView>(R.id.login_status_card)
         val loginStatusText = view.findViewById<MaterialTextView>(R.id.login_error_text)
 
-        val url = view.context.getString(R.string.smswithoutborders_official_site_login)
+        ThreadExecutorPool.executorService.execute {
+            try {
+                var vault = Vault()
+//                var response2 = vault.authenticateEntity(phonenumber,
+//                    password,
+//                    Base64.encodeToString(publishPubKey.publicKey, Base64.DEFAULT),
+//                    Base64.encodeToString(deviceIdPubKey.publicKey, Base64.DEFAULT))
+                onSuccessRunnable?.run()
+                dismiss()
+            } catch(e: StatusRuntimeException) {
+                e.printStackTrace()
+                activity?.runOnUiThread {
+                    loginStatusCard.visibility = View.VISIBLE
+                    loginStatusText.text = e.status.description
+                }
+            } finally {
+                activity?.runOnUiThread {
+                    loginProgressIndicator.visibility = View.GONE
+                    enableComponents(view)
+                }
+            }
+        }
 
-//        ThreadExecutorPool.executorService.execute {
-//            try {
-//                Vault_V2.loginSyncPlatformsFlow(requireContext(), phonenumber, password, code, fragment = this)
-//                onSuccessRunnable?.run()
-//                dismiss()
-//            } catch(e: Exception) {
-//                e.printStackTrace()
-//                Log.e(javaClass.name, "Exception login", e)
-//                when(e.message) {
-//                    Vault_V2.INVALID_CREDENTIALS_EXCEPTION -> {
-//                        activity?.runOnUiThread {
-//                            loginStatusCard.visibility = View.VISIBLE
-//                            loginStatusText.text = getString(R.string.login_wrong_credentials)
-//                        }
-//                    }
-//                    Vault_V2.SERVER_ERROR_EXCEPTION -> {
-//                        activity?.runOnUiThread {
-//                            loginStatusCard.visibility = View.VISIBLE
-//                            loginStatusText.text = getString(R.string.login_server_something_went_wrong_please_try_again)
-//                        }
-//                    }
-//                    else -> {
-//                        activity?.runOnUiThread {
-//                            loginStatusCard.visibility = View.VISIBLE
-//                            loginStatusText.text = getString(R.string.login_server_something_went_wrong_please_try_again)
-//                        }
-//                    }
-//                }
-//            } finally {
-//                activity?.runOnUiThread {
-//                    loginProgressIndicator.visibility = View.GONE
-//        enableComponents(view)
-//                }
-//            }
-//        }
-//
     }
 
 }

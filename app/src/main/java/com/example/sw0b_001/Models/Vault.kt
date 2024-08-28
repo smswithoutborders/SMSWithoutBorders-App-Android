@@ -6,7 +6,6 @@ import com.example.sw0b_001.Security.SecurityCurve25519
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import io.grpc.StatusRuntimeException
-import org.whispersystems.curve25519.Curve25519KeyPair
 import publisher.v1.PublisherGrpc
 import publisher.v1.PublisherGrpc.PublisherBlockingStub
 import vault.v1.EntityGrpc
@@ -48,7 +47,7 @@ class Vault {
                            clientPublishPubKey: String,
                            clientDeviceIDPubKey: String,
                            ownershipResponse: String = "",
-                           keypair: Curve25519KeyPair? = null) :
+                           keypair: SecurityCurve25519? = null) :
             Pair<Vault.AuthenticateEntityResponse, String> {
         val authenticateEntityRequest = Vault.AuthenticateEntityRequest.newBuilder().apply {
             setPhoneNumber(phoneNumber)
@@ -69,9 +68,8 @@ class Vault {
             var llt = ""
             if(!createResponse.requiresOwnershipProof) {
                 keypair?.let {
-                    val sharedKey = SecurityCurve25519().calculateSharedSecret(
-                        Base64.decode(createResponse.serverDeviceIdPubKey, Base64.DEFAULT),
-                        keypair)
+                    val sharedKey = keypair.calculateSharedSecret(
+                        Base64.decode(createResponse.serverDeviceIdPubKey, Base64.DEFAULT))
 
                     llt = Crypto.decryptFernet(sharedKey,
                         String(Base64.decode(createResponse.longLivedToken, Base64.DEFAULT), Charsets.UTF_8))
