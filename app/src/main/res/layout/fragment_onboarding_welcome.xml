@@ -6,41 +6,51 @@
     android:layout_height="match_parent" >
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/onboarding_welcome_welcome"
-        android:layout_width="match_parent"
+        android:id="@+id/onboarding_welcome_get_started"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/app_name_full"
-        android:textSize="20sp"
+        android:layout_marginTop="200dp"
+        android:text="@string/welcome_to_relaysms"
+        android:textAlignment="center"
+        android:textSize="34sp"
+        app:fontFamily="sans-serif-medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/onboarding_welcome_get_started"
-        android:layout_width="0dp"
+        android:id="@+id/materialTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:text="@string/onboarding_let_s_get_you_started"
-        android:textSize="40sp"
+        android:layout_marginTop="16dp"
+        android:text="@string/use_sms_to_make_a_post_send_emails_and_messages_nwith_no_internet_connection"
+        android:textAlignment="center"
+        android:textColor="@color/md_theme_outline"
+        app:fontFamily="@font/roboto"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/onboarding_welcome_welcome"
-        app:layout_constraintTop_toBottomOf="@+id/onboarding_welcome_welcome" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/onboarding_welcome_get_started" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/airy_woman_flying_and_holding_onto_a_planet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialTextView" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/onboarding_welcome_get_started_language_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="50dp"
         android:text="@string/language_choose_text"
         app:icon="@drawable/round_language_24"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/onboarding_welcome_privacy_policy"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/onboarding_welcome_get_started" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -48,7 +58,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
-        android:textColor="@color/browser_actions_text_color"
+        android:textColor="#539FF1"
         android:text="@string/homepage_read_our_privacy_policy"
         android:textAlignment="center"
         android:textAllCaps="false"
