@@ -39,7 +39,6 @@ class OnboardingVaultFragment : OnboardingComponent(R.layout.fragment_onboarding
             }
         }
 
-
         view.findViewById<MaterialButton>(R.id.onboarding_vault_login_btn)
             .setOnClickListener {
                 val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
