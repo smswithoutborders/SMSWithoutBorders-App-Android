@@ -138,12 +138,13 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/login_forgot_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/forgot_password"
+            android:background="#0000"
             android:textColor="#007AFF"
             app:layout_constraintEnd_toEndOf="@+id/login_phonenumber_layout"
             app:layout_constraintTop_toBottomOf="@+id/login_phonenumber_layout" />

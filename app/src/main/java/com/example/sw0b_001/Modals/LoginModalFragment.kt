@@ -31,6 +31,7 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
     private lateinit var passwordTextView: TextInputEditText
     private lateinit var loginProgressIndicator: LinearProgressIndicator
     private lateinit var countryCodePickerView: CountryCodePicker
+    private lateinit var forgotPasswordBtn: MaterialButton
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,14 +39,6 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         view.findViewById<MaterialButton>(R.id.login_btn).setOnClickListener {
             loginRecaptchaEnabled(view)
         }
-
-//        val customUrlView = view.findViewById<TextInputLayout>(R.id.login_url)
-//        view.findViewById<MaterialTextView>(R.id.login_advanced_toggle).setOnClickListener {
-//            if(customUrlView.visibility == View.VISIBLE)
-//                customUrlView.visibility = View.INVISIBLE
-//            else
-//                customUrlView.visibility = View.VISIBLE
-//        }
 
         val bottomSheet = view.findViewById<View>(R.id.login_constraint)
 
@@ -57,6 +50,16 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         phonenumberTextView = view.findViewById(R.id.login_phonenumber_text_input)
         passwordTextView = view.findViewById(R.id.login_password_text_input)
         loginProgressIndicator = view.findViewById(R.id.login_progress_bar)
+
+        forgotPasswordBtn = view.findViewById(R.id.login_forgot_password)
+        forgotPasswordBtn.setOnClickListener {
+            dismiss()
+            val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+            val recoverModalFragment = RecoverModalFragment(onSuccessRunnable)
+            fragmentTransaction?.add(recoverModalFragment, "recovery_tag")
+            fragmentTransaction?.show(recoverModalFragment)
+            fragmentTransaction?.commit()
+        }
     }
 
     private fun loginInputVerification(view: View) : Boolean {
