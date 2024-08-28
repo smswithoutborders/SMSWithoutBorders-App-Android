@@ -101,7 +101,6 @@
         android:padding="15dp"
         android:text="@string/login"
         android:textSize="16sp"
-        android:textStyle="bold"
         android:backgroundTint="@color/md_theme_outlineVariant_mediumContrast"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
