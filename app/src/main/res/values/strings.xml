@@ -402,5 +402,9 @@
     <string name="send_your_first_messages">Send your first messages</string>
     <string name="create_a_new_relaysms_vault_account_or_signup_to_your_existing">Create a new RelaySMS Vault account or signup to your existing.</string>
     <string name="messages_are_encrypted_meaning_the_messages_will_be_scrambled_don_t_worry_that_s_intended">Messages are encrypted meaning the messages will be scrambled - don\'t worry that\'s intended</string>
+    <string name="you_can_add_platforms_from_the_homepage_once_you_are_logged_in">You can add platforms from the homepage once you are logged in</string>
+    <string name="you_are_ready_to_begin_sending_messages_from_you_added_platforms">You are ready to begin sending messages from you added platforms.</string>
+    <string name="you_are_ready">You are ready!</string>
+    <string name="come_back_anytime">Come back anytime</string>
 
 </resources>
