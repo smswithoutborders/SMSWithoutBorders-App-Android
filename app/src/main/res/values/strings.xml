@@ -387,5 +387,6 @@
     <string name="telephone_number">Telephone number</string>
     <string name="welcome_to_relaysms">Welcome to RelaySMS</string>
     <string name="use_sms_to_make_a_post_send_emails_and_messages_nwith_no_internet_connection">Use SMS to make a post, send emails and messages\nwith no internet connection</string>
+    <string name="get_started">Get started!</string>
 
 </resources>

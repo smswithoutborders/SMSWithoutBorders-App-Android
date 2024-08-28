@@ -42,7 +42,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
 
-
+        // This decides if to skp the onboarding not to show it
         if(!BuildConfig.IS_ONBOARDING)
             if(OnboardingComponent.getOnboarded(applicationContext)) {
                 val intent = Intent(this, HomepageActivity::class.java).apply {
@@ -64,6 +64,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
 //        val fragmentIndex = savedInstanceState?.getInt("fragment_index", 0)
         val fragmentIndex = intent.getIntExtra("fragment_index", 0)
         supportFragmentManager.commit {
+            findViewById<View>(R.id.onboarding_navigation_controller).visibility = View.GONE
             val fragment = fragmentList[fragmentIndex]
             add(R.id.onboarding_fragment_container, fragment)
             setReorderingAllowed(true)
