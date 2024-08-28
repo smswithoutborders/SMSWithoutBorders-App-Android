@@ -60,8 +60,8 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
         fragmentList = arrayListOf(onboardingWelcomeFragment)
 
         configureScreens()
+        configureButtonClicks()
 
-//        val fragmentIndex = savedInstanceState?.getInt("fragment_index", 0)
         val fragmentIndex = intent.getIntExtra("fragment_index", 0)
         supportFragmentManager.commit {
             findViewById<View>(R.id.onboarding_navigation_controller).visibility = View.GONE
@@ -73,9 +73,10 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                     R.anim.fade_in,
                     R.anim.slide_out)
 
-            iterateButtonText(fragment)
+            fragment.onNextClickedRunnable = Runnable {
+                nextButton.performClick()
+            }
         }
-        configureButtonClicks()
     }
 
     private fun configureScreens() {
@@ -105,7 +106,12 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
             supportFragmentManager.commit {
                 if(fragmentIterator.value!! + 1 < fragmentList.size) {
                     fragmentIterator.value = fragmentIterator.value!! + 1
+
                     val fragment: OnboardingComponent = fragmentList[fragmentIterator.value!!]
+
+                    if(fragmentIterator.value!! > 0) {
+                        findViewById<View>(R.id.onboarding_navigation_controller).visibility = View.VISIBLE
+                    }
 
                     replace(R.id.onboarding_fragment_container, fragment)
                     setReorderingAllowed(false)
@@ -133,6 +139,12 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                 else fragmentIterator.value!! - 1
 
                 val fragment: OnboardingComponent = fragmentList[fragmentIterator.value!!]
+                if(fragmentIterator.value!! < 1) {
+                    findViewById<View>(R.id.onboarding_navigation_controller).visibility = View.GONE
+                    fragment.onNextClickedRunnable = Runnable {
+                        nextButton.performClick()
+                    }
+                }
 
                 replace(R.id.onboarding_fragment_container, fragment)
                 setReorderingAllowed(true)
