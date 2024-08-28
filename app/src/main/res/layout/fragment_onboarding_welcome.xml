@@ -9,11 +9,12 @@
         android:id="@+id/onboarding_welcome_get_started"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="150dp"
         android:text="@string/welcome_to_relaysms"
         android:textAlignment="center"
         android:textSize="34sp"
         app:fontFamily="sans-serif-medium"
+        app:layout_constraintBottom_toTopOf="@+id/materialTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,21 +23,21 @@
         android:id="@+id/materialTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:text="@string/use_sms_to_make_a_post_send_emails_and_messages_nwith_no_internet_connection"
         android:textAlignment="center"
         android:textColor="@color/md_theme_outline"
         app:fontFamily="@font/roboto"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/onboarding_welcome_get_started" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="230dp"
-        android:layout_height="230dp"
-        android:layout_marginTop="70dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:src="@drawable/airy_woman_flying_and_holding_onto_a_planet"
+        app:layout_constraintBottom_toTopOf="@+id/onboarding_welcome_get_started_language_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialTextView" />
@@ -45,9 +46,9 @@
         android:id="@+id/onboarding_welcome_get_started_language_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/language_choose_text"
         app:icon="@drawable/round_language_24"
+        app:layout_constraintBottom_toTopOf="@+id/onboarding_get_started"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
@@ -57,13 +58,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="93dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
         android:padding="15dp"
         android:text="@string/get_started"
-        android:textStyle="bold"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/onboarding_welcome_privacy_policy"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -82,5 +81,6 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/onboarding_get_started" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -397,5 +397,10 @@
     <string name="save_accounts_to_vault">Save Accounts to Vault</string>
     <string name="you_can_add_accounts_to_vault_this_accounts_are_accessible_to_you_when_you_are_offline">You can add accounts to Vault. This accounts are accessible to you when you are offline</string>
     <string name="the_vault_supports_storing_for_multiple_online_platforms_click_save_accounts_to_vault_to_see_the_list">The Vault supports storing for multiple online platforms. Click Save accounts to Vault to see the list</string>
+    <string name="messages_are_shared_with_your_default_sms_messaging_app_which_you_use_to_send_out_sms_messages_from_your_device">Messages are shared with your default SMS messaging app which you use to send out SMS messages from your device</string>
+    <string name="learn_how_it_works">Learn how it works</string>
+    <string name="send_your_first_messages">Send your first messages</string>
+    <string name="create_a_new_relaysms_vault_account_or_signup_to_your_existing">Create a new RelaySMS Vault account or signup to your existing.</string>
+    <string name="messages_are_encrypted_meaning_the_messages_will_be_scrambled_don_t_worry_that_s_intended">Messages are encrypted meaning the messages will be scrambled - don\'t worry that\'s intended</string>
 
 </resources>
