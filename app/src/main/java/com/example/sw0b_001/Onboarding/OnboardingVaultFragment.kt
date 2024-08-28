@@ -39,11 +39,10 @@ class OnboardingVaultFragment : OnboardingComponent(R.layout.fragment_onboarding
             }
         }
 
-        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-        val fragmentTransaction1 = activity?.supportFragmentManager?.beginTransaction()
 
         view.findViewById<MaterialButton>(R.id.onboarding_vault_login_btn)
             .setOnClickListener {
+                val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
                 val loginModalFragment = LoginModalFragment(loginSuccessRunnable)
                 fragmentTransaction?.add(loginModalFragment, "login_signup_login_vault_tag")
                 fragmentTransaction?.show(loginModalFragment)
@@ -52,10 +51,11 @@ class OnboardingVaultFragment : OnboardingComponent(R.layout.fragment_onboarding
 
         view.findViewById<MaterialButton>(R.id.onboarding_vault_signup_btn)
             .setOnClickListener {
+                val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
                 val signupModalFragment = SignupModalFragment(loginSuccessRunnable)
-                fragmentTransaction1?.add(signupModalFragment, "signup_tag")
-                fragmentTransaction1?.show(signupModalFragment)
-                fragmentTransaction1?.commit()
+                fragmentTransaction?.add(signupModalFragment, "signup_tag")
+                fragmentTransaction?.show(signupModalFragment)
+                fragmentTransaction?.commit()
             }
     }
 }

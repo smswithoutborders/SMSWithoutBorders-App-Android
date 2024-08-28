@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -48,6 +49,7 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
             fragmentTransaction?.show(signupModalFragment)
             fragmentTransaction?.commit()
         }
+
 
         val bottomSheet = view.findViewById<View>(R.id.login_constraint)
 

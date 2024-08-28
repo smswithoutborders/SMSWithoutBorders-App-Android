@@ -50,6 +50,12 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        view.findViewById<MaterialCheckBox>(R.id.signup_read_privacy_policy_checkbox)
+            .setOnCheckedChangeListener { _, isChecked ->
+                view.findViewById<MaterialButton>(R.id.signup_btn).isEnabled = isChecked
+            }
+
+
         val bottomSheet = view.findViewById<View>(R.id.signup_constraint)
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
