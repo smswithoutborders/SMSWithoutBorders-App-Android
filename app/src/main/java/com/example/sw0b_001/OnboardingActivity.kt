@@ -72,10 +72,6 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                     R.anim.fade_out,
                     R.anim.fade_in,
                     R.anim.slide_out)
-
-            fragment.onNextClickedRunnable = Runnable {
-                nextButton.performClick()
-            }
         }
     }
 
@@ -141,9 +137,6 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                 val fragment: OnboardingComponent = fragmentList[fragmentIterator.value!!]
                 if(fragmentIterator.value!! < 1) {
                     findViewById<View>(R.id.onboarding_navigation_controller).visibility = View.GONE
-                    fragment.onNextClickedRunnable = Runnable {
-                        nextButton.performClick()
-                    }
                 }
 
                 replace(R.id.onboarding_fragment_container, fragment)

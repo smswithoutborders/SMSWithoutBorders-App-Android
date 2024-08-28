@@ -6,13 +6,12 @@ import at.favre.lib.armadillo.Armadillo
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.google.android.material.button.MaterialButton
 
-open class OnboardingComponent(val layout: Int, private val _onNextClickedRunnable: Runnable? = null)
+open class OnboardingComponent(val layout: Int)
     : Fragment(layout) {
     var nextButtonText: String = ""
     var previousButtonText: String = ""
     var skipButtonText: String = ""
     var skipOnboardingFragment: OnboardingComponent? = null
-    var onNextClickedRunnable = _onNextClickedRunnable
 
     public interface ManageComponentsListing {
         fun removeComponent(index: Int)

@@ -50,8 +50,10 @@ class OnboardingWelcomeFragment :
         changeLanguageBtn.setOnClickListener { populateLanguagePopup(view) }
         view.findViewById<View>(R.id.onboarding_welcome_privacy_policy)
                 .setOnClickListener { linkPrivacyPolicy(it) }
+
         view.findViewById<MaterialButton>(R.id.onboarding_get_started).setOnClickListener {
-            onNextClickedRunnable?.run()
+            activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
+                ?.performClick()
         }
     }
 

@@ -304,7 +304,7 @@
     <string name="onboarding_finish">Finish</string>
     <string name="onboarding_previous">Previous</string>
     <string name="onboarding_skip">Skip</string>
-    <string name="onboarding_let_s_get_you_started">Let\'s get you started.</string>
+    <string name="onboarding_let_s_get_you_started">Let\'s get you started</string>
     <string name="onboarding_done">Done</string>
     <string name="onboarding_tour_complete_description">Tour complete! You can add your Vault accounts at anytime from within the app</string>
     <string name="onboarding_introducing_vaults">Introducing Vaults</string>
@@ -388,5 +388,9 @@
     <string name="welcome_to_relaysms">Welcome to RelaySMS</string>
     <string name="use_sms_to_make_a_post_send_emails_and_messages_nwith_no_internet_connection">Use SMS to make a post, send emails and messages\nwith no internet connection</string>
     <string name="get_started">Get started!</string>
+    <string name="relaysms_vaults_keep_secure_access_to_your_online_accounts_while_you_are_offline">RelaySMS Vaults keep secure access to your online accounts while you are offline</string>
+    <string name="introducing_vaults">Introducing Vaults</string>
+    <string name="create_account">Create Account</string>
+    <string name="login">Login</string>
 
 </resources>

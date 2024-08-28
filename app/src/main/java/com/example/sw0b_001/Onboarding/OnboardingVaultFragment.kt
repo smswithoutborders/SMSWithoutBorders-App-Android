@@ -4,7 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.transition.TransitionInflater
+import com.example.sw0b_001.Modals.LoginModalFragment
 import com.example.sw0b_001.Modals.LoginSignupVaultModalFragment
+import com.example.sw0b_001.Modals.SignupModalFragment
 import com.example.sw0b_001.R
 import com.google.android.material.button.MaterialButton
 
@@ -26,30 +28,34 @@ class OnboardingVaultFragment : OnboardingComponent(R.layout.fragment_onboarding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val tryExampleButton = view.findViewById<MaterialButton>(
-                R.id.onboarding_welcome_vaults_description_try_example_btn)
-
-        tryExampleButton?.setOnClickListener { nextFragment(view) }
-    }
-
-    private fun nextFragment(view: View) {
         val loginSuccessRunnable = Runnable {
             if(activity is OnboardingComponent.ManageComponentsListing) {
                 ((activity) as OnboardingComponent.ManageComponentsListing)
-                        .addComponent(OnboardingVaultStorePlatformFragment())
+                    .addComponent(OnboardingVaultStorePlatformFragment())
                 activity?.runOnUiThread {
                     activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
-                            ?.performClick()
+                        ?.performClick()
                 }
             }
         }
 
-        val loginSignupVaultModalFragment =
-                LoginSignupVaultModalFragment(loginSuccessRunnable, loginSuccessRunnable)
-
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-        fragmentTransaction?.add(loginSignupVaultModalFragment, "login_signup_vault_tag")
-        fragmentTransaction?.show(loginSignupVaultModalFragment)
-        fragmentTransaction?.commitNow()
+        val fragmentTransaction1 = activity?.supportFragmentManager?.beginTransaction()
+
+        view.findViewById<MaterialButton>(R.id.onboarding_vault_login_btn)
+            .setOnClickListener {
+                val loginModalFragment = LoginModalFragment(loginSuccessRunnable)
+                fragmentTransaction?.add(loginModalFragment, "login_signup_login_vault_tag")
+                fragmentTransaction?.show(loginModalFragment)
+                fragmentTransaction?.commit()
+            }
+
+        view.findViewById<MaterialButton>(R.id.onboarding_vault_signup_btn)
+            .setOnClickListener {
+                val signupModalFragment = SignupModalFragment(loginSuccessRunnable)
+                fragmentTransaction1?.add(signupModalFragment, "signup_tag")
+                fragmentTransaction1?.show(signupModalFragment)
+                fragmentTransaction1?.commit()
+            }
     }
 }
