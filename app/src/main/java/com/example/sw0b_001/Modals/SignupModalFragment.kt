@@ -56,6 +56,15 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
         bottomSheetBehavior.isDraggable = true
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
+        view.findViewById<MaterialButton>(R.id.signup_already_have_account).setOnClickListener {
+            dismiss()
+            val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+            val loginModalFragment = LoginModalFragment(onSuccessRunnable)
+            fragmentTransaction?.add(loginModalFragment, "login_signup_login_vault_tag")
+            fragmentTransaction?.show(loginModalFragment)
+            fragmentTransaction?.commit()
+        }
+
         configurePrivacyPolicyCheckbox(view)
         configureRecaptcha(view)
     }

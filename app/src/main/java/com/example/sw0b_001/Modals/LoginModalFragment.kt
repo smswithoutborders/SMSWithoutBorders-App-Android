@@ -40,6 +40,15 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
             loginRecaptchaEnabled(view)
         }
 
+        view.findViewById<MaterialButton>(R.id.login_already_have_account).setOnClickListener {
+            dismiss()
+            val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+            val signupModalFragment = SignupModalFragment(onSuccessRunnable)
+            fragmentTransaction?.add(signupModalFragment, "signup_tag")
+            fragmentTransaction?.show(signupModalFragment)
+            fragmentTransaction?.commit()
+        }
+
         val bottomSheet = view.findViewById<View>(R.id.login_constraint)
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
