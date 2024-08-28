@@ -77,18 +77,24 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
 
     private fun configureScreens() {
         val viewModel: PlatformsViewModel by viewModels()
-        if(!UserArtifactsHandler.isCredentials(applicationContext)) {
+        if(BuildConfig.IS_SHOWALL_ONBOARDING) {
             fragmentList.add(OnboardingVaultFragment())
+            fragmentList.add(OnboardingVaultStorePlatformFragment())
+            fragmentList.add(OnboardingPublishExampleFragment())
         } else {
-            val thread = Thread(Runnable {
-                if(viewModel.getSavedCount(applicationContext) < 1) {
-                    fragmentList.add(OnboardingVaultStorePlatformFragment())
-                } else {
-                    fragmentList.add(OnboardingPublishExampleFragment())
-                }
-            })
-            thread.start()
-            thread.join()
+            if(!UserArtifactsHandler.isCredentials(applicationContext)) {
+                fragmentList.add(OnboardingVaultFragment())
+            } else {
+                val thread = Thread(Runnable {
+                    if(viewModel.getSavedCount(applicationContext) < 1) {
+                        fragmentList.add(OnboardingVaultStorePlatformFragment())
+                    } else {
+                        fragmentList.add(OnboardingPublishExampleFragment())
+                    }
+                })
+                thread.start()
+                thread.join()
+            }
         }
         fragmentList.add(OnboardingFinishedFragment())
     }

@@ -50,10 +50,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField("Boolean", "IS_RECAPTCHA", "false")
             buildConfigField("Boolean", "IS_ONBOARDING", "false")
+            buildConfigField("Boolean", "IS_SHOWALL_ONBOARDING", "false")
         }
         debug {
             buildConfigField("Boolean", "IS_RECAPTCHA", "false")
             buildConfigField("Boolean", "IS_ONBOARDING", "true")
+            buildConfigField("Boolean", "IS_SHOWALL_ONBOARDING", "true")
         }
     }
 
