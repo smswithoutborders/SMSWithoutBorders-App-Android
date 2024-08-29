@@ -1,25 +1,23 @@
 package com.example.sw0b_001.Models
 
+import android.content.Context
 import android.util.Base64
 import com.example.sw0b_001.Modules.Crypto
-import com.example.sw0b_001.Security.SecurityCurve25519
+import com.example.sw0b_001.Security.Cryptography
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
-import io.grpc.StatusRuntimeException
-import publisher.v1.PublisherGrpc
-import publisher.v1.PublisherGrpc.PublisherBlockingStub
 import vault.v1.EntityGrpc
 import vault.v1.EntityGrpc.EntityBlockingStub
 import vault.v1.Vault
 
 class Vault {
+    private val DEVICE_ID_KEYSTORE_ALIAS = "DEVICE_ID_KEYSTORE_ALIAS"
+
     private var channel: ManagedChannel = ManagedChannelBuilder
         .forAddress("staging.smswithoutborders.com", 9050)
         .useTransportSecurity()
         .build()
     private var entityStub: EntityBlockingStub = EntityGrpc.newBlockingStub(channel)
-
-    private val deviceIdPubKey = SecurityCurve25519().generateKey()
 
     fun createEntity(phoneNumber: String,
                      countryCode: String,
@@ -42,12 +40,12 @@ class Vault {
         return entityStub.createEntity(createEntityRequest1)
     }
 
-    fun authenticateEntity(phoneNumber: String,
+    fun authenticateEntity(context: Context,
+                           phoneNumber: String,
                            password: String,
                            clientPublishPubKey: String,
                            clientDeviceIDPubKey: String,
-                           ownershipResponse: String = "",
-                           keypair: SecurityCurve25519? = null) :
+                           ownershipResponse: String = "") :
             Pair<Vault.AuthenticateEntityResponse, String> {
         val authenticateEntityRequest = Vault.AuthenticateEntityRequest.newBuilder().apply {
             setPhoneNumber(phoneNumber)
@@ -67,13 +65,13 @@ class Vault {
 
             var llt = ""
             if(!createResponse.requiresOwnershipProof) {
-                keypair?.let {
-                    val sharedKey = keypair.calculateSharedSecret(
-                        Base64.decode(createResponse.serverDeviceIdPubKey, Base64.DEFAULT))
+                val sharedKey = Cryptography.calculateSharedSecret(
+                    context,
+                    DEVICE_ID_KEYSTORE_ALIAS,
+                    Base64.decode(createResponse.serverDeviceIdPubKey, Base64.DEFAULT))
 
-                    llt = Crypto.decryptFernet(sharedKey,
-                        String(Base64.decode(createResponse.longLivedToken, Base64.DEFAULT), Charsets.UTF_8))
-                }
+                llt = Crypto.decryptFernet(sharedKey,
+                    String(Base64.decode(createResponse.longLivedToken, Base64.DEFAULT), Charsets.UTF_8))
             }
             return Pair(createResponse, llt)
         } catch(e: Exception) {

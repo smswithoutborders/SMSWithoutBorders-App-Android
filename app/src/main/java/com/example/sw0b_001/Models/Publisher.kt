@@ -1,6 +1,6 @@
 package com.example.sw0b_001.Models
 
-import com.example.sw0b_001.Security.SecurityCurve25519
+import com.example.sw0b_001.Security.Cryptography
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import publisher.v1.PublisherGrpc
@@ -10,8 +10,6 @@ class Publisher {
     private lateinit var channel: ManagedChannel
 
     private lateinit var publisherStub: PublisherBlockingStub
-
-    private val publishPubKey = SecurityCurve25519().generateKey()
 
     fun init() {
         channel = ManagedChannelBuilder

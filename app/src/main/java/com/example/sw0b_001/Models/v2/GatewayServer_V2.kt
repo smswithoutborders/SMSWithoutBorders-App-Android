@@ -4,6 +4,7 @@ import android.content.Context
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
 import com.example.sw0b_001.Modules.Crypto
 import com.example.sw0b_001.Modules.Network
+import com.example.sw0b_001.Modules.Security
 import com.example.sw0b_001.R
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -44,7 +45,7 @@ class GatewayServer_V2 {
 //                            android.util.Base64.DEFAULT)
 
             val encryptedPassword = android.util.Base64
-                    .encodeToString(Crypto.encryptRSA(gatewayServerPublicKey,
+                    .encodeToString(SecurityRSA.encrypt(gatewayServerPublicKey,
                             password.encodeToByteArray()),
                             android.util.Base64.DEFAULT)
 

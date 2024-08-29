@@ -1,26 +1,15 @@
 package com.example.sw0b_001
 
 import android.util.Base64
-import com.example.sw0b_001.Modules.Crypto
-import com.example.sw0b_001.Modules.Helpers
-import com.example.sw0b_001.Security.SecurityCurve25519
+import androidx.test.platform.app.InstrumentationRegistry
+import com.example.sw0b_001.Security.Cryptography
 import io.grpc.ManagedChannel
-import io.grpc.ManagedChannelBuilder
 import io.grpc.StatusRuntimeException
-import io.grpc.stub.StreamObserver
-import junit.framework.TestCase.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import publisher.v1.PublisherGrpc
 import publisher.v1.PublisherGrpc.PublisherBlockingStub
-import publisher.v1.PublisherGrpc.PublisherStub
-import publisher.v1.PublisherOuterClass
-import publisher.v1.PublisherOuterClass.GetOAuth2AuthorizationUrlResponse
-import vault.v1.EntityGrpc
 import vault.v1.EntityGrpc.EntityBlockingStub
-import vault.v1.Vault
-import vault.v1.Vault.AuthenticateEntityResponse
 
 /**
  * Flow from https://github.com/smswithoutborders/SMSwithoutborders-BE/blob/feature/grpc_api/docs/grpc.md
@@ -55,16 +44,19 @@ class gRPCTest {
     private val globalCountryCode = "CM"
     private val globalPassword = "dMd2Kmo9#"
 
-    private val deviceIDKeypair = SecurityCurve25519()
-    private val publishKeyPair = SecurityCurve25519()
-
-    private val deviceIdPubKey = deviceIDKeypair.generateKey()
-    private val publishPubKey = publishKeyPair.generateKey()
+    private lateinit var deviceIdPubKey: ByteArray
+    private lateinit var publishPubKey: ByteArray
 
     private val vault = com.example.sw0b_001.Models.Vault()
 
+    var context = InstrumentationRegistry.getInstrumentation().targetContext
+    private val device_id_keystoreAlias = "device_id_keystoreAlias"
+    private val publisher_keystoreAlias = "publisher_keystoreAlias"
+
     @Before
     fun init() {
+        deviceIdPubKey = Cryptography.generateKey(context, device_id_keystoreAlias)
+        publishPubKey = Cryptography.generateKey(context, publisher_keystoreAlias)
     }
 
     @Test
@@ -114,19 +106,20 @@ class gRPCTest {
                 Base64.encodeToString(deviceIdPubKey, Base64.DEFAULT),
                 "123456")
 
-            var response2 = vault.authenticateEntity(globalPhoneNumber,
+            var response2 = vault.authenticateEntity(context,
+                globalPhoneNumber,
                 globalPassword,
                 Base64.encodeToString(publishPubKey, Base64.DEFAULT),
                 Base64.encodeToString(deviceIdPubKey, Base64.DEFAULT))
 
             assertTrue(response2.first.requiresOwnershipProof)
 
-            var response3 = vault.authenticateEntity(globalPhoneNumber,
+            var response3 = vault.authenticateEntity(context,
+                globalPhoneNumber,
                 globalPassword,
                 Base64.encodeToString(publishPubKey, Base64.DEFAULT),
                 Base64.encodeToString(deviceIdPubKey, Base64.DEFAULT),
-                "123456",
-                deviceIDKeypair)
+                "123456")
 
             var response6 = vault.deleteEntity(response3.second)
         } catch(e: StatusRuntimeException) {
