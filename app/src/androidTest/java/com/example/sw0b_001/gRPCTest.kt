@@ -41,7 +41,7 @@ class gRPCTest {
     private lateinit var entityStub: EntityBlockingStub
     private lateinit var publisherStub: PublisherBlockingStub
 
-    private val globalPhoneNumber = "+23711234572"
+    private val globalPhoneNumber = "+23711234575"
     private val globalCountryCode = "CM"
     private val globalPassword = "dMd2Kmo9#"
 
@@ -64,7 +64,7 @@ class gRPCTest {
     fun endToEndCompleteTest() {
         try {
             println("Starting")
-            var response = vault.createEntity(context,
+            val response = vault.createEntity(context,
                 globalPhoneNumber,
                 globalCountryCode,
                 globalPassword)

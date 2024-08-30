@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Base64
 import at.favre.lib.armadillo.Armadillo
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
+import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityAES
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
 import com.example.sw0b_001.Modules.Crypto
 import com.example.sw0b_001.Security.Cryptography
@@ -153,28 +154,43 @@ class Vault {
         private const val LONG_LIVED_TOKEN_KEYSTORE_ALIAS =
             "com.afkanerd.relaysms.LONG_LIVED_TOKEN_KEYSTORE_ALIAS"
 
+        private const val LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS =
+            "com.afkanerd.relaysms.LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS"
+
         fun storeLongLivedToken(context: Context, llt: String) {
             val publicKey = SecurityRSA.generateKeyPair(LONG_LIVED_TOKEN_KEYSTORE_ALIAS, 2048)
-            println("Len llt: ${llt.encodeToByteArray().size}")
-            val privateKeyCipherText = SecurityRSA.encrypt(publicKey, llt.encodeToByteArray())
+            val secretKey = SecurityAES.generateSecretKey(256)
+
+            val lltEncrypted = SecurityAES.encryptAES256CBC(llt.encodeToByteArray(),
+                secretKey.encoded, null)
+
+            val encryptedSecretKey = SecurityRSA.encrypt(publicKey, secretKey.encoded)
 
             val sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
                 .encryptionFingerprint(context)
                 .build()
 
-            sharedPreferences.edit().putString(LONG_LIVED_TOKEN_KEYSTORE_ALIAS,
-                Base64.encodeToString(privateKeyCipherText, Base64.DEFAULT)).apply()
+            sharedPreferences.edit()
+                .putString(LONG_LIVED_TOKEN_KEYSTORE_ALIAS,
+                    Base64.encodeToString(lltEncrypted, Base64.DEFAULT))
+                .putString(LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS,
+                    Base64.encodeToString(encryptedSecretKey, Base64.DEFAULT))
+                .apply()
         }
 
         fun fetchLongLivedToken(context: Context) : String {
-            val encryptedLlt = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
+            val sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
                 .encryptionFingerprint(context)
                 .build()
-                .getString(LONG_LIVED_TOKEN_KEYSTORE_ALIAS, "")!!
+            val encryptedLlt = Base64.decode(sharedPreferences
+                .getString(LONG_LIVED_TOKEN_KEYSTORE_ALIAS, "")!!, Base64.DEFAULT)
 
-            return String(SecurityRSA.decrypt(KeystoreHelpers.getKeyPairFromKeystore(
-                LONG_LIVED_TOKEN_KEYSTORE_ALIAS).private,
-                Base64.decode(encryptedLlt, Base64.DEFAULT)), Charsets.UTF_8)
+            val secretKeyEncrypted = Base64.decode(sharedPreferences
+                .getString(LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS, "")!!, Base64.DEFAULT)
+
+            val secretKey = SecurityRSA.decrypt(KeystoreHelpers.getKeyPairFromKeystore(
+                LONG_LIVED_TOKEN_KEYSTORE_ALIAS).private, secretKeyEncrypted)
+            return String(SecurityAES.decryptAES256CBC(encryptedLlt, secretKey), Charsets.UTF_8)
         }
     }
 }
