@@ -104,6 +104,6 @@ object UserArtifactsHandler {
         val credentials = fetchCredentials(context)
         val sharedKey = Base64.decode(credentials[SHARED_KEY], Base64.DEFAULT)
         val privateKey = KeystoreHelpers.getKeyPairFromKeystore(credentials[USER_ID_KEY]).private
-        return com.example.sw0b_001.Security.SecurityRSA.decrypt(privateKey, sharedKey)
+        return SecurityRSA.decrypt(privateKey, sharedKey)
     }
 }

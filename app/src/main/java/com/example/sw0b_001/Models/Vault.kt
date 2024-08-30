@@ -2,6 +2,8 @@ package com.example.sw0b_001.Models
 
 import android.content.Context
 import android.util.Base64
+import at.favre.lib.armadillo.Armadillo
+import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
 import com.example.sw0b_001.Modules.Crypto
 import com.example.sw0b_001.Security.Cryptography
 import io.grpc.ManagedChannel
@@ -19,7 +21,20 @@ class Vault {
         .build()
     private var entityStub: EntityBlockingStub = EntityGrpc.newBlockingStub(channel)
 
-    fun createEntity(phoneNumber: String,
+    private fun processLongLivedToken(context: Context, encodedLlt: String, deviceIdPubKey: String) {
+        val sharedKey = Cryptography.calculateSharedSecret(
+            context,
+            DEVICE_ID_KEYSTORE_ALIAS,
+            Base64.decode(deviceIdPubKey, Base64.DEFAULT))
+
+        val llt = Crypto.decryptFernet(sharedKey,
+            String(Base64.decode(encodedLlt, Base64.DEFAULT), Charsets.UTF_8))
+
+        storeLongLivedToken(context, llt)
+    }
+
+    fun createEntity(context: Context,
+                     phoneNumber: String,
                      countryCode: String,
                      password: String,
                      clientPublishPubKey: String,
@@ -37,7 +52,19 @@ class Vault {
             }
         }.build()
 
-        return entityStub.createEntity(createEntityRequest1)
+        try {
+            val response = entityStub.createEntity(createEntityRequest1)
+
+            var llt = ""
+            if(!response.requiresOwnershipProof) {
+                processLongLivedToken(context,
+                    response.longLivedToken,
+                    response.serverDeviceIdPubKey)
+            }
+            return response
+        } catch(e: Exception) {
+            throw Throwable(e)
+        }
     }
 
     fun authenticateEntity(context: Context,
@@ -45,8 +72,7 @@ class Vault {
                            password: String,
                            clientPublishPubKey: String,
                            clientDeviceIDPubKey: String,
-                           ownershipResponse: String = "") :
-            Pair<Vault.AuthenticateEntityResponse, String> {
+                           ownershipResponse: String = "") : Vault.AuthenticateEntityResponse {
         val authenticateEntityRequest = Vault.AuthenticateEntityRequest.newBuilder().apply {
             setPhoneNumber(phoneNumber)
             setPassword(password)
@@ -59,21 +85,14 @@ class Vault {
         }.build()
 
         try {
-            val createResponse = entityStub.authenticateEntity(authenticateEntityRequest)
-            println(createResponse.message)
-            println(createResponse.serverDeviceIdPubKey)
-
+            val response = entityStub.authenticateEntity(authenticateEntityRequest)
             var llt = ""
-            if(!createResponse.requiresOwnershipProof) {
-                val sharedKey = Cryptography.calculateSharedSecret(
-                    context,
-                    DEVICE_ID_KEYSTORE_ALIAS,
-                    Base64.decode(createResponse.serverDeviceIdPubKey, Base64.DEFAULT))
-
-                llt = Crypto.decryptFernet(sharedKey,
-                    String(Base64.decode(createResponse.longLivedToken, Base64.DEFAULT), Charsets.UTF_8))
+            if(!response.requiresOwnershipProof) {
+                processLongLivedToken(context,
+                    response.longLivedToken,
+                    response.serverDeviceIdPubKey)
             }
-            return Pair(createResponse, llt)
+            return response
         } catch(e: Exception) {
             throw Throwable(e)
         }
@@ -113,5 +132,30 @@ class Vault {
         }
     }
 
+    companion object {
+        private const val VAULT_ATTRIBUTE_FILES =
+            "com.afkanerd.relaysms.VAULT_ATTRIBUTE_FILES"
 
+        private const val LONG_LIVED_TOKEN_KEYSTORE_ALIAS =
+            "com.afkanerd.relaysms.LONG_LIVED_TOKEN_KEYSTORE_ALIAS"
+
+        fun storeLongLivedToken(context: Context, llt: String) {
+            val publicKey = SecurityRSA.generateKeyPair(LONG_LIVED_TOKEN_KEYSTORE_ALIAS, 2048)
+            val privateKeyCipherText = SecurityRSA.encrypt(publicKey, llt.encodeToByteArray())
+
+            val sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
+                .encryptionFingerprint(context)
+                .build()
+
+            sharedPreferences.edit().putString(LONG_LIVED_TOKEN_KEYSTORE_ALIAS,
+                Base64.encodeToString(privateKeyCipherText, Base64.DEFAULT)).apply()
+        }
+
+        fun fetchLongLivedToken(context: Context) : String {
+            return Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
+                .encryptionFingerprint(context)
+                .build()
+                .getString(LONG_LIVED_TOKEN_KEYSTORE_ALIAS, "")!!
+        }
+    }
 }

@@ -5,7 +5,6 @@ import android.util.Base64
 import android.util.Log
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
 import com.example.sw0b_001.Security.SecurityAES
-import com.example.sw0b_001.Security.SecurityRSA
 import java.nio.charset.Charset
 
 object PublisherHandler {
