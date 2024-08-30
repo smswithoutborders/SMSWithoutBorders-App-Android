@@ -2,6 +2,7 @@ package com.example.sw0b_001
 
 import android.util.Base64
 import androidx.test.platform.app.InstrumentationRegistry
+import com.example.sw0b_001.Models.Vault
 import com.example.sw0b_001.Security.Cryptography
 import io.grpc.ManagedChannel
 import io.grpc.StatusRuntimeException
@@ -40,7 +41,7 @@ class gRPCTest {
     private lateinit var entityStub: EntityBlockingStub
     private lateinit var publisherStub: PublisherBlockingStub
 
-    private val globalPhoneNumber = "+2371123457"
+    private val globalPhoneNumber = "+23711234572"
     private val globalCountryCode = "CM"
     private val globalPassword = "dMd2Kmo9#"
 
@@ -63,19 +64,17 @@ class gRPCTest {
     fun endToEndCompleteTest() {
         try {
             println("Starting")
-            var response = vault.createEntity(globalPhoneNumber,
+            var response = vault.createEntity(context,
+                globalPhoneNumber,
                 globalCountryCode,
-                globalPassword,
-                Base64.encodeToString(publishPubKey, Base64.DEFAULT),
-                Base64.encodeToString(deviceIdPubKey, Base64.DEFAULT))
+                globalPassword)
 
             assertTrue(response.requiresOwnershipProof)
 
-            var response1 = vault.createEntity(globalPhoneNumber,
+            var response1 = vault.createEntity(context,
+                globalPhoneNumber,
                 globalCountryCode,
                 globalPassword,
-                Base64.encodeToString(publishPubKey, Base64.DEFAULT),
-                Base64.encodeToString(deviceIdPubKey, Base64.DEFAULT),
                 "123456")
 
         } catch(e: StatusRuntimeException) {
@@ -93,35 +92,30 @@ class gRPCTest {
         }
 
         try {
-            var response4 = vault.recoverEntityPassword(globalPhoneNumber,
-                globalPassword,
-                Base64.encodeToString(publishPubKey, Base64.DEFAULT),
-                Base64.encodeToString(deviceIdPubKey, Base64.DEFAULT))
+            val response4 = vault.recoverEntityPassword(context,
+                globalPhoneNumber,
+                globalPassword)
 
             assertTrue(response4.requiresOwnershipProof)
 
-            var response5 = vault.recoverEntityPassword(globalPhoneNumber,
-                globalPassword,
-                Base64.encodeToString(publishPubKey, Base64.DEFAULT),
-                Base64.encodeToString(deviceIdPubKey, Base64.DEFAULT),
-                "123456")
-
-            var response2 = vault.authenticateEntity(context,
+            val response5 = vault.recoverEntityPassword(context,
                 globalPhoneNumber,
                 globalPassword,
-                Base64.encodeToString(publishPubKey, Base64.DEFAULT),
-                Base64.encodeToString(deviceIdPubKey, Base64.DEFAULT))
-
-            assertTrue(response2.first.requiresOwnershipProof)
-
-            var response3 = vault.authenticateEntity(context,
-                globalPhoneNumber,
-                globalPassword,
-                Base64.encodeToString(publishPubKey, Base64.DEFAULT),
-                Base64.encodeToString(deviceIdPubKey, Base64.DEFAULT),
                 "123456")
 
-            var response6 = vault.deleteEntity(response3.second)
+            val response2 = vault.authenticateEntity(context,
+                globalPhoneNumber,
+                globalPassword)
+
+            assertTrue(response2.requiresOwnershipProof)
+
+            val response3 = vault.authenticateEntity(context,
+                globalPhoneNumber,
+                globalPassword,
+                "123456")
+
+            val llt = Vault.fetchLongLivedToken(context)
+            var response6 = vault.deleteEntity(llt)
         } catch(e: StatusRuntimeException) {
             println("Exception code: ${e.status.code.value()}")
             println("Exception code: ${e.status.description}")

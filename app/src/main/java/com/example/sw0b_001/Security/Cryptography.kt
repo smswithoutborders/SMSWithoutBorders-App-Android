@@ -55,9 +55,7 @@ object Cryptography {
         val libSigCurve25519 = SecurityCurve25519()
         libSigCurve25519.privateKey = privateKey
 
-        val sharedKey = libSigCurve25519.calculateSharedSecret(publicKey)
-        return CryptoHelpers.HKDF("HMACSHA256", sharedKey, null,
-            "x25591_key_exchange".encodeToByteArray(), 32, 1)[0]
+        return libSigCurve25519.calculateSharedSecret(publicKey)
     }
 
 }

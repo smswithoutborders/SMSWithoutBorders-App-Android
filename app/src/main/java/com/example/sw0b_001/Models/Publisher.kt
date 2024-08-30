@@ -11,6 +11,10 @@ class Publisher {
 
     private lateinit var publisherStub: PublisherBlockingStub
 
+    companion object {
+        val PUBLISHER_ID_KEYSTORE_ALIAS = "PUBLISHER_ID_KEYSTORE_ALIAS"
+    }
+
     fun init() {
         channel = ManagedChannelBuilder
             .forAddress("staging.smswithoutborders.com", 9060)

@@ -3,6 +3,7 @@ package com.example.sw0b_001.Models
 import android.content.Context
 import android.util.Base64
 import at.favre.lib.armadillo.Armadillo
+import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
 import com.example.sw0b_001.Modules.Crypto
 import com.example.sw0b_001.Security.Cryptography
@@ -11,6 +12,7 @@ import io.grpc.ManagedChannelBuilder
 import vault.v1.EntityGrpc
 import vault.v1.EntityGrpc.EntityBlockingStub
 import vault.v1.Vault
+import java.nio.charset.Charset
 
 class Vault {
     private val DEVICE_ID_KEYSTORE_ALIAS = "DEVICE_ID_KEYSTORE_ALIAS"
@@ -21,11 +23,11 @@ class Vault {
         .build()
     private var entityStub: EntityBlockingStub = EntityGrpc.newBlockingStub(channel)
 
-    private fun processLongLivedToken(context: Context, encodedLlt: String, deviceIdPubKey: String) {
+    private fun processLongLivedToken(context: Context, encodedLlt: String, publicKey: String) {
         val sharedKey = Cryptography.calculateSharedSecret(
             context,
             DEVICE_ID_KEYSTORE_ALIAS,
-            Base64.decode(deviceIdPubKey, Base64.DEFAULT))
+            Base64.decode(publicKey, Base64.DEFAULT))
 
         val llt = Crypto.decryptFernet(sharedKey,
             String(Base64.decode(encodedLlt, Base64.DEFAULT), Charsets.UTF_8))
@@ -37,19 +39,21 @@ class Vault {
                      phoneNumber: String,
                      countryCode: String,
                      password: String,
-                     clientPublishPubKey: String,
-                     clientDeviceIDPubKey: String,
                      ownershipResponse: String = "") : Vault.CreateEntityResponse {
-        val createEntityRequest1 = Vault.CreateEntityRequest.newBuilder().apply {
-            setCountryCode(countryCode)
-            setPhoneNumber(phoneNumber)
-            setPassword(password)
-            setClientPublishPubKey(clientPublishPubKey)
-            setClientDeviceIdPubKey(clientDeviceIDPubKey)
 
+        val deviceIdPubKey = Cryptography.generateKey(context, DEVICE_ID_KEYSTORE_ALIAS)
+        val publishPubKey = Cryptography.generateKey(context, Publisher.PUBLISHER_ID_KEYSTORE_ALIAS)
+
+        val createEntityRequest1 = Vault.CreateEntityRequest.newBuilder().apply {
             if(ownershipResponse.isNotBlank()) {
                 setOwnershipProofResponse(ownershipResponse)
             }
+            setCountryCode(countryCode)
+            setPhoneNumber(phoneNumber)
+            setPassword(password)
+            setClientPublishPubKey(Base64.encodeToString(publishPubKey, Base64.DEFAULT))
+            setClientDeviceIdPubKey(Base64.encodeToString(deviceIdPubKey, Base64.DEFAULT))
+
         }.build()
 
         try {
@@ -69,14 +73,16 @@ class Vault {
     fun authenticateEntity(context: Context,
                            phoneNumber: String,
                            password: String,
-                           clientPublishPubKey: String,
-                           clientDeviceIDPubKey: String,
                            ownershipResponse: String = "") : Vault.AuthenticateEntityResponse {
+
+        val deviceIdPubKey = Cryptography.generateKey(context, DEVICE_ID_KEYSTORE_ALIAS)
+        val publishPubKey = Cryptography.generateKey(context, Publisher.PUBLISHER_ID_KEYSTORE_ALIAS)
+
         val authenticateEntityRequest = Vault.AuthenticateEntityRequest.newBuilder().apply {
             setPhoneNumber(phoneNumber)
             setPassword(password)
-            setClientPublishPubKey(clientPublishPubKey)
-            setClientDeviceIdPubKey(clientDeviceIDPubKey)
+            setClientPublishPubKey(Base64.encodeToString(publishPubKey, Base64.DEFAULT))
+            setClientDeviceIdPubKey(Base64.encodeToString(deviceIdPubKey, Base64.DEFAULT))
 
             if(ownershipResponse.isNotBlank()) {
                 setOwnershipProofResponse(ownershipResponse)
@@ -99,14 +105,17 @@ class Vault {
     fun recoverEntityPassword(context: Context,
                               phoneNumber: String,
                               newPassword: String,
-                              clientPublishPubKey: String,
-                              clientDeviceIDPubKey: String,
                               ownershipResponse: String? = null) : Vault.ResetPasswordResponse {
+
+        val deviceIdPubKey = Cryptography.generateKey(context, DEVICE_ID_KEYSTORE_ALIAS)
+        val publishPubKey = Cryptography.generateKey(context, Publisher.PUBLISHER_ID_KEYSTORE_ALIAS)
+
         val resetPasswordRequest = Vault.ResetPasswordRequest.newBuilder().apply {
             setPhoneNumber(phoneNumber)
             setNewPassword(newPassword)
-            setClientPublishPubKey(clientPublishPubKey)
-            setClientDeviceIdPubKey(clientDeviceIDPubKey)
+            setClientPublishPubKey(Base64.encodeToString(publishPubKey, Base64.DEFAULT))
+            setClientDeviceIdPubKey(Base64.encodeToString(deviceIdPubKey, Base64.DEFAULT))
+
             ownershipResponse?.let {
                 setOwnershipProofResponse(ownershipResponse)
             }
@@ -146,6 +155,7 @@ class Vault {
 
         fun storeLongLivedToken(context: Context, llt: String) {
             val publicKey = SecurityRSA.generateKeyPair(LONG_LIVED_TOKEN_KEYSTORE_ALIAS, 2048)
+            println("Len llt: ${llt.encodeToByteArray().size}")
             val privateKeyCipherText = SecurityRSA.encrypt(publicKey, llt.encodeToByteArray())
 
             val sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
@@ -157,10 +167,14 @@ class Vault {
         }
 
         fun fetchLongLivedToken(context: Context) : String {
-            return Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
+            val encryptedLlt = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
                 .encryptionFingerprint(context)
                 .build()
                 .getString(LONG_LIVED_TOKEN_KEYSTORE_ALIAS, "")!!
+
+            return String(SecurityRSA.decrypt(KeystoreHelpers.getKeyPairFromKeystore(
+                LONG_LIVED_TOKEN_KEYSTORE_ALIAS).private,
+                Base64.decode(encryptedLlt, Base64.DEFAULT)), Charsets.UTF_8)
         }
     }
 }
