@@ -55,7 +55,6 @@ class Vault {
         try {
             val response = entityStub.createEntity(createEntityRequest1)
 
-            var llt = ""
             if(!response.requiresOwnershipProof) {
                 processLongLivedToken(context,
                     response.longLivedToken,
@@ -86,7 +85,6 @@ class Vault {
 
         try {
             val response = entityStub.authenticateEntity(authenticateEntityRequest)
-            var llt = ""
             if(!response.requiresOwnershipProof) {
                 processLongLivedToken(context,
                     response.longLivedToken,
@@ -98,7 +96,8 @@ class Vault {
         }
     }
 
-    fun recoverEntityPassword(phoneNumber: String,
+    fun recoverEntityPassword(context: Context,
+                              phoneNumber: String,
                               newPassword: String,
                               clientPublishPubKey: String,
                               clientDeviceIDPubKey: String,
@@ -114,7 +113,13 @@ class Vault {
         }.build()
 
         try {
-            return entityStub.resetPassword(resetPasswordRequest)
+            val response = entityStub.resetPassword(resetPasswordRequest)
+            if(!response.requiresOwnershipProof) {
+                processLongLivedToken(context,
+                    response.longLivedToken,
+                    response.serverDeviceIdPubKey)
+            }
+            return response
         } catch(e: Exception) {
             throw Throwable(e)
         }
