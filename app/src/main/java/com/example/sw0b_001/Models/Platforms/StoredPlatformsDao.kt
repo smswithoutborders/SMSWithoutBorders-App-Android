@@ -6,5 +6,5 @@ import androidx.room.Insert
 @Dao
 interface StoredPlatformsDao {
     @Insert
-    fun insertAll(vararg platforms: ArrayList<StoredPlatformsEntity>)
+    fun insertAll(platforms: ArrayList<StoredPlatformsEntity>)
 }

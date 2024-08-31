@@ -32,10 +32,10 @@ class OnboardingVaultFragment : OnboardingComponent(R.layout.fragment_onboarding
             if(activity is OnboardingComponent.ManageComponentsListing) {
                 ((activity) as OnboardingComponent.ManageComponentsListing)
                     .addComponent(OnboardingVaultStorePlatformFragment())
-                activity?.runOnUiThread {
-                    activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
-                        ?.performClick()
-                }
+            }
+            activity?.runOnUiThread {
+                activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
+                    ?.performClick()
             }
         }
 

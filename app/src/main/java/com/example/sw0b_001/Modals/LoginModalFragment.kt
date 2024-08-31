@@ -1,17 +1,25 @@
 package com.example.sw0b_001.Modals
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import com.afkanerd.smswithoutborders.libsignal_doubleratchet.CryptoHelpers
+import com.example.sw0b_001.BuildConfig
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.HomepageComposeNewFragment
 import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.Vault
 import com.example.sw0b_001.Models.v2.Vault_V2
+import com.example.sw0b_001.OTPVerificationActivity
 import com.example.sw0b_001.R
+import com.github.kittinunf.result.Validation
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.tasks.OnFailureListener
@@ -27,6 +35,8 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import com.hbb20.CountryCodePicker
 import io.grpc.StatusRuntimeException
+import java.security.DigestException
+import java.security.MessageDigest
 
 class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         BottomSheetDialogFragment(R.layout.fragment_login_modal) {
@@ -38,8 +48,32 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
     private lateinit var countryCodePickerView: CountryCodePicker
     private lateinit var forgotPasswordBtn: MaterialButton
 
+    private lateinit var vault: Vault
+
+    private val activityLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            when(it.resultCode) {
+                Activity.RESULT_OK -> {
+                    onSuccessRunnable?.run()
+                    dismiss()
+                }
+                else -> { }
+            }
+        }
+
+    private fun populateDebugMode(view: View) {
+        val globalPhoneNumber = "1123457528"
+        val globalCountryCode = "CM"
+        val globalPassword = "dMd2Kmo9#"
+
+        phonenumberTextView.text = Editable.Factory().newEditable(globalPhoneNumber)
+        passwordTextView.text = Editable.Factory().newEditable(globalPassword)
+        countryCodePickerView.setCountryForNameCode(globalCountryCode)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        vault = Vault(requireContext())
 
         view.findViewById<MaterialButton>(R.id.login_btn).setOnClickListener {
             loginRecaptchaEnabled(view)
@@ -74,6 +108,10 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
             fragmentTransaction?.add(recoverModalFragment, "recovery_tag")
             fragmentTransaction?.show(recoverModalFragment)
             fragmentTransaction?.commit()
+        }
+
+        if(BuildConfig.DEBUG) {
+            populateDebugMode(view)
         }
     }
 
@@ -151,22 +189,19 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
 
         ThreadExecutorPool.executorService.execute {
             try {
-                val vault = Vault(requireContext())
-                val response2 = vault.authenticateEntity(requireContext(),
+                val response = vault.authenticateEntity(requireContext(),
                     phoneNumber, password)
 
-                val llt = Vault.fetchLongLivedToken(requireContext())
-                val response = vault.listStoredEntityTokens(llt)
-
-                val storedPlatforms = ArrayList<StoredPlatformsEntity>()
-                response.storedTokensList.forEach {
-                    storedPlatforms.add(StoredPlatformsEntity(it.accountIdentifier, it.platform))
+                if(response.requiresOwnershipProof) {
+                    activity?.runOnUiThread {
+                        val intent = Intent(requireContext(), OTPVerificationActivity::class.java)
+                        intent.putExtra("phone_number", phoneNumber)
+                        intent.putExtra("password", password)
+                        intent.putExtra("type",
+                            OTPVerificationActivity.Type.AUTHENTICATE.type)
+                        activityLauncher.launch(intent)
+                    }
                 }
-                Datastore.getDatastore(requireContext()).storedPlatformsDao()
-                    .insertAll(storedPlatforms)
-
-                onSuccessRunnable?.run()
-                dismiss()
             } catch(e: StatusRuntimeException) {
                 e.printStackTrace()
                 activity?.runOnUiThread {
@@ -175,7 +210,9 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
                 }
             } catch(e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                activity?.runOnUiThread {
+                    Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+                }
             }
             finally {
                 activity?.runOnUiThread {
@@ -185,6 +222,11 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
             }
         }
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        vault.shutdown()
     }
 
 }

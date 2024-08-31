@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.text.Editable
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +18,8 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
+import com.example.sw0b_001.Database.Datastore
+import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.Vault
@@ -30,23 +34,43 @@ import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
 import io.grpc.StatusRuntimeException
+import java.security.DigestException
+import java.security.MessageDigest
 
 class OTPVerificationActivity : AppCompactActivityCustomized() {
+
+    enum class Type(val type: String) {
+        CREATE("CREATE"),
+        AUTHENTICATE("AUTHENTICATE"),
+        RECOVER("RECOVER")
+    }
 
     private val SMS_CONSENT_REQUEST = 2  // Set to an unused request code
     private lateinit var phoneNumber: String
     private lateinit var password : String
+    private var countryCode : String? = null
+
+    private lateinit var vault: Vault
+    private lateinit var type: Type
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_otp_verification_code)
 
         phoneNumber = intent.getStringExtra("phone_number")!!
         password = intent.getStringExtra("password")!!
+        countryCode = intent.getStringExtra("country_code")
+        type = Type.valueOf(intent.getStringExtra("type")!!)
 
         val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
         registerReceiver(applicationContext, smsVerificationReceiver, intentFilter,
                 ContextCompat.RECEIVER_EXPORTED)
         configureVerificationListener()
+
+        if(BuildConfig.DEBUG) {
+            findViewById<TextInputEditText>(R.id.ownership_verification_input).text =
+                Editable.Factory().newEditable("123456")
+        }
 
         findViewById<MaterialButton>(R.id.ownership_verification_btn).setOnClickListener {
             val codeTextView = findViewById<TextInputEditText>(R.id.ownership_verification_input)
@@ -62,6 +86,8 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
                 .setOnClickListener {
                     finish()
                 }
+
+        vault = Vault(applicationContext)
     }
 
 
@@ -107,15 +133,52 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
         }
     }
 
+    private fun buildPlatformsUUID(name: String, account: String) : ByteArray {
+        val md: MessageDigest = MessageDigest.getInstance("SHA-256");
+        try {
+            md.update(name.encodeToByteArray());
+            md.update(account.encodeToByteArray());
+            return md.digest()
+        } catch (e: CloneNotSupportedException) {
+            throw DigestException("couldn't make digest of partial content");
+        }
+    }
+
     private fun submitOTPCode(submitBtnView: View, code: String) {
         val linearProgressIndicator = findViewById<LinearProgressIndicator>(R.id.ownership_progress_bar)
         linearProgressIndicator.visibility = View.VISIBLE
 
         ThreadExecutorPool.executorService.execute {
             try {
-                val vault = Vault()
-                val response3 = vault.authenticateEntity(applicationContext, phoneNumber, password,
-                    code)
+                when(type) {
+                    Type.CREATE -> {
+                        countryCode.let {
+                            var response1 = vault.createEntity(applicationContext,
+                                phoneNumber, countryCode!!, password, code)
+                        }
+                    }
+                    Type.AUTHENTICATE -> {
+                        val response3 = vault.authenticateEntity(applicationContext,
+                            phoneNumber, password, code)
+                    }
+                    Type.RECOVER -> TODO()
+                }
+
+                val llt = Vault.fetchLongLivedToken(applicationContext)
+                val response = vault.listStoredEntityTokens(llt)
+
+                val storedPlatforms = ArrayList<StoredPlatformsEntity>()
+                response.storedTokensList.forEach {
+                    val uuid = Base64.encodeToString(buildPlatformsUUID(it.platform,
+                        it.accountIdentifier), Base64.DEFAULT)
+                    storedPlatforms.add(
+                        StoredPlatformsEntity(uuid, it.accountIdentifier,
+                        it.platform)
+                    )
+                }
+                Datastore.getDatastore(applicationContext).storedPlatformsDao()
+                    .insertAll(storedPlatforms)
+
                 setResult(Activity.RESULT_OK)
                 finish()
             } catch(e: StatusRuntimeException) {
@@ -126,8 +189,10 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
                     Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
                 }
             } finally {
-                linearProgressIndicator.visibility = View.GONE
-                submitBtnView.isEnabled = true
+                runOnUiThread {
+                    linearProgressIndicator.visibility = View.GONE
+                    submitBtnView.isEnabled = true
+                }
             }
         }
     }
@@ -147,5 +212,10 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        vault.shutdown()
     }
 }

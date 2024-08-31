@@ -26,6 +26,10 @@ class Vault(context: Context) {
         .build()
     private var entityStub: EntityBlockingStub = EntityGrpc.newBlockingStub(channel)
 
+    fun shutdown() {
+        channel.shutdown()
+    }
+
     private fun processLongLivedToken(context: Context, encodedLlt: String, publicKey: String) {
         val sharedKey = Cryptography.calculateSharedSecret(
             context,
@@ -59,18 +63,14 @@ class Vault(context: Context) {
 
         }.build()
 
-        try {
-            val response = entityStub.createEntity(createEntityRequest1)
+        val response = entityStub.createEntity(createEntityRequest1)
 
-            if(!response.requiresOwnershipProof) {
-                processLongLivedToken(context,
-                    response.longLivedToken,
-                    response.serverDeviceIdPubKey)
-            }
-            return response
-        } catch(e: Exception) {
-            throw Throwable(e)
+        if(!response.requiresOwnershipProof) {
+            processLongLivedToken(context,
+                response.longLivedToken,
+                response.serverDeviceIdPubKey)
         }
+        return response
     }
 
     fun authenticateEntity(context: Context,
@@ -92,17 +92,13 @@ class Vault(context: Context) {
             }
         }.build()
 
-        try {
-            val response = entityStub.authenticateEntity(authenticateEntityRequest)
-            if(!response.requiresOwnershipProof) {
-                processLongLivedToken(context,
-                    response.longLivedToken,
-                    response.serverDeviceIdPubKey)
-            }
-            return response
-        } catch(e: Exception) {
-            throw Throwable(e)
+        val response = entityStub.authenticateEntity(authenticateEntityRequest)
+        if(!response.requiresOwnershipProof) {
+            processLongLivedToken(context,
+                response.longLivedToken,
+                response.serverDeviceIdPubKey)
         }
+        return response
     }
 
     fun recoverEntityPassword(context: Context,
