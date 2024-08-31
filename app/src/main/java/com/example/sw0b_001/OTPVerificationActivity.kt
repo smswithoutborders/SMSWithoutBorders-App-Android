@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.UserArtifactsHandler
+import com.example.sw0b_001.Models.Vault
 import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Network
 import com.github.kittinunf.fuel.core.Headers
@@ -28,28 +29,19 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
+import io.grpc.StatusRuntimeException
 
 class OTPVerificationActivity : AppCompactActivityCustomized() {
 
     private val SMS_CONSENT_REQUEST = 2  // Set to an unused request code
     private lateinit var phoneNumber: String
     private lateinit var password : String
-    private lateinit var uid : String
-    private lateinit var otpRequestHeader : Headers
-    private lateinit var signupRequestHeader : Headers
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_otp_verification_code)
 
         phoneNumber = intent.getStringExtra("phone_number")!!
         password = intent.getStringExtra("password")!!
-        uid = intent.getStringExtra("uid")!!
-
-        otpRequestHeader = Headers()
-        signupRequestHeader = Headers()
-
-        otpRequestHeader["Set-Cookie"] = intent.getStringExtra("opt_request_cookie")!!
-        signupRequestHeader["Set-Cookie"] = intent.getStringExtra("signup_request_cookie")!!
 
         val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
         registerReceiver(applicationContext, smsVerificationReceiver, intentFilter,
@@ -68,16 +60,6 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
 
         findViewById<MaterialTextView>(R.id.ownership_resend_code_by_sms_btn)
                 .setOnClickListener {
-//                    val linearProgressIndicator =
-//                            findViewById<LinearProgressIndicator>(R.id.ownership_progress_bar)
-//                    linearProgressIndicator.visibility = View.VISIBLE
-//                    val optNetworkResponseResults = resendCode(it)
-//                    when(optNetworkResponseResults.response.statusCode) {
-//                        in 400..600 -> throw Exception(String(optNetworkResponseResults.response.data))
-//                    }
-////                    headers = optNetworkResponseResults.response.headers
-//                    otpRequestHeader = optNetworkResponseResults.response.headers
-//                    linearProgressIndicator.visibility = View.GONE
                     finish()
                 }
     }
@@ -125,81 +107,27 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
         }
     }
 
-//    private fun resendCode(view: View) : Network.NetworkResponseResults{
-//        view.findViewById<MaterialButton>(R.id.ownership_verification_btn)
-//                .isEnabled = true
-//        val otpRequestUrl = view.context.getString(R.string.smswithoutborders_official_vault)
-//
-//        return Vault_V2.otpRequest(otpRequestUrl, signupRequestHeader, phoneNumber, uid)
-//    }
-
     private fun submitOTPCode(submitBtnView: View, code: String) {
         val linearProgressIndicator = findViewById<LinearProgressIndicator>(R.id.ownership_progress_bar)
         linearProgressIndicator.visibility = View.VISIBLE
 
-        val otpSubmissionUrl = getString(R.string.smswithoutborders_official_otp_submission)
         ThreadExecutorPool.executorService.execute {
-            val optRequestHeader = Headers()
-            optRequestHeader["Set-Cookie"] = intent.getStringExtra("opt_request_cookie")!!
-            val networkResponseResultsOTP = Vault_V2.otpSubmit(otpSubmissionUrl, optRequestHeader,
+            try {
+                val vault = Vault()
+                val response3 = vault.authenticateEntity(applicationContext, phoneNumber, password,
                     code)
-
-            when(networkResponseResultsOTP.response.statusCode) {
-                in 200..300 -> {
-                    runOnUiThread {
-                        Toast.makeText(applicationContext,
-                                getString(R.string.otp_code_submitted_otp_verified),
-                                Toast.LENGTH_SHORT).show()
-                    }
-                    val url = getString(R.string.smswithoutborders_official_site_signup)
-                    val completeNetworkResponseResults =
-                            Vault_V2.signupOtpComplete(url, networkResponseResultsOTP.response.headers)
-
-                    when(completeNetworkResponseResults.response.statusCode) {
-                        200 -> {
-                            UserArtifactsHandler.storeCredentials(applicationContext, phoneNumber,
-                                    password, uid)
-
-                            loginAndFetchPlatforms(password, uid)
-                        } else -> {
-                            Log.e(javaClass.name, "Signup completion error: " +
-                                    String(completeNetworkResponseResults.response.data))
-                        }
-                    }
-                    runOnUiThread {
-                        linearProgressIndicator.visibility = View.GONE
-                        setResult(Activity.RESULT_OK)
-                        finish()
-                    }
+                setResult(Activity.RESULT_OK)
+                finish()
+            } catch(e: StatusRuntimeException) {
+                e.printStackTrace()
+            } catch(e: Exception) {
+                e.printStackTrace()
+                runOnUiThread {
+                    Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
                 }
-                else -> {
-                    Log.e(javaClass.name, "status code: " +
-                            "${networkResponseResultsOTP.response.statusCode}")
-                    Log.e(javaClass.name, "OTP submission error: " +
-                            String(networkResponseResultsOTP.response.data))
-                    linearProgressIndicator.visibility = View.GONE
-                }
-            }
-            runOnUiThread {
+            } finally {
+                linearProgressIndicator.visibility = View.GONE
                 submitBtnView.isEnabled = true
-            }
-        }
-    }
-
-    private fun loginAndFetchPlatforms(password: String, uid: String) {
-        try {
-            Vault_V2.loginSyncPlatformsFlow(applicationContext, phoneNumber, password,
-                    "", uid)
-        } catch(e: Exception) {
-            e.printStackTrace()
-            when(e.message) {
-                Vault_V2.INVALID_CREDENTIALS_EXCEPTION -> {
-                    TODO("Invalidate and delete all creds")
-                }
-                Vault_V2.SERVER_ERROR_EXCEPTION -> {
-                }
-                else -> {
-                }
             }
         }
     }

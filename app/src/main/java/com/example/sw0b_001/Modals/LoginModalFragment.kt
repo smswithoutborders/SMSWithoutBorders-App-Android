@@ -131,7 +131,7 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         loginStatusText.text = null
 
         try {
-            login(view, phoneNumber, password, "")
+            login(view, phoneNumber, password)
         } catch (e: Exception) {
             Log.e(HomepageComposeNewFragment.TAG, "Unknown Error: ${e.message}")
             activity?.runOnUiThread {
@@ -141,20 +141,17 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
     }
 
     private fun login(view: View,
-                      phonenumber: String,
-                      password: String,
-                      code: String) {
+                      phoneNumber: String,
+                      password: String) {
 
         val loginStatusCard = view.findViewById<MaterialCardView>(R.id.login_status_card)
         val loginStatusText = view.findViewById<MaterialTextView>(R.id.login_error_text)
 
         ThreadExecutorPool.executorService.execute {
             try {
-                var vault = Vault()
-//                var response2 = vault.authenticateEntity(phonenumber,
-//                    password,
-//                    Base64.encodeToString(publishPubKey.publicKey, Base64.DEFAULT),
-//                    Base64.encodeToString(deviceIdPubKey.publicKey, Base64.DEFAULT))
+                val vault = Vault()
+                val response2 = vault.authenticateEntity(requireContext(),
+                    phoneNumber, password)
                 onSuccessRunnable?.run()
                 dismiss()
             } catch(e: StatusRuntimeException) {
@@ -163,7 +160,11 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
                     loginStatusCard.visibility = View.VISIBLE
                     loginStatusText.text = e.status.description
                 }
-            } finally {
+            } catch(e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+            }
+            finally {
                 activity?.runOnUiThread {
                     loginProgressIndicator.visibility = View.GONE
                     enableComponents(view)
