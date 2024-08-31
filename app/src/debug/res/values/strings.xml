@@ -32,4 +32,6 @@
     <string name="publisher_grpc_url" translatable="false">staging.smswithoutborders.com</string>
     <string name="publisher_grpc_port" translatable="false">9060</string>
 
+    <string name="publisher_get_platforms_url" translatable="false">https://raw.githubusercontent.com/smswithoutborders/SMSWithoutBorders-Publisher/staging/resources/platforms.json</string>
+
 </resources>

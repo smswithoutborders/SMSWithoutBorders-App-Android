@@ -392,7 +392,7 @@
     <string name="introducing_vaults">Introducing Vaults</string>
     <string name="create_account">Create Account</string>
     <string name="login">Login</string>
-    <string name="add_accounts_you_vault">Add accounts you Vault</string>
+    <string name="add_accounts_you_vault">Add platforms to your Vault</string>
     <string name="let_s_get_you_started">Let\'s get you started</string>
     <string name="save_accounts_to_vault">Save Accounts to Vault</string>
     <string name="you_can_add_accounts_to_vault_this_accounts_are_accessible_to_you_when_you_are_offline">You can add accounts to Vault. This accounts are accessible to you when you are offline</string>
@@ -412,5 +412,7 @@
 
     <string name="publisher_grpc_url" translatable="false">publisher.smswithoutborders.com</string>
     <string name="publisher_grpc_port" translatable="false">443</string>
+
+    <string name="publisher_get_platforms_url" translatable="false">https://raw.githubusercontent.com/smswithoutborders/SMSWithoutBorders-Publisher/master/resources/platforms.json</string>
 
 </resources>
