@@ -54,14 +54,14 @@ class HomepageComposeNewFragment(private val bottomSheetViewLayout: Int =
         val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java]
         context?.let { it ->
             platformsViewModel.get(it).observe(viewLifecycleOwner, Observer {
-                platformsRecyclerAdapter.mDiffer.submitList(it)
-                if(it.isNullOrEmpty()) {
-                    view.findViewById<MaterialTextView>(R.id.homepage_no_platforms_saved)
-                            .visibility = View.VISIBLE
-                } else {
-                    view.findViewById<MaterialTextView>(R.id.homepage_no_platforms_saved)
-                            .visibility = View.GONE
-                }
+//                platformsRecyclerAdapter.mDiffer.submitList(it)
+//                if(it.isNullOrEmpty()) {
+//                    view.findViewById<MaterialTextView>(R.id.homepage_no_platforms_saved)
+//                            .visibility = View.VISIBLE
+//                } else {
+//                    view.findViewById<MaterialTextView>(R.id.homepage_no_platforms_saved)
+//                            .visibility = View.GONE
+//                }
         }) }
     }
 

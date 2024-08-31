@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 public class PlatformsRecyclerAdapter extends
         RecyclerView.Adapter<PlatformsRecyclerAdapter.ViewHolder> {
 
-    public final AsyncListDiffer<Platforms> mDiffer =
+    public final AsyncListDiffer<AvailablePlatforms> mDiffer =
             new AsyncListDiffer(this, Platforms.DIFF_CALLBACK);
 
     FragmentTransaction fragmentTransaction;
@@ -42,7 +42,7 @@ public class PlatformsRecyclerAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder viewHolder, int position) {
-        Platforms platforms = mDiffer.getCurrentList().get(position);
+        AvailablePlatforms platforms = mDiffer.getCurrentList().get(position);
         viewHolder.bind(platforms, savedOnClickListenerLiveData, unSavedOnClickListenerLiveData);
     }
 
@@ -63,18 +63,18 @@ public class PlatformsRecyclerAdapter extends
             this.image = itemView.findViewById(R.id.platforms_thumbnails);
         }
 
-        public void bind(Platforms platforms,
+        public void bind(AvailablePlatforms platforms,
                          MutableLiveData<Platforms> onClickListenerLiveData,
                          MutableLiveData<Platforms> unSavedOnClickListenerLiveData) {
             image.setImageDrawable(itemView.getContext()
                     .getDrawable(_PlatformsHandler.hardGetLogoByName(platforms.getName())));
 
-            cardView.setOnClickListener(it -> {
-                if (platforms.isSaved())
-                    onClickListenerLiveData.setValue(platforms);
-                else
-                    unSavedOnClickListenerLiveData.setValue(platforms);
-            });
+//            cardView.setOnClickListener(it -> {
+//                if (platforms.isSaved())
+//                    onClickListenerLiveData.setValue(platforms);
+//                else
+//                    unSavedOnClickListenerLiveData.setValue(platforms);
+//            });
         }
     }
 }

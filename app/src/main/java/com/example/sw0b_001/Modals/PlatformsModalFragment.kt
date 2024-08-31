@@ -104,15 +104,15 @@ class PlatformsModalFragment(private val showType: Int = SHOW_TYPE_ALL)
         when(showType) {
             SHOW_TYPE_SAVED, SHOW_TYPE_SAVED_REVOKE -> {
                 context?.let { it ->
-                    viewModel.getSaved(it).observe(this, Observer {
-                        savedPlatformsAdapter.mDiffer.submitList(it)
-                        if(it.isNullOrEmpty())
-                            view.findViewById<View>(R.id.store_platforms_saved_empty)
-                                    .visibility = View.VISIBLE
-                        else
-                            view.findViewById<View>(R.id.store_platforms_saved_empty)
-                                    .visibility = View.INVISIBLE
-                    })
+//                    viewModel.getSaved(it).observe(this, Observer {
+//                        savedPlatformsAdapter.mDiffer.submitList(it)
+//                        if(it.isNullOrEmpty())
+//                            view.findViewById<View>(R.id.store_platforms_saved_empty)
+//                                    .visibility = View.VISIBLE
+//                        else
+//                            view.findViewById<View>(R.id.store_platforms_saved_empty)
+//                                    .visibility = View.INVISIBLE
+//                    })
                 }
             } else -> {
                 context?.let { it ->
@@ -128,21 +128,21 @@ class PlatformsModalFragment(private val showType: Int = SHOW_TYPE_ALL)
 
                     val credentials = UserArtifactsHandler.fetchCredentials(view.context)
 
-                    viewModel.getUnsaved(it,
-                            credentials[UserArtifactsHandler.USER_ID_KEY]!!,
-                            credentials[UserArtifactsHandler.PASSWORD]!!, runnable)
-                            .observe(this, Observer { it1 ->
-                                viewModel.networkResponseResults?.let {
-                                    this.networkResponseResults = it
-                                }
-
-                        unSavedPlatformsAdapter.mDiffer.submitList(it1)
-                        if(it1.isNullOrEmpty())
-                            view.findViewById<View>(R.id.store_platforms_unsaved_empty)
-                                    .visibility = View.VISIBLE
-                        else view.findViewById<View>(R.id.store_platforms_unsaved_empty)
-                                .visibility = View.INVISIBLE
-                    })
+//                    viewModel.getUnsaved(it,
+//                            credentials[UserArtifactsHandler.USER_ID_KEY]!!,
+//                            credentials[UserArtifactsHandler.PASSWORD]!!, runnable)
+//                            .observe(this, Observer { it1 ->
+//                                viewModel.networkResponseResults?.let {
+//                                    this.networkResponseResults = it
+//                                }
+//
+//                        unSavedPlatformsAdapter.mDiffer.submitList(it1)
+//                        if(it1.isNullOrEmpty())
+//                            view.findViewById<View>(R.id.store_platforms_unsaved_empty)
+//                                    .visibility = View.VISIBLE
+//                        else view.findViewById<View>(R.id.store_platforms_unsaved_empty)
+//                                .visibility = View.INVISIBLE
+//                    })
                 }
             }
         }

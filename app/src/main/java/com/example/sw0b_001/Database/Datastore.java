@@ -21,6 +21,8 @@ import com.example.sw0b_001.Models.GatewayClients.GatewayClient;
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsDao;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServer;
 import com.example.sw0b_001.Models.GatewayServers.GatewayServersDAO;
+import com.example.sw0b_001.Models.Platforms.AvailablePlatforms;
+import com.example.sw0b_001.Models.Platforms.AvailablePlatformsDao;
 import com.example.sw0b_001.Models.Platforms.Platforms;
 import com.example.sw0b_001.Models.Platforms.PlatformDao;
 import com.example.sw0b_001.Models.Platforms.StoredPlatformsDao;
@@ -31,15 +33,17 @@ import org.jetbrains.annotations.NotNull;
 @Database(entities = {
         GatewayServer.class,
         Platforms.class,
+        AvailablePlatforms.class,
         GatewayClient.class,
         StoredPlatformsEntity.class,
         EncryptedContent.class},
-        version = 13,
+        version = 14,
         autoMigrations = { @AutoMigration( from = 8, to = 9, spec = Datastore.DatastoreMigrations.class),
                 @AutoMigration( from = 9, to = 10, spec= Datastore.DatastoreMigrations.class),
                 @AutoMigration( from = 10, to = 11),
                 @AutoMigration( from = 11, to = 12),
-                @AutoMigration( from = 12, to = 13)
+                @AutoMigration( from = 12, to = 13),
+                @AutoMigration( from = 13, to = 14),
 })
 public abstract class Datastore extends RoomDatabase {
     @RenameTable(fromTableName = "Platform", toTableName = "Platforms")
@@ -61,6 +65,7 @@ public abstract class Datastore extends RoomDatabase {
 
 
     public abstract PlatformDao platformDao();
+    public abstract AvailablePlatformsDao availablePlatformsDao();
     public abstract GatewayClientsDao gatewayClientsDao();
     public abstract GatewayServersDAO gatewayServersDAO();
     public abstract EncryptedContentDAO encryptedContentDAO();

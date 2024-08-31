@@ -8,6 +8,7 @@ import android.os.PersistableBundle
 import android.text.Html
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -17,7 +18,9 @@ import androidx.lifecycle.ViewModel
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
 import com.example.sw0b_001.Database.Datastore
+import com.example.sw0b_001.Models.Platforms.AvailablePlatforms
 import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
+import com.example.sw0b_001.Models.Publisher
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Onboarding.OnboardingComponent
@@ -28,6 +31,10 @@ import com.example.sw0b_001.Onboarding.OnboardingVaultStorePlatformFragment
 import com.example.sw0b_001.Onboarding.OnboardingWelcomeFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textview.MaterialTextView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.net.URL
 import kotlin.io.encoding.Base64
 
 class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageComponentsListing {
@@ -207,5 +214,27 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
 
     override fun getFragmentIndex(): Int {
         return fragmentIterator.value!!
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val scope = CoroutineScope(Dispatchers.Default)
+        scope.launch {
+            try {
+                Publisher.getAvailablePlatforms(applicationContext).let{ json ->
+                    json.forEach { it->
+                        val url = URL(it.icon_svg)
+                        it.logo = url.readBytes()
+                    }
+                    Datastore.getDatastore(applicationContext).availablePlatformsDao()
+                        .insertAll(json)
+                }
+            } catch(e: Exception) {
+                e.printStackTrace()
+                runOnUiThread {
+                    Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 }
