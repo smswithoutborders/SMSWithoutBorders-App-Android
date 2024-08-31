@@ -223,7 +223,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
             try {
                 Publisher.getAvailablePlatforms(applicationContext).let{ json ->
                     json.forEach { it->
-                        val url = URL(it.icon_svg)
+                        val url = URL(it.icon_png)
                         it.logo = url.readBytes()
                     }
                     Datastore.getDatastore(applicationContext).availablePlatformsDao()

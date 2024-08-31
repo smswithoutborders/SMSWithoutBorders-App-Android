@@ -1,5 +1,7 @@
 package com.example.sw0b_001.Models.Platforms;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +18,8 @@ import com.example.sw0b_001.R;
 import com.google.android.material.card.MaterialCardView;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.nio.ByteBuffer;
 
 public class PlatformsRecyclerAdapter extends
         RecyclerView.Adapter<PlatformsRecyclerAdapter.ViewHolder> {
@@ -66,8 +70,11 @@ public class PlatformsRecyclerAdapter extends
         public void bind(AvailablePlatforms platforms,
                          MutableLiveData<Platforms> onClickListenerLiveData,
                          MutableLiveData<Platforms> unSavedOnClickListenerLiveData) {
-            image.setImageDrawable(itemView.getContext()
-                    .getDrawable(_PlatformsHandler.hardGetLogoByName(platforms.getName())));
+            if(platforms.getLogo() != null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(platforms.getLogo(), 0,
+                        platforms.getLogo().length);
+                image.setImageBitmap(bitmap);
+            }
 
 //            cardView.setOnClickListener(it -> {
 //                if (platforms.isSaved())

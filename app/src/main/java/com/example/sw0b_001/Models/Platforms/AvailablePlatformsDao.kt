@@ -8,7 +8,7 @@ import androidx.room.Query
 
 @Dao
 interface AvailablePlatformsDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(platforms: ArrayList<AvailablePlatforms>)
 
     @Query("SELECT * FROM AvailablePlatforms")
