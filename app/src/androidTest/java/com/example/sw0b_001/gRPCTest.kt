@@ -34,13 +34,6 @@ import vault.v1.EntityGrpc.EntityBlockingStub
  * Docs: https://grpc.github.io/grpc/core/md_doc_statuscodes.html
  */
 class gRPCTest {
-
-    private lateinit var channel: ManagedChannel
-    private lateinit var publisherChannel: ManagedChannel
-
-    private lateinit var entityStub: EntityBlockingStub
-    private lateinit var publisherStub: PublisherBlockingStub
-
     private val globalPhoneNumber = "+23711234575"
     private val globalCountryCode = "CM"
     private val globalPassword = "dMd2Kmo9#"
@@ -48,14 +41,16 @@ class gRPCTest {
     private lateinit var deviceIdPubKey: ByteArray
     private lateinit var publishPubKey: ByteArray
 
-    private val vault = com.example.sw0b_001.Models.Vault()
 
-    var context = InstrumentationRegistry.getInstrumentation().targetContext
+    private var context = InstrumentationRegistry.getInstrumentation().targetContext
+
+    private lateinit var vault: Vault
     private val device_id_keystoreAlias = "device_id_keystoreAlias"
     private val publisher_keystoreAlias = "publisher_keystoreAlias"
 
     @Before
     fun init() {
+        vault = Vault(context)
         deviceIdPubKey = Cryptography.generateKey(context, device_id_keystoreAlias)
         publishPubKey = Cryptography.generateKey(context, publisher_keystoreAlias)
     }

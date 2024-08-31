@@ -5,7 +5,9 @@ import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.HomepageComposeNewFragment
+import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.Vault
 import com.example.sw0b_001.Models.v2.Vault_V2
@@ -149,9 +151,20 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
 
         ThreadExecutorPool.executorService.execute {
             try {
-                val vault = Vault()
+                val vault = Vault(requireContext())
                 val response2 = vault.authenticateEntity(requireContext(),
                     phoneNumber, password)
+
+                val llt = Vault.fetchLongLivedToken(requireContext())
+                val response = vault.listStoredEntityTokens(llt)
+
+                val storedPlatforms = ArrayList<StoredPlatformsEntity>()
+                response.storedTokensList.forEach {
+                    storedPlatforms.add(StoredPlatformsEntity(it.accountIdentifier, it.platform))
+                }
+                Datastore.getDatastore(requireContext()).storedPlatformsDao()
+                    .insertAll(storedPlatforms)
+
                 onSuccessRunnable?.run()
                 dismiss()
             } catch(e: StatusRuntimeException) {

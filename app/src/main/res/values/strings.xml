@@ -407,4 +407,10 @@
     <string name="you_are_ready">You are ready!</string>
     <string name="come_back_anytime">Come back anytime</string>
 
+    <string name="vault_grpc_url" translatable="false">vault.smswithoutborders.com</string>
+    <string name="vault_grpc_port" translatable="false">443</string>
+
+    <string name="publisher_grpc_url" translatable="false">publisher.smswithoutborders.com</string>
+    <string name="publisher_grpc_port" translatable="false">443</string>
+
 </resources>

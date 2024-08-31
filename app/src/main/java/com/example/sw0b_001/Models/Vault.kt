@@ -7,6 +7,7 @@ import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityAES
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
 import com.example.sw0b_001.Modules.Crypto
+import com.example.sw0b_001.R
 import com.example.sw0b_001.Security.Cryptography
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
@@ -15,11 +16,12 @@ import vault.v1.EntityGrpc.EntityBlockingStub
 import vault.v1.Vault
 import java.nio.charset.Charset
 
-class Vault {
+class Vault(context: Context) {
     private val DEVICE_ID_KEYSTORE_ALIAS = "DEVICE_ID_KEYSTORE_ALIAS"
 
     private var channel: ManagedChannel = ManagedChannelBuilder
-        .forAddress("staging.smswithoutborders.com", 9050)
+        .forAddress(context.getString(R.string.vault_grpc_url),
+            context.getString(R.string.vault_grpc_port).toInt())
         .useTransportSecurity()
         .build()
     private var entityStub: EntityBlockingStub = EntityGrpc.newBlockingStub(channel)
@@ -129,6 +131,19 @@ class Vault {
                     response.longLivedToken,
                     response.serverDeviceIdPubKey)
             }
+            return response
+        } catch(e: Exception) {
+            throw Throwable(e)
+        }
+    }
+
+    fun listStoredEntityTokens(llt: String) : Vault.ListEntityStoredTokensResponse {
+        val request = Vault.ListEntityStoredTokensRequest.newBuilder().apply {
+            setLongLivedToken(llt)
+        }.build()
+
+        try {
+            val response = entityStub.listEntityStoredTokens(request)
             return response
         } catch(e: Exception) {
             throw Throwable(e)
