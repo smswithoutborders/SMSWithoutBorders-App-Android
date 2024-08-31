@@ -50,13 +50,10 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 when(it.resultCode) {
                     Activity.RESULT_OK -> {
-                        println("Activity returned OK")
                         onSuccessRunnable?.run()
                         dismiss()
                     }
-                    else -> {
-                        println("Activity did not returned OK")
-                    }
+                    else -> { }
                 }
             }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -197,7 +194,6 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
                     activityLauncher.launch(intent)
                 }
             }
-//            dismiss()
         } catch(e: StatusRuntimeException) {
             activity?.runOnUiThread {
                 view.findViewById<View>(R.id.signup_status_card).visibility = View.VISIBLE

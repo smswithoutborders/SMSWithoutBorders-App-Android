@@ -153,15 +153,18 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
                 when(type) {
                     Type.CREATE -> {
                         countryCode.let {
-                            var response1 = vault.createEntity(applicationContext,
+                            vault.createEntity(applicationContext,
                                 phoneNumber, countryCode!!, password, code)
                         }
                     }
                     Type.AUTHENTICATE -> {
-                        val response3 = vault.authenticateEntity(applicationContext,
+                        vault.authenticateEntity(applicationContext,
                             phoneNumber, password, code)
                     }
-                    Type.RECOVER -> TODO()
+                    Type.RECOVER -> {
+                        vault.recoverEntityPassword(applicationContext,
+                            phoneNumber, password, code)
+                    }
                 }
 
                 val llt = Vault.fetchLongLivedToken(applicationContext)
