@@ -72,24 +72,24 @@ class AvailablePlatformsModalFragment(val type: Type):
                 savedPlatformsAdapter = PlatformsRecyclerAdapter(type)
                 savedPlatformsRecyclerView.adapter = savedPlatformsAdapter
 
-                var availablePlatforms = emptyList<AvailablePlatforms>()
-                val thread = Thread(Runnable {
-                    availablePlatforms = Datastore.getDatastore(requireContext())
-                        .availablePlatformsDao().fetchAllList()
-                })
-                thread.start()
-                thread.join()
-                savedPlatformsAdapter.availablePlatforms = availablePlatforms
+                configureStoredClickListener()
 
-                viewModel.getSaved(requireContext()).observe(this, Observer {
-                    savedPlatformsAdapter.storedMDiffer.submitList(it)
-                    if(it.isNullOrEmpty())
-                        view.findViewById<View>(R.id.store_platforms_saved_empty)
-                            .visibility = View.VISIBLE
-                    else
-                        view.findViewById<View>(R.id.store_platforms_saved_empty)
-                            .visibility = View.INVISIBLE
-                })
+                CoroutineScope(Dispatchers.Default).launch {
+                    savedPlatformsAdapter.availablePlatforms = Datastore.getDatastore(requireContext())
+                        .availablePlatformsDao().fetchAllList()
+
+                    activity?.runOnUiThread {
+                        viewModel.getSaved(requireContext()).observe(viewLifecycleOwner, Observer {
+                            savedPlatformsAdapter.storedMDiffer.submitList(it)
+                            if(it.isNullOrEmpty())
+                                view.findViewById<View>(R.id.store_platforms_saved_empty)
+                                    .visibility = View.VISIBLE
+                            else
+                                view.findViewById<View>(R.id.store_platforms_saved_empty)
+                                    .visibility = View.INVISIBLE
+                        })
+                    }
+                }
             }
             Type.AVAILABLE -> {
                 progress.visibility = View.VISIBLE
@@ -124,8 +124,16 @@ class AvailablePlatformsModalFragment(val type: Type):
 
     }
 
+    private fun configureStoredClickListener() {
+        savedPlatformsAdapter.savedPlatformsMutableData.observe(viewLifecycleOwner) {
+
+        }
+    }
+
     private fun configureAvailableClickListener() {
-        availablePlatformsAdapter.availablePlatformsMutableLiveData.observeForever {
+        availablePlatformsAdapter.availablePlatformsMutableLiveData.observe(viewLifecycleOwner) {
+            isCancelable = false
+
             val scope = CoroutineScope(Dispatchers.Default)
             scope.launch {
                 val publisher = Publisher(requireContext())
@@ -161,9 +169,9 @@ class AvailablePlatformsModalFragment(val type: Type):
                         progress.visibility = View.GONE
                     }
                     availablePlatformsAdapter.isClickable = true
+                    isCancelable = true
                 }
             }
         }
-
     }
 }

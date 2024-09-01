@@ -235,11 +235,6 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                     }
                     Datastore.getDatastore(applicationContext).availablePlatformsDao()
                         .insertAll(json)
-                    runOnUiThread {
-                        Toast.makeText(applicationContext,
-                            "Successfully refreshed available platforms",
-                            Toast.LENGTH_SHORT).show()
-                    }
                 }
             } catch(e: Exception) {
                 e.printStackTrace()

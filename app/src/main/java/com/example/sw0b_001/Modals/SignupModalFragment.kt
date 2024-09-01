@@ -36,6 +36,9 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
 import com.hbb20.CountryCodePicker
 import io.grpc.StatusRuntimeException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
 
@@ -147,6 +150,23 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
         view.findViewById<MaterialCheckBox>(R.id.signup_read_privacy_policy_checkbox).error = null
         view.findViewById<View>(R.id.signup_status_card).visibility = View.GONE
     }
+
+    private fun disableComponents(view: View) {
+        isCancelable = false
+        view.findViewById<TextInputEditText>(R.id.signup_phonenumber_text_input).isEnabled = false
+        view.findViewById<TextInputEditText>(R.id.signup_password_text_input).isEnabled = false
+        view.findViewById<TextInputEditText>(R.id.signup_password_text_retry_input).isEnabled = false
+        view.findViewById<MaterialCheckBox>(R.id.signup_read_privacy_policy_checkbox).isEnabled = false
+    }
+
+    private fun enableComponents(view: View) {
+        isCancelable = true
+        view.findViewById<TextInputEditText>(R.id.signup_phonenumber_text_input).isEnabled = true
+        view.findViewById<TextInputEditText>(R.id.signup_password_text_input).isEnabled = true
+        view.findViewById<TextInputEditText>(R.id.signup_password_text_retry_input).isEnabled = true
+        view.findViewById<MaterialCheckBox>(R.id.signup_read_privacy_policy_checkbox).isEnabled = true
+    }
+
     private fun verifyInput(view: View): Boolean {
         val phoneNumberView = view.findViewById<TextInputEditText>(R.id.signup_phonenumber_text_input)
         if(phoneNumberView.text.isNullOrEmpty()) {
@@ -208,6 +228,7 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
             activity?.runOnUiThread {
                 view.findViewById<MaterialButton>(R.id.signup_btn).isEnabled = true
                 view.findViewById<View>(R.id.signup_progress_bar).visibility = View.GONE
+                enableComponents(view)
             }
         }
     }
@@ -218,6 +239,7 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
                     nullifyInputs(view)
                     if(!verifyInput(view))
                         return@setOnClickListener
+                    disableComponents(view)
 
                     val signupProgressBar = view.findViewById<LinearProgressIndicator>(
                         R.id.signup_progress_bar)
@@ -235,7 +257,7 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
                     val password = view.findViewById<TextInputEditText>(
                         R.id.signup_password_text_input).text.toString()
 
-                    ThreadExecutorPool.executorService.execute {
+                    CoroutineScope(Dispatchers.Default).launch {
                         signup(view, phonenumber, countryCode, password)
                     }
                 }
