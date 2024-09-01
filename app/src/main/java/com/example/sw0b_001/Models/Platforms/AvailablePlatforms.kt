@@ -1,11 +1,11 @@
 package com.example.sw0b_001.Models.Platforms
 
+import androidx.recyclerview.widget.DiffUtil
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
-import java.sql.Blob
 
 @Serializable
 @Entity

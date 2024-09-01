@@ -73,6 +73,8 @@ class AvailablePlatformsModalFragment(val type: Type):
 //                })
             }
             Type.AVAILABLE -> {
+                view.findViewById<View>(R.id.store_platform_saved_layout).visibility = View.GONE
+
                 availablePlatformsRecyclerView = view.findViewById(
                     R.id.store_platforms_unsaved_recycler_view)
                 availableLinearLayoutManager = LinearLayoutManager(context,

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sw0b_001.R;
@@ -84,4 +85,19 @@ public class PlatformsRecyclerAdapter extends
 //            });
         }
     }
+
+    public static final DiffUtil.ItemCallback<AvailablePlatforms> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<AvailablePlatforms>() {
+                @Override
+                public boolean areItemsTheSame(@NonNull AvailablePlatforms oldItem,
+                                               @NonNull AvailablePlatforms newItem) {
+                    return oldItem.getName().equals(newItem.getName());
+                }
+
+                @Override
+                public boolean areContentsTheSame(@NonNull AvailablePlatforms oldItem,
+                                                  @NonNull AvailablePlatforms newItem) {
+                    return oldItem.equals(newItem);
+                }
+            };
 }
