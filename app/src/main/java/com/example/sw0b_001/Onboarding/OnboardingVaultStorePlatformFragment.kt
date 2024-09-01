@@ -3,15 +3,8 @@ package com.example.sw0b_001.Onboarding
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.transition.TransitionInflater
-import com.example.sw0b_001.Models.ThreadExecutorPool
-import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.LoadingFragment
-import com.example.sw0b_001.Models.v2.Vault_V2
-import com.example.sw0b_001.Modals.PlatformsModalFragment
-import com.example.sw0b_001.Models.Platforms.AvailablePlatforms
-import com.example.sw0b_001.Models.Platforms.AvailablePlatformsModalFragment
+import com.example.sw0b_001.Modals.AvailablePlatformsModalFragment
 import com.example.sw0b_001.R
 import com.google.android.material.button.MaterialButton
 

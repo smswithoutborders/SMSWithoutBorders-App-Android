@@ -1,5 +1,7 @@
-package com.example.sw0b_001.Models.Platforms
+package com.example.sw0b_001.Modals
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
@@ -7,11 +9,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sw0b_001.Models.UserArtifactsHandler
+import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter
+import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
+import com.example.sw0b_001.Models.Publisher
 import com.example.sw0b_001.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class AvailablePlatformsModalFragment(val type: Type):
     BottomSheetDialogFragment(R.layout.fragment_modal_sheet_store_platforms) {
@@ -38,8 +45,11 @@ class AvailablePlatformsModalFragment(val type: Type):
     private lateinit var savedPlatformsRecyclerView: RecyclerView
     private lateinit var savedLinearLayoutManager: LinearLayoutManager
 
+    private lateinit var publisher: Publisher
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        publisher = Publisher(requireContext())
 
         val bottomSheet = view.findViewById<View>(R.id.store_platforms_constraint)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
@@ -73,6 +83,7 @@ class AvailablePlatformsModalFragment(val type: Type):
 //                })
             }
             Type.AVAILABLE -> {
+                progress.visibility = View.VISIBLE
                 view.findViewById<View>(R.id.store_platform_saved_layout).visibility = View.GONE
 
                 availablePlatformsRecyclerView = view.findViewById(
@@ -84,14 +95,36 @@ class AvailablePlatformsModalFragment(val type: Type):
                 availablePlatformsAdapter = PlatformsRecyclerAdapter(fragmentTransaction)
                 availablePlatformsRecyclerView.adapter = availablePlatformsAdapter
 
+                availablePlatformsAdapter.availablePlatformsMutableLiveData.observeForever {
+                    val scope = CoroutineScope(Dispatchers.Default)
+                    scope.launch {
+                        activity?.runOnUiThread {
+                            progress.visibility = View.VISIBLE
+                        }
+
+                        val response = publisher.getOAuthURL(it, true,
+                            it.support_url_scheme!!)
+
+                        activity?.runOnUiThread {
+                            val intentUri = Uri.parse(response.authorizationUrl)
+                            val intent = Intent(Intent.ACTION_VIEW, intentUri)
+                            startActivity(intent)
+                        }
+                    }
+                }
+
                 viewModel.getAvailablePlatforms(requireContext()).observe(this, Observer { it ->
                     availablePlatformsAdapter.mDiffer.submitList(it)
+                    availablePlatformsAdapter.isClickable = false
 
                     if(it.isNullOrEmpty())
                         view.findViewById<View>(R.id.store_platforms_unsaved_empty)
                             .visibility = View.VISIBLE
                     else view.findViewById<View>(R.id.store_platforms_unsaved_empty)
                         .visibility = View.INVISIBLE
+
+                    progress.visibility = View.GONE
+                    availablePlatformsAdapter.isClickable = true
                 })
             }
             Type.ALL -> TODO()

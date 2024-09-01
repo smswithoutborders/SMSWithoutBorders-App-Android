@@ -19,7 +19,6 @@ import com.example.sw0b_001.Modals.LoginModalFragment
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Security
-import com.example.sw0b_001.Modals.PlatformsModalFragment
 import com.example.sw0b_001.R
 import com.example.sw0b_001.Security.LockScreenFragment
 
@@ -159,10 +158,10 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
 
     private fun showPlatformsModal() {
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-        val platformsModalFragment =
-                PlatformsModalFragment(PlatformsModalFragment.SHOW_TYPE_SAVED_REVOKE)
-        fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
-        fragmentTransaction?.show(platformsModalFragment)
-        fragmentTransaction?.commitNow()
+//        val platformsModalFragment =
+//                PlatformsModalFragment(PlatformsModalFragment.SHOW_TYPE_SAVED_REVOKE)
+//        fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
+//        fragmentTransaction?.show(platformsModalFragment)
+//        fragmentTransaction?.commitNow()
     }
 }

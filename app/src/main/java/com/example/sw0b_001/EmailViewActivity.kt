@@ -6,7 +6,6 @@ import android.view.Menu
 import android.view.MenuItem
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Modals.PlatformComposers.EmailComposeModalFragment
-import com.example.sw0b_001.Modals.PlatformsModalFragment
 import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.ThreadExecutorPool

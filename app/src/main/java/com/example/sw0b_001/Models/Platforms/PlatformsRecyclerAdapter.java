@@ -25,13 +25,15 @@ import java.nio.ByteBuffer;
 public class PlatformsRecyclerAdapter extends
         RecyclerView.Adapter<PlatformsRecyclerAdapter.ViewHolder> {
 
+    public Boolean isClickable = true;
     public final AsyncListDiffer<AvailablePlatforms> mDiffer =
-            new AsyncListDiffer(this, Platforms.DIFF_CALLBACK);
+            new AsyncListDiffer(this, DIFF_CALLBACK);
 
     FragmentTransaction fragmentTransaction;
+    Runnable onClickListenerCallback;
 
-    public MutableLiveData<Platforms> savedOnClickListenerLiveData = new MutableLiveData<>();
-    public MutableLiveData<Platforms> unSavedOnClickListenerLiveData = new MutableLiveData<>();
+    public MutableLiveData<AvailablePlatforms> availablePlatformsMutableLiveData = new MutableLiveData<>();
+
     public PlatformsRecyclerAdapter(FragmentTransaction fragmentTransaction){
         this.fragmentTransaction = fragmentTransaction;
     }
@@ -48,7 +50,13 @@ public class PlatformsRecyclerAdapter extends
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder viewHolder, int position) {
         AvailablePlatforms platforms = mDiffer.getCurrentList().get(position);
-        viewHolder.bind(platforms, savedOnClickListenerLiveData, unSavedOnClickListenerLiveData);
+        viewHolder.bind(platforms, this.onClickListenerCallback);
+
+        viewHolder.cardView.setOnClickListener(it -> {
+            if(isClickable) {
+                availablePlatformsMutableLiveData.setValue(platforms);
+            }
+        });
     }
 
     @Override
@@ -68,21 +76,13 @@ public class PlatformsRecyclerAdapter extends
             this.image = itemView.findViewById(R.id.platforms_thumbnails);
         }
 
-        public void bind(AvailablePlatforms platforms,
-                         MutableLiveData<Platforms> onClickListenerLiveData,
-                         MutableLiveData<Platforms> unSavedOnClickListenerLiveData) {
+        public void bind(AvailablePlatforms platforms, Runnable onClickListenerCallback) {
             if(platforms.getLogo() != null) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(platforms.getLogo(), 0,
                         platforms.getLogo().length);
                 image.setImageBitmap(bitmap);
             }
 
-//            cardView.setOnClickListener(it -> {
-//                if (platforms.isSaved())
-//                    onClickListenerLiveData.setValue(platforms);
-//                else
-//                    unSavedOnClickListenerLiveData.setValue(platforms);
-//            });
         }
     }
 

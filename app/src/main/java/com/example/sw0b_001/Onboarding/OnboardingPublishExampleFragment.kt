@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.transition.TransitionInflater
-import com.example.sw0b_001.Modals.PlatformsModalFragment
 import com.example.sw0b_001.R
 import com.google.android.material.button.MaterialButton
 
@@ -36,9 +35,9 @@ class OnboardingPublishExampleFragment :
 
     private fun showPlatformsModal() {
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-        val platformsModalFragment = PlatformsModalFragment(PlatformsModalFragment.SHOW_TYPE_SAVED)
-        fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
-        fragmentTransaction?.show(platformsModalFragment)
-        activity?.runOnUiThread { fragmentTransaction?.commitNow() }
+//        val platformsModalFragment = PlatformsModalFragment(PlatformsModalFragment.SHOW_TYPE_SAVED)
+//        fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
+//        fragmentTransaction?.show(platformsModalFragment)
+//        activity?.runOnUiThread { fragmentTransaction?.commitNow() }
     }
 }

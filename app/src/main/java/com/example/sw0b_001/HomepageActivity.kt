@@ -13,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Modals.LoginSignupVaultModalFragment
-import com.example.sw0b_001.Modals.PlatformsModalFragment
 import com.example.sw0b_001.Modals.RebrandingModalFragment
 import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.Messages.MessagesRecyclerAdapter
@@ -37,11 +36,11 @@ class HomepageActivity : AppCompactActivityCustomized() {
         configureRecyclerHandlers()
 
         findViewById<View>(R.id.homepage_compose_new_btn)
-                .setOnClickListener { v -> onComposePlatformClick() }
+                .setOnClickListener { v -> /* onComposePlatformClick()*/ }
 
-        findViewById<View>(R.id.homepage_add_new_btn)
-                .setOnClickListener { v -> onComposePlatformClick(PlatformsModalFragment
-                        .SHOW_TYPE_UNSAVED) }
+//        findViewById<View>(R.id.homepage_add_new_btn)
+//                .setOnClickListener { v -> onComposePlatformClick(PlatformsModalFragment
+//                        .SHOW_TYPE_UNSAVED) }
 
         showRebrandingModal()
     }
@@ -157,16 +156,16 @@ class HomepageActivity : AppCompactActivityCustomized() {
     }
 
 
-    fun onComposePlatformClick(showType: Int = PlatformsModalFragment.SHOW_TYPE_SAVED) {
-        showPlatformsModal(showType)
-    }
+//    fun onComposePlatformClick(showType: Int = PlatformsModalFragment.SHOW_TYPE_SAVED) {
+//        showPlatformsModal(showType)
+//    }
 
-    private fun showPlatformsModal(showType: Int) {
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        val platformsModalFragment = PlatformsModalFragment(showType)
-        fragmentTransaction.add(platformsModalFragment, "store_platforms_tag")
-        fragmentTransaction.show(platformsModalFragment)
-        fragmentTransaction.commitNow()
-    }
+//    private fun showPlatformsModal(showType: Int) {
+//        val fragmentTransaction = supportFragmentManager.beginTransaction()
+//        val platformsModalFragment = PlatformsModalFragment(showType)
+//        fragmentTransaction.add(platformsModalFragment, "store_platforms_tag")
+//        fragmentTransaction.show(platformsModalFragment)
+//        fragmentTransaction.commitNow()
+//    }
 
 }
