@@ -35,6 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.net.URL
+import java.net.UnknownHostException
 import kotlin.io.encoding.Base64
 
 class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageComponentsListing {
@@ -221,13 +222,24 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
         val scope = CoroutineScope(Dispatchers.Default)
         scope.launch {
             try {
-                Publisher.getAvailablePlatforms(applicationContext).let{ json ->
+                Publisher.getAvailablePlatforms(applicationContext, Runnable {
+                    runOnUiThread {
+                        Toast.makeText(applicationContext,
+                            "Failed to refresh available platforms",
+                            Toast.LENGTH_SHORT).show()
+                    }
+                }).let{ json ->
                     json.forEach { it->
                         val url = URL(it.icon_png)
                         it.logo = url.readBytes()
                     }
                     Datastore.getDatastore(applicationContext).availablePlatformsDao()
                         .insertAll(json)
+                    runOnUiThread {
+                        Toast.makeText(applicationContext,
+                            "Successfully refreshed available platforms",
+                            Toast.LENGTH_SHORT).show()
+                    }
                 }
             } catch(e: Exception) {
                 e.printStackTrace()

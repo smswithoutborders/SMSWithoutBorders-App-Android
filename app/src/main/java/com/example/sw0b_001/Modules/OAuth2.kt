@@ -1,17 +1,12 @@
 package com.example.sw0b_001.Modules
 
-import android.accounts.Account
-import android.accounts.AccountManager
-import android.accounts.AccountManagerCallback
-import android.accounts.AccountManagerFuture
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.util.Log
 import com.example.sw0b_001.HomepageComposeNewFragment
-import com.example.sw0b_001.OpenIDOAuthRedirectActivity
+import com.example.sw0b_001.OauthRedirectActivity
 import com.example.sw0b_001.R
 import net.openid.appauth.AuthorizationRequest
 import net.openid.appauth.AuthorizationService
@@ -144,7 +139,7 @@ class OAuth2 {
 //            context.startActivity(authIntent);
             authService.performAuthorizationRequest(authRequest.build(),
                     PendingIntent.getActivity(context, 0,
-                            Intent(context, OpenIDOAuthRedirectActivity::class.java),
+                            Intent(context, OauthRedirectActivity::class.java),
                             PendingIntent.FLAG_IMMUTABLE))
         }
     }

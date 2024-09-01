@@ -231,11 +231,22 @@ class Vault_V2(val uid: String) {
                     .build()
             return sharedPreferences.getString("cookies", "")!!
         }
+
         fun fetchOauthRequestVerifier(context: Context) : String {
             val sharedPreferences = Armadillo.create(context, OAUTH_COOKES_PREF)
                     .encryptionFingerprint(context)
                     .build()
             return sharedPreferences.getString("code_verifier", "")!!
+        }
+
+        fun storeOauthRequestCodeVerifier(context: Context, code_verifier: String) {
+            val sharedPreferences = Armadillo.create(context, OAUTH_COOKES_PREF)
+                .encryptionFingerprint(context)
+                .build()
+
+            sharedPreferences.edit()
+                .putString("code_verifier", code_verifier)
+                .apply()
         }
 
         fun storeOauthRequestCookies(context: Context, headers: Headers) {
@@ -248,15 +259,6 @@ class Vault_V2(val uid: String) {
                     .apply()
         }
 
-        fun storeOauthRequestCodeVerifier(context: Context, code_verifier: String) {
-            val sharedPreferences = Armadillo.create(context, OAUTH_COOKES_PREF)
-                    .encryptionFingerprint(context)
-                    .build()
-
-            sharedPreferences.edit()
-                    .putString("code_verifier", code_verifier)
-                    .apply()
-        }
 
         fun loginSyncPlatformsFlow(context: Context,
                                    phoneNumber: String,

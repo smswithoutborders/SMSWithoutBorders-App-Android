@@ -1,0 +1,118 @@
+package com.example.sw0b_001
+
+import android.content.Intent
+import android.os.Bundle
+import android.util.Base64
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityAES
+import com.example.sw0b_001.Models.Publisher
+import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.example.sw0b_001.Models.UserArtifactsHandler
+import com.example.sw0b_001.Models.Vault
+import com.example.sw0b_001.Models.v2.GatewayServer_V2
+import com.example.sw0b_001.Models.v2.Vault_V2
+import com.example.sw0b_001.Modules.Helpers
+import com.example.sw0b_001.Security.SecurityHelpers
+import com.github.kittinunf.fuel.core.Headers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+import java.net.URLDecoder
+
+
+class OauthRedirectActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_open_idoauth_redirect)
+        Helpers.logIntentDetails(intent)
+
+        /**
+         * Send this to Vault to complete the OAuth process
+         */
+
+        val intentUrl = intent.dataString
+        if(intentUrl.isNullOrEmpty()) {
+            Log.e(javaClass.name, "Intent has no URL")
+            finish()
+        }
+
+        val parameters = Helpers.extractParameters(intentUrl!!)
+        val decoded = String(Base64.decode(URLDecoder.decode(parameters["state"]!!, "UTF-8"),
+            Base64.DEFAULT), Charsets.UTF_8)
+
+        val values = decoded.split(",")
+        val platform = values[0]
+        val supportsUrlScheme = values[1] == "true"
+        val code: String = URLDecoder.decode(parameters["code"]!!, "UTF-8")
+
+        val scope = CoroutineScope(Dispatchers.Default)
+        scope.launch {
+            val publisher = Publisher(applicationContext)
+            try {
+                val llt = Vault.fetchLongLivedToken(applicationContext)
+                val codeVerifier = Publisher.fetchOauthRequestVerifier(applicationContext)
+                publisher.sendOAuthAuthorizationCode(llt,
+                    platform,
+                    code,
+                    codeVerifier,
+                    supportsUrlScheme)
+
+                TODO("Refresh stored platforms here")
+            } catch(e: Exception) {
+                e.printStackTrace()
+                runOnUiThread {
+                    Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
+                }
+            } finally {
+                publisher.shutdown()
+            }
+            runOnUiThread {
+                finish()
+            }
+        }
+    }
+
+    private fun startActivityFromState(state: String, fragmentIndex: Int) {
+        val intent = Intent()
+        println("State to go to: $state")
+        intent.setClassName(applicationContext, state)
+        intent.putExtra("fragment_index", fragmentIndex)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun updatePlatforms() {
+        val credentials = UserArtifactsHandler.fetchCredentials(applicationContext)
+        val networkResponseResults = Vault_V2.loginSyncPlatformsFlow(applicationContext,
+                credentials[UserArtifactsHandler.PHONE_NUMBER]!!,
+                credentials[UserArtifactsHandler.PASSWORD]!!, "",
+                credentials[UserArtifactsHandler.USER_ID_KEY])
+
+        when(networkResponseResults.response.statusCode) {
+            200 -> {
+                runOnUiThread {
+                    Toast.makeText(applicationContext, getString(R.string.open_id_platforms_updated),
+                            Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun syncAndStore() {
+        val credentials = UserArtifactsHandler.fetchCredentials(applicationContext)
+        val payload = GatewayServer_V2.sync(applicationContext,
+                credentials[UserArtifactsHandler.USER_ID_KEY]!!,
+                credentials[UserArtifactsHandler.PASSWORD]!!)
+        UserArtifactsHandler.storeSharedKey(applicationContext, payload.shared_key)
+        runOnUiThread {
+            Toast.makeText(applicationContext,
+                    getString(R.string.open_id_sync_updated), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+}

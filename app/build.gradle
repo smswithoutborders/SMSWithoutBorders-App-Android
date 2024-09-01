@@ -40,7 +40,7 @@ android {
         resourceConfigurations += ['en', 'fr', 'fa']
 
         manifestPlaceholders =
-                ['appAuthRedirectScheme': 'com.afkanerd.sw0b']
+                ['appAuthRedirectScheme': 'relaysms.com']
 
     }
 

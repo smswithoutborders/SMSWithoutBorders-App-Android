@@ -99,7 +99,7 @@
         </provider>
 
         <activity
-            android:name=".OpenIDOAuthRedirectActivity"
+            android:name=".OauthRedirectActivity"
             android:exported="true"
             tools:node="replace">
             <intent-filter>
@@ -107,19 +107,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="@string/oauth_openid_redirect_url_scheme" />
-                <data android:host="@string/oauth_openid_redirect_url_scheme_host" />
-                <data android:path="@string/oauth_openid_redirect_url_scheme_path_gmail"/>
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="@string/oauth_openid_redirect_url_scheme" />
-                <data android:host="@string/oauth_openid_redirect_url_scheme_host" />
-                <data android:path="@string/oauth_openid_redirect_url_scheme_path_x"/>
+                <data android:scheme="relaysms" />
+                <data android:host="relaysms.com" />
+                <data android:path="/android/"/>
             </intent-filter>
         </activity>
     </application>

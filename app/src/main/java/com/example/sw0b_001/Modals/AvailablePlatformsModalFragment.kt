@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import com.example.sw0b_001.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import io.grpc.StatusRuntimeException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,11 +47,8 @@ class AvailablePlatformsModalFragment(val type: Type):
     private lateinit var savedPlatformsRecyclerView: RecyclerView
     private lateinit var savedLinearLayoutManager: LinearLayoutManager
 
-    private lateinit var publisher: Publisher
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        publisher = Publisher(requireContext())
 
         val bottomSheet = view.findViewById<View>(R.id.store_platforms_constraint)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
@@ -98,17 +97,39 @@ class AvailablePlatformsModalFragment(val type: Type):
                 availablePlatformsAdapter.availablePlatformsMutableLiveData.observeForever {
                     val scope = CoroutineScope(Dispatchers.Default)
                     scope.launch {
+                        val publisher = Publisher(requireContext())
                         activity?.runOnUiThread {
                             progress.visibility = View.VISIBLE
                         }
 
-                        val response = publisher.getOAuthURL(it, true,
-                            it.support_url_scheme!!)
+                        try {
+                            val response = publisher.getOAuthURL(it, true,
+                                it.support_url_scheme!!)
 
-                        activity?.runOnUiThread {
-                            val intentUri = Uri.parse(response.authorizationUrl)
-                            val intent = Intent(Intent.ACTION_VIEW, intentUri)
-                            startActivity(intent)
+                            Publisher.storeOauthRequestCodeVerifier(requireContext(),
+                                response.codeVerifier)
+
+                            publisher.shutdown()
+
+                            activity?.runOnUiThread {
+                                val intentUri = Uri.parse(response.authorizationUrl)
+                                val intent = Intent(Intent.ACTION_VIEW, intentUri)
+                                startActivity(intent)
+                            }
+                        } catch(e: StatusRuntimeException) {
+                            activity?.runOnUiThread {
+                                Toast.makeText(requireContext(), e.status.description,
+                                    Toast.LENGTH_SHORT).show()
+                            }
+                        } catch(e: Exception) {
+                            activity?.runOnUiThread {
+                                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                            }
+                        } finally {
+                            activity?.run {
+                                progress.visibility = View.GONE
+                            }
+                            availablePlatformsAdapter.isClickable = true
                         }
                     }
                 }

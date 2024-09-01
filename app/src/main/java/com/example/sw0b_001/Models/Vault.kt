@@ -120,17 +120,13 @@ class Vault(context: Context) {
             }
         }.build()
 
-        try {
-            val response = entityStub.resetPassword(resetPasswordRequest)
-            if(!response.requiresOwnershipProof) {
-                processLongLivedToken(context,
-                    response.longLivedToken,
-                    response.serverDeviceIdPubKey)
-            }
-            return response
-        } catch(e: Exception) {
-            throw Throwable(e)
+        val response = entityStub.resetPassword(resetPasswordRequest)
+        if(!response.requiresOwnershipProof) {
+            processLongLivedToken(context,
+                response.longLivedToken,
+                response.serverDeviceIdPubKey)
         }
+        return response
     }
 
     fun listStoredEntityTokens(llt: String) : Vault.ListEntityStoredTokensResponse {
@@ -138,12 +134,7 @@ class Vault(context: Context) {
             setLongLivedToken(llt)
         }.build()
 
-        try {
-            val response = entityStub.listEntityStoredTokens(request)
-            return response
-        } catch(e: Exception) {
-            throw Throwable(e)
-        }
+        return entityStub.listEntityStoredTokens(request)
     }
 
     fun deleteEntity(longLivedToken: String) : Vault.DeleteEntityResponse {
@@ -151,11 +142,7 @@ class Vault(context: Context) {
             setLongLivedToken(longLivedToken)
         }.build()
 
-        try {
-            return entityStub.deleteEntity(deleteEntityRequest)
-        } catch(e: Exception) {
-            throw Throwable(e)
-        }
+        return entityStub.deleteEntity(deleteEntityRequest)
     }
 
     companion object {

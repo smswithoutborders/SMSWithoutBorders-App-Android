@@ -7,28 +7,33 @@ import com.github.kittinunf.fuel.core.Response
 import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.result.Result
+import java.net.UnknownHostException
 
 class Network {
     data class NetworkResponseResults(val response: Response,
                                       val result: Result<String, java.lang.Exception>)
     companion object {
         fun requestGet(url: String, headers: Headers? = null) : NetworkResponseResults{
-            val (_, response, result) = if(headers.isNullOrEmpty())
-                url.httpGet()
-                    .responseString()
-            else
-                url.httpGet()
+            try {
+                val (_, response, result) = if(headers.isNullOrEmpty())
+                    url.httpGet()
+                        .responseString()
+                else
+                    url.httpGet()
                         .header(Headers.COOKIE to headers["Set-Cookie"].first())
                         .responseString()
 
-            return when(result) {
-                is Result.Failure -> {
-                    NetworkResponseResults(response, Result.Failure(result.error))
-                }
+                return when(result) {
+                    is Result.Failure -> {
+                        NetworkResponseResults(response, Result.Failure(result.error))
+                    }
 
-                is Result.Success -> {
-                    NetworkResponseResults(response, Result.Success(result.get()))
+                    is Result.Success -> {
+                        NetworkResponseResults(response, Result.Success(result.get()))
+                    }
                 }
+            } catch(e: Exception) {
+                throw Throwable(e)
             }
         }
 
