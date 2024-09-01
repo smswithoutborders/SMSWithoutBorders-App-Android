@@ -126,7 +126,7 @@ class AvailablePlatformsModalFragment(val type: Type):
                                 Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
                             }
                         } finally {
-                            activity?.run {
+                            activity?.runOnUiThread {
                                 progress.visibility = View.GONE
                             }
                             availablePlatformsAdapter.isClickable = true

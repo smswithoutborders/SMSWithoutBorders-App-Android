@@ -108,8 +108,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="relaysms" />
-                <data android:host="relaysms.com" />
-                <data android:path="/android/"/>
+                <data android:host="oauth.afkanerd.com" />
+                <data android:pathPattern="/android/"/>
             </intent-filter>
         </activity>
     </application>

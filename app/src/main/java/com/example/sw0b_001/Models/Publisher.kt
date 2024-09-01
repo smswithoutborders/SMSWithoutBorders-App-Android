@@ -58,9 +58,7 @@ class Publisher(val context: Context) {
 
     private var publisherStub = PublisherGrpc.newBlockingStub(channel)
 
-    private fun getRedirectUrl(platform: String): String{
-        return "https://oauth.afkanerd.com/platforms/$platform/protocols/oauth2/redirect_codes/"
-    }
+    private var oAuthRedirectUrl = "https://oauth.afkanerd.com/android/"
 
     fun getOAuthURL(availablePlatforms: AvailablePlatforms,
                     autogenerateCodeVerifier: Boolean = true,
@@ -71,8 +69,7 @@ class Publisher(val context: Context) {
                 setPlatform(availablePlatforms.name)
                 setState(Base64.encodeToString("${availablePlatforms.name},$scheme".encodeToByteArray(),
                     Base64.DEFAULT))
-                setRedirectUrl(if (supportsUrlScheme) REDIRECT_URL_SCHEME else
-                    getRedirectUrl(availablePlatforms.name))
+                setRedirectUrl(if (supportsUrlScheme) REDIRECT_URL_SCHEME else oAuthRedirectUrl)
                 setAutogenerateCodeVerifier(autogenerateCodeVerifier)
             }.build()
 
@@ -90,8 +87,7 @@ class Publisher(val context: Context) {
             setPlatform(platform)
             setAuthorizationCode(code)
             setCodeVerifier(codeVerifier)
-            setRedirectUrl(if (supportsUrlScheme) REDIRECT_URL_SCHEME else
-                getRedirectUrl(platform))
+            setRedirectUrl(if (supportsUrlScheme) REDIRECT_URL_SCHEME else oAuthRedirectUrl)
         }.build()
 
         try {
