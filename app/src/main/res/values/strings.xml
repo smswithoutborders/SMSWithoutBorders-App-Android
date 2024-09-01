@@ -414,5 +414,6 @@
     <string name="publisher_grpc_port" translatable="false">443</string>
 
     <string name="publisher_get_platforms_url" translatable="false">https://raw.githubusercontent.com/smswithoutborders/SMSWithoutBorders-Publisher/master/resources/platforms.json</string>
+    <string name="skip_all">skip all</string>
 
 </resources>

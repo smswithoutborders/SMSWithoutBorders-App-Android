@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:text="skip all"
+            android:text="@string/skip_all"
             android:textColor="@color/browser_actions_text_color"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
