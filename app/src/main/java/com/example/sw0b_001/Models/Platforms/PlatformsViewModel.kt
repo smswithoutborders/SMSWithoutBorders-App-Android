@@ -11,28 +11,18 @@ import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Network
 
 class PlatformsViewModel : ViewModel() {
-
-    private var liveData: LiveData<List<Platforms>> = MutableLiveData()
-    private var mutableLiveData: MutableLiveData<Pair<List<Platforms>, List<Platforms>>> = MutableLiveData()
-
     private var availableLiveData: LiveData<List<AvailablePlatforms>> = MutableLiveData()
+    private var storedLiveData: LiveData<List<StoredPlatformsEntity>> = MutableLiveData()
 
-    fun get(context: Context): LiveData<List<Platforms>> {
-        if(liveData.value.isNullOrEmpty()) {
-            liveData = Datastore.getDatastore(context).platformDao().all
+    fun getSaved(context: Context): LiveData<List<StoredPlatformsEntity>> {
+        if(storedLiveData.value.isNullOrEmpty()) {
+            storedLiveData = Datastore.getDatastore(context).storedPlatformsDao().fetchAll()
         }
-        return liveData
-    }
-
-    fun getSaved(context: Context): LiveData<List<Platforms>> {
-        if(liveData.value.isNullOrEmpty()) {
-            liveData = Datastore.getDatastore(context).platformDao().saved
-        }
-        return liveData
+        return storedLiveData
     }
 
     fun getAvailablePlatforms(context: Context): LiveData<List<AvailablePlatforms>> {
-        if(liveData.value.isNullOrEmpty()) {
+        if(availableLiveData.value.isNullOrEmpty()) {
             availableLiveData = Datastore.getDatastore(context).availablePlatformsDao().fetchAll()
         }
         return availableLiveData

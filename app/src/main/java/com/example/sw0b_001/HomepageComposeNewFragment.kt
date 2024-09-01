@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sw0b_001.Modals.AvailablePlatformsModalFragment
 import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter
 import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -47,13 +48,12 @@ class HomepageComposeNewFragment(private val bottomSheetViewLayout: Int =
                 LinearLayoutManager.VERTICAL, false)
         platformsRecyclerView.layoutManager = linearLayoutManager
 
-        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-        val platformsRecyclerAdapter = PlatformsRecyclerAdapter(fragmentTransaction)
+        val platformsRecyclerAdapter = PlatformsRecyclerAdapter(AvailablePlatformsModalFragment.Type.SAVED)
         platformsRecyclerView.adapter = platformsRecyclerAdapter
 
         val platformsViewModel = ViewModelProvider(this)[PlatformsViewModel::class.java]
         context?.let { it ->
-            platformsViewModel.get(it).observe(viewLifecycleOwner, Observer {
+//            platformsViewModel.get(it).observe(viewLifecycleOwner, Observer {
 //                platformsRecyclerAdapter.mDiffer.submitList(it)
 //                if(it.isNullOrEmpty()) {
 //                    view.findViewById<MaterialTextView>(R.id.homepage_no_platforms_saved)
@@ -62,7 +62,8 @@ class HomepageComposeNewFragment(private val bottomSheetViewLayout: Int =
 //                    view.findViewById<MaterialTextView>(R.id.homepage_no_platforms_saved)
 //                            .visibility = View.GONE
 //                }
-        }) }
+//            })
+        }
     }
 
     companion object {

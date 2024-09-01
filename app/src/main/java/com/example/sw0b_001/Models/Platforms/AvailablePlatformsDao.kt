@@ -13,4 +13,7 @@ interface AvailablePlatformsDao {
 
     @Query("SELECT * FROM AvailablePlatforms")
     fun fetchAll() : LiveData<List<AvailablePlatforms>>
+
+    @Query("SELECT * FROM AvailablePlatforms")
+    fun fetchAllList() : List<AvailablePlatforms>
 }

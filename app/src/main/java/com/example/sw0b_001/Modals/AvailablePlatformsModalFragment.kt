@@ -10,8 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sw0b_001.Database.Datastore
+import com.example.sw0b_001.Models.Platforms.AvailablePlatforms
 import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter
 import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
+import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Models.Publisher
 import com.example.sw0b_001.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -39,11 +42,9 @@ class AvailablePlatformsModalFragment(val type: Type):
 
     private lateinit var progress: LinearProgressIndicator
 
-    private lateinit var availableLinearLayout: LinearLayout
     private lateinit var availableLinearLayoutManager: LinearLayoutManager
     private lateinit var availablePlatformsRecyclerView: RecyclerView
 
-    private lateinit var savedLinearLayout: LinearLayout
     private lateinit var savedPlatformsRecyclerView: RecyclerView
     private lateinit var savedLinearLayoutManager: LinearLayoutManager
 
@@ -57,29 +58,38 @@ class AvailablePlatformsModalFragment(val type: Type):
 
         progress = view.findViewById(R.id.store_platforms_loader)
 
-        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
         val viewModel: PlatformsViewModel by viewModels()
 
         when(type) {
             Type.SAVED, Type.REVOKE -> {
+                view.findViewById<View>(R.id.store_platform_unsaved_layout).visibility = View.GONE
+
                 savedPlatformsRecyclerView = view.findViewById(
                     R.id.store_platforms_saved_recycler_view)
                 savedLinearLayoutManager = LinearLayoutManager(context,
                     LinearLayoutManager.HORIZONTAL, false)
                 savedPlatformsRecyclerView.layoutManager = savedLinearLayoutManager
-                savedLinearLayout = view.findViewById(R.id.store_platform_saved_layout)
-                savedPlatformsAdapter = PlatformsRecyclerAdapter(fragmentTransaction)
+                savedPlatformsAdapter = PlatformsRecyclerAdapter(type)
                 savedPlatformsRecyclerView.adapter = savedPlatformsAdapter
 
-//                viewModel.getSaved(requireContext()).observe(this, Observer {
-//                    savedPlatformsAdapter.mDiffer.submitList(it)
-//                    if(it.isNullOrEmpty())
-//                        view.findViewById<View>(R.id.store_platforms_saved_empty)
-//                            .visibility = View.VISIBLE
-//                    else
-//                        view.findViewById<View>(R.id.store_platforms_saved_empty)
-//                            .visibility = View.INVISIBLE
-//                })
+                var availablePlatforms = emptyList<AvailablePlatforms>()
+                val thread = Thread(Runnable {
+                    availablePlatforms = Datastore.getDatastore(requireContext())
+                        .availablePlatformsDao().fetchAllList()
+                })
+                thread.start()
+                thread.join()
+                savedPlatformsAdapter.availablePlatforms = availablePlatforms
+
+                viewModel.getSaved(requireContext()).observe(this, Observer {
+                    savedPlatformsAdapter.storedMDiffer.submitList(it)
+                    if(it.isNullOrEmpty())
+                        view.findViewById<View>(R.id.store_platforms_saved_empty)
+                            .visibility = View.VISIBLE
+                    else
+                        view.findViewById<View>(R.id.store_platforms_saved_empty)
+                            .visibility = View.INVISIBLE
+                })
             }
             Type.AVAILABLE -> {
                 progress.visibility = View.VISIBLE
@@ -90,52 +100,13 @@ class AvailablePlatformsModalFragment(val type: Type):
                 availableLinearLayoutManager = LinearLayoutManager(context,
                     LinearLayoutManager.HORIZONTAL, false)
                 availablePlatformsRecyclerView.layoutManager = availableLinearLayoutManager
-                availableLinearLayout = view.findViewById(R.id.store_platform_unsaved_layout)
-                availablePlatformsAdapter = PlatformsRecyclerAdapter(fragmentTransaction)
+                availablePlatformsAdapter = PlatformsRecyclerAdapter(type)
                 availablePlatformsRecyclerView.adapter = availablePlatformsAdapter
 
-                availablePlatformsAdapter.availablePlatformsMutableLiveData.observeForever {
-                    val scope = CoroutineScope(Dispatchers.Default)
-                    scope.launch {
-                        val publisher = Publisher(requireContext())
-                        activity?.runOnUiThread {
-                            progress.visibility = View.VISIBLE
-                        }
-
-                        try {
-                            val response = publisher.getOAuthURL(it, true,
-                                it.support_url_scheme!!)
-
-                            Publisher.storeOauthRequestCodeVerifier(requireContext(),
-                                response.codeVerifier)
-
-                            publisher.shutdown()
-
-                            activity?.runOnUiThread {
-                                val intentUri = Uri.parse(response.authorizationUrl)
-                                val intent = Intent(Intent.ACTION_VIEW, intentUri)
-                                startActivity(intent)
-                            }
-                        } catch(e: StatusRuntimeException) {
-                            activity?.runOnUiThread {
-                                Toast.makeText(requireContext(), e.status.description,
-                                    Toast.LENGTH_SHORT).show()
-                            }
-                        } catch(e: Exception) {
-                            activity?.runOnUiThread {
-                                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
-                            }
-                        } finally {
-                            activity?.runOnUiThread {
-                                progress.visibility = View.GONE
-                            }
-                            availablePlatformsAdapter.isClickable = true
-                        }
-                    }
-                }
+                configureAvailableClickListener()
 
                 viewModel.getAvailablePlatforms(requireContext()).observe(this, Observer { it ->
-                    availablePlatformsAdapter.mDiffer.submitList(it)
+                    availablePlatformsAdapter.availableMDiffer.submitList(it)
                     availablePlatformsAdapter.isClickable = false
 
                     if(it.isNullOrEmpty())
@@ -149,6 +120,49 @@ class AvailablePlatformsModalFragment(val type: Type):
                 })
             }
             Type.ALL -> TODO()
+        }
+
+    }
+
+    private fun configureAvailableClickListener() {
+        availablePlatformsAdapter.availablePlatformsMutableLiveData.observeForever {
+            val scope = CoroutineScope(Dispatchers.Default)
+            scope.launch {
+                val publisher = Publisher(requireContext())
+                activity?.runOnUiThread {
+                    progress.visibility = View.VISIBLE
+                }
+
+                try {
+                    val response = publisher.getOAuthURL(it, true,
+                        it.support_url_scheme!!)
+
+                    Publisher.storeOauthRequestCodeVerifier(requireContext(),
+                        response.codeVerifier)
+
+                    publisher.shutdown()
+
+                    activity?.runOnUiThread {
+                        val intentUri = Uri.parse(response.authorizationUrl)
+                        val intent = Intent(Intent.ACTION_VIEW, intentUri)
+                        startActivity(intent)
+                    }
+                } catch(e: StatusRuntimeException) {
+                    activity?.runOnUiThread {
+                        Toast.makeText(requireContext(), e.status.description,
+                            Toast.LENGTH_SHORT).show()
+                    }
+                } catch(e: Exception) {
+                    activity?.runOnUiThread {
+                        Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                    }
+                } finally {
+                    activity?.runOnUiThread {
+                        progress.visibility = View.GONE
+                    }
+                    availablePlatformsAdapter.isClickable = true
+                }
+            }
         }
 
     }
