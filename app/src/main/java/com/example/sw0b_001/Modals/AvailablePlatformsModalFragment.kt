@@ -126,7 +126,12 @@ class AvailablePlatformsModalFragment(val type: Type):
 
     private fun configureStoredClickListener() {
         savedPlatformsAdapter.savedPlatformsMutableData.observe(viewLifecycleOwner) {
-
+            dismiss()
+            val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+            val accountsModalFragment = AccountsModalFragment(it.name!!)
+            fragmentTransaction?.add(accountsModalFragment, "accounts_fragment")
+            fragmentTransaction?.show(accountsModalFragment)
+            fragmentTransaction?.commit()
         }
     }
 

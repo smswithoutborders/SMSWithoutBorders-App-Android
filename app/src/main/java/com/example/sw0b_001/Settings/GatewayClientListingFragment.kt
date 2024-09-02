@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -24,6 +25,7 @@ import com.example.sw0b_001.Models.GatewayClients.GatewayClient
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientAddModalFragment
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientViewModel
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
+import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.R
 import com.google.android.material.card.MaterialCardView
@@ -36,7 +38,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
 
     private lateinit var listViewAdapter: GatewayClientListingAdapter
 
-    private lateinit var gatewayClientsViewModel: GatewayClientViewModel
+    private val viewModel: GatewayClientViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,9 +56,8 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
         linearProgressIndicator.visibility = View.VISIBLE
 
         val gatewayClient = GatewayClientsCommunications(requireContext())
-        gatewayClientsViewModel = ViewModelProvider(this)[GatewayClientViewModel::class.java]
 
-        gatewayClientsViewModel.get(requireContext()) {
+        viewModel.get(requireContext()) {
             activity?.runOnUiThread {
                 linearProgressIndicator.visibility = View.GONE
                 refreshLayout.isRefreshing = false
@@ -113,7 +114,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
         val linearProgressIndicator = view.findViewById<LinearProgressIndicator>(R.id.refresh_loader)
         linearProgressIndicator.visibility = View.VISIBLE
 
-        gatewayClientsViewModel.loadRemote(requireContext(), {
+        viewModel.loadRemote(requireContext(), {
             refreshLayout.isRefreshing = false
         } ) {
             activity?.runOnUiThread {
