@@ -4,6 +4,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.View.OnClickListener
@@ -11,10 +12,13 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.sw0b_001.AppCompactActivityCustomized
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientAddModalFragment
@@ -22,38 +26,38 @@ import com.example.sw0b_001.Models.GatewayClients.GatewayClientViewModel
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.R
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textview.MaterialTextView
 
-class GatewayClientListingActivity : AppCompactActivityCustomized() {
+
+class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_available) {
 
     private lateinit var listViewAdapter: GatewayClientListingAdapter
 
     private lateinit var gatewayClientsViewModel: GatewayClientViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gateway_clients_available)
+    }
 
-        val myToolbar = findViewById<MaterialToolbar>(R.id.gateway_client_toolbar)
-        setSupportActionBar(myToolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val listView = findViewById<ListView>(R.id.gateway_clients_recycler_view)
+        val listView = view.findViewById<ListView>(R.id.gateway_clients_recycler_view)
 
-        val linearProgressIndicator = findViewById<LinearProgressIndicator>(R.id.refresh_loader)
-        val refreshLayout = findViewById<SwipeRefreshLayout>(R.id.gateway_client_swipe_refresh)
+        val linearProgressIndicator = view.findViewById<LinearProgressIndicator>(R.id.refresh_loader)
+        val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.gateway_client_swipe_refresh)
 
         refreshLayout.isRefreshing = true
         linearProgressIndicator.visibility = View.VISIBLE
 
-        val gatewayClient = GatewayClientsCommunications(applicationContext)
+        val gatewayClient = GatewayClientsCommunications(requireContext())
         gatewayClientsViewModel = ViewModelProvider(this)[GatewayClientViewModel::class.java]
 
-        gatewayClientsViewModel.get(applicationContext) {
-            runOnUiThread {
+        gatewayClientsViewModel.get(requireContext()) {
+            activity?.runOnUiThread {
                 linearProgressIndicator.visibility = View.GONE
                 refreshLayout.isRefreshing = false
             }
@@ -62,12 +66,39 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
             listView.adapter = listViewAdapter
         })
 
-        findViewById<SwipeRefreshLayout>(R.id.gateway_client_swipe_refresh)
-                .setOnRefreshListener { refresh() }
-
+        view.findViewById<SwipeRefreshLayout>(R.id.gateway_client_swipe_refresh)
+            .setOnRefreshListener { refresh(view) }
 
         gatewayClient.sharedPreferences
-                .registerOnSharedPreferenceChangeListener(sharedPreferencesChangeListener)
+            .registerOnSharedPreferenceChangeListener(sharedPreferencesChangeListener)
+
+        val menuHost = requireActivity()
+        menuHost.addMenuProvider(object: MenuProvider{
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menu.clear()
+                menuInflater.inflate(R.menu.gateway_client_settings_toolbar, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                if(menuItem.itemId == R.id.gateway_client_menu_refresh) {
+                    refresh(view)
+                    return true
+                }
+                else if(menuItem.itemId == R.id.gateway_client_menu_add_contact) {
+                    activity?.let {
+                        val fragmentTransaction = it.supportFragmentManager.beginTransaction()
+                        val gatewayClientAddFragment = GatewayClientAddModalFragment()
+                        fragmentTransaction.add(gatewayClientAddFragment, "gateway_client_add_tag")
+                        fragmentTransaction.show(gatewayClientAddFragment)
+                        fragmentTransaction.commitNow()
+                        return true
+                    }
+                    return false
+                }
+                return false
+            }
+
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private val sharedPreferencesChangeListener = OnSharedPreferenceChangeListener { _, _ ->
@@ -75,45 +106,24 @@ class GatewayClientListingActivity : AppCompactActivityCustomized() {
             listViewAdapter.notifyDataSetChanged()
     }
 
-    private fun refresh() {
-        val refreshLayout = findViewById<SwipeRefreshLayout>(R.id.gateway_client_swipe_refresh)
+    private fun refresh(view: View) {
+        val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.gateway_client_swipe_refresh)
         refreshLayout.isRefreshing = true
 
-        val linearProgressIndicator = findViewById<LinearProgressIndicator>(R.id.refresh_loader)
+        val linearProgressIndicator = view.findViewById<LinearProgressIndicator>(R.id.refresh_loader)
         linearProgressIndicator.visibility = View.VISIBLE
 
-        gatewayClientsViewModel.loadRemote(applicationContext,
-                { refreshLayout.isRefreshing = false } ) {
-            runOnUiThread {
+        gatewayClientsViewModel.loadRemote(requireContext(), {
+            refreshLayout.isRefreshing = false
+        } ) {
+            activity?.runOnUiThread {
                 refreshLayout.isRefreshing = false
                 linearProgressIndicator.visibility = View.GONE
-                Toast.makeText(applicationContext, "Failed to refresh...",
+                Toast.makeText(requireContext(), "Failed to refresh...",
                         Toast.LENGTH_SHORT).show()
             }
         }
 
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.gateway_client_settings_toolbar, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.gateway_client_menu_refresh) {
-            refresh()
-            return true
-        }
-        else if(item.itemId == R.id.gateway_client_menu_add_contact) {
-            val fragmentTransaction = supportFragmentManager.beginTransaction()
-
-            val gatewayClientAddFragment = GatewayClientAddModalFragment()
-            fragmentTransaction.add(gatewayClientAddFragment, "gateway_client_add_tag")
-            fragmentTransaction.show(gatewayClientAddFragment)
-            fragmentTransaction.commitNow()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     class GatewayClientListingAdapter(private val gatewayClientsCommunications: GatewayClientsCommunications,

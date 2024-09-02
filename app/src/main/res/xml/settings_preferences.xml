@@ -26,14 +26,4 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        app:key="advance_settings"
-        app:title="@string/settings_advanced_category">
-        <Preference
-            app:icon="@drawable/ic_round_router_24"
-            app:key="gateway_server_settings"
-            app:summary="@string/settings_gateway_clients_text_summary"
-            app:title="@string/settings_gateway_clients_text" />
-    </PreferenceCategory>
-
 </PreferenceScreen>

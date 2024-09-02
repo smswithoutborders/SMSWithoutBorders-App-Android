@@ -12,21 +12,12 @@
         android:id="@+id/homepage_recents_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:title="@string/homepage_recent"
+        app:titleTextAppearance="@style/TextAppearance.Material3.DisplaySmall"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/homepage_main_menu" >
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="@string/homepage_recent"
-            style="@style/TextAppearance.Material3.HeadlineLarge"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/homepage_recents_toolbar" />
-    </com.google.android.material.appbar.MaterialToolbar>
+        app:menu="@menu/homepage_main_menu" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/homepage_fragment_container"
