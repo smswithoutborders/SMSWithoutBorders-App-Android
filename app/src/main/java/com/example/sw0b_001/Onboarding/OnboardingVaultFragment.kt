@@ -2,7 +2,9 @@ package com.example.sw0b_001.Onboarding
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.transition.TransitionInflater
 import com.example.sw0b_001.Modals.LoginModalFragment
 import com.example.sw0b_001.Modals.LoginSignupVaultModalFragment
@@ -17,6 +19,7 @@ class OnboardingVaultFragment : OnboardingComponent(R.layout.fragment_onboarding
         val inflater = TransitionInflater.from(requireContext())
         enterTransition = inflater.inflateTransition(R.transition.slide_right)
     }
+
     override fun getButtonText(context: Context) {
         super.onAttach(context)
         nextButtonText = context.getString(R.string.onboarding_next)
@@ -29,10 +32,10 @@ class OnboardingVaultFragment : OnboardingComponent(R.layout.fragment_onboarding
         super.onViewCreated(view, savedInstanceState)
 
         val loginSuccessRunnable = Runnable {
-            if(activity is OnboardingComponent.ManageComponentsListing) {
-                ((activity) as OnboardingComponent.ManageComponentsListing)
-                    .addComponent(OnboardingVaultStorePlatformFragment())
-            }
+//            if(activity is OnboardingComponent.ManageComponentsListing) {
+//                ((activity) as OnboardingComponent.ManageComponentsListing)
+//                    .addComponent(OnboardingVaultStorePlatformFragment())
+//            }
             activity?.runOnUiThread {
                 activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
                     ?.performClick()

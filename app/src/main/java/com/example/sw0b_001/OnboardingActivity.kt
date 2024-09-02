@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.text.Html
+import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -13,6 +14,8 @@ import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.commitNow
+import androidx.fragment.app.findFragment
+import androidx.fragment.app.replace
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
@@ -46,6 +49,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
     private lateinit var prevButton : MaterialButton
     private lateinit var dotIndicatorLayout :LinearLayout
     private lateinit var skipAllBtn : MaterialButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
@@ -74,12 +78,19 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
         supportFragmentManager.commit {
             findViewById<View>(R.id.onboarding_navigation_controller).visibility = View.GONE
             val fragment = fragmentList[fragmentIndex]
-            add(R.id.onboarding_fragment_container, fragment)
-            setReorderingAllowed(true)
-            setCustomAnimations(R.anim.slide_in,
+            if(supportFragmentManager.fragments.isNullOrEmpty()) {
+                add(R.id.onboarding_fragment_container, fragment, "homepage_fragment")
+                setCustomAnimations(R.anim.slide_in,
                     R.anim.fade_out,
                     R.anim.fade_in,
                     R.anim.slide_out)
+            } else {
+                replace(R.id.onboarding_fragment_container, fragment, "homepage_fragment")
+                setCustomAnimations(R.anim.slide_in,
+                    R.anim.fade_out,
+                    R.anim.fade_in,
+                    R.anim.slide_out)
+            }
         }
     }
 
@@ -124,7 +135,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                     }
 
                     replace(R.id.onboarding_fragment_container, fragment)
-                    setReorderingAllowed(false)
+//                    setReorderingAllowed(false)
                     addToBackStack(fragment.javaClass.name)
                     setCustomAnimations(R.anim.slide_in,
                             R.anim.fade_out,
@@ -153,8 +164,8 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                     findViewById<View>(R.id.onboarding_navigation_controller).visibility = View.GONE
                 }
 
+//                setReorderingAllowed(true)
                 replace(R.id.onboarding_fragment_container, fragment)
-                setReorderingAllowed(true)
 
                 setCustomAnimations(R.anim.slide_in,
                         R.anim.fade_out,
@@ -171,7 +182,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                 val fragment: OnboardingComponent? =
                         fragmentList[fragmentIterator.value!!].skipOnboardingFragment
                 replace(R.id.onboarding_fragment_container, fragment!!)
-                setReorderingAllowed(true)
+//                setReorderingAllowed(true)
 
                 setCustomAnimations(R.anim.slide_in,
                         R.anim.fade_out,
