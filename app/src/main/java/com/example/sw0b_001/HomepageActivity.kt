@@ -8,10 +8,13 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.fragment.app.commit
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sw0b_001.Homepage.HomepageLoggedIn
+import com.example.sw0b_001.Homepage.HomepageNotLoggedIn
 import com.example.sw0b_001.Modals.LoginSignupVaultModalFragment
 import com.example.sw0b_001.Modals.RebrandingModalFragment
 import com.example.sw0b_001.Models.Messages.EncryptedContent
@@ -19,6 +22,7 @@ import com.example.sw0b_001.Models.Messages.MessagesRecyclerAdapter
 import com.example.sw0b_001.Models.Messages.MessagesViewModel
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.UserArtifactsHandler
+import com.example.sw0b_001.Models.Vault
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 
@@ -31,112 +35,12 @@ class HomepageActivity : AppCompactActivityCustomized() {
         setSupportActionBar(myToolbar)
         supportActionBar!!.title = null
 
-        messagesRecyclerView = findViewById<RecyclerView>(R.id.recents_recycler_view)
-
-        configureRecyclerHandlers()
-
-        findViewById<View>(R.id.homepage_compose_new_btn)
-                .setOnClickListener { v -> /* onComposePlatformClick()*/ }
-
-//        findViewById<View>(R.id.homepage_add_new_btn)
-//                .setOnClickListener { v -> onComposePlatformClick(PlatformsModalFragment
-//                        .SHOW_TYPE_UNSAVED) }
-
-        showRebrandingModal()
-    }
-
-    private fun showRebrandingModal() {
-        val rebrandingModal = RebrandingModalFragment()
-        if(!rebrandingModal.shownRebranding(applicationContext)) {
-            val fragmentTransaction = supportFragmentManager.beginTransaction()
-            fragmentTransaction.add(rebrandingModal, "rebranding_modal")
-            fragmentTransaction.show(rebrandingModal)
-            fragmentTransaction.commit()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        configureButtonViews()
-    }
-
-    private fun configureButtonViews() {
-        if(UserArtifactsHandler.isCredentials(applicationContext)) {
-            findViewById<MaterialButton>(R.id.homepage_login_new_btn).visibility = View.GONE
-            findViewById<MaterialButton>(R.id.homepage_add_new_btn).visibility = View.VISIBLE
-            findViewById<MaterialButton>(R.id.homepage_compose_new_btn).visibility = View.VISIBLE
-        } else {
-            findViewById<MaterialButton>(R.id.homepage_login_new_btn).apply {
-                visibility = View.VISIBLE
-                setOnClickListener {
-                    loginSignupModal()
-                }
-            }
-            findViewById<MaterialButton>(R.id.homepage_add_new_btn).visibility = View.GONE
-            findViewById<MaterialButton>(R.id.homepage_compose_new_btn).visibility = View.GONE
-        }
-    }
-
-    private fun loginSignupModal() {
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        val runnable = Runnable {
-            runOnUiThread {
-                recreate()
-                configureButtonViews()
-                Toast.makeText(applicationContext, getString(R.string.homepage_vault_account_added),
-                        Toast.LENGTH_SHORT).show()
-            }
-        }
-        val loginSignupModalFragment = LoginSignupVaultModalFragment(runnable, runnable)
-        fragmentTransaction.add(loginSignupModalFragment, "login_signup_login_vault_tag")
-        fragmentTransaction.show(loginSignupModalFragment)
-        fragmentTransaction.commit()
-
-    }
-
-    private lateinit var messagesRecyclerView : RecyclerView
-    private fun configureRecyclerHandlers() {
-        val recentRecyclerAdapter = MessagesRecyclerAdapter()
-        val linearLayoutManager = LinearLayoutManager(applicationContext,
-                LinearLayoutManager.VERTICAL, false);
-
-        messagesRecyclerView.layoutManager = linearLayoutManager
-        messagesRecyclerView.adapter = recentRecyclerAdapter
-
-        val viewModel: MessagesViewModel by viewModels()
-
-        val noRecentMessagesText = findViewById<TextView>(R.id.no_recent_messages)
-        viewModel.getMessages(applicationContext).observe(this) {
-            recentRecyclerAdapter.mDiffer.submitList(it) {
-                messagesRecyclerView.smoothScrollToPosition(0)
-            }
-            if (it.isNullOrEmpty())
-                noRecentMessagesText.visibility = View.VISIBLE
+        supportFragmentManager.commit {
+            if(Vault.fetchLongLivedToken(applicationContext).isNotBlank())
+                add(R.id.homepage_fragment_container, HomepageLoggedIn(), "homepage_fragment")
             else
-                noRecentMessagesText.visibility = View.GONE
+                add(R.id.homepage_fragment_container, HomepageNotLoggedIn(), "homepage_not_fragment")
         }
-
-        recentRecyclerAdapter.messageOnClickListener.observe(this, Observer {
-            if(it != null) {
-                recentRecyclerAdapter.messageOnClickListener.value = null
-                when(it.first.type) {
-                    Platforms.TYPE_TEXT -> {
-                        startActivity(Intent(this, TextViewActivity::class.java).apply {
-                            putExtra("platform_id", it.second.id)
-                            putExtra("platform_name", it.second.name)
-                            putExtra("message_id", it.first.id)
-                        })
-                    }
-                    Platforms.TYPE_EMAIL -> {
-                        startActivity(Intent(this, EmailViewActivity::class.java).apply {
-                            putExtra("platform_id", it.second.id)
-                            putExtra("platform_name", it.second.name)
-                            putExtra("message_id", it.first.id)
-                        })
-                    }
-                }
-            }
-        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -154,18 +58,5 @@ class HomepageActivity : AppCompactActivityCustomized() {
         }
         return false
     }
-
-
-//    fun onComposePlatformClick(showType: Int = PlatformsModalFragment.SHOW_TYPE_SAVED) {
-//        showPlatformsModal(showType)
-//    }
-
-//    private fun showPlatformsModal(showType: Int) {
-//        val fragmentTransaction = supportFragmentManager.beginTransaction()
-//        val platformsModalFragment = PlatformsModalFragment(showType)
-//        fragmentTransaction.add(platformsModalFragment, "store_platforms_tag")
-//        fragmentTransaction.show(platformsModalFragment)
-//        fragmentTransaction.commitNow()
-//    }
 
 }
