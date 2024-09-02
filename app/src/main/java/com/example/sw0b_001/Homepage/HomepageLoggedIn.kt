@@ -44,6 +44,7 @@ class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
             .setOnClickListener { v ->
                 showPlatformsModal(AvailablePlatformsModalFragment.Type.AVAILABLE)
             }
+
     }
 
     private fun configureRecyclerHandlers(view: View) {
@@ -57,17 +58,31 @@ class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
         val viewModel: MessagesViewModel by viewModels()
 
         val noRecentMessagesText = view.findViewById<TextView>(R.id.no_recent_messages)
-        viewModel.getMessages(requireContext()).observe(this) {
+        viewModel.getMessages(requireContext()).observe(viewLifecycleOwner) {
             recentRecyclerAdapter.mDiffer.submitList(it) {
                 messagesRecyclerView.smoothScrollToPosition(0)
             }
             if (it.isNullOrEmpty()) {
                 noRecentMessagesText.visibility = View.VISIBLE
                 view.findViewById<View>(R.id.homepage_no_message_image).visibility = View.VISIBLE
+                view.findViewById<View>(R.id.homepage_compose_new_btn1).visibility = View.GONE
+                view.findViewById<View>(R.id.homepage_add_new_btn1).visibility = View.GONE
             }
             else {
                 noRecentMessagesText.visibility = View.GONE
                 view.findViewById<View>(R.id.homepage_no_message_image).visibility = View.GONE
+                view.findViewById<View>(R.id.homepage_compose_new_btn1).visibility = View.VISIBLE
+                view.findViewById<View>(R.id.homepage_add_new_btn1).visibility = View.VISIBLE
+
+                view.findViewById<View>(R.id.homepage_compose_new_btn1)
+                    .setOnClickListener { v ->
+                        showPlatformsModal(AvailablePlatformsModalFragment.Type.SAVED)
+                    }
+
+                view.findViewById<View>(R.id.homepage_add_new_btn1)
+                    .setOnClickListener { v ->
+                        showPlatformsModal(AvailablePlatformsModalFragment.Type.AVAILABLE)
+                    }
             }
         }
 
