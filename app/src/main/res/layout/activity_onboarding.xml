@@ -7,10 +7,12 @@
     android:layout_height="match_parent">
 
     <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/onboarding_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:id="@+id/onboarding_fragment_container"
         app:layout_constraintBottom_toTopOf="@+id/onboarding_navigation_controller"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,15 +46,16 @@
             app:layout_constraintTop_toBottomOf="@+id/onboard_dot_indicator_layout"
             tools:text="Previous" />
 
-        <com.google.android.material.textview.MaterialTextView
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/onboard_skip_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
             android:text="@string/skip_all"
-            android:textColor="@color/browser_actions_text_color"
             android:textSize="16sp"
+            android:background="#0000"
+            android:textColor="#007AFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/onboard_next_button"
             app:layout_constraintStart_toEndOf="@+id/onboard_back_button"

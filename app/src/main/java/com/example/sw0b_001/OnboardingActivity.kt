@@ -45,7 +45,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
     private lateinit var nextButton : MaterialButton
     private lateinit var prevButton : MaterialButton
     private lateinit var dotIndicatorLayout :LinearLayout
-    private lateinit var skipAllBtn : MaterialTextView
+    private lateinit var skipAllBtn : MaterialButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
