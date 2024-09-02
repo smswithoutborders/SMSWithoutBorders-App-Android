@@ -86,7 +86,7 @@ class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
             }
         }
 
-        recentRecyclerAdapter.messageOnClickListener.observe(this, Observer {
+        recentRecyclerAdapter.messageOnClickListener.observe(viewLifecycleOwner, Observer {
             if(it != null) {
                 recentRecyclerAdapter.messageOnClickListener.value = null
                 when(it.first.type) {

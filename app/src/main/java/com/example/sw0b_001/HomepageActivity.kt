@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -41,6 +42,9 @@ class HomepageActivity : AppCompactActivityCustomized() {
             else
                 add(R.id.homepage_fragment_container, HomepageNotLoggedIn(), "homepage_not_fragment")
         }
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.navigationBarColor = getResources().getColor(R.color.md_theme_surfaceContainer, theme);
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

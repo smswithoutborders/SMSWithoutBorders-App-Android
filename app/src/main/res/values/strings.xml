@@ -417,5 +417,8 @@
     <string name="skip_all">skip all</string>
     <string name="create_new_account_or_log_into_existing_one_to_begin_sending_messages_from_stored_online_platforms">Create new account or log into existing one to begin sending messages from stored online platforms</string>
     <string name="no_vault_account">No Vault account</string>
+    <string name="recents">Recents</string>
+    <string name="recents_lower">recents</string>
+    <string name="gateway_clients">Gateway Clients</string>
 
 </resources>
