@@ -16,4 +16,7 @@ interface AvailablePlatformsDao {
 
     @Query("SELECT * FROM AvailablePlatforms")
     fun fetchAllList() : List<AvailablePlatforms>
+
+    @Query("SELECT * FROM AvailablePlatforms WHERE name = :name")
+    fun fetch(name: String) : AvailablePlatforms
 }

@@ -7,12 +7,18 @@ import android.view.MenuItem
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Modals.PlatformComposers.EmailComposeModalFragment
 import com.example.sw0b_001.Models.Messages.EncryptedContent
+import com.example.sw0b_001.Models.Platforms.AvailablePlatforms
 import com.example.sw0b_001.Models.Platforms.Platforms
+import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class EmailViewActivity : AppCompactActivityCustomized() {
+    private lateinit var message: EncryptedContent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,13 +33,10 @@ class EmailViewActivity : AppCompactActivityCustomized() {
         configureView()
     }
 
-
-    private lateinit var message: EncryptedContent
     private fun configureView() {
-        ThreadExecutorPool.executorService.execute {
+        CoroutineScope(Dispatchers.Default).launch {
             message = Datastore.getDatastore(applicationContext).encryptedContentDAO()
                 .get(intent.getLongExtra("message_id", -1))
-            println(message.encryptedContent)
             runOnUiThread {
                 message.encryptedContent.split(":").let {
                     findViewById<MaterialTextView>(R.id.layout_identity_header_title).apply {
@@ -59,17 +62,20 @@ class EmailViewActivity : AppCompactActivityCustomized() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.compose_view_edit_menu_edit -> {
-                ThreadExecutorPool.executorService.execute {
-                    val platforms = Datastore.getDatastore(applicationContext).platformDao()
-                        .get(intent.getLongExtra("platform_id", -1))
-                    runOnUiThread {
-                        showPlatformsModal(platforms)
+                CoroutineScope(Dispatchers.Default).launch {
+                    val id = intent.getLongExtra("id", -1)
+                    if(id > -1) {
+                        val platforms = Datastore.getDatastore(applicationContext)
+                            .storedPlatformsDao().fetch(id.toInt())
+                        runOnUiThread {
+                            showPlatformsModal(platforms)
+                        }
                     }
                 }
                 return true
             }
             R.id.compose_view_edit_menu_delete -> {
-                ThreadExecutorPool.executorService.execute {
+                CoroutineScope(Dispatchers.Default).launch {
                     Datastore.getDatastore(applicationContext).encryptedContentDAO()
                         .delete(intent.getLongExtra("message_id", -1))
                     runOnUiThread {
@@ -82,7 +88,7 @@ class EmailViewActivity : AppCompactActivityCustomized() {
         return false
     }
 
-    private fun showPlatformsModal(platforms: Platforms) {
+    private fun showPlatformsModal(platforms: StoredPlatformsEntity) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         val emailComposeModalFragment = EmailComposeModalFragment(platforms, message) {
             finish()

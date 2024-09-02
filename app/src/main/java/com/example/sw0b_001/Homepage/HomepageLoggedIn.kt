@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.EmailViewActivity
 import com.example.sw0b_001.Modals.AvailablePlatformsModalFragment
 import com.example.sw0b_001.Models.Messages.MessagesRecyclerAdapter
@@ -17,6 +18,9 @@ import com.example.sw0b_001.Models.Messages.MessagesViewModel
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.R
 import com.example.sw0b_001.TextViewActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
 
@@ -46,65 +50,78 @@ class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
     }
 
     private fun configureRecyclerHandlers(view: View) {
-        val recentRecyclerAdapter = MessagesRecyclerAdapter()
         val linearLayoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.VERTICAL, false);
-
-        messagesRecyclerView.layoutManager = linearLayoutManager
-        messagesRecyclerView.adapter = recentRecyclerAdapter
-
         val viewModel: MessagesViewModel by viewModels()
-
         val noRecentMessagesText = view.findViewById<TextView>(R.id.no_recent_messages)
-        viewModel.getMessages(requireContext()).observe(viewLifecycleOwner) {
-            recentRecyclerAdapter.mDiffer.submitList(it) {
-                messagesRecyclerView.smoothScrollToPosition(0)
-            }
-            if (it.isNullOrEmpty()) {
-                noRecentMessagesText.visibility = View.VISIBLE
-                view.findViewById<View>(R.id.homepage_no_message_image).visibility = View.VISIBLE
-                view.findViewById<View>(R.id.homepage_compose_new_btn1).visibility = View.GONE
-                view.findViewById<View>(R.id.homepage_add_new_btn1).visibility = View.GONE
-            }
-            else {
-                noRecentMessagesText.visibility = View.GONE
-                view.findViewById<View>(R.id.homepage_no_message_image).visibility = View.GONE
-                view.findViewById<View>(R.id.homepage_compose_new_btn1).visibility = View.VISIBLE
-                view.findViewById<View>(R.id.homepage_add_new_btn1).visibility = View.VISIBLE
+        messagesRecyclerView.layoutManager = linearLayoutManager
 
-                view.findViewById<View>(R.id.homepage_compose_new_btn1)
-                    .setOnClickListener { v ->
-                        showPlatformsModal(AvailablePlatformsModalFragment.Type.SAVED)
-                    }
+        CoroutineScope(Dispatchers.Default).launch {
+            val availablePlatforms = Datastore.getDatastore(requireContext()).availablePlatformsDao()
+                .fetchAllList();
+            val recentRecyclerAdapter = MessagesRecyclerAdapter(availablePlatforms)
+            messagesRecyclerView.adapter = recentRecyclerAdapter
 
-                view.findViewById<View>(R.id.homepage_add_new_btn1)
-                    .setOnClickListener { v ->
-                        showPlatformsModal(AvailablePlatformsModalFragment.Type.AVAILABLE)
+            activity?.runOnUiThread {
+                viewModel.getMessages(requireContext()).observe(viewLifecycleOwner) {
+                    recentRecyclerAdapter.mDiffer.submitList(it) {
+                        messagesRecyclerView.smoothScrollToPosition(0)
                     }
-            }
-        }
+                    if (it.isNullOrEmpty()) {
+                        activity?.runOnUiThread {
+                            noRecentMessagesText.visibility = View.VISIBLE
+                            view.findViewById<View>(R.id.homepage_no_message_image).visibility = View.VISIBLE
+                            view.findViewById<View>(R.id.homepage_compose_new_btn1).visibility = View.GONE
+                            view.findViewById<View>(R.id.homepage_add_new_btn1).visibility = View.GONE
+                        }
+                    }
+                    else {
+                        activity?.runOnUiThread {
+                            noRecentMessagesText.visibility = View.GONE
+                            view.findViewById<View>(R.id.homepage_no_message_image).visibility = View.GONE
+                            view.findViewById<View>(R.id.homepage_compose_new_btn1).visibility = View.VISIBLE
+                            view.findViewById<View>(R.id.homepage_add_new_btn1).visibility = View.VISIBLE
 
-        recentRecyclerAdapter.messageOnClickListener.observe(viewLifecycleOwner, Observer {
-            if(it != null) {
-                recentRecyclerAdapter.messageOnClickListener.value = null
-                when(it.first.type) {
-                    Platforms.TYPE_TEXT -> {
-                        startActivity(Intent(requireContext(), TextViewActivity::class.java).apply {
-                            putExtra("platform_id", it.second.id)
-                            putExtra("platform_name", it.second.name)
-                            putExtra("message_id", it.first.id)
-                        })
-                    }
-                    Platforms.TYPE_EMAIL -> {
-                        startActivity(Intent(requireContext(), EmailViewActivity::class.java).apply {
-                            putExtra("platform_id", it.second.id)
-                            putExtra("platform_name", it.second.name)
-                            putExtra("message_id", it.first.id)
-                        })
+                            view.findViewById<View>(R.id.homepage_compose_new_btn1)
+                                .setOnClickListener { v ->
+                                    showPlatformsModal(AvailablePlatformsModalFragment.Type.SAVED)
+                                }
+
+                            view.findViewById<View>(R.id.homepage_add_new_btn1)
+                                .setOnClickListener { v ->
+                                    showPlatformsModal(AvailablePlatformsModalFragment.Type.AVAILABLE)
+                                }
+                        }
                     }
                 }
+
+                recentRecyclerAdapter.messageOnClickListener.observe(viewLifecycleOwner, Observer {
+                    if(it != null) {
+                        recentRecyclerAdapter.messageOnClickListener.value = null
+                        when(it.first.type) {
+                            Platforms.TYPE_TEXT -> {
+                                startActivity(Intent(requireContext(), TextViewActivity::class.java).apply {
+                                    val platform = Datastore.getDatastore(requireContext()).storedPlatformsDao()
+                                        .fetch(it.second.toInt());
+                                    putExtra("id", it.second)
+                                    putExtra("platform_name", platform.name!!)
+                                    putExtra("message_id", it.first.id)
+                                })
+                            }
+                            Platforms.TYPE_EMAIL -> {
+                                startActivity(Intent(requireContext(), EmailViewActivity::class.java).apply {
+                                    val platform = Datastore.getDatastore(requireContext()).storedPlatformsDao()
+                                        .fetch(it.second.toInt());
+                                    putExtra("id", it.second)
+                                    putExtra("platform_name", platform.name!!)
+                                    putExtra("message_id", it.first.id)
+                                })
+                            }
+                        }
+                    }
+                })
             }
-        })
+        }
     }
 
     private fun showPlatformsModal(type: AvailablePlatformsModalFragment.Type) {

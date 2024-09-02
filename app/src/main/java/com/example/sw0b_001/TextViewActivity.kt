@@ -8,9 +8,13 @@ import com.example.sw0b_001.Modals.PlatformComposers.EmailComposeModalFragment
 import com.example.sw0b_001.Modals.PlatformComposers.TextComposeModalFragment
 import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.Platforms.Platforms
+import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class TextViewActivity : AppCompactActivityCustomized() {
 
@@ -52,11 +56,14 @@ class TextViewActivity : AppCompactActivityCustomized() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
             R.id.compose_view_edit_menu_edit -> {
-                ThreadExecutorPool.executorService.execute {
-                    val platforms = Datastore.getDatastore(applicationContext).platformDao()
-                        .get(intent.getLongExtra("platform_id", -1))
-                    runOnUiThread {
-                        showPlatformsModal(platforms)
+                CoroutineScope(Dispatchers.Default).launch {
+                    val id = intent.getLongExtra("id", -1)
+                    if(id > -1) {
+                        val platforms = Datastore.getDatastore(applicationContext)
+                            .storedPlatformsDao().fetch(id.toInt())
+                        runOnUiThread {
+                            showPlatformsModal(platforms)
+                        }
                     }
                 }
                 return true
@@ -65,7 +72,7 @@ class TextViewActivity : AppCompactActivityCustomized() {
         return false
     }
 
-    private fun showPlatformsModal(platforms: Platforms) {
+    private fun showPlatformsModal(platforms: StoredPlatformsEntity) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         val textComposeModalFragment = TextComposeModalFragment(platforms, message) {
             finish()

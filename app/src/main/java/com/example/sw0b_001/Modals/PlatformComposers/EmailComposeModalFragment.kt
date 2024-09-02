@@ -3,16 +3,22 @@ package com.example.sw0b_001.Modals.PlatformComposers
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.Platforms.Platforms
+import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Models.Platforms._PlatformsHandler
 import com.example.sw0b_001.R
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class EmailComposeModalFragment(val platforms: Platforms, val message: EncryptedContent? = null,
+class EmailComposeModalFragment(val platform: StoredPlatformsEntity,
+                                val message: EncryptedContent? = null,
                                 private val onSuccessCallback: Runnable? = null)
     : BottomSheetDialogFragment(R.layout.fragment_modal_email_compose) {
 
@@ -83,12 +89,17 @@ class EmailComposeModalFragment(val platforms: Platforms, val message: Encrypted
         val subject = subjectTextInputEditText.text.toString()
         val body = bodyTextInputEditText.text.toString()
 
-        val platforms = _PlatformsHandler.getPlatform(view.context, platforms.id)
-        val formattedContent = processEmailForEncryption(platforms.letter, to, cc, bcc, subject, body)
+        val scope = CoroutineScope(Dispatchers.Default)
+        scope.launch {
+            val availablePlatforms = Datastore.getDatastore(requireContext())
+                .availablePlatformsDao().fetch(platform.name!!)
+            val formattedContent = processEmailForEncryption(availablePlatforms.shortcode!!,
+                to, cc, bcc, subject, body)
 
-        ComposeHandlers.compose(requireContext(), formattedContent, platforms) {
-            dismiss()
-            onSuccessCallback?.let { it.run() }
+            ComposeHandlers.compose(requireContext(), formattedContent, availablePlatforms) {
+                dismiss()
+                onSuccessCallback?.let { it.run() }
+            }
         }
     }
 

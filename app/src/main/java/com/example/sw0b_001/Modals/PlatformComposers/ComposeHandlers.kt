@@ -7,6 +7,7 @@ import android.widget.Toast
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
+import com.example.sw0b_001.Models.Platforms.AvailablePlatforms
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.PublisherHandler
 import com.example.sw0b_001.Models.SMSHandler
@@ -14,7 +15,7 @@ import com.example.sw0b_001.Models.ThreadExecutorPool
 
 object ComposeHandlers {
 
-    fun compose(context: Context, formattedContent: String, platforms: Platforms,
+    fun compose(context: Context, formattedContent: String, platforms: AvailablePlatforms,
                 onSuccessRunnable: Runnable) {
         val encryptedContentBase64 = PublisherHandler
                 .formatForPublishing(context, formattedContent)
@@ -32,8 +33,7 @@ object ComposeHandlers {
             val encryptedContent = EncryptedContent()
             encryptedContent.encryptedContent = formattedContent
             encryptedContent.date = System.currentTimeMillis()
-            encryptedContent.type = platforms.type
-            encryptedContent.platformId = platforms.id
+            encryptedContent.type = platforms.service_type
             encryptedContent.platformName = platforms.name
 
             ThreadExecutorPool.executorService.execute {
@@ -50,9 +50,9 @@ object ComposeHandlers {
     data class DecomposedMessages(val body: String,
                                   val subject: String = "",
                                   val recipient: String = "")
-    fun decompose(content: String, platforms: Platforms) : DecomposedMessages {
+    fun decompose(content: String, platforms: AvailablePlatforms) : DecomposedMessages {
         val split = content.split(":")
-        return when(platforms.type) {
+        return when(platforms.service_type) {
             Platforms.TYPE_EMAIL -> {
                 DecomposedMessages(body = split[5], subject = split[4], recipient = split[1])
             }

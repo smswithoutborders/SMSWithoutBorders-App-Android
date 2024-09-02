@@ -420,5 +420,6 @@
     <string name="recents">Recents</string>
     <string name="recents_lower">recents</string>
     <string name="gateway_clients">Gateway Clients</string>
+    <string name="unknown_service_type">Unknown service type</string>
 
 </resources>

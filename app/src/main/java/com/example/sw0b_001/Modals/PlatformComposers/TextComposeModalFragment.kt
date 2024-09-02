@@ -5,15 +5,22 @@ import android.os.SystemClock
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
+import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.Messages.EncryptedContent
+import com.example.sw0b_001.Models.Platforms.AvailablePlatforms
 import com.example.sw0b_001.Models.Platforms.Platforms
+import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class TextComposeModalFragment(val platforms: Platforms, val message: EncryptedContent? = null,
+class TextComposeModalFragment(val platform: StoredPlatformsEntity,
+                               val message: EncryptedContent? = null,
                                private val onSuccessCallback: Runnable? = null)
     : BottomSheetDialogFragment(R.layout.fragment_modal_text_compose) {
 
@@ -21,7 +28,6 @@ class TextComposeModalFragment(val platforms: Platforms, val message: EncryptedC
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        println("Platforms letter: ${platforms.letter}")
         view.findViewById<MaterialButton>(R.id.text_compose_btn)
                 .setOnClickListener {
                     processPost(view)
@@ -58,13 +64,20 @@ class TextComposeModalFragment(val platforms: Platforms, val message: EncryptedC
             return
         }
 
-        val formattedString =
-                processTextForEncryption(platforms.letter, textComposeTextEdit.text.toString())
-        ComposeHandlers.compose(view.context, formattedString, platforms) {
-            dismiss()
-            onSuccessCallback?.let { it.run() }
-        }
+        val scope = CoroutineScope(Dispatchers.Default)
+        scope.launch {
+            val availablePlatforms = Datastore.getDatastore(requireContext())
+                .availablePlatformsDao().fetch(platform.name!!)
 
+            val formattedString =
+                processTextForEncryption(availablePlatforms.shortcode!!,
+                    textComposeTextEdit.text.toString())
+
+            ComposeHandlers.compose(view.context, formattedString, availablePlatforms) {
+                dismiss()
+                onSuccessCallback?.let { it.run() }
+            }
+        }
     }
 
     private fun processTextForEncryption(platformLetter: String, body: String): String {

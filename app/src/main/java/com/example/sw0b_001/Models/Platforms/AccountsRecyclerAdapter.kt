@@ -3,6 +3,7 @@ package com.example.sw0b_001.Models.Platforms
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.R
@@ -13,6 +14,8 @@ class AccountsRecyclerAdapter : RecyclerView.Adapter<AccountsRecyclerAdapter.Vie
 
     val mDiffer: AsyncListDiffer<StoredPlatformsEntity> = AsyncListDiffer( this,
         PlatformsRecyclerAdapter.STORED_DIFF_CALLBACK )
+
+    val onClickListener: MutableLiveData<StoredPlatformsEntity> = MutableLiveData()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context);
@@ -27,6 +30,7 @@ class AccountsRecyclerAdapter : RecyclerView.Adapter<AccountsRecyclerAdapter.Vie
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val platform = mDiffer.currentList[position]
         holder.bind(platform)
+        holder.card.setOnClickListener { onClickListener.value = platform }
     }
 
 
