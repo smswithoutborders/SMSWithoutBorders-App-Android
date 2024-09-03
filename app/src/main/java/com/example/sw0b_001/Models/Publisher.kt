@@ -20,35 +20,7 @@ import java.net.UnknownHostException
 
 class Publisher(val context: Context) {
 
-     private var REDIRECT_URL_SCHEME = "relaysms://relaysms.com/android/"
-
-    companion object {
-        val PUBLISHER_ID_KEYSTORE_ALIAS = "PUBLISHER_ID_KEYSTORE_ALIAS"
-        val OAUTH2_PARAMETERS_FILE = "OAUTH2_PARAMETERS_FILE"
-
-        fun getAvailablePlatforms(context: Context,
-                                  exceptionRunnable: Runnable): ArrayList<AvailablePlatforms> {
-            val response = Network.requestGet(context.getString(R.string.publisher_get_platforms_url))
-            return Json.decodeFromString<ArrayList<AvailablePlatforms>>(response.result.get())
-        }
-
-        fun fetchOauthRequestVerifier(context: Context) : String {
-            val sharedPreferences = Armadillo.create(context, OAUTH2_PARAMETERS_FILE)
-                .encryptionFingerprint(context)
-                .build()
-            return sharedPreferences.getString("code_verifier", "")!!
-        }
-
-        fun storeOauthRequestCodeVerifier(context: Context, codeVerifier: String) {
-            val sharedPreferences = Armadillo.create(context, OAUTH2_PARAMETERS_FILE)
-                .encryptionFingerprint(context)
-                .build()
-
-            sharedPreferences.edit()
-                .putString("code_verifier", codeVerifier)
-                .apply()
-        }
-    }
+     private var REDIRECT_URL_SCHEME = "relaysms://oauth.afkanerd.com/android/"
 
     private var channel: ManagedChannel = ManagedChannelBuilder
         .forAddress(context.getString(R.string.publisher_grpc_url),
@@ -76,6 +48,17 @@ class Publisher(val context: Context) {
         return publisherStub.getOAuth2AuthorizationUrl(request)
     }
 
+    fun revokeOAuthPlatforms(llt: String, platform: String, account: String) :
+            PublisherOuterClass.RevokeAndDeleteOAuth2TokenResponse {
+        val request = PublisherOuterClass.RevokeAndDeleteOAuth2TokenRequest.newBuilder().apply {
+            setPlatform(platform)
+            setLongLivedToken(llt)
+            setAccountIdentifier(account)
+        }.build()
+
+        return publisherStub.revokeAndDeleteOAuth2Token(request)
+    }
+
     fun sendOAuthAuthorizationCode(llt: String,
                                    platform: String,
                                    code: String,
@@ -100,4 +83,34 @@ class Publisher(val context: Context) {
     fun shutdown() {
         channel.shutdown()
     }
+
+
+    companion object {
+        const val PUBLISHER_ID_KEYSTORE_ALIAS = "PUBLISHER_ID_KEYSTORE_ALIAS"
+        const val OAUTH2_PARAMETERS_FILE = "OAUTH2_PARAMETERS_FILE"
+
+        fun getAvailablePlatforms(context: Context,
+                                  exceptionRunnable: Runnable): ArrayList<AvailablePlatforms> {
+            val response = Network.requestGet(context.getString(R.string.publisher_get_platforms_url))
+            return Json.decodeFromString<ArrayList<AvailablePlatforms>>(response.result.get())
+        }
+
+        fun fetchOauthRequestVerifier(context: Context) : String {
+            val sharedPreferences = Armadillo.create(context, OAUTH2_PARAMETERS_FILE)
+                .encryptionFingerprint(context)
+                .build()
+            return sharedPreferences.getString("code_verifier", "")!!
+        }
+
+        fun storeOauthRequestCodeVerifier(context: Context, codeVerifier: String) {
+            val sharedPreferences = Armadillo.create(context, OAUTH2_PARAMETERS_FILE)
+                .encryptionFingerprint(context)
+                .build()
+
+            sharedPreferences.edit()
+                .putString("code_verifier", codeVerifier)
+                .apply()
+        }
+    }
+
 }

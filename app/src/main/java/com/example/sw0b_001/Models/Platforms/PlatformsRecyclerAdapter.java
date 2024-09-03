@@ -66,7 +66,8 @@ public class PlatformsRecyclerAdapter extends
                 }
             });
         }
-        if(type == AvailablePlatformsModalFragment.Type.SAVED) {
+        if(type == AvailablePlatformsModalFragment.Type.SAVED ||
+                type == AvailablePlatformsModalFragment.Type.REVOKE) {
             StoredPlatformsEntity platforms = storedMDiffer.getCurrentList().get(position);
             for(AvailablePlatforms platform : this.availablePlatforms) {
                 if(platforms.getName().equals(platform.getName())) {

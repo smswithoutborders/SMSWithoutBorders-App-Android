@@ -62,7 +62,9 @@ class OauthRedirectActivity : AppCompatActivity() {
                     codeVerifier,
                     supportsUrlScheme)
 
-                TODO("Refresh stored platforms here")
+                val vault = Vault(applicationContext)
+                vault.refreshStoredTokens(applicationContext)
+                vault.shutdown()
             } catch(e: Exception) {
                 e.printStackTrace()
                 runOnUiThread {
@@ -74,44 +76,6 @@ class OauthRedirectActivity : AppCompatActivity() {
             runOnUiThread {
                 finish()
             }
-        }
-    }
-
-    private fun startActivityFromState(state: String, fragmentIndex: Int) {
-        val intent = Intent()
-        println("State to go to: $state")
-        intent.setClassName(applicationContext, state)
-        intent.putExtra("fragment_index", fragmentIndex)
-        startActivity(intent)
-        finish()
-    }
-
-    private fun updatePlatforms() {
-        val credentials = UserArtifactsHandler.fetchCredentials(applicationContext)
-        val networkResponseResults = Vault_V2.loginSyncPlatformsFlow(applicationContext,
-                credentials[UserArtifactsHandler.PHONE_NUMBER]!!,
-                credentials[UserArtifactsHandler.PASSWORD]!!, "",
-                credentials[UserArtifactsHandler.USER_ID_KEY])
-
-        when(networkResponseResults.response.statusCode) {
-            200 -> {
-                runOnUiThread {
-                    Toast.makeText(applicationContext, getString(R.string.open_id_platforms_updated),
-                            Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    private fun syncAndStore() {
-        val credentials = UserArtifactsHandler.fetchCredentials(applicationContext)
-        val payload = GatewayServer_V2.sync(applicationContext,
-                credentials[UserArtifactsHandler.USER_ID_KEY]!!,
-                credentials[UserArtifactsHandler.PASSWORD]!!)
-        UserArtifactsHandler.storeSharedKey(applicationContext, payload.shared_key)
-        runOnUiThread {
-            Toast.makeText(applicationContext,
-                    getString(R.string.open_id_sync_updated), Toast.LENGTH_SHORT).show()
         }
     }
 

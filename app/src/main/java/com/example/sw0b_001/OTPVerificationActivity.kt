@@ -34,6 +34,9 @@ import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
 import io.grpc.StatusRuntimeException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.security.DigestException
 import java.security.MessageDigest
 
@@ -133,22 +136,13 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
         }
     }
 
-    private fun buildPlatformsUUID(name: String, account: String) : ByteArray {
-        val md: MessageDigest = MessageDigest.getInstance("SHA-256");
-        try {
-            md.update(name.encodeToByteArray());
-            md.update(account.encodeToByteArray());
-            return md.digest()
-        } catch (e: CloneNotSupportedException) {
-            throw DigestException("couldn't make digest of partial content");
-        }
-    }
+
 
     private fun submitOTPCode(submitBtnView: View, code: String) {
         val linearProgressIndicator = findViewById<LinearProgressIndicator>(R.id.ownership_progress_bar)
         linearProgressIndicator.visibility = View.VISIBLE
 
-        ThreadExecutorPool.executorService.execute {
+        CoroutineScope(Dispatchers.Default).launch {
             try {
                 when(type) {
                     Type.CREATE -> {
@@ -167,21 +161,7 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
                     }
                 }
 
-                val llt = Vault.fetchLongLivedToken(applicationContext)
-                val response = vault.listStoredEntityTokens(llt)
-
-                val storedPlatforms = ArrayList<StoredPlatformsEntity>()
-                response.storedTokensList.forEach {
-                    val uuid = Base64.encodeToString(buildPlatformsUUID(it.platform,
-                        it.accountIdentifier), Base64.DEFAULT)
-                    storedPlatforms.add(
-                        StoredPlatformsEntity(uuid, it.accountIdentifier,
-                        it.platform)
-                    )
-                }
-                Datastore.getDatastore(applicationContext).storedPlatformsDao()
-                    .insertAll(storedPlatforms)
-
+                vault.refreshStoredTokens(applicationContext)
                 setResult(Activity.RESULT_OK)
                 finish()
             } catch(e: StatusRuntimeException) {

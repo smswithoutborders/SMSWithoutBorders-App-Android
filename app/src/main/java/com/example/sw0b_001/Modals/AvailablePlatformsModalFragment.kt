@@ -72,8 +72,6 @@ class AvailablePlatformsModalFragment(val type: Type):
                 savedPlatformsAdapter = PlatformsRecyclerAdapter(type)
                 savedPlatformsRecyclerView.adapter = savedPlatformsAdapter
 
-                configureStoredClickListener()
-
                 CoroutineScope(Dispatchers.Default).launch {
                     savedPlatformsAdapter.availablePlatforms = Datastore.getDatastore(requireContext())
                         .availablePlatformsDao().fetchAllList()
@@ -90,6 +88,7 @@ class AvailablePlatformsModalFragment(val type: Type):
                         })
                     }
                 }
+                configureStoredClickListener(type)
             }
             Type.AVAILABLE -> {
                 progress.visibility = View.VISIBLE
@@ -124,11 +123,11 @@ class AvailablePlatformsModalFragment(val type: Type):
 
     }
 
-    private fun configureStoredClickListener() {
+    private fun configureStoredClickListener(type: Type) {
         savedPlatformsAdapter.savedPlatformsMutableData.observe(viewLifecycleOwner) {
             dismiss()
             val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-            val accountsModalFragment = AccountsModalFragment(it.name!!)
+            val accountsModalFragment = AccountsModalFragment(it.name!!, type)
             fragmentTransaction?.add(accountsModalFragment, "accounts_fragment")
             fragmentTransaction?.show(accountsModalFragment)
             fragmentTransaction?.commit()
@@ -160,6 +159,7 @@ class AvailablePlatformsModalFragment(val type: Type):
                         val intent = Intent(Intent.ACTION_VIEW, intentUri)
                         startActivity(intent)
                     }
+                    dismiss()
                 } catch(e: StatusRuntimeException) {
                     activity?.runOnUiThread {
                         Toast.makeText(requireContext(), e.status.description,

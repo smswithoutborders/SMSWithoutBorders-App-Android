@@ -6,15 +6,22 @@ import at.favre.lib.armadillo.Armadillo
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityAES
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
+import com.example.sw0b_001.Database.Datastore
+import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Modules.Crypto
 import com.example.sw0b_001.R
 import com.example.sw0b_001.Security.Cryptography
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import vault.v1.EntityGrpc
 import vault.v1.EntityGrpc.EntityBlockingStub
 import vault.v1.Vault
 import java.nio.charset.Charset
+import java.security.DigestException
+import java.security.MessageDigest
 
 class Vault(context: Context) {
     private val DEVICE_ID_KEYSTORE_ALIAS = "DEVICE_ID_KEYSTORE_ALIAS"
@@ -28,6 +35,33 @@ class Vault(context: Context) {
 
     fun shutdown() {
         channel.shutdown()
+    }
+    private fun buildPlatformsUUID(name: String, account: String) : ByteArray {
+        val md: MessageDigest = MessageDigest.getInstance("SHA-256");
+        try {
+            md.update(name.encodeToByteArray());
+            md.update(account.encodeToByteArray());
+            return md.digest()
+        } catch (e: CloneNotSupportedException) {
+            throw DigestException("couldn't make digest of partial content");
+        }
+    }
+
+    fun refreshStoredTokens(context: Context) {
+        val llt = fetchLongLivedToken(context)
+        val response = listStoredEntityTokens(llt)
+
+        val storedPlatforms = ArrayList<StoredPlatformsEntity>()
+        response.storedTokensList.forEach {
+            val uuid = Base64.encodeToString(buildPlatformsUUID(it.platform,
+                it.accountIdentifier), Base64.DEFAULT)
+            storedPlatforms.add(
+                StoredPlatformsEntity(uuid, it.accountIdentifier,
+                    it.platform)
+            )
+        }
+        Datastore.getDatastore(context).storedPlatformsDao()
+            .insertAll(storedPlatforms)
     }
 
     private fun processLongLivedToken(context: Context, encodedLlt: String, publicKey: String) {
@@ -129,7 +163,7 @@ class Vault(context: Context) {
         return response
     }
 
-    fun listStoredEntityTokens(llt: String) : Vault.ListEntityStoredTokensResponse {
+    private fun listStoredEntityTokens(llt: String) : Vault.ListEntityStoredTokensResponse {
         val request = Vault.ListEntityStoredTokensRequest.newBuilder().apply {
             setLongLivedToken(llt)
         }.build()
@@ -155,13 +189,18 @@ class Vault(context: Context) {
         private const val LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS =
             "com.afkanerd.relaysms.LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS"
 
+
         fun logout(context: Context) {
             val sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
                 .encryptionFingerprint(context)
                 .build()
-            sharedPreferences.edit().clear().commit()
+            sharedPreferences.edit().clear().apply()
 
             KeystoreHelpers.removeAllFromKeystore(context)
+
+            CoroutineScope(Dispatchers.Default).launch {
+                Datastore.getDatastore(context).storedPlatformsDao().deleteAll()
+            }
         }
 
         fun storeLongLivedToken(context: Context, llt: String) {

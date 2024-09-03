@@ -424,5 +424,7 @@
     <string name="you_can_log_back_at_anytime_logging_out_removes_your_account_on_this_device_click_logout_to_finish_the_process_this_is_a_safe_process">You can log back at anytime. All messages would be deleted.</string>
     <string name="log_out">Log out</string>
     <string name="cancel">Cancel</string>
+    <string name="select_an_account_to_send_a_message">Select an account to send a message</string>
+    <string name="click_continue_to_confirm_this_action_do_not_worry_this_has_no_dangerous_effects">Click continue to confirm this action. Do not worry, this has no dangerous effects.</string>
 
 </resources>

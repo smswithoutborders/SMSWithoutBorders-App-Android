@@ -12,15 +12,21 @@ import com.example.sw0b_001.Modals.PlatformComposers.EmailComposeModalFragment
 import com.example.sw0b_001.Modals.PlatformComposers.TextComposeModalFragment
 import com.example.sw0b_001.Models.Platforms.AccountsRecyclerAdapter
 import com.example.sw0b_001.Models.Platforms.AccountsViewModel
+import com.example.sw0b_001.Models.Platforms.AvailablePlatforms
 import com.example.sw0b_001.Models.Platforms.PlatformsRecyclerAdapter
+import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
+import com.example.sw0b_001.Models.Publisher
+import com.example.sw0b_001.Models.Vault
 import com.example.sw0b_001.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.progressindicator.CircularProgressIndicator
+import io.grpc.StatusRuntimeException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AccountsModalFragment(val platformName: String) :
+class AccountsModalFragment(val platformName: String, val type: AvailablePlatformsModalFragment.Type) :
     BottomSheetDialogFragment(R.layout.fragment_modal_accounts) {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
@@ -54,39 +60,99 @@ class AccountsModalFragment(val platformName: String) :
                 })
 
                 accountsRecyclerAdapter.onClickListener.observe(viewLifecycleOwner, Observer {
-                    dismiss()
-                    when(availablePlatforms.service_type) {
-                        "email" -> {
+                    when(type) {
+                        AvailablePlatformsModalFragment.Type.SAVED -> {
+                            dismiss()
+                            savedPlatformsClicked(availablePlatforms, it)
+                        }
+                        AvailablePlatformsModalFragment.Type.AVAILABLE -> TODO()
+                        AvailablePlatformsModalFragment.Type.ALL -> TODO()
+                        AvailablePlatformsModalFragment.Type.REVOKE -> {
+                            val onSuccessRunnable = Runnable {
+                                activity?.runOnUiThread {
+                                    view.findViewById<CircularProgressIndicator>(
+                                        R.id.account_progress_view).visibility = View.VISIBLE
+                                    accountsRecyclerView.visibility = View.GONE
+                                }
+                                revokePlatformsClick(view, it)
+                            }
                             val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-                            val emailComposeModalFragment = EmailComposeModalFragment(it) {
-                                activity?.finish()
-                            }
-                            fragmentTransaction?.add(emailComposeModalFragment, "email_compose_tag")
-                            fragmentTransaction?.show(emailComposeModalFragment)
-                            fragmentTransaction?.commitNow()
-                        }
-                        "text" -> {
-                            val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-                            val textComposeModalFragment = TextComposeModalFragment(it) {
-                                activity?.finish()
-                            }
-                            fragmentTransaction?.add(textComposeModalFragment, "text_compose_tag")
-                            fragmentTransaction?.show(textComposeModalFragment)
-                            fragmentTransaction?.commitNow()
-                        }
-                        "message" -> {
-
-                        }
-                        else -> {
-                            activity?.runOnUiThread {
-                                Toast.makeText(requireContext(),
-                                    getString(R.string.unknown_service_type), Toast.LENGTH_SHORT).show()
-                            }
+                            val loginModalFragment = LogoutDeleteConfirmationModalFragment(onSuccessRunnable)
+                            fragmentTransaction?.add(loginModalFragment, "logout_delete_fragment")
+                            fragmentTransaction?.show(loginModalFragment)
+                            fragmentTransaction?.commit()
                         }
                     }
                 })
 
             }
         }
+    }
+
+    private fun revokePlatformsClick(view: View, storedPlatformsEntity: StoredPlatformsEntity) {
+        val llt = Vault.fetchLongLivedToken(requireContext())
+
+        CoroutineScope(Dispatchers.Default).launch {
+            val publisher = Publisher(requireContext())
+            try {
+                publisher.revokeOAuthPlatforms(llt, storedPlatformsEntity.name!!,
+                    storedPlatformsEntity.account!!)
+
+                Datastore.getDatastore(requireContext()).storedPlatformsDao()
+                    .delete(storedPlatformsEntity.id)
+                dismiss()
+            } catch(e: StatusRuntimeException) {
+                activity?.runOnUiThread {
+                    Toast.makeText(requireContext(), e.status.description, Toast.LENGTH_SHORT).show()
+                }
+            } catch(e: Exception) {
+                e.printStackTrace()
+                activity?.runOnUiThread {
+                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                }
+            } finally {
+                publisher.shutdown()
+                activity?.runOnUiThread {
+                    view.findViewById<CircularProgressIndicator>(
+                        R.id.account_progress_view).visibility = View.GONE
+                    view.findViewById<RecyclerView>(
+                        R.id.account_recyclerview).visibility = View.VISIBLE
+                }
+            }
+        }
+    }
+
+    private fun savedPlatformsClicked(availablePlatforms: AvailablePlatforms,
+                                      storedPlatformsEntity: StoredPlatformsEntity) {
+        when(availablePlatforms.service_type) {
+            "email" -> {
+                val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+                val emailComposeModalFragment = EmailComposeModalFragment(storedPlatformsEntity) {
+                    activity?.finish()
+                }
+                fragmentTransaction?.add(emailComposeModalFragment, "email_compose_tag")
+                fragmentTransaction?.show(emailComposeModalFragment)
+                fragmentTransaction?.commitNow()
+            }
+            "text" -> {
+                val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+                val textComposeModalFragment = TextComposeModalFragment(storedPlatformsEntity) {
+                    activity?.finish()
+                }
+                fragmentTransaction?.add(textComposeModalFragment, "text_compose_tag")
+                fragmentTransaction?.show(textComposeModalFragment)
+                fragmentTransaction?.commitNow()
+            }
+            "message" -> {
+
+            }
+            else -> {
+                activity?.runOnUiThread {
+                    Toast.makeText(requireContext(),
+                        getString(R.string.unknown_service_type), Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
     }
 }
