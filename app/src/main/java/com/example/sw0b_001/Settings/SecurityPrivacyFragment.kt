@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.biometric.BiometricManager
@@ -23,8 +24,14 @@ import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.Vault
 import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Security
+import com.example.sw0b_001.OnboardingActivity
 import com.example.sw0b_001.R
 import com.example.sw0b_001.Security.LockScreenFragment
+import com.google.android.material.progressindicator.LinearProgressIndicator
+import io.grpc.StatusRuntimeException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SecurityPrivacyFragment : PreferenceFragmentCompat() {
 
@@ -68,7 +75,33 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
         val delete = findPreference<Preference>("delete")
         delete?.setOnPreferenceClickListener {
             val onSuccessRunnable = Runnable {
-
+                val progress = activity?.findViewById<LinearProgressIndicator>(R.id.settings_progress)
+                CoroutineScope(Dispatchers.Default).launch {
+                    activity?.runOnUiThread {
+                        progress?.visibility = View.VISIBLE
+                    }
+                    try {
+                        val llt = Vault.fetchLongLivedToken(requireContext())
+                        Vault.completeDelete(requireContext(), llt)
+                        Vault.logout(requireContext())
+                        returnToStart()
+                    } catch(e: StatusRuntimeException) {
+                        e.printStackTrace()
+                        activity?.runOnUiThread {
+                            Toast.makeText(requireContext(), e.status.description, Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    } catch(e: Exception) {
+                        e.printStackTrace()
+                        activity?.runOnUiThread {
+                            Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                        }
+                    } finally {
+                        activity?.runOnUiThread {
+                            progress?.visibility = View.GONE
+                        }
+                    }
+                }
             }
             val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
             val loginModalFragment = LogoutDeleteConfirmationModalFragment(onSuccessRunnable)
@@ -87,6 +120,14 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
             delete?.summary = getString(R.string
                     .security_settings_you_have_no_accounts_to_delete_in_vault_at_this_time)
         }
+    }
+
+    private fun returnToStart() {
+        val intent = Intent(activity, OnboardingActivity::class.java)
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or
+                Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
     }
 
     private fun returnToHomepage() {

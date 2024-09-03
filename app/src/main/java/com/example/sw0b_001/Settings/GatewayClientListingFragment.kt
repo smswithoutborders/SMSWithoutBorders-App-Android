@@ -62,7 +62,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
                 linearProgressIndicator.visibility = View.GONE
                 refreshLayout.isRefreshing = false
             }
-        }.observe(this, Observer {
+        }.observe(viewLifecycleOwner, Observer {
             listViewAdapter = GatewayClientListingAdapter(gatewayClient, it)
             listView.adapter = listViewAdapter
         })

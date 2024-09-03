@@ -15,6 +15,9 @@ interface StoredPlatformsDao {
     @Query("SELECT * FROM StoredPlatformsEntity")
     fun fetchAll() : LiveData<List<StoredPlatformsEntity>>
 
+    @Query("SELECT * FROM StoredPlatformsEntity")
+    fun fetchAllList() : List<StoredPlatformsEntity>
+
     @Query("SELECT * FROM StoredPlatformsEntity WHERE name = :name")
     fun fetchPlatform(name: String) : LiveData<List<StoredPlatformsEntity>>
 

@@ -48,7 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingBottom="16dp"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:text="@string/click_continue_to_confirm_this_action_do_not_worry_this_has_no_dangerous_effects"
                     android:textAlignment="center" />
 

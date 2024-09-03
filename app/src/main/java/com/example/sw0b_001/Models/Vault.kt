@@ -189,6 +189,20 @@ class Vault(context: Context) {
         private const val LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS =
             "com.afkanerd.relaysms.LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS"
 
+        fun completeDelete(context: Context, llt: String) {
+            val publisher = Publisher(context)
+            Datastore.getDatastore(context).storedPlatformsDao().fetchAllList().forEach {
+                publisher.revokeOAuthPlatforms(llt, it.name!!, it.account!!)
+            }
+            publisher.shutdown()
+
+            val vault = Vault(context)
+            val response = vault.deleteEntity(llt)
+            if(response.success) {
+                Datastore.getDatastore(context).clearAllTables()
+            }
+            vault.shutdown()
+        }
 
         fun logout(context: Context) {
             val sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)

@@ -84,12 +84,4 @@ public abstract class Datastore extends RoomDatabase {
     protected InvalidationTracker createInvalidationTracker() {
         return null;
     }
-
-    @Override
-    public void clearAllTables() {
-
-    }
-
-
-
 }
