@@ -26,7 +26,6 @@ import com.example.sw0b_001.Models.Platforms.AvailablePlatforms
 import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Models.Publisher
 import com.example.sw0b_001.Models.ThreadExecutorPool
-import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Onboarding.OnboardingComponent
 import com.example.sw0b_001.Onboarding.OnboardingPublishExampleFragment
 import com.example.sw0b_001.Onboarding.OnboardingFinishedFragment
@@ -96,26 +95,9 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
     }
 
     private fun configureScreens() {
-        val viewModel: PlatformsViewModel by viewModels()
-        if(BuildConfig.IS_SHOWALL_ONBOARDING) {
-            fragmentList.add(OnboardingVaultFragment())
-            fragmentList.add(OnboardingVaultStorePlatformFragment())
-            fragmentList.add(OnboardingPublishExampleFragment())
-        } else {
-            if(!UserArtifactsHandler.isCredentials(applicationContext)) {
-                fragmentList.add(OnboardingVaultFragment())
-            } else {
-                val thread = Thread(Runnable {
-                    if(viewModel.getSavedCount(applicationContext) < 1) {
-                        fragmentList.add(OnboardingVaultStorePlatformFragment())
-                    } else {
-                        fragmentList.add(OnboardingPublishExampleFragment())
-                    }
-                })
-                thread.start()
-                thread.join()
-            }
-        }
+        fragmentList.add(OnboardingVaultFragment())
+        fragmentList.add(OnboardingVaultStorePlatformFragment())
+        fragmentList.add(OnboardingPublishExampleFragment())
         fragmentList.add(OnboardingFinishedFragment())
     }
 

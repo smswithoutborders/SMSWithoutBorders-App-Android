@@ -20,7 +20,6 @@ import com.example.sw0b_001.HomepageActivity
 import com.example.sw0b_001.Modals.AvailablePlatformsModalFragment
 import com.example.sw0b_001.Modals.LoginModalFragment
 import com.example.sw0b_001.Modals.LogoutDeleteConfirmationModalFragment
-import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.Vault
 import com.example.sw0b_001.Modules.Security
 import com.example.sw0b_001.OnboardingActivity

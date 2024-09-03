@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityAES
 import com.example.sw0b_001.Models.Publisher
 import com.example.sw0b_001.Models.ThreadExecutorPool
-import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.Vault
 import com.example.sw0b_001.Modules.Helpers
 import com.example.sw0b_001.Security.SecurityHelpers

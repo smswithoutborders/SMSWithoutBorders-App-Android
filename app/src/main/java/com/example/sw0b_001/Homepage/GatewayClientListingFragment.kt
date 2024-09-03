@@ -1,4 +1,4 @@
-package com.example.sw0b_001.Settings
+package com.example.sw0b_001.Homepage
 
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
@@ -12,20 +12,17 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientAddModalFragment
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientViewModel
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
-import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.R
 import com.google.android.material.card.MaterialCardView
@@ -116,6 +113,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
 
         viewModel.loadRemote(requireContext(), {
             refreshLayout.isRefreshing = false
+            linearProgressIndicator.visibility = View.GONE
         } ) {
             activity?.runOnUiThread {
                 refreshLayout.isRefreshing = false

@@ -3,40 +3,20 @@ package com.example.sw0b_001
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils.replace
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import android.view.WindowManager
-import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
 import com.example.sw0b_001.Homepage.HomepageLoggedIn
 import com.example.sw0b_001.Homepage.HomepageNotLoggedIn
-import com.example.sw0b_001.Modals.LoginSignupVaultModalFragment
-import com.example.sw0b_001.Modals.RebrandingModalFragment
-import com.example.sw0b_001.Models.Messages.EncryptedContent
-import com.example.sw0b_001.Models.Messages.MessagesRecyclerAdapter
-import com.example.sw0b_001.Models.Messages.MessagesViewModel
-import com.example.sw0b_001.Models.Platforms.Platforms
-import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.Vault
-import com.example.sw0b_001.Settings.GatewayClientListingFragment
+import com.example.sw0b_001.Homepage.GatewayClientListingFragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.button.MaterialButton
 
 class HomepageActivity : AppCompactActivityCustomized() {
     lateinit var myToolbar: MaterialToolbar

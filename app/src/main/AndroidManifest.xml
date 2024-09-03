@@ -79,7 +79,7 @@
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".Settings.GatewayClientListingFragment"
+            android:name=".Homepage.GatewayClientListingFragment"
             android:exported="false"
             android:parentActivityName=".SettingsActivity" />
         <activity

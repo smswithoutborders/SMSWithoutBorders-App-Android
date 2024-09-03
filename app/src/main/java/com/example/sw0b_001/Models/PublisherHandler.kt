@@ -9,9 +9,9 @@ import java.nio.charset.Charset
 
 object PublisherHandler {
     private fun encryptContentForPublishing(context: Context, emailContent: String): ByteArray {
-        val credentials = UserArtifactsHandler.fetchCredentials(context)
-        val keypair = KeystoreHelpers
-                .getKeyPairFromKeystore(credentials[UserArtifactsHandler.USER_ID_KEY])
+//        val credentials = UserArtifactsHandler.fetchCredentials(context)
+//        val keypair = KeystoreHelpers
+//                .getKeyPairFromKeystore(credentials[UserArtifactsHandler.USER_ID_KEY])
 
 //        val sharedKeyDecrypted = SecurityRSA.decrypt(keypair.private,
 //                Base64.decode(credentials[UserArtifactsHandler.SHARED_KEY], Base64.DEFAULT))
@@ -19,9 +19,9 @@ object PublisherHandler {
 //        val sharedKeyDecrypted = com.afkanerd.smswithoutborders.libsignal_doubleratchet
 //                .SecurityRSA.decrypt(keypair.private,
 //                        Base64.decode(credentials[UserArtifactsHandler.SHARED_KEY], Base64.DEFAULT))
-        val sharedKeyDecrypted = UserArtifactsHandler.getSharedKeyDecrypted(context)
-        Log.d(javaClass.name, "Decrypted sharedkey: ${String(sharedKeyDecrypted)}")
-        return SecurityAES.encrypt(emailContent.toByteArray(Charset.defaultCharset()), sharedKeyDecrypted)
+//        val sharedKeyDecrypted = UserArtifactsHandler.getSharedKeyDecrypted(context)
+//        return SecurityAES.encrypt(emailContent.toByteArray(Charset.defaultCharset()), sharedKeyDecrypted)
+        return "".encodeToByteArray()
     }
 
     fun formatForPublishing(context: Context, formattedContent: String): String {

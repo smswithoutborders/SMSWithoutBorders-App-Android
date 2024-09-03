@@ -3,7 +3,6 @@ package com.example.sw0b_001.Onboarding
 import android.content.Context
 import androidx.fragment.app.Fragment
 import at.favre.lib.armadillo.Armadillo
-import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.google.android.material.button.MaterialButton
 
 open class OnboardingComponent(val layout: Int)

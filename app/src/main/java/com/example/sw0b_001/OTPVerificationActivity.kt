@@ -21,7 +21,6 @@ import androidx.fragment.app.Fragment
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Models.ThreadExecutorPool
-import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.Vault
 import com.example.sw0b_001.Modules.Network
 import com.github.kittinunf.fuel.core.Headers
