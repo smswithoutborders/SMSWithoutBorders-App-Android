@@ -73,11 +73,7 @@ class Publisher(val context: Context) {
             setRedirectUrl(if (supportsUrlScheme) REDIRECT_URL_SCHEME else oAuthRedirectUrl)
         }.build()
 
-        try {
-            return publisherStub.exchangeOAuth2CodeAndStore(request)
-        } catch(e: Exception) {
-            throw Throwable(e)
-        }
+        return publisherStub.exchangeOAuth2CodeAndStore(request)
     }
 
     fun shutdown() {

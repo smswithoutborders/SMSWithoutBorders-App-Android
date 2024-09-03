@@ -14,6 +14,7 @@ import com.example.sw0b_001.Models.Vault
 import com.example.sw0b_001.Modules.Helpers
 import com.example.sw0b_001.Security.SecurityHelpers
 import com.github.kittinunf.fuel.core.Headers
+import io.grpc.StatusRuntimeException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -62,7 +63,13 @@ class OauthRedirectActivity : AppCompatActivity() {
                 val vault = Vault(applicationContext)
                 vault.refreshStoredTokens(applicationContext)
                 vault.shutdown()
-            } catch(e: Exception) {
+            } catch(e: StatusRuntimeException) {
+                e.printStackTrace()
+                runOnUiThread {
+                    Toast.makeText(applicationContext, e.status.description, Toast.LENGTH_LONG).show()
+                }
+            }
+            catch(e: Exception) {
                 e.printStackTrace()
                 runOnUiThread {
                     Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()

@@ -64,6 +64,9 @@ class EmailComposeModalFragment(val platform: StoredPlatformsEntity,
             }
         }
 
+        view.findViewById<TextInputEditText>(R.id.email_from).apply {
+            setText(platform.account)
+        }
     }
 
     private fun processSend(view: View) {
