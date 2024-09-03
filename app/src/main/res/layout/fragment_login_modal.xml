@@ -177,6 +177,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
             android:text="@string/login_login"
+            android:padding="14dp"
             app:layout_constraintBottom_toTopOf="@+id/login_already_have_account"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

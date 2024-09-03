@@ -16,7 +16,7 @@ class GatewayClientsCommunications(context: Context) {
                                         val operator: String,
                                         val operator_code: String,
                                         val protocols: ArrayList<String>,
-                                        val last_published_date: String)
+                                        val last_published_date: Int)
 
     private val filename = "gateway_client_prefs"
     private val defaultKey = "DEFAULT_KEY"

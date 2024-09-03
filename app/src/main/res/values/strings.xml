@@ -421,5 +421,8 @@
     <string name="recents_lower">recents</string>
     <string name="gateway_clients">Gateway Clients</string>
     <string name="unknown_service_type">Unknown service type</string>
+    <string name="you_can_log_back_at_anytime_logging_out_removes_your_account_on_this_device_click_logout_to_finish_the_process_this_is_a_safe_process">You can log back at anytime. All messages would be deleted.</string>
+    <string name="log_out">Log out</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

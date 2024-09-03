@@ -52,17 +52,18 @@ class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
     private fun configureRecyclerHandlers(view: View) {
         val linearLayoutManager = LinearLayoutManager(requireContext(),
             LinearLayoutManager.VERTICAL, false);
-        val viewModel: MessagesViewModel by viewModels()
         val noRecentMessagesText = view.findViewById<TextView>(R.id.no_recent_messages)
         messagesRecyclerView.layoutManager = linearLayoutManager
+
+        val viewModel: MessagesViewModel by viewModels()
 
         CoroutineScope(Dispatchers.Default).launch {
             val availablePlatforms = Datastore.getDatastore(requireContext()).availablePlatformsDao()
                 .fetchAllList();
             val recentRecyclerAdapter = MessagesRecyclerAdapter(availablePlatforms)
-            messagesRecyclerView.adapter = recentRecyclerAdapter
 
             activity?.runOnUiThread {
+                messagesRecyclerView.adapter = recentRecyclerAdapter
                 viewModel.getMessages(requireContext()).observe(viewLifecycleOwner) {
                     recentRecyclerAdapter.mDiffer.submitList(it) {
                         messagesRecyclerView.smoothScrollToPosition(0)

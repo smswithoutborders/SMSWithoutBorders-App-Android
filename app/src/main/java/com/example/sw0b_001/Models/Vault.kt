@@ -155,6 +155,15 @@ class Vault(context: Context) {
         private const val LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS =
             "com.afkanerd.relaysms.LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS"
 
+        fun logout(context: Context) {
+            val sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
+                .encryptionFingerprint(context)
+                .build()
+            sharedPreferences.edit().clear().commit()
+
+            KeystoreHelpers.removeAllFromKeystore(context)
+        }
+
         fun storeLongLivedToken(context: Context, llt: String) {
             val publicKey = SecurityRSA.generateKeyPair(LONG_LIVED_TOKEN_KEYSTORE_ALIAS, 2048)
             val secretKey = SecurityAES.generateSecretKey(256)
@@ -177,6 +186,10 @@ class Vault(context: Context) {
         }
 
         fun fetchLongLivedToken(context: Context) : String {
+            if(!KeystoreHelpers.isAvailableInKeystore(LONG_LIVED_TOKEN_KEYSTORE_ALIAS)) {
+                return ""
+            }
+
             val sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
                 .encryptionFingerprint(context)
                 .build()
@@ -186,8 +199,8 @@ class Vault(context: Context) {
             val secretKeyEncrypted = Base64.decode(sharedPreferences
                 .getString(LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS, "")!!, Base64.DEFAULT)
 
-            val secretKey = SecurityRSA.decrypt(KeystoreHelpers.getKeyPairFromKeystore(
-                LONG_LIVED_TOKEN_KEYSTORE_ALIAS).private, secretKeyEncrypted)
+            val keypair = KeystoreHelpers.getKeyPairFromKeystore(LONG_LIVED_TOKEN_KEYSTORE_ALIAS)
+            val secretKey = SecurityRSA.decrypt(keypair.private, secretKeyEncrypted)
             return String(SecurityAES.decryptAES256CBC(encryptedLlt, secretKey), Charsets.UTF_8)
         }
     }
