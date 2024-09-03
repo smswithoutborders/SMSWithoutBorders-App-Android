@@ -23,7 +23,6 @@ import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.Vault
-import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Network
 import com.github.kittinunf.fuel.core.Headers
 import com.google.android.gms.auth.api.phone.SmsRetriever

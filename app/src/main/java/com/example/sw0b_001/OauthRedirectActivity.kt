@@ -12,8 +12,6 @@ import com.example.sw0b_001.Models.Publisher
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.UserArtifactsHandler
 import com.example.sw0b_001.Models.Vault
-import com.example.sw0b_001.Models.v2.GatewayServer_V2
-import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Helpers
 import com.example.sw0b_001.Security.SecurityHelpers
 import com.github.kittinunf.fuel.core.Headers

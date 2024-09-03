@@ -11,7 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.example.sw0b_001.BuildConfig
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.Vault
-import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.OTPVerificationActivity
 import com.example.sw0b_001.R
 import com.github.kittinunf.fuel.core.Headers

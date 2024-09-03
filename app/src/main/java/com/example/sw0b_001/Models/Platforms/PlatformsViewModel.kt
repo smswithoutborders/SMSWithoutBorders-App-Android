@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.UserArtifactsHandler
-import com.example.sw0b_001.Models.v2.Vault_V2
 import com.example.sw0b_001.Modules.Network
 
 class PlatformsViewModel : ViewModel() {
