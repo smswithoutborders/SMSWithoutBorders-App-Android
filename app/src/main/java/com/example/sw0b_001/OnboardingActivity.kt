@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModel
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
 import com.example.sw0b_001.Database.Datastore
+import com.example.sw0b_001.Models.GatewayClients.GatewayClient
 import com.example.sw0b_001.Models.Platforms.AvailablePlatforms
 import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
 import com.example.sw0b_001.Models.Publisher
@@ -230,29 +231,9 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
 
     override fun onResume() {
         super.onResume()
-        val scope = CoroutineScope(Dispatchers.Default)
-        scope.launch {
-            try {
-                Publisher.getAvailablePlatforms(applicationContext, Runnable {
-                    runOnUiThread {
-                        Toast.makeText(applicationContext,
-                            "Failed to refresh available platforms",
-                            Toast.LENGTH_SHORT).show()
-                    }
-                }).let{ json ->
-                    json.forEach { it->
-                        val url = URL(it.icon_png)
-                        it.logo = url.readBytes()
-                    }
-                    Datastore.getDatastore(applicationContext).availablePlatformsDao()
-                        .insertAll(json)
-                }
-            } catch(e: Exception) {
-                e.printStackTrace()
-                runOnUiThread {
-                    Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
-                }
-            }
+        GatewayClient.refreshGatewayClients(applicationContext) {
+            Toast.makeText(applicationContext, getString(R.string.failed_to_refresh_gateway_clients),
+                Toast.LENGTH_SHORT).show()
         }
     }
 }

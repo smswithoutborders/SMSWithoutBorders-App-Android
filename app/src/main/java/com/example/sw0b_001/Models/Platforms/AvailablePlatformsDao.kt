@@ -19,4 +19,7 @@ interface AvailablePlatformsDao {
 
     @Query("SELECT * FROM AvailablePlatforms WHERE name = :name")
     fun fetch(name: String) : AvailablePlatforms
+
+    @Query("DELETE FROM AvailablePlatforms WHERE name = :name")
+    fun delete(name: String)
 }

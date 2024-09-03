@@ -40,29 +40,29 @@ class GatewayClientsCommunications(context: Context) {
             val gatewayClientList: MutableList<GatewayClient> = java.util.ArrayList()
 
             val gatewayClient = GatewayClient()
-            gatewayClient.setCountry("Cameroon")
-            gatewayClient.msisdn = context.getString(R.string.default_gateway_MSISDN_0)
-            gatewayClient.setOperatorName("MTN Cameroon")
-            gatewayClient.setOperatorId("62401")
-            gatewayClient.setType("custom")
+            gatewayClient.country = "Cameroon"
+            gatewayClient.mSISDN = context.getString(R.string.default_gateway_MSISDN_0)
+            gatewayClient.operatorName = "MTN Cameroon"
+            gatewayClient.operatorId = "62401"
+            gatewayClient.type = "custom"
 
             val gatewayClient2 = GatewayClient()
-            gatewayClient2.setCountry("Cameroon")
-            gatewayClient2.msisdn = context.getString(R.string.default_gateway_MSISDN_2)
-            gatewayClient2.setOperatorName("Orange Cameroon")
-            gatewayClient2.setOperatorId("62402")
-            gatewayClient2.setType("custom")
+            gatewayClient2.country = "Cameroon"
+            gatewayClient2.mSISDN = context.getString(R.string.default_gateway_MSISDN_2)
+            gatewayClient2.operatorName = "Orange Cameroon"
+            gatewayClient2.operatorId = "62402"
+            gatewayClient2.type = "custom"
             if(GatewayClientsCommunications(context)
                     .getDefaultGatewayClient().isNullOrEmpty())
                 GatewayClientsCommunications(context)
-                        .updateDefaultGatewayClient(gatewayClient2.msisdn)
+                        .updateDefaultGatewayClient(gatewayClient2.mSISDN!!)
 
             val gatewayClient3 = GatewayClient()
-            gatewayClient3.setCountry("Nigeria")
-            gatewayClient3.msisdn = context.getString(R.string.default_gateway_MSISDN_3)
-            gatewayClient3.setOperatorName("MTN Nigeria")
-            gatewayClient3.setOperatorId("62130")
-            gatewayClient3.setType("custom")
+            gatewayClient3.country = "Nigeria"
+            gatewayClient3.mSISDN = context.getString(R.string.default_gateway_MSISDN_3)
+            gatewayClient3.operatorName = "MTN Nigeria"
+            gatewayClient3.operatorId = "62130"
+            gatewayClient3.type = "custom"
 
             gatewayClientList.add(gatewayClient)
             gatewayClientList.add(gatewayClient2)
@@ -92,10 +92,10 @@ class GatewayClientsCommunications(context: Context) {
                 val gatewayClients : ArrayList<GatewayClientJsonPayload> = fetchRemote(context)
                 gatewayClients.forEach {
                     val gatewayClient = GatewayClient()
-                    gatewayClient.setCountry(it.country)
-                    gatewayClient.msisdn = it.msisdn
-                    gatewayClient.setOperatorName(it.operator)
-                    gatewayClient.setOperatorId(it.operator_code)
+                    gatewayClient.country = it.country
+                    gatewayClient.mSISDN = it.msisdn
+                    gatewayClient.operatorName = it.operator
+                    gatewayClient.operatorId = it.operator_code
                     gatewayClientList.add(gatewayClient)
                 }
                 Datastore.getDatastore(context).gatewayClientsDao().insertAll(gatewayClientList)

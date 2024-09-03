@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.EmailViewActivity
 import com.example.sw0b_001.Modals.AvailablePlatformsModalFragment
+import com.example.sw0b_001.Models.GatewayClients.GatewayClient
 import com.example.sw0b_001.Models.Messages.MessagesRecyclerAdapter
 import com.example.sw0b_001.Models.Messages.MessagesViewModel
 import com.example.sw0b_001.Models.Platforms.Platforms
@@ -28,6 +30,14 @@ class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        GatewayClient.refreshGatewayClients(requireContext()) {
+            Toast.makeText(requireContext(), getString(R.string.failed_to_refresh_gateway_clients),
+                Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

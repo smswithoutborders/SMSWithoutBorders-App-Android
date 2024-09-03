@@ -153,12 +153,12 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
 
             val gatewayClient = getItem(position)
             view?.findViewById<MaterialTextView>(R.id.gateway_client_MSISDN)?.text =
-                    gatewayClient.msisdn
+                    gatewayClient.mSISDN
 
             view?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
 
             val radioButton = view?.findViewById<SwitchMaterial>(R.id.gateway_client_radio_btn)
-            radioButton?.isChecked = defaultGatewayClientMsisdn == gatewayClient.msisdn
+            radioButton?.isChecked = defaultGatewayClientMsisdn == gatewayClient.mSISDN
             radioButton?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
 
 
@@ -171,7 +171,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
         private fun gatewayClientOnClickListener(gatewayClient: GatewayClient):
                 OnClickListener {
             return OnClickListener {
-                gatewayClientsCommunications.updateDefaultGatewayClient(gatewayClient.msisdn)
+                gatewayClientsCommunications.updateDefaultGatewayClient(gatewayClient.mSISDN!!)
                 ThreadExecutorPool.executorService.execute {
                     gatewayClient.type = "custom"
                     Datastore.getDatastore(it.context).gatewayClientsDao().update(gatewayClient)

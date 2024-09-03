@@ -1,110 +1,91 @@
-package com.example.sw0b_001.Models.GatewayClients;
+package com.example.sw0b_001.Models.GatewayClients
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
+import android.content.Context
+import android.widget.Toast
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
+import com.example.sw0b_001.Database.Datastore
+import com.example.sw0b_001.Models.Publisher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.net.URL
 
-@Entity(indices = {@Index(value={"MSISDN"}, unique = true)})
-public class GatewayClient {
-    public static String TYPE_CUSTOM = "custom";
-
+@Entity(indices = [Index(value = ["MSISDN"], unique = true)])
+class GatewayClient {
     @PrimaryKey(autoGenerate = true)
-    public long id;
+    var id: Long = 0
 
-    @ColumnInfo(name="type")
-    String type;
+    @ColumnInfo(name = "type")
+    var type: String? = null
 
-    @ColumnInfo(name="MSISDN")
-    String MSISDN;
+    @ColumnInfo(name = "MSISDN")
+    var mSISDN: String? = null
 
-    @ColumnInfo(name="default")
-    boolean isDefault = false;
+    @ColumnInfo(name = "default")
+    var isDefault: Boolean = false
 
-    @ColumnInfo(name="operator_name")
-    String operatorName;
+    @ColumnInfo(name = "operator_name")
+    var operatorName: String? = null
 
-    String alias;
+    var alias: String? = null
 
-    public String getOperatorId() {
-        return operatorId;
-    }
+    @ColumnInfo(name = "operator_id")
+    var operatorId: String? = null
 
-    public void setOperatorId(String operatorId) {
-        this.operatorId = operatorId;
-    }
+    @ColumnInfo(name = "country")
+    var country: String? = null
 
-    @ColumnInfo(name="operator_id")
-    String operatorId;
-
-    @ColumnInfo(name="country")
-    String country;
-
-    @ColumnInfo(name="last_ping_session")
-    double lastPingSession = 0.0;
+    @ColumnInfo(name = "last_ping_session")
+    var lastPingSession: Double = 0.0
 
     @ColumnInfo(defaultValue = "0")
-    long date = System.currentTimeMillis();
+    var date: Long = System.currentTimeMillis()
 
-    public GatewayClient(String type, String MSISDN, String operatorName, String country, boolean isDefault) {
-        this.type = type;
-        this.MSISDN = MSISDN;
-        this.operatorName = operatorName;
-        this.isDefault = isDefault;
-        this.country = country;
+    constructor(
+        type: String?,
+        MSISDN: String?,
+        operatorName: String?,
+        country: String?,
+        isDefault: Boolean
+    ) {
+        this.type = type
+        this.mSISDN = MSISDN
+        this.operatorName = operatorName
+        this.isDefault = isDefault
+        this.country = country
     }
 
-    public GatewayClient() {}
+    constructor()
 
-    public long getId() {
-        return id;
-    }
+    companion object {
+        var TYPE_CUSTOM: String = "custom"
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCountry() {
-        return this.country;
-    }
-
-    public String getMSISDN() {
-        return MSISDN;
-    }
-
-    public void setMSISDN(String MSISDN) {
-        this.MSISDN = MSISDN;
-    }
-
-    public String getOperatorName() {
-        return this.operatorName;
-    }
-
-    public void setOperatorName(String operatorName) {
-        this.operatorName = operatorName;
-    }
-
-    public boolean isDefault() {
-        return this.isDefault;
-    }
-
-    public void setDefault(boolean isDefault) {
-        this.isDefault = isDefault;
-    }
-
-    public void setLastPingSession(double lastPingSession) {
-        this.lastPingSession = lastPingSession;
-    }
-
-    public double getLastPingSession() {
-        return this.lastPingSession;
+        fun refreshGatewayClients(context: Context, failedCallback: Runnable) {
+            val scope = CoroutineScope(Dispatchers.Default)
+            scope.launch {
+                try {
+                    Publisher.getAvailablePlatforms(context, failedCallback).let{ json ->
+                        json.forEach { it->
+                            val url = URL(it.icon_png)
+                            it.logo = url.readBytes()
+                        }
+                        Datastore.getDatastore(context).availablePlatformsDao()
+                            .fetchAllList().forEach {
+                                if(!json.contains(it)) {
+                                    Datastore.getDatastore(context).availablePlatformsDao()
+                                        .delete(it.name)
+                                }
+                            }
+                        Datastore.getDatastore(context).availablePlatformsDao()
+                            .insertAll(json)
+                    }
+                } catch(e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
     }
 }

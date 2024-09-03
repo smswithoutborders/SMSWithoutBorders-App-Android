@@ -40,7 +40,7 @@ class GatewayClientAddModalFragment :
         }
 
         val gatewayClient = GatewayClient()
-        gatewayClient.msisdn = contactTextView.text.toString()
+        gatewayClient.mSISDN = contactTextView.text.toString()
         gatewayClient.alias = aliasTextView.text?.toString()
         gatewayClient.type = GatewayClient.TYPE_CUSTOM
 
