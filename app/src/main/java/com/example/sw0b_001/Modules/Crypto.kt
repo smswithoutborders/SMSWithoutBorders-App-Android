@@ -7,8 +7,12 @@ import com.macasaet.fernet.Token
 import java.io.BufferedInputStream
 import java.io.InputStream
 import java.net.URL
+import java.security.GeneralSecurityException
 import java.security.PublicKey
 import java.security.cert.Certificate
+import javax.crypto.Mac
+import javax.crypto.SecretKey
+import javax.crypto.spec.SecretKeySpec
 import javax.net.ssl.HttpsURLConnection
 
 
@@ -34,5 +38,13 @@ object Crypto {
         val token = Token.fromString(data)
         val validator = object : StringValidator { }
         return token.validateAndDecrypt(fKey, validator)
+    }
+
+    fun HMAC(secretKey: ByteArray, data: ByteArray): ByteArray {
+        val algorithm = "HmacSHA256"
+        val hmacOutput = Mac.getInstance(algorithm)
+        val key: SecretKey = SecretKeySpec(secretKey, algorithm)
+        hmacOutput.init(key)
+        return hmacOutput.doFinal(data)
     }
 }

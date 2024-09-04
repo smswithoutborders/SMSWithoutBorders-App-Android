@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 import vault.v1.EntityGrpc
 import vault.v1.EntityGrpc.EntityBlockingStub
 import vault.v1.Vault
-import java.nio.charset.Charset
 import java.security.DigestException
 import java.security.MessageDigest
 
@@ -64,16 +63,29 @@ class Vault(context: Context) {
             .insertAll(storedPlatforms)
     }
 
-    private fun processLongLivedToken(context: Context, encodedLlt: String, publicKey: String) {
-        val sharedKey = Cryptography.calculateSharedSecret(
+    private fun processVaultArtifacts(context: Context,
+                                      encodedLlt: String,
+                                      deviceIdPubKey: String,
+                                      publisherPubKey: String,
+                                      phoneNumber: String) {
+        val deviceIdSharedKey = Cryptography.calculateSharedSecret(
             context,
             DEVICE_ID_KEYSTORE_ALIAS,
-            Base64.decode(publicKey, Base64.DEFAULT))
+            Base64.decode(deviceIdPubKey, Base64.DEFAULT))
 
-        val llt = Crypto.decryptFernet(sharedKey,
+        val publisherSharedKey = Cryptography.calculateSharedSecret(
+            context,
+            Publisher.PUBLISHER_ID_KEYSTORE_ALIAS,
+            Base64.decode(publisherPubKey, Base64.DEFAULT))
+
+        val keypair = KeystoreHelpers.getKeyPairFromKeystore(DEVICE_ID_KEYSTORE_ALIAS)
+
+        val llt = Crypto.decryptFernet(deviceIdSharedKey,
             String(Base64.decode(encodedLlt, Base64.DEFAULT), Charsets.UTF_8))
 
-        storeLongLivedToken(context, llt)
+        val deviceId = getDeviceID(deviceIdSharedKey, phoneNumber, keypair.public.encoded)
+
+        storeArtifacts(context, llt, deviceId, publisherPubKey)
     }
 
     fun createEntity(context: Context,
@@ -100,7 +112,7 @@ class Vault(context: Context) {
         val response = entityStub.createEntity(createEntityRequest1)
 
         if(!response.requiresOwnershipProof) {
-            processLongLivedToken(context,
+            processVaultArtifacts(context,
                 response.longLivedToken,
                 response.serverDeviceIdPubKey)
         }
@@ -128,7 +140,7 @@ class Vault(context: Context) {
 
         val response = entityStub.authenticateEntity(authenticateEntityRequest)
         if(!response.requiresOwnershipProof) {
-            processLongLivedToken(context,
+            processVaultArtifacts(context,
                 response.longLivedToken,
                 response.serverDeviceIdPubKey)
         }
@@ -156,7 +168,7 @@ class Vault(context: Context) {
 
         val response = entityStub.resetPassword(resetPasswordRequest)
         if(!response.requiresOwnershipProof) {
-            processLongLivedToken(context,
+            processVaultArtifacts(context,
                 response.longLivedToken,
                 response.serverDeviceIdPubKey)
         }
@@ -185,9 +197,16 @@ class Vault(context: Context) {
 
         private const val LONG_LIVED_TOKEN_KEYSTORE_ALIAS =
             "com.afkanerd.relaysms.LONG_LIVED_TOKEN_KEYSTORE_ALIAS"
+        private const val DEVICE_ID_KEYSTORE_ALIAS =
+            "com.afkanerd.relaysms.DEVICE_ID_KEYSTORE_ALIAS"
 
         private const val LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS =
             "com.afkanerd.relaysms.LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS"
+        private const val DEVICE_ID_SECRET_KEY_KEYSTORE_ALIAS =
+            "com.afkanerd.relaysms.DEVICE_ID_SECRET_KEY_KEYSTORE_ALIAS"
+
+        private const val PUBLISHER_PUBLIC_KEY =
+            "com.afkanerd.relaysms.PUBLISHER_PUBLIC_KEY"
 
         fun completeDelete(context: Context, llt: String) {
             val publisher = Publisher(context)
@@ -217,14 +236,21 @@ class Vault(context: Context) {
             }
         }
 
-        fun storeLongLivedToken(context: Context, llt: String) {
+        fun storeArtifacts(context: Context, llt: String, deviceId: ByteArray, publisherPubKey: String) {
             val publicKey = SecurityRSA.generateKeyPair(LONG_LIVED_TOKEN_KEYSTORE_ALIAS, 2048)
             val secretKey = SecurityAES.generateSecretKey(256)
 
+            val deviceIdPubKey = SecurityRSA.generateKeyPair(DEVICE_ID_KEYSTORE_ALIAS, 2048)
+            val deviceIdSecretKey = SecurityAES.generateSecretKey(256)
+
             val lltEncrypted = SecurityAES.encryptAES256CBC(llt.encodeToByteArray(),
                 secretKey.encoded, null)
+            val deviceIdEncrypted = SecurityAES.encryptAES256CBC(deviceId,
+                deviceIdSecretKey.encoded, null)
 
             val encryptedSecretKey = SecurityRSA.encrypt(publicKey, secretKey.encoded)
+            val encryptedDeviceIdSecretKey = SecurityRSA.encrypt(deviceIdPubKey,
+                deviceIdSecretKey.encoded)
 
             val sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
                 .encryptionFingerprint(context)
@@ -233,8 +259,13 @@ class Vault(context: Context) {
             sharedPreferences.edit()
                 .putString(LONG_LIVED_TOKEN_KEYSTORE_ALIAS,
                     Base64.encodeToString(lltEncrypted, Base64.DEFAULT))
+                .putString(DEVICE_ID_KEYSTORE_ALIAS,
+                    Base64.encodeToString(deviceIdEncrypted, Base64.DEFAULT))
                 .putString(LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS,
                     Base64.encodeToString(encryptedSecretKey, Base64.DEFAULT))
+                .putString(DEVICE_ID_SECRET_KEY_KEYSTORE_ALIAS,
+                    Base64.encodeToString(encryptedDeviceIdSecretKey, Base64.DEFAULT))
+                .putString(PUBLISHER_PUBLIC_KEY, publisherPubKey)
                 .apply()
         }
 
@@ -255,6 +286,40 @@ class Vault(context: Context) {
             val keypair = KeystoreHelpers.getKeyPairFromKeystore(LONG_LIVED_TOKEN_KEYSTORE_ALIAS)
             val secretKey = SecurityRSA.decrypt(keypair.private, secretKeyEncrypted)
             return String(SecurityAES.decryptAES256CBC(encryptedLlt, secretKey), Charsets.UTF_8)
+        }
+
+        fun fetchDeviceId(context: Context) : ByteArray? {
+            if(!KeystoreHelpers.isAvailableInKeystore(DEVICE_ID_KEYSTORE_ALIAS)) {
+                return null
+            }
+
+            val sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
+                .encryptionFingerprint(context)
+                .build()
+            val encryptedDeviceId = Base64.decode(sharedPreferences
+                .getString(DEVICE_ID_KEYSTORE_ALIAS, "")!!, Base64.DEFAULT)
+
+            val secretKeyEncrypted = Base64.decode(sharedPreferences
+                .getString(DEVICE_ID_SECRET_KEY_KEYSTORE_ALIAS, "")!!, Base64.DEFAULT)
+
+            val keypair = KeystoreHelpers.getKeyPairFromKeystore(DEVICE_ID_KEYSTORE_ALIAS)
+            val secretKey = SecurityRSA.decrypt(keypair.private, secretKeyEncrypted)
+            return SecurityAES.decryptAES256CBC(encryptedDeviceId, secretKey)
+        }
+
+        fun fetchPublisherSharedKey(context: Context) : ByteArray {
+            val sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
+                .encryptionFingerprint(context)
+                .build()
+            val pubKey = sharedPreferences.getString(PUBLISHER_PUBLIC_KEY, "")
+                ?.encodeToByteArray()
+            return Cryptography.calculateSharedSecret(context, Publisher.PUBLISHER_ID_KEYSTORE_ALIAS,
+                pubKey!!)
+        }
+
+        fun getDeviceID(derivedKey: ByteArray, phoneNumber: String, publicKey: ByteArray) : ByteArray {
+            val combinedData = phoneNumber.encodeToByteArray() + publicKey
+            return Crypto.HMAC(derivedKey, combinedData)
         }
     }
 }

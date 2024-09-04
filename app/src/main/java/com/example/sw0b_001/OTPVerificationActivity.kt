@@ -143,20 +143,12 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
         CoroutineScope(Dispatchers.Default).launch {
             try {
                 when(type) {
-                    Type.CREATE -> {
-                        countryCode.let {
-                            vault.createEntity(applicationContext,
-                                phoneNumber, countryCode!!, password, code)
-                        }
-                    }
-                    Type.AUTHENTICATE -> {
-                        vault.authenticateEntity(applicationContext,
-                            phoneNumber, password, code)
-                    }
-                    Type.RECOVER -> {
-                        vault.recoverEntityPassword(applicationContext,
-                            phoneNumber, password, code)
-                    }
+                    Type.CREATE -> vault.createEntity(applicationContext, phoneNumber,
+                        countryCode!!, password, code)
+                    Type.AUTHENTICATE -> vault.authenticateEntity(applicationContext,
+                        phoneNumber, password, code)
+                    Type.RECOVER -> vault.recoverEntityPassword(applicationContext, phoneNumber,
+                        password, code)
                 }
 
                 vault.refreshStoredTokens(applicationContext)

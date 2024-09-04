@@ -34,6 +34,9 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import com.hbb20.CountryCodePicker
 import io.grpc.StatusRuntimeException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.security.DigestException
 import java.security.MessageDigest
 
@@ -186,7 +189,7 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         val loginStatusCard = view.findViewById<MaterialCardView>(R.id.login_status_card)
         val loginStatusText = view.findViewById<MaterialTextView>(R.id.login_error_text)
 
-        ThreadExecutorPool.executorService.execute {
+        CoroutineScope(Dispatchers.Default).launch{
             try {
                 val response = vault.authenticateEntity(requireContext(),
                     phoneNumber, password)
