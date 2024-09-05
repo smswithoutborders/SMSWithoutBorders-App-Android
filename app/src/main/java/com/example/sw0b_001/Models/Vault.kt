@@ -233,6 +233,7 @@ class Vault(context: Context) {
 
             CoroutineScope(Dispatchers.Default).launch {
                 Datastore.getDatastore(context).storedPlatformsDao().deleteAll()
+                Datastore.getDatastore(context).encryptedContentDAO().deleteAll()
             }
         }
 

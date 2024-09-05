@@ -22,7 +22,7 @@ interface StoredPlatformsDao {
     fun fetchPlatform(name: String) : LiveData<List<StoredPlatformsEntity>>
 
     @Query("SELECT * FROM StoredPlatformsEntity WHERE id = :id")
-    fun fetch(id: Int) : StoredPlatformsEntity
+    fun fetch(id: String) : StoredPlatformsEntity
 
     @Query("DELETE FROM StoredPlatformsEntity")
     fun deleteAll()

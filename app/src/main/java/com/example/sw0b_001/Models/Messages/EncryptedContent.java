@@ -7,13 +7,15 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Objects;
+
 @Entity
 public class EncryptedContent {
 
     String encryptedContent;
 
     @ColumnInfo(name="platform_id")
-    long platformId;
+    String platformId;
 
     @PrimaryKey(autoGenerate = true)
     long id;
@@ -43,11 +45,11 @@ public class EncryptedContent {
         this.encryptedContent = encryptedContent;
     }
 
-    public long getPlatformId() {
+    public String getPlatformId() {
         return platformId;
     }
 
-    public void setPlatformId(long platformId) {
+    public void setPlatformId(String platformId) {
         this.platformId = platformId;
     }
 
@@ -92,7 +94,7 @@ public class EncryptedContent {
         if(obj instanceof EncryptedContent) {
             EncryptedContent encryptedContent = (EncryptedContent) obj;
             return encryptedContent.id == this.id &&
-                    encryptedContent.platformId == this.platformId &&
+                    Objects.equals(encryptedContent.platformId, this.platformId) &&
                     encryptedContent.platformName.equals(this.platformName) &&
                     encryptedContent.date == this.date &&
                     encryptedContent.type.equals(this.type) &&

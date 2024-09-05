@@ -13,6 +13,7 @@ import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
 import com.example.sw0b_001.Models.MessageComposer
 import com.example.sw0b_001.Models.Platforms.AvailablePlatforms
 import com.example.sw0b_001.Models.Platforms.Platforms
+import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Models.PublisherHandler
 import com.example.sw0b_001.Models.SMSHandler
 import com.example.sw0b_001.Models.ThreadExecutorPool
@@ -22,7 +23,10 @@ import kotlinx.coroutines.launch
 
 object ComposeHandlers {
 
-    fun compose(context: Context, formattedContent: String, platforms: AvailablePlatforms,
+    fun compose(context: Context,
+                formattedContent: String,
+                platforms: AvailablePlatforms,
+                storedPlatforms: StoredPlatformsEntity,
                 onSuccessRunnable: Runnable) {
         val states = Datastore.getDatastore(context).ratchetStatesDAO().fetch()
         if(states.size > 1) {
@@ -50,6 +54,7 @@ object ComposeHandlers {
             encryptedContent.date = System.currentTimeMillis()
             encryptedContent.type = platforms.service_type
             encryptedContent.platformName = platforms.name
+            encryptedContent.platformId = storedPlatforms.id
 
             Datastore.getDatastore(context).encryptedContentDAO()
                 .insert(encryptedContent)

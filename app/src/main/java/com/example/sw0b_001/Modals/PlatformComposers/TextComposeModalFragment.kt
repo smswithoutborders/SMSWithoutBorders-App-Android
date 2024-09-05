@@ -71,7 +71,7 @@ class TextComposeModalFragment(val platform: StoredPlatformsEntity,
                 processTextForEncryption(availablePlatforms.shortcode!!,
                     textComposeTextEdit.text.toString())
 
-            ComposeHandlers.compose(view.context, formattedString, availablePlatforms) {
+            ComposeHandlers.compose(view.context, formattedString, availablePlatforms, platform) {
                 onSuccessCallback?.let { it.run() }
                 dismiss()
             }

@@ -63,10 +63,10 @@ class EmailViewActivity : AppCompactActivityCustomized() {
         when(item.itemId) {
             R.id.compose_view_edit_menu_edit -> {
                 CoroutineScope(Dispatchers.Default).launch {
-                    val id = intent.getLongExtra("id", -1)
-                    if(id > -1) {
+                    val id = intent.getStringExtra("id")
+                    id?.let {
                         val platforms = Datastore.getDatastore(applicationContext)
-                            .storedPlatformsDao().fetch(id.toInt())
+                            .storedPlatformsDao().fetch(id)
                         runOnUiThread {
                             showPlatformsModal(platforms)
                         }

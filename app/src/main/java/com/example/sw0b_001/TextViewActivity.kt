@@ -34,7 +34,7 @@ class TextViewActivity : AppCompactActivityCustomized() {
 
     private lateinit var message: EncryptedContent
     private fun configureView() {
-        ThreadExecutorPool.executorService.execute {
+        CoroutineScope(Dispatchers.Default).launch {
             message = Datastore.getDatastore(applicationContext).encryptedContentDAO()
                 .get(intent.getLongExtra("message_id", -1))
             println(message.encryptedContent)
@@ -57,10 +57,10 @@ class TextViewActivity : AppCompactActivityCustomized() {
         when(item.itemId) {
             R.id.compose_view_edit_menu_edit -> {
                 CoroutineScope(Dispatchers.Default).launch {
-                    val id = intent.getLongExtra("id", -1)
-                    if(id > -1) {
+                    val id = intent.getStringExtra("id")
+                    id?.let {
                         val platforms = Datastore.getDatastore(applicationContext)
-                            .storedPlatformsDao().fetch(id.toInt())
+                            .storedPlatformsDao().fetch(id)
                         runOnUiThread {
                             showPlatformsModal(platforms)
                         }

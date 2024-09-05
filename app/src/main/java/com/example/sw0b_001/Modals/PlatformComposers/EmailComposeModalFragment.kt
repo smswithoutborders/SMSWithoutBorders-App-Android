@@ -96,7 +96,7 @@ class EmailComposeModalFragment(val platform: StoredPlatformsEntity,
                 .availablePlatformsDao().fetch(platform.name!!)
             val formattedContent = processEmailForEncryption(to, cc, bcc, subject, body)
 
-            ComposeHandlers.compose(requireContext(), formattedContent, availablePlatforms) {
+            ComposeHandlers.compose(requireContext(), formattedContent, availablePlatforms, platform) {
                 onSuccessCallback?.let { it.run() }
                 dismiss()
             }

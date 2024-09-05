@@ -83,11 +83,11 @@ class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
                         noRecentMessagesText.visibility = View.VISIBLE
                         view.findViewById<View>(R.id.homepage_no_message_image).visibility = View.VISIBLE
 
-                        view.findViewById<View>(R.id.homepage_compose_new_btn).visibility = View.GONE
-                        view.findViewById<View>(R.id.homepage_add_new_btn).visibility = View.GONE
+                        view.findViewById<View>(R.id.homepage_compose_new_btn).visibility = View.VISIBLE
+                        view.findViewById<View>(R.id.homepage_add_new_btn).visibility = View.VISIBLE
 
-                        view.findViewById<View>(R.id.homepage_compose_new_btn1).visibility = View.VISIBLE
-                        view.findViewById<View>(R.id.homepage_add_new_btn1).visibility = View.VISIBLE
+                        view.findViewById<View>(R.id.homepage_compose_new_btn1).visibility = View.GONE
+                        view.findViewById<View>(R.id.homepage_add_new_btn1).visibility = View.GONE
                     }
                     else {
                         noRecentMessagesText.visibility = View.GONE
@@ -114,28 +114,33 @@ class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
                 recentRecyclerAdapter.messageOnClickListener.observe(viewLifecycleOwner, Observer {
                     if(it != null) {
                         recentRecyclerAdapter.messageOnClickListener.value = null
-                        when(it.first.type) {
+                        when(it.type) {
                             Platforms.TYPE_TEXT -> {
-                                startActivity(Intent(requireContext(), TextViewActivity::class.java).apply {
-                                    CoroutineScope(Dispatchers.Default).launch {
+                                CoroutineScope(Dispatchers.Default).launch {
+                                    startActivity(Intent(requireContext(), TextViewActivity::class.java).apply {
                                         val platform = Datastore.getDatastore(requireContext())
-                                            .storedPlatformsDao().fetch(it.second.toInt());
-                                        putExtra("id", it.second)
+                                            .storedPlatformsDao().fetch(it.platformId);
+
+                                        println("platform id: ${it.platformId}")
+                                        println("platform name: ${it.platformName}")
+                                        println("message id: ${it.id}")
+
+                                        putExtra("id", platform.id)
                                         putExtra("platform_name", platform.name!!)
-                                        putExtra("message_id", it.first.id)
-                                    }
-                                })
+                                        putExtra("message_id", it.id)
+                                    })
+                                }
                             }
                             Platforms.TYPE_EMAIL -> {
-                                startActivity(Intent(requireContext(), EmailViewActivity::class.java).apply {
-                                    CoroutineScope(Dispatchers.Default).launch {
+                                CoroutineScope(Dispatchers.Default).launch {
+                                    startActivity(Intent(requireContext(), EmailViewActivity::class.java).apply {
                                         val platform = Datastore.getDatastore(requireContext())
-                                            .storedPlatformsDao().fetch(it.second.toInt());
-                                        putExtra("id", it.second)
+                                            .storedPlatformsDao().fetch(it.platformId);
+                                        putExtra("id", platform.id)
                                         putExtra("platform_name", platform.name!!)
-                                        putExtra("message_id", it.first.id)
-                                    }
-                                })
+                                        putExtra("message_id", it.id)
+                                    })
+                                }
                             }
                         }
                     }

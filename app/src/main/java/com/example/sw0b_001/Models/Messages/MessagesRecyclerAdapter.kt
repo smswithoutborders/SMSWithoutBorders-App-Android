@@ -23,7 +23,7 @@ class MessagesRecyclerAdapter(private val availablePlatforms: List<AvailablePlat
     val mDiffer: AsyncListDiffer<EncryptedContent> = AsyncListDiffer(this,
             EncryptedContent.DIFF_CALLBACK)
 
-    var messageOnClickListener: MutableLiveData<Pair<EncryptedContent, Long>> =
+    var messageOnClickListener: MutableLiveData<EncryptedContent> =
         MutableLiveData()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,7 +41,7 @@ class MessagesRecyclerAdapter(private val availablePlatforms: List<AvailablePlat
             }
         }
         holder.card.setOnClickListener {
-            messageOnClickListener.value = Pair(encryptedContent, encryptedContent.platformId)
+            messageOnClickListener.value = encryptedContent
         }
     }
 
