@@ -52,9 +52,7 @@ object Cryptography {
 
     fun calculateSharedSecret(context: Context, keystoreAlias: String, publicKey: ByteArray): ByteArray {
         val privateKey = fetchPrivateKey(context, keystoreAlias)
-        val libSigCurve25519 = SecurityCurve25519()
-        libSigCurve25519.privateKey = privateKey
-
+        val libSigCurve25519 = SecurityCurve25519(privateKey)
         return libSigCurve25519.calculateSharedSecret(publicKey)
     }
 

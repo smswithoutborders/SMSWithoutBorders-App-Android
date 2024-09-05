@@ -85,33 +85,29 @@ class EmailComposeModalFragment(val platform: StoredPlatformsEntity,
             return
         }
 
-
         val to = toEditText.text.toString()
         val cc = ccTextInputEditText.text.toString()
         val bcc = bccTextInputEditText.text.toString()
         val subject = subjectTextInputEditText.text.toString()
         val body = bodyTextInputEditText.text.toString()
 
-        val scope = CoroutineScope(Dispatchers.Default)
-        scope.launch {
+        CoroutineScope(Dispatchers.Default).launch {
             val availablePlatforms = Datastore.getDatastore(requireContext())
                 .availablePlatformsDao().fetch(platform.name!!)
-            val formattedContent = processEmailForEncryption(availablePlatforms.shortcode!!,
-                to, cc, bcc, subject, body)
+            val formattedContent = processEmailForEncryption(to, cc, bcc, subject, body)
 
             ComposeHandlers.compose(requireContext(), formattedContent, availablePlatforms) {
-                dismiss()
                 onSuccessCallback?.let { it.run() }
+                dismiss()
             }
         }
     }
 
-    private fun processEmailForEncryption(platformLetter: String,
-                                          to: String,
+    private fun processEmailForEncryption(to: String,
                                           cc: String,
                                           bcc: String,
                                           subject: String,
                                           body: String): String {
-        return "$platformLetter:$to:$cc:$bcc:$subject:$body"
+        return "${platform.account}:$to:$cc:$bcc:$subject:$body"
     }
 }

@@ -134,8 +134,6 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
         }
     }
 
-
-
     private fun submitOTPCode(submitBtnView: View, code: String) {
         val linearProgressIndicator = findViewById<LinearProgressIndicator>(R.id.ownership_progress_bar)
         linearProgressIndicator.visibility = View.VISIBLE
@@ -152,8 +150,10 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
                 }
 
                 vault.refreshStoredTokens(applicationContext)
-                setResult(Activity.RESULT_OK)
-                finish()
+                runOnUiThread {
+                    setResult(Activity.RESULT_OK)
+                    finish()
+                }
             } catch(e: StatusRuntimeException) {
                 e.printStackTrace()
             } catch(e: Exception) {

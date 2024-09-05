@@ -73,11 +73,6 @@ class Vault(context: Context) {
             DEVICE_ID_KEYSTORE_ALIAS,
             Base64.decode(deviceIdPubKey, Base64.DEFAULT))
 
-        val publisherSharedKey = Cryptography.calculateSharedSecret(
-            context,
-            Publisher.PUBLISHER_ID_KEYSTORE_ALIAS,
-            Base64.decode(publisherPubKey, Base64.DEFAULT))
-
         val keypair = KeystoreHelpers.getKeyPairFromKeystore(DEVICE_ID_KEYSTORE_ALIAS)
 
         val llt = Crypto.decryptFernet(deviceIdSharedKey,
@@ -85,7 +80,8 @@ class Vault(context: Context) {
 
         val deviceId = getDeviceID(deviceIdSharedKey, phoneNumber, keypair.public.encoded)
 
-        storeArtifacts(context, llt, deviceId, publisherPubKey)
+        storeArtifacts(context, llt, deviceId)
+        Publisher.storeArtifacts(context, publisherPubKey)
     }
 
     fun createEntity(context: Context,
@@ -114,7 +110,9 @@ class Vault(context: Context) {
         if(!response.requiresOwnershipProof) {
             processVaultArtifacts(context,
                 response.longLivedToken,
-                response.serverDeviceIdPubKey)
+                response.serverDeviceIdPubKey,
+                response.serverPublishPubKey,
+                phoneNumber)
         }
         return response
     }
@@ -142,7 +140,9 @@ class Vault(context: Context) {
         if(!response.requiresOwnershipProof) {
             processVaultArtifacts(context,
                 response.longLivedToken,
-                response.serverDeviceIdPubKey)
+                response.serverDeviceIdPubKey,
+                response.serverPublishPubKey,
+                phoneNumber)
         }
         return response
     }
@@ -170,7 +170,9 @@ class Vault(context: Context) {
         if(!response.requiresOwnershipProof) {
             processVaultArtifacts(context,
                 response.longLivedToken,
-                response.serverDeviceIdPubKey)
+                response.serverDeviceIdPubKey,
+                response.serverPublishPubKey,
+                phoneNumber)
         }
         return response
     }
@@ -205,8 +207,6 @@ class Vault(context: Context) {
         private const val DEVICE_ID_SECRET_KEY_KEYSTORE_ALIAS =
             "com.afkanerd.relaysms.DEVICE_ID_SECRET_KEY_KEYSTORE_ALIAS"
 
-        private const val PUBLISHER_PUBLIC_KEY =
-            "com.afkanerd.relaysms.PUBLISHER_PUBLIC_KEY"
 
         fun completeDelete(context: Context, llt: String) {
             val publisher = Publisher(context)
@@ -236,7 +236,7 @@ class Vault(context: Context) {
             }
         }
 
-        fun storeArtifacts(context: Context, llt: String, deviceId: ByteArray, publisherPubKey: String) {
+        fun storeArtifacts(context: Context, llt: String, deviceId: ByteArray) {
             val publicKey = SecurityRSA.generateKeyPair(LONG_LIVED_TOKEN_KEYSTORE_ALIAS, 2048)
             val secretKey = SecurityAES.generateSecretKey(256)
 
@@ -265,7 +265,6 @@ class Vault(context: Context) {
                     Base64.encodeToString(encryptedSecretKey, Base64.DEFAULT))
                 .putString(DEVICE_ID_SECRET_KEY_KEYSTORE_ALIAS,
                     Base64.encodeToString(encryptedDeviceIdSecretKey, Base64.DEFAULT))
-                .putString(PUBLISHER_PUBLIC_KEY, publisherPubKey)
                 .apply()
         }
 
@@ -307,15 +306,6 @@ class Vault(context: Context) {
             return SecurityAES.decryptAES256CBC(encryptedDeviceId, secretKey)
         }
 
-        fun fetchPublisherSharedKey(context: Context) : ByteArray {
-            val sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
-                .encryptionFingerprint(context)
-                .build()
-            val pubKey = sharedPreferences.getString(PUBLISHER_PUBLIC_KEY, "")
-                ?.encodeToByteArray()
-            return Cryptography.calculateSharedSecret(context, Publisher.PUBLISHER_ID_KEYSTORE_ALIAS,
-                pubKey!!)
-        }
 
         fun getDeviceID(derivedKey: ByteArray, phoneNumber: String, publicKey: ByteArray) : ByteArray {
             val combinedData = phoneNumber.encodeToByteArray() + publicKey

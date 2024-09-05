@@ -64,23 +64,21 @@ class TextComposeModalFragment(val platform: StoredPlatformsEntity,
             return
         }
 
-        val scope = CoroutineScope(Dispatchers.Default)
-        scope.launch {
+        CoroutineScope(Dispatchers.Default).launch {
             val availablePlatforms = Datastore.getDatastore(requireContext())
                 .availablePlatformsDao().fetch(platform.name!!)
-
             val formattedString =
                 processTextForEncryption(availablePlatforms.shortcode!!,
                     textComposeTextEdit.text.toString())
 
             ComposeHandlers.compose(view.context, formattedString, availablePlatforms) {
-                dismiss()
                 onSuccessCallback?.let { it.run() }
+                dismiss()
             }
         }
     }
 
     private fun processTextForEncryption(platformLetter: String, body: String): String {
-        return "$platformLetter:$body"
+        return "${platform.account}:$platformLetter:$body"
     }
 }

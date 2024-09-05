@@ -19,7 +19,9 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomepageActivity : AppCompactActivityCustomized() {
-    lateinit var myToolbar: MaterialToolbar
+    private lateinit var myToolbar: MaterialToolbar
+    private val homepageLoggedIn = HomepageLoggedIn()
+    private val homepageNotLoggedIn = HomepageNotLoggedIn()
 
     private val activityLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -33,6 +35,7 @@ class HomepageActivity : AppCompactActivityCustomized() {
             }
         }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_homepage)
@@ -42,9 +45,6 @@ class HomepageActivity : AppCompactActivityCustomized() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.navigationBarColor = getResources().getColor(R.color.md_theme_surfaceContainer, theme);
-
-        val homepageLoggedIn = HomepageLoggedIn()
-        val homepageNotLoggedIn = HomepageNotLoggedIn()
 
         supportFragmentManager.commit {
             if(Vault.fetchLongLivedToken(applicationContext).isNotBlank()) {

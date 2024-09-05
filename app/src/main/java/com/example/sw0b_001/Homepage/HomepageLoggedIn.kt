@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
 
     private lateinit var messagesRecyclerView : RecyclerView
+    private lateinit var recentRecyclerAdapter: MessagesRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +71,7 @@ class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
         CoroutineScope(Dispatchers.Default).launch {
             val availablePlatforms = Datastore.getDatastore(requireContext()).availablePlatformsDao()
                 .fetchAllList();
-            val recentRecyclerAdapter = MessagesRecyclerAdapter(availablePlatforms)
+            recentRecyclerAdapter = MessagesRecyclerAdapter(availablePlatforms)
 
             activity?.runOnUiThread {
                 messagesRecyclerView.adapter = recentRecyclerAdapter
@@ -79,30 +80,34 @@ class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
                         messagesRecyclerView.smoothScrollToPosition(0)
                     }
                     if (it.isNullOrEmpty()) {
-                        activity?.runOnUiThread {
-                            noRecentMessagesText.visibility = View.VISIBLE
-                            view.findViewById<View>(R.id.homepage_no_message_image).visibility = View.VISIBLE
-                            view.findViewById<View>(R.id.homepage_compose_new_btn1).visibility = View.GONE
-                            view.findViewById<View>(R.id.homepage_add_new_btn1).visibility = View.GONE
-                        }
+                        noRecentMessagesText.visibility = View.VISIBLE
+                        view.findViewById<View>(R.id.homepage_no_message_image).visibility = View.VISIBLE
+
+                        view.findViewById<View>(R.id.homepage_compose_new_btn).visibility = View.GONE
+                        view.findViewById<View>(R.id.homepage_add_new_btn).visibility = View.GONE
+
+                        view.findViewById<View>(R.id.homepage_compose_new_btn1).visibility = View.VISIBLE
+                        view.findViewById<View>(R.id.homepage_add_new_btn1).visibility = View.VISIBLE
                     }
                     else {
-                        activity?.runOnUiThread {
-                            noRecentMessagesText.visibility = View.GONE
-                            view.findViewById<View>(R.id.homepage_no_message_image).visibility = View.GONE
-                            view.findViewById<View>(R.id.homepage_compose_new_btn1).visibility = View.VISIBLE
-                            view.findViewById<View>(R.id.homepage_add_new_btn1).visibility = View.VISIBLE
+                        noRecentMessagesText.visibility = View.GONE
+                        view.findViewById<View>(R.id.homepage_no_message_image).visibility = View.GONE
 
-                            view.findViewById<View>(R.id.homepage_compose_new_btn1)
-                                .setOnClickListener { v ->
-                                    showPlatformsModal(AvailablePlatformsModalFragment.Type.SAVED)
-                                }
+                        view.findViewById<View>(R.id.homepage_compose_new_btn).visibility = View.GONE
+                        view.findViewById<View>(R.id.homepage_add_new_btn).visibility = View.GONE
 
-                            view.findViewById<View>(R.id.homepage_add_new_btn1)
-                                .setOnClickListener { v ->
-                                    showPlatformsModal(AvailablePlatformsModalFragment.Type.AVAILABLE)
-                                }
-                        }
+                        view.findViewById<View>(R.id.homepage_compose_new_btn1).visibility = View.VISIBLE
+                        view.findViewById<View>(R.id.homepage_add_new_btn1).visibility = View.VISIBLE
+
+                        view.findViewById<View>(R.id.homepage_compose_new_btn1)
+                            .setOnClickListener { v ->
+                                showPlatformsModal(AvailablePlatformsModalFragment.Type.SAVED)
+                            }
+
+                        view.findViewById<View>(R.id.homepage_add_new_btn1)
+                            .setOnClickListener { v ->
+                                showPlatformsModal(AvailablePlatformsModalFragment.Type.AVAILABLE)
+                            }
                     }
                 }
 
@@ -112,20 +117,24 @@ class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
                         when(it.first.type) {
                             Platforms.TYPE_TEXT -> {
                                 startActivity(Intent(requireContext(), TextViewActivity::class.java).apply {
-                                    val platform = Datastore.getDatastore(requireContext()).storedPlatformsDao()
-                                        .fetch(it.second.toInt());
-                                    putExtra("id", it.second)
-                                    putExtra("platform_name", platform.name!!)
-                                    putExtra("message_id", it.first.id)
+                                    CoroutineScope(Dispatchers.Default).launch {
+                                        val platform = Datastore.getDatastore(requireContext())
+                                            .storedPlatformsDao().fetch(it.second.toInt());
+                                        putExtra("id", it.second)
+                                        putExtra("platform_name", platform.name!!)
+                                        putExtra("message_id", it.first.id)
+                                    }
                                 })
                             }
                             Platforms.TYPE_EMAIL -> {
                                 startActivity(Intent(requireContext(), EmailViewActivity::class.java).apply {
-                                    val platform = Datastore.getDatastore(requireContext()).storedPlatformsDao()
-                                        .fetch(it.second.toInt());
-                                    putExtra("id", it.second)
-                                    putExtra("platform_name", platform.name!!)
-                                    putExtra("message_id", it.first.id)
+                                    CoroutineScope(Dispatchers.Default).launch {
+                                        val platform = Datastore.getDatastore(requireContext())
+                                            .storedPlatformsDao().fetch(it.second.toInt());
+                                        putExtra("id", it.second)
+                                        putExtra("platform_name", platform.name!!)
+                                        putExtra("message_id", it.first.id)
+                                    }
                                 })
                             }
                         }
@@ -133,6 +142,7 @@ class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
                 })
             }
         }
+
     }
 
     private fun showPlatformsModal(type: AvailablePlatformsModalFragment.Type) {

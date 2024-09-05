@@ -85,6 +85,12 @@ class Publisher(val context: Context) {
         const val PUBLISHER_ID_KEYSTORE_ALIAS = "PUBLISHER_ID_KEYSTORE_ALIAS"
         const val OAUTH2_PARAMETERS_FILE = "OAUTH2_PARAMETERS_FILE"
 
+        private const val PUBLISHER_ATTRIBUTE_FILES =
+            "com.afkanerd.relaysms.PUBLISHER_ATTRIBUTE_FILES"
+
+        private const val PUBLISHER_PUBLIC_KEY =
+            "com.afkanerd.relaysms.PUBLISHER_PUBLIC_KEY"
+
         fun getAvailablePlatforms(context: Context,
                                   exceptionRunnable: Runnable): ArrayList<AvailablePlatforms> {
             val response = Network.requestGet(context.getString(R.string.publisher_get_platforms_url))
@@ -105,6 +111,32 @@ class Publisher(val context: Context) {
 
             sharedPreferences.edit()
                 .putString("code_verifier", codeVerifier)
+                .apply()
+        }
+
+        fun fetchPublisherPublicKey(context: Context) : ByteArray? {
+            val sharedPreferences = Armadillo.create(context, PUBLISHER_ATTRIBUTE_FILES)
+                .encryptionFingerprint(context)
+                .build()
+            return Base64.decode(sharedPreferences.getString(PUBLISHER_PUBLIC_KEY, ""),
+                Base64.DEFAULT)
+        }
+
+        fun fetchPublisherSharedKey(context: Context) : ByteArray {
+            val pubKey = fetchPublisherPublicKey(context)
+            println("Public key: $pubKey")
+            println("Public key: ${Base64.encodeToString(pubKey, Base64.DEFAULT)}")
+            return Cryptography.calculateSharedSecret(context, PUBLISHER_ID_KEYSTORE_ALIAS,
+                pubKey!!)
+        }
+
+        fun storeArtifacts(context: Context, publisherPubKey: String) {
+            val sharedPreferences = Armadillo.create(context, PUBLISHER_ATTRIBUTE_FILES)
+                .encryptionFingerprint(context)
+                .build()
+
+            sharedPreferences.edit()
+                .putString(PUBLISHER_PUBLIC_KEY, publisherPubKey)
                 .apply()
         }
     }

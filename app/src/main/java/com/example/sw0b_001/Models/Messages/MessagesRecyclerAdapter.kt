@@ -35,8 +35,10 @@ class MessagesRecyclerAdapter(private val availablePlatforms: List<AvailablePlat
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val encryptedContent = mDiffer.currentList[position]
         availablePlatforms.forEach {
-            holder.bind(encryptedContent, it)
-            return@forEach
+            if(it.name == encryptedContent.platformName) {
+                holder.bind(encryptedContent, it)
+                return@forEach
+            }
         }
         holder.card.setOnClickListener {
             messageOnClickListener.value = Pair(encryptedContent, encryptedContent.platformId)

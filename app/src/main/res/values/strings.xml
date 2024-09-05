@@ -261,5 +261,6 @@
     <string name="enter_the_verification_code_we_sent_you">Enter the verification code we sent you</string>
     <string name="failed_to_refresh_gateway_clients">Failed to refresh Gateway clients</string>
     <string name="from">From</string>
+    <string name="send_new_message">Send new message</string>
 
 </resources>
