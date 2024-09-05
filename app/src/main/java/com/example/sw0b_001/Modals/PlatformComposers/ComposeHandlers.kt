@@ -55,6 +55,7 @@ object ComposeHandlers {
             encryptedContent.type = platforms.service_type
             encryptedContent.platformName = platforms.name
             encryptedContent.platformId = storedPlatforms.id
+            encryptedContent.fromAccount = storedPlatforms.account
 
             Datastore.getDatastore(context).encryptedContentDAO()
                 .insert(encryptedContent)

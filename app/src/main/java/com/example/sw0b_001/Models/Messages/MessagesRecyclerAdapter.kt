@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Modals.PlatformComposers.ComposeHandlers
 import com.example.sw0b_001.Models.Platforms.AvailablePlatforms

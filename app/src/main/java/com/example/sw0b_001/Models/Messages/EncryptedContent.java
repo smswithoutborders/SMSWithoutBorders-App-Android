@@ -24,6 +24,16 @@ public class EncryptedContent {
 
     String type;
 
+    public String getFromAccount() {
+        return fromAccount;
+    }
+
+    public void setFromAccount(String fromAccount) {
+        this.fromAccount = fromAccount;
+    }
+
+    String fromAccount;
+
     long date;
 
 
