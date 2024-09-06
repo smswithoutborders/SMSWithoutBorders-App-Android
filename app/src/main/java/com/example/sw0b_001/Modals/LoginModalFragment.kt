@@ -12,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.CryptoHelpers
 import com.example.sw0b_001.BuildConfig
 import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.HomepageComposeNewFragment
 import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.Vault
@@ -175,7 +174,6 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
         try {
             login(view, phoneNumber, password)
         } catch (e: Exception) {
-            Log.e(HomepageComposeNewFragment.TAG, "Unknown Error: ${e.message}")
             activity?.runOnUiThread {
                 Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
             }

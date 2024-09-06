@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
+import com.example.sw0b_001.Models.Publisher
 import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.Vault
 import com.example.sw0b_001.Modules.Network
@@ -43,12 +44,14 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
     enum class Type(val type: String) {
         CREATE("CREATE"),
         AUTHENTICATE("AUTHENTICATE"),
-        RECOVER("RECOVER")
+        RECOVER("RECOVER"),
+        PNBA("PNBA")
     }
 
     private val SMS_CONSENT_REQUEST = 2  // Set to an unused request code
     private lateinit var phoneNumber: String
-    private lateinit var password : String
+    private var password : String? = null
+    private var platform : String? = null
     private var countryCode : String? = null
 
     private lateinit var vault: Vault
@@ -59,9 +62,13 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
         setContentView(R.layout.fragment_otp_verification_code)
 
         phoneNumber = intent.getStringExtra("phone_number")!!
-        password = intent.getStringExtra("password")!!
+        platform = intent.getStringExtra("platform")
+        password = intent.getStringExtra("password")
         countryCode = intent.getStringExtra("country_code")
-        type = Type.valueOf(intent.getStringExtra("type")!!)
+
+        intent.getStringExtra("type")?.let {
+            type = Type.valueOf(it)
+        }
 
         val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
         registerReceiver(applicationContext, smsVerificationReceiver, intentFilter,
@@ -141,12 +148,32 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
         CoroutineScope(Dispatchers.Default).launch {
             try {
                 when(type) {
-                    Type.CREATE -> vault.createEntity(applicationContext, phoneNumber,
-                        countryCode!!, password, code)
-                    Type.AUTHENTICATE -> vault.authenticateEntity(applicationContext,
-                        phoneNumber, password, code)
-                    Type.RECOVER -> vault.recoverEntityPassword(applicationContext, phoneNumber,
-                        password, code)
+                    Type.CREATE -> {
+                        password?.let {
+                            vault.createEntity(applicationContext, phoneNumber, countryCode!!,
+                                password!!, code)
+                        }
+                    }
+                    Type.AUTHENTICATE -> {
+                        password?.let {
+                            vault.authenticateEntity(applicationContext, phoneNumber, password!!,
+                                code)
+                        }
+                    }
+                    Type.RECOVER -> {
+                        password?.let {
+                            vault.recoverEntityPassword(applicationContext, phoneNumber, password!!,
+                                code)
+                        }
+                    }
+                    Type.PNBA -> {
+                        platform?.let {
+                            val llt = Vault.fetchLongLivedToken(applicationContext)
+                            val publisher = Publisher(applicationContext)
+                            publisher.phoneNumberBaseAuthenticationExchange(code,
+                                llt, phoneNumber, platform!!)
+                        }
+                    }
                 }
 
                 vault.refreshStoredTokens(applicationContext)
@@ -156,6 +183,10 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
                 }
             } catch(e: StatusRuntimeException) {
                 e.printStackTrace()
+                runOnUiThread {
+                    Toast.makeText(applicationContext, e.status.description, Toast.LENGTH_SHORT)
+                        .show()
+                }
             } catch(e: Exception) {
                 e.printStackTrace()
                 runOnUiThread {

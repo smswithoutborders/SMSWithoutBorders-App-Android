@@ -262,5 +262,6 @@
     <string name="failed_to_refresh_gateway_clients">Failed to refresh Gateway clients</string>
     <string name="from">From</string>
     <string name="send_new_message">Send new message</string>
+    <string name="unknown_platform_protocol">Unknown platform protocol</string>
 
 </resources>

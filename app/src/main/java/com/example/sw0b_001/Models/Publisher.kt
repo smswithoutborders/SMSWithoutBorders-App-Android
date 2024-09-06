@@ -76,10 +76,46 @@ class Publisher(val context: Context) {
         return publisherStub.exchangeOAuth2CodeAndStore(request)
     }
 
+    fun phoneNumberBaseAuthenticationRequest(phoneNumber: String, platform: String):
+            PublisherOuterClass.GetPNBACodeResponse {
+        val request = PublisherOuterClass.GetPNBACodeRequest.newBuilder().apply {
+            setPlatform(platform)
+            setPhoneNumber(phoneNumber)
+        }.build()
+
+        return publisherStub.getPNBACode(request)
+    }
+
+    fun revokePNBAPlatform(llt: String, platform: String, account: String) :
+            PublisherOuterClass.RevokeAndDeletePNBATokenResponse {
+        val request = PublisherOuterClass.RevokeAndDeletePNBATokenRequest.newBuilder().apply {
+            setPlatform(platform)
+            setLongLivedToken(llt)
+            setAccountIdentifier(account)
+        }.build()
+
+        return publisherStub.revokeAndDeletePNBAToken(request)
+    }
+
+    fun phoneNumberBaseAuthenticationExchange(authorizationCode: String,
+                                              llt: String,
+                                              phoneNumber: String,
+                                              platform: String) :
+            PublisherOuterClass.ExchangePNBACodeAndStoreResponse {
+        val request = PublisherOuterClass.ExchangePNBACodeAndStoreRequest.newBuilder().apply {
+            setPlatform(platform)
+            setLongLivedToken(llt)
+            setAuthorizationCode(authorizationCode)
+            setPassword("")
+            setPhoneNumber(phoneNumber)
+        }.build()
+
+        return publisherStub.exchangePNBACodeAndStore(request)
+    }
+
     fun shutdown() {
         channel.shutdown()
     }
-
 
     companion object {
         const val PUBLISHER_ID_KEYSTORE_ALIAS = "PUBLISHER_ID_KEYSTORE_ALIAS"

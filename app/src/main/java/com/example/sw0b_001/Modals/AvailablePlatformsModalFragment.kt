@@ -145,37 +145,60 @@ class AvailablePlatformsModalFragment(val type: Type):
                     progress.visibility = View.VISIBLE
                 }
 
-                try {
-                    val response = publisher.getOAuthURL(it, true,
-                        it.support_url_scheme!!)
+                when(it.protocol_type) {
+                    "oauth2" -> {
+                        try {
+                            val response = publisher.getOAuthURL(it, true,
+                                it.support_url_scheme!!)
 
-                    Publisher.storeOauthRequestCodeVerifier(requireContext(),
-                        response.codeVerifier)
+                            Publisher.storeOauthRequestCodeVerifier(requireContext(),
+                                response.codeVerifier)
 
-                    publisher.shutdown()
 
-                    activity?.runOnUiThread {
-                        val intentUri = Uri.parse(response.authorizationUrl)
-                        val intent = Intent(Intent.ACTION_VIEW, intentUri)
-                        startActivity(intent)
+                            activity?.runOnUiThread {
+                                val intentUri = Uri.parse(response.authorizationUrl)
+                                val intent = Intent(Intent.ACTION_VIEW, intentUri)
+                                startActivity(intent)
+                            }
+                            dismiss()
+                        } catch(e: StatusRuntimeException) {
+                            activity?.runOnUiThread {
+                                Toast.makeText(requireContext(), e.status.description,
+                                    Toast.LENGTH_SHORT).show()
+                            }
+                        } catch(e: Exception) {
+                            activity?.runOnUiThread {
+                                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        } finally {
+                            activity?.runOnUiThread {
+                                progress.visibility = View.GONE
+                            }
+                            availablePlatformsAdapter.isClickable = true
+                            isCancelable = true
+                        }
                     }
-                    dismiss()
-                } catch(e: StatusRuntimeException) {
-                    activity?.runOnUiThread {
-                        Toast.makeText(requireContext(), e.status.description,
-                            Toast.LENGTH_SHORT).show()
+                    "pnba" -> {
+                        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+                        val loginModalFragment = PnbaPhonenumberModalFragment(it) {
+                            dismiss()
+                        }
+                        fragmentTransaction?.add(loginModalFragment, "pnba_modal_fragment")
+                        fragmentTransaction?.show(loginModalFragment)
+                        fragmentTransaction?.commit()
+
+                        isCancelable = true
                     }
-                } catch(e: Exception) {
-                    activity?.runOnUiThread {
-                        Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                    else -> {
+                        activity?.runOnUiThread {
+                            Toast.makeText(requireContext(),
+                                getString(R.string.unknown_platform_protocol),
+                                Toast.LENGTH_SHORT).show()
+                        }
                     }
-                } finally {
-                    activity?.runOnUiThread {
-                        progress.visibility = View.GONE
-                    }
-                    availablePlatformsAdapter.isClickable = true
-                    isCancelable = true
                 }
+                publisher.shutdown()
             }
         }
     }
