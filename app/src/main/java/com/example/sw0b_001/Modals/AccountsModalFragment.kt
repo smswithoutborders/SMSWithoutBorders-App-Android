@@ -50,8 +50,7 @@ class AccountsModalFragment(val platformName: String, val type: AvailablePlatfor
 
         val viewModel: AccountsViewModel by viewModels()
 
-        val scope = CoroutineScope(Dispatchers.Default)
-        scope.launch {
+        CoroutineScope(Dispatchers.Default).launch {
             val availablePlatforms = Datastore.getDatastore(requireContext())
                 .availablePlatformsDao().fetch(platformName)
             activity?.runOnUiThread {
@@ -93,10 +92,28 @@ class AccountsModalFragment(val platformName: String, val type: AvailablePlatfor
         val llt = Vault.fetchLongLivedToken(requireContext())
 
         CoroutineScope(Dispatchers.Default).launch {
+            val availablePlatforms = Datastore.getDatastore(requireContext())
+                .availablePlatformsDao().fetch(storedPlatformsEntity.name!!)
+
             val publisher = Publisher(requireContext())
             try {
-                publisher.revokeOAuthPlatforms(llt, storedPlatformsEntity.name!!,
-                    storedPlatformsEntity.account!!)
+                when(availablePlatforms.protocol_type) {
+                    "oauth2" -> {
+                        publisher.revokeOAuthPlatforms(llt, storedPlatformsEntity.name,
+                            storedPlatformsEntity.account!!)
+                    }
+                    "pnba" -> {
+                        publisher.revokePNBAPlatforms(llt, storedPlatformsEntity.name,
+                            storedPlatformsEntity.account!!)
+                    }
+                    else -> {
+                        activity?.runOnUiThread {
+                            Toast.makeText(requireContext(), "Unknown protocol...",
+                                Toast.LENGTH_SHORT).show()
+                        }
+                        return@launch
+                    }
+                }
 
                 Datastore.getDatastore(requireContext()).storedPlatformsDao()
                     .delete(storedPlatformsEntity.id)
