@@ -50,7 +50,7 @@ class TextComposeModalFragment(val platform: StoredPlatformsEntity,
         message?.let {
             it.encryptedContent.split(":").let {
                 view.findViewById<EditText>(R.id.tweet_compose_text).apply {
-                    setText(it.subList(1, it.size).joinToString())
+                    setText(it.subList(2, it.size).joinToString())
                 }
             }
         }
@@ -68,8 +68,7 @@ class TextComposeModalFragment(val platform: StoredPlatformsEntity,
             val availablePlatforms = Datastore.getDatastore(requireContext())
                 .availablePlatformsDao().fetch(platform.name!!)
             val formattedString =
-                processTextForEncryption(availablePlatforms.shortcode!!,
-                    textComposeTextEdit.text.toString())
+                processTextForEncryption(textComposeTextEdit.text.toString())
 
             ComposeHandlers.compose(view.context, formattedString, availablePlatforms, platform) {
                 onSuccessCallback?.let { it.run() }
@@ -78,7 +77,7 @@ class TextComposeModalFragment(val platform: StoredPlatformsEntity,
         }
     }
 
-    private fun processTextForEncryption(platformLetter: String, body: String): String {
-        return "${platform.account}:$platformLetter:$body"
+    private fun processTextForEncryption(body: String): String {
+        return "${platform.account}:$body"
     }
 }

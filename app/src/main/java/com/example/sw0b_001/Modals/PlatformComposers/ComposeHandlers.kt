@@ -70,7 +70,9 @@ object ComposeHandlers {
                                   val subject: String = "",
                                   val recipient: String = "")
     fun decompose(content: String, platforms: AvailablePlatforms) : DecomposedMessages {
-        val split = content.split(":")
+        var split = content.split(":")
+//        split = split.slice(1..<split.size)
+        println(split)
         return when(platforms.service_type) {
             Platforms.TYPE_EMAIL -> {
                 DecomposedMessages(body = split[5], subject = split[4], recipient = split[1])

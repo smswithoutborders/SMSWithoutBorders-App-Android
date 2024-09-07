@@ -43,7 +43,13 @@
 
         <activity
             android:name=".Security.LockScreenActivity"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".SettingsActivity"
             android:exported="true"
@@ -52,17 +58,15 @@
         <activity
             android:name=".OTPVerificationActivity"
             android:exported="false" />
-        <activity
-            android:name=".VaultStoreActivity"
-            android:exported="false" />
+
         <activity
             android:name=".OnboardingActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
 
         <service
@@ -87,16 +91,6 @@
             android:exported="false"
             android:label="@string/message_compose_header"
             android:parentActivityName=".HomepageActivity" />
-
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
-            android:exported="false"
-            tools:node="merge">
-            <meta-data
-                android:name="com.example.sw0b_001.Security.LockScreenInitializer"
-                android:value="androidx.startup" />
-        </provider>
 
         <activity
             android:name=".OauthRedirectActivity"
