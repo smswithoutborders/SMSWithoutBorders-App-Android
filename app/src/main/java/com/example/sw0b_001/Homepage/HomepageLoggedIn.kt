@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.EmailViewActivity
+import com.example.sw0b_001.MessageViewActivity
 import com.example.sw0b_001.Modals.AvailablePlatformsModalFragment
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient
 import com.example.sw0b_001.Models.Messages.MessagesRecyclerAdapter
@@ -115,30 +116,42 @@ class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
                     if(it != null) {
                         recentRecyclerAdapter.messageOnClickListener.value = null
                         when(it.type) {
-                            Platforms.TYPE_TEXT -> {
+                            Platforms.Type.TEXT.type -> {
                                 CoroutineScope(Dispatchers.Default).launch {
-                                    startActivity(Intent(requireContext(), TextViewActivity::class.java).apply {
+                                    startActivity(Intent(requireContext(),
+                                        TextViewActivity::class.java).apply {
                                         val platform = Datastore.getDatastore(requireContext())
                                             .storedPlatformsDao().fetch(it.platformId);
-
-                                        println("platform id: ${it.platformId}")
-                                        println("platform name: ${it.platformName}")
-                                        println("message id: ${it.id}")
-
                                         putExtra("id", platform.id)
                                         putExtra("platform_name", platform.name!!)
                                         putExtra("message_id", it.id)
+                                        putExtra("type", it.type)
                                     })
                                 }
                             }
-                            Platforms.TYPE_EMAIL -> {
+                            Platforms.Type.EMAIL.type -> {
                                 CoroutineScope(Dispatchers.Default).launch {
-                                    startActivity(Intent(requireContext(), EmailViewActivity::class.java).apply {
+                                    startActivity(Intent(requireContext(),
+                                        EmailViewActivity::class.java).apply {
                                         val platform = Datastore.getDatastore(requireContext())
                                             .storedPlatformsDao().fetch(it.platformId);
                                         putExtra("id", platform.id)
                                         putExtra("platform_name", platform.name!!)
                                         putExtra("message_id", it.id)
+                                        putExtra("type", it.type)
+                                    })
+                                }
+                            }
+                            Platforms.Type.MESSAGE.type -> {
+                                CoroutineScope(Dispatchers.Default).launch {
+                                    startActivity(Intent(requireContext(),
+                                        MessageViewActivity::class.java).apply {
+                                        val platform = Datastore.getDatastore(requireContext())
+                                            .storedPlatformsDao().fetch(it.platformId);
+                                        putExtra("id", platform.id)
+                                        putExtra("platform_name", platform.name!!)
+                                        putExtra("message_id", it.id)
+                                        putExtra("type", it.type)
                                     })
                                 }
                             }

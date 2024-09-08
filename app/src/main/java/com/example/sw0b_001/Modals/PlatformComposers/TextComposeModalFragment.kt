@@ -50,7 +50,7 @@ class TextComposeModalFragment(val platform: StoredPlatformsEntity,
         message?.let {
             it.encryptedContent.split(":").let {
                 view.findViewById<EditText>(R.id.tweet_compose_text).apply {
-                    setText(it.subList(2, it.size).joinToString())
+                    setText(it.subList(1, it.size).joinToString())
                 }
             }
         }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -29,18 +29,19 @@
         android:usesCleartextTraffic="false"
         android:versionCode="48"
         android:versionName="2.5.8"
-        tools:replace="android:label">
-
+        tools:replace="android:label" >
+        <activity
+            android:name=".MessageViewActivity"
+            android:exported="false"
+            android:parentActivityName=".HomepageActivity" />
         <activity
             android:name=".EmailViewActivity"
             android:exported="false"
             android:parentActivityName=".HomepageActivity" />
-
         <activity
             android:name=".TextViewActivity"
             android:exported="false"
             android:parentActivityName=".HomepageActivity" />
-
         <activity
             android:name=".Security.LockScreenActivity"
             android:exported="true" >
@@ -54,25 +55,25 @@
             android:name=".SettingsActivity"
             android:exported="true"
             android:parentActivityName=".HomepageActivity" />
-
         <activity
             android:name=".OTPVerificationActivity"
             android:exported="false" />
-
         <activity
             android:name=".OnboardingActivity"
-            android:exported="false">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+            android:exported="false" >
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
 
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
             android:enabled="false"
-            android:exported="false">
+            android:exported="false" >
             <meta-data
                 android:name="autoStoreLocales"
                 android:value="true" />
@@ -87,23 +88,23 @@
             android:exported="false"
             android:parentActivityName=".SettingsActivity" />
         <activity
-            android:name=".MessageComposeModalFragment"
+            android:name=".Modals.PlatformComposers.MessageComposeModalFragment"
             android:exported="false"
             android:label="@string/message_compose_header"
             android:parentActivityName=".HomepageActivity" />
-
         <activity
             android:name=".OauthRedirectActivity"
             android:exported="true"
-            tools:node="replace">
+            tools:node="replace" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="relaysms" />
                 <data android:host="oauth.afkanerd.com" />
-                <data android:pathPattern="/android/"/>
+                <data android:pathPattern="/android/" />
             </intent-filter>
         </activity>
     </application>

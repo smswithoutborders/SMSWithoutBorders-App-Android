@@ -264,5 +264,6 @@
     <string name="send_new_message">Send new message</string>
     <string name="unknown_platform_protocol">Unknown platform protocol</string>
     <string name="always_add_the_dialing_code_if_absent_e_g_237">Always add the dialing code if absent. e.g +237</string>
+    <string name="please_verify_the_phone_number_is_valid">Please verify the phone number is valid.</string>
 
 </resources>

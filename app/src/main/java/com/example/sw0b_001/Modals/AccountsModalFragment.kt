@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Modals.PlatformComposers.EmailComposeModalFragment
+import com.example.sw0b_001.Modals.PlatformComposers.MessageComposeModalFragment
 import com.example.sw0b_001.Modals.PlatformComposers.TextComposeModalFragment
 import com.example.sw0b_001.Models.Platforms.AccountsRecyclerAdapter
 import com.example.sw0b_001.Models.Platforms.AccountsViewModel
@@ -162,11 +163,11 @@ class AccountsModalFragment(val platformName: String, val type: AvailablePlatfor
             }
             "message" -> {
                 val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-                val emailComposeModalFragment = EmailComposeModalFragment(storedPlatformsEntity) {
+                val messageComposeModalFragment = MessageComposeModalFragment(storedPlatformsEntity) {
                     activity?.finish()
                 }
-                fragmentTransaction?.add(emailComposeModalFragment, "text_compose_tag")
-                fragmentTransaction?.show(emailComposeModalFragment)
+                fragmentTransaction?.add(messageComposeModalFragment, "message_compose_tag")
+                fragmentTransaction?.show(messageComposeModalFragment)
                 fragmentTransaction?.commitNow()
             }
             else -> {

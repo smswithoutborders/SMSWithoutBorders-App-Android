@@ -1,26 +1,23 @@
-package com.example.sw0b_001
+package com.example.sw0b_001.Modals.PlatformComposers
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.provider.ContactsContract
-import android.view.Menu
-import android.view.MenuItem
+import android.text.Editable
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
 import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.Modals.PlatformComposers.ComposeHandlers
 import com.example.sw0b_001.Models.Messages.EncryptedContent
-import com.example.sw0b_001.Models.Messages.EncryptedContentHandler
 import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
-import com.example.sw0b_001.Models.Platforms._PlatformsHandler
-import com.example.sw0b_001.Models.PublisherHandler.formatForPublishing
-import com.example.sw0b_001.Models.SMSHandler.Companion.transferToDefaultSMSApp
+import com.example.sw0b_001.R
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +27,8 @@ class MessageComposeModalFragment(val platform: StoredPlatformsEntity,
                                   private val onSuccessCallback: Runnable? = null):
     BottomSheetDialogFragment(R.layout.fragment_modal_message_compose) {
 
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -37,6 +36,13 @@ class MessageComposeModalFragment(val platform: StoredPlatformsEntity,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val composeToolbar = view.findViewById<MaterialToolbar>(R.id.message_compose_toolbar)
+
+        val bottomSheet = view.findViewById<View>(R.id.message_compose_layout)
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        bottomSheetBehavior.isDraggable = true
+
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+
         composeToolbar?.apply {
             title = platform.name
             setOnMenuItemClickListener {
@@ -68,11 +74,12 @@ class MessageComposeModalFragment(val platform: StoredPlatformsEntity,
     }
 
     private fun populateEncryptedContent(view: View) {
-        val toEditText = view.findViewById<EditText>(R.id.message_recipient_number_edit_text)
-        val messageEditText = view.findViewById<EditText>(R.id.message_compose_text)
-
-        toEditText.text = toEditText.text
-        messageEditText.text = messageEditText.text
+        message?.encryptedContent?.split(":").let {
+            val toEditText = view.findViewById<EditText>(R.id.message_recipient_number_edit_text)
+            val messageEditText = view.findViewById<EditText>(R.id.message_compose_text)
+            toEditText.text = Editable.Factory.getInstance().newEditable(it!![1])
+            messageEditText.text = Editable.Factory.getInstance().newEditable(it[2])
+        }
     }
 
     private fun autoFocusKeyboard(view: View) {
@@ -118,8 +125,13 @@ class MessageComposeModalFragment(val platform: StoredPlatformsEntity,
         val toEditText = view.findViewById<EditText>(R.id.message_recipient_number_edit_text)
         val messageEditText = view.findViewById<EditText>(R.id.message_compose_text)
 
-        if (toEditText.text.isNullOrBlank() || verifyPhoneNumberFormat(toEditText.text.toString())) {
+        if (toEditText.text.isNullOrBlank()) {
             toEditText.error = getString(R.string.message_compose_empty_recipient)
+            return
+        }
+
+        if (!verifyPhoneNumberFormat(toEditText.text.toString())) {
+            toEditText.error = getString(R.string.please_verify_the_phone_number_is_valid)
             return
         }
 
@@ -156,7 +168,9 @@ class MessageComposeModalFragment(val platform: StoredPlatformsEntity,
                     if (contactCursor.moveToFirst()) {
                         val contactIndexInformation =
                             contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
-                        val number = contactCursor.getString(contactIndexInformation)
+                        val number = contactCursor.getString(contactIndexInformation).filter {
+                            !it.isWhitespace()
+                        }
 
                         val numberEditText = requireView()
                             .findViewById<EditText>(R.id.message_recipient_number_edit_text)

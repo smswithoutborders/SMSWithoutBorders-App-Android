@@ -73,13 +73,19 @@ class MessagesRecyclerAdapter(private val availablePlatforms: List<AvailablePlat
                     platformLogo.setImageBitmap(bitmap)
                 }
 
-                when(platforms.service_type) {
-                    Platforms.TYPE_EMAIL -> {
+                when(platforms.service_type!!) {
+                    Platforms.Type.EMAIL.type -> {
                         subject.text = decomposed.subject
                         recipient.text = decomposed.recipient
 
                         subject.visibility = View.VISIBLE
                         recipient.visibility = View.VISIBLE
+                    }
+                    Platforms.Type.MESSAGE.type -> {
+                        subject.visibility = View.VISIBLE
+                        subject.text = decomposed.subject
+
+                        recipient.visibility = View.GONE
                     } else -> {
                         subject.visibility = View.GONE
                         recipient.visibility = View.GONE

@@ -69,22 +69,25 @@ object ComposeHandlers {
     data class DecomposedMessages(val body: String,
                                   val subject: String = "",
                                   val recipient: String = "")
+
     fun decompose(content: String, platforms: AvailablePlatforms) : DecomposedMessages {
         var split = content.split(":")
 //        split = split.slice(1..<split.size)
-        println(split)
-        return when(platforms.service_type) {
-            Platforms.TYPE_EMAIL -> {
+        println("$split - ${platforms.service_type}")
+        return when(platforms.service_type!!) {
+            Platforms.Type.EMAIL.type -> {
                 DecomposedMessages(body = split[5], subject = split[4], recipient = split[1])
             }
 
-            Platforms.TYPE_TEXT -> {
+            Platforms.Type.TEXT.type -> {
                 DecomposedMessages(body = split[1])
             }
 
-            else -> {
-                DecomposedMessages(content)
+            Platforms.Type.MESSAGE.type -> {
+                DecomposedMessages(body = split[2], subject = split[1])
             }
+
+            else -> TODO()
         }
     }
 }

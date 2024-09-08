@@ -1,123 +1,64 @@
-package com.example.sw0b_001.Models.Platforms;
+package com.example.sw0b_001.Models.Platforms
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
-
-import java.util.Objects;
+import androidx.recyclerview.widget.DiffUtil
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.PrimaryKey
 
 //@DatabaseView("SELECT platform.name, platform.description, platform.provider, platform.image, platform.id FROM platform")
-@Entity(indices = {@Index(value={"name"}, unique = true)})
-public class Platforms {
-    public static final String TYPE_EMAIL = "email";
-    public static final String TYPE_TEXT = "text";
-    public static final String TYPE_MESSAGING = "messaging";
+@Entity(indices = [Index(value = ["name"], unique = true)])
+class Platforms {
+
+    public enum class Type(val type: String) {
+        EMAIL("email"),
+        TEXT("text"),
+        MESSAGE("message")
+    }
 
     @PrimaryKey(autoGenerate = true)
-    private long id;
+    var id: Long = 0
 
-    private String name;
+    var name: String? = null
 
-    private String description;
+    var description: String? = null
 
-    private long logo;
+    var logo: Long = 0
 
-    private String letter;
+    var letter: String? = null
 
-    private String type;
-
-    public boolean isSaved() {
-        return isSaved;
-    }
-
-    public void setSaved(boolean saved) {
-        isSaved = saved;
-    }
+    var type: String? = null
 
     @ColumnInfo(defaultValue = "0")
-    private boolean isSaved = false;
+    var isSaved: Boolean = false
 
-    public Platforms() { }
-    public Platforms(long id) {
-        this.id = id;
+    constructor()
+    constructor(id: Long) {
+        this.id = id
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setLogo(long logo) {
-        this.logo = logo;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setLetter(String letter) {
-        this.letter = letter;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public long getLogo() {
-        return this.logo;
-    }
-
-    public long getId() {
-        return this.id;
-    }
-
-    public String getLetter() {
-        return this.letter;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    @Override
-    public boolean equals(@Nullable Object obj) {
-        if(obj instanceof Platforms) {
-            Platforms platforms = (Platforms) obj;
-            return platforms.id == this.id &&
-                    Objects.equals(platforms.description, this.description) &&
-                    Objects.equals(platforms.name, this.name) &&
-                    Objects.equals(platforms.type, this.type) &&
-                    Objects.equals(platforms.letter, this.letter) &&
-                    platforms.logo == this.logo;
+    override fun equals(other: Any?): Boolean {
+        if (other is Platforms) {
+            return (other.id == this.id &&
+                    other.description == description &&
+                    other.name == name &&
+                    other.type == type &&
+                    other.letter == letter)
         }
-        return false;
+        return false
     }
 
-    public static final DiffUtil.ItemCallback<Platforms> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<Platforms>() {
-                @Override
-                public boolean areItemsTheSame(@NonNull Platforms oldItem, @NonNull Platforms newItem) {
-                    return oldItem.id == newItem.id;
+    companion object {
+
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<Platforms> =
+            object : DiffUtil.ItemCallback<Platforms>() {
+                override fun areItemsTheSame(oldItem: Platforms, newItem: Platforms): Boolean {
+                    return oldItem.id == newItem.id
                 }
 
-                @Override
-                public boolean areContentsTheSame(@NonNull Platforms oldItem, @NonNull Platforms newItem) {
-                    return oldItem.equals(newItem);
+                override fun areContentsTheSame(oldItem: Platforms, newItem: Platforms): Boolean {
+                    return oldItem == newItem
                 }
-            };
+            }
+    }
 }

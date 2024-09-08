@@ -1,26 +1,22 @@
-package com.example.sw0b_001;
+package com.example.sw0b_001
 
-import android.os.Bundle;
-import android.view.View;
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-public class AppCompactActivityCustomized extends AppCompatActivity {
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+open class AppCompactActivityCustomized : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
         // TODO: check if shared key is available else kill
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState)
     }
 
-    @Override
-    public void setContentView(View view) {
-        implementViewSecurities(view);
-        super.setContentView(view);
+    override fun setContentView(view: View?) {
+        implementViewSecurities(view)
+        super.setContentView(view)
     }
 
-    private void implementViewSecurities(View view) {
-        view.setFilterTouchesWhenObscured(true);
+    private fun implementViewSecurities(view: View?) {
+        view!!.filterTouchesWhenObscured = true
     }
 
 }
