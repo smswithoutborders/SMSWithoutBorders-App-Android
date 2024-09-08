@@ -52,7 +52,7 @@ class MessagesRecyclerAdapter(private val availablePlatforms: List<AvailablePlat
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val card: MaterialCardView = itemView.findViewById(R.id.recents_card_layout)
-        private val date = itemView.findViewById<MaterialTextView>(R.id.recent_date)
+        private val date = itemView.findViewById<MaterialTextView>(R.id.encryptedTextDate)
         private val body = itemView.findViewById<MaterialTextView>(R.id.encryptedTextSnippet)
         private val subject = itemView.findViewById<MaterialTextView>(R.id.homepage_subject)
         private val recipient = itemView.findViewById<MaterialTextView>(R.id.homepage_recipient)

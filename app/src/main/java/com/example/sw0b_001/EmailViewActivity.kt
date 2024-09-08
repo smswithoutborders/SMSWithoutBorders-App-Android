@@ -11,6 +11,7 @@ import com.example.sw0b_001.Models.Platforms.AvailablePlatforms
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.example.sw0b_001.Modules.Helpers.formatDate
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.CoroutineScope
@@ -43,6 +44,9 @@ class EmailViewActivity : MessagesComposeAppCompactActivityFactory() {
             }
             findViewById<MaterialTextView>(R.id.view_message_body).apply {
                 text = it.subList(5, it.size).joinToString()
+            }
+            findViewById<MaterialTextView>(R.id.layout_email_date).apply {
+                text = formatDate(applicationContext, message.date)
             }
         }
     }

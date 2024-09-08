@@ -79,7 +79,7 @@
                 tools:text="Hello world, here is a sample text that was sent. But emails should be different from messages and their contents." />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/recent_date"
+                android:id="@+id/encryptedTextDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"

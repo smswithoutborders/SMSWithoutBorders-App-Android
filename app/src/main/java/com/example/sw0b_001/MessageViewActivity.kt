@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.sw0b_001.Database.Datastore
+import com.example.sw0b_001.Modules.Helpers.formatDate
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +37,10 @@ class MessageViewActivity : MessagesComposeAppCompactActivityFactory() {
             }
             findViewById<MaterialTextView>(R.id.view_message_body).apply {
                 text = it.subList(2, it.size).joinToString()
+            }
+
+            findViewById<MaterialTextView>(R.id.layout_message_date).apply {
+                text = formatDate(applicationContext, message.date)
             }
         }
     }
