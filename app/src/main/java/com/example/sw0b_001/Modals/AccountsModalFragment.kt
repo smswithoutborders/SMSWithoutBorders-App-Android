@@ -161,7 +161,13 @@ class AccountsModalFragment(val platformName: String, val type: AvailablePlatfor
                 fragmentTransaction?.commitNow()
             }
             "message" -> {
-
+                val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+                val emailComposeModalFragment = EmailComposeModalFragment(storedPlatformsEntity) {
+                    activity?.finish()
+                }
+                fragmentTransaction?.add(emailComposeModalFragment, "text_compose_tag")
+                fragmentTransaction?.show(emailComposeModalFragment)
+                fragmentTransaction?.commitNow()
             }
             else -> {
                 activity?.runOnUiThread {

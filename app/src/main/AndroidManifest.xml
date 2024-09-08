@@ -87,7 +87,7 @@
             android:exported="false"
             android:parentActivityName=".SettingsActivity" />
         <activity
-            android:name=".MessageComposeActivity"
+            android:name=".MessageComposeModalFragment"
             android:exported="false"
             android:label="@string/message_compose_header"
             android:parentActivityName=".HomepageActivity" />
