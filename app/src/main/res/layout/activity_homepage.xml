@@ -12,6 +12,7 @@
         android:id="@+id/homepage_recents_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:focusedByDefault="true"
         app:title="@string/homepage_recent"
         app:titleTextAppearance="@style/TextAppearance.Material3.DisplaySmall"
         app:layout_constraintEnd_toEndOf="parent"

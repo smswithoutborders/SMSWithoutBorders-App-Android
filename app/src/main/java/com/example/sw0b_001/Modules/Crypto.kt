@@ -45,6 +45,7 @@ object Crypto {
         val hmacOutput = Mac.getInstance(algorithm)
         val key: SecretKey = SecretKeySpec(secretKey, algorithm)
         hmacOutput.init(key)
-        return hmacOutput.doFinal(data)
+        hmacOutput.update(data)
+        return hmacOutput.doFinal()
     }
 }

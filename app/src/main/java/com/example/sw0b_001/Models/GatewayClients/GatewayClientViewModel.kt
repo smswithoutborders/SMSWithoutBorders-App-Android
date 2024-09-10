@@ -6,10 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.Models.ThreadExecutorPool
-import com.example.sw0b_001.R
-import com.github.kittinunf.result.Result
-import kotlinx.serialization.json.Json
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class GatewayClientViewModel : ViewModel() {
     private var liveData: LiveData<List<GatewayClient>> = MutableLiveData()
@@ -24,7 +23,7 @@ class GatewayClientViewModel : ViewModel() {
     fun loadRemote(context: Context,
                    successRunnable: Runnable?,
                    failureRunnable: Runnable?){
-        ThreadExecutorPool.executorService.execute(Runnable {
+        CoroutineScope(Dispatchers.Default).launch{
             try {
                 GatewayClientsCommunications.fetchAndPopulateWithDefault(context)
                 successRunnable?.run()
@@ -32,6 +31,6 @@ class GatewayClientViewModel : ViewModel() {
                 Log.e(javaClass.name, "Exception fetching Gateway clients", e)
                 failureRunnable?.run()
             }
-        })
+        }
     }
 }

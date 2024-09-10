@@ -61,7 +61,9 @@ class gRPCTest {
 
     @Test
     fun getPlatformsTest() {
-        val response = Publisher.getAvailablePlatforms(context)
+        val response = Publisher.getAvailablePlatforms(context) {
+
+        }
         assertTrue(response.isNotEmpty())
     }
 

@@ -11,6 +11,8 @@ import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Modules.Crypto
 import com.example.sw0b_001.R
 import com.example.sw0b_001.Security.Cryptography
+import com.example.sw0b_001.Security.Cryptography.HYBRID_KEYS_FILE
+import com.google.common.primitives.Bytes
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import kotlinx.coroutines.CoroutineScope
@@ -67,20 +69,22 @@ class Vault(context: Context) {
                                       encodedLlt: String,
                                       deviceIdPubKey: String,
                                       publisherPubKey: String,
-                                      phoneNumber: String) {
+                                      phoneNumber: String,
+                                      clientDeviceIDPubKey: ByteArray) {
         val deviceIdSharedKey = Cryptography.calculateSharedSecret(
             context,
             DEVICE_ID_KEYSTORE_ALIAS,
             Base64.decode(deviceIdPubKey, Base64.DEFAULT))
-
-        val keypair = KeystoreHelpers.getKeyPairFromKeystore(DEVICE_ID_KEYSTORE_ALIAS)
+        println("DeviceID sk: ${Base64.encodeToString(deviceIdSharedKey, Base64.DEFAULT)}")
 
         val llt = Crypto.decryptFernet(deviceIdSharedKey,
             String(Base64.decode(encodedLlt, Base64.DEFAULT), Charsets.UTF_8))
 
-        val deviceId = getDeviceID(deviceIdSharedKey, phoneNumber, keypair.public.encoded)
+        val deviceId = getDeviceID(deviceIdSharedKey, phoneNumber, clientDeviceIDPubKey)
+        println("DeviceID: ${Base64.encodeToString(deviceId, Base64.DEFAULT)}")
+        println("Device msisdn: $phoneNumber")
 
-        storeArtifacts(context, llt, deviceId)
+        storeArtifacts(context, llt, deviceId, clientDeviceIDPubKey)
         Publisher.storeArtifacts(context, publisherPubKey)
     }
 
@@ -112,7 +116,8 @@ class Vault(context: Context) {
                 response.longLivedToken,
                 response.serverDeviceIdPubKey,
                 response.serverPublishPubKey,
-                phoneNumber)
+                phoneNumber,
+                deviceIdPubKey)
         }
         return response
     }
@@ -142,7 +147,8 @@ class Vault(context: Context) {
                 response.longLivedToken,
                 response.serverDeviceIdPubKey,
                 response.serverPublishPubKey,
-                phoneNumber)
+                phoneNumber,
+                deviceIdPubKey)
         }
         return response
     }
@@ -172,7 +178,8 @@ class Vault(context: Context) {
                 response.longLivedToken,
                 response.serverDeviceIdPubKey,
                 response.serverPublishPubKey,
-                phoneNumber)
+                phoneNumber,
+                deviceIdPubKey)
         }
         return response
     }
@@ -199,8 +206,10 @@ class Vault(context: Context) {
 
         private const val LONG_LIVED_TOKEN_KEYSTORE_ALIAS =
             "com.afkanerd.relaysms.LONG_LIVED_TOKEN_KEYSTORE_ALIAS"
-        private const val DEVICE_ID_KEYSTORE_ALIAS =
+        const val DEVICE_ID_KEYSTORE_ALIAS =
             "com.afkanerd.relaysms.DEVICE_ID_KEYSTORE_ALIAS"
+        const val DEVICE_ID_PUB_KEY =
+            "com.afkanerd.relaysms.DEVICE_ID_PUB_KEY"
 
         private const val LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS =
             "com.afkanerd.relaysms.LONG_LIVED_TOKEN_SECRET_KEY_KEYSTORE_ALIAS"
@@ -237,7 +246,10 @@ class Vault(context: Context) {
             }
         }
 
-        fun storeArtifacts(context: Context, llt: String, deviceId: ByteArray) {
+        fun storeArtifacts(context: Context,
+                           llt: String,
+                           deviceId: ByteArray,
+                           clientDeviceIDPubKey: ByteArray) {
             val publicKey = SecurityRSA.generateKeyPair(LONG_LIVED_TOKEN_KEYSTORE_ALIAS, 2048)
             val secretKey = SecurityAES.generateSecretKey(256)
 
@@ -266,7 +278,17 @@ class Vault(context: Context) {
                     Base64.encodeToString(encryptedSecretKey, Base64.DEFAULT))
                 .putString(DEVICE_ID_SECRET_KEY_KEYSTORE_ALIAS,
                     Base64.encodeToString(encryptedDeviceIdSecretKey, Base64.DEFAULT))
+                .putString(DEVICE_ID_PUB_KEY,
+                    Base64.encodeToString(clientDeviceIDPubKey, Base64.DEFAULT))
                 .apply()
+        }
+
+        fun fetchDeviceIDPublicKey(context: Context) : ByteArray {
+            val sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
+                .encryptionFingerprint(context)
+                .build()
+            return Base64.decode(sharedPreferences.getString(DEVICE_ID_PUB_KEY, ""),
+                Base64.DEFAULT)
         }
 
         fun fetchLongLivedToken(context: Context) : String {
@@ -285,7 +307,7 @@ class Vault(context: Context) {
 
             val keypair = KeystoreHelpers.getKeyPairFromKeystore(LONG_LIVED_TOKEN_KEYSTORE_ALIAS)
             val secretKey = SecurityRSA.decrypt(keypair.private, secretKeyEncrypted)
-            return String(SecurityAES.decryptAES256CBC(encryptedLlt, secretKey), Charsets.UTF_8)
+            return String(SecurityAES.decryptAES256CBC(encryptedLlt, secretKey, null), Charsets.UTF_8)
         }
 
         fun fetchDeviceId(context: Context) : ByteArray? {
@@ -304,12 +326,17 @@ class Vault(context: Context) {
 
             val keypair = KeystoreHelpers.getKeyPairFromKeystore(DEVICE_ID_KEYSTORE_ALIAS)
             val secretKey = SecurityRSA.decrypt(keypair.private, secretKeyEncrypted)
-            return SecurityAES.decryptAES256CBC(encryptedDeviceId, secretKey)
+            return SecurityAES.decryptAES256CBC(encryptedDeviceId, secretKey, null)
         }
 
 
         fun getDeviceID(derivedKey: ByteArray, phoneNumber: String, publicKey: ByteArray) : ByteArray {
             val combinedData = phoneNumber.encodeToByteArray() + publicKey
+            println("PK size: ${publicKey.size}")
+            assert(publicKey.size == 32)
+            println("Combined: ${Base64.encodeToString(combinedData, Base64.DEFAULT)} = " +
+                    "${combinedData.size}")
+            println("pk: ${Base64.encodeToString(publicKey, Base64.DEFAULT)}")
             return Crypto.HMAC(derivedKey, combinedData)
         }
     }

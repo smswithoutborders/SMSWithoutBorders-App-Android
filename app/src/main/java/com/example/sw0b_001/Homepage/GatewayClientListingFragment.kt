@@ -23,12 +23,14 @@ import com.example.sw0b_001.Models.GatewayClients.GatewayClient
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientAddModalFragment
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientViewModel
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
-import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.R
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textview.MaterialTextView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_available) {
@@ -170,7 +172,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
                 OnClickListener {
             return OnClickListener {
                 gatewayClientsCommunications.updateDefaultGatewayClient(gatewayClient.mSISDN!!)
-                ThreadExecutorPool.executorService.execute {
+                CoroutineScope(Dispatchers.Default).launch{
                     gatewayClient.type = "custom"
                     Datastore.getDatastore(it.context).gatewayClientsDao().update(gatewayClient)
                 }

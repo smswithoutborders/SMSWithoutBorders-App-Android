@@ -1,7 +1,6 @@
 package com.example.sw0b_001
 
 import android.app.Activity
-import android.app.Activity.RESULT_OK
 import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -9,22 +8,13 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.text.Editable
-import android.util.Base64
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.registerReceiver
-import androidx.fragment.app.Fragment
-import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Models.Publisher
-import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.Vault
-import com.example.sw0b_001.Modules.Network
-import com.github.kittinunf.fuel.core.Headers
 import com.google.android.gms.auth.api.phone.SmsRetriever
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
@@ -36,8 +26,6 @@ import io.grpc.StatusRuntimeException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.security.DigestException
-import java.security.MessageDigest
 
 class OTPVerificationActivity : AppCompactActivityCustomized() {
 

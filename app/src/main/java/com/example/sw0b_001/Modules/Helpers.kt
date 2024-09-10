@@ -6,10 +6,16 @@ import android.text.format.DateUtils
 import android.util.Log
 import com.example.sw0b_001.R
 import java.net.URL
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.security.SecureRandom
 import java.util.Calendar
 
 object Helpers {
+    fun Int.toBytes(order: ByteOrder = ByteOrder.LITTLE_ENDIAN, size: Int=4): ByteArray {
+        return ByteBuffer.allocate(size).order(order).putInt(this).array()
+    }
+
     fun formatDate(context: Context, epochTime: Long): String {
         val currentTime = System.currentTimeMillis()
         val diff = currentTime - epochTime

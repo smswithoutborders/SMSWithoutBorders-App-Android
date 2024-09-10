@@ -4,16 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.sw0b_001.BuildConfig
-import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.Vault
 import com.example.sw0b_001.OTPVerificationActivity
 import com.example.sw0b_001.R
-import com.github.kittinunf.fuel.core.Headers
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
@@ -22,7 +19,9 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
 import com.hbb20.CountryCodePicker
 import io.grpc.StatusRuntimeException
-import kotlinx.serialization.json.Json
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class RecoverModalFragment(private val onSuccessRunnable: Runnable?) :
@@ -171,7 +170,7 @@ class RecoverModalFragment(private val onSuccessRunnable: Runnable?) :
                     val password = view.findViewById<TextInputEditText>(
                         R.id.recovery_password_text_input).text.toString()
 
-                    ThreadExecutorPool.executorService.execute {
+                    CoroutineScope(Dispatchers.Default).launch{
                         recover(view, phoneNumber, password)
                     }
                 }

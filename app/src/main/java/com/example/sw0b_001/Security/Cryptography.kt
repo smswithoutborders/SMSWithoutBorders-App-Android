@@ -9,16 +9,18 @@ import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityCurve25519
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
 
 object Cryptography {
-    private val HYBRID_KEYS_FILE = "com.afkanerd.relaysms.HYBRID_KEYS_FILE"
+    val HYBRID_KEYS_FILE = "com.afkanerd.relaysms.HYBRID_KEYS_FILE"
 
-    private fun secureStorePrivateKey(context: Context, keystoreAlias: String,
+    private fun secureStorePrivateKey(context: Context,
+                                      keystoreAlias: String,
                                       encryptedCipherPrivateKey: ByteArray) {
         val sharedPreferences = Armadillo.create(context, HYBRID_KEYS_FILE)
             .encryptionFingerprint(context)
             .build()
 
-        sharedPreferences.edit().putString(keystoreAlias,
-            Base64.encodeToString(encryptedCipherPrivateKey, Base64.DEFAULT)).apply()
+        sharedPreferences.edit()
+            .putString(keystoreAlias, Base64.encodeToString(encryptedCipherPrivateKey,
+                Base64.DEFAULT)).apply()
     }
 
     fun generateKey(context: Context, keystoreAlias: String): ByteArray {
@@ -31,13 +33,13 @@ object Cryptography {
         return publicKey
     }
 
-
     private fun getSecuredStoredPrivateKey(context: Context, keystoreAlias: String) : String {
         val sharedPreferences = Armadillo.create(context, HYBRID_KEYS_FILE)
             .encryptionFingerprint(context)
             .build()
         return sharedPreferences.getString(keystoreAlias, "")!!
     }
+
 
     private fun fetchPrivateKey(context: Context, keystoreAlias: String) : ByteArray {
         val cipherPrivateKeyString = getSecuredStoredPrivateKey(context, keystoreAlias)

@@ -4,9 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.Modules.Network
 
 class PlatformsViewModel : ViewModel() {
     private var availableLiveData: LiveData<List<AvailablePlatforms>> = MutableLiveData()

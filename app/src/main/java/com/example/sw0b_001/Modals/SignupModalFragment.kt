@@ -11,20 +11,13 @@ import android.text.TextPaint
 import android.text.TextUtils
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.sw0b_001.BuildConfig
-import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Models.Vault
 import com.example.sw0b_001.OTPVerificationActivity
 import com.example.sw0b_001.R
-import com.github.kittinunf.fuel.core.Headers
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.CommonStatusCodes
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
@@ -37,7 +30,6 @@ import io.grpc.StatusRuntimeException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 
 
 class SignupModalFragment(private val onSuccessRunnable: Runnable?) :

@@ -1,31 +1,14 @@
 package com.example.sw0b_001
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.text.Html
-import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.fragment.app.commitNow
-import androidx.fragment.app.findFragment
-import androidx.fragment.app.replace
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
-import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityRSA
-import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient
-import com.example.sw0b_001.Models.Platforms.AvailablePlatforms
-import com.example.sw0b_001.Models.Platforms.PlatformsViewModel
-import com.example.sw0b_001.Models.Publisher
-import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Onboarding.OnboardingComponent
 import com.example.sw0b_001.Onboarding.OnboardingPublishExampleFragment
 import com.example.sw0b_001.Onboarding.OnboardingFinishedFragment
@@ -33,13 +16,6 @@ import com.example.sw0b_001.Onboarding.OnboardingVaultFragment
 import com.example.sw0b_001.Onboarding.OnboardingVaultStorePlatformFragment
 import com.example.sw0b_001.Onboarding.OnboardingWelcomeFragment
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textview.MaterialTextView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.net.URL
-import java.net.UnknownHostException
-import kotlin.io.encoding.Base64
 
 class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageComponentsListing {
     private var fragmentIterator: MutableLiveData<Int> = MutableLiveData<Int>()

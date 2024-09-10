@@ -1,16 +1,16 @@
 package com.example.sw0b_001.Models.GatewayClients
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import com.example.sw0b_001.Models.ThreadExecutorPool
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class GatewayClientAddModalFragment :
         BottomSheetDialogFragment(R.layout.fragment_gateway_client_add_modal) {
@@ -44,9 +44,9 @@ class GatewayClientAddModalFragment :
         gatewayClient.alias = aliasTextView.text?.toString()
         gatewayClient.type = GatewayClient.TYPE_CUSTOM
 
-        ThreadExecutorPool.executorService.execute(Runnable {
+        CoroutineScope(Dispatchers.Default).launch {
             Datastore.getDatastore(context).gatewayClientsDao().insert(gatewayClient)
             dismiss()
-        })
+        }
     }
 }
