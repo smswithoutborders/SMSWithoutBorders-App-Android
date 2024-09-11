@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="31dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/the_vault_supports_storing_for_multiple_online_platforms_click_save_accounts_to_vault_to_see_the_list"
         android:textAlignment="center"
         android:textSize="14sp"

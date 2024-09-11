@@ -53,10 +53,7 @@
         android:layout_marginBottom="30dp"
         android:text="@string/create_a_new_relaysms_vault_account_or_signup_to_your_existing"
         android:textAlignment="center"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/onboarding_vault_signup_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textSize="16sp"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/onboarding_vault_signup_btn"
@@ -66,10 +63,7 @@
         android:padding="15dp"
         android:text="@string/create_account"
         android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/onboarding_vault_login_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textStyle="bold"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/onboarding_vault_login_btn"
@@ -79,10 +73,6 @@
         android:backgroundTint="@color/md_theme_outlineVariant_mediumContrast"
         android:padding="15dp"
         android:text="@string/login"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        android:textSize="16sp"/>
 
 </LinearLayout>
