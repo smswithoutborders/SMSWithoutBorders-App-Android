@@ -233,7 +233,12 @@ class Vault(context: Context) {
         }
 
         fun logout(context: Context) {
-            val sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
+            var sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
+                .encryptionFingerprint(context)
+                .build()
+            sharedPreferences.edit().clear().apply()
+
+            sharedPreferences = Armadillo.create(context, Publisher.PUBLISHER_ATTRIBUTE_FILES)
                 .encryptionFingerprint(context)
                 .build()
             sharedPreferences.edit().clear().apply()
@@ -243,6 +248,7 @@ class Vault(context: Context) {
             CoroutineScope(Dispatchers.Default).launch {
                 Datastore.getDatastore(context).storedPlatformsDao().deleteAll()
                 Datastore.getDatastore(context).encryptedContentDAO().deleteAll()
+                Datastore.getDatastore(context).ratchetStatesDAO().deleteAll()
             }
         }
 

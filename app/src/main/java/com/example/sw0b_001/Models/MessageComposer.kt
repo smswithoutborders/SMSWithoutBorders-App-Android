@@ -23,16 +23,13 @@ class MessageComposer(val context: Context, val state: States) {
         if(state.DHs == null) {
             val SK = Publisher.fetchPublisherSharedKey(context)
             Ratchets.ratchetInitAlice(state, SK, AD)
-
-            println("SK: ${Base64.encodeToString(SK, Base64.DEFAULT)}")
-            println("DeviceID pubkey: ${Base64.encodeToString(KeystoreHelpers
-                .getKeyPairFromKeystore(Vault.DEVICE_ID_KEYSTORE_ALIAS).public.encoded, Base64.DEFAULT)}")
-            println("DeviceID: ${Base64.encodeToString(Vault.fetchDeviceId(context), Base64.DEFAULT)}")
         }
     }
 
     fun compose(availablePlatforms: AvailablePlatforms, content: String): String {
         val (header, cipherMk) = Ratchets.ratchetEncrypt(state, content.encodeToByteArray(), AD)
+        println("Header PN: ${header.PN}")
+        println("Header N: ${header.N}")
         val deviceID = Vault.fetchDeviceId(context)
         return formatTransmission(header,  cipherMk,
             availablePlatforms.shortcode!!.encodeToByteArray()[0], deviceID)
@@ -46,11 +43,6 @@ class MessageComposer(val context: Context, val state: States) {
 
             val bytesLen = sHeader.size.toBytes()
             val encryptedContentPayload = bytesLen + sHeader + cipherText
-            println("CipherText: ${Base64.encodeToString(cipherText, Base64.DEFAULT)}")
-            println("BytesLen: ${Base64.encodeToString(bytesLen, Base64.DEFAULT)}")
-            println("BytesLen real: ${sHeader.size}")
-            println("Encrypted content: ${Base64.encodeToString(encryptedContentPayload, Base64.DEFAULT)}")
-
             val payloadBytesLen = encryptedContentPayload.size.toBytes()
             var data = payloadBytesLen + platformLetter + encryptedContentPayload
 

@@ -16,4 +16,7 @@ interface RatchetStatesDAO {
 
     @Query("SELECT * FROM RatchetStates")
     fun fetch(): List<RatchetStates>
+
+    @Query("DELETE FROM RatchetStates")
+    fun deleteAll()
 }

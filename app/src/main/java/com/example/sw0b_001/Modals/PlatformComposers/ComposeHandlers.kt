@@ -10,9 +10,11 @@ import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
 import com.example.sw0b_001.Models.MessageComposer
+import com.example.sw0b_001.Models.Messages.RatchetStates
 import com.example.sw0b_001.Models.Platforms.AvailablePlatforms
 import com.example.sw0b_001.Models.Platforms.Platforms
 import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
+import com.example.sw0b_001.Models.Publisher
 import com.example.sw0b_001.Models.SMSHandler
 
 object ComposeHandlers {
@@ -27,11 +29,23 @@ object ComposeHandlers {
             throw Exception("More than 1 states exist")
         }
 
-        val state = if(states.isNotEmpty()) States(Base64.encodeToString(states.first().value,
-            Base64.DEFAULT)) else States()
+        val state = if(states.isNotEmpty())
+            States(String(Publisher.getEncryptedStates(context, states[0].value),
+                Charsets.UTF_8)) else States()
         val messageComposer = MessageComposer(context, state)
         val encryptedContentBase64 = messageComposer.compose(platforms, formattedContent)
-        println("Final content: $encryptedContentBase64")
+        println(state.serializedStates)
+        println("Final format: $encryptedContentBase64")
+
+        val encryptedStates = Publisher.encryptStates(context, state.serializedStates)
+        val ratchetsStates : RatchetStates?
+        if(states.isNotEmpty()) {
+            ratchetsStates = RatchetStates(states[0].id, encryptedStates)
+            Datastore.getDatastore(context).ratchetStatesDAO().update(ratchetsStates)
+        } else {
+            ratchetsStates = RatchetStates(value = encryptedStates)
+            Datastore.getDatastore(context).ratchetStatesDAO().insert(ratchetsStates)
+        }
 
         val gatewayClientMSISDN = GatewayClientsCommunications(context)
             .getDefaultGatewayClient()
