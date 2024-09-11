@@ -178,7 +178,7 @@ dependencies {
 
     implementation "androidx.startup:startup-runtime:1.1.1"
     implementation 'at.favre.lib:armadillo:1.0.0'
-    implementation 'com.afkanerd.oss1:smswithoutborders_libsignal:0.0.9'
+    implementation 'com.afkanerd.oss1:smswithoutborders_libsignal:0.0.10'
     implementation "net.openid:appauth:0.11.1"
     implementation 'com.hbb20:ccp:2.7.0'
 
