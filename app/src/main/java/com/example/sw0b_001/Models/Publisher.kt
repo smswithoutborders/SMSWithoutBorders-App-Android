@@ -101,17 +101,6 @@ class Publisher(val context: Context) {
         return publisherStub.getPNBACode(request)
     }
 
-    fun revokePNBAPlatform(llt: String, platform: String, account: String) :
-            PublisherOuterClass.RevokeAndDeletePNBATokenResponse {
-        val request = PublisherOuterClass.RevokeAndDeletePNBATokenRequest.newBuilder().apply {
-            setPlatform(platform)
-            setLongLivedToken(llt)
-            setAccountIdentifier(account)
-        }.build()
-
-        return publisherStub.revokeAndDeletePNBAToken(request)
-    }
-
     fun phoneNumberBaseAuthenticationExchange(authorizationCode: String,
                                               llt: String,
                                               phoneNumber: String,
