@@ -23,7 +23,7 @@
         android:id="@+id/onboarding_welcome_vaults_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="24dp"
         android:text="@string/introducing_vaults"
         android:textAlignment="center"
         android:textSize="18sp"
@@ -36,13 +36,13 @@
         android:layout_marginBottom="1dp"
         android:text="@string/relaysms_vaults_keep_secure_access_to_your_online_accounts_while_you_are_offline"
         android:textAlignment="center"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textStyle="bold"/>
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_gravity="center"
         android:src="@drawable/_d_fluency_safe"/>
 
@@ -50,10 +50,10 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="16dp"
         android:text="@string/create_a_new_relaysms_vault_account_or_signup_to_your_existing"
         android:textAlignment="center"
-        android:textSize="16sp"/>
+        android:textSize="14sp"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/onboarding_vault_signup_btn"
@@ -69,7 +69,6 @@
         android:id="@+id/onboarding_vault_login_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
         android:backgroundTint="@color/md_theme_outlineVariant_mediumContrast"
         android:padding="15dp"
         android:text="@string/login"

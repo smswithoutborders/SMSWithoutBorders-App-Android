@@ -164,7 +164,7 @@
             android:layout_height="wrap_content"
             android:background="#0000"
             android:padding="16dp"
-            android:text="@string/already_have_an_account"
+            android:text="@string/don_t_have_an_account_create_account"
             android:textAlignment="center"
             android:textColor="#539FF1"
             android:textSize="16sp"/>
