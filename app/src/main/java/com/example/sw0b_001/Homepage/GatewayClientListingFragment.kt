@@ -2,6 +2,7 @@ package com.example.sw0b_001.Homepage
 
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -11,12 +12,15 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient
@@ -62,7 +66,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
                 refreshLayout.isRefreshing = false
             }
         }.observe(viewLifecycleOwner, Observer {
-            listViewAdapter = GatewayClientListingAdapter(gatewayClient, it)
+            listViewAdapter = GatewayClientListingAdapter(gatewayClient, it, viewModel)
             listView.adapter = listViewAdapter
         })
 
@@ -71,6 +75,20 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
 
         gatewayClient.sharedPreferences
             .registerOnSharedPreferenceChangeListener(sharedPreferencesChangeListener)
+
+        val selectedPhoneNumberText = view.findViewById<TextView>(R.id.selected_phone_number_text)
+        val selectedOperatorText = view.findViewById<TextView>(R.id.selected_operator_text)
+        val selectedOperatorCodeText = view.findViewById<TextView>(R.id.selected_operator_code_text)
+        val selectedCountryText = view.findViewById<TextView>(R.id.selected_country_text)
+
+        lifecycleScope.launch {
+            viewModel.selectedGatewayClient.collect { gatewayClient ->
+                selectedPhoneNumberText.text = gatewayClient?.mSISDN ?: ""
+                selectedOperatorText.text = gatewayClient?.operatorName ?: ""
+                selectedOperatorCodeText.text = gatewayClient?.operatorId ?: ""
+                selectedCountryText.text = gatewayClient?.country ?: ""
+            }
+        }
 
         val menuHost = requireActivity()
         menuHost.addMenuProvider(object: MenuProvider{
@@ -130,7 +148,8 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
     }
 
     class GatewayClientListingAdapter(private val gatewayClientsCommunications: GatewayClientsCommunications,
-                                      private var gatewayClientsList: List<GatewayClient>) : BaseAdapter() {
+                                      private var gatewayClientsList: List<GatewayClient>,
+                                      private val viewModel: GatewayClientViewModel) : BaseAdapter() {
 
         override fun getCount(): Int {
             return gatewayClientsList.size
@@ -157,20 +176,20 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
             view?.findViewById<MaterialTextView>(R.id.gateway_client_MSISDN)?.text =
                     gatewayClient.mSISDN
 
-            view?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
+            view?.setOnClickListener(gatewayClientOnClickListener(gatewayClient, viewModel))
 
             val radioButton = view?.findViewById<SwitchMaterial>(R.id.gateway_client_radio_btn)
             radioButton?.isChecked = defaultGatewayClientMsisdn == gatewayClient.mSISDN
-            radioButton?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
+            radioButton?.setOnClickListener(gatewayClientOnClickListener(gatewayClient, viewModel))
 
 
             view?.findViewById<MaterialCardView>(R.id.gateway_client_listing_card)
-                    ?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
+                    ?.setOnClickListener(gatewayClientOnClickListener(gatewayClient, viewModel))
 
             return view!!
         }
 
-        private fun gatewayClientOnClickListener(gatewayClient: GatewayClient):
+        private fun gatewayClientOnClickListener(gatewayClient: GatewayClient, viewModel: GatewayClientViewModel):
                 OnClickListener {
             return OnClickListener {
                 gatewayClientsCommunications.updateDefaultGatewayClient(gatewayClient.mSISDN!!)
@@ -178,6 +197,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
                     gatewayClient.type = "custom"
                     Datastore.getDatastore(it.context).gatewayClientsDao().update(gatewayClient)
                 }
+                viewModel.updateSelectedGatewayClient(gatewayClient.mSISDN)
             }
         }
     }
