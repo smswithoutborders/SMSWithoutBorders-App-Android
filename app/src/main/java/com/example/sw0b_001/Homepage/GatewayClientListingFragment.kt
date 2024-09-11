@@ -114,8 +114,10 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
         linearProgressIndicator.visibility = View.VISIBLE
 
         viewModel.loadRemote(requireContext(), {
-            refreshLayout.isRefreshing = false
-            linearProgressIndicator.visibility = View.GONE
+            activity?.runOnUiThread {
+                refreshLayout.isRefreshing = false
+                linearProgressIndicator.visibility = View.GONE
+            }
         } ) {
             activity?.runOnUiThread {
                 refreshLayout.isRefreshing = false
