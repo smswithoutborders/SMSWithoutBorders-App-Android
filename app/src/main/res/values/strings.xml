@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">SWOB</string>
+    <string name="app_name" translatable="false">RelaySMS</string>
 
     <string name="email_compose_to">
         To

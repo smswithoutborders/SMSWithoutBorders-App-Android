@@ -7,60 +7,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    android:padding="8dp"
     style="@style/Widget.Material3.BottomSheet.Modal">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:orientation="vertical"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:id="@+id/login_constraint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:id="@+id/drag_handle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <ImageView
             android:id="@+id/login_logo"
-            android:layout_width="127dp"
-            android:layout_height="136dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/logo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/login_text_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_gravity="center"
             android:text="@string/onboarding_log_into_vault"
             android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_logo" />
+            android:textStyle="bold"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/login_description"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:text="@string/welcome_back_nsign_in_to_continue_with_existing_account"
             android:textAlignment="center"
-            android:textColor="@color/md_theme_outline"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_text_description" />
+            android:textColor="@color/md_theme_outline"/>
 
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/login_progress_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="8dp"
             android:indeterminate="true"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_description"
             tools:visibility="visible" />
 
         <com.google.android.material.card.MaterialCardView
@@ -68,14 +64,9 @@
             style="@style/Widget.Material3.CardView.Elevated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
             android:visibility="gone"
             app:cardBackgroundColor="@color/md_theme_error_mediumContrast"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_progress_bar"
             tools:visibility="visible">
 
             <com.google.android.material.textview.MaterialTextView
@@ -93,13 +84,8 @@
             android:id="@+id/login_phonenumber_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_status_card">
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
             <com.hbb20.CountryCodePicker
                 android:id="@+id/login_country_code_picker"
@@ -142,23 +128,17 @@
             android:id="@+id/login_forgot_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:text="@string/forgot_password"
             android:background="#0000"
             android:textColor="#007AFF"
-            app:layout_constraintEnd_toEndOf="@+id/login_phonenumber_layout"
-            app:layout_constraintTop_toBottomOf="@+id/login_phonenumber_layout" />
+            android:layout_gravity="end"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_password_text"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:hint="@string/login_password"
-            app:layout_constraintEnd_toEndOf="@+id/login_phonenumber_layout"
-            app:layout_constraintStart_toStartOf="@+id/login_phonenumber_layout"
-            app:layout_constraintTop_toBottomOf="@+id/login_forgot_password"
-            app:layout_constraintBottom_toTopOf="@+id/login_btn"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -172,32 +152,23 @@
             android:id="@+id/login_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginTop="24dp"
             android:layout_marginBottom="16dp"
             android:text="@string/login_login"
-            android:padding="14dp"
-            app:layout_constraintBottom_toTopOf="@+id/login_already_have_account"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_password_text" />
+            android:padding="14dp"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/login_already_have_account"
+            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:background="#0000"
             android:padding="16dp"
             android:text="@string/already_have_an_account"
             android:textAlignment="center"
             android:textColor="#539FF1"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/login_btn"
-            app:layout_constraintStart_toStartOf="@+id/login_btn" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:textSize="16sp"/>
+    </LinearLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

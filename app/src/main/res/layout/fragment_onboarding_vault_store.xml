@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="16dp"
         android:text="@string/add_accounts_you_vault"
         android:textAlignment="center"
@@ -25,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/let_s_get_you_started"
         android:textAlignment="center"
         android:textSize="18sp"
@@ -39,6 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:text="@string/you_can_add_accounts_to_vault_this_accounts_are_accessible_to_you_when_you_are_offline"
         android:textAlignment="center"
@@ -53,6 +55,8 @@
         android:id="@+id/imageView3"
         android:layout_width="250dp"
         android:layout_height="250dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
         android:src="@drawable/_d_fluency_bank_safe"
         app:layout_constraintBottom_toTopOf="@+id/onboarding_welcome_vaults_description2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,13 +69,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="31dp"
         android:text="@string/the_vault_supports_storing_for_multiple_online_platforms_click_save_accounts_to_vault_to_see_the_list"
         android:textAlignment="center"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/onboarding_welcome_vaults_store_description_try_example_btn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <com.google.android.material.button.MaterialButton
@@ -80,10 +84,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:padding="15dp"
         android:text="@string/save_accounts_to_vault"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/onboarding_welcome_vaults_description2" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

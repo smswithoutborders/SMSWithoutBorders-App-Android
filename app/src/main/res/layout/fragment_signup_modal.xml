@@ -5,13 +5,15 @@
     android:theme="@style/Theme.main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="8dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     style="@style/Widget.Material3.BottomSheet.Modal">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:id="@+id/signup_constraint"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <com.google.android.material.bottomsheet.BottomSheetDragHandleView
@@ -24,9 +26,10 @@
 
         <ImageView
             android:id="@+id/signup_logo"
-            android:layout_width="127dp"
-            android:layout_height="136dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/logo"
+            android:layout_gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/drag_handle" />
@@ -36,9 +39,7 @@
             android:id="@+id/signup_text_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_gravity="center"
             android:text="@string/create_new_vault_account"
             android:textSize="30sp"
             android:textStyle="bold"
@@ -50,7 +51,8 @@
             android:id="@+id/login_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
             android:text="@string/if_you_do_not_have_an_account_nplease_create_one_to_save_your_platforms"
             android:textAlignment="center"
             android:textColor="@color/md_theme_outline"
@@ -145,7 +147,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/signup_password_text"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="@string/password"
@@ -163,7 +165,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/signup_password_text_retry"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:hint="@string/re_enter_password"
@@ -183,7 +185,7 @@
             android:id="@+id/signup_read_privacy_policy_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             tools:text="@string/signup_i_have_read_the_privacy_policy_start"
             app:layout_constraintStart_toStartOf="@+id/signup_password_text_retry"
             app:layout_constraintTop_toBottomOf="@+id/signup_password_text_retry" />
@@ -192,10 +194,7 @@
             android:id="@+id/signup_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="8dp"
             android:padding="16dp"
             android:text="@string/signup"
             android:enabled="false"
@@ -208,12 +207,12 @@
             android:id="@+id/signup_already_have_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_gravity="center"
             android:background="#0000"
             android:textColor="#007AFF"
             android:padding="16dp"
             android:text="@string/already_got_sms_code"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/signup_already_have_account"
             app:layout_constraintEnd_toEndOf="@+id/signup_btn"
             app:layout_constraintStart_toStartOf="@+id/signup_btn" />
@@ -222,7 +221,7 @@
             android:id="@+id/signup_already_have_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_gravity="center"
             android:background="#0000"
             android:padding="16dp"
             android:text="@string/already_have_an_account"
@@ -232,6 +231,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/signup_already_have_code"
             app:layout_constraintStart_toStartOf="@+id/signup_already_have_code" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
