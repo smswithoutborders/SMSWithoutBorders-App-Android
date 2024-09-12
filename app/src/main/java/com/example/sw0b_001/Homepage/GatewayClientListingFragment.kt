@@ -41,6 +41,11 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
 
     private lateinit var listViewAdapter: GatewayClientListingAdapter
 
+    private lateinit var selectedPhoneNumberText: TextView
+    private lateinit var selectedOperatorText: TextView
+    private lateinit var selectedOperatorCodeText: TextView
+    private lateinit var selectedCountryText: TextView
+
     private val viewModel: GatewayClientViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +71,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
                 refreshLayout.isRefreshing = false
             }
         }.observe(viewLifecycleOwner, Observer {
-            listViewAdapter = GatewayClientListingAdapter(gatewayClient, it, viewModel)
+            listViewAdapter = GatewayClientListingAdapter(gatewayClient, it)
             listView.adapter = listViewAdapter
         })
 
@@ -76,19 +81,11 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
         gatewayClient.sharedPreferences
             .registerOnSharedPreferenceChangeListener(sharedPreferencesChangeListener)
 
-        val selectedPhoneNumberText = view.findViewById<TextView>(R.id.selected_phone_number_text)
-        val selectedOperatorText = view.findViewById<TextView>(R.id.selected_operator_text)
-        val selectedOperatorCodeText = view.findViewById<TextView>(R.id.selected_operator_code_text)
-        val selectedCountryText = view.findViewById<TextView>(R.id.selected_country_text)
-
-        lifecycleScope.launch {
-            viewModel.selectedGatewayClient.collect { gatewayClient ->
-                selectedPhoneNumberText.text = gatewayClient?.mSISDN ?: ""
-                selectedOperatorText.text = gatewayClient?.operatorName ?: ""
-                selectedOperatorCodeText.text = gatewayClient?.operatorId ?: ""
-                selectedCountryText.text = gatewayClient?.country ?: ""
-            }
-        }
+        selectedPhoneNumberText = view.findViewById(R.id.selected_phone_number_text)
+        selectedOperatorText = view.findViewById(R.id.selected_operator_text)
+        selectedOperatorCodeText = view.findViewById(R.id.selected_operator_code_text)
+        selectedCountryText = view.findViewById(R.id.selected_country_text)
+        updateSelectedGatewayClientUI()
 
         val menuHost = requireActivity()
         menuHost.addMenuProvider(object: MenuProvider{
@@ -119,9 +116,27 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
+    private fun updateSelectedGatewayClientUI() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val defaultGatewayClientMsisdn = GatewayClientsCommunications(requireContext()).getDefaultGatewayClient()
+            val defaultGatewayClient = defaultGatewayClientMsisdn?.let {
+                viewModel.getGatewayClientByMsisdn(requireContext(), it)
+            }
+
+            activity?.runOnUiThread {
+                selectedPhoneNumberText.text = defaultGatewayClient?.mSISDN ?: ""
+                selectedOperatorText.text = defaultGatewayClient?.operatorName ?: ""
+                selectedOperatorCodeText.text = defaultGatewayClient?.operatorId ?: ""
+                selectedCountryText.text = defaultGatewayClient?.country ?: ""
+            }
+        }
+    }
+
     private val sharedPreferencesChangeListener = OnSharedPreferenceChangeListener { _, _ ->
         if(::listViewAdapter.isInitialized)
             listViewAdapter.notifyDataSetChanged()
+
+        updateSelectedGatewayClientUI()
     }
 
     private fun refresh(view: View) {
@@ -148,8 +163,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
     }
 
     class GatewayClientListingAdapter(private val gatewayClientsCommunications: GatewayClientsCommunications,
-                                      private var gatewayClientsList: List<GatewayClient>,
-                                      private val viewModel: GatewayClientViewModel) : BaseAdapter() {
+                                      private var gatewayClientsList: List<GatewayClient>) : BaseAdapter() {
 
         override fun getCount(): Int {
             return gatewayClientsList.size
@@ -176,20 +190,20 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
             view?.findViewById<MaterialTextView>(R.id.gateway_client_MSISDN)?.text =
                     gatewayClient.mSISDN
 
-            view?.setOnClickListener(gatewayClientOnClickListener(gatewayClient, viewModel))
+            view?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
 
             val radioButton = view?.findViewById<SwitchMaterial>(R.id.gateway_client_radio_btn)
             radioButton?.isChecked = defaultGatewayClientMsisdn == gatewayClient.mSISDN
-            radioButton?.setOnClickListener(gatewayClientOnClickListener(gatewayClient, viewModel))
+            radioButton?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
 
 
             view?.findViewById<MaterialCardView>(R.id.gateway_client_listing_card)
-                    ?.setOnClickListener(gatewayClientOnClickListener(gatewayClient, viewModel))
+                    ?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
 
             return view!!
         }
 
-        private fun gatewayClientOnClickListener(gatewayClient: GatewayClient, viewModel: GatewayClientViewModel):
+        private fun gatewayClientOnClickListener(gatewayClient: GatewayClient):
                 OnClickListener {
             return OnClickListener {
                 gatewayClientsCommunications.updateDefaultGatewayClient(gatewayClient.mSISDN!!)
@@ -197,7 +211,6 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
                     gatewayClient.type = "custom"
                     Datastore.getDatastore(it.context).gatewayClientsDao().update(gatewayClient)
                 }
-                viewModel.updateSelectedGatewayClient(gatewayClient.mSISDN)
             }
         }
     }
