@@ -2,6 +2,7 @@ package com.example.sw0b_001.Homepage
 
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -11,12 +12,15 @@ import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient
@@ -36,6 +40,11 @@ import kotlinx.coroutines.launch
 class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_available) {
 
     private lateinit var listViewAdapter: GatewayClientListingAdapter
+
+    private lateinit var selectedPhoneNumberText: TextView
+    private lateinit var selectedOperatorText: TextView
+    private lateinit var selectedOperatorCodeText: TextView
+    private lateinit var selectedCountryText: TextView
 
     private val viewModel: GatewayClientViewModel by viewModels()
 
@@ -72,6 +81,12 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
         gatewayClient.sharedPreferences
             .registerOnSharedPreferenceChangeListener(sharedPreferencesChangeListener)
 
+        selectedPhoneNumberText = view.findViewById(R.id.selected_phone_number_text)
+        selectedOperatorText = view.findViewById(R.id.selected_operator_text)
+        selectedOperatorCodeText = view.findViewById(R.id.selected_operator_code_text)
+        selectedCountryText = view.findViewById(R.id.selected_country_text)
+        updateSelectedGatewayClientUI()
+
         val menuHost = requireActivity()
         menuHost.addMenuProvider(object: MenuProvider{
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -101,9 +116,27 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
+    private fun updateSelectedGatewayClientUI() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val defaultGatewayClientMsisdn = GatewayClientsCommunications(requireContext()).getDefaultGatewayClient()
+            val defaultGatewayClient = defaultGatewayClientMsisdn?.let {
+                viewModel.getGatewayClientByMsisdn(requireContext(), it)
+            }
+
+            activity?.runOnUiThread {
+                selectedPhoneNumberText.text = defaultGatewayClient?.mSISDN ?: ""
+                selectedOperatorText.text = defaultGatewayClient?.operatorName ?: ""
+                selectedOperatorCodeText.text = defaultGatewayClient?.operatorId ?: ""
+                selectedCountryText.text = defaultGatewayClient?.country ?: ""
+            }
+        }
+    }
+
     private val sharedPreferencesChangeListener = OnSharedPreferenceChangeListener { _, _ ->
         if(::listViewAdapter.isInitialized)
             listViewAdapter.notifyDataSetChanged()
+
+        updateSelectedGatewayClientUI()
     }
 
     private fun refresh(view: View) {

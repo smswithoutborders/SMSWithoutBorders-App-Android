@@ -20,6 +20,7 @@
     <string name="email_compose_body">Compose email</string>
 
     <string name="gateway_clients_settings_operator_id">Your Operator ID</string>
+    <string name="selected_gateway_client_text" translatable="false">Selected Gateway Client</string>
 
     <!-- Homepage menu -->
     <string name="homepage_recent">
