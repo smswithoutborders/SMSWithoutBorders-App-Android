@@ -34,7 +34,6 @@ object ComposeHandlers {
                 Charsets.UTF_8)) else States()
         val messageComposer = MessageComposer(context, state)
         val encryptedContentBase64 = messageComposer.compose(platforms, formattedContent)
-        println(state.serializedStates)
         println("Final format: $encryptedContentBase64")
 
         val encryptedStates = Publisher.encryptStates(context, state.serializedStates)

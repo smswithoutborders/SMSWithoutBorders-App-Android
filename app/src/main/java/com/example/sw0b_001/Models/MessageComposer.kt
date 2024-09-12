@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Base64
 import androidx.core.util.component1
 import androidx.core.util.component2
+import androidx.preference.PreferenceManager
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.CryptoHelpers
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.KeystoreHelpers
 import com.afkanerd.smswithoutborders.libsignal_doubleratchet.SecurityCurve25519
@@ -28,9 +29,11 @@ class MessageComposer(val context: Context, val state: States) {
 
     fun compose(availablePlatforms: AvailablePlatforms, content: String): String {
         val (header, cipherMk) = Ratchets.ratchetEncrypt(state, content.encodeToByteArray(), AD)
-        println("Header PN: ${header.PN}")
-        println("Header N: ${header.N}")
-        val deviceID = Vault.fetchDeviceId(context)
+
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val usePhoneNumber = sharedPreferences.getBoolean("use_phone_number_switch", false)
+
+        val deviceID = if(!usePhoneNumber) Vault.fetchDeviceId(context) else null
         return formatTransmission(header,  cipherMk,
             availablePlatforms.shortcode!!.encodeToByteArray()[0], deviceID)
     }

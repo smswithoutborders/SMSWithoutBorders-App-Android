@@ -267,5 +267,7 @@
     <string name="always_add_the_dialing_code_if_absent_e_g_237">Always add the dialing code if absent. e.g +237</string>
     <string name="please_verify_the_phone_number_is_valid">Please verify the phone number is valid.</string>
     <string name="don_t_have_an_account_create_account">Don\'t have an account? Create account</string>
+    <string name="messaging">Messaging</string>
+    <string name="you_have_a_device_id_for_the_device_you_log_into_it_is_used_to_identify_you_on_the_vault_you_can_switch_to_phone_number_to_reduce_size_of_sms_message">You have a Device ID for the device you log into. It is used to identify you on the Vault. You can switch to phone number to reduce size of SMS message.</string>
 
 </resources>
