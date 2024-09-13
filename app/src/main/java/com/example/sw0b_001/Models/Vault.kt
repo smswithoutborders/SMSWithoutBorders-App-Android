@@ -232,7 +232,7 @@ class Vault(context: Context) {
             vault.shutdown()
         }
 
-        fun logout(context: Context) {
+        fun logout(context: Context, successRunnable: Runnable) {
             var sharedPreferences = Armadillo.create(context, VAULT_ATTRIBUTE_FILES)
                 .encryptionFingerprint(context)
                 .build()
@@ -249,6 +249,7 @@ class Vault(context: Context) {
                 Datastore.getDatastore(context).storedPlatformsDao().deleteAll()
                 Datastore.getDatastore(context).encryptedContentDAO().deleteAll()
                 Datastore.getDatastore(context).ratchetStatesDAO().deleteAll()
+                successRunnable.run()
             }
         }
 

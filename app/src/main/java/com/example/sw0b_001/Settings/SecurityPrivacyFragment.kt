@@ -57,8 +57,9 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
         val logout = findPreference<Preference>("logout")
         logout?.setOnPreferenceClickListener {
             val onSuccessRunnable = Runnable {
-                Vault.logout(requireContext())
-                returnToHomepage()
+                Vault.logout(requireContext()) {
+                    returnToHomepage()
+                }
             }
 
             val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
@@ -81,8 +82,9 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
                     try {
                         val llt = Vault.fetchLongLivedToken(requireContext())
                         Vault.completeDelete(requireContext(), llt)
-                        Vault.logout(requireContext())
-                        returnToStart()
+                        Vault.logout(requireContext()) {
+                            returnToStart()
+                        }
                     } catch(e: StatusRuntimeException) {
                         e.printStackTrace()
                         activity?.runOnUiThread {

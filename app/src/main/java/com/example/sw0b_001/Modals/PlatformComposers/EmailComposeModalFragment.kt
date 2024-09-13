@@ -3,6 +3,7 @@ package com.example.sw0b_001.Modals.PlatformComposers
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.Platforms.Platforms
@@ -97,9 +98,16 @@ class EmailComposeModalFragment(val platform: StoredPlatformsEntity,
             val formattedContent = processEmailForEncryption(to, cc, bcc, subject, body)
             println("Formatted content: $formattedContent")
 
-            ComposeHandlers.compose(requireContext(), formattedContent, availablePlatforms, platform) {
-                onSuccessCallback?.let { it.run() }
-                dismiss()
+            try {
+                ComposeHandlers.compose(requireContext(), formattedContent, availablePlatforms, platform) {
+                    onSuccessCallback?.let { it.run() }
+                    dismiss()
+                }
+            } catch(e: Exception) {
+                e.printStackTrace()
+                activity?.runOnUiThread {
+                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
