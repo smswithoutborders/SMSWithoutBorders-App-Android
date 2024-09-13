@@ -19,8 +19,7 @@
 
     <string name="email_compose_body">Compose email</string>
 
-    <string name="gateway_clients_settings_operator_id">Your Operator ID</string>
-    <string name="selected_gateway_client_text" translatable="false">Selected Gateway Client</string>
+    <string name="selected_gateway_client_text">Selected Gateway Client</string>
 
     <!-- Homepage menu -->
     <string name="homepage_recent">
@@ -32,8 +31,6 @@
     <string name="message_compose_phonenumber">Contact\'s phone number</string>
 
     <string name="message_compose_body">Message</string>
-
-    <string name="message_compose_invalid_number">Please check the number is valid and has a country code</string>
 
     <string name="message_compose_empty_recipient">Recipient cannot be empty!</string>
 
@@ -124,12 +121,6 @@
     <string name="default_gateway_MSISDN_2" translatable="false">+237690826242</string>
     <string name="default_gateway_MSISDN_3" translatable="false">+2348131498393</string>
 
-    <string name="message_compose_groups_option">
-        Telegram user\'s name (optional)
-    </string>
-
-    <string name="message_compose_groups_name">User\'s name</string>
-
     <string name="gateway_client_settings_add_custom_empty_error">Please provide a phone number</string>
 
     <string name="new_gateway_client_alias">
@@ -144,7 +135,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
 
-    <string name="homepage_compose_modal_no_platforms">No Platforms saved</string>
     <string name="email_compose_title">Compose email</string>
     <string name="security_settings_failed_to_switch_security">Failed to switch security on…</string>
     <string name="settings_security_biometric_user_cannot_add_this_functionality_at_this_time">User cannot add this functionality at this time.</string>
@@ -156,8 +146,6 @@
     <string name="gateway_client_add_gateway_client_text">Add Gateway Client</string>
     <string name="otp_verification_code_template" translatable="false">Your SMSWithoutBorders-Auth verification code is: </string>
 
-    <string name="oauth_x_client_id" translatable="false">WGptX1N5dkJiS1lVUFZUSC1wYkk6MTpjaQ</string>
-
     <string name="signup_phonenumber_empty_error">Please provide a phone number</string>
     <string name="signup_please_provide_a_strong_password">Please provide a strong password</string>
     <string name="signup_please_re_enter_your_password">Please re-enter your password</string>
@@ -168,7 +156,6 @@
     <string name="onboarding_next">Next</string>
     <string name="onboarding_finish">Finish</string>
     <string name="onboarding_previous">Previous</string>
-    <string name="onboarding_skip">Skip</string>
     <string name="onboarding_let_s_get_you_started">Let\'s get you started</string>
     <string name="onboarding_try_example">Try Example!</string>
     <string name="onboarding_log_into_vault">Login</string>
@@ -199,26 +186,21 @@
     <string name="login_signup_create_new">Create new</string>
     <string name="compose_edit">Edit</string>
     <string name="compose_delete">Delete</string>
-    <string name="rebranding_text">Hi there, we are rebranding the SWOB app from SMSWOB to RelaySMS as part of the SMSWithoutBorders project. You will be able to find the app on the playstore using the name RelaySMS</string>
-    <string name="read_more">Read more</string>
-    <string name="important_notice">Important Notice</string>
-    <string name="close">close</string>
-    <string name="smswithoutborders_official_rebranding_blogpost" translatable="false">https://blog.smswithoutborders.com/posts/rebranding</string>
-    <string name="welcome_back_nsign_in_to_continue_with_existing_account">Welcome back\nSign in to continue with existing account</string>
+    <string name="welcome_back_nsign_in_to_continue_with_existing_account">Welcome back Sign in to continue with existing account</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="create_new_vault_account">Create account</string>
     <string name="signup">Signup</string>
-    <string name="if_you_do_not_have_an_account_nplease_create_one_to_save_your_platforms">If you do not have an account\nPlease create one to save your platforms</string>
+    <string name="if_you_do_not_have_an_account_nplease_create_one_to_save_your_platforms">If you do not have an account Please create one to save your platforms</string>
     <string name="already_have_an_account">Already have an account? Log in</string>
     <string name="already_got_sms_code">Already got SMS code</string>
     <string name="forgot_password_recovery">Forgot password?</string>
-    <string name="if_you_forgot_your_password_nenter_your_phone_number_and_new_passwords">If you forgot your password\nEnter your phone number and new passwords</string>
+    <string name="if_you_forgot_your_password_nenter_your_phone_number_and_new_passwords">If you forgot your password Enter your phone number and new passwords</string>
     <string name="recovery_continue">Continue</string>
     <string name="re_enter_new_password">Re-enter new password</string>
     <string name="new_password">New password</string>
     <string name="telephone_number">Telephone number</string>
     <string name="welcome_to_relaysms">Welcome to RelaySMS</string>
-    <string name="use_sms_to_make_a_post_send_emails_and_messages_nwith_no_internet_connection">Use SMS to make a post, send emails and messages\nwith no internet connection</string>
+    <string name="use_sms_to_make_a_post_send_emails_and_messages_nwith_no_internet_connection">Use SMS to make a post, send emails and messages with no internet connection</string>
     <string name="get_started">Get started!</string>
     <string name="relaysms_vaults_keep_secure_access_to_your_online_accounts_while_you_are_offline">RelaySMS Vaults keep secure access to your online accounts while you are offline</string>
     <string name="introducing_vaults">Introducing Vaults</string>
@@ -260,7 +242,6 @@
     <string name="submit">Submit</string>
     <string name="enter_verification_code">Enter verification code</string>
     <string name="enter_the_verification_code_we_sent_you">Enter the verification code we sent you</string>
-    <string name="failed_to_refresh_gateway_clients">Failed to refresh Gateway clients</string>
     <string name="from">From</string>
     <string name="send_new_message">Send new message</string>
     <string name="unknown_platform_protocol">Unknown platform protocol</string>
@@ -279,5 +260,10 @@
     <string name="relay_sms_contact_email" translatable="false">developers@smswithoutborders.com</string>
     <string name="share_app_text">Download the RelaySMS app from the Play Store: %1$s</string>
     <string name="share_via">Share via</string>
+    <string name="messaging">Messaging</string>
+    <string name="you_have_a_device_id_for_the_device_you_log_into_it_is_used_to_identify_you_on_the_vault_you_can_switch_to_phone_number_to_reduce_size_of_sms_message">You have a Device ID for the device you log into. It is used to identify you on the Vault. You can switch to phone number to reduce size of SMS message.</string>
+    <string name="revoke_platforms">Revoke Platforms</string>
+    <string name="validate_with_phone_number">Validate with phone number</string>
+    <string name="the_code_can_be_automatically_detected_in_some_cases">The code can be automatically detected in some cases</string>
 
 </resources>

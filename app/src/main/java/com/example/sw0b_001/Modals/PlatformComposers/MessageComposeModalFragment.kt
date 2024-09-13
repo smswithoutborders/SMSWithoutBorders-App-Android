@@ -9,6 +9,7 @@ import android.text.Editable
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
@@ -147,9 +148,16 @@ class MessageComposeModalFragment(val platform: StoredPlatformsEntity,
                 processMessageForEncryption(toEditText.text.toString(),
                     messageEditText.text.toString())
 
-            ComposeHandlers.compose(view.context, formattedString, availablePlatforms, platform) {
-                onSuccessCallback?.let { it.run() }
-                dismiss()
+            try {
+                ComposeHandlers.compose(requireContext(), formattedString, availablePlatforms, platform) {
+                    onSuccessCallback?.let { it.run() }
+                    dismiss()
+                }
+            } catch(e: Exception) {
+                e.printStackTrace()
+                activity?.runOnUiThread {
+                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
 

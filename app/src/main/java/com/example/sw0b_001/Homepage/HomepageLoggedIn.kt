@@ -37,8 +37,6 @@ class HomepageLoggedIn : Fragment(R.layout.fragment_homepage_logged_in) {
     override fun onResume() {
         super.onResume()
         GatewayClient.refreshGatewayClients(requireContext()) {
-            Toast.makeText(requireContext(), getString(R.string.failed_to_refresh_gateway_clients),
-                Toast.LENGTH_SHORT).show()
         }
     }
 

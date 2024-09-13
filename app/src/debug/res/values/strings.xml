@@ -1,30 +1,8 @@
 <resources>
 
     <string name="smswithoutborders_official_privacy_policy" translatable="false">https://staging.smswithoutborders.com/privacy-policy</string>
-    <string name="smswithoutborders_official_vault" translatable="false">https://staging.smswithoutborders.com:9000</string>
-    <string name="smswithoutborders_official_site_login" translatable="false">https://staging.smswithoutborders.com:9000/v2/login</string>
-    <string name="smswithoutborders_official_site_signup" translatable="false">https://staging.smswithoutborders.com:9000/v2/signup</string>
-    <string name="smswithoutborders_official_otp_submission" translatable="false">https://staging.smswithoutborders.com:9000/v2/OTP</string>
-    <string name="smswithoutborders_official_gateway_server" translatable="false">https://staging.smswithoutborders.com:15000</string>
-<!--    <string name="smswithoutboarders_official_gateway_client_seeding_url" translatable="false">https://mocki.io/v1/a7da7414-6b2d-4d0b-9de9-708f5368e525</string>-->
+    <!--    <string name="smswithoutboarders_official_gateway_client_seeding_url" translatable="false">https://mocki.io/v1/a7da7414-6b2d-4d0b-9de9-708f5368e525</string>-->
     <string name="smswithoutboarders_official_gateway_client_seeding_url" translatable="false">https://staging.smswithoutborders.com:15000/v3/clients</string>
-    <string name="smswithoutborders_official_site_signup_intent" translatable="false">intent://staging.smswithoutborders.com/sign-up</string>
-
-    <string name="default_seeds_url" translatable="false">
-        http://seeds.smswithoutborders.com
-    </string>
-
-    <string name="notifications_queue_name" translatable="false">
-        notifications-smswithoutborders-
-    </string>
-
-    <string name="notifications_exchange_name" translatable="false">
-        notifications-smswithoutborders-exchange
-    </string>
-
-    <string name="notifications_url" translatable="false">
-        staging.smswithoutborders.com
-    </string>
 
     <string name="vault_grpc_url" translatable="false">staging.smswithoutborders.com</string>
     <string name="vault_grpc_port" translatable="false">9050</string>

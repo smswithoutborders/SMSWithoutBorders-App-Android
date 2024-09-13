@@ -117,8 +117,9 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
     }
 
     private fun updateSelectedGatewayClientUI() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            val defaultGatewayClientMsisdn = GatewayClientsCommunications(requireContext()).getDefaultGatewayClient()
+        CoroutineScope(Dispatchers.Default).launch{
+            val defaultGatewayClientMsisdn = GatewayClientsCommunications(requireContext())
+                .getDefaultGatewayClient()
             val defaultGatewayClient = defaultGatewayClientMsisdn?.let {
                 viewModel.getGatewayClientByMsisdn(requireContext(), it)
             }

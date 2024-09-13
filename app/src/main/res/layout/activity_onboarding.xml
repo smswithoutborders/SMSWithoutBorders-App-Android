@@ -45,7 +45,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/onboard_dot_indicator_layout"
-            tools:text="Previous" />
+            android:text="@string/onboarding_previous" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/onboard_skip_all"
@@ -70,7 +70,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/onboard_dot_indicator_layout"
-            tools:text="Next" />
+            android:text="@string/onboarding_next" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

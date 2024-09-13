@@ -17,70 +17,80 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/selected_gateway_client"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:orientation="vertical"
+        style="@style/Widget.Material3.CardView.Elevated"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/refresh_loader">
-
-        <TextView
-            android:id="@+id/selected_gateway_client_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/selected_gateway_client_text"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/selected_phone_number_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="phone number"
-            android:textSize="20sp" />
+        app:layout_constraintTop_toBottomOf="@+id/refresh_loader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:padding="16dp"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/selected_operator_text"
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="operator"
-                android:textSize="16sp" />
+                android:textStyle="bold"
+                android:text="@string/selected_gateway_client_text"
+                android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/selected_operator_dash_text"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/selected_phone_number_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" - "
-                android:textSize="16sp" />
+                android:textSize="20sp"
+                android:paddingBottom="4dp"
+                tools:text="phone number" />
 
-            <TextView
-                android:id="@+id/selected_operator_code_text"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="operator code"
-                android:textSize="16sp" />
+                android:paddingBottom="2dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/selected_operator_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    tools:text="operator" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" - "
+                    android:textSize="16sp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/selected_operator_code_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    tools:text="operator code" />
+
+            </LinearLayout>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/selected_country_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                tools:text="country" />
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/selected_country_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="country"
-            android:textSize="14sp" />
-
-    </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/gateway_client_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

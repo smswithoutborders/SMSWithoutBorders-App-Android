@@ -30,10 +30,6 @@ class OnboardingWelcomeFragment :
         exitTransition = inflater.inflateTransition(R.transition.fade)
     }
 
-    override fun getButtonText(context: Context) {
-        nextButtonText = context.getString(R.string.onboarding_next)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         languageValues = view.context.resources.getStringArray(R.array.language_values)
@@ -85,7 +81,8 @@ class OnboardingWelcomeFragment :
                 option.isChecked = true
 
             option.setOnClickListener {
-                SettingsFragment.changeLanguageLocale(it.context, languageValues[index])
+                SettingsFragment.changeLanguageLocale(requireContext(), languageValues[index])
+                activity?.recreate()
             }
             radioGroup.addView(option)
         }

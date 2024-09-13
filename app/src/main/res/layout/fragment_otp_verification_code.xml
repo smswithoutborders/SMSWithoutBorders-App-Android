@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:hint="@string/enter_verification_code"
-        app:helperText="The code can be automatically detected in some cases"
+        app:helperText="@string/the_code_can_be_automatically_detected_in_some_cases"
         app:layout_constraintEnd_toEndOf="@+id/ownership_verification_description"
         app:layout_constraintStart_toStartOf="@+id/ownership_verification_description"
         app:layout_constraintTop_toBottomOf="@+id/ownership_verification_description">

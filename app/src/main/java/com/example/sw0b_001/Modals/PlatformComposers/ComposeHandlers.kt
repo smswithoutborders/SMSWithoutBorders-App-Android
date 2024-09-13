@@ -34,7 +34,6 @@ object ComposeHandlers {
                 Charsets.UTF_8)) else States()
         val messageComposer = MessageComposer(context, state)
         val encryptedContentBase64 = messageComposer.compose(platforms, formattedContent)
-        println(state.serializedStates)
         println("Final format: $encryptedContentBase64")
 
         val encryptedStates = Publisher.encryptStates(context, state.serializedStates)
@@ -50,28 +49,23 @@ object ComposeHandlers {
         val gatewayClientMSISDN = GatewayClientsCommunications(context)
             .getDefaultGatewayClient()
 
-        try {
-            val sentIntent = SMSHandler.transferToDefaultSMSApp(context, gatewayClientMSISDN!!,
-                encryptedContentBase64).apply {
-                setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-            context.startActivity(sentIntent)
-
-            val encryptedContent = EncryptedContent()
-            encryptedContent.encryptedContent = formattedContent
-            encryptedContent.date = System.currentTimeMillis()
-            encryptedContent.type = platforms.service_type
-            encryptedContent.platformName = platforms.name
-            encryptedContent.platformId = storedPlatforms.id
-            encryptedContent.fromAccount = storedPlatforms.account
-
-            Datastore.getDatastore(context).encryptedContentDAO()
-                .insert(encryptedContent)
-            onSuccessRunnable.run()
-        } catch(e: Exception) {
-            Log.e(javaClass.name, "Exception finding package", e)
-            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+        val sentIntent = SMSHandler.transferToDefaultSMSApp(context, gatewayClientMSISDN!!,
+            encryptedContentBase64).apply {
+            setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
+        context.startActivity(sentIntent)
+
+        val encryptedContent = EncryptedContent()
+        encryptedContent.encryptedContent = formattedContent
+        encryptedContent.date = System.currentTimeMillis()
+        encryptedContent.type = platforms.service_type
+        encryptedContent.platformName = platforms.name
+        encryptedContent.platformId = storedPlatforms.id
+        encryptedContent.fromAccount = storedPlatforms.account
+
+        Datastore.getDatastore(context).encryptedContentDAO()
+            .insert(encryptedContent)
+        onSuccessRunnable.run()
     }
 
     data class DecomposedMessages(val body: String,
