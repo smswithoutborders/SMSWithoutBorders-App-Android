@@ -167,8 +167,7 @@ class Publisher(val context: Context) {
             return SecurityAES.decryptAES256CBC(states, secretKey, null)
         }
 
-        fun getAvailablePlatforms(context: Context,
-                                  exceptionRunnable: Runnable): ArrayList<AvailablePlatforms> {
+        fun getAvailablePlatforms(context: Context): ArrayList<AvailablePlatforms> {
             val response = Network.requestGet(context.getString(R.string.publisher_get_platforms_url))
             return Json.decodeFromString<ArrayList<AvailablePlatforms>>(response.result.get())
         }

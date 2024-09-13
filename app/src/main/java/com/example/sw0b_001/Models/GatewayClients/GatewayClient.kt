@@ -67,7 +67,7 @@ class GatewayClient {
             val scope = CoroutineScope(Dispatchers.Default)
             scope.launch {
                 try {
-                    Publisher.getAvailablePlatforms(context, failedCallback).let{ json ->
+                    Publisher.getAvailablePlatforms(context).let{ json ->
                         json.forEach { it->
                             val url = URL(it.icon_png)
                             it.logo = url.readBytes()
@@ -84,6 +84,7 @@ class GatewayClient {
                     }
                 } catch(e: Exception) {
                     e.printStackTrace()
+                    failedCallback.run()
                 }
             }
         }

@@ -55,12 +55,14 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
             findViewById<View>(R.id.onboarding_navigation_controller).visibility = View.GONE
             val fragment = fragmentList[fragmentIndex]
             if(supportFragmentManager.fragments.isNullOrEmpty()) {
+                println("Adding")
                 add(R.id.onboarding_fragment_container, fragment, "homepage_fragment")
                 setCustomAnimations(R.anim.slide_in,
                     R.anim.fade_out,
                     R.anim.fade_in,
                     R.anim.slide_out)
             } else {
+                println("Replacing")
                 replace(R.id.onboarding_fragment_container, fragment, "homepage_fragment")
                 setCustomAnimations(R.anim.slide_in,
                     R.anim.fade_out,
@@ -86,6 +88,9 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
             supportFragmentManager.commit {
                 if(fragmentIterator.value!! + 1 < fragmentList.size) {
                     fragmentIterator.value = fragmentIterator.value!! + 1
+                    if(fragmentIterator.value == fragmentList.size -1)
+                        modifyLastFragment()
+                    else modifyFragment()
 
                     val fragment: OnboardingComponent = fragmentList[fragmentIterator.value!!]
 
@@ -94,7 +99,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                     }
 
                     replace(R.id.onboarding_fragment_container, fragment)
-//                    setReorderingAllowed(false)
+                    setReorderingAllowed(true)
                     addToBackStack(fragment.javaClass.name)
                     setCustomAnimations(R.anim.slide_in,
                             R.anim.fade_out,
@@ -115,6 +120,7 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
 
         prevButton.setOnClickListener {
             supportFragmentManager.commit {
+                modifyFragment()
                 fragmentIterator.value = if(previousValueFromSkip != -1) previousValueFromSkip
                 else fragmentIterator.value!! - 1
 
@@ -123,7 +129,8 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
                     findViewById<View>(R.id.onboarding_navigation_controller).visibility = View.GONE
                 }
 
-//                setReorderingAllowed(true)
+                setReorderingAllowed(true)
+                supportFragmentManager.popBackStackImmediate()
                 replace(R.id.onboarding_fragment_container, fragment)
 
                 setCustomAnimations(R.anim.slide_in,
@@ -138,10 +145,12 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
         skipAllBtn.setOnClickListener {
             previousValueFromSkip = fragmentIterator.value!!
             supportFragmentManager.commit {
-                val fragment: OnboardingComponent? =
-                        fragmentList[fragmentIterator.value!!].skipOnboardingFragment
-                replace(R.id.onboarding_fragment_container, fragment!!)
-//                setReorderingAllowed(true)
+                modifyLastFragment()
+                val fragment: OnboardingComponent = fragmentList.last()
+                replace(R.id.onboarding_fragment_container, fragment)
+                setReorderingAllowed(true)
+
+                supportFragmentManager.popBackStackImmediate()
 
                 setCustomAnimations(R.anim.slide_in,
                         R.anim.fade_out,
@@ -153,12 +162,21 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
         }
     }
 
-    private fun iterateButtonText(fragment: OnboardingComponent) {
-        fragment.getButtonText(applicationContext)
-        nextButton.text = fragment.nextButtonText
-        prevButton.text = fragment.previousButtonText
-        skipAllBtn.text = fragment.skipButtonText
+    private fun modifyFragment() {
+        findViewById<MaterialButton>(R.id.onboard_next_button).text =
+            getString(R.string.onboarding_next)
 
+        findViewById<MaterialButton>(R.id.onboard_skip_all).visibility = View.VISIBLE
+    }
+
+    private fun modifyLastFragment() {
+        findViewById<MaterialButton>(R.id.onboard_next_button).text =
+            getString(R.string.onboarding_finish)
+
+        findViewById<MaterialButton>(R.id.onboard_skip_all).visibility = View.INVISIBLE
+    }
+
+    private fun iterateButtonText(fragment: OnboardingComponent) {
         if(nextButton.text.isNullOrEmpty())
             nextButton.visibility = View.INVISIBLE
         else nextButton.visibility = View.VISIBLE
@@ -190,8 +208,8 @@ class OnboardingActivity : AppCompatActivity(), OnboardingComponent.ManageCompon
     override fun onResume() {
         super.onResume()
         GatewayClient.refreshGatewayClients(applicationContext) {
-            Toast.makeText(applicationContext, getString(R.string.failed_to_refresh_gateway_clients),
-                Toast.LENGTH_SHORT).show()
+//            Toast.makeText(applicationContext, getString(R.string.failed_to_refresh_gateway_clients),
+//                Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -20,14 +20,6 @@ class OnboardingVaultFragment : OnboardingComponent(R.layout.fragment_onboarding
         enterTransition = inflater.inflateTransition(R.transition.slide_right)
     }
 
-    override fun getButtonText(context: Context) {
-        super.onAttach(context)
-        nextButtonText = context.getString(R.string.onboarding_next)
-        previousButtonText = context.getString(R.string.onboarding_previous)
-        skipButtonText = context.getString(R.string.onboarding_skip)
-        skipOnboardingFragment = OnboardingFinishedFragment()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
