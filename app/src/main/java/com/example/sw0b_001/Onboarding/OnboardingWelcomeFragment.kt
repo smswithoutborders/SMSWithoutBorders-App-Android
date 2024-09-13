@@ -82,7 +82,6 @@ class OnboardingWelcomeFragment :
 
             option.setOnClickListener {
                 SettingsFragment.changeLanguageLocale(requireContext(), languageValues[index])
-                activity?.recreate()
             }
             radioGroup.addView(option)
         }
