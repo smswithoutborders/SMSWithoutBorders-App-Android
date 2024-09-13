@@ -106,6 +106,11 @@ class HomepageActivity : AppCompactActivityCustomized() {
                             SettingsActivity::class.java))
                         return true
                     }
+                    R.id.homepage_about_menu -> {
+                        activityLauncher.launch(Intent(applicationContext,
+                            AboutActivity::class.java))
+                        return true
+                    }
                 }
                 return false
             }
