@@ -141,10 +141,6 @@
     <string name="login_signup_create_new">Créer un nouveau</string>
     <string name="compose_edit">Modifier</string>
     <string name="compose_delete">Supprimer</string>
-    <string name="rebranding_text">Bonjour, dans le cadre du projet SMSWithoutBorders, nous sommes en train de renommer l\'application SWOB de SMSWOB à RelaySMS. Vous pourrez trouver l\'application sur le Playstore sous le nom RelaySMS</string>
-    <string name="read_more">En savoir plus</string>
-    <string name="important_notice">Avis important</string>
-    <string name="close">fermer</string>
     <string name="main_navigation_about">À propos</string>
     <string name="about_slogan">Connecter le monde, un SMS à la fois.</string>
     <string name="about_app_text">RelaySMS est une initiative open source visant à permettre la communication par SMS sans dépendre d\'une connexion Internet. Nous croyons en un monde connecté et nous le réalisons un SMS à la fois. RelaySMS reste gratuit et open source.</string>
@@ -152,9 +148,6 @@
     <string name="about_app_github_text">Soutenez-nous en mettant en favoris notre dépôt GitHub et en le partageant avec vos amis !</string>
     <string name="about_follow_us_text">Suivez-nous</string>
     <string name="view_on_github"><![CDATA[Voir sur GitHub>>>]]></string>
-    <string name="about_share_app">Partager l\'application</string>
-    <string name="share_app_text">Téléchargez l\'application RelaySMS depuis le Play Store : %1$s</string>
-    <string name="share_via">Partager via</string>
     <string name="the_vault_supports_storing_for_multiple_online_platforms_click_save_accounts_to_vault_to_see_the_list">Le coffre-fort prend en charge le stockage pour plusieurs plates-formes en ligne. Cliquez sur Enregistrer les comptes dans le coffre-fort pour voir la liste</string>
     <string name="revoke_platforms">Révoquer les plateformes</string>
     <string name="validate_with_phone_number">Valider avec le numéro de téléphone</string>

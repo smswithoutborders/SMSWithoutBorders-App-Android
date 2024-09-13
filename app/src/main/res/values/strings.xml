@@ -254,12 +254,9 @@
     <string name="about_app_tutorial">App Tutorial</string>
     <string name="about_app_github_text">Support us by starring our GitHub repository and sharing it with your friends!</string>
     <string name="view_on_github"><![CDATA[View on GitHub >>>]]></string>
-    <string name="about_share_app">Share App</string>
     <string name="about_follow_us_text">Follow us</string>
     <string name="relay_sms_website" translatable="false">https://relay.smswithoutborders.com/</string>
     <string name="relay_sms_contact_email" translatable="false">developers@smswithoutborders.com</string>
-    <string name="share_app_text">Download the RelaySMS app from the Play Store: %1$s</string>
-    <string name="share_via">Share via</string>
     <string name="messaging">Messaging</string>
     <string name="you_have_a_device_id_for_the_device_you_log_into_it_is_used_to_identify_you_on_the_vault_you_can_switch_to_phone_number_to_reduce_size_of_sms_message">You have a Device ID for the device you log into. It is used to identify you on the Vault. You can switch to phone number to reduce size of SMS message.</string>
     <string name="revoke_platforms">Revoke Platforms</string>

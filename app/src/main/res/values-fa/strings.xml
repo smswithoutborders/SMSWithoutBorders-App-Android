@@ -87,10 +87,6 @@
     <string name="login_signup_create_new">ایجاد جدید</string>
     <string name="compose_edit">ویرایش کنید</string>
     <string name="compose_delete">حذف</string>
-    <string name="rebranding_text">سلام، ما در حال تغییر نام برنامه SWOB از SMSWOB به RelaySMS به عنوان بخشی از پروژه SMSWithoutBorders هستیم. با استفاده از نام RelaySMS می توانید برنامه را در پلی استور پیدا کنید</string>
-    <string name="read_more">ادامه مطلب</string>
-    <string name="important_notice">اطلاعیه مهم</string>
-    <string name="close">بستن</string>
     <string name="main_navigation_about">درباره</string>
     <string name="about_slogan">اتصال جهان، یک پیامک در یک زمان</string>
     <string name="about_app_text">RelaySMS یک ابتکار منبع باز است که تمرکز آن بر امکان ارتباط از طریق پیامک بدون وابستگی به اتصالبه اینترنت است. ما به دنیایی متصل باور داریم و آن را یک پیامک در یک زمان محقق می کنیم. RelaySMS رایگان و منبع باز باقی می ماند.</string>
@@ -98,9 +94,6 @@
     <string name="about_app_github_text">با ستاره دادن به مخزن GitHub ما و به اشتراکگذاشتن آن با دوستان خود از ما حمایت کنید!</string>
     <string name="view_on_github"><![CDATA[مشاهده در GitHub >>>]]></string>
     <string name="about_follow_us_text">ما را دنبال کنید</string>
-    <string name="about_share_app">اشتراک گذاری برنامه</string>
-    <string name="share_app_text">برنامه RelaySMS را از فروشگاه Play دانلود کنید: %1$s</string>
-    <string name="share_via">به اشتراک بگذارید از طریق</string>
     <string name="welcome_back_nsign_in_to_continue_with_existing_account">دوباره خوش آمدید برای ادامه با حساب موجود وارد شوید</string>
     <string name="forgot_password">رمز عبور را فراموش کرده اید؟</string>
     <string name="create_new_vault_account">ایجاد حساب کاربری</string>

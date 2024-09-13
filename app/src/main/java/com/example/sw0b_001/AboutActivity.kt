@@ -30,7 +30,6 @@ class AboutActivity : AppCompatActivity() {
         val myToolbar = findViewById<View>(R.id.about_toolbar) as Toolbar
         setSupportActionBar(myToolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.title = getString(R.string.main_navigation_about)
 
         val xIcon = findViewById<ImageView>(R.id.x_icon)
         val githubIcon = findViewById<ImageView>(R.id.github_link_icon)
@@ -58,20 +57,6 @@ class AboutActivity : AppCompatActivity() {
 
         val appVersionTextView = findViewById<TextView>(R.id.app_version)
         appVersionTextView.text = BuildConfig.VERSION_NAME
-
-        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val copyrightTextView = findViewById<TextView>(R.id.copyright_text)
-        copyrightTextView.text = "$currentYear SMSWithoutBorders"
-
-        val shareButton = findViewById<Button>(R.id.share_button)
-        shareButton.setOnClickListener {
-            val playStoreLink = "https://play.google.com/store/apps/details?id=com.afkanerd.sw0b"
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "text/plain"
-            val shareText = getString(R.string.share_app_text, playStoreLink)
-            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText)
-            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)))
-        }
     }
 
     private fun openSocialLink(url: String) {
