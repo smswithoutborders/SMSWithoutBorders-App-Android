@@ -39,7 +39,7 @@
         android:id="@+id/app_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Version 1.0"
+        android:text=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/app_title" />
@@ -49,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Connecting the world, one SMS at a time."
+        android:text="@string/about_slogan"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +62,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="RelaySMS is an open-source initiative focused on enabling communication through SMS without relying on internet connectivity. We believe in a connected world, and we're making it happen one SMS at a time. RelaySMS remains free and open source."
+        android:text="@string/about_app_text"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="App Tutorial"
+        android:text="@string/about_app_tutorial"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/about_text" />
@@ -107,13 +107,13 @@
                 android:id="@+id/github_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Support us by starring our GitHub repository and sharing it with your friends!" />
+                android:text="@string/about_app_github_text" />
 
             <TextView
                 android:id="@+id/view_on_github"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="View on GitHub >>>"
+                android:text="@string/view_on_github"
                 android:textStyle="bold"
                 android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                 android:autoLink="web"
@@ -126,7 +126,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Share App"
+        android:text="@string/about_share_app"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/github_layout" />
@@ -136,7 +136,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Follow us"
+        android:text="@string/about_follow_us_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/share_button" />
@@ -193,7 +193,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="https://relay.smswithoutborders.com/"
+            android:text="@string/relay_sms_website"
             android:autoLink="web"
             android:linksClickable="true" />
     </LinearLayout>
@@ -219,7 +219,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="developers@smswithoutborders.com"
+            android:text="@string/relay_sms_contact_email"
             android:autoLink="email"
             android:linksClickable="true" />
     </LinearLayout>
@@ -229,7 +229,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="© 2024 SMSWithoutBorders"
+        android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
