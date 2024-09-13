@@ -248,6 +248,18 @@
     <string name="always_add_the_dialing_code_if_absent_e_g_237">Always add the dialing code if absent. e.g +237</string>
     <string name="please_verify_the_phone_number_is_valid">Please verify the phone number is valid.</string>
     <string name="don_t_have_an_account_create_account">Don\'t have an account? Create account</string>
+    <string name="main_navigation_about">About</string>
+    <string name="about_slogan">Connecting the world, one SMS at a time.</string>
+    <string name="about_app_text">RelaySMS is an open-source initiative focused on enabling communication through SMS without relying on internet connectivity. We believe in a connected world, and we\'re making it happen one SMS at a time. RelaySMS remains free and open source.</string>
+    <string name="about_app_tutorial">App Tutorial</string>
+    <string name="about_app_github_text">Support us by starring our GitHub repository and sharing it with your friends!</string>
+    <string name="view_on_github"><![CDATA[View on GitHub >>>]]></string>
+    <string name="about_share_app">Share App</string>
+    <string name="about_follow_us_text">Follow us</string>
+    <string name="relay_sms_website" translatable="false">https://relay.smswithoutborders.com/</string>
+    <string name="relay_sms_contact_email" translatable="false">developers@smswithoutborders.com</string>
+    <string name="share_app_text">Download the RelaySMS app from the Play Store: %1$s</string>
+    <string name="share_via">Share via</string>
     <string name="messaging">Messaging</string>
     <string name="you_have_a_device_id_for_the_device_you_log_into_it_is_used_to_identify_you_on_the_vault_you_can_switch_to_phone_number_to_reduce_size_of_sms_message">You have a Device ID for the device you log into. It is used to identify you on the Vault. You can switch to phone number to reduce size of SMS message.</string>
     <string name="revoke_platforms">Revoke Platforms</string>
