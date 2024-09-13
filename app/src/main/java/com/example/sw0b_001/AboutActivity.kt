@@ -17,7 +17,6 @@ import androidx.core.view.WindowInsetsCompat
 import java.util.Calendar
 
 class AboutActivity : AppCompatActivity() {
-    @SuppressLint("MissingInflatedId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -54,18 +53,11 @@ class AboutActivity : AppCompatActivity() {
             openSocialLink("https://docs.smswithoutborders.com/docs/App%20Tutorial/New-Tutorial")
         }
 
-        val (appName, versionName) = try {
-            val packageInfo = packageManager.getPackageInfo(packageName, 0)
-            Pair(getString(packageInfo.applicationInfo.labelRes), packageInfo.versionName)
-        } catch (e: PackageManager.NameNotFoundException) {
-            Pair("RelaySMS", "")
-        }
-
         val appTitleTextView = findViewById<TextView>(R.id.app_title)
-        appTitleTextView.text = appName
+        appTitleTextView.text = getString(R.string.app_name)
 
         val appVersionTextView = findViewById<TextView>(R.id.app_version)
-        appVersionTextView.text = versionName
+        appVersionTextView.text = BuildConfig.VERSION_NAME
 
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         val copyrightTextView = findViewById<TextView>(R.id.copyright_text)
@@ -76,8 +68,9 @@ class AboutActivity : AppCompatActivity() {
             val playStoreLink = "https://play.google.com/store/apps/details?id=com.afkanerd.sw0b"
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_TEXT, "Download the RelaySMS app from the Play Store: $playStoreLink")
-            startActivity(Intent.createChooser(shareIntent, "Share via"))
+            val shareText = getString(R.string.share_app_text, playStoreLink)
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareText)
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_via)))
         }
     }
 

@@ -173,8 +173,9 @@
     <string name="about_app_text">RelaySMS est une initiative open source visant à permettre la communication par SMS sans dépendre d\'une connexion Internet. Nous croyons en un monde connecté et nous le réalisons un SMS à la fois. RelaySMS reste gratuit et open source.</string>
     <string name="about_app_tutorial">Tutoriel de l\'application</string>
     <string name="about_app_github_text">Soutenez-nous en mettant en favoris notre dépôt GitHub et en le partageant avec vos amis !</string>
+    <string name="about_follow_us_text">Suivez-nous</string>
     <string name="view_on_github"><![CDATA[Voir sur GitHub>>>]]></string>
     <string name="about_share_app">Partager l\'application</string>
-    <string name="relay_sms_website">https://relay.smswithoutborders.com/</string>
-    <string name="relay_sms_contact_email">developers@smswithoutborders.com</string>
+    <string name="share_app_text">Téléchargez l\'application RelaySMS depuis le Play Store : %1$s</string>
+    <string name="share_via">Partager via</string>
 </resources>

@@ -174,7 +174,8 @@
     <string name="about_app_tutorial">آموزش برنامه</string>
     <string name="about_app_github_text">با ستاره دادن به مخزن GitHub ما و به اشتراکگذاشتن آن با دوستان خود از ما حمایت کنید!</string>
     <string name="view_on_github"><![CDATA[مشاهده در GitHub >>>]]></string>
+    <string name="about_follow_us_text">ما را دنبال کنید</string>
     <string name="about_share_app">اشتراک گذاری برنامه</string>
-    <string name="relay_sms_website">https://relay.smswithoutborders.com/</string>
-    <string name="relay_sms_contact_email">developers@smswithoutborders.com</string>
+    <string name="share_app_text">برنامه RelaySMS را از فروشگاه Play دانلود کنید: %1$s</string>
+    <string name="share_via">به اشتراک بگذارید از طریق</string>
 </resources>

@@ -275,7 +275,9 @@
     <string name="view_on_github"><![CDATA[View on GitHub >>>]]></string>
     <string name="about_share_app">Share App</string>
     <string name="about_follow_us_text">Follow us</string>
-    <string name="relay_sms_website">https://relay.smswithoutborders.com/</string>
-    <string name="relay_sms_contact_email">developers@smswithoutborders.com</string>
+    <string name="relay_sms_website" translatable="false">https://relay.smswithoutborders.com/</string>
+    <string name="relay_sms_contact_email" translatable="false">developers@smswithoutborders.com</string>
+    <string name="share_app_text">Download the RelaySMS app from the Play Store: %1$s</string>
+    <string name="share_via">Share via</string>
 
 </resources>
