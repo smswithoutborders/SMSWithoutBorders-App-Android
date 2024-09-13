@@ -34,19 +34,14 @@ class AboutActivity : AppCompatActivity() {
         supportActionBar!!.title = getString(R.string.main_navigation_about)
 
         val xIcon = findViewById<ImageView>(R.id.x_icon)
-        val facebookIcon = findViewById<ImageView>(R.id.facebook_icon)
-        val youtubeIcon = findViewById<ImageView>(R.id.youtube_icon)
+        val githubIcon = findViewById<ImageView>(R.id.github_link_icon)
 
         xIcon.setOnClickListener {
             openSocialLink("https://x.com/RelaySMS")
         }
 
-        facebookIcon.setOnClickListener {
-            openSocialLink("https://www.facebook.com/SMSWithoutBorders")
-        }
-
-        youtubeIcon.setOnClickListener {
-            openSocialLink("https://www.youtube.com/@smswithoutborders9162")
+        githubIcon.setOnClickListener {
+            openSocialLink("https://github.com/smswithoutborders/SMSWithoutBorders-App-Android")
         }
 
         val viewOnGithub = findViewById<TextView>(R.id.view_on_github)
@@ -74,7 +69,7 @@ class AboutActivity : AppCompatActivity() {
 
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         val copyrightTextView = findViewById<TextView>(R.id.copyright_text)
-        copyrightTextView.text = "© $currentYear SMSWithoutBorders"
+        copyrightTextView.text = "$currentYear SMSWithoutBorders"
 
         val shareButton = findViewById<Button>(R.id.share_button)
         shareButton.setOnClickListener {

@@ -159,17 +159,10 @@
             android:src="@drawable/x_icon" />
 
         <ImageView
-            android:id="@+id/facebook_icon"
+            android:id="@+id/github_link_icon"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/facebook_icon" />
-
-        <ImageView
-            android:id="@+id/youtube_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/youtube_icon" />
+            android:src="@drawable/github_icon" />
     </LinearLayout>
 
     <LinearLayout
