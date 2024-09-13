@@ -75,6 +75,15 @@ class AboutActivity : AppCompatActivity() {
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         val copyrightTextView = findViewById<TextView>(R.id.copyright_text)
         copyrightTextView.text = "© $currentYear SMSWithoutBorders"
+
+        val shareButton = findViewById<Button>(R.id.share_button)
+        shareButton.setOnClickListener {
+            val playStoreLink = "https://play.google.com/store/apps/details?id=com.afkanerd.sw0b"
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "Download the RelaySMS app from the Play Store: $playStoreLink")
+            startActivity(Intent.createChooser(shareIntent, "Share via"))
+        }
     }
 
     private fun openSocialLink(url: String) {
