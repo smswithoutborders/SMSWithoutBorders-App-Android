@@ -26,7 +26,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/pnba_platform_name"
             tools:text="Telegram"
             style="@style/TextAppearance.Material3.HeadlineMedium"
             android:textAlignment="center"
@@ -34,7 +33,6 @@
             android:layout_height="wrap_content"/>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/pnba_error_text_layout"
             style="@style/Widget.Material3.CardView.Elevated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

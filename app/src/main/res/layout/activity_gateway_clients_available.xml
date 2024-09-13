@@ -33,7 +33,6 @@
             android:orientation="vertical">
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/selected_gateway_client_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
@@ -62,7 +61,6 @@
                     tools:text="operator" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/selected_operator_dash_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" - "
