@@ -40,7 +40,7 @@ android {
         resourceConfigurations += ['en', 'fr', 'fa']
 
         manifestPlaceholders =
-                ['appAuthRedirectScheme': 'relaysms.com']
+                ['appAuthRedirectScheme': 'oauth.afkanerd.com']
 
     }
 
@@ -54,8 +54,8 @@ android {
         }
         debug {
             buildConfigField("Boolean", "IS_RECAPTCHA", "false")
-            buildConfigField("Boolean", "IS_ONBOARDING", "true")
-            buildConfigField("Boolean", "IS_SHOWALL_ONBOARDING", "true")
+            buildConfigField("Boolean", "IS_ONBOARDING", "false")
+            buildConfigField("Boolean", "IS_SHOWALL_ONBOARDING", "false")
         }
     }
 
