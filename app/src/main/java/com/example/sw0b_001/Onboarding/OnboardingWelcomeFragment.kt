@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioGroup
@@ -28,9 +29,6 @@ class OnboardingWelcomeFragment :
         val inflater = TransitionInflater.from(requireContext())
         exitTransition = inflater.inflateTransition(R.transition.fade)
     }
-    override fun getButtonText(context: Context) {
-        nextButtonText = context.getString(R.string.onboarding_next)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -50,6 +48,11 @@ class OnboardingWelcomeFragment :
         changeLanguageBtn.setOnClickListener { populateLanguagePopup(view) }
         view.findViewById<View>(R.id.onboarding_welcome_privacy_policy)
                 .setOnClickListener { linkPrivacyPolicy(it) }
+
+        view.findViewById<MaterialButton>(R.id.onboarding_get_started).setOnClickListener {
+            activity?.findViewById<MaterialButton>(R.id.onboard_next_button)
+                ?.performClick()
+        }
     }
 
     private fun linkPrivacyPolicy(view: View?) {
@@ -78,7 +81,7 @@ class OnboardingWelcomeFragment :
                 option.isChecked = true
 
             option.setOnClickListener {
-                SettingsFragment.changeLanguageLocale(it.context, languageValues[index])
+                SettingsFragment.changeLanguageLocale(requireContext(), languageValues[index])
             }
             radioGroup.addView(option)
         }

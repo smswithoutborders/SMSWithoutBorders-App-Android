@@ -1,25 +1,20 @@
 package com.example.sw0b_001
 
 import android.util.Base64
-import com.example.sw0b_001.Modules.Crypto
-import com.example.sw0b_001.Modules.Helpers
-import com.example.sw0b_001.Security.SecurityCurve25519
+import androidx.test.platform.app.InstrumentationRegistry
+import com.example.sw0b_001.Models.Platforms.AvailablePlatforms
+import com.example.sw0b_001.Models.Publisher
+import com.example.sw0b_001.Models.Vault
+import com.example.sw0b_001.Modules.Network
+import com.example.sw0b_001.Security.Cryptography
 import io.grpc.ManagedChannel
-import io.grpc.ManagedChannelBuilder
 import io.grpc.StatusRuntimeException
-import io.grpc.stub.StreamObserver
-import junit.framework.TestCase.assertFalse
+import kotlinx.serialization.json.Json
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import publisher.v1.PublisherGrpc
 import publisher.v1.PublisherGrpc.PublisherBlockingStub
-import publisher.v1.PublisherGrpc.PublisherStub
-import publisher.v1.PublisherOuterClass
-import publisher.v1.PublisherOuterClass.GetOAuth2AuthorizationUrlResponse
-import vault.v1.EntityGrpc
 import vault.v1.EntityGrpc.EntityBlockingStub
-import vault.v1.Vault
-import vault.v1.Vault.AuthenticateEntityResponse
 
 /**
  * Flow from https://github.com/smswithoutborders/SMSwithoutborders-BE/blob/feature/grpc_api/docs/grpc.md
@@ -43,193 +38,103 @@ import vault.v1.Vault.AuthenticateEntityResponse
  * Docs: https://grpc.github.io/grpc/core/md_doc_statuscodes.html
  */
 class gRPCTest {
+    private val globalPhoneNumber = "+23711234575"
+    private val globalCountryCode = "CM"
+    private val globalPassword = "dMd2Kmo9#"
 
-    private lateinit var channel: ManagedChannel
-    private lateinit var publisherChannel: ManagedChannel
+    private lateinit var deviceIdPubKey: ByteArray
+    private lateinit var publishPubKey: ByteArray
 
-    private lateinit var entityStub: EntityBlockingStub
-    private lateinit var publisherStub: PublisherBlockingStub
 
-    private val globalPhoneNumber = "+2371234567891"
-    private val globalPassword = "dMd2Kmo9"
-    private val deviceIdPubKey = SecurityCurve25519().generateKey()
-    private val publishPubKey = SecurityCurve25519().generateKey()
+    private var context = InstrumentationRegistry.getInstrumentation().targetContext
+
+    private lateinit var vault: Vault
+    private val device_id_keystoreAlias = "device_id_keystoreAlias"
+    private val publisher_keystoreAlias = "publisher_keystoreAlias"
 
     @Before
     fun init() {
-        channel = ManagedChannelBuilder
-            .forAddress("staging.smswithoutborders.com", 9050)
-            .useTransportSecurity()
-            .build()
-
-        publisherChannel = ManagedChannelBuilder
-            .forAddress("staging.smswithoutborders.com", 9060)
-            .useTransportSecurity()
-            .build()
-
-        entityStub = EntityGrpc.newBlockingStub(channel)
-        publisherStub = PublisherGrpc.newBlockingStub(publisherChannel)
+        vault = Vault(context)
+        deviceIdPubKey = Cryptography.generateKey(context, device_id_keystoreAlias)
+        publishPubKey = Cryptography.generateKey(context, publisher_keystoreAlias)
     }
 
     @Test
-    fun vaultTestCreateEntity() {
-        /**
-         * TODO: Get wait time in here, to be used for
-         */
-        val createEntityRequest1 = Vault.CreateEntityRequest.newBuilder().apply {
-            setPhoneNumber(globalPhoneNumber)
-        }.build()
+    fun getPlatformsTest() {
+        val response = Publisher.getAvailablePlatforms(context) {
 
-        try {
-            val createResponse = entityStub.createEntity(createEntityRequest1)
-            assert(createResponse.requiresOwnershipProof)
-            println(createResponse.message)
-        } catch(e: Exception) {
-            if(e is StatusRuntimeException) {
-                when(e.status.code.toString()) {
-                    "INVALID_ARGUMENT" -> {
-                        println(e.message)
-                        throw e
-                    }
-                    "ALREADY_EXISTS" -> {
-                        println(e.message)
-                    }
-                }
-            }
         }
+        assertTrue(response.isNotEmpty())
     }
 
     @Test
-    fun vaultTestCreateEntity2() {
-        /**
-         * TODO: grpc
-         * Need to be able to delete contacts
-         *
-         * Public and private keys should go as bytes
-         */
-//        vaultTestCreateEntity()
-        val createEntityRequest2 = Vault.CreateEntityRequest.newBuilder().apply {
-            setCountryCode("CM")
-            setPhoneNumber(globalPhoneNumber)
-            setPassword(globalPassword)
-            setClientPublishPubKey(Base64.encodeToString(publishPubKey.publicKey, Base64.DEFAULT))
-            setClientDeviceIdPubKey(Base64.encodeToString(deviceIdPubKey.publicKey, Base64.DEFAULT))
-            setOwnershipProofResponse("123456")
-        }.build()
+    fun endToEndCompleteTest() {
+        try {
+            println("Starting")
+            val response = vault.createEntity(context,
+                globalPhoneNumber,
+                globalCountryCode,
+                globalPassword)
+
+            assertTrue(response.requiresOwnershipProof)
+
+            var response1 = vault.createEntity(context,
+                globalPhoneNumber,
+                globalCountryCode,
+                globalPassword,
+                "123456")
+
+        } catch(e: StatusRuntimeException) {
+            println("Exception code: ${e.status.code.value()}")
+            println("Exception code: ${e.status.description}")
+            when(e.status.code.value()) {
+                3 -> {
+                    println("invalid arg - code is ${e.status.code.value()}")
+                    throw e
+                }
+                6 -> { println("already exist - code is ${e.status.code.value()}")}
+            }
+        } catch(e: Exception) {
+            println("Regular exception requested")
+        }
 
         try {
-            val createResponse = entityStub.createEntity(createEntityRequest2)
-            assertFalse(createResponse.requiresOwnershipProof)
-            println(createResponse.message)
-        } catch(e: Exception) {
-            if(e is StatusRuntimeException) {
-                when(e.status.code.toString()) {
-                    "UNAUTHENTICATED" -> {
-                        println(e.message)
-                    }
+            val response4 = vault.recoverEntityPassword(context,
+                globalPhoneNumber,
+                globalPassword)
+
+            assertTrue(response4.requiresOwnershipProof)
+
+            val response5 = vault.recoverEntityPassword(context,
+                globalPhoneNumber,
+                globalPassword,
+                "123456")
+
+            val response2 = vault.authenticateEntity(context,
+                globalPhoneNumber,
+                globalPassword)
+
+            assertTrue(response2.requiresOwnershipProof)
+
+            val response3 = vault.authenticateEntity(context,
+                globalPhoneNumber,
+                globalPassword,
+                "123456")
+
+            val llt = Vault.fetchLongLivedToken(context)
+            var response6 = vault.deleteEntity(llt)
+        } catch(e: StatusRuntimeException) {
+            println("Exception code: ${e.status.code.value()}")
+            println("Exception code: ${e.status.description}")
+            when(e.status.code.value()) {
+                3 -> {
+                    println("invalid arg - code is ${e.status.code.value()}")
+                    throw e
                 }
+                6 -> { println("already exist - code is ${e.status.code.value()}")}
             }
+        } catch(e: Exception) {
             throw e
         }
-    }
-
-    private fun vaultAuthenticateEntity(): AuthenticateEntityResponse {
-        val authenticateEntity = Vault.AuthenticateEntityRequest.newBuilder().apply {
-            setPhoneNumber(globalPhoneNumber)
-            setPassword(globalPassword)
-        }.build()
-
-        val createResponse = entityStub.authenticateEntity(authenticateEntity)
-        return createResponse
-    }
-
-
-    @Test
-    fun vaultTestAuthenticateEntity() {
-//        vaultTestCreateEntity()
-//        vaultTestCreateEntity2()
-
-        val createResponse = vaultAuthenticateEntity()
-        vaultTestAuthenticationEntity2()
-    }
-
-    private fun vaultTestAuthenticationEntity2(): String {
-        /**
-         * TODO: grpc
-         * Need to be able to delete contacts
-         *
-         * Public and private keys should go as bytes
-         */
-//        vaultTestCreateEntity()
-        val createEntityRequest2 = Vault.AuthenticateEntityRequest.newBuilder().apply {
-            setPhoneNumber(globalPhoneNumber)
-            setClientPublishPubKey(Base64.encodeToString(publishPubKey.publicKey, Base64.DEFAULT))
-            setClientDeviceIdPubKey(Base64.encodeToString(deviceIdPubKey.publicKey, Base64.DEFAULT))
-            setOwnershipProofResponse("123456")
-        }.build()
-
-        val createResponse = entityStub.authenticateEntity(createEntityRequest2)
-
-        val sharedKey = SecurityCurve25519().calculateSharedSecret(
-            Base64.decode(createResponse.serverDeviceIdPubKey, Base64.DEFAULT), deviceIdPubKey)
-
-        return Crypto.decryptFernet(sharedKey,
-            String(Base64.decode(createResponse.longLivedToken, Base64.DEFAULT), Charsets.UTF_8))
-    }
-
-    @Test
-    fun vaultTestListStoredEntityToken() {
-        /**
-         * https://github.com/smswithoutborders/SMSwithoutborders-BE/blob/feature/grpc_api/docs/grpc.md#authenticate-an-entity
-         */
-
-        vaultAuthenticateEntity()
-        val llt = vaultTestAuthenticationEntity2()
-
-        val listEntity = Vault.ListEntityStoredTokenRequest.newBuilder().apply {
-            setLongLivedToken(llt)
-        }.build()
-
-        val listResponse = entityStub.listEntityStoredTokens(listEntity)
-        val listStoredTokens: List<Vault.Token> = listResponse.storedTokensList
-
-        println(listStoredTokens)
-
-        /**
-        listStoredTokens.forEach {
-            it.accountIdentifier
-            it.platform
-        }
-        **/
-    }
-
-    @Test
-    fun publisherTestStoring() {
-        vaultAuthenticateEntity()
-        val llt = vaultTestAuthenticationEntity2()
-
-        val publisherOAuthRequestRequest = PublisherOuterClass.GetOAuth2AuthorizationUrlRequest
-            .newBuilder().apply {
-                setPlatform("gmail")
-                setState("")
-                setCodeVerifier("")
-                setAutogenerateCodeVerifier(true)
-            }.build()
-
-        val getResponse = publisherStub.getOAuth2AuthorizationUrl(publisherOAuthRequestRequest)
-        println(getResponse.authorizationUrl)
-        println(getResponse.state)
-        println(getResponse.codeVerifier)
-        println(getResponse.message)
-
-//        val publisherAuthorizationCodeExchange =
-//            PublisherOuterClass.ExchangeOAuth2CodeAndStoreRequest.newBuilder().apply {
-//                setLongLivedToken(llt)
-//                setPlatform("gmail")
-//                setAuthorizationCode(Base64.encodeToString(Helpers.generateRandomBytes(32),
-//                    Base64.URL_SAFE))
-//            }.build()
-//
-//        val response = publisherStub.exchangeOAuth2CodeAndStore(publisherAuthorizationCodeExchange)
     }
 }

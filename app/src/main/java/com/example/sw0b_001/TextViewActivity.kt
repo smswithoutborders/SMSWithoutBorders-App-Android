@@ -1,77 +1,36 @@
 package com.example.sw0b_001
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import com.example.sw0b_001.Database.Datastore
-import com.example.sw0b_001.Modals.PlatformComposers.EmailComposeModalFragment
-import com.example.sw0b_001.Modals.PlatformComposers.TextComposeModalFragment
-import com.example.sw0b_001.Models.Messages.EncryptedContent
-import com.example.sw0b_001.Models.Platforms.Platforms
-import com.example.sw0b_001.Models.ThreadExecutorPool
+import com.example.sw0b_001.Modules.Helpers.formatDate
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textview.MaterialTextView
 
-class TextViewActivity : AppCompactActivityCustomized() {
+class TextViewActivity : MessagesComposeAppCompactActivityFactory() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_text_view)
 
-        val myToolbar = findViewById<MaterialToolbar>(R.id.layout_text_toolbar)
+        val myToolbar = findViewById<MaterialToolbar>(R.id.view_message_toolbar)
         setSupportActionBar(myToolbar)
         supportActionBar?.apply {
-            this.title = intent.getStringExtra("platform_name")
+            title = intent.getStringExtra("platform_name")
             setDisplayHomeAsUpEnabled(true)
         }
 
         configureView()
     }
 
-    private lateinit var message: EncryptedContent
     private fun configureView() {
-        ThreadExecutorPool.executorService.execute {
-            message = Datastore.getDatastore(applicationContext).encryptedContentDAO()
-                .get(intent.getLongExtra("message_id", -1))
-            println(message.encryptedContent)
-            runOnUiThread {
-                message.encryptedContent.split(":").let {
-                    findViewById<MaterialTextView>(R.id.layout_text_body).apply {
-                        text = it.subList(1, it.size).joinToString()
-                    }
-                }
+        message.encryptedContent.split(":").let {
+            findViewById<MaterialTextView>(R.id.view_message_body).apply {
+                text = it.subList(1, it.size).joinToString()
+            }
+
+            findViewById<MaterialTextView>(R.id.layout_text_date).apply {
+                text = formatDate(applicationContext, message.date)
             }
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.compose_view_edit_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.compose_view_edit_menu_edit -> {
-                ThreadExecutorPool.executorService.execute {
-                    val platforms = Datastore.getDatastore(applicationContext).platformDao()
-                        .get(intent.getLongExtra("platform_id", -1))
-                    runOnUiThread {
-                        showPlatformsModal(platforms)
-                    }
-                }
-                return true
-            }
-        }
-        return false
-    }
-
-    private fun showPlatformsModal(platforms: Platforms) {
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        val textComposeModalFragment = TextComposeModalFragment(platforms, message) {
-            finish()
-        }
-        fragmentTransaction.add(textComposeModalFragment, "text_compose_tag")
-        fragmentTransaction.show(textComposeModalFragment)
-        fragmentTransaction.commitNow()
-    }
 }

@@ -6,10 +6,16 @@ import android.text.format.DateUtils
 import android.util.Log
 import com.example.sw0b_001.R
 import java.net.URL
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.security.SecureRandom
 import java.util.Calendar
 
 object Helpers {
+    fun Int.toBytes(order: ByteOrder = ByteOrder.LITTLE_ENDIAN, size: Int=4): ByteArray {
+        return ByteBuffer.allocate(size).order(order).putInt(this).array()
+    }
+
     fun formatDate(context: Context, epochTime: Long): String {
         val currentTime = System.currentTimeMillis()
         val diff = currentTime - epochTime
@@ -41,17 +47,20 @@ object Helpers {
     }
 
     fun extractParameters(data: String) : Map<String, String> {
-        val query = URL(data.replace("apps://", "https://")).query
-        val parameters = query.split("&")
+        val query = URL(data.replace("relaysms://", "https://")).query
         val mappedParameters = emptyMap<String, String>().toMutableMap()
-        parameters.forEach {
-            val entries = it.split("=")
-            mappedParameters[entries[0]] = entries[1]
+
+        query?.let {
+            val parameters = query.split("&")
+            parameters.forEach {
+                val entries = it.split("=")
+                mappedParameters[entries[0]] = entries[1]
+            }
         }
         return mappedParameters
     }
     fun getPath(data: String): String {
-        return URL(data.replace("apps://", "https://")).path
+        return URL(data.replace("relaysms://", "https://")).path
     }
 
     fun logIntentDetails(intent: Intent?) {

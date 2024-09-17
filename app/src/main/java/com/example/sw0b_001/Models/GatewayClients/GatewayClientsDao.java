@@ -51,4 +51,7 @@ public interface GatewayClientsDao {
         clear();
         insertAll(gatewayClients);
     }
+
+    @Query("SELECT * FROM GatewayClient WHERE MSISDN = :msisdn")
+    GatewayClient getByMsisdn(String msisdn);
 }

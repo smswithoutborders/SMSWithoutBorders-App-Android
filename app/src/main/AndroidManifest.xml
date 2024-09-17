@@ -30,39 +30,48 @@
         android:versionCode="48"
         android:versionName="2.5.8"
         tools:replace="android:label">
-
+        <activity
+            android:name=".MessageViewActivity"
+            android:exported="false"
+            android:parentActivityName=".HomepageActivity" />
         <activity
             android:name=".EmailViewActivity"
             android:exported="false"
             android:parentActivityName=".HomepageActivity" />
-
         <activity
             android:name=".TextViewActivity"
             android:exported="false"
             android:parentActivityName=".HomepageActivity" />
-
         <activity
             android:name=".Security.LockScreenActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SettingsActivity"
-            android:exported="true"
-            android:parentActivityName=".HomepageActivity" />
-
-        <activity
-            android:name=".OTPVerificationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".VaultStoreActivity"
-            android:exported="false" />
-        <activity
-            android:name=".OnboardingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:exported="false"
+            android:parentActivityName=".HomepageActivity" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="true"
+            android:parentActivityName=".HomepageActivity" />
+        <activity
+            android:name=".OTPVerificationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OnboardingActivity"
+            android:exported="false">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
 
         <service
@@ -79,47 +88,27 @@
             android:exported="false"
             android:launchMode="singleTask" />
         <activity
-            android:name=".Settings.GatewayClientListingActivity"
+            android:name=".Homepage.GatewayClientListingFragment"
             android:exported="false"
             android:parentActivityName=".SettingsActivity" />
         <activity
-            android:name=".MessageComposeActivity"
+            android:name=".Modals.PlatformComposers.MessageComposeModalFragment"
             android:exported="false"
             android:label="@string/message_compose_header"
             android:parentActivityName=".HomepageActivity" />
-
-        <provider
-            android:name="androidx.startup.InitializationProvider"
-            android:authorities="${applicationId}.androidx-startup"
-            android:exported="false"
-            tools:node="merge">
-            <meta-data
-                android:name="com.example.sw0b_001.Security.LockScreenInitializer"
-                android:value="androidx.startup" />
-        </provider>
-
         <activity
-            android:name=".OpenIDOAuthRedirectActivity"
+            android:name=".OauthRedirectActivity"
             android:exported="true"
             tools:node="replace">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="@string/oauth_openid_redirect_url_scheme" />
-                <data android:host="@string/oauth_openid_redirect_url_scheme_host" />
-                <data android:path="@string/oauth_openid_redirect_url_scheme_path_gmail"/>
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="@string/oauth_openid_redirect_url_scheme" />
-                <data android:host="@string/oauth_openid_redirect_url_scheme_host" />
-                <data android:path="@string/oauth_openid_redirect_url_scheme_path_x"/>
+                <data android:scheme="relaysms" />
+                <data android:host="oauth.afkanerd.com" />
+                <data android:pathPattern="/android/" />
             </intent-filter>
         </activity>
     </application>

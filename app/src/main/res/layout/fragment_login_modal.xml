@@ -7,39 +7,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    android:padding="8dp"
     style="@style/Widget.Material3.BottomSheet.Modal">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:orientation="vertical"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         android:id="@+id/login_constraint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:id="@+id/drag_handle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/logo"
+            android:layout_gravity="center"/>
+
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/login_text_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_gravity="center"
             android:text="@string/onboarding_log_into_vault"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="30sp"
+            android:textStyle="bold"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/login_description"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/welcome_back_nsign_in_to_continue_with_existing_account"
+            android:textAlignment="center"
+            android:textColor="@color/md_theme_outline"/>
 
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/login_progress_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:indeterminate="true"
             android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_text_description"
             tools:visibility="visible" />
 
         <com.google.android.material.card.MaterialCardView
@@ -47,69 +62,37 @@
             style="@style/Widget.Material3.CardView.Elevated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
             android:visibility="gone"
-            app:cardBackgroundColor="@color/md_theme_error"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_progress_bar"
+            app:cardBackgroundColor="@color/md_theme_error_mediumContrast"
             tools:visibility="visible">
 
-            <LinearLayout
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/login_error_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/login_error_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/md_theme_onError"
-                    tools:text="Wrong number or password, please try again..." />
-
-                <!--                <com.google.android.material.button.MaterialButton-->
-                <!--                    android:id="@+id/login_retry_btn"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginStart="8dp"-->
-                <!--                    android:layout_marginTop="8dp"-->
-                <!--                    android:layout_marginEnd="8dp"-->
-                <!--                    android:layout_marginBottom="8dp"-->
-                <!--                    android:visibility="gone"-->
-                <!--                    tools:text="Retry"-->
-                <!--                    tools:visibility="visible" />-->
-            </LinearLayout>
+                android:padding="16dp"
+                android:textSize="16sp"
+                android:textColor="@color/md_theme_onError"
+                tools:text="Wrong number or password, please try again..." />
 
         </com.google.android.material.card.MaterialCardView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/login_phonenumber_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_status_card">
+            android:orientation="horizontal">
 
             <com.hbb20.CountryCodePicker
                 android:id="@+id/login_country_code_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                app:ccp_contentColor="@color/md_theme_primary"
                 app:ccpDialog_backgroundColor="@color/md_theme_background"
                 app:ccpDialog_textColor="@color/md_theme_primary"
                 app:ccp_autoDetectCountry="true"
                 app:ccp_clickable="true"
+                app:ccp_contentColor="@color/md_theme_primary"
                 app:ccp_countryAutoDetectionPref="SIM_ONLY"
                 app:ccp_defaultLanguage="ENGLISH"
                 app:ccp_defaultNameCode="CM"
@@ -138,64 +121,50 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/login_forgot_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/forgot_password"
+            android:background="#0000"
+            android:textColor="#007AFF"
+            android:layout_gravity="end"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/login_password_text"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:hint="@string/login_password"
-            app:layout_constraintEnd_toEndOf="@+id/login_phonenumber_layout"
-            app:layout_constraintStart_toStartOf="@+id/login_phonenumber_layout"
-            app:layout_constraintTop_toBottomOf="@+id/login_phonenumber_layout"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/login_password_text_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
-
-<!--        <com.google.android.material.textview.MaterialTextView-->
-<!--            android:id="@+id/login_advanced_toggle"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/login_password_text"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/login_password_text"-->
-<!--            tools:text="Advanced options" />-->
-
-<!--        <com.google.android.material.textfield.TextInputLayout-->
-<!--            android:id="@+id/login_url"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:visibility="gone"-->
-<!--            tools:visibility="visible"-->
-<!--            android:hint=""-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/login_advanced_toggle"-->
-<!--            app:layout_constraintEnd_toEndOf="@+id/login_password_text"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/login_password_text" >-->
-<!--            <com.google.android.material.textfield.TextInputEditText-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:inputType="textWebEditText"-->
-<!--                android:text="@string/default_login_url"/>-->
-<!--        </com.google.android.material.textfield.TextInputLayout>-->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/login_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/login_login"
+            android:padding="14dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/login_already_have_account"
+            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_password_text"
-            android:text="@string/login_login" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:background="#0000"
+            android:padding="16dp"
+            android:text="@string/don_t_have_an_account_create_account"
+            android:textAlignment="center"
+            android:textColor="#539FF1"
+            android:textSize="16sp"/>
+    </LinearLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -3,16 +3,23 @@ package com.example.sw0b_001.Modals.PlatformComposers
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
+import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.Messages.EncryptedContent
 import com.example.sw0b_001.Models.Platforms.Platforms
+import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.Models.Platforms._PlatformsHandler
 import com.example.sw0b_001.R
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class EmailComposeModalFragment(val platforms: Platforms, val message: EncryptedContent? = null,
+class EmailComposeModalFragment(val platform: StoredPlatformsEntity,
+                                val message: EncryptedContent? = null,
                                 private val onSuccessCallback: Runnable? = null)
     : BottomSheetDialogFragment(R.layout.fragment_modal_email_compose) {
 
@@ -58,6 +65,9 @@ class EmailComposeModalFragment(val platforms: Platforms, val message: Encrypted
             }
         }
 
+        view.findViewById<TextInputEditText>(R.id.email_from).apply {
+            setText(platform.account)
+        }
     }
 
     private fun processSend(view: View) {
@@ -76,28 +86,37 @@ class EmailComposeModalFragment(val platforms: Platforms, val message: Encrypted
             return
         }
 
-
         val to = toEditText.text.toString()
         val cc = ccTextInputEditText.text.toString()
         val bcc = bccTextInputEditText.text.toString()
         val subject = subjectTextInputEditText.text.toString()
         val body = bodyTextInputEditText.text.toString()
 
-        val platforms = _PlatformsHandler.getPlatform(view.context, platforms.id)
-        val formattedContent = processEmailForEncryption(platforms.letter, to, cc, bcc, subject, body)
+        CoroutineScope(Dispatchers.Default).launch {
+            val availablePlatforms = Datastore.getDatastore(requireContext())
+                .availablePlatformsDao().fetch(platform.name!!)
+            val formattedContent = processEmailForEncryption(to, cc, bcc, subject, body)
+            println("Formatted content: $formattedContent")
 
-        ComposeHandlers.compose(requireContext(), formattedContent, platforms) {
-            dismiss()
-            onSuccessCallback?.let { it.run() }
+            try {
+                ComposeHandlers.compose(requireContext(), formattedContent, availablePlatforms, platform) {
+                    onSuccessCallback?.let { it.run() }
+                    dismiss()
+                }
+            } catch(e: Exception) {
+                e.printStackTrace()
+                activity?.runOnUiThread {
+                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
-    private fun processEmailForEncryption(platformLetter: String,
-                                          to: String,
+    private fun processEmailForEncryption(to: String,
                                           cc: String,
                                           bcc: String,
                                           subject: String,
                                           body: String): String {
-        return "$platformLetter:$to:$cc:$bcc:$subject:$body"
+        return "${platform.account}:$to:$cc:$bcc:$subject:$body"
     }
 }

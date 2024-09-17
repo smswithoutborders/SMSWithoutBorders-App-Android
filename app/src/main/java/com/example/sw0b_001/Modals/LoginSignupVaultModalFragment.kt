@@ -25,7 +25,6 @@ class LoginSignupVaultModalFragment(private val onSuccessRunnable: Runnable?,
         view.findViewById<MaterialButton>(R.id.onboarding_login_signup_login_btn)
                 .setOnClickListener {
                     dismiss()
-
                     val loginModalFragment = LoginModalFragment(onSuccessRunnable)
                     fragmentTransaction?.add(loginModalFragment, "login_signup_login_vault_tag")
                     fragmentTransaction?.show(loginModalFragment)
@@ -35,7 +34,6 @@ class LoginSignupVaultModalFragment(private val onSuccessRunnable: Runnable?,
         view.findViewById<MaterialButton>(R.id.onboarding_login_signup_signup_btn)
                 .setOnClickListener {
                     dismiss()
-
                     val signupModalFragment = SignupModalFragment(onSignupSuccessRunnable)
                     fragmentTransaction?.add(signupModalFragment, "signup_tag")
                     fragmentTransaction?.show(signupModalFragment)

@@ -6,4 +6,9 @@
         android:id="@+id/homepage_settings_menu"
         app:showAsAction="never"
         android:title="@string/main_navigation_settings" />
+
+    <item
+        android:id="@+id/homepage_about_menu"
+        app:showAsAction="never"
+        android:title="@string/main_navigation_about" />
 </menu>

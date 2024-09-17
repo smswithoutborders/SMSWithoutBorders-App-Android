@@ -14,15 +14,12 @@ import com.example.sw0b_001.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class LockScreenFragment(val layout: Int = R.layout.fragment_modal_security_lockscreen,
-                         val successRunnable: Runnable?,
+class LockScreenFragment(val successRunnable: Runnable?,
                          val failedRunnable: Runnable?,
-                         val errorRunnable: Runnable?) : BottomSheetDialogFragment() {
+                         val errorRunnable: Runnable?) :
+    BottomSheetDialogFragment(R.layout.fragment_modal_security_lockscreen) {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(layout, container, false)
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

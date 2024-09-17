@@ -19,7 +19,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.settings_preferences, rootKey)
 
         val securityPrivacyPreference = findPreference<Preference>("security_settings")
-        val gatewayClientsPreference = findPreference<Preference>("gateway_server_settings")
 
         securityPrivacyPreference!!.fragment = SecurityPrivacyFragment::class.java.getCanonicalName()
 
@@ -29,12 +28,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     changeLanguageLocale(requireContext(), newValue)
                     true
                 }
-
-        gatewayClientsPreference!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val gatewayClientIntent = Intent(context, GatewayClientListingActivity::class.java)
-            startActivity(gatewayClientIntent)
-            true
-        }
     }
 
     companion object {
