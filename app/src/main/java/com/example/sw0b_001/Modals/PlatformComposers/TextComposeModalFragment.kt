@@ -5,15 +5,23 @@ import android.os.SystemClock
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
+import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.Messages.EncryptedContent
+import com.example.sw0b_001.Models.Platforms.AvailablePlatforms
 import com.example.sw0b_001.Models.Platforms.Platforms
+import com.example.sw0b_001.Models.Platforms.StoredPlatformsEntity
 import com.example.sw0b_001.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class TextComposeModalFragment(val platforms: Platforms, val message: EncryptedContent? = null,
+class TextComposeModalFragment(val platform: StoredPlatformsEntity,
+                               val message: EncryptedContent? = null,
                                private val onSuccessCallback: Runnable? = null)
     : BottomSheetDialogFragment(R.layout.fragment_modal_text_compose) {
 
@@ -21,7 +29,6 @@ class TextComposeModalFragment(val platforms: Platforms, val message: EncryptedC
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        println("Platforms letter: ${platforms.letter}")
         view.findViewById<MaterialButton>(R.id.text_compose_btn)
                 .setOnClickListener {
                     processPost(view)
@@ -58,16 +65,27 @@ class TextComposeModalFragment(val platforms: Platforms, val message: EncryptedC
             return
         }
 
-        val formattedString =
-                processTextForEncryption(platforms.letter, textComposeTextEdit.text.toString())
-        ComposeHandlers.compose(view.context, formattedString, platforms) {
-            dismiss()
-            onSuccessCallback?.let { it.run() }
-        }
+        CoroutineScope(Dispatchers.Default).launch {
+            val availablePlatforms = Datastore.getDatastore(requireContext())
+                .availablePlatformsDao().fetch(platform.name!!)
+            val formattedString =
+                processTextForEncryption(textComposeTextEdit.text.toString())
 
+            try {
+                ComposeHandlers.compose(requireContext(), formattedString, availablePlatforms, platform) {
+                    onSuccessCallback?.let { it.run() }
+                    dismiss()
+                }
+            } catch(e: Exception) {
+                e.printStackTrace()
+                activity?.runOnUiThread {
+                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
-    private fun processTextForEncryption(platformLetter: String, body: String): String {
-        return "$platformLetter:$body"
+    private fun processTextForEncryption(body: String): String {
+        return "${platform.account}:$body"
     }
 }

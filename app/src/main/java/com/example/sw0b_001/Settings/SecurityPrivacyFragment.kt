@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.biometric.BiometricManager
@@ -15,13 +16,20 @@ import androidx.preference.Preference.OnPreferenceChangeListener
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreferenceCompat
+import com.example.sw0b_001.HomepageActivity
+import com.example.sw0b_001.Modals.AvailablePlatformsModalFragment
 import com.example.sw0b_001.Modals.LoginModalFragment
-import com.example.sw0b_001.Models.UserArtifactsHandler
-import com.example.sw0b_001.Models.v2.Vault_V2
+import com.example.sw0b_001.Modals.LogoutDeleteConfirmationModalFragment
+import com.example.sw0b_001.Models.Vault
 import com.example.sw0b_001.Modules.Security
-import com.example.sw0b_001.Modals.PlatformsModalFragment
+import com.example.sw0b_001.OnboardingActivity
 import com.example.sw0b_001.R
 import com.example.sw0b_001.Security.LockScreenFragment
+import com.google.android.material.progressindicator.LinearProgressIndicator
+import io.grpc.StatusRuntimeException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SecurityPrivacyFragment : PreferenceFragmentCompat() {
 
@@ -31,7 +39,7 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
 
         val revokeVaults = findPreference<Preference>("revoke")
         revokeVaults?.setOnPreferenceClickListener {
-            showPlatformsModal()
+            showPlatformsModal(AvailablePlatformsModalFragment.Type.REVOKE)
             true
         }
 
@@ -48,20 +56,62 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
 
         val logout = findPreference<Preference>("logout")
         logout?.setOnPreferenceClickListener {
-            UserArtifactsHandler.clearCredentials(requireContext())
-            Toast.makeText(requireContext(),
-                    getString(R.string.logout_all_credentials_have_been_cleared_from_app),
-                    Toast.LENGTH_LONG).show()
-            activity?.finish()
+            val onSuccessRunnable = Runnable {
+                Vault.logout(requireContext()) {
+                    returnToHomepage()
+                }
+            }
+
+            val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+            val loginModalFragment = LogoutDeleteConfirmationModalFragment(onSuccessRunnable)
+            fragmentTransaction?.add(loginModalFragment, "logout_delete_fragment")
+            fragmentTransaction?.show(loginModalFragment)
+            fragmentTransaction?.commit()
+
             true
         }
 
         val delete = findPreference<Preference>("delete")
         delete?.setOnPreferenceClickListener {
-            showLoginModal()
+            val onSuccessRunnable = Runnable {
+                val progress = activity?.findViewById<LinearProgressIndicator>(R.id.settings_progress)
+                CoroutineScope(Dispatchers.Default).launch {
+                    activity?.runOnUiThread {
+                        progress?.visibility = View.VISIBLE
+                    }
+                    try {
+                        val llt = Vault.fetchLongLivedToken(requireContext())
+                        Vault.completeDelete(requireContext(), llt)
+                        Vault.logout(requireContext()) {
+                            returnToStart()
+                        }
+                    } catch(e: StatusRuntimeException) {
+                        e.printStackTrace()
+                        activity?.runOnUiThread {
+                            Toast.makeText(requireContext(), e.status.description, Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    } catch(e: Exception) {
+                        e.printStackTrace()
+                        activity?.runOnUiThread {
+                            Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                        }
+                    } finally {
+                        activity?.runOnUiThread {
+                            progress?.visibility = View.GONE
+                        }
+                    }
+                }
+            }
+            val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
+            val loginModalFragment = LogoutDeleteConfirmationModalFragment(onSuccessRunnable)
+            fragmentTransaction?.add(loginModalFragment, "logout_delete_fragment")
+            fragmentTransaction?.show(loginModalFragment)
+            fragmentTransaction?.commit()
             true
         }
-        if(!UserArtifactsHandler.isCredentials(requireContext())) {
+
+        if(Vault.fetchLongLivedToken(requireContext()).isNullOrBlank()) {
             logout?.isEnabled = false
             logout?.summary = getString(R.string
                     .logout_you_have_no_accounts_logged_into_vaults_at_this_time)
@@ -70,6 +120,22 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
             delete?.summary = getString(R.string
                     .security_settings_you_have_no_accounts_to_delete_in_vault_at_this_time)
         }
+    }
+
+    private fun returnToStart() {
+        val intent = Intent(activity, OnboardingActivity::class.java)
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or
+                Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
+    }
+
+    private fun returnToHomepage() {
+        val intent = Intent(activity, HomepageActivity::class.java)
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or
+                Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
     }
 
     private fun switchSecurityPreferences(): OnPreferenceChangeListener {
@@ -123,46 +189,12 @@ class SecurityPrivacyFragment : PreferenceFragmentCompat() {
                             .show()
                 }
             }
-    private fun showLoginModal() {
-        val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-        val loginModalFragment = LoginModalFragment(Runnable {
-            val credentials = UserArtifactsHandler.fetchCredentials(requireContext())
-            val networkResponseResults = Vault_V2.delete(requireContext(),
-                    credentials[UserArtifactsHandler.USER_ID_KEY]!!,
-                    credentials[UserArtifactsHandler.PASSWORD]!!)
-            when(networkResponseResults.response.statusCode) {
-                200 -> {
-                    UserArtifactsHandler.clearCredentials(requireContext())
-                    activity?.let {
-                        it.runOnUiThread {
-                            it.recreate()
-                            Toast.makeText(requireContext(),
-                                    getString(R.string.security_settings_vault_account_deleted),
-                                    Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                } else -> {
-                    activity?.let {
-                        it.runOnUiThread {
-                            Toast.makeText(requireContext(),
-                                    getString(R.string.networ_error_reaching_server_please_try_again),
-                                    Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            }
-        })
-        fragmentTransaction?.add(loginModalFragment, "login_signup_login_vault_tag")
-        fragmentTransaction?.show(loginModalFragment)
-        fragmentTransaction?.commit()
-    }
 
-    private fun showPlatformsModal() {
+    private fun showPlatformsModal(type: AvailablePlatformsModalFragment.Type) {
         val fragmentTransaction = activity?.supportFragmentManager?.beginTransaction()
-        val platformsModalFragment =
-                PlatformsModalFragment(PlatformsModalFragment.SHOW_TYPE_SAVED_REVOKE)
+        val platformsModalFragment = AvailablePlatformsModalFragment(type)
         fragmentTransaction?.add(platformsModalFragment, "store_platforms_tag")
         fragmentTransaction?.show(platformsModalFragment)
-        fragmentTransaction?.commitNow()
+        activity?.runOnUiThread { fragmentTransaction?.commit() }
     }
 }

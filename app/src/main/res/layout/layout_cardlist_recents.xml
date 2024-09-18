@@ -24,27 +24,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!--        <de.hdodenhof.circleimageview.CircleImageView-->
-            <!--            android:id="@+id/recents_platform_logo"-->
-            <!--            android:layout_width="45dp"-->
-            <!--            android:layout_height="45dp"-->
-            <!--            android:layout_marginStart="16dp"-->
-            <!--            android:layout_marginTop="8dp"-->
-            <!--            android:layout_marginBottom="16dp"-->
-            <!--            android:scaleType="centerCrop"-->
-            <!--            android:src="@drawable/gmail"-->
-            <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--            app:layout_constraintStart_toStartOf="parent"-->
-            <!--            app:layout_constraintTop_toTopOf="parent" />-->
-
             <ImageView
                 android:id="@+id/recents_platform_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/gmail"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -93,7 +79,7 @@
                 tools:text="Hello world, here is a sample text that was sent. But emails should be different from messages and their contents." />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/recent_date"
+                android:id="@+id/encryptedTextDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"

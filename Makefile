@@ -105,7 +105,7 @@ _commit-check:
 	@echo "jks: $(jks)"
 	@cp $(jks) commit-checks/
 	@cd commit-checks && \
-		docker build -t ${docker_apk_image_commit_check} \
+		docker build --platform linux/amd64 -t ${docker_apk_image_commit_check} \
 		--build-arg COMMIT=$(commit) \
 		--build-arg COMMIT_URL=$(commit_url) \
 		--build-arg RELEASE_URL=$(release_url) . && \
@@ -118,7 +118,7 @@ commit-check: _commit-check clean
 
 check-diffoscope: ks.passwd
 	@echo "Building apk output: ${APP_1}"
-	DOCKER_BUILDKIT=1 docker build -t ${docker_apk_image} --target apk-builder .
+	DOCKER_BUILDKIT=1 docker build --platform linux/amd64 -t ${docker_apk_image} --target apk-builder .
 	docker run --name ${CONTAINER_NAME} -e PASS=$(pass) ${docker_apk_image} && \
 		docker cp ${CONTAINER_NAME}:/android/app/build/outputs/apk/release/app-release.apk apk-outputs/${APP_1}
 	@sleep 3
@@ -130,7 +130,8 @@ check-diffoscope: ks.passwd
 
 docker-build-aab: check-diffoscope
 	# @sleep 5
-	DOCKER_BUILDKIT=1 docker build -t ${docker_app_image} --target bundle-builder .
+	# DOCKER_BUILDKIT=1 docker build -t ${docker_app_image} --target bundle-builder .
+	DOCKER_BUILDKIT=1 docker build --platform linux/amd64 -t ${docker_app_image} --target bundle-builder .
 	docker run --name ${CONTAINER_NAME_BUNDLE} -e PASS=$(pass) -e MIN_SDK=$(minSdk) ${docker_app_image} && \
 		docker cp ${CONTAINER_NAME_BUNDLE}:/android/app/build/outputs/bundle/release/app-bundle.aab apk-outputs/${aab_output}
 

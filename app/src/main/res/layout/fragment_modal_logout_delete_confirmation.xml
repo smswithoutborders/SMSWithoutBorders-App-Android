@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/Theme.main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    style="@style/Widget.Material3.BottomSheet.Modal">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/logout_delete_confirmation_layout"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:id="@+id/drag_handle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            style="@style/Widget.Material3.CardView.Elevated"
+            app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/drag_handle">
+
+            <LinearLayout
+                android:showDividers="middle"
+                android:divider="@drawable/empty_tall_divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/TextAppearance.Material3.BodyLarge"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:textSize="20sp"
+                    android:text="@string/click_continue_to_confirm_this_action_do_not_worry_this_has_no_dangerous_effects"
+                    android:textAlignment="center" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/logout_delete_confirmation_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/md_theme_error"
+                    android:padding="16dp"
+                    android:paddingTop="16dp"
+                    android:text="@string/recovery_continue"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            style="@style/Widget.Material3.CardView.Elevated"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/logout_delete_confirmation_cancel_btn"
+                    android:padding="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel" />
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

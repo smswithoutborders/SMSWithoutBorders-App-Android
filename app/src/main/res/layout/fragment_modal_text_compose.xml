@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/Theme.main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -27,7 +26,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/text_compose_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -39,7 +37,7 @@
                 android:layout_marginEnd="24dp"
                 android:backgroundTint="#3F51B5"
                 android:text="@string/tweet_compose_tweet"
-                android:textColor="@color/white" />
+                android:textColor="@color/md_theme_background" />
         </com.google.android.material.appbar.MaterialToolbar>
 
         <EditText

@@ -3,13 +3,14 @@ buildscript {
     ext {
 //        kotlin_version = '1.8.20-RC'
         kotlin_version = '1.9.23'
+        agp_version = '8.6.0'
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.2'
+        classpath "com.android.tools.build:gradle:$agp_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.protobuf:protobuf-gradle-plugin:0.9.4"
 
