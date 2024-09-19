@@ -262,8 +262,5 @@
     <string name="revoke_platforms">Revoke Platforms</string>
     <string name="validate_with_phone_number">Validate with phone number</string>
     <string name="the_code_can_be_automatically_detected_in_some_cases">The code can be automatically detected in some cases</string>
-    <string name="request_contact_permission">Please grant permission to select a contact</string>
-    <string name="read_contacts_permission_denied">Permission to read contacts denied</string>
-    <string name="grant_contact_permission_from_settings">Please grant contact access permission from app settings</string>
 
 </resources>
