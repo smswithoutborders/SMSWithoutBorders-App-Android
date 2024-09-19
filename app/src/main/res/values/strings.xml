@@ -262,5 +262,6 @@
     <string name="revoke_platforms">Revoke Platforms</string>
     <string name="validate_with_phone_number">Validate with phone number</string>
     <string name="the_code_can_be_automatically_detected_in_some_cases">The code can be automatically detected in some cases</string>
+    <string name="request_contact_permission">Please grant permission to select a contact</string>
 
 </resources>

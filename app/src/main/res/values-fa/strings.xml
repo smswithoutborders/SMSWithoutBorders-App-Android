@@ -153,4 +153,5 @@
     <string name="revoke_platforms">ابطال پلتفرم ها</string>
     <string name="validate_with_phone_number">با شماره تلفن تایید کنید</string>
     <string name="the_code_can_be_automatically_detected_in_some_cases">کد را می توان به طور خودکار در برخی موارد شناسایی کرد</string>
+    <string name="request_contact_permission">لطفا اجازه انتخاب مخاطب را بدهید</string>
 </resources>
