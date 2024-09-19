@@ -23,6 +23,7 @@
             android:layout_height="match_parent"/>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/gateway_client_add_contact_layout"
             style="@style/Widget.Material3.TextInputEditText.OutlinedBox"
             app:helperText="@string/gateway_client_add_custom_example_text"
             android:layout_width="match_parent"

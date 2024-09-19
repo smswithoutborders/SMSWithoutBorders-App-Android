@@ -1,6 +1,9 @@
 package com.example.sw0b_001.Models.GatewayClients
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.view.View
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.R
@@ -13,9 +16,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class GatewayClientAddModalFragment :
-        BottomSheetDialogFragment(R.layout.fragment_gateway_client_add_modal) {
+    BottomSheetDialogFragment(R.layout.fragment_gateway_client_add_modal) {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val bottomSheet = view.findViewById<View>(R.id.gateway_client_add_modal)
@@ -25,17 +30,27 @@ class GatewayClientAddModalFragment :
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
         view.findViewById<MaterialButton>(R.id.gateway_client_add_custom_btn)
-                .setOnClickListener {
-                    addGatewayClients(view)
-                }
+            .setOnClickListener {
+                addGatewayClients(view)
+            }
+
+        val textInputLayout = view.findViewById<TextInputEditText>(R.id.gateway_client_add_contact)
+        textInputLayout.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK).apply {
+                type = ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE
+            }
+            startActivityForResult(intent, 1)
+        }
     }
 
     private fun addGatewayClients(view: View) {
         val contactTextView = view.findViewById<TextInputEditText>(R.id.gateway_client_add_contact)
-        val aliasTextView = view.findViewById<TextInputEditText>(R.id.gateway_client_add_contact_alias)
+        val aliasTextView =
+            view.findViewById<TextInputEditText>(R.id.gateway_client_add_contact_alias)
 
-        if(contactTextView.text.isNullOrEmpty()) {
-            contactTextView.error = getString(R.string.gateway_client_settings_add_custom_empty_error)
+        if (contactTextView.text.isNullOrEmpty()) {
+            contactTextView.error =
+                getString(R.string.gateway_client_settings_add_custom_empty_error)
             return
         }
 
@@ -47,6 +62,24 @@ class GatewayClientAddModalFragment :
         CoroutineScope(Dispatchers.Default).launch {
             Datastore.getDatastore(context).gatewayClientsDao().insert(gatewayClient)
             dismiss()
+        }
+    }
+
+    override fun onActivityResult(reqCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(reqCode, resultCode, data)
+
+        if (reqCode == 1 && resultCode == RESULT_OK) {
+            val contactData = data?.data
+            val contactCursor = requireContext().contentResolver.query(
+                contactData!!, null, null, null, null
+            )
+            if (contactCursor != null && contactCursor.moveToFirst()) {
+                val contactIndexInformation =
+                    contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                val number = contactCursor.getString(contactIndexInformation).filter { !it.isWhitespace() }
+                view?.findViewById<TextInputEditText>(R.id.gateway_client_add_contact)?.setText(number)
+                contactCursor.close()
+            }
         }
     }
 }
