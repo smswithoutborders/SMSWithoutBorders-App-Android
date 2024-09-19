@@ -7,11 +7,9 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.R
@@ -36,7 +34,7 @@ class GatewayClientAddModalFragment :
             } else {
                 Toast.makeText(
                     requireContext(),
-                    "Permission to read contacts denied",
+                    getString(R.string.read_contacts_permission_denied),
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -53,7 +51,6 @@ class GatewayClientAddModalFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("GatewayClientAddModalFragment", "View: $view")
         val bottomSheet = view.findViewById<View>(R.id.gateway_client_add_modal)
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
@@ -101,10 +98,7 @@ class GatewayClientAddModalFragment :
                 selectContact()
             }
 
-            ActivityCompat.shouldShowRequestPermissionRationale(
-                requireActivity(),
-                Manifest.permission.READ_CONTACTS
-            ) -> {
+            shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS) -> {
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.request_contact_permission),
@@ -112,9 +106,16 @@ class GatewayClientAddModalFragment :
                 ).show()
                 requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
             }
-
             else -> {
-                requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.grant_contact_permission_from_settings),
+                    Toast.LENGTH_SHORT
+                ).show()
+                val intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri: Uri = Uri.fromParts("package", requireActivity().packageName, null)
+                intent.data = uri
+                startActivity(intent)
             }
         }
     }

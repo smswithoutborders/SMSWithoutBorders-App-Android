@@ -154,4 +154,6 @@
     <string name="selected_gateway_client_text">Client de passerelle SMS sélectionné</string>
     <string name="the_code_can_be_automatically_detected_in_some_cases">Le code peut être détecté automatiquement dans certains cas</string>
     <string name="request_contact_permission">Veuillez accorder l\u00A0autorisation de s\u00E9lectionner un contact</string>
+    <string name="read_contacts_permission_denied">Autorisation de lire les contacts refusée</string>
+    <string name="grant_contact_permission_from_settings">Veuillez accorder la permission d\'accès aux contacts depuis les paramètres de l\'application</string>
 </resources>
