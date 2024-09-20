@@ -74,10 +74,14 @@ class GatewayClientAddModalFragment :
                 contactData!!, null, null, null, null
             )
             if (contactCursor != null && contactCursor.moveToFirst()) {
-                val contactIndexInformation =
-                    contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
-                val number = contactCursor.getString(contactIndexInformation).filter { !it.isWhitespace() }
+                val numberIndex = contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                val number = contactCursor.getString(numberIndex).filter { !it.isWhitespace() }
                 view?.findViewById<TextInputEditText>(R.id.gateway_client_add_contact)?.setText(number)
+
+                val nameIndex = contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+                val name = contactCursor.getString(nameIndex)
+                view?.findViewById<TextInputEditText>(R.id.gateway_client_add_contact_alias)?.setText(name)
+
                 contactCursor.close()
             }
         }
