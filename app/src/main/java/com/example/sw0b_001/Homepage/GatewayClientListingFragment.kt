@@ -131,7 +131,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
     }
 
     private val sharedPreferencesChangeListener = OnSharedPreferenceChangeListener { _, _ ->
-        if(::listViewAdapter.isInitialized) {
+        if(::listViewAdapter.isInitialized && view != null) {
             listViewAdapter.notifyDataSetChanged()
             updateSelectedGatewayClientUI()
         }
