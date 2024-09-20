@@ -190,7 +190,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
 
             val gatewayClient = getItem(position)
             view?.findViewById<MaterialTextView>(R.id.gateway_client_MSISDN)?.text =
-                    gatewayClient.mSISDN
+                    gatewayClient.alias ?: gatewayClient.mSISDN
 
             view?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
 
