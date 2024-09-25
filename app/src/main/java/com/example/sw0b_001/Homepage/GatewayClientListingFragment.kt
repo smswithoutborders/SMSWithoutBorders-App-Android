@@ -2,7 +2,6 @@ package com.example.sw0b_001.Homepage
 
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -19,8 +18,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient
@@ -134,10 +131,11 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
     }
 
     private val sharedPreferencesChangeListener = OnSharedPreferenceChangeListener { _, _ ->
-        if(::listViewAdapter.isInitialized)
+        if(::listViewAdapter.isInitialized && view != null) {
             listViewAdapter.notifyDataSetChanged()
+            updateSelectedGatewayClientUI()
+        }
 
-        updateSelectedGatewayClientUI()
     }
 
     private fun refresh(view: View) {
@@ -188,8 +186,33 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
             }
 
             val gatewayClient = getItem(position)
-            view?.findViewById<MaterialTextView>(R.id.gateway_client_MSISDN)?.text =
-                    gatewayClient.mSISDN
+            val msisdnTextView = view?.findViewById<MaterialTextView>(R.id.gateway_client_MSISDN)
+            val operatorTextView = view?.findViewById<MaterialTextView>(R.id.gateway_client_operator)
+            val countryTextView = view?.findViewById<MaterialTextView>(R.id.gateway_client_country)
+            val phoneNumberTextView = view?.findViewById<MaterialTextView>(R.id.gateway_client_phone_number)
+
+            if (!gatewayClient.alias.isNullOrEmpty()) {
+                msisdnTextView?.text = gatewayClient.alias
+                phoneNumberTextView?.visibility = View.VISIBLE
+                phoneNumberTextView?.text = gatewayClient.mSISDN
+            } else {
+                msisdnTextView?.text = gatewayClient.mSISDN
+                phoneNumberTextView?.visibility = View.GONE
+            }
+
+            operatorTextView?.text = gatewayClient.operatorName
+            if (gatewayClient.operatorName.isNullOrEmpty()) {
+                operatorTextView?.visibility = View.GONE
+            } else {
+                operatorTextView?.visibility = View.VISIBLE
+            }
+
+            countryTextView?.text = gatewayClient.country
+            if (gatewayClient.country.isNullOrEmpty()) {
+                countryTextView?.visibility = View.GONE
+            } else {
+                countryTextView?.visibility = View.VISIBLE
+            }
 
             view?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
 
