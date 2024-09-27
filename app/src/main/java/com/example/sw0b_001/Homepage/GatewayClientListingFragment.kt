@@ -2,6 +2,7 @@ package com.example.sw0b_001.Homepage
 
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -26,6 +27,7 @@ import com.example.sw0b_001.Models.GatewayClients.GatewayClientViewModel
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
 import com.example.sw0b_001.R
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textview.MaterialTextView
@@ -191,6 +193,18 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
             val countryTextView = view?.findViewById<MaterialTextView>(R.id.gateway_client_country)
             val phoneNumberTextView = view?.findViewById<MaterialTextView>(R.id.gateway_client_phone_number)
 
+            val editIcon = view?.findViewById<ShapeableImageView>(R.id.edit_icon)
+            val deleteIcon = view?.findViewById<ShapeableImageView>(R.id.delete_icon)
+
+            if (gatewayClient.type == GatewayClient.TYPE_CUSTOM) {
+                Log.d("GatewayClientListingAdapter", "${gatewayClient.mSISDN} - ${gatewayClient.type} - ${GatewayClient.TYPE_CUSTOM}")
+                editIcon?.visibility = View.VISIBLE
+                deleteIcon?.visibility = View.VISIBLE
+            } else {
+                editIcon?.visibility = View.GONE
+                deleteIcon?.visibility = View.GONE
+            }
+
             if (!gatewayClient.alias.isNullOrEmpty()) {
                 msisdnTextView?.text = gatewayClient.alias
                 phoneNumberTextView?.visibility = View.VISIBLE
@@ -221,8 +235,8 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
             radioButton?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
 
 
-            view?.findViewById<MaterialCardView>(R.id.gateway_client_listing_card)
-                    ?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
+//            view?.findViewById<MaterialCardView>(R.id.gateway_client_listing_card)
+//                    ?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
 
             return view!!
         }
