@@ -14,6 +14,7 @@ import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -275,7 +276,19 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
     }
 
     override fun onDeleteGatewayClient(gatewayClient: GatewayClient) {
-        Log.d("GatewayClientListingFragment", "onDeleteGatewayClient")
+        AlertDialog.Builder(requireContext())
+            .setTitle("Delete Gateway Client")
+            .setMessage("Are you sure you want to delete this gateway client?")
+            .setPositiveButton("Delete") { dialog, _ ->
+                CoroutineScope(Dispatchers.IO).launch {
+                    viewModel.delete(requireContext(), gatewayClient)
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
 }
