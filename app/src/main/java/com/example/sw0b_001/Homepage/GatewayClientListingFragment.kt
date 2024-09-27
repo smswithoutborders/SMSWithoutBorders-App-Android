@@ -36,7 +36,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_available) {
+interface GatewayClientItemListener {
+    fun onEditGatewayClient(gatewayClient: GatewayClient)
+    fun onDeleteGatewayClient(gatewayClient: GatewayClient)
+}
+
+class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_available), GatewayClientItemListener {
 
     private lateinit var listViewAdapter: GatewayClientListingAdapter
 
@@ -70,7 +75,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
                 refreshLayout.isRefreshing = false
             }
         }.observe(viewLifecycleOwner, Observer {
-            listViewAdapter = GatewayClientListingAdapter(gatewayClient, it)
+            listViewAdapter = GatewayClientListingAdapter(gatewayClient, it, this)
             listView.adapter = listViewAdapter
         })
 
@@ -164,7 +169,8 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
     }
 
     class GatewayClientListingAdapter(private val gatewayClientsCommunications: GatewayClientsCommunications,
-                                      private var gatewayClientsList: List<GatewayClient>) : BaseAdapter() {
+                                      private var gatewayClientsList: List<GatewayClient>,
+                                      private val listener: GatewayClientItemListener) : BaseAdapter() {
 
         override fun getCount(): Int {
             return gatewayClientsList.size
@@ -234,6 +240,13 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
             radioButton?.isChecked = defaultGatewayClientMsisdn == gatewayClient.mSISDN
             radioButton?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
 
+            editIcon?.setOnClickListener {
+                listener.onEditGatewayClient(gatewayClient)
+            }
+
+            deleteIcon?.setOnClickListener {
+                listener.onDeleteGatewayClient(gatewayClient)
+            }
 
 //            view?.findViewById<MaterialCardView>(R.id.gateway_client_listing_card)
 //                    ?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
@@ -252,4 +265,18 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
             }
         }
     }
+
+    override fun onEditGatewayClient(gatewayClient: GatewayClient) {
+        val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+        val gatewayClientAddFragment = GatewayClientAddModalFragment.newInstance(gatewayClient.id)
+        fragmentTransaction.add(gatewayClientAddFragment, "gateway_client_add_tag")
+        fragmentTransaction.show(gatewayClientAddFragment)
+        fragmentTransaction.commitNow()
+    }
+
+    override fun onDeleteGatewayClient(gatewayClient: GatewayClient) {
+        Log.d("GatewayClientListingFragment", "onDeleteGatewayClient")
+    }
+
 }
+
