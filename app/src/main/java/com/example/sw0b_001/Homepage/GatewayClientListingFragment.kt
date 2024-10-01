@@ -249,9 +249,6 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
                 listener.onDeleteGatewayClient(gatewayClient)
             }
 
-//            view?.findViewById<MaterialCardView>(R.id.gateway_client_listing_card)
-//                    ?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
-
             return view!!
         }
 
