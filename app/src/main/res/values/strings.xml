@@ -262,5 +262,11 @@
     <string name="revoke_platforms">Revoke Platforms</string>
     <string name="validate_with_phone_number">Validate with phone number</string>
     <string name="the_code_can_be_automatically_detected_in_some_cases">The code can be automatically detected in some cases</string>
+    <string name="delete_gateway_client_title">Delete Gateway Client</string>
+    <string name="delete_gateway_client_message">Are you sure you want to delete this gateway client?</string>
+    <string name="cannot_delete_selected_title">Cannot Delete Selected Gateway Client</string>
+    <string name="cannot_delete_selected_message">Please switch to another gateway client before deleting this one.</string>
+    <string name="delete">Delete</string>
+    <string name="ok">OK</string>
 
 </resources>

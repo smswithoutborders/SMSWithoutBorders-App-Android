@@ -273,19 +273,30 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
     }
 
     override fun onDeleteGatewayClient(gatewayClient: GatewayClient) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Delete Gateway Client")
-            .setMessage("Are you sure you want to delete this gateway client?")
-            .setPositiveButton("Delete") { dialog, _ ->
-                CoroutineScope(Dispatchers.IO).launch {
-                    viewModel.delete(requireContext(), gatewayClient)
+        val defaultGatewayClientMsisdn = GatewayClientsCommunications(requireContext()).getDefaultGatewayClient()
+        if (defaultGatewayClientMsisdn == gatewayClient.mSISDN) {
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.cannot_delete_selected_title)
+                .setMessage(R.string.cannot_delete_selected_message)
+                .setPositiveButton(R.string.ok) { dialog, _ ->
+                    dialog.dismiss()
                 }
-                dialog.dismiss()
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
+                .show()
+        } else {
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.delete_gateway_client_title)
+                .setMessage(R.string.delete_gateway_client_message)
+                .setPositiveButton(R.string.delete) { dialog, _ ->
+                    CoroutineScope(Dispatchers.IO).launch {
+                        viewModel.delete(requireContext(), gatewayClient)
+                    }
+                    dialog.dismiss()
+                }
+                .setNegativeButton(R.string.cancel) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
     }
 
 }
