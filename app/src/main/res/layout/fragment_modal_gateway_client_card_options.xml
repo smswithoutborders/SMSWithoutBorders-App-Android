@@ -39,7 +39,8 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:text="@string/gateway_client_options"
-                    style="@style/TextAppearance.Material3.HeadlineSmall"/>
+                    style="@style/TextAppearance.Material3.HeadlineSmall"
+                    android:gravity="center" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -53,7 +54,8 @@
                         android:id="@+id/make_default_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/make_default" />
+                        android:text="@string/make_default"
+                        android:backgroundTint="@color/md_theme_primary"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/edit_button"
