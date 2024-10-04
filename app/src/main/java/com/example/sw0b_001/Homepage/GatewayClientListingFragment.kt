@@ -19,6 +19,8 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.sw0b_001.Database.Datastore
@@ -53,6 +55,9 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
     private lateinit var selectedOperatorCodeText: TextView
     private lateinit var selectedCountryText: TextView
 
+    private var _clickedGatewayClient = MutableLiveData<GatewayClient?>()
+    val clickedGatewayClient: LiveData<GatewayClient?> = _clickedGatewayClient
+
     private val viewModel: GatewayClientViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +66,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         val listView = view.findViewById<ListView>(R.id.gateway_clients_recycler_view)
 
@@ -72,16 +78,17 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
 
         val gatewayClient = GatewayClientsCommunications(requireContext())
 
+        clickedGatewayClient.observe(viewLifecycleOwner) { clickedClient ->
+            clickedClient?.let { showModal(it) }
+        }
+
         viewModel.get(requireContext()) {
             activity?.runOnUiThread {
                 linearProgressIndicator.visibility = View.GONE
                 refreshLayout.isRefreshing = false
             }
         }.observe(viewLifecycleOwner, Observer {
-            val runnable = Runnable {
-                showModal()
-            }
-            listViewAdapter = GatewayClientListingAdapter(gatewayClient, it, this, runnable)
+            listViewAdapter = GatewayClientListingAdapter(gatewayClient, it, this)
             listView.adapter = listViewAdapter
         })
 
@@ -174,9 +181,9 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
 
     }
 
-    fun showModal() {
+    fun showModal(gatewayClient: GatewayClient) {
         val fragmentTransaction = activity?.supportFragmentManager!!.beginTransaction()
-        val gatewayClientAddFragment = GatewayClientCardOptionsModalFragment()
+        val gatewayClientAddFragment = GatewayClientCardOptionsModalFragment(gatewayClient)
         fragmentTransaction.add(gatewayClientAddFragment, "gateway_client_add_tag")
         fragmentTransaction.show(gatewayClientAddFragment)
         fragmentTransaction.commit()
@@ -184,8 +191,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
 
     class GatewayClientListingAdapter(private val gatewayClientsCommunications: GatewayClientsCommunications,
                                       private var gatewayClientsList: List<GatewayClient>,
-                                      private val listener: GatewayClientItemListener,
-                                      private val onViewClickRunnable: Runnable) : BaseAdapter() {
+                                      private val fragment: GatewayClientListingFragment) : BaseAdapter() {
 
         override fun getCount(): Int {
             return gatewayClientsList.size
@@ -257,21 +263,20 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
 
 //            view?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
             card?.setOnClickListener {
-                println("Running click function")
-                onViewClickRunnable.run()
+                fragment._clickedGatewayClient.value = gatewayClient // Use fragment property
             }
 
             val radioButton = view?.findViewById<SwitchMaterial>(R.id.gateway_client_radio_btn)
             radioButton?.isChecked = defaultGatewayClientMsisdn == gatewayClient.mSISDN
             radioButton?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
 
-            editIcon?.setOnClickListener {
-                listener.onEditGatewayClient(gatewayClient)
-            }
-
-            deleteIcon?.setOnClickListener {
-                listener.onDeleteGatewayClient(gatewayClient)
-            }
+//            editIcon?.setOnClickListener {
+//                listener.onEditGatewayClient(gatewayClient)
+//            }
+//
+//            deleteIcon?.setOnClickListener {
+//                listener.onDeleteGatewayClient(gatewayClient)
+//            }
 
             return view!!
         }
