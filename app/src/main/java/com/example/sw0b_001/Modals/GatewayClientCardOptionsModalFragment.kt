@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.launch
 import androidx.fragment.app.viewModels
 import com.example.sw0b_001.Database.Datastore
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient
@@ -34,11 +33,18 @@ class GatewayClientCardOptionsModalFragment(val gatewayClient: GatewayClient) : 
         val deleteButton = view.findViewById<View>(R.id.delete_button)
         val editButton = view.findViewById<View>(R.id.edit_button)
 
+        if (gatewayClient.type == GatewayClient.TYPE_CUSTOM) {
+            editButton.visibility = View.VISIBLE
+            deleteButton.visibility = View.VISIBLE
+        } else {
+            editButton.visibility = View.GONE
+            deleteButton.visibility = View.GONE
+        }
+
         makeDefaultButton.setOnClickListener {
             val gatewayClientsCommunications = GatewayClientsCommunications(requireContext())
             gatewayClientsCommunications.updateDefaultGatewayClient(gatewayClient.mSISDN!!)
             CoroutineScope(Dispatchers.Default).launch {
-                gatewayClient.type = GatewayClient.TYPE_CUSTOM
                 Datastore.getDatastore(it.context).gatewayClientsDao().update(gatewayClient)
             }
             Toast.makeText(requireContext(), "Default gateway client updated", Toast.LENGTH_SHORT).show()

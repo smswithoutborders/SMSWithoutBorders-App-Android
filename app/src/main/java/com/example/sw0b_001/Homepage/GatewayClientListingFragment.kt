@@ -249,11 +249,9 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
                 countryTextView?.visibility = View.VISIBLE
             }
 
-//            view?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
             card?.setOnClickListener {
-                fragment._clickedGatewayClient.value = gatewayClient // Use fragment property
+                fragment._clickedGatewayClient.value = gatewayClient
             }
-
 
             return view!!
         }
