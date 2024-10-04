@@ -159,5 +159,8 @@
     <string name="cannot_delete_selected_message">لطفاً قبل از حذف این کلاینت، به کلاینت دروازه دیگری تغییر دهید.</string>
     <string name="delete">حذف</string>
     <string name="ok">تأیید</string>
+    <string name="edit">ویرایش</string>
+    <string name="make_default">پیش‌فرض</string>
+    <string name="gateway_client_options">گزینه‌های کلاینت دروازه</string>
 
 </resources>

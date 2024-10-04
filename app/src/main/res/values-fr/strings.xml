@@ -159,5 +159,8 @@
     <string name="cannot_delete_selected_message">Veuillez passer à un autre client passerelle avant de supprimer celui-ci.</string>
     <string name="delete">Supprimer</string>
     <string name="ok">OK</string>
+    <string name="edit">Modifier</string>
+    <string name="make_default">Définir par défaut</string>
+    <string name="gateway_client_options">Options du client passerelle</string>
 
 </resources>

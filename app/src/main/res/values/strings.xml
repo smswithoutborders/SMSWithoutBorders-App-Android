@@ -268,5 +268,8 @@
     <string name="cannot_delete_selected_message">Please switch to another gateway client before deleting this one.</string>
     <string name="delete">Delete</string>
     <string name="ok">OK</string>
+    <string name="edit">Edit</string>
+    <string name="make_default">Make Default</string>
+    <string name="gateway_client_options">Gateway Client Options</string>
 
 </resources>

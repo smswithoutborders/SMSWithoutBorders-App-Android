@@ -22,6 +22,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.sw0b_001.Database.Datastore
+import com.example.sw0b_001.Modals.GatewayClientCardOptionsModalFragment
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientAddModalFragment
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientViewModel
@@ -34,6 +35,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.launch
 
 
@@ -76,7 +78,10 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
                 refreshLayout.isRefreshing = false
             }
         }.observe(viewLifecycleOwner, Observer {
-            listViewAdapter = GatewayClientListingAdapter(gatewayClient, it, this)
+            val runnable = Runnable {
+                showModal()
+            }
+            listViewAdapter = GatewayClientListingAdapter(gatewayClient, it, this, runnable)
             listView.adapter = listViewAdapter
         })
 
@@ -169,9 +174,18 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
 
     }
 
+    fun showModal() {
+        val fragmentTransaction = activity?.supportFragmentManager!!.beginTransaction()
+        val gatewayClientAddFragment = GatewayClientCardOptionsModalFragment()
+        fragmentTransaction.add(gatewayClientAddFragment, "gateway_client_add_tag")
+        fragmentTransaction.show(gatewayClientAddFragment)
+        fragmentTransaction.commit()
+    }
+
     class GatewayClientListingAdapter(private val gatewayClientsCommunications: GatewayClientsCommunications,
                                       private var gatewayClientsList: List<GatewayClient>,
-                                      private val listener: GatewayClientItemListener) : BaseAdapter() {
+                                      private val listener: GatewayClientItemListener,
+                                      private val onViewClickRunnable: Runnable) : BaseAdapter() {
 
         override fun getCount(): Int {
             return gatewayClientsList.size
@@ -185,14 +199,20 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
             return gatewayClientsList[position].id
         }
 
+
+
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val defaultGatewayClientMsisdn = gatewayClientsCommunications.getDefaultGatewayClient()
-            var view = convertView
-            if(view == null) {
-                val inflater: LayoutInflater = LayoutInflater.from(parent?.context);
-                view = inflater.inflate(R.layout.layout_cardlist_gateway_clients, parent,
-                        false)
-            }
+//            var view = convertView
+//            if(view == null) {
+//
+//            }
+            val inflater: LayoutInflater = LayoutInflater.from(parent?.context);
+
+            val view = inflater.inflate(R.layout.layout_cardlist_gateway_clients, parent,
+                false)
+
+            val card = view?.findViewById<MaterialCardView>(R.id.gateway_client_listing_card)
 
             val gatewayClient = getItem(position)
             val msisdnTextView = view?.findViewById<MaterialTextView>(R.id.gateway_client_MSISDN)
@@ -235,7 +255,11 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
                 countryTextView?.visibility = View.VISIBLE
             }
 
-            view?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
+//            view?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
+            card?.setOnClickListener {
+                println("Running click function")
+                onViewClickRunnable.run()
+            }
 
             val radioButton = view?.findViewById<SwitchMaterial>(R.id.gateway_client_radio_btn)
             radioButton?.isChecked = defaultGatewayClientMsisdn == gatewayClient.mSISDN
@@ -298,6 +322,8 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
                 .show()
         }
     }
+
+
 
 }
 
