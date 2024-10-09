@@ -2,6 +2,7 @@ package com.example.sw0b_001.Homepage
 
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -13,28 +14,39 @@ import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.sw0b_001.Database.Datastore
+import com.example.sw0b_001.Modals.GatewayClientCardOptionsModalFragment
 import com.example.sw0b_001.Models.GatewayClients.GatewayClient
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientAddModalFragment
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientViewModel
 import com.example.sw0b_001.Models.GatewayClients.GatewayClientsCommunications
 import com.example.sw0b_001.R
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Runnable
 import kotlinx.coroutines.launch
 
 
-class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_available) {
+interface GatewayClientItemListener {
+    fun onEditGatewayClient(gatewayClient: GatewayClient)
+    fun onDeleteGatewayClient(gatewayClient: GatewayClient)
+}
+
+class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_available), GatewayClientItemListener {
 
     private lateinit var listViewAdapter: GatewayClientListingAdapter
 
@@ -42,6 +54,9 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
     private lateinit var selectedOperatorText: TextView
     private lateinit var selectedOperatorCodeText: TextView
     private lateinit var selectedCountryText: TextView
+
+    private var _clickedGatewayClient = MutableLiveData<GatewayClient?>()
+    val clickedGatewayClient: LiveData<GatewayClient?> = _clickedGatewayClient
 
     private val viewModel: GatewayClientViewModel by viewModels()
 
@@ -51,6 +66,7 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         val listView = view.findViewById<ListView>(R.id.gateway_clients_recycler_view)
 
@@ -62,13 +78,17 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
 
         val gatewayClient = GatewayClientsCommunications(requireContext())
 
+        clickedGatewayClient.observe(viewLifecycleOwner) { clickedClient ->
+            clickedClient?.let { showModal(it) }
+        }
+
         viewModel.get(requireContext()) {
             activity?.runOnUiThread {
                 linearProgressIndicator.visibility = View.GONE
                 refreshLayout.isRefreshing = false
             }
         }.observe(viewLifecycleOwner, Observer {
-            listViewAdapter = GatewayClientListingAdapter(gatewayClient, it)
+            listViewAdapter = GatewayClientListingAdapter(gatewayClient, it, this)
             listView.adapter = listViewAdapter
         })
 
@@ -161,8 +181,17 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
 
     }
 
+    fun showModal(gatewayClient: GatewayClient) {
+        val fragmentTransaction = activity?.supportFragmentManager!!.beginTransaction()
+        val gatewayClientAddFragment = GatewayClientCardOptionsModalFragment(gatewayClient)
+        fragmentTransaction.add(gatewayClientAddFragment, "gateway_client_add_tag")
+        fragmentTransaction.show(gatewayClientAddFragment)
+        fragmentTransaction.commit()
+    }
+
     class GatewayClientListingAdapter(private val gatewayClientsCommunications: GatewayClientsCommunications,
-                                      private var gatewayClientsList: List<GatewayClient>) : BaseAdapter() {
+                                      private var gatewayClientsList: List<GatewayClient>,
+                                      private val fragment: GatewayClientListingFragment) : BaseAdapter() {
 
         override fun getCount(): Int {
             return gatewayClientsList.size
@@ -176,14 +205,20 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
             return gatewayClientsList[position].id
         }
 
+
+
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val defaultGatewayClientMsisdn = gatewayClientsCommunications.getDefaultGatewayClient()
-            var view = convertView
-            if(view == null) {
-                val inflater: LayoutInflater = LayoutInflater.from(parent?.context);
-                view = inflater.inflate(R.layout.layout_cardlist_gateway_clients, parent,
-                        false)
-            }
+//            var view = convertView
+//            if(view == null) {
+//
+//            }
+            val inflater: LayoutInflater = LayoutInflater.from(parent?.context);
+
+            val view = inflater.inflate(R.layout.layout_cardlist_gateway_clients, parent,
+                false)
+
+            val card = view?.findViewById<MaterialCardView>(R.id.gateway_client_listing_card)
 
             val gatewayClient = getItem(position)
             val msisdnTextView = view?.findViewById<MaterialTextView>(R.id.gateway_client_MSISDN)
@@ -214,15 +249,9 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
                 countryTextView?.visibility = View.VISIBLE
             }
 
-            view?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
-
-            val radioButton = view?.findViewById<SwitchMaterial>(R.id.gateway_client_radio_btn)
-            radioButton?.isChecked = defaultGatewayClientMsisdn == gatewayClient.mSISDN
-            radioButton?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
-
-
-            view?.findViewById<MaterialCardView>(R.id.gateway_client_listing_card)
-                    ?.setOnClickListener(gatewayClientOnClickListener(gatewayClient))
+            card?.setOnClickListener {
+                fragment._clickedGatewayClient.value = gatewayClient
+            }
 
             return view!!
         }
@@ -238,4 +267,43 @@ class GatewayClientListingFragment : Fragment(R.layout.activity_gateway_clients_
             }
         }
     }
+
+    override fun onEditGatewayClient(gatewayClient: GatewayClient) {
+        val fragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
+        val gatewayClientAddFragment = GatewayClientAddModalFragment.newInstance(gatewayClient.id)
+        fragmentTransaction.add(gatewayClientAddFragment, "gateway_client_add_tag")
+        fragmentTransaction.show(gatewayClientAddFragment)
+        fragmentTransaction.commitNow()
+    }
+
+    override fun onDeleteGatewayClient(gatewayClient: GatewayClient) {
+        val defaultGatewayClientMsisdn = GatewayClientsCommunications(requireContext()).getDefaultGatewayClient()
+        if (defaultGatewayClientMsisdn == gatewayClient.mSISDN) {
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.cannot_delete_selected_title)
+                .setMessage(R.string.cannot_delete_selected_message)
+                .setPositiveButton(R.string.ok) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        } else {
+            AlertDialog.Builder(requireContext())
+                .setTitle(R.string.delete_gateway_client_title)
+                .setMessage(R.string.delete_gateway_client_message)
+                .setPositiveButton(R.string.delete) { dialog, _ ->
+                    CoroutineScope(Dispatchers.IO).launch {
+                        viewModel.delete(requireContext(), gatewayClient)
+                    }
+                    dialog.dismiss()
+                }
+                .setNegativeButton(R.string.cancel) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
+    }
+
+
+
 }
+

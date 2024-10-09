@@ -19,7 +19,17 @@ class GatewayClientAddModalFragment :
     BottomSheetDialogFragment(R.layout.fragment_gateway_client_add_modal) {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+    private var gatewayClientId: Long? = null
 
+    companion object {
+        fun newInstance(gatewayClientId: Long): GatewayClientAddModalFragment {
+            val fragment = GatewayClientAddModalFragment()
+            val args = Bundle()
+            args.putLong("gatewayClientId", gatewayClientId)
+            fragment.arguments = args
+            return fragment
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -41,6 +51,23 @@ class GatewayClientAddModalFragment :
             }
             startActivityForResult(intent, 1)
         }
+
+        gatewayClientId = arguments?.getLong("gatewayClientId")
+
+        if (gatewayClientId != null) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val gatewayClient = Datastore.getDatastore(requireContext()).gatewayClientsDao()
+                    .fetch(gatewayClientId!!)
+                val contactTextView =
+                    view.findViewById<TextInputEditText>(R.id.gateway_client_add_contact)
+                val aliasTextView =
+                    view.findViewById<TextInputEditText>(R.id.gateway_client_add_contact_alias)
+                activity?.runOnUiThread {
+                    contactTextView.setText(gatewayClient.mSISDN)
+                    aliasTextView.setText(gatewayClient.alias)
+                }
+            }
+        }
     }
 
     private fun addGatewayClients(view: View) {
@@ -59,9 +86,17 @@ class GatewayClientAddModalFragment :
         gatewayClient.alias = aliasTextView.text?.toString()
         gatewayClient.type = GatewayClient.TYPE_CUSTOM
 
-        CoroutineScope(Dispatchers.Default).launch {
-            Datastore.getDatastore(context).gatewayClientsDao().insert(gatewayClient)
-            dismiss()
+        if (gatewayClientId != null) {
+            gatewayClient.id = gatewayClientId!!
+            CoroutineScope(Dispatchers.Default).launch {
+                Datastore.getDatastore(context).gatewayClientsDao().update(gatewayClient)
+                dismiss()
+            }
+        } else {
+            CoroutineScope(Dispatchers.Default).launch {
+                Datastore.getDatastore(context).gatewayClientsDao().insert(gatewayClient)
+                dismiss()
+            }
         }
     }
 

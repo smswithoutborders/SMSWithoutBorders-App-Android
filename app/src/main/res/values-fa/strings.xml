@@ -153,5 +153,14 @@
     <string name="revoke_platforms">ابطال پلتفرم ها</string>
     <string name="validate_with_phone_number">با شماره تلفن تایید کنید</string>
     <string name="the_code_can_be_automatically_detected_in_some_cases">کد را می توان به طور خودکار در برخی موارد شناسایی کرد</string>
+    <string name="delete_gateway_client_title">حذف کلاینت دروازه</string>
+    <string name="delete_gateway_client_message">آیا مطمئن هستید که می خواهید این کلاینت دروازه را حذف کنید؟</string>
+    <string name="cannot_delete_selected_title">حذف کلاینت دروازه انتخاب شده امکان پذیر نیست</string>
+    <string name="cannot_delete_selected_message">لطفاً قبل از حذف این کلاینت، به کلاینت دروازه دیگری تغییر دهید.</string>
+    <string name="delete">حذف</string>
+    <string name="ok">تأیید</string>
+    <string name="edit">ویرایش</string>
+    <string name="make_default">پیش‌فرض</string>
+    <string name="gateway_client_options">گزینه‌های کلاینت دروازه</string>
 
 </resources>
