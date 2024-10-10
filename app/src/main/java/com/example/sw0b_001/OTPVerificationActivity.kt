@@ -72,7 +72,7 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
                     runOnUiThread {
                         resendCodeTextView.text = getString(R.string.resend_code)
                         resendCodeTextView.setOnClickListener {
-                            // Handle resend code action here
+
                         }
                     }
                 })
@@ -123,10 +123,13 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
 
                 override fun onFinish() {
                     onFinish()
+                    finish()
+                    Toast.makeText(this@OTPVerificationActivity, R.string.sms_code_expired, Toast.LENGTH_LONG).show()
                 }
             }.start()
         } else {
             onFinish()
+            finish()
         }
     }
 
