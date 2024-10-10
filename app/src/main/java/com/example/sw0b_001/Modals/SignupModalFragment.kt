@@ -200,6 +200,7 @@ class SignupModalFragment(private val onSuccessRunnable: Runnable?) :
                     intent.putExtra("phone_number", phonenumber)
                     intent.putExtra("password", password)
                     intent.putExtra("country_code", countryCode)
+                    intent.putExtra("next_attempt_timestamp", response.nextAttemptTimestamp.toString())
                     intent.putExtra("type", OTPVerificationActivity.Type.CREATE.type)
                     activityLauncher.launch(intent)
                 }

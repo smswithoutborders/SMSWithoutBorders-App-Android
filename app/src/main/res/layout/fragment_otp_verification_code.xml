@@ -76,7 +76,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/ownership_resend_code_by_sms"
-        android:textColor="@color/browser_actions_text_color"
         app:layout_constraintEnd_toEndOf="@+id/ownership_verification_btn"
         app:layout_constraintStart_toStartOf="@+id/ownership_verification_btn"
         app:layout_constraintTop_toBottomOf="@+id/ownership_verification_btn" />
