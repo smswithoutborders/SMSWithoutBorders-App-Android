@@ -26,6 +26,8 @@ import io.grpc.StatusRuntimeException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import android.os.CountDownTimer
+
 
 class OTPVerificationActivity : AppCompactActivityCustomized() {
 
@@ -41,6 +43,7 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
     private var password : String? = null
     private var platform : String? = null
     private var countryCode : String? = null
+    private var nextAttemptTimestamp : String? = null
 
     private lateinit var vault: Vault
     private lateinit var type: Type
@@ -53,6 +56,27 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
         platform = intent.getStringExtra("platform")
         password = intent.getStringExtra("password")
         countryCode = intent.getStringExtra("country_code")
+        nextAttemptTimestamp = intent.getStringExtra("next_attempt_timestamp")
+
+        val resendCodeTextView = findViewById<MaterialTextView>(R.id.ownership_resend_code_by_sms_btn)
+
+        nextAttemptTimestamp?.let { timestampString ->
+            val timestamp = timestampString.toLongOrNull() ?: 0
+            startCountdownTimer(timestamp,
+                onTick = { secondsRemaining ->
+                    runOnUiThread {
+                        resendCodeTextView.text = getString(R.string.ownership_resend_code_by_sms, secondsRemaining)
+                    }
+                },
+                onFinish = {
+                    runOnUiThread {
+                        resendCodeTextView.text = getString(R.string.resend_code)
+                        resendCodeTextView.setOnClickListener {
+                            // Handle resend code action here
+                        }
+                    }
+                })
+        }
 
         intent.getStringExtra("type")?.let {
             type = Type.valueOf(it)
@@ -86,6 +110,25 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
         vault = Vault(applicationContext)
     }
 
+    private fun startCountdownTimer(nextAttemptTimestamp: Long, onTick: (Long) -> Unit, onFinish: () -> Unit) {
+        val currentTimeMillis = System.currentTimeMillis()
+        val timeDiffInMillis = nextAttemptTimestamp * 1000 - currentTimeMillis
+
+        if (timeDiffInMillis > 0) {
+            object : CountDownTimer(timeDiffInMillis, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val secondsRemaining = millisUntilFinished / 1000
+                    onTick(secondsRemaining)
+                }
+
+                override fun onFinish() {
+                    onFinish()
+                }
+            }.start()
+        } else {
+            onFinish()
+        }
+    }
 
     private val smsVerificationReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -114,6 +157,7 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
             }
         }
     }
+
     private fun configureVerificationListener() {
         // Start listening for SMS User Consent broadcasts from senderPhoneNumber
         // The Task<Void> will be successful if SmsRetriever was able to start

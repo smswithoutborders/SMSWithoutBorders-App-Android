@@ -108,7 +108,8 @@
     <string name="signup_please_re_enter_your_password">Veuillez saisir à nouveau votre mot de passe</string>
     <string name="signup_your_passwords_do_not_match">Vos mots de passe ne correspondent pas !</string>
     <string name="owernship_otp_please_enter_a_valid_code">Veuillez saisir un code valide</string>
-    <string name="ownership_resend_code_by_sms">Renvoyer le code par SMS</string>
+    <string name="ownership_resend_code_by_sms">Temps restant pour renvoyer le code : %1$d</string>
+    <string name="resend_code">Renvoyer le code</string>
     <string name="login_password_empty_please_provide_a_password">Veuillez fournir un mot de passe</string>
     <string name="onboarding_next">Suivant</string>
     <string name="onboarding_finish">Terminer</string>

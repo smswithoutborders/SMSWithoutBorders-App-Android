@@ -151,7 +151,8 @@
     <string name="signup_please_re_enter_your_password">Please re-enter your password</string>
     <string name="signup_your_passwords_do_not_match">Your passwords do not match!</string>
     <string name="owernship_otp_please_enter_a_valid_code">Please enter a valid code</string>
-    <string name="ownership_resend_code_by_sms">Resend code by SMS</string>
+    <string name="ownership_resend_code_by_sms">Time left to resend code: %1$d</string>
+    <string name="resend_code">Resend code</string>
     <string name="login_password_empty_please_provide_a_password">Please provide a password</string>
     <string name="onboarding_next">Next</string>
     <string name="onboarding_finish">Finish</string>
