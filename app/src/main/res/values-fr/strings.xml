@@ -111,6 +111,7 @@
     <string name="ownership_resend_code_by_sms">Temps restant avant expiration du code envoyé par SMS : %1$d</string>
     <string name="resend_code">Renvoyer le code</string>
     <string name="sms_code_expired">Le code SMS a expiré. Veuillez réessayer.</string>
+    <string name="copy_code_telegram">Copiez le code qui vous a été envoyé via Telegram</string>
     <string name="login_password_empty_please_provide_a_password">Veuillez fournir un mot de passe</string>
     <string name="onboarding_next">Suivant</string>
     <string name="onboarding_finish">Terminer</string>

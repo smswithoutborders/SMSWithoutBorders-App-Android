@@ -27,6 +27,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.os.CountDownTimer
+import com.google.android.material.card.MaterialCardView
 
 
 class OTPVerificationActivity : AppCompactActivityCustomized() {
@@ -59,23 +60,29 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
         nextAttemptTimestamp = intent.getStringExtra("next_attempt_timestamp")
 
         val resendCodeTextView = findViewById<MaterialTextView>(R.id.ownership_resend_code_by_sms_btn)
-
-        nextAttemptTimestamp?.let { timestampString ->
-            val timestamp = timestampString.toLongOrNull() ?: 0
-            startCountdownTimer(timestamp,
-                onTick = { secondsRemaining ->
-                    runOnUiThread {
-                        resendCodeTextView.text = getString(R.string.ownership_resend_code_by_sms, secondsRemaining)
-                    }
-                },
-                onFinish = {
-                    runOnUiThread {
-                        resendCodeTextView.text = getString(R.string.resend_code)
-                        resendCodeTextView.setOnClickListener {
-
+        val telegramInfoBox = findViewById<MaterialCardView>(R.id.telegram_info_box)
+        if (intent.hasExtra("platform")) {
+            telegramInfoBox.visibility = View.VISIBLE
+            resendCodeTextView.visibility = View.GONE
+        } else {
+            telegramInfoBox.visibility = View.GONE
+            nextAttemptTimestamp?.let { timestampString ->
+                val timestamp = timestampString.toLongOrNull() ?: 0
+                startCountdownTimer(timestamp,
+                    onTick = { secondsRemaining ->
+                        runOnUiThread {
+                            resendCodeTextView.text = getString(R.string.ownership_resend_code_by_sms, secondsRemaining)
                         }
-                    }
-                })
+                    },
+                    onFinish = {
+                        runOnUiThread {
+                            resendCodeTextView.text = getString(R.string.resend_code)
+                            resendCodeTextView.setOnClickListener {
+
+                            }
+                        }
+                    })
+            }
         }
 
         intent.getStringExtra("type")?.let {
