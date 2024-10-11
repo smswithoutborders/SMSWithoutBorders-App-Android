@@ -44,14 +44,14 @@ class GatewayClientsCommunications(context: Context) {
             gatewayClient.mSISDN = context.getString(R.string.default_gateway_MSISDN_0)
             gatewayClient.operatorName = "MTN Cameroon"
             gatewayClient.operatorId = "62401"
-            gatewayClient.type = "custom"
+            gatewayClient.type = null
 
             val gatewayClient2 = GatewayClient()
             gatewayClient2.country = "Cameroon"
             gatewayClient2.mSISDN = context.getString(R.string.default_gateway_MSISDN_2)
             gatewayClient2.operatorName = "Orange Cameroon"
             gatewayClient2.operatorId = "62402"
-            gatewayClient2.type = "custom"
+            gatewayClient2.type = null
             if(GatewayClientsCommunications(context)
                     .getDefaultGatewayClient().isNullOrEmpty())
                 GatewayClientsCommunications(context)
@@ -62,7 +62,7 @@ class GatewayClientsCommunications(context: Context) {
             gatewayClient3.mSISDN = context.getString(R.string.default_gateway_MSISDN_3)
             gatewayClient3.operatorName = "MTN Nigeria"
             gatewayClient3.operatorId = "62130"
-            gatewayClient3.type = "custom"
+            gatewayClient3.type = null
 
             gatewayClientList.add(gatewayClient)
             gatewayClientList.add(gatewayClient2)

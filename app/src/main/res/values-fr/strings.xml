@@ -153,5 +153,14 @@
     <string name="validate_with_phone_number">Valider avec le numéro de téléphone</string>
     <string name="selected_gateway_client_text">Client de passerelle SMS sélectionné</string>
     <string name="the_code_can_be_automatically_detected_in_some_cases">Le code peut être détecté automatiquement dans certains cas</string>
+    <string name="delete_gateway_client_title">Supprimer le client passerelle</string>
+    <string name="delete_gateway_client_message">Êtes-vous sûr de vouloir supprimer ce client passerelle ?</string>
+    <string name="cannot_delete_selected_title">Impossible de supprimer le client passerelle sélectionné</string>
+    <string name="cannot_delete_selected_message">Veuillez passer à un autre client passerelle avant de supprimer celui-ci.</string>
+    <string name="delete">Supprimer</string>
+    <string name="ok">OK</string>
+    <string name="edit">Modifier</string>
+    <string name="make_default">Définir par défaut</string>
+    <string name="gateway_client_options">Options du client passerelle</string>
 
 </resources>
