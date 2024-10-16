@@ -57,7 +57,7 @@
     <string name="ownership_resend_code_by_sms">زمان باقی مانده تا انقضای کد ارسال شده از طریق پیامک: %1$d</string>
     <string name="resend_code">ارسال مجدد کد</string>
     <string name="sms_code_expired">کد پیامک منقضی شده است. لطفا دوباره امتحان کنید.</string>
-    <string name="copy_code_telegram">کد ارسال شده به شما از طریق تلگرام را کپی کنید</string>
+    <string name="copy_code_telegram">در صورت استفاده از تلگرام، لطفا کد را بدون کپی کردن از تلگرام وارد کنید. کپی کردن کد یک خطر امنیتی است و تلگرام ممکن است اقداماتی را برای محافظت از حساب شما انجام دهد.</string>
     <string name="login_password_empty_please_provide_a_password">لطفا رمز عبور بدهید</string>
     <string name="onboarding_next">بعد</string>
     <string name="onboarding_finish">پایان</string>
