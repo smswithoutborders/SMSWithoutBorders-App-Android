@@ -71,14 +71,18 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
                 startCountdownTimer(timestamp,
                     onTick = { secondsRemaining ->
                         runOnUiThread {
-                            resendCodeTextView.text = getString(R.string.ownership_resend_code_by_sms, secondsRemaining)
+                            resendCodeTextView.text = getString(R.string.ownership_resend_code_by_sms, secondsRemaining) // Show countdown string
+                            resendCodeTextView.setOnClickListener(null)
+                            resendCodeTextView.isClickable = false
+                            resendCodeTextView.visibility = View.VISIBLE
                         }
                     },
                     onFinish = {
                         runOnUiThread {
                             resendCodeTextView.text = getString(R.string.resend_code)
+                            resendCodeTextView.isClickable = true
                             resendCodeTextView.setOnClickListener {
-
+                                finish()
                             }
                         }
                     })
@@ -130,13 +134,10 @@ class OTPVerificationActivity : AppCompactActivityCustomized() {
 
                 override fun onFinish() {
                     onFinish()
-                    finish()
-                    Toast.makeText(this@OTPVerificationActivity, R.string.sms_code_expired, Toast.LENGTH_LONG).show()
                 }
             }.start()
         } else {
             onFinish()
-            finish()
         }
     }
 
