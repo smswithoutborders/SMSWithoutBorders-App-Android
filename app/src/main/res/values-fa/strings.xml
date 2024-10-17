@@ -166,5 +166,6 @@
     <string name="edit">ویرایش</string>
     <string name="make_default">پیش‌فرض</string>
     <string name="gateway_client_options">گزینه‌های کلاینت دروازه</string>
+    <string name="select_account_to_revoke_access">انتخاب حساب برای لغو دسترسی</string>
 
 </resources>

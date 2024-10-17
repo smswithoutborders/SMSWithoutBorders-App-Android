@@ -21,6 +21,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/select_account_text"
             android:text="@string/select_an_account_to_send_a_message"
             android:textSize="25sp"
             android:textAlignment="center"

@@ -280,5 +280,6 @@
     <string name="edit">Edit</string>
     <string name="make_default">Make Default</string>
     <string name="gateway_client_options">Gateway Client Options</string>
+    <string name="select_account_to_revoke_access">Select account to revoke access</string>
 
 </resources>

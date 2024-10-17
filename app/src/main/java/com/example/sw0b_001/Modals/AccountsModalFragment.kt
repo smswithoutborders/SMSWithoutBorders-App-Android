@@ -22,6 +22,7 @@ import com.example.sw0b_001.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.textview.MaterialTextView
 import io.grpc.StatusRuntimeException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -50,6 +51,20 @@ class AccountsModalFragment(val platformName: String, val type: AvailablePlatfor
         accountsRecyclerView.adapter = accountsRecyclerAdapter
 
         val viewModel: AccountsViewModel by viewModels()
+
+        val selectAccountText = view.findViewById<MaterialTextView>(R.id.select_account_text)
+        when (type) {
+            AvailablePlatformsModalFragment.Type.SAVED -> {
+                selectAccountText.text = getString(R.string.select_an_account_to_send_a_message)
+            }
+
+            AvailablePlatformsModalFragment.Type.REVOKE -> {
+                selectAccountText.text = getString(R.string.select_account_to_revoke_access)
+            }
+            else -> {
+                TODO()
+            }
+        }
 
         CoroutineScope(Dispatchers.Default).launch {
             val availablePlatforms = Datastore.getDatastore(requireContext())
