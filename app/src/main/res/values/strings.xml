@@ -140,7 +140,7 @@
     <string name="settings_security_biometric_user_cannot_add_this_functionality_at_this_time">User cannot add this functionality at this time.</string>
     <string name="gateway_client_add_label">Add</string>
     <string name="gateway_client_refresh_label">Refresh</string>
-    <string name="lock_screen_relay_sms_is_locked">SWOB App is locked</string>
+    <string name="lock_screen_relay_sms_is_locked">RelaySMS App is locked</string>
     <string name="lock_screen_unlock_with_your_phone_s_locking_system">Unlock with your phone\'s locking system</string>
     <string name="gateway_client_add_custom_example_text">e.g +237123456789 or select contact</string>
     <string name="gateway_client_add_gateway_client_text">Add Gateway Client</string>

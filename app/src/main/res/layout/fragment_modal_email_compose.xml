@@ -109,7 +109,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="0dp"
                         android:layout_marginEnd="0dp"
-                        android:hint="@string/email_compose_subject">
+                        android:hint="@string/">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/email_subject"
