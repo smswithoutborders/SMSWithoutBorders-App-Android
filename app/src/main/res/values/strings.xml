@@ -14,7 +14,7 @@
     </string>
 
     <string name="email_compose_subject">
-       subject
+       Subject
     </string>
 
     <string name="email_compose_body">Compose email</string>
@@ -106,6 +106,9 @@
     <string name="language_farsi">
         Farsi
     </string>
+    <string name="language_spanish">
+        Spanish
+    </string>
     <string name="language_english_value" translatable="false">
         en
     </string>
@@ -114,6 +117,9 @@
     </string>
     <string name="language_farsi_value" translatable="false">
         fa
+    </string>
+    <string name="language_spanish_value" translatable="false">
+        es
     </string>
 
 

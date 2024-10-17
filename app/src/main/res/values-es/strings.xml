@@ -35,6 +35,9 @@
     <string name="settings_security_and_privacy_account_delete_summary">Eliminar su cuenta significa eliminar todas sus cuentas en línea registradas. Siempre puedes volver a crear tu cuenta cuando sea necesario.</string>
     <string name="language_choose_text">Elige tu idioma preferido</string>
     <string name="language_english">Inglés</string>
+    <string name="language_french">Francés</string>
+    <string name="language_farsi">Persa</string>
+    <string name="language_spanish">Español</string>
     <string name="gateway_client_settings_add_custom_empty_error">Por favor proporcione un número de teléfono</string>
     <string name="new_gateway_client_alias">Alias ​​(opcional)</string>
     <string name="gateway_client_alias_description">Nombre para ayudar a recordar al cliente Gateway</string>
@@ -126,7 +129,7 @@
     <string name="create_new_account_or_log_into_existing_one_to_begin_sending_messages_from_stored_online_platforms">Cree una cuenta nueva o inicie sesión en una existente para comenzar a enviar mensajes desde plataformas en línea almacenadas</string>
     <string name="no_vault_account">Sin cuenta de bóveda</string>
     <string name="recents">Recientes</string>
-    <string name="gateway_clients">Clientes de puerta de enlace SMS</string>
+    <string name="gateway_clients">Pasarelas</string>
     <string name="unknown_service_type">Tipo de servicio desconocido</string>
     <string name="cancel">Cancelar</string>
     <string name="select_an_account_to_send_a_message">Seleccione una cuenta para enviar un mensaje</string>
