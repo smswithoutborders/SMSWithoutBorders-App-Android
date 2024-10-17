@@ -182,6 +182,7 @@ class LoginModalFragment(private val onSuccessRunnable: Runnable?) :
                         val intent = Intent(requireContext(), OTPVerificationActivity::class.java)
                         intent.putExtra("phone_number", phoneNumber)
                         intent.putExtra("password", password)
+                        intent.putExtra("next_attempt_timestamp", response.nextAttemptTimestamp.toString())
                         intent.putExtra("type",
                             OTPVerificationActivity.Type.AUTHENTICATE.type)
                         activityLauncher.launch(intent)
