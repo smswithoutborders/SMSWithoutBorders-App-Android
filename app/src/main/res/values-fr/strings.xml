@@ -89,6 +89,7 @@
     <string name="language_english">Anglaise</string>
     <string name="language_french">Français</string>
     <string name="language_farsi">Farsi</string>
+    <string name="language_spanish">Espagnol</string>
     <string name="settings_security_and_privacy_account">Votre compte</string>
     <string name="settings_security_and_privacy_account_logout">Se déconnecter</string>
     <string name="settings_security_and_privacy_account_logout_summary">Déconnexion de votre compte. Vous pouvez toujours vous reconnecter, mais vos messages actuels seront supprimés.</string>

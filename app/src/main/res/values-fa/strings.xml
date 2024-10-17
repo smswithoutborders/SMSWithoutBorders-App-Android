@@ -35,6 +35,7 @@
     <string name="language_english">انگلیسی</string>
     <string name="language_french">فرانسوی</string>
     <string name="language_farsi">فارسی</string>
+    <string name="language_spanish">اسپانیایی</string>
     <string name="settings_security_and_privacy_account">حساب شما</string>
     <string name="settings_security_and_privacy_account_logout">خروج</string>
     <string name="settings_security_and_privacy_account_logout_summary">از حساب خود خارج شوید شما همیشه می توانید دوباره وارد شوید، با این حال پیام های فعلی شما حذف خواهند شد.</string>
@@ -46,7 +47,7 @@
     <string name="settings_security_biometric_user_cannot_add_this_functionality_at_this_time">کاربر در حال حاضر نمی تواند این قابلیت را اضافه کند.</string>
     <string name="gateway_client_add_label">اضافه کردن</string>
     <string name="gateway_client_refresh_label">تازه کردن</string>
-    <string name="lock_screen_relay_sms_is_locked">برنامه SWOB قفل شده است</string>
+    <string name="lock_screen_relay_sms_is_locked">برنامه RelaySMS قفل شده است</string>
     <string name="lock_screen_unlock_with_your_phone_s_locking_system">با سیستم قفل گوشی خود قفل را باز کنید</string>
     <string name="gateway_client_add_custom_example_text">به عنوان مثال +237123456789 یا مخاطب را انتخاب کنید</string>
     <string name="gateway_client_add_gateway_client_text">کلاینت دروازه اس ام اس اضافه کنید</string>
