@@ -36,6 +36,7 @@
     <string name="language_french">فرانسوی</string>
     <string name="language_farsi">فارسی</string>
     <string name="language_spanish">اسپانیایی</string>
+    <string name="language_turkish">ترکی</string>
     <string name="settings_security_and_privacy_account">حساب شما</string>
     <string name="settings_security_and_privacy_account_logout">خروج</string>
     <string name="settings_security_and_privacy_account_logout_summary">از حساب خود خارج شوید شما همیشه می توانید دوباره وارد شوید، با این حال پیام های فعلی شما حذف خواهند شد.</string>
