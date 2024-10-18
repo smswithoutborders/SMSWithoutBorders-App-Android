@@ -48,52 +48,34 @@
 
     <!-- settings saved platforms -->
 
-    <string name="settings_accessibility_category">"         Accessibility     "</string>
+    <string name="settings_accessibility_category">" Accessibility     "</string>
     <string name="settings_language">Language</string>
 
-    <string name="settings_security_category">"         Security and Privacy     "</string>
-    <string name="settings_security">"         Security     "</string>
-    <string name="settings_security_category_summary">"         Enable app locks and pin codes     "</string>
+    <string name="settings_security_category">"Security and Privacy     "</string>
+    <string name="settings_security">"Security     "</string>
+    <string name="settings_security_category_summary">"Enable app locks and pin codes     "</string>
 
     <string name="settings_gateway_clients_text">"         Gateway Clients     "</string>
 
     <!-- settings security -->
-    <string name="settings_lock_screen_preference_category">"         Phone Lockscreen options     "</string>
+    <string name="settings_lock_screen_preference_category">" Phone Lockscreen options     "</string>
     <string name="settings_security_and_privacy_enable_lockscreen_open">"Enable lockscreen     "</string>
     <string name="settings_security_and_privacy_enable_lockscreen_open_summary">Require lockscreen pin/fingerprint when starting the app</string>
 
-    <string name="settings_security_and_privacy_account">
-        Account
-    </string>
-    <string name="settings_security_and_privacy_account_logout">
-        Logout
-    </string>
+    <string name="settings_security_and_privacy_account">"Account     "</string>
+    <string name="settings_security_and_privacy_account_logout">"Logout     "</string>
     <string name="settings_security_and_privacy_account_logout_summary">Logout of your account. You can always log back in, however you current messages would be deleted. </string>
 
-    <string name="settings_security_and_privacy_account_delete">
-        Delete
-    </string>
+    <string name="settings_security_and_privacy_account_delete">"Delete     "</string>
 
-    <string name="settings_security_and_privacy_account_delete_summary">
-        Deleting your account means deleting all your saved accounts online. You can always recreate your account once needed.
-    </string>
+    <string name="settings_security_and_privacy_account_delete_summary">"Deleting your account means deleting all your saved accounts online. You can always recreate your account once needed.     "</string>
 
     <!-- settings language -->
-    <string name="language_choose_text">
-        Choose your preferred language
-    </string>
-    <string name="language_english">
-        English
-    </string>
-    <string name="language_french">
-        French
-    </string>
-    <string name="language_farsi">
-        Farsi
-    </string>
-    <string name="language_spanish">
-        Spanish
-    </string>
+    <string name="language_choose_text">"Choose your preferred language     "</string>
+    <string name="language_english">"English     "</string>
+    <string name="language_french">"French  "</string>
+    <string name="language_farsi">Farsi</string>
+    <string name="language_spanish">"Spanish     "</string>
     <string name="language_turkish" >
         Turkish
     </string>
@@ -120,11 +102,11 @@
 
     <string name="gateway_client_settings_add_custom_empty_error">Please provide a phone number</string>
 
-    <string name="new_gateway_client_alias">"         Alias (optional)     "</string>
+    <string name="new_gateway_client_alias">"Alias (optional)     "</string>
     <string name="gateway_client_alias_description">Name to help remember the Gateway client</string>
     <string name="gateway_client_save_btn_text">Save</string>
 
-    <string name="choose_sms_app">"         Select an SMS messaging app     "</string>
+    <string name="choose_sms_app">"Select an SMS messaging app     "</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 
