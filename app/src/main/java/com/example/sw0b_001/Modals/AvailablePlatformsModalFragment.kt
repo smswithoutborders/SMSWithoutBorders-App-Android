@@ -162,9 +162,13 @@ class AvailablePlatformsModalFragment(val type: Type):
                             }
                             dismiss()
                         } catch(e: StatusRuntimeException) {
+                            e.printStackTrace()
                             activity?.runOnUiThread {
-                                Toast.makeText(requireContext(), e.status.description,
-                                    Toast.LENGTH_SHORT).show()
+                                e.status.description?.let {
+                                    Toast.makeText(requireContext(), e.status.description,
+                                        Toast.LENGTH_SHORT).show()
+                                }
+
                             }
                         } catch(e: Exception) {
                             activity?.runOnUiThread {
