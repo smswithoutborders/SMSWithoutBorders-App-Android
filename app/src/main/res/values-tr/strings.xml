@@ -1,171 +1,73 @@
 <resources>
-    <string name="app_name" translatable="false">SWOB</string>
-    <string name="app_name_full" translatable="false">SMSWithoutBorders</string>
 
-    <string name="email_compose_to">
-        Alıcı
-    </string>
+    <string name="email_compose_to">Kime</string>
 
-    <string name="email_compose_cc">
-        cc
-    </string>
+    <string name="email_compose_cc">cc</string>
 
-    <string name="email_compose_bcc">
-       bcc
-    </string>
+    <string name="email_compose_bcc">bcc</string>
 
-    <string name="email_compose_subject">
-       Konu
-    </string>
+    <string name="email_compose_subject">Konu</string>
+    <string name="email_compose_body">E-posta Oluştur</string>
 
-    <string name="email_compose_body">E-posta yaz</string>
+    <string name="selected_gateway_client_text">Seçili Ağ Geçidi İstemcisi</string>
 
-    <string name="gateway_clients_settings_operator_id">Operatör Kimliğiniz</string>
+    <!-- Homepage menu -->
 
-    <!-- Ana Sayfa Menüsü -->
-    <string name="homepage_recent">
-        Son
-    </string>
-
-    <string name="homepage_search">
-        Ara
-    </string>
-
+    <string name="homepage_recent">Geçmiş</string>
     <string name="homepage_no_recent_messages">Son Mesaj Yok</string>
 
     <string name="message_compose_phonenumber">Kişinin telefon numarası</string>
 
     <string name="message_compose_body">Mesaj</string>
 
-    <string name="message_compose_invalid_number">Lütfen numaranın geçerli olduğundan ve ülke kodu içerdiğinden emin olun</string>
-
     <string name="message_compose_empty_recipient">Alıcı boş olamaz!</string>
 
-    <string name="message_compose_empty_body">Mesaj boş olmamalı!</string>
-
-    <string name="homepage_confirm">Onayla</string>
-
-    <string name="homepage_snackbar_cannot_sign_key">Daha güçlü bir güvenlik mevcut, güvenliğinizi güncellemek için lütfen çıkış yapıp tekrar giriş yapın.</string>
-
-    <string name="homepage_enter_password">Şifre Girin</string>
-
-    <string name="homepage_enter_password_prompt">Hesabınızı oluştururken kullandığınız aynı şifre</string>
+    <string name="message_compose_empty_body">Gövde boş olmamalı!</string>
 
     <string name="homepage_read_our_privacy_policy">Gizlilik politikamızı okuyun</string>
 
     <string name="settings_settings">Ayarlar</string>
 
-    <string name="settings_automatically_stored_access">Kaydedilen platformları yenileyin</string>
-
-    <string name="settings_automatically_stored_access_warning">Uyarı! Yeniden senkronize etmek, daha önce gönderilen tüm mesajları silecek.</string>
-
-    <string name="synchronize_type_header">Senkronize Et</string>
-
-    <string name="synchronize_type_header_automatic_synchronize_text_continue">Devam Et</string>
-
-    <string name="synchronize_type_header_manual_synchronize_text">Uygulamanızı çevrimiçi hesabınızla manuel olarak bağlayın</string>
-
-    <string name="synchronize_type_header_manual_synchronize_text_continue">QR Tarayın</string>
-
     <string name="tweet_compose_tweet">Gönder</string>
 
     <string name="tweet_compose_prompt">Neler oluyor?</string>
-
-    <string name="welcome_welcome">Hoş Geldiniz</string>
-
-    <string name="welcome_signup">KAYDOL</string>
-
-    <string name="welcome_login_prompt">Zaten bir hesabınız var mı?</string>
-
-    <string name="welcome_synchronize">GİRİŞ YAP</string>
-
-    <string name="main_navigation_recents">Son</string>
 
     <string name="main_navigation_settings">Ayarlar</string>
 
     <string name="message_compose_header">Mesaj…</string>
 
-    <string name="platforms_compose_header">
-        Kaydedilen Erişim için Oluştur
-    </string>
+    <!-- settings saved platforms -->
 
-    <!-- Kaydedilen platformlar -->
-    <string name="settings_custom_platforms_category">
-        Kaydedilen platformlar
-    </string>
-    <string name="settings_store_access_text">
-        Erişimi Kaydet
-    </string>
-    <string name="settings_store_access_text_summary">
-        Çevrimdışı kullanmak için daha fazla platform ekleyin
-    </string>
-
-    <string name="settings_accessibility_category">
-        Erişilebilirlik
-    </string>
+    <string name="settings_accessibility_category">Erişilebilirlik</string>
     <string name="settings_language">Dil</string>
-    <string name="settings_language_summary" translatable="false"></string>
 
-    <string name="settings_security_category">
-        Güvenlik ve Gizlilik
-    </string>
-    <string name="settings_security">
-        Güvenlik
-    </string>
-    <string name="settings_security_category_summary">
-        Uygulama kilitlerini ve pin kodlarını etkinleştirin
-    </string>
+    <string name="settings_security_category">Güvenlik ve Gizlilik</string>
+    <string name="settings_security">Güvenlik</string>
+    <string name="settings_security_category_summary">Uygulama kilitlerini ve PIN kodlarını etkinleştir</string>
 
-    <string name="settings_advanced_category">Gelişmiş ayarlar</string>
-    <string name="settings_gateway_clients_text">
-        Ağ Geçidi İstemcileri
-    </string>
-    <string name="settings_gateway_clients_text_summary">
-        SMS yönlendirme için Ağ Geçidi istemcilerini ekleyin/çıkarın
-    </string>
+    <!-- settings security -->
+    <string name="settings_gateway_clients_text">SMS Ağ Geçidi İstemcileri</string>
+    <string name="settings_lock_screen_preference_category">Telefon Kilit Ekranı seçenekleri</string>
+    <string name="settings_security_and_privacy_enable_lockscreen_open">Kilit ekranını etkinleştir</string>
+    <string name="settings_security_and_privacy_enable_lockscreen_open_summary">Uygulamayı başlatırken kilit ekranı PIN\'i/parmak izini iste</string>
 
-    <!-- Güvenlik ayarları -->
-    <string name="settings_lock_screen_preference_category">
-        Telefon Kilit Ekranı seçenekleri
-    </string>
-    <string name="settings_security_and_privacy_enable_lockscreen_open">Kilit ekranını etkinleştir
-    </string>
-    <string name="settings_security_and_privacy_enable_lockscreen_open_summary">Uygulamayı başlatırken kilit ekranı pin/parmak izi gerektirir</string>
-
-    <string name="settings_security_and_privacy_enable_lockscreen_read_encrypted">Şifre çözme için kilit ekranını etkinleştir
-    </string>
-    <string name="settings_security_and_privacy_enable_lockscreen_read_encrypted_summary">Uygulamada şifre çözme gerektiğinde kilit ekranı pin/parmak izi gerektirir, örneğin gönderilen mesajları açarken</string>
-    <string name="settings_biometric_enable_btn">Etkinleştir</string>
-    <string name="settings_biometric_not_now_btn">Şimdi değil</string>
-
-    <string name="settings_pin_preference_category">
-        Özel PIN seçenekleri
-    </string>
-    <string name="settings_security_and_privacy_enable_pin">
-        Şifre çözme için PIN etkinleştir
-    </string>
-    <string name="settings_security_and_privacy_enable_pin_summary">
-        Kullanılamaz
-    </string>
     <string name="settings_security_and_privacy_account">
         Hesap
     </string>
     <string name="settings_security_and_privacy_account_logout">
         Çıkış Yap
     </string>
-    <string name="settings_security_and_privacy_account_logout_summary">Hesabınızdan çıkış yapın. Her zaman yeniden giriş yapabilirsiniz, ancak mevcut mesajlarınız silinecektir.</string>
+    <string name="settings_security_and_privacy_account_logout_summary">Hesabınızdan çıkış yapın. İstediğiniz zaman tekrar giriş yapabilirsiniz, ancak mevcut mesajlarınız silinecektir.</string>
 
     <string name="settings_security_and_privacy_account_delete">
         Sil
     </string>
 
     <string name="settings_security_and_privacy_account_delete_summary">
-        Hesabınızı silmek, çevrimiçi olarak kaydedilen tüm hesaplarınızı silmek anlamına gelir. İhtiyacınız olduğunda her zaman hesabınızı yeniden oluşturabilirsiniz.
+        Hesabınızı silmek, çevrimiçi olarak kaydedilen tüm hesaplarınızı silmek anlamına gelir. İhtiyaç duyduğunuzda hesabınızı her zaman yeniden oluşturabilirsiniz.
     </string>
 
-    <string name="settings_security_and_privacy_account_delete_url">https://smswithoutborders.github.io/docs/tutorials/delete-account/</string>
-
-    <!-- Dil ayarları -->
+    <!-- settings language -->
     <string name="language_choose_text">
         Tercih ettiğiniz dili seçin
     </string>
@@ -178,190 +80,144 @@
     <string name="language_farsi">
         Farsça
     </string>
-    <string name="language_english_value" translatable="false">
-        en
-    </string>
-    <string name="language_french_value" translatable="false">
-        fr
-    </string>
-    <string name="language_farsi_value" translatable="false">
-        fa
-    </string>
+    <string name="language_spanish">İspanyol</string>
+    <string name="language_turkish">Türkçe</string>
 
-    <string name="gateway_clients_settings_header">Mevcut Ağ Geçidi İstemcileri</string>
-    <string name="password_failed">Kimlik doğrulama başarısız! Lütfen tekrar deneyin…</string>
 
-    <string name="password_empty">Şifre boş olamaz!</string>
+    <string name="gateway_client_settings_add_custom_empty_error">Lütfen bir telefon numarası girin</string>
 
-    <string name="default_gateway_MSISDN_0" translatable="false">+237679466332</string>
-    <string name="default_gateway_MSISDN_2" translatable="false">+237690826242</string>
-    <string name="default_gateway_MSISDN_3" translatable="false">+2348131498393</string>
-
-    <string name="default_operator_id" translatable="false">62402 </string>
-
-    <string name="message_compose_groups_option">
-        Telegram kullanıcısının adı (isteğe bağlı)
-    </string>
-
-    <string name="message_compose_groups_name">Kullanıcının adı</string>
-
-    <string name="gateway_client_settings_add_custom_gateway_add_btn">Ekle</string>
-
-    <string name="gateway_client_settings_add_custom_empty_error">Lütfen bir telefon numarası sağlayın</string>
-    <string name="synchronize_type_header_automatic_synchronize_text">Uygulamanızı çevrimiçi hesabınızla otomatik olarak bağlayın</string>
-
-    <string name="default_seeds_url" translatable="false">
-        http://seeds.smswithoutborders.com
-    </string>
-
-    <string name="new_gateway_client_alias">
-        Takma Ad (isteğe bağlı)
-    </string>
-    <string name="gateway_client_alias_description">Geçit istemcisini hatırlamak için ad</string>
+    <string name="new_gateway_client_alias">Takma Ad (isteğe bağlı)</string>
+    <string name="gateway_client_alias_description">Ağ Geçidi istemcisini hatırlamaya yardımcı olacak ad</string>
     <string name="gateway_client_save_btn_text">Kaydet</string>
-    <string name="new_gateway_client_custom_alias">
-        Özel Geçit İstemcisi
-    </string>
 
-    <string name="choose_sms_app">
-        Bir SMS mesajlaşma uygulaması seçin
-    </string>
+    <string name="choose_sms_app">Bir SMS mesajlaşma uygulaması seçin</string>
 
-    <string name="messages_title">
-        Bildirimler
-    </string>
-
-    <string name="settings_biometric_login">
-        Biyometrik Giriş
-    </string>
-    <string name="settings_biometric_login_subtitle">Biyometrik kimliğinizi kullanarak giriş yapın</string>
-    <string name="settings_biometric_login_description">Biyometrik kimliğinizi kullanmak için sensöre dokunun</string>
-
-    <string name="notifications_queue_name" translatable="false">
-        notifications-smswithoutborders-
-    </string>
-
-    <string name="notifications_exchange_name" translatable="false">
-        notifications-smswithoutborders-exchange
-    </string>
-
-    <string name="notifications_url" translatable="false">
-        smswithoutborders.com
-    </string>
-
-    <string name="no_notifications">
-        Son Bildirim Yok
-    </string>
-    <string name="title_activity_onboarding" translatable="false">OnboardingActivity</string>
-    <string name="tab_text_1" translatable="false">Sekme 1</string>
-    <string name="tab_text_2" translatable="false">Sekme 2</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Merhaba boş parça</string>
-    <string name="login_wrong_credentials">Yanlış numara veya şifre, lütfen tekrar deneyin...</string>
 
-    <string name="default_login_url" translatable="false">
-        https://smswithoutborders.com:9000/v2/login
-    </string>
-
-    <string name="default_backend_url" translatable="false">
-        https://smswithoutborders.com:9000
-    </string>
-
-    <string name="homepage_compose_modal_no_platforms">Kayıtlı Platform Yok</string>
-    <string name="email_compose_title">E-posta oluştur</string>
-    <string name="security_settings_failed_to_switch_security">Güvenliği açma başarısız oldu...</string>
-    <string name="settings_security_biometric_user_cannot_add_this_functionality_at_this_time">Kullanıcı bu işlevi şu anda ekleyemez.</string>
+    <string name="email_compose_title">E-posta Oluştur</string>
+    <string name="security_settings_failed_to_switch_security">Güvenlik açılırken hata oluştu…</string>
+    <string name="settings_security_biometric_user_cannot_add_this_functionality_at_this_time">Kullanıcı şu anda bu işlevi ekleyemiyor.</string>
     <string name="gateway_client_add_label">Ekle</string>
     <string name="gateway_client_refresh_label">Yenile</string>
-    <string name="lock_screen_relay_sms_is_locked">SWOB Uygulaması kilitli</string>
-    <string name="lock_screen_unlock_with_your_phone_s_locking_system">Telefonunuzun kilit sistemi ile açın</string>
-    <string name="gateway_client_add_custom_example_text">ör. +237123456789 veya kişiyi seçin</string>
-    <string name="gateway_client_add_custom_text">Telefon numarasını girin</string>
-    <string name="gateway_client_add_gateway_client_text">Geçit İstemcisi Ekle</string>
-    <string name="otp_verification_code_template" translatable="false">SMSWithoutBorders-Auth doğrulama kodunuz: </string>
+    <string name="lock_screen_relay_sms_is_locked">RelaySMS Uygulaması kilitli</string>
+    <string name="lock_screen_unlock_with_your_phone_s_locking_system">Telefonunuzun kilit açma sistemiyle kilidini açın</string>
+    <string name="gateway_client_add_custom_example_text">örneğin +237123456789 veya kişi seçin</string>
+    <string name="gateway_client_add_gateway_client_text">Ağ Geçidi İstemcisi Ekle</string>
 
-    <string name="recaptcha_client_side_key" translatable="false">6LfrOsQpAAAAALsmO5WjVEmybrKB_rl6DwhK8mMw</string>
-
-    <string name="oauth_gmail_client_id" translatable="false">86878463881-3miiph6l8e8almabu5mat1gun3aaumrv.apps.googleusercontent.com</string>
-    <string name="oauth_x_client_id" translatable="false">WGptX1N5dkJiS1lVUFZUSC1wYkk6MTpjaQ</string>
-
-    <string name="oauth_openid_redirect_url_scheme" translatable="false">apps</string>
-    <string name="oauth_openid_redirect_url_scheme_host" translatable="false">oauth.afkanerd.com</string>
-
-    <string name="oauth_openid_redirect_url_scheme_path_gmail" translatable="false">/platforms/gmail/protocols/oauth2/redirect_codes/</string>
-    <string name="oauth_openid_redirect_url_scheme_path_x" translatable="false">/platforms/twitter/protocols/oauth2/redirect_codes/</string>
     <string name="signup_phonenumber_empty_error">Lütfen bir telefon numarası girin</string>
     <string name="signup_please_provide_a_strong_password">Lütfen güçlü bir şifre girin</string>
-    <string name="signup_please_re_enter_your_password">Lütfen şifrenizi yeniden girin</string>
-    <string name="signup_your_passwords_do_not_match">Şifreleriniz uyuşmuyor!</string>
+    <string name="signup_please_re_enter_your_password">Lütfen şifrenizi tekrar girin</string>
+    <string name="signup_your_passwords_do_not_match">Şifreleriniz eşleşmiyor!</string>
     <string name="owernship_otp_please_enter_a_valid_code">Lütfen geçerli bir kod girin</string>
-    <string name="ownership_resend_code_by_sms">Kodu SMS ile yeniden gönder</string>
-    <string name="login_server_something_went_wrong_please_try_again">Bir hata oluştu, lütfen tekrar deneyin</string>
+    <string name="ownership_resend_code_by_sms">SMS ile gönderilen kodun süresi dolana kadar kalan süre: %1$d</string>
+    <string name="resend_code">Kodu yeniden gönder</string>
+    <string name="sms_code_expired">SMS kodu süresi doldu. Lütfen tekrar deneyin.</string>
+    <string name="copy_code_telegram">Telegram durumunda, lütfen kodu Telegram\'dan kopyalamadan girin. Kodu kopyalamak bir güvenlik riski oluşturur ve Telegram hesabınızı korumak için bazı önlemler alabilir.</string>
     <string name="login_password_empty_please_provide_a_password">Lütfen bir şifre girin</string>
-    <string name="onboarding_next">İleri</string>
+    <string name="onboarding_next">Sonraki</string>
     <string name="onboarding_finish">Bitir</string>
-    <string name="onboarding_previous">Geri</string>
-    <string name="onboarding_skip">Atla</string>
-    <string name="onboarding_let_s_get_you_started">Başlayalım.</string>
-    <string name="onboarding_done">Tamamlandı</string>
-    <string name="onboarding_tour_complete_description">Tur tamamlandı! Uygulama içinden Vault hesaplarınızı istediğiniz zaman ekleyebilirsiniz</string>
-    <string name="onboarding_introducing_vaults">Vault\'ları Tanıtıyoruz</string>
-    <string name="onboarding_vaults_description_1">Vault\'lar çevrimdışıyken çevrimiçi hesaplarınıza erişimi güvende tutar</string>
-    <string name="onboarding_vault_description_2">SMSWithoutBorders, Vault\'larda saklanan bilgilerinizi hem kullanarak hem de güvence altına alarak çevrimiçi platformlar tarafından sağlanan standart yöntemleri kullanır.</string>
+    <string name="onboarding_previous">Önceki</string>
+    <string name="onboarding_let_s_get_you_started">Başlayalım</string>
     <string name="onboarding_try_example">Örneği Deneyin!</string>
-    <string name="onboarding_keep_platforms_in_your_vault">Platformları Vault\'unuzda Tutun</string>
-    <string name="onboarding_platforms_in_vault_description">Platformların Vault\'unuzda olması, internet bağlantısı olmadan kullanmanıza olanak tanır - yine de SMS mesajlaşma gerektirir</string>
-    <string name="onboarding_try_vault_description_title">Vault hesaplarını kullanmayı deneyelim</string>
-    <string name="onboarding_vault_publish_description_1">SMSWithoutBorders, giden mesajları varsayılan SMS uygulamanızla paylaşır</string>
-    <string name="onboarding_vault_publish_description_2">SMSWithoutBorders, varsayılan SMS uygulamanızla paylaşılan mesajları şifreler</string>
-    <string name="onboarding_log_into_vault">Vault\'a Giriş Yap</string>
-    <string name="login_telephone_number">Telefon numarası</string>
+    <string name="onboarding_log_into_vault">Giriş Yap</string>
     <string name="login_password">Şifre</string>
-    <string name="networ_error_reaching_server_please_try_again">Sunucuya ulaşılamıyor, lütfen tekrar deneyin</string>
-    <string name="network_invalid_credentials_try_again">Geçersiz kimlik bilgileri, tekrar deneyin</string>
-    <string name="logout_all_credentials_have_been_cleared_from_app">Tüm kimlik bilgileri uygulamadan temizlendi</string>
-    <string name="logout_you_have_no_accounts_logged_into_vaults_at_this_time">Şu anda Vault\'a giriş yapılmış hesabınız yok</string>
+    <string name="logout_you_have_no_accounts_logged_into_vaults_at_this_time">Şu anda Kasalara giriş yapmış hiçbir hesabınız yok</string>
     <string name="login_telephone_number_hint">Telefon numarası</string>
-    <string name="signup_i_have_read_the_privacy_policy_start">Gizlilik politikasını okudum</string>
-    <string name="signup_i_have_read_the_privacy_policy_end">Gizlilik politikası</string>
+    <string name="signup_i_have_read_the_privacy_policy_start">Okudum </string>
+    <string name="signup_i_have_read_the_privacy_policy_end">Gizlilik Politikası</string>
     <string name="signup_you_have_to_read_the_privacy_policy_to_proceed">Devam etmek için gizlilik politikasını okumalısınız!</string>
-    <string name="login_successful">Giriş başarılı...</string>
-    <string name="synced_successfully">Başarıyla senkronize edildi...</string>
-    <string name="login_platforms_stored_successfully">Platformlar başarıyla saklandı</string>
-    <string name="platforms_these_are_platforms_stored_in_your_vault_and_can_be_used_when_you_are_offline">Bunlar Vault\'unuzda saklanan ve çevrimdışı olduğunuzda kullanabileceğiniz platformlardır.</string>
+    <string name="platforms_these_are_platforms_stored_in_your_vault_and_can_be_used_when_you_are_offline">Bunlar Kasanızda depolanan platformlardır ve çevrimdışı olduğunuzda kullanılabilir.</string>
     <string name="platforms_saved_platforms">Kaydedilen Platformlar</string>
-    <string name="platforms_unsaved_platforms">Çevrimdışı kullanmak için Platform ekleyin</string>
-    <string name="platform_your_vault_is_empty">Vault\'unuz boş</string>
-    <string name="settings_privacy_vault_preference">Vault</string>
-    <string name="settings_privacy_preferences_choose_which_platforms_you_want_to_remove_from_the_vault">Vault\'tan kaldırmak istediğiniz platformları seçin</string>
+    <string name="platforms_unsaved_platforms">Çevrimdışı kullanmak için Platformlar Ekleyin</string>
+    <string name="platform_your_vault_is_empty">Kasanız boş</string>
+    <string name="settings_privacy_vault_preference">Kasa</string>
+    <string name="settings_privacy_preferences_choose_which_platforms_you_want_to_remove_from_the_vault">Kasadan kaldırmak istediğiniz platformları seçin</string>
     <string name="login_login">Giriş Yap</string>
-    <string name="platforms_revoked_successfully">" başarıyla iptal edildi"</string>
-    <string name="store_select_platforms_you_will_like_to_utilize_without_an_internet_connection_this_would_still_require_you_to_have_sms_messages_activated">İnternet bağlantısı olmadan kullanmak istediğiniz platformları seçin. Bu, yine de SMS mesajlarının etkinleştirilmiş olmasını gerektirir</string>
-    <string name="platforms_no_platform_to_store">Saklanacak platform yok</string>
-    <string name="platforms_re_synced_gateway_server">Geçit sunucusu yeniden senkronize edildi</string>
-    <string name="open_id_sync_updated">Senkronizasyon güncellendi!</string>
-    <string name="open_id_platforms_updated">Platformlar güncellendi</string>
+    <string name="store_select_platforms_you_will_like_to_utilize_without_an_internet_connection_this_would_still_require_you_to_have_sms_messages_activated">İnternet bağlantısı olmadan kullanmak istediğiniz platformları seçin. Bunun için yine de SMS mesajlarının etkinleştirilmiş olması gerekir</string>
+    <string name="platforms_no_platform_to_store">Depolanacak platform yok</string>
     <string name="homepage_save_platforms">Platformları kaydet</string>
-    <string name="homepage_add_account">Hesap Ekle</string>
-    <string name="homepage_vault_account_added">Vault hesabı eklendi</string>
-    <string name="security_settings_you_have_no_accounts_to_delete_in_vault_at_this_time">Şu anda Vault\'ta silinecek hesabınız yok</string>
-    <string name="security_settings_vault_account_deleted">Vault hesabı silindi</string>
-    <string name="otp_code_submitted_otp_verified">Kod gönderildi OTP doğrulandı</string>
-    <string name="signup_something_went_wrong_please_check_this_account_does_not_already_exist">Bir hata oluştu, bu hesabın zaten var olup olmadığını kontrol edin</string>
+    <string name="security_settings_you_have_no_accounts_to_delete_in_vault_at_this_time">Şu anda Kasada silinecek hiçbir hesabınız yok</string>
     <string name="helper_yesterday">dün</string>
-    <string name="text_compose_you_need_some_content_for_posting">Göndermek için içeriğe ihtiyacınız var</string>
-
-
+    <string name="text_compose_you_need_some_content_for_posting">Gönderi için biraz içeriğe ihtiyacınız var</string>
     <string name="smswithoutborders_official_privacy_policy">https://smswithoutborders.com/privacy-policy</string>
-    <string name="smswithoutborders_official_vault" translatable="false">https://smswithoutborders.com:9000</string>
-    <string name="smswithoutborders_official_site_login">https://smswithoutborders.com:9000/v2/login</string>
-    <string name="smswithoutborders_official_site_signup">https://smswithoutborders.com:9000/v2/signup</string>
-    <string name="smswithoutborders_official_otp_submission" translatable="false">https://smswithoutborders.com:9000/v2/OTP</string>
-    <string name="smswithoutborders_official_gateway_server" translatable="false">https://smswithoutborders.com:15000</string>
-    <string name="smswithoutboarders_official_gateway_client_seeding_url" translatable="false">https://smswithoutborders.com:15000/v3/clients</string>
-    <string name="smswithoutborders_official_site_signup_intent" translatable="false">intent://smswithoutborders.com/sign-up</string>
-    <string name="log_into_your_vault_account_or_create_one_if_you_do_not_have_yet">Vault hesabınıza giriş yapın veya henüz yoksa bir tane oluşturun</string>
+    <string name="log_into_your_vault_account_or_create_one_if_you_do_not_have_yet">Kasa hesabınıza giriş yapın veya henüz yoksa bir tane oluşturun</string>
     <string name="login_signup_create_new">Yeni oluştur</string>
     <string name="compose_edit">Düzenle</string>
     <string name="compose_delete">Sil</string>
+    <string name="welcome_back_nsign_in_to_continue_with_existing_account">Tekrar hoş geldiniz Mevcut hesapla devam etmek için giriş yapın</string>
+    <string name="forgot_password">Şifrenizi mi unuttunuz?</string>
+    <string name="create_new_vault_account">Hesap oluştur</string>
+    <string name="signup">Kaydol</string>
+    <string name="if_you_do_not_have_an_account_nplease_create_one_to_save_your_platforms">Hesabınız yoksa Lütfen platformlarınızı kaydetmek için bir tane oluşturun</string>
+    <string name="already_have_an_account">Zaten hesabınız var mı? Giriş yapın</string>
+    <string name="already_got_sms_code">SMS kodu zaten alındı</string>
+    <string name="forgot_password_recovery">Şifrenizi mi unuttunuz?</string>
+    <string name="if_you_forgot_your_password_nenter_your_phone_number_and_new_passwords">Şifrenizi unuttuysanız Telefon numaranızı ve yeni şifrenizi girin</string>
+    <string name="recovery_continue">Devam Et</string>
+    <string name="re_enter_new_password">Yeni şifreyi tekrar girin</string>
+    <string name="new_password">Yeni şifre</string>
+    <string name="telephone_number">Telefon numarası</string>
+    <string name="welcome_to_relaysms">RelaySMS\'e hoş geldiniz</string>
+    <string name="use_sms_to_make_a_post_send_emails_and_messages_nwith_no_internet_connection">İnternet bağlantısı olmadan gönderi yapmak, e-posta ve mesaj göndermek için SMS kullanın</string>
+    <string name="get_started">Başlayın!</string>
+    <string name="relaysms_vaults_keep_secure_access_to_your_online_accounts_while_you_are_offline">RelaySMS Kasaları, çevrimdışı olduğunuzda çevrimiçi hesaplarınıza güvenli erişim sağlar</string>
+    <string name="introducing_vaults">Kasaları Tanıyalım</string>
+    <string name="create_account">Hesap Oluştur</string>
+    <string name="login">Giriş Yap</string>
+    <string name="add_accounts_you_vault">Kasanıza platformlar ekleyin</string>
+    <string name="let_s_get_you_started">Başlayalım</string>
+    <string name="save_accounts_to_vault">Hesapları Kasaya Kaydet</string>
+    <string name="you_can_add_accounts_to_vault_this_accounts_are_accessible_to_you_when_you_are_offline">Kasaya hesap ekleyebilirsiniz. Bu hesaplara çevrimdışı olduğunuzda erişebilirsiniz</string>
+    <string name="the_vault_supports_storing_for_multiple_online_platforms_click_save_accounts_to_vault_to_see_the_list">Kasa, birden fazla çevrimiçi platform için depolama alanını destekler. Listeyi görmek için Hesapları Kasaya Kaydet\'e tıklayın</string>
+    <string name="messages_are_shared_with_your_default_sms_messaging_app_which_you_use_to_send_out_sms_messages_from_your_device">Mesajlar, cihazınızdan SMS mesajları göndermek için kullandığınız varsayılan SMS mesajlaşma uygulamanızla paylaşılır</string>
+    <string name="learn_how_it_works">Nasıl çalıştığını öğrenin</string>
+    <string name="send_your_first_messages">İlk mesajlarınızı gönderin</string>
+    <string name="create_a_new_relaysms_vault_account_or_signup_to_your_existing">Yeni bir RelaySMS Kasa hesabı oluşturun veya mevcut hesabınıza kaydolun.</string>
+    <string name="messages_are_encrypted_meaning_the_messages_will_be_scrambled_don_t_worry_that_s_intended">Mesajlar şifrelenir, yani mesajlar karıştırılacaktır - endişelenmeyin, bu kasıtlıdır</string>
+    <string name="you_can_add_platforms_from_the_homepage_once_you_are_logged_in">Giriş yaptıktan sonra ana sayfadan platform ekleyebilirsiniz</string>
+    <string name="you_are_ready_to_begin_sending_messages_from_you_added_platforms">Eklediğiniz platformlardan mesaj göndermeye başlamaya hazırsınız.</string>
+    <string name="you_are_ready">Hazırsınız!</string>
+    <string name="come_back_anytime">İstediğiniz zaman geri gelin</string>
+    <string name="skip_all">Tümünü atla</string>
+    <string name="create_new_account_or_log_into_existing_one_to_begin_sending_messages_from_stored_online_platforms">Depolanmış çevrimiçi platformlardan mesaj göndermeye başlamak için yeni bir hesap oluşturun veya mevcut hesabınıza giriş yapın</string>
+    <string name="no_vault_account">Kasa hesabı yok</string>
+    <string name="recents">Son Kullanılanlar</string>
+    <string name="gateway_clients">Ağ Geçidi İstemcileri</string>
+    <string name="unknown_service_type">Bilinmeyen hizmet türü</string>
+    <string name="cancel">İptal</string>
+    <string name="select_an_account_to_send_a_message">Mesaj göndermek için bir hesap seçin</string>
+    <string name="click_continue_to_confirm_this_action_do_not_worry_this_has_no_dangerous_effects">Bu eylemi onaylamak için devam\'a tıklayın. Endişelenmeyin, bunun tehlikeli bir etkisi yok.</string>
+    <string name="re_enter_password">Şifreyi Tekrar Girin</string>
+    <string name="password">Şifre</string>
+    <string name="submit">Gönder</string>
+    <string name="enter_verification_code">Doğrulama kodunu girin</string>
+    <string name="enter_the_verification_code_we_sent_you">Size gönderdiğimiz doğrulama kodunu girin</string>
+    <string name="from">Kimden</string>
+    <string name="send_new_message">Yeni mesaj gönder</string>
+    <string name="unknown_platform_protocol">Bilinmeyen platform protokolü</string>
+    <string name="always_add_the_dialing_code_if_absent_e_g_237">Eksikse her zaman alan kodunu ekleyin. örneğin +237</string>
+    <string name="please_verify_the_phone_number_is_valid">Lütfen telefon numarasının geçerli olduğunu doğrulayın.</string>
+    <string name="don_t_have_an_account_create_account">Hesabınız yok mu? Hesap oluşturun</string>
+    <string name="main_navigation_about">Hakkında</string>
+    <string name="about_slogan">Dünyayı bir SMS ile bağlıyoruz.</string>
+    <string name="about_app_text">RelaySMS, internet bağlantısına dayanmadan SMS yoluyla iletişimi sağlamaya odaklanan açık kaynaklı bir girişimdir. Bağlı bir dünyaya inanıyoruz ve bunu bir SMS ile gerçekleştiriyoruz. RelaySMS ücretsiz ve açık kaynaklı olarak kalır.</string>
+    <string name="about_app_tutorial">Uygulama Eğitimi</string>
+    <string name="about_app_github_text">GitHub depomuzu yıldızlayarak ve arkadaşlarınızla paylaşarak bize destek olun!</string>
+    <string name="view_on_github"><![CDATA[GitHub\'da Görüntüle >>>]]></string>
+    <string name="about_follow_us_text">Bizi takip edin</string>
+    <string name="messaging">Mesajlaşma</string>
+    <string name="you_have_a_device_id_for_the_device_you_log_into_it_is_used_to_identify_you_on_the_vault_you_can_switch_to_phone_number_to_reduce_size_of_sms_message">Giriş yaptığınız cihaz için bir Cihaz Kimliğiniz var. Kasada sizi tanımlamak için kullanılır. SMS mesajının boyutunu küçültmek için telefon numarasına geçebilirsiniz.</string>
+    <string name="revoke_platforms">Platformları İptal Et</string>
+    <string name="validate_with_phone_number">Telefon numarasıyla doğrulayın</string>
+    <string name="the_code_can_be_automatically_detected_in_some_cases">Kod bazı durumlarda otomatik olarak algılanabilir</string>
+    <string name="delete_gateway_client_title">Ağ Geçidi İstemcisini Sil</string>
+    <string name="delete_gateway_client_message">Bu ağ geçidi istemcisini silmek istediğinizden emin misiniz?</string>
+    <string name="cannot_delete_selected_title">Seçili Ağ Geçidi İstemcisi Silinemiyor</string>
+    <string name="cannot_delete_selected_message">Lütfen bunu silmeden önce başka bir ağ geçidi istemcisine geçin.</string>
+    <string name="delete">Sil</string>
+    <string name="ok">Tamam</string>
+    <string name="edit">Düzenle</string>
+    <string name="make_default">Varsayılan Yap</string>
+    <string name="gateway_client_options">Ağ Geçidi İstemcisi Seçenekleri</string>
+    <string name="select_account_to_revoke_access">Erişimi iptal etmek için hesap seçin</string>
 </resources>

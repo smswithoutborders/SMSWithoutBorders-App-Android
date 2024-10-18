@@ -4,5 +4,6 @@
     <locale android:name="fr"/>
     <locale android:name="fa"/>
     <locale android:name="es"/>
+    <locale android:name="tr"/>
 </locale-config>
 
