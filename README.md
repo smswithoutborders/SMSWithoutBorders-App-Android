@@ -154,6 +154,9 @@ RelaySMS supports publishing encrypted content to various platforms with specifi
 *   **Blog:** [https://blog.smswithoutborders.com/](https://blog.smswithoutborders.com/)
 *   **GitHub Repository (Backend):** [https://github.com/smswithoutborders/SMSwithoutborders-BE](https://github.com/smswithoutborders/SMSwithoutborders-BE)
 
+## Special thanks to:
+- @[mikropsoft](https://github.com/mikropsoft) for adding Spanish localization.
+
 ## <a name="contact"></a> Contact
 
 *   **Website:** [https://relay.smswithoutborders.com/](https://relay.smswithoutborders.com/)
